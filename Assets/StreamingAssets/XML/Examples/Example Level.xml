@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- This is a fully functioning mod file.  Copy it to StreamingAssets/XML/Modded Levels to see it in action! -->
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!-- 	This many waves will be generated randomly and added to the END of the wave list -->
+  <randomWaveCount>12</randomWaveCount>
+  <!-- 	These waves will be gauranteed to spawn, in order.
+		type: name of the enemy type to spawn
+		budget: how much the wave spawner can "spend" on spawning enemies
+		time: how many seconds the enemies spawn for.  Shorter time spans result in more densely packed groups.-->
+  <Waves>
+    <Wave type="Swarm" budget="500" time="5" />
+    <Wave type="Standard" budget="800" time="8" />
+    <Wave type="Tank" budget="1000" time="10" />
+  </Waves>
+  <!--	positions at which the enemies can spawn -->
+  <Spawners>
+    <Spawner spawnX="15" spawnY="0" />
+    <Spawner spawnX="15" spawnY="4" />
+    <Spawner spawnX="15" spawnY="8" />
+  </Spawners>
+  <!--	positions at which each path segment starts and ends.  Make sure each spawner has a segment which starts at the same position.
+		note that the pathfinder is very basic at the moment: it will only search for other segments further down the list that start at
+		the same position their last segment ended at, and it will take the first option it finds.
+		This means you must list the segments in order, and the path can combine but not really branch off because all enemies will take the same path.-->
+  <PathSegments>
+    <Segment startX="15" startY="0" endX="4" endY="0" />
+    <Segment startX="15" startY="4" endX="4" endY="0" />
+    <Segment startX="15" startY="8" endX="4" endY="0" />
+    <Segment startX="4" startY="0" endX="4" endY="4" />
+    <Segment startX="4" startY="4" endX="-4" endY="4" />
+    <Segment startX="-4" startY="4" endX="-4" endY="-2" />
+    <Segment startX="-4" startY="-2" endX="0" endY="-2" />
+    <Segment startX="0" startY="-2" endX="0" endY="0" />
+  </PathSegments>
+  <!--	this section is for choosing cards to play before the level begins.-->
+  <Towers>
+	<!-- name: name of the card to use to summon this tower.  x/y: position to place it-->
+    <Tower name="Basic Tower" x="0" y="1">
+	  <!-- name: name of the card to use to upgrade this tower.  count: how many times to apply it.
+		   you can list as many upgrades as you want.  they are applied in order.-->
+      <Upgrades>
+        <Upgrade Name="Basic Upgrade" Count="10" />
+      </Upgrades>
+    </Tower>
+    <Tower name="Basic Tower" x="0.5" y="1">
+      <Upgrades>
+        <Upgrade Name="Basic Upgrade" Count="5" />
+      </Upgrades>
+    </Tower>
+    <Tower name="Basic Tower" x="-0.5" y="1">
+      <Upgrades>
+        <Upgrade Name="Basic Upgrade" Count="5" />
+      </Upgrades>
+    </Tower>
+    <Tower name="Basic Tower" x="0" y="0.5">
+      <Upgrades>
+        <Upgrade Name="Basic Upgrade" Count="5" />
+      </Upgrades>
+    </Tower>
+    <Tower name="Basic Tower" x="0.5" y="0.5">
+      <Upgrades>
+        <Upgrade Name="Basic Upgrade" Count="1" />
+      </Upgrades>
+    </Tower>
+    <Tower name="Basic Tower" x="-0.5" y="0.5">
+      <Upgrades>
+        <Upgrade Name="Basic Upgrade" Count="1" />
+      </Upgrades>
+    </Tower>
+    <Tower name="Basic Tower" x="0" y="1.5">
+      <Upgrades>
+        <Upgrade Name="Basic Upgrade" Count="5" />
+      </Upgrades>
+    </Tower>
+    <Tower name="Basic Tower" x="-0.5" y="1.5">
+      <Upgrades>
+        <Upgrade Name="Basic Upgrade" Count="1" />
+      </Upgrades>
+    </Tower>
+    <Tower name="Basic Tower" x="0.5" y="1.5">
+      <Upgrades>
+        <Upgrade Name="Basic Upgrade" Count="1" />
+      </Upgrades>
+    </Tower>
+  </Towers>
+  <!--	this is the deck the player is given to use in this level by default.  the deck name is currently unused.-->
+  <levelDeck name="Heavy Buffs">
+    <!-- name: name of the card
+		 count: how many of that card are present-->
+    <Cards>
+      <Card name="Heavy Tower" count="10" />
+      <Card name="Basic Upgrade" count="10" />
+      <Card name="Enrage" count="10" />
+      <Card name="Basic Tower" count="10" />
+    </Cards>
+  </levelDeck>
+</Level>

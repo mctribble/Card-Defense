@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PlayerDecks xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Decks>
+    <Deck name="Patient Power">
+      <Cards>
+        <Card name="Heavy Tower" count="10" />
+        <Card name="Basic Upgrade" count="20" />
+      </Cards>
+    </Deck>
+  </Decks>
+</PlayerDecks>
