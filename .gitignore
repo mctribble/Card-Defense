@@ -5,6 +5,7 @@ Library/
 Build/
 AssetPackages/
 Assets/Resources/Scores
+.vs/
 
 *.svd
 *.userprefs
