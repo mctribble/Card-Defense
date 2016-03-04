@@ -50,5 +50,9 @@ public class PathSegmentScript : MonoBehaviour {
 		rTrans.position = midpoint;
 		rTrans.sizeDelta = new Vector2 (segmentLength, pathWidth);
 		rTrans.Rotate (0.0f, 0.0f, angle);
+
+        //also scale collider
+        BoxCollider2D collider = gameObject.GetComponent<BoxCollider2D>();
+        collider.size = new Vector2(segmentLength, pathWidth);
 	}
 }
