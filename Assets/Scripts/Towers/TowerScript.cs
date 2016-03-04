@@ -24,6 +24,7 @@ public class TowerScript : MonoBehaviour {
 	public Image		towerImage;			//reference to image for the tower itself
 	public Image		rangeImage;			//reference to image for the range overlay
 	public Image		buttonImage;		//reference to image for the button object
+    public Image        tooltipPanel;       //reference to image for the tooltip background
 	public Text			tooltipText;		//reference to text for the tooltip
 
 	private float 		deltaTime;			//time since last frame
@@ -53,7 +54,7 @@ public class TowerScript : MonoBehaviour {
 		//update tooltip position
 		if (tooltipText.enabled) {
 			//pos
-			tooltipText.transform.position = Input.mousePosition;
+			tooltipPanel.transform.position = Input.mousePosition;
 
 			//pivot
 			//default: pivot in lower right
@@ -71,7 +72,7 @@ public class TowerScript : MonoBehaviour {
 			}
 
 			//set pivot
-			tooltipText.rectTransform.pivot = new Vector2(x,y);
+			tooltipPanel.rectTransform.pivot = new Vector2(x,y);
 		}
 
 		shotCharge += deltaTime / rechargeTime;		//increase shot charge
@@ -116,12 +117,14 @@ public class TowerScript : MonoBehaviour {
 
 	void TowerMouseEnter(){
 		rangeImage.enabled = true;
+        tooltipPanel.enabled = true;
 		tooltipText.enabled = true;
 	}
 
 	//called when the mouse is no longer 
 	void TowerMouseExit(){
 		rangeImage.enabled = false;
+        tooltipPanel.enabled = false;
 		tooltipText.enabled = false;
 	}
 
