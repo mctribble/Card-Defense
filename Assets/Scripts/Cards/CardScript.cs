@@ -89,10 +89,10 @@ public class EffectData : System.Object {
 public class CardData : System.Object {
 
 	//card data
-	[XmlAttribute("Type")] public CardType 		cardType;	 	//determines aspects of how the card should behave and the meaning of other values.  See enum dec for more info
-	[XmlAttribute("Name")] public string 		cardName;		//name of the card
-	[XmlAttribute("Description")] public string cardDescription;//description of the card
-	[XmlAttribute("Cost")] public int 			cardCost; 		//how much it costs to use this card
+	[XmlAttribute("Type")] public CardType 		cardType;	 	    //determines aspects of how the card should behave and the meaning of other values.  See enum dec for more info
+	[XmlAttribute("Name")] public string 		cardName;		    //name of the card
+	[XmlAttribute("Description")] public string cardDescription;    //description of the card
+	[XmlAttribute("Charges")] public int 		cardMaxCharges; 	//how much it costs to use this card
 
 	[DefaultValue("Default_Art")]
 	[XmlAttribute("Art")] public string cardArtName { get; set; }
@@ -221,7 +221,6 @@ public class CardScript : MonoBehaviour {
 		
 		//if already casting, cancel it
 		if (tooltipInstance != null) {
-			ManaManagerScript.instance.currentMana += data.cardCost;  //refund mana cost
 			state = State.idle;  //reset state
 			//send a message to all cards except this one to tell them to come back out
 			foreach (GameObject c in cards)
@@ -235,12 +234,6 @@ public class CardScript : MonoBehaviour {
 		//ignore this event if hidden or discarding
 		if (hidden || (state == State.discarding))
 			yield break;
-
-		//handle mana cost
-		if (data.cardCost > ManaManagerScript.instance.currentMana)
-			yield break; //skip if cant afford
-		else
-			ManaManagerScript.instance.currentMana -= data.cardCost; //charge mana for use
 
 		//start casting when clicked
 		state = State.casting;
@@ -370,7 +363,7 @@ public class CardScript : MonoBehaviour {
 	//saves card definition data and updates components as necessarry
 	IEnumerator SetData(CardData d) {
 		data = d;
-		title.text = d.cardName + "\n" + d.cardCost;
+		title.text = d.cardName;
 		description.text = d.cardDescription;
 
 		//load art with WWW (yes, really!  I couldn't find an easier way to do this and still let the user access the image files)
