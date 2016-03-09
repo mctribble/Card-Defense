@@ -67,14 +67,8 @@ public class EnemyScript : MonoBehaviour {
 			currentDestination++;
 
 			if (path.Count == currentDestination) { 
-				//reached the end.  damage player...
-				ManaManagerScript.instance.currentMana -= (data.spawnCost * 2);
-				if (ManaManagerScript.instance.currentMana < 0) {
-					Debug.Log("GAME OVER!");
-					Time.timeScale = 0.0f;
-					Destroy(this.gameObject);
-				}
-
+				//TODO: reached the end.  damage player...
+				
 				//...and go back to start for another lap
 				parentTransform.position = startPos;
 				currentDestination = 0;
@@ -103,7 +97,6 @@ public class EnemyScript : MonoBehaviour {
 		if (curHealth <= 0) {
 			//if dead, report the kill to the tower that shot it
 			e.source.SendMessage("OnEnemyKilled", gameObject);
-			ManaManagerScript.instance.currentMana += data.spawnCost;
 			LevelManagerScript.instance.deadThisWave++;
 			Destroy (gameObject);
 		}

@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class ManaStatusScript : MonoBehaviour {
+public class ChargeStatusScript : MonoBehaviour {
 
 	Text text;
 
@@ -13,6 +13,6 @@ public class ManaStatusScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		text.text = "Mana:\n" + ManaManagerScript.instance.currentMana;
+		text.text = "Charges:\n" + DeckManagerScript.instance.curDeckCharges + "/" + DeckManagerScript.instance.maxDeckCharges;
 	}
 }
