@@ -77,9 +77,6 @@ public class DeckManagerScript : MonoBehaviour {
     public int maxDeckCharges; //max
 
     private List<Card> currentDeck;	//current deck
-
-    
-
 	private const int SHUFFLE_ITERATIONS = 5; //number of times to shuffle the deck
     
 
