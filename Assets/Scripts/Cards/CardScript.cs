@@ -126,7 +126,7 @@ public class CardScript : MonoBehaviour {
 
 	public float motionSpeed;			//speed in pixels/second this card can animate
 	public Vector2 discardLocation;		//location to discard self to
-	public CardData data;				//holds data specific to the card itself
+	public Card card;   				//holds data specific to the card itself
 	public GameObject tooltipPrefab;	//used to create a tooltip
 	public GameObject 	towerPrefab;	//prefab used to create a tower object
 	public Image art;					//reference to card art image
@@ -244,9 +244,9 @@ public class CardScript : MonoBehaviour {
 				c.SendMessage ("Hide");
 
 		//this card has no target
-		if (data.cardType == CardType.spell && data.EffectData.targetingType == TargetingType.none) {
+		if (card.data.cardType == CardType.spell && card.data.EffectData.targetingType == TargetingType.none) {
 			//apply effects
-			foreach (IEffect e in data.EffectData.effects) {
+			foreach (IEffect e in card.data.EffectData.effects) {
 				//effect must be handled differently based on effect type
 				switch (e.effectType) {
 				case EffectType.wave:
@@ -269,7 +269,7 @@ public class CardScript : MonoBehaviour {
 		tooltipInstance = (GameObject)Instantiate (tooltipPrefab, Vector3.zero, Quaternion.identity); 	//instantiate prefab
 
 		//set sprite with *twitch* WWW *twitch*
-		WWW www = new WWW ("file:///" + Application.dataPath + "/StreamingAssets/Art/Sprites/" + data.tooltipSpriteName + ".png");
+		WWW www = new WWW ("file:///" + Application.dataPath + "/StreamingAssets/Art/Sprites/" + card.data.tooltipSpriteName + ".png");
 		yield return www;
 		tooltipInstance.GetComponentInChildren<Image> ().sprite = Sprite.Create(
 			www.texture,
@@ -277,15 +277,15 @@ public class CardScript : MonoBehaviour {
 			new Vector2(0.5f, 0.5f));					
 
 		tooltipInstance.SendMessage ("SetParent", gameObject);											//tell tooltip who spawned it so it can call back later
-		tooltipInstance.SendMessage ("SetCardType", data.cardType);										//tell tooltip what kind of card it is
+		tooltipInstance.SendMessage ("SetCardType", card.data.cardType);										//tell tooltip what kind of card it is
 
 		//if tower, pass range to the tooltip
-		if (data.cardType == CardType.tower)
-			tooltipInstance.SendMessage ("SetRange", data.TowerData.range);
+		if (card.data.cardType == CardType.tower)
+			tooltipInstance.SendMessage ("SetRange", card.data.TowerData.range);
 
 		//if its a spell, tell it what kind of spell it is
-		if (data.cardType == CardType.spell)
-			tooltipInstance.SendMessage ("SetTargetingType", data.EffectData.targetingType);			
+		if (card.data.cardType == CardType.spell)
+			tooltipInstance.SendMessage ("SetTargetingType", card.data.EffectData.targetingType);			
 	}
 
 	void Hide(){
@@ -320,8 +320,8 @@ public class CardScript : MonoBehaviour {
 	void SummonTower(Vector3 location){
 		//summon tower
 		GameObject instance = (GameObject) UnityEngine.Object.Instantiate (towerPrefab, location, Quaternion.identity);
-		data.TowerData.towerName = data.cardName;
-		instance.SendMessage("SetData", data.TowerData);
+        card.data.TowerData.towerName = card.data.cardName;
+		instance.SendMessage("SetData", card.data.TowerData);
 
 		//perform steps that must be done on every cast
 		Cast ();
@@ -329,7 +329,7 @@ public class CardScript : MonoBehaviour {
 
 	void UpgradeTower(GameObject target) {
 		//send upgrade data to the target tower
-		target.SendMessage ("Upgrade", data.upgradeData);
+		target.SendMessage ("Upgrade", card.data.upgradeData);
 
 		//perform steps that must be done on every cast
 		Cast ();
@@ -361,13 +361,13 @@ public class CardScript : MonoBehaviour {
 	}
 
 	//saves card definition data and updates components as necessarry
-	IEnumerator SetData(CardData d) {
-		data = d;
-		title.text = d.cardName;
-		description.text = d.cardDescription;
+	IEnumerator SetCard(Card c) {
+        card = c;
+		title.text = card.data.cardName;
+		description.text = card.data.cardDescription;
 
 		//load art with WWW (yes, really!  I couldn't find an easier way to do this and still let the user access the image files)
-		WWW www = new WWW ("file:///" + Application.dataPath + "/StreamingAssets/Art/Card Art/" + d.cardArtName + ".png"); //load file
+		WWW www = new WWW ("file:///" + Application.dataPath + "/StreamingAssets/Art/Card Art/" + card.data.cardArtName + ".png"); //load file
 		yield return www; //wait for it to load
 		art.sprite = Sprite.Create (www.texture, new Rect (0, 0, www.texture.width, www.texture.height), new Vector2 (0.5f, 0.5f));
 	}
