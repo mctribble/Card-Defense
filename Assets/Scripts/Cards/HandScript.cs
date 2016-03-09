@@ -62,7 +62,7 @@ public class HandScript : MonoBehaviour {
 		cards [currentHandSize].GetComponent<RectTransform> ().localScale = Vector3.one; 		//reset scale because changing parent changes it
 		cards [currentHandSize].SendMessage ("SetHand", gameObject); 							//tell the card which hand owns it
 
-		cards [currentHandSize].SendMessage ("SetData", DeckManagerScript.instance.Draw());	//send the card the data that defines it
+		cards [currentHandSize].SendMessage ("SetCard", DeckManagerScript.instance.Draw());	//send the card the data that defines it
 
 		currentHandSize++;	//increment card count
 
