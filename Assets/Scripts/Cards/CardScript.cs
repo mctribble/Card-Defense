@@ -336,7 +336,7 @@ public class CardScript : MonoBehaviour {
 	}
 
 
-
+    //performs steps that must be done whenever a card of any type is cast
 	void Cast() {
 		//send a message to all cards to tell them to show themselves
 		GameObject[] cards = GameObject.FindGameObjectsWithTag ("Card");
@@ -347,6 +347,14 @@ public class CardScript : MonoBehaviour {
 		state = State.discarding;
 		targetLocation = discardLocation;
 		hand.SendMessage ("Discard", gameObject);
+
+        //remove charge.  If any are left, return this card to the deck
+        card.charges -= 1;
+        if (card.charges > 0)
+        {
+            DeckManagerScript.instance.addCardAtBottom(card);
+        }
+
 	}
 
 	void SetIdleLocation(Vector2 newIdle){
@@ -363,7 +371,7 @@ public class CardScript : MonoBehaviour {
 	//saves card definition data and updates components as necessarry
 	IEnumerator SetCard(Card c) {
         card = c;
-		title.text = card.data.cardName;
+		title.text = card.data.cardName + "\n" + card.charges + "/" + card.data.cardMaxCharges;
 		description.text = card.data.cardDescription;
 
 		//load art with WWW (yes, really!  I couldn't find an easier way to do this and still let the user access the image files)
