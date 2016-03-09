@@ -58,6 +58,12 @@ public class DeckCollection {
 	
 }
 
+public struct Card
+{
+    public CardData data; //defines the card type
+    public int charges; //number of remaining charges
+}
+
 public class DeckManagerScript : MonoBehaviour {
 
 	//singleton instance
@@ -66,7 +72,7 @@ public class DeckManagerScript : MonoBehaviour {
 	public string path;					//location of player deck file
 	public DeckCollection playerDecks;	//stores player decks
 	
-	private List<CardData> currentDeck;	//current deck
+	private List<Card> currentDeck;	//current deck
 
 	private const int SHUFFLE_ITERATIONS = 5; //number of times to shuffle the deck
 
@@ -82,7 +88,7 @@ public class DeckManagerScript : MonoBehaviour {
 	void Awake () {
 		instance = this;
 		playerDecks = DeckCollection.Load (Path.Combine (Application.dataPath, path));
-		currentDeck = new List<CardData> ();
+		currentDeck = new List<Card> ();
 	}
 	
 	// Sets the currentDeck based on the XMLDeck
@@ -90,7 +96,10 @@ public class DeckManagerScript : MonoBehaviour {
 		foreach (XMLDeckEntry xde in newDeck.contents) {
 			CardData type = CardTypeManagerScript.instance.getCardByName(xde.name);
 			for (int i = 0; i < xde.count; i++) {
-				currentDeck.Add(type);
+                Card c;
+                c.data = type;
+                c.charges = type.cardMaxCharges;
+				currentDeck.Add(c);
 			}
 		}
 		Shuffle ();
@@ -102,7 +111,7 @@ public class DeckManagerScript : MonoBehaviour {
 		for (int iteration = 0; iteration < SHUFFLE_ITERATIONS; iteration++) {
 			for (int i = 0; i < currentDeck.Count; i++) {
 				int swapTarget = Random.Range(0, currentDeck.Count);
-				CardData temp = currentDeck[i];
+				Card temp = currentDeck[i];
 				currentDeck[i] = currentDeck[swapTarget];
 				currentDeck[swapTarget] = temp;
 			}
@@ -110,9 +119,15 @@ public class DeckManagerScript : MonoBehaviour {
 	}
 
 	// Returns the top card in the deck and removes it
-	public CardData Draw () {
-		CardData drawnCard = currentDeck [0];
+	public Card Draw () {
+		Card drawnCard = currentDeck [0];
 		currentDeck.RemoveAt (0);
 		return drawnCard;
 	}
+
+    // adds card c to the bottom of the deck
+    public void addCardAtBottom(Card c)
+    {
+        currentDeck.Add(c);
+    }
 }
