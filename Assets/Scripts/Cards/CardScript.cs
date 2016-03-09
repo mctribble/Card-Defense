@@ -361,17 +361,10 @@ public class CardScript : MonoBehaviour {
 	}
 
 	//saves card definition data and updates components as necessarry
-<<<<<<< HEAD
 	IEnumerator SetCard(Card c) {
         card = c;
 		title.text = card.data.cardName;
 		description.text = card.data.cardDescription;
-=======
-	IEnumerator SetData(CardData d) {
-		data = d;
-		title.text = d.cardName;
-		description.text = d.cardDescription;
->>>>>>> e69f0307a89c42eb449d43140dac85245890cc2f
 
 		//load art with WWW (yes, really!  I couldn't find an easier way to do this and still let the user access the image files)
 		WWW www = new WWW ("file:///" + Application.dataPath + "/StreamingAssets/Art/Card Art/" + card.data.cardArtName + ".png"); //load file
