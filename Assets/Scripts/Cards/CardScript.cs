@@ -41,6 +41,8 @@ public class UpgradeData : System.Object {
 	[DefaultValueAttribute(0.0f), XmlAttribute("RechargeMod")]	public float rechargeModifier 	= 0.0f;
 	[DefaultValueAttribute(0.0f), XmlAttribute("rangeMod")]		public float rangeModifier		= 0.0f;
 	[DefaultValueAttribute(0.0f), XmlAttribute("DamageMod")]	public float attackModifier		= 0.0f;
+
+    [DefaultValueAttribute(0), XmlAttribute("WaveBonus")]    public int waveBonus = 0;
 }
 
 //represents an effect in XML

@@ -10,11 +10,11 @@
     <Card Type="tower" Name="Heavy Tower" Description="Summons a heavy-hitting tower suitable for fighting tanks" Charges="4" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <TowerData Recharge="3" Range="2" Damage="100" Lifespan="3" Sprite="Tower_Basic" />
     </Card>
-    <Card Type="upgrade" Name="Basic Upgrade" Description="-20% speed.  +0.5 range.  +25 damage." Charges="5" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
-      <upgradeData RechargeMult="1.2" rangeMod="0.5" DamageMod="25" />
+    <Card Type="upgrade" Name="Basic Upgrade" Description="-20% speed.  +0.5 range.  +25 damage.  +1 wave." Charges="5" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+      <upgradeData RechargeMult="1.2" rangeMod="0.5" DamageMod="25" WaveBonus="1" />
     </Card>
-    <Card Type="upgrade" Name="Major Upgrade" Description="recharges 0.5s slower.\n+1 range.\n+100% damage." Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
-      <upgradeData DamageMult="2" RechargeMod="0.5" rangeMod="1" />
+    <Card Type="upgrade" Name="Major Upgrade" Description="recharges 0.5s slower.  +1 range.  +100% damage.  +3 waves" Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+      <upgradeData DamageMult="2" RechargeMod="0.5" rangeMod="1" WaveBonus="3" />
     </Card>
     <Card Type="spell" Name="Enrage" Description="50% more enemies next wave.  Draw two cards." Charges="6" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <EffectData>
