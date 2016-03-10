@@ -202,6 +202,9 @@ public class TowerScript : MonoBehaviour {
 		attackPower		= attackPower 	* d.attackMultiplier 	+ d.attackModifier;
 		range			= range			* d.rangeMultiplier 	+ d.rangeModifier;
 
+        //also increase waves
+        wavesRemaining += d.waveBonus;
+
 		//set scale of range image and collider to match range
 		rangeImage.gameObject.GetComponent<RectTransform> ().localScale = new Vector3 (range, range, 1.0f);
 		GetComponent<CircleCollider2D> ().radius = range;
