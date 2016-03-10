@@ -100,9 +100,9 @@ public class LevelManagerScript : MonoBehaviour {
 	//wave generation parameters
 	//budget: absolute + (wave * linear) + (wave * squared)^2 + (exponential^wave)
 	const float WAVEGROWTH_ABSOLUTE = 40.0f;
-	const float WAVEGROWTH_LINEAR = 6.0f;
-	const float WAVEGROWTH_SQUARED = 3.2f;
-	const float WAVEGROWTH_EXPONENTIAL = 1.2f;
+	const float WAVEGROWTH_LINEAR = 4.0f;
+	const float WAVEGROWTH_SQUARED = 2.2f;
+	const float WAVEGROWTH_EXPONENTIAL = 1.1f;
 
 	//time: min(wave*linear, maxwavetime)
 	const float WAVETIME_LINEAR = 1.1f;
@@ -208,7 +208,7 @@ public class LevelManagerScript : MonoBehaviour {
 		//F toggles fast forward
 		if (Input.GetKeyUp (KeyCode.F) && Time.timeScale > 0.0f) {
 			if (Time.timeScale == 1.0f)
-				Time.timeScale =  2.0f;
+				Time.timeScale =  3.0f;
 			else
 				Time.timeScale = 1.0f;
 		}
@@ -252,6 +252,14 @@ public class LevelManagerScript : MonoBehaviour {
 		waveOngoing = false;
 		currentWave++;
 		GameObject.FindGameObjectWithTag ("Hand").SendMessage ("Show"); //show the hand
+
+        //find all towers in the level and tell them a wave ended
+        GameObject[] towers = GameObject.FindGameObjectsWithTag("Tower");
+        foreach (GameObject t in towers)
+        {
+            t.SendMessage("WaveOver");
+        }
+
 		deadThisWave = 0;
 
 		//print message if this is the last wave TODO: handle end of level
@@ -260,8 +268,8 @@ public class LevelManagerScript : MonoBehaviour {
 			Time.timeScale = 0.0f;
 		}
 
-		//draw a new card
+		//draw new cards until seven in hand
 		yield return new WaitForSeconds (1.0f);
-		GameObject.FindGameObjectWithTag ("Hand").SendMessage ("drawCard");
+		GameObject.FindGameObjectWithTag ("Hand").SendMessage ("drawToHandSize", 7);
 	}
 }

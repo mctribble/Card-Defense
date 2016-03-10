@@ -150,4 +150,33 @@ public class DeckManagerScript : MonoBehaviour {
         curDeckCharges += c.charges; //track charges
         currentDeck.Add(c); //and ad dthe card
     }
+
+    // removes d charges from cards, starting at the top.  cards that hit zero charges in this way are removed
+    public void Damage(int d)
+    {
+        Debug.Log("The enemy dealt " + d + " damage!");
+        while (d > 0)
+        {
+            if (currentDeck.Count == 0)
+            {
+                Debug.Log("GAME OVER!"); //todo: properly handle game over
+                Time.timeScale = 0.0f;
+                return;
+            }
+
+            Card topCard = currentDeck[0];
+            topCard.charges--;
+            curDeckCharges--;
+            d--;
+            if (topCard.charges == 0)
+            {
+                currentDeck.RemoveAt(0);
+                Debug.Log(topCard.data.cardName + " was destroyed by the enemy!");
+            }
+            else
+            {
+                currentDeck[0] = topCard;
+            }
+        }
+    }
 }
