@@ -47,9 +47,14 @@ public class EnemyTypeManagerScript : MonoBehaviour {
 	public string path;						//path of base game enemies
 	public string modPath;					//path of modded enemies
 	public EnemyTypeCollection types;		//collection of all enemy types
-	
-	// Use this for initialization
-	void Awake () {
+
+    //set ALL THREE of these to true to save any debugger enemy data changes back to the XML
+    public bool saveEnemyChanges;
+    public bool reallySaveEnemyChanges;
+    public bool reallyReallySaveEnemyChanges;
+
+    // Use this for initialization
+    void Awake () {
 		instance = this;
 		types = EnemyTypeCollection.Load (Path.Combine (Application.dataPath, path));
 
@@ -89,8 +94,15 @@ public class EnemyTypeManagerScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+        if (saveEnemyChanges && reallySaveEnemyChanges && reallyReallySaveEnemyChanges)
+        {
+            types.Save(Path.Combine(Application.dataPath, path));
+            saveEnemyChanges = false;
+            reallySaveEnemyChanges = false;
+            reallyReallySaveEnemyChanges = false;
+            Debug.Log("Enemy changes saved.");
+        }
+    }
 	
 	//returns a random enemy type from the database
 	public EnemyData getRandomEnemyType(){

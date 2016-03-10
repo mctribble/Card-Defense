@@ -49,6 +49,11 @@ public class CardTypeManagerScript : MonoBehaviour {
 	public string modPath;					//path of modded cards
 	public CardTypeCollection types;		//contains all card types
 
+    //set ALL THREE of these to true to save any debugger card data changes back to the XML
+    public bool saveCardChanges;
+    public bool reallySaveCardChanges;
+    public bool reallyReallySaveCardChanges;
+
 	// Use this for initialization
 	void Awake () {
 		instance = this;
@@ -89,7 +94,14 @@ public class CardTypeManagerScript : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
+        if (saveCardChanges && reallySaveCardChanges && reallyReallySaveCardChanges)
+        {
+            types.Save(Path.Combine(Application.dataPath, path));
+            saveCardChanges = false;
+            reallySaveCardChanges = false;
+            reallyReallySaveCardChanges = false;
+            Debug.Log("Card changes saved.");
+        }
 	}
 
 	//returns a random card type from the database

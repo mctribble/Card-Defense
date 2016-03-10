@@ -70,6 +70,16 @@ public class HandScript : MonoBehaviour {
 		updateCardIdleLocations (); //rearrange the cards
 	}
 
+    //draws until the target card count
+    IEnumerator drawToHandSize (int target)
+    {
+        while ((currentHandSize < target) && (currentHandSize < maximumHandSize) && (DeckManagerScript.instance.cardsLeft > 0))
+        {
+            yield return new WaitForSeconds(1);
+            drawCard();
+        }
+    }
+
 	//to be called whenever the number of cards changes: updates all the cards to tell them where they should be
 	void updateCardIdleLocations () {
 

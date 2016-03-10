@@ -26,6 +26,7 @@ public class TowerData : System.Object {
 	[DefaultValueAttribute(0.0f), XmlAttribute("Recharge")]	public float 	rechargeTime;	//how long it takes tthe tower to charge
 	[DefaultValueAttribute(0.0f), XmlAttribute("Range")]	public float	range;			//how far away from itself, in world space, the tower can shoot
 	[DefaultValueAttribute(0.0f), XmlAttribute("Damage")]	public float	attackPower;	// amount of damage this dower does before any modifiers susch as armor
+    [DefaultValueAttribute(1.0f), XmlAttribute("Lifespan")] public int      lifespan;	    // amount of waves this tower remains on the field
 }
 
 //represents everything needed to upgrade a tower

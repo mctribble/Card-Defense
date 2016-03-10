@@ -22,7 +22,8 @@ public class XMLColor {
 public class EnemyData {
 	[XmlAttribute] public string 		name;		//used to identify this enemy type
 	[XmlAttribute] public int			spawnCost;	//used for wave generation: more expensive enemies spawn in smaller numbers
-	[XmlAttribute] public int			maxHealth;	//max health
+    [XmlAttribute] public int           damage;     //number of charges knocked off if the enemy reaches the goal
+    [XmlAttribute] public int			maxHealth;	//max health
 	[XmlAttribute] public float			unitSpeed;	//speed, measured in distance/second
 				   public XMLColor		unitColor;	//used to colorize the enemy sprite
 };
@@ -66,9 +67,10 @@ public class EnemyScript : MonoBehaviour {
 		if (curLocation == newLocation) {
 			currentDestination++;
 
-			if (path.Count == currentDestination) { 
-				//TODO: reached the end.  damage player...
-				
+			if (path.Count == currentDestination) {
+                //reached the end.  damage player...
+                DeckManagerScript.instance.SendMessage("Damage", data.damage);
+
 				//...and go back to start for another lap
 				parentTransform.position = startPos;
 				currentDestination = 0;

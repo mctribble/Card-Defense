@@ -1,22 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <CardTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Cards>
-	<Card Type="tower" Name="Fast Tower" Description="Summons a very fast tower suitable for fighting swarms" Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
-      <TowerData Recharge="0.1" Range="2" Damage="3.5" Sprite="Tower_Basic" />
+    <Card Type="tower" Name="Fast Tower" Description="Summons a very fast tower suitable for fighting swarms" Charges="4" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+      <TowerData Recharge="0.1" Range="2" Damage="3.5" Lifespan="3" Sprite="Tower_Basic" />
     </Card>
-    <Card Type="tower" Name="Basic Tower" Description="Summons a basic tower" Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
-      <TowerData Recharge="0.75" Range="3" Damage="15" Sprite="Tower_Basic" />
+    <Card Type="tower" Name="Basic Tower" Description="Summons a basic tower" Charges="6" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+      <TowerData Recharge="0.75" Range="3" Damage="15" Lifespan="5" Sprite="Tower_Basic" />
     </Card>
-    <Card Type="tower" Name="Heavy Tower" Description="Summons a heavy-hitting tower suitable for fighting tanks" Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
-      <TowerData Recharge="3" Range="2" Damage="100" Sprite="Tower_Basic" />
+    <Card Type="tower" Name="Heavy Tower" Description="Summons a heavy-hitting tower suitable for fighting tanks" Charges="4" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+      <TowerData Recharge="3" Range="2" Damage="100" Lifespan="3" Sprite="Tower_Basic" />
     </Card>
-    <Card Type="upgrade" Name="Basic Upgrade" Description="-20% speed.  +0.5 range.  +25 damage." Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Type="upgrade" Name="Basic Upgrade" Description="-20% speed.  +0.5 range.  +25 damage." Charges="5" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <upgradeData RechargeMult="1.2" rangeMod="0.5" DamageMod="25" />
     </Card>
-	<Card Type="upgrade" Name="Major Upgrade" Description="recharges 0.5s slower.\n+1 range.\n+100% damage." Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
-      <upgradeData RechargeMod="0.5" rangeMod="1" DamageMult="2" />
+    <Card Type="upgrade" Name="Major Upgrade" Description="recharges 0.5s slower.\n+1 range.\n+100% damage." Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+      <upgradeData DamageMult="2" RechargeMod="0.5" rangeMod="1" />
     </Card>
-    <Card Type="spell" Name="Enrage" Description="50% more enemies next wave.  Draw two cards." Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Type="spell" Name="Enrage" Description="50% more enemies next wave.  Draw two cards." Charges="6" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <EffectData>
         <Effects>
           <Effect name="budgetPercentageChange" strength="0.5" />
@@ -24,7 +24,7 @@
         </Effects>
       </EffectData>
     </Card>
-	<Card Type="spell" Name="Mana Tap" Description="Draw five cards." Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Type="spell" Name="Mana Tap" Description="Draw five cards." Charges="1" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <EffectData>
         <Effects>
           <Effect name="drawCard" strength="5" />

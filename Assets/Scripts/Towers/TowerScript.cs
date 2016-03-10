@@ -20,6 +20,7 @@ public class TowerScript : MonoBehaviour {
 	public float 		rechargeTime;		//time, in seconds, between shots.
 	public float		range;				//distance the tower can shoot
 	public float		attackPower;		//damage done on hit
+    public int          wavesRemaining;     //number of waves this tower has left before disappearing
 
 	public Image		towerImage;			//reference to image for the tower itself
 	public Image		rangeImage;			//reference to image for the range overlay
@@ -176,6 +177,7 @@ public class TowerScript : MonoBehaviour {
 		rechargeTime = d.rechargeTime;
 		range = d.range;
 		attackPower = d.attackPower;
+        wavesRemaining = d.lifespan;
 
 		//set scale of range image and collider to match range
 
@@ -218,6 +220,17 @@ public class TowerScript : MonoBehaviour {
 			upgradeCount + " upgrades\n" +
 			"attack: " + attackPower + "\n" +
 			"range: " + range + "\n" +
-			"charge time: " + rechargeTime;
+			"charge time: " + rechargeTime + "\n" +
+            "waves remaining: " + wavesRemaining;
 	}
+
+    //called whenever a wave ends.  Updates the lifespan and destroys the tower if it hits zero.
+    void WaveOver()
+    {
+        wavesRemaining -= 1;
+        UpdateTooltipText();
+
+        if (wavesRemaining == 0)
+            Destroy(gameObject);
+    }
 }
