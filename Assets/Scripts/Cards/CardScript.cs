@@ -270,6 +270,8 @@ public class CardScript : MonoBehaviour {
 			}
 			//perform steps that must be done on every cast
 			Cast ();
+
+            yield break; //we're done now
 		}
 
 		//this card has a target.  create a tooltip object to handle casting.
