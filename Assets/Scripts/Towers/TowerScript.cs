@@ -27,6 +27,7 @@ public class TowerScript : MonoBehaviour {
 	public Image		buttonImage;		//reference to image for the button object
     public Image        tooltipPanel;       //reference to image for the tooltip background
 	public Text			tooltipText;		//reference to text for the tooltip
+    public Text         lifespanText;       //reference to text that shows the lifespan
 
 	private float 		deltaTime;			//time since last frame
 	private float 		shotCharge;			//represents how charged the next. 0.0 is empty, 1.0 is full.
@@ -225,6 +226,8 @@ public class TowerScript : MonoBehaviour {
 			"range: " + range + "\n" +
 			"charge time: " + rechargeTime + "\n" +
             "waves remaining: " + wavesRemaining;
+
+        lifespanText.text = wavesRemaining.ToString();
 	}
 
     //called whenever a wave ends.  Updates the lifespan and destroys the tower if it hits zero.

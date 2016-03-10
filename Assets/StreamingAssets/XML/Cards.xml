@@ -20,7 +20,7 @@
       <EffectData>
         <Effects>
           <Effect name="budgetPercentageChange" strength="0.5" />
-          <Effect name="drawCard" strength="2" />
+          <Effect name="drawCard" strength="5" />
         </Effects>
       </EffectData>
     </Card>
