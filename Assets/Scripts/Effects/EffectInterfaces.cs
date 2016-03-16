@@ -7,13 +7,14 @@ using System.Collections;
 //different targeting types
 public enum TargetingType {
 	none, 	//this effect does not require a target
-	tower 	//this effect targets a tower
+	tower 	//this effect targets a tower 
 };
 
 //different effect types
 public enum EffectType {
 	instant,
-	wave
+	wave,
+    discard
 };
 
 //base interface
@@ -39,4 +40,12 @@ public interface IEffectWave : IEffect {
 	WaveData alteredWaveData (WaveData currentWaveData); //alters the current wave data and returns the new values
 
 };
+
+//for effects that apply on discard
+public interface IEffectDiscard : IEffect
+{
+
+    bool trigger(Card c); //called when this effect triggers.  returns true if the card no longer needs discarding
+
+}
 

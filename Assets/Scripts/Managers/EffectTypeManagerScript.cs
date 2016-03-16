@@ -25,6 +25,7 @@ public class EffectTypeManagerScript : MonoBehaviour {
 
 		case "drawCard": 				ie = new EffectDrawCard(); break;
 		case "budgetPercentageChange": 	ie = new EffectBudgetPercentageChange(); break;
+        case "ReturnsToTopOfDeck":  ie = new EffectReturnsToTopOfDeck(); break;
 		default: throw new NotImplementedException("Effect type " + xe.name + " is not implemented.");
 	
 		}
