@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//all effects in this file effect the current wave
+
+
+//alters wave budget by x%
 public class EffectBudgetPercentageChange : IEffectWave {
 
 	//generic interface

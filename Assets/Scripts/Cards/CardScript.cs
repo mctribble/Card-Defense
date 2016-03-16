@@ -259,6 +259,8 @@ public class CardScript : MonoBehaviour {
 				case EffectType.instant:
 					((IEffectInstant)e).trigger();
 					break;
+                case EffectType.discard:
+                    break; //discard effects are handled elsewhere
 				default:
 					Debug.LogWarning("I dont know how to apply an effect of type " + e.effectType);
 					break;
@@ -353,8 +355,26 @@ public class CardScript : MonoBehaviour {
 		targetLocation = discardLocation;
 		hand.SendMessage ("Discard", gameObject);
 
-        //remove charge.  If any are left, return this card to the deck
+        //remove charge.  
         card.charges -= 1;
+
+        //run discard effects
+        bool discardCancelled = false;
+        if (card.data.cardType == CardType.spell)
+        {
+            foreach (IEffectDiscard e in card.data.EffectData.effects)
+            {
+                if (e.effectType == EffectType.discard)
+                {
+                    discardCancelled = discardCancelled || e.trigger(card);
+                }
+            }
+        }
+
+        //return here if the discard has been cancelled by one of the effects
+        if (discardCancelled) return;
+
+        //If any charges are left, return this card to the deck
         if (card.charges > 0)
         {
             DeckManagerScript.instance.addCardAtBottom(card);

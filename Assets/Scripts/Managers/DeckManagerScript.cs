@@ -148,7 +148,14 @@ public class DeckManagerScript : MonoBehaviour {
     public void addCardAtBottom(Card c)
     {
         curDeckCharges += c.charges; //track charges
-        currentDeck.Add(c); //and ad dthe card
+        currentDeck.Add(c);          //and add the card
+    }
+
+    // adds card c to the top of the deck
+    public void addCardAtTop(Card c)
+    {
+        curDeckCharges += c.charges; //track charges
+        currentDeck.Insert(0, c);    //and add the card
     }
 
     // removes d charges from cards, starting at the top.  cards that hit zero charges in this way are removed

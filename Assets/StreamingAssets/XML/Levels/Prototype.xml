@@ -28,6 +28,7 @@
       <Card name="Basic Tower" count="5" />
       <Card name="Major Upgrade" count="2" />
       <Card name="Mana Tap" count="1" />
+      <Card name="Shield" count="1" />
     </Cards>
   </levelDeck>
 </Level>
