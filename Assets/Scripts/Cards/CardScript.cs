@@ -366,7 +366,7 @@ public class CardScript : MonoBehaviour {
             {
                 if (e.effectType == EffectType.discard)
                 {
-                    discardCancelled = discardCancelled || e.trigger(card);
+                    discardCancelled = discardCancelled || e.trigger(ref card);
                 }
             }
         }

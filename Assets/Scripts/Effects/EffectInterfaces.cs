@@ -45,7 +45,7 @@ public interface IEffectWave : IEffect {
 public interface IEffectDiscard : IEffect
 {
 
-    bool trigger(Card c); //called when this effect triggers.  returns true if the card no longer needs discarding
+    bool trigger(ref Card c); //called when this effect triggers.  returns true if the card no longer needs discarding
 
 }
 
