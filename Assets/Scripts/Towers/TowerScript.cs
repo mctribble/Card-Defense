@@ -204,11 +204,11 @@ public class TowerScript : MonoBehaviour {
 		rangeImage.gameObject.GetComponent<RectTransform> ().localScale = new Vector3 (range, range, 1.0f);
 		GetComponent<CircleCollider2D> ().radius = range;
 
-		//update tooltip text
-		UpdateTooltipText ();
+        //count the upgrade
+        upgradeCount++;
 
-		//count the upgrade
-		upgradeCount++;
+        //update tooltip text
+        UpdateTooltipText ();
 	}
 
 	//updates the tooltip text to reflect new values
