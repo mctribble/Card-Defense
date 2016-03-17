@@ -22,12 +22,11 @@ public class EffectTypeManagerScript : MonoBehaviour {
 	public IEffect parse (XMLEffect xe) {
 		IEffect ie;
 		switch (xe.name) {
-
-		case "drawCard": 				ie = new EffectDrawCard(); break;
-		case "budgetPercentageChange": 	ie = new EffectBudgetPercentageChange(); break;
-        case "ReturnsToTopOfDeck":  ie = new EffectReturnsToTopOfDeck(); break;
-		default: throw new NotImplementedException("Effect type " + xe.name + " is not implemented.");
-	
+            case "addCharges":              ie = new EffectAddCharges(); break;
+            case "budgetPercentageChange":  ie = new EffectBudgetPercentageChange(); break;
+            case "drawCard": 				ie = new EffectDrawCard(); break;
+            case "returnsToTopOfDeck":      ie = new EffectReturnsToTopOfDeck(); break;
+		    default: throw new NotImplementedException("Effect type " + xe.name + " is not implemented.");
 		}
 		ie.strength = xe.strength;
 		return ie;

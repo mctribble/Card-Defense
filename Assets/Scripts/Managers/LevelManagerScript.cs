@@ -270,6 +270,6 @@ public class LevelManagerScript : MonoBehaviour {
 
 		//draw new cards until seven in hand
 		yield return new WaitForSeconds (1.0f);
-		GameObject.FindGameObjectWithTag ("Hand").SendMessage ("drawToHandSize", 7);
+		GameObject.FindGameObjectWithTag ("Hand").SendMessage ("drawToHandSize", 10);
 	}
 }
