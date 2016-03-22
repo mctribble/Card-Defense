@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified">
+  <xsd:element name="Level">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="randomWaveCount" type="xsd:unsignedByte" />
+        <xsd:element name="Waves" />
+        <xsd:element name="Spawners">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element maxOccurs="unbounded" name="Spawner">
+                <xsd:complexType>
+                  <xsd:attribute name="spawnX" type="xsd:unsignedByte" use="required" />
+                  <xsd:attribute name="spawnY" type="xsd:unsignedByte" use="required" />
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="PathSegments">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element maxOccurs="unbounded" name="Segment">
+                <xsd:complexType>
+                  <xsd:attribute name="startX" type="xsd:byte" use="required" />
+                  <xsd:attribute name="startY" type="xsd:byte" use="required" />
+                  <xsd:attribute name="endX" type="xsd:byte" use="required" />
+                  <xsd:attribute name="endY" type="xsd:byte" use="required" />
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="Towers" />
+        <xsd:element name="levelDeck">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="Cards">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" name="Card">
+                      <xsd:complexType>
+                        <xsd:attribute name="name" type="xsd:string" use="required" />
+                        <xsd:attribute name="count" type="xsd:unsignedByte" use="required" />
+                      </xsd:complexType>
+                    </xsd:element>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+            <xsd:attribute name="name" type="xsd:string" use="required" />
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xs:schema>
