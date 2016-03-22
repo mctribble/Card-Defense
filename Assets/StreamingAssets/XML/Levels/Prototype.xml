@@ -30,6 +30,7 @@
       <Card name="Mana Tap" count="1" />
       <Card name="Shield" count="1" />
       <Card name="Reinforce" count="1" />
+      <Card name="Recycle" count="1" />
     </Cards>
   </levelDeck>
 </Level>
