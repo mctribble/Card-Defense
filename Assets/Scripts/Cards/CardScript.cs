@@ -362,11 +362,11 @@ public class CardScript : MonoBehaviour {
         bool discardCancelled = false;
         if (card.data.cardType == CardType.spell)
         {
-            foreach (IEffectDiscard e in card.data.EffectData.effects)
+            foreach (IEffect e in card.data.EffectData.effects)
             {
                 if (e.effectType == EffectType.discard)
                 {
-                    discardCancelled = discardCancelled || e.trigger(ref card);
+                    discardCancelled = discardCancelled || ((IEffectDiscard)e).trigger(ref card);
                 }
             }
         }
