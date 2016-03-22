@@ -31,11 +31,18 @@
         </Effects>
       </EffectData>
     </Card>
-  <Card Type="spell" Name="Shield" Description="Costs no charges to use.  Return this card to the top of the deck." Charges="15" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Type="spell" Name="Shield" Description="Costs no charges to use.  Return this card to the top of the deck." Charges="15" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <EffectData>
         <Effects>
           <Effect name="addCharges" strength ="1" />
           <Effect name="returnsToTopOfDeck" strength="0" />
+        </Effects>
+      </EffectData>
+    </Card>
+    <Card Type="spell" Name="Reinforce" Description="All towers last three waves longer."  Charges ="1" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+      <EffectData>
+        <Effects>
+          <Effect name="AllTowersLifespanBonus" strength ="3" />
         </Effects>
       </EffectData>
     </Card>
