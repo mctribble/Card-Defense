@@ -80,6 +80,45 @@ public class HandScript : MonoBehaviour {
         }
     }
 
+    //discard a random card from the hand.  exemption card is safe
+    void discardRandom (GameObject exemption)
+    {
+        //special case: no cards
+        if (currentHandSize == 0)
+            return;
+
+        //special case: only one card
+        if (currentHandSize == 1)
+        {
+            if (cards[0] != exemption)
+            {
+                cards[0].SendMessage("Discard");
+            }
+            return;
+        }
+        
+        
+        //general case: multiple cards
+        GameObject target = null;
+        while (target == null) //loop because we might randomly pick the exempt card
+        {
+            //pick a card
+            int i = Random.Range(0, currentHandSize);
+            target = cards[i];
+
+            //if we picked the exempt card, reset and try again
+            if (target == exemption)
+            {
+                target = null;
+                continue;
+            }
+
+            //discard it
+            target.SendMessage("Discard");
+        }
+           
+    }
+
 	//to be called whenever the number of cards changes: updates all the cards to tell them where they should be
 	void updateCardIdleLocations () {
 

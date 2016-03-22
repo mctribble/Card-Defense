@@ -4,17 +4,18 @@ using System.Collections;
 //All effects in the game must implement one of these interfaces.  
 //Most will not use Effect directly, but instead a derivitave such as EffectInstant or EffectWave
 
-//different targeting types
+//different targeting types.
 public enum TargetingType {
-	none, 	//this effect does not require a target
-	tower 	//this effect targets a tower 
+	none, 	//this effect does not require the player to select a target
+	tower, 	//this effect requires the player to target a tower 
 };
 
 //different effect types
 public enum EffectType {
 	instant,
 	wave,
-    discard
+    discard,
+    self
 };
 
 //base interface
@@ -46,6 +47,14 @@ public interface IEffectDiscard : IEffect
 {
 
     bool trigger(ref Card c); //called when this effect triggers.  returns true if the card no longer needs discarding
+
+}
+
+//for effects that target the card itself
+public interface IEffectSelf : IEffect
+{
+
+    void trigger(ref Card card, GameObject card_gameObject); //called when this effect triggers.
 
 }
 

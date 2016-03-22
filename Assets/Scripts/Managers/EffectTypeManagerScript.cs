@@ -24,9 +24,10 @@ public class EffectTypeManagerScript : MonoBehaviour {
 		switch (xe.name) {
             case "addCharges":              ie = new EffectAddCharges(); break;
             case "budgetPercentageChange":  ie = new EffectBudgetPercentageChange(); break;
+            case "discardRandomCard":       ie = new EffectDiscardRandom(); break;
             case "drawCard": 				ie = new EffectDrawCard(); break;
             case "returnsToTopOfDeck":      ie = new EffectReturnsToTopOfDeck(); break;
-            case "AllTowersLifespanBonus":  ie = new EffectAllTowersLifespanBonus(); break;
+            case "allTowersLifespanBonus":  ie = new EffectAllTowersLifespanBonus(); break;
 		    default: throw new NotImplementedException("Effect type " + xe.name + " is not implemented.");
 		}
 		ie.strength = xe.strength;
