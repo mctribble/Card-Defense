@@ -125,7 +125,7 @@ public class DeckManagerScript : MonoBehaviour {
 	}
 	
 	// Shuffles the current deck by swapping every item with another random item.  This is performed multiple times
-	void Shuffle() {
+	public void Shuffle() {
 		for (int iteration = 0; iteration < SHUFFLE_ITERATIONS; iteration++) {
 			for (int i = 0; i < currentDeck.Count; i++) {
 				int swapTarget = Random.Range(0, currentDeck.Count);
