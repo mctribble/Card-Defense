@@ -259,10 +259,13 @@ public class CardScript : MonoBehaviour {
 				case EffectType.instant:
 					((IEffectInstant)e).trigger();
 					break;
+                case EffectType.self:
+                        ((IEffectSelf)e).trigger(ref card, gameObject);
+                    break;
                 case EffectType.discard:
                     break; //discard effects are handled elsewhere
 				default:
-					Debug.LogWarning("I dont know how to apply an effect of type " + e.effectType);
+					Debug.LogError("I dont know how to apply an effect of type " + e.effectType);
 					break;
 				}
 			}
@@ -342,21 +345,12 @@ public class CardScript : MonoBehaviour {
 		Cast ();
 	}
 
-
-    //performs steps that must be done whenever a card of any type is cast
-	void Cast() {
-		//send a message to all cards to tell them to show themselves
-		GameObject[] cards = GameObject.FindGameObjectsWithTag ("Card");
-		foreach (GameObject c in cards)
-			c.SendMessage ("Show");
-		
-		//discard self
-		state = State.discarding;
-		targetLocation = discardLocation;
-		hand.SendMessage ("Discard", gameObject);
-
-        //remove charge.  
-        card.charges -= 1;
+    //discards this card
+    void Discard()
+    {
+        state = State.discarding;
+        targetLocation = discardLocation;
+        hand.SendMessage("Discard", gameObject);
 
         //run discard effects
         bool discardCancelled = false;
@@ -379,8 +373,21 @@ public class CardScript : MonoBehaviour {
         {
             DeckManagerScript.instance.addCardAtBottom(card);
         }
+    }
 
-	}
+    //performs steps that must be done whenever a card of any type is cast
+	void Cast() {
+		//send a message to all cards to tell them to show themselves
+		GameObject[] cards = GameObject.FindGameObjectsWithTag ("Card");
+		foreach (GameObject c in cards)
+			c.SendMessage ("Show");
+
+        //remove charge.  
+        card.charges -= 1;
+
+        //discard self
+        Discard();
+    }
 
 	void SetIdleLocation(Vector2 newIdle){
 
