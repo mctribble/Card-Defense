@@ -23,11 +23,12 @@ public class EffectTypeManagerScript : MonoBehaviour {
 		IEffect ie;
 		switch (xe.name) {
             case "addCharges":              ie = new EffectAddCharges(); break;
+            case "allTowersLifespanBonus": ie = new EffectAllTowersLifespanBonus(); break;
             case "budgetPercentageChange":  ie = new EffectBudgetPercentageChange(); break;
             case "discardRandomCard":       ie = new EffectDiscardRandom(); break;
             case "drawCard": 				ie = new EffectDrawCard(); break;
             case "returnsToTopOfDeck":      ie = new EffectReturnsToTopOfDeck(); break;
-            case "allTowersLifespanBonus":  ie = new EffectAllTowersLifespanBonus(); break;
+            case "shuffle":                 ie = new EffectShuffle(); break;
 		    default: throw new NotImplementedException("Effect type " + xe.name + " is not implemented.");
 		}
 		ie.strength = xe.strength;
