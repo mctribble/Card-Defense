@@ -46,10 +46,11 @@
         </Effects>
       </EffectData>
     </Card>
-    <Card Type="spell" Name="Recycle" Description="Discard your hand.  Draw ten cards."  Charges ="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Type="spell" Name="Recycle" Description="SHUFFLE your hand into the deck.  Draw ten cards."  Charges ="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <EffectData>
         <Effects>
           <Effect name="discardRandomCard" strength ="30" />
+          <Effect name="shuffle" strength="1" />
           <Effect name="drawCard" strength="10" />
         </Effects>
       </EffectData>
