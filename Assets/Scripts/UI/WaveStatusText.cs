@@ -23,8 +23,8 @@ public class WaveStatusText : MonoBehaviour {
 
 		int curWave = LevelManagerScript.instance.currentWave;
 		WaveData curWaveData = LevelManagerScript.instance.data.waves[curWave];
-		text.text = "Wave: " + (curWave + 1) + "/" + LevelManagerScript.instance.data.waves.Count + "\n" +
-			"Next: " + curWaveData.type + 
-			"  Count: " + (Mathf.RoundToInt((float)curWaveData.budget / (float)curWaveData.getEnemyData ().spawnCost) - LevelManagerScript.instance.deadThisWave);
+		text.text = "Wave: " + (curWave + 1) + "/" + LevelManagerScript.instance.data.waves.Count + " Next: " + curWaveData.type + "\n" + 
+			"  Count: " + (Mathf.RoundToInt((float)curWaveData.budget / (float)curWaveData.getEnemyData ().spawnCost) - LevelManagerScript.instance.deadThisWave) +
+            " over " + curWaveData.time + " seconds";
 	}
 }
