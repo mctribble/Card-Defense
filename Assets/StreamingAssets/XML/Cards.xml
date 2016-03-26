@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <CardTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Cards>
-    <Card Type="tower" Name="Fast Tower" Description="Summons a very fast tower suitable for fighting swarms" Charges="4" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
-      <TowerData Recharge="0.1" Range="2" Damage="3.5" Lifespan="3" Sprite="Tower_Basic" />
+    <Card Type="tower" Name="Fast Tower" Description="Summons a very fast tower suitable for fighting swarms" Charges="4" Art="Summon_Tower_Basic" Tooltip="Tower_Fast">
+      <TowerData Recharge="0.1" Range="2" Damage="3.5" Lifespan="3" Sprite="Tower_Fast" />
     </Card>
-    <Card Type="tower" Name="Basic Tower" Description="Summons a basic tower" Charges="6" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
-      <TowerData Recharge="0.75" Range="3" Damage="15" Lifespan="5" Sprite="Tower_Basic" />
+    <Card Type="tower" Name="Basic Tower" Description="Summons a basic tower" Charges="6" Art="Summon_Tower_Basic" Tooltip="Tower_Standard">
+      <TowerData Recharge="0.75" Range="3" Damage="15" Lifespan="5" Sprite="Tower_Standard" />
     </Card>
-    <Card Type="tower" Name="Heavy Tower" Description="Summons a heavy-hitting tower suitable for fighting tanks" Charges="4" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
-      <TowerData Recharge="3" Range="2" Damage="100" Lifespan="3" Sprite="Tower_Basic" />
+    <Card Type="tower" Name="Heavy Tower" Description="Summons a heavy-hitting tower suitable for fighting tanks" Charges="4" Art="Summon_Tower_Basic" Tooltip="Tower_Heavy">
+      <TowerData Recharge="3" Range="2" Damage="100" Lifespan="3" Sprite="Tower_Heavy" />
     </Card>
     <Card Type="upgrade" Name="Basic Upgrade" Description="-20% speed.  +0.5 range.  +25 damage.  +1 wave." Charges="5" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <upgradeData RechargeMult="1.2" RechargeMod="0.0" rangeMod="0.5" DamageMult="1.0" DamageMod="25" WaveBonus="1" />
