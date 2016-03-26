@@ -35,7 +35,7 @@
       <EffectData>
         <Effects>
           <Effect name="addCharges" strength ="1" />
-          <Effect name="returnsToTopOfDeck" strength="0" />
+          <Effect name="returnsToTopOfDeck" />
         </Effects>
       </EffectData>
     </Card>
@@ -50,10 +50,18 @@
       <EffectData>
         <Effects>
           <Effect name="discardRandomCard" strength ="30" />
-          <Effect name="shuffle" strength="1" />
+          <Effect name="shuffle" />
           <Effect name="drawCard" strength="10" />
         </Effects>
       </EffectData>
     </Card>
+    <Card Type="spell" Name="Summon Swarm" Description="The next wave becomes a swarm wave.  take three damage."  Charges ="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+      <EffectData>
+        <Effects>
+          <Effect name="changeWaveType" argument="Swarm" />
+          <Effect name="damagePlayer" strength="3" />
+        </Effects>
+      </EffectData>
+    </Card>  
   </Cards>
 </CardTypes>
