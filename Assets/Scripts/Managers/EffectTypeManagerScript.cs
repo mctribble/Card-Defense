@@ -23,8 +23,10 @@ public class EffectTypeManagerScript : MonoBehaviour {
 		IEffect ie;
 		switch (xe.name) {
             case "addCharges":              ie = new EffectAddCharges(); break;
-            case "allTowersLifespanBonus": ie = new EffectAllTowersLifespanBonus(); break;
+            case "allTowersLifespanBonus":  ie = new EffectAllTowersLifespanBonus(); break;
             case "budgetPercentageChange":  ie = new EffectBudgetPercentageChange(); break;
+            case "changeWaveType":          ie = new EffectChangeWaveType(); break;
+            case "damagePlayer":            ie = new EffectDamagePlayer(); break;
             case "discardRandomCard":       ie = new EffectDiscardRandom(); break;
             case "drawCard": 				ie = new EffectDrawCard(); break;
             case "returnsToTopOfDeck":      ie = new EffectReturnsToTopOfDeck(); break;
@@ -32,6 +34,7 @@ public class EffectTypeManagerScript : MonoBehaviour {
 		    default: throw new NotImplementedException("Effect type " + xe.name + " is not implemented.");
 		}
 		ie.strength = xe.strength;
+        ie.argument = xe.argument;
 		return ie;
 	}
 }

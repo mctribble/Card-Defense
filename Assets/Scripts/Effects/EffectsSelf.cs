@@ -8,8 +8,9 @@ class EffectAddCharges : IEffectSelf
 {
     //generic interface
     public TargetingType targetingType { get { return TargetingType.none; } }   //this effect doesnt need a target
-    public EffectType effectType { get { return EffectType.self; } }         //this is a discard effect
-    public float strength { get; set; }                                         //how strong this effect is
+    public EffectType effectType { get { return EffectType.self; } }            //this is a discard effect
+    public float strength { get; set; }                                         //how strong this effect is.  (unused in this effect)
+    public string argument { get; set; }                                        //effect argument (unused in this effect)
 
     //this effect
     public string Name { get { return "Card gains " + strength + "charges."; } }        //returns name and strength
@@ -24,8 +25,9 @@ public class EffectDiscardRandom : IEffectSelf
 {
     //generic interface
     public TargetingType targetingType { get { return TargetingType.none; } }   //this effect doesnt need a target
-    public EffectType effectType { get { return EffectType.self; } }         //this is an instant effect
-    public float strength { get; set; }                                         //how strong this effect is
+    public EffectType effectType { get { return EffectType.self; } }            //this is an instant effect
+    public float strength { get; set; }                                         //how strong this effect is.  (unused in this effect)
+    public string argument { get; set; }                                        //effect argument (unused in this effect)
 
     //this effect
     public string Name { get { return "Discard " + strength + " random cards"; } }        //returns name and strength

@@ -8,11 +8,12 @@ public class EffectDrawCard : IEffectInstant {
 
 	//generic interface
 	public TargetingType targetingType { get { return TargetingType.none; } }	//this effect doesnt need a target
-	public EffectType effectType { get { return EffectType.instant; } }			//this is an instant effect
-	public float strength { get; set; }											//how strong this effect is
+	public EffectType effectType { get { return EffectType.instant; } }         //this is an instant effect
+    public float strength { get; set; }                                         //how strong this effect is.  (unused in this effect)
+    public string argument { get; set; }                                        //effect argument (unused in this effect)
 
-	//this effect
-	public string Name { get { return "Draw " + strength + " cards"; } }		//returns name and strength
+    //this effect
+    public string Name { get { return "Draw " + strength + " cards"; } }		//returns name and strength
 	public void trigger() {
 		for (uint i = 0; i < strength; i++)
 			GameObject.FindGameObjectWithTag("Hand").SendMessage ("drawCard");
@@ -27,7 +28,8 @@ public class EffectAllTowersLifespanBonus : IEffectInstant
     //generic interface
     public TargetingType targetingType { get { return TargetingType.none; } }   //this effect doesnt need a target
     public EffectType effectType { get { return EffectType.instant; } }         //this is an instant effect
-    public float strength { get; set; }                                         //how strong this effect is
+    public float strength { get; set; }                                         //how strong this effect is.  (unused in this effect)
+    public string argument { get; set; }                                        //effect argument (unused in this effect)
 
     //this effect
     public string Name { get { return "All towers have their lifespan increased by " + strength + "."; } }        //returns name and strength
@@ -52,13 +54,33 @@ public class EffectShuffle : IEffectInstant
     //generic interface
     public TargetingType targetingType { get { return TargetingType.none; } }   //this effect doesnt need a target
     public EffectType effectType { get { return EffectType.instant; } }         //this is an instant effect
-    public float strength { get; set; }                                         //how strong this effect is
+    public float strength { get; set; }                                         //how strong this effect is.  (unused in this effect)
+    public string argument { get; set; }                                        //effect argument (unused in this effect)
 
     //this effect
     public string Name { get { return "Shuffle the deck."; } }        //returns name and strength
     public void trigger()
     {
         DeckManagerScript.instance.Shuffle();
+    }
+
+}
+
+//damages the player
+public class EffectDamagePlayer : IEffectInstant
+{
+
+    //generic interface
+    public TargetingType targetingType { get { return TargetingType.none; } }   //this effect doesnt need a target
+    public EffectType effectType { get { return EffectType.instant; } }         //this is an instant effect
+    public float strength { get; set; }                                         //how strong this effect is.  (unused in this effect)
+    public string argument { get; set; }                                        //effect argument (unused in this effect)
+
+    //this effect
+    public string Name { get { return "The player takes " + strength + " damage."; } }        //returns name and strength
+    public void trigger()
+    {
+        DeckManagerScript.instance.Damage(Mathf.RoundToInt(strength));
     }
 
 }

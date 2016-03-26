@@ -11,7 +11,8 @@ class EffectReturnsToTopOfDeck : IEffectDiscard
     //generic interface
     public TargetingType targetingType { get { return TargetingType.none; } }   //this effect doesnt need a target
     public EffectType effectType { get { return EffectType.discard; } }         //this is a discard effect
-    public float strength { get; set; }                                         //how strong this effect is
+    public float strength { get; set; }                                         //how strong this effect is.  (unused in this effect)
+    public string argument { get; set; }                                        //effect argument (unused in this effect)
 
     //this effect
     public string Name { get { return "Returns to top of deck."; } }        //returns name and strength

@@ -50,6 +50,7 @@ public class UpgradeData : System.Object {
 public class XMLEffect : System.Object {
 	[XmlAttribute] public string name;
 	[XmlAttribute] public float strength;
+    [XmlAttribute] public string argument;
 }
 
 //represents everything needed to apply card effects
