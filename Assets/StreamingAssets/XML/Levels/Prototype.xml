@@ -32,6 +32,7 @@
       <Card name="Reinforce" count="1" />
       <Card name="Recycle" count="1" />
       <Card name="Summon Swarm" count="1"/>
+      <Card name="Time Crunch" count="1"/>
     </Cards>
   </levelDeck>
 </Level>
