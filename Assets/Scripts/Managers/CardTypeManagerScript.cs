@@ -120,6 +120,8 @@ public class CardTypeManagerScript : MonoBehaviour {
 				return cd;
 			}
 		}
+
+        Debug.LogError("Could not find card type " + name + ".");
 		return null;
 	}
 }

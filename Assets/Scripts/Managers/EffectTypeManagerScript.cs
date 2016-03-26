@@ -31,6 +31,7 @@ public class EffectTypeManagerScript : MonoBehaviour {
             case "drawCard": 				ie = new EffectDrawCard(); break;
             case "returnsToTopOfDeck":      ie = new EffectReturnsToTopOfDeck(); break;
             case "shuffle":                 ie = new EffectShuffle(); break;
+            case "timePercentageChange":    ie = new EffectTimePercentageChange(); break;
 		    default: throw new NotImplementedException("Effect type " + xe.name + " is not implemented.");
 		}
 		ie.strength = xe.strength;
