@@ -18,7 +18,8 @@
                                 <xsd:element maxOccurs="unbounded" name="Effect">
                                   <xsd:complexType>
                                     <xsd:attribute name="name" type="xsd:string" use="required" />
-                                    <xsd:attribute name="strength" type="xsd:decimal" use="required" />
+                                    <xsd:attribute name="strength" type="xsd:decimal" use="optional" />
+                                    <xsd:attribute name="argument" type="xsd:string" use="optional" />
                                   </xsd:complexType>
                                 </xsd:element>
                               </xsd:sequence>
