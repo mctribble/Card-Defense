@@ -31,11 +31,12 @@
                     <xsd:element minOccurs="0" name="upgradeData">
                       <xsd:complexType>
                         <xsd:attribute name="RechargeMult" type="xsd:decimal" use="required" />
-                        <xsd:attribute name="rangeMod" type="xsd:decimal" use="required" />
+						<xsd:attribute name="RechargeMod" type="xsd:decimal" use="required" />
+						<xsd:attribute name="RangeMult" type="xsd:decimal" use="required" />
+                        <xsd:attribute name="RangeMod" type="xsd:decimal" use="required" />
+						<xsd:attribute name="DamageMult" type="xsd:decimal" use="required" />
                         <xsd:attribute name="DamageMod" type="xsd:decimal" use="required" />
                         <xsd:attribute name="WaveBonus" type="xsd:unsignedByte" use="required" />
-                        <xsd:attribute name="DamageMult" type="xsd:decimal" use="required" />
-                        <xsd:attribute name="RechargeMod" type="xsd:decimal" use="required" />
                       </xsd:complexType>
                     </xsd:element>
                     <xsd:element minOccurs="0" name="TowerData">
