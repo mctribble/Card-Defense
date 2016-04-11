@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- This is a fully functioning mod file.  Copy it to StreamingAssets/XML/Modded Levels to see it in action! -->
-<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="../Level.xsd">
   <!-- 	This many waves will be generated randomly and added to the END of the wave list -->
   <randomWaveCount>12</randomWaveCount>
   <!-- 	These waves will be gauranteed to spawn, in order.
