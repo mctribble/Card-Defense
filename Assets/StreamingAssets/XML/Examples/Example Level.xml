@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<!-- This is a fully functioning mod file.  Copy it to StreamingAssets/XML/Modded Levels to see it in action! -->
+<!--This is a fully functioning mod file.  Copy it to StreamingAssets/XML/Modded Levels to see it in action! 
+	WARNING: this file uses the example cards and enemies.  Make sure to copy over those files as well!-->
 <Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="../Level.xsd">
   <!-- 	This many waves will be generated randomly and added to the END of the wave list -->
   <randomWaveCount>12</randomWaveCount>
@@ -11,6 +12,7 @@
     <Wave type="Swarm" budget="500" time="5" />
     <Wave type="Standard" budget="800" time="8" />
     <Wave type="Tank" budget="1000" time="10" />
+	<Wave type="ExEnemy" budget="1000" time="10" />
   </Waves>
   <!--	positions at which the enemies can spawn -->
   <Spawners>
@@ -89,7 +91,8 @@
 		 count: how many of that card are present-->
     <Cards>
       <Card name="Heavy Tower" count="10" />
-      <Card name="Basic Upgrade" count="10" />
+      <Card name="Free Mana Tap" count="1" />
+	  <Card name="Example Upgrade" count="10" />
       <Card name="Enrage" count="10" />
       <Card name="Basic Tower" count="10" />
     </Cards>
