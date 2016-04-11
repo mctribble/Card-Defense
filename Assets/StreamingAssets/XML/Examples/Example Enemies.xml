@@ -1,17 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- This is a fully functioning mod file.  Copy it to StreamingAssets/XML/Modded Enemies to see it in action! -->
-<EnemyTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<EnemyTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="../Enemies.xsd">
   <!--	Enemies added here can spawn in random waves, or be specified in a level's wave list.
-		name: The name of the enemy.  If an enemy of this name already exists, the existing enemy is OVERWRITTEN!
-		spawnCost: the wave spawner must "pay" this much to spawn an enemy of this type.  Player receives this much mana when the enemy is killed, and loses twice this much if the enemy reaches the end.
-		maxHealth: the amount of damage this unit can take before dying.
-		unitSpeed: how fast this unit moves
+		string name: The name of the enemy.  If an enemy of this name already exists, the existing enemy is OVERWRITTEN!
+		byte   spawnCost: the wave spawner must "pay" this much to spawn an enemy of this type.  Player receives this much mana when the enemy is killed, and loses twice this much if the enemy reaches the end.
+		short  maxHealth: the amount of damage this unit can take before dying.
+		byte   damage: the amount of charges removed from the player's deck when this enemy reaches their goal
+		byte   unitSpeed: how fast this unit moves
 		unitColor: the enemy sprite is colorized with this.  Values range from 0 to 1.-->
   <Enemies>
-    <Enemy name="Tank" spawnCost="100" maxHealth="8" unitSpeed="1">
+    <!--because an enemy named Tank already exists in the base game, that version will be overwritten.  
+		This variation of tank has very low health. -->
+    <Enemy name="Tank" spawnCost="100" damage="10" maxHealth="8" unitSpeed="1">
       <unitColor r="0" g="0" b="1" a="1" />
     </Enemy>
-    <Enemy name="ExEnemy" spawnCost="1" maxHealth="1" unitSpeed="1">
+	<!--because an enemy of this name does not exist in base game, this will be added to the list.  
+		It will only appear in levels that spawn at least some waves at random. 
+		these enemies are very slow and always die in one hit, but spawn in great numbers-->
+    <Enemy name="ExEnemy" spawnCost="1" damage="1" maxHealth="1" unitSpeed="1">
       <unitColor r="0" g="0" b="0" a="1" />
     </Enemy>
   </Enemies>
