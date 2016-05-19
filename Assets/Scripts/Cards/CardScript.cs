@@ -56,18 +56,18 @@ public class XMLEffect : System.Object {
 //represents everything needed to apply card effects
 [System.Serializable]
 public class EffectData : System.Object {
-	//list of effects from xml
-	[XmlArray("Effects")]
-	[XmlArrayItem("Effect")]
-	public List<XMLEffect> XMLeffects = new List<XMLEffect> ();
-	[XmlIgnore]
-	public bool effectsSpecified //hide effect list if it is empty
-	{
-		get { return XMLeffects.Count > 0; }
-		set {}
-	}
-	
-	[XmlIgnore]	public List<IEffect> effects = new List<IEffect> (); //list of effect classes
+    //list of effects from xml
+    [XmlArray("Effects")]
+    [XmlArrayItem("Effect")]
+    public List<XMLEffect> XMLeffects = new List<XMLEffect>();
+    [XmlIgnore]
+    public bool effectsSpecified //hide effect list if it is empty
+    {
+        get { return XMLeffects.Count > 0; }
+        set { }
+    }
+
+    [XmlIgnore] public List<IEffect> effects = new List<IEffect>(); //list of effect classes
 	[XmlIgnore] public TargetingType targetingType {
 		get {
 			if (effects.Count == 0) parseEffects(); //make sure we have actual code references to the effects
@@ -82,7 +82,7 @@ public class EffectData : System.Object {
 	}
 
 	//translates the XMLeffects into code references
-	private void parseEffects() {
+	public void parseEffects() {
 		foreach (XMLEffect xe in XMLeffects)
 			effects.Add (EffectTypeManagerScript.instance.parse (xe));
 	}
@@ -163,7 +163,7 @@ public class CardScript : MonoBehaviour {
 		//start idle
 		state = State.idle;
 
-		tooltipInstance = null;
+        tooltipInstance = null;
 	}
 
 	//called by the hand to pass a reference to said hand
@@ -403,13 +403,46 @@ public class CardScript : MonoBehaviour {
 
 	//saves card definition data and updates components as necessarry
 	IEnumerator SetCard(Card c) {
+        //save the data
         card = c;
+
+        //update card text
 		title.text = card.data.cardName + "\n" + card.charges + "/" + card.data.cardMaxCharges;
-		description.text = card.data.cardDescription;
+        updateDescriptionText();
 
 		//load art with WWW (yes, really!  I couldn't find an easier way to do this and still let the user access the image files)
 		WWW www = new WWW ("file:///" + Application.dataPath + "/StreamingAssets/Art/Card Art/" + card.data.cardArtName + ".png"); //load file
 		yield return www; //wait for it to load
 		art.sprite = Sprite.Create (www.texture, new Rect (0, 0, www.texture.width, www.texture.height), new Vector2 (0.5f, 0.5f));
-	}
+    }
+
+    //helper function.  updates the card description text.
+    private void updateDescriptionText()
+    {
+        //init
+        description.text = "";
+
+        //add info depending on card type
+        switch (card.data.cardType)
+        {
+            case CardType.spell:
+                //make sure the effects have been parsed
+                if (card.data.EffectData.effects.Count == 0) { card.data.EffectData.parseEffects(); }
+
+                //add a line of text to the description for each
+                foreach (IEffect e in card.data.EffectData.effects)
+                {
+                    description.text += "* " + e.Name + '\n';
+                }
+                break;
+            case CardType.tower:
+                //todo
+                break;
+            case CardType.upgrade:
+                //todo
+                break;
+        }
+        //end with the flavor text found in the card file
+        description.text += "<i>" + card.data.cardDescription + "</i>";  
+    }
 }
