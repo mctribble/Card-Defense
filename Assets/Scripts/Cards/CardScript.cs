@@ -436,7 +436,10 @@ public class CardScript : MonoBehaviour {
                 }
                 break;
             case CardType.tower:
-                //todo
+                description.text += "Damage: " + card.data.TowerData.attackPower + '\n' +
+                                    "Range: " + card.data.TowerData.range + '\n' +
+                                    "Recharges in: " + card.data.TowerData.rechargeTime + "s\n" +
+                                    "Lifespan: " + card.data.TowerData.lifespan + '\n';
                 break;
             case CardType.upgrade:
                 //todo
