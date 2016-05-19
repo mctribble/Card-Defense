@@ -10,10 +10,10 @@
     <Card Type="tower" Name="Heavy Tower" Description="Suitable for fighting tanks" Charges="4" Art="Summon_Tower_Basic" Tooltip="Tower_Heavy">
       <TowerData Recharge="3" Range="2" Damage="100" Lifespan="3" Sprite="Tower_Heavy" />
     </Card>
-    <Card Type="upgrade" Name="Basic Upgrade" Description="-20% speed.  +0.5 range.  +25 damage.  +1 wave." Charges="5" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Type="upgrade" Name="Basic Upgrade" Description="Useful on most towers, but be mindful of the speed penalty" Charges="5" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <upgradeData RechargeMult="1.2" RechargeMod="0.0" RangeMult="1.0" RangeMod="0.5" DamageMult="1.0" DamageMod="25" WaveBonus="1" />
     </Card>
-    <Card Type="upgrade" Name="Heavy Upgrade" Description="recharges 0.5s slower.  +1 range.  +100% damage.  +3 waves" Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Type="upgrade" Name="Heavy Upgrade" Description="Best on towers with high damage" Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <upgradeData DamageMult="2" DamageMod="0" RechargeMod="0.5" RechargeMult="1.0" RangeMod="1" RangeMult="1.0" WaveBonus="3" />
     </Card>
     <Card Type="spell" Name="Enrage" Description="Poking the bear." Charges="6" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
