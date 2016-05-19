@@ -93,10 +93,10 @@ public class EffectData : System.Object {
 public class CardData : System.Object {
 
 	//card data
-	[XmlAttribute("Type")] public CardType 		cardType;	 	    //determines aspects of how the card should behave and the meaning of other values.  See enum dec for more info
-	[XmlAttribute("Name")] public string 		cardName;		    //name of the card
-	[XmlAttribute("Description")] public string cardDescription;    //description of the card
-	[XmlAttribute("Charges")] public int 		cardMaxCharges; 	//how much it costs to use this card
+	[XmlAttribute("Type")]                          public CardType cardType;	 	    //determines aspects of how the card should behave and the meaning of other values.  See enum dec for more info
+	[XmlAttribute("Name")]                          public string 	cardName;		    //name of the card
+	[XmlAttribute("Description")][DefaultValue("")] public string   cardDescription;    //description of the card
+	[XmlAttribute("Charges")]                       public int 		cardMaxCharges; 	//how much it costs to use this card
 
 	[DefaultValue("Default_Art")]
 	[XmlAttribute("Art")] public string cardArtName { get; set; }

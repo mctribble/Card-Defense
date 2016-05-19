@@ -16,7 +16,7 @@
     <Card Type="upgrade" Name="Heavy Upgrade" Description="recharges 0.5s slower.  +1 range.  +100% damage.  +3 waves" Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <upgradeData DamageMult="2" DamageMod="0" RechargeMod="0.5" RechargeMult="1.0" RangeMod="1" RangeMult="1.0" WaveBonus="3" />
     </Card>
-    <Card Type="spell" Name="Enrage" Description="50% more enemies next wave.  Draw two cards." Charges="6" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Type="spell" Name="Enrage" Description="Poking the bear." Charges="6" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <EffectData>
         <Effects>
           <Effect name="budgetPercentageChange" strength="50" />
@@ -24,14 +24,14 @@
         </Effects>
       </EffectData>
     </Card>
-    <Card Type="spell" Name="Mana Tap" Description="Draw five cards." Charges="1" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Type="spell" Name="Mana Tap" Charges="1" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <EffectData>
         <Effects>
           <Effect name="drawCard" strength="5" />
         </Effects>
       </EffectData>
     </Card>
-    <Card Type="spell" Name="Shield" Description="Costs no charges to use.  Return this card to the top of the deck." Charges="15" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Type="spell" Name="Shield" Description="Use ths to protect more important cards from harm." Charges="15" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <EffectData>
         <Effects>
           <Effect name="addCharges" strength ="1" />
@@ -39,14 +39,14 @@
         </Effects>
       </EffectData>
     </Card>
-    <Card Type="spell" Name="Reinforce" Description="All towers last three waves longer."  Charges ="1" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Type="spell" Name="Reinforce" Charges ="1" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <EffectData>
         <Effects>
           <Effect name="allTowersLifespanBonus" strength ="3" />
         </Effects>
       </EffectData>
     </Card>
-    <Card Type="spell" Name="Recycle" Description="SHUFFLE your hand into the deck.  Draw ten cards."  Charges ="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Type="spell" Name="Recycle" Description="Does not guarantee your new hand will be better than the one you have."  Charges ="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <EffectData>
         <Effects>
           <Effect name="discardRandomCard" strength ="30" />
@@ -55,7 +55,7 @@
         </Effects>
       </EffectData>
     </Card>
-    <Card Type="spell" Name="Summon Swarm" Description="The next wave becomes a swarm wave.  take three damage."  Charges ="2" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Type="spell" Name="Summon Swarm" Description="BEES!"  Charges ="2" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <EffectData>
         <Effects>
           <Effect name="changeWaveType" argument="Swarm" />
@@ -63,7 +63,7 @@
         </Effects>
       </EffectData>
     </Card>  
-    <Card Type="spell" Name="Time Crunch" Description="All towers last one wave longer.  Enemies spawn twice as fast this wave."  Charges ="4" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Type="spell" Name="Time Crunch" Description="Condensing the onslaught"  Charges ="4" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <EffectData>
         <Effects>
           <Effect name="allTowersLifespanBonus" strength ="1" />
