@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CardTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="Cards.xsd">
+<CardTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="Cards.xsd">
   <Cards>
     <Card Type="tower" Name="Fast Tower" Description="Summons a very fast tower suitable for fighting swarms" Charges="4" Art="Summon_Tower_Basic" Tooltip="Tower_Fast">
       <TowerData Recharge="0.1" Range="2" Damage="3.5" Lifespan="3" Sprite="Tower_Fast" />

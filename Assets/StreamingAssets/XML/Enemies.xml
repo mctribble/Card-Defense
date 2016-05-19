@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<EnemyTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="Enemies.xsd">
+<EnemyTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="Enemies.xsd">
   <Enemies>
     <Enemy name="Swarm" spawnCost="5" damage="1" maxHealth="4" unitSpeed="5">
       <unitColor r="1" g="0" b="0" a="1" />

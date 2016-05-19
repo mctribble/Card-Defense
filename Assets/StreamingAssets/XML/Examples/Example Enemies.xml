@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- This is a fully functioning mod file.  Copy it to StreamingAssets/XML/Modded Enemies to see it in action! -->
-<EnemyTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="../Enemies.xsd">
+<EnemyTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Enemies.xsd">
   <!--	Enemies added here can spawn in random waves, or be specified in a level's wave list.
 		string name: The name of the enemy.  If an enemy of this name already exists, the existing enemy is OVERWRITTEN!
 		byte   spawnCost: the wave spawner must "pay" this much to spawn an enemy of this type.  Player receives this much mana when the enemy is killed, and loses twice this much if the enemy reaches the end.
