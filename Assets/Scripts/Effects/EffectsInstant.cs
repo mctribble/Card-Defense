@@ -13,7 +13,7 @@ public class EffectDrawCard : IEffectInstant {
     public string argument { get; set; }                                        //effect argument (unused in this effect)
 
     //this effect
-    public string Name { get { return "Draw " + strength + " cards"; } }		//returns name and strength
+    public string Name { get { return "Draw up to " + strength + " cards"; } }		//returns name and strength
 	public void trigger() {
 		for (uint i = 0; i < strength; i++)
 			GameObject.FindGameObjectWithTag("Hand").SendMessage ("drawCard");

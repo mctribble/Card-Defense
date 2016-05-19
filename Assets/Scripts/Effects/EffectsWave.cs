@@ -14,7 +14,16 @@ public class EffectBudgetPercentageChange : IEffectWave {
     public string argument { get; set; }                                        //effect argument (unused in this effect)
 
     //this effect
-    public string Name { get { return "Increase wave strength by " + strength + " percent."; } }	//returns name and strength
+    public string Name //returns name and strength
+    { 
+        get
+        {
+            if ( strength >= 0 )
+                return "wave is " + strength + " percent stronger.";
+            else
+                return "wave is " + -strength + " percent weaker.";
+        }
+    }	
 	public WaveData alteredWaveData(WaveData currentWaveData) {
 		currentWaveData.budget = Mathf.RoundToInt(currentWaveData.budget * (1.0f + (strength / 100.0f)));
 		return currentWaveData;
@@ -53,7 +62,16 @@ public class EffectTimePercentageChange : IEffectWave
     public string argument { get; set; }                                        //effect argument (unused in this effect)
 
     //this effect
-    public string Name { get { return "Increase wave time by " + strength + " percent."; } }    //returns name and strength
+    public string Name //returns name and strength
+    {
+        get
+        {
+            if (strength >= 0)
+                return "wave spawns " + strength + " percent slower.";
+            else
+                return "wave spawns " + -strength + " percent faster.";
+        }
+    }
     public WaveData alteredWaveData(WaveData currentWaveData)
     {
         currentWaveData.time = currentWaveData.time * (1.0f + (strength / 100.0f));
