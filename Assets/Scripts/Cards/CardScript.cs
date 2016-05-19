@@ -450,14 +450,14 @@ public class CardScript : MonoBehaviour {
                 if (card.data.upgradeData.rechargeMultiplier> 1)   { description.text += "recharge: +"  + (card.data.upgradeData.rechargeMultiplier - 1).ToString("P1") + '\n'; }
                 if (card.data.upgradeData.attackModifier    > 0)   { description.text += "damage: +"    + card.data.upgradeData.attackModifier.ToString()               + '\n'; }
                 if (card.data.upgradeData.rangeModifier     > 0)   { description.text += "range: +"     + card.data.upgradeData.rangeModifier.ToString()                + '\n'; }
-                if (card.data.upgradeData.rechargeModifier  > 0)   { description.text += "recharge: +"  + card.data.upgradeData.rechargeModifier.ToString()             + 's\n'; }
+                if (card.data.upgradeData.rechargeModifier  > 0)   { description.text += "recharge: +"  + card.data.upgradeData.rechargeModifier.ToString()             + "s\n"; }
                 if (card.data.upgradeData.waveBonus         < 0)   { description.text += "lifespan: -"  + card.data.upgradeData.waveBonus                               + '\n'; }
                 if (card.data.upgradeData.attackMultiplier  < 1)   { description.text += "damage: -"    + (1 - card.data.upgradeData.attackMultiplier).ToString("P1")   + '\n'; }
                 if (card.data.upgradeData.rangeMultiplier   < 1)   { description.text += "range: -"     + (1 - card.data.upgradeData.rangeMultiplier).ToString("P1")    + '\n'; }
                 if (card.data.upgradeData.rechargeMultiplier< 1)   { description.text += "recharge: -"  + (1 - card.data.upgradeData.rechargeMultiplier).ToString("P1") + '\n'; }
                 if (card.data.upgradeData.attackModifier    < 0)   { description.text += "damage: -"    + card.data.upgradeData.attackModifier.ToString()               + '\n'; }
                 if (card.data.upgradeData.rangeModifier     < 0)   { description.text += "range: -"     + card.data.upgradeData.rangeModifier.ToString()                + '\n'; }
-                if (card.data.upgradeData.rechargeModifier  < 0)   { description.text += "recharge: -"  + card.data.upgradeData.rechargeModifier.ToString()             + 's\n'; }
+                if (card.data.upgradeData.rechargeModifier  < 0)   { description.text += "recharge: -"  + card.data.upgradeData.rechargeModifier.ToString()             + "s\n"; }
                 break;
         }
         //end with the flavor text found in the card file
