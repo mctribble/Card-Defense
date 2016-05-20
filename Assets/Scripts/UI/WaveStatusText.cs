@@ -21,10 +21,24 @@ public class WaveStatusText : MonoBehaviour {
 		if (LevelManagerScript.instance.data.waves.Count == 0)
 			return;
 
+        //get variables
 		int curWave = LevelManagerScript.instance.currentWave;
 		WaveData curWaveData = LevelManagerScript.instance.data.waves[curWave];
-		text.text = "Wave: " + (curWave + 1) + "/" + LevelManagerScript.instance.data.waves.Count + " Next: " + curWaveData.type + "\n" + 
-			"  Count: " + (Mathf.RoundToInt((float)curWaveData.budget / (float)curWaveData.getEnemyData ().spawnCost) - LevelManagerScript.instance.deadThisWave) +
-            " over " + curWaveData.time + " seconds";
+
+        //first line is always Wave ??/?? (?????)
+        text.text = "Wave " + (curWave + 1) + "/" + LevelManagerScript.instance.data.waves.Count + " (" + curWaveData.type + ")\n";
+
+        //if the wave is still spawning or has not yet started, second line is ??? incoming over ??? seconds
+        if (LevelManagerScript.instance.SpawnCount != 0)
+        {
+            text.text += LevelManagerScript.instance.SpawnCount +
+                " incoming over " + curWaveData.time.ToString("F1") + " seconds";
+        }
+        else //if the wave has finished spawning, second line is ??? remaining with ?????? health
+        {
+            text.text += (Mathf.RoundToInt((float)curWaveData.budget / (float)curWaveData.getEnemyData().spawnCost) - LevelManagerScript.instance.deadThisWave) +
+                " remaining with " + LevelManagerScript.instance.WaveTotalRemainingHealth + " health";
+        }
+        
 	}
 }

@@ -256,6 +256,8 @@ public class CardScript : MonoBehaviour {
 				case EffectType.wave:
 					LevelManagerScript.instance.data.waves[LevelManagerScript.instance.currentWave] = 
 						((IEffectWave)e).alteredWaveData(LevelManagerScript.instance.data.waves[LevelManagerScript.instance.currentWave]);
+
+                    LevelManagerScript.instance.UpdateWaveStats();
 					break;
 				case EffectType.instant:
 					((IEffectInstant)e).trigger();
