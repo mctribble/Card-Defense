@@ -85,6 +85,8 @@
       </Upgrades>
     </Tower>
   </Towers>
+  <!--  this determines whether or not the deck is shuffled at game start.  If false, cards appear in the order listed below-->
+  <shuffleDeck>true</shuffleDeck>
   <!--	this is the deck the player is given to use in this level by default.  the deck name is currently unused.-->
   <levelDeck name="Heavy Buffs">
     <!-- name: name of the card
@@ -92,7 +94,7 @@
     <Cards>
       <Card name="Heavy Tower" count="10" />
       <Card name="Free Mana Tap" count="1" />
-	  <Card name="Example Upgrade" count="10" />
+	    <Card name="Example Upgrade" count="10" />
       <Card name="Enrage" count="10" />
       <Card name="Basic Tower" count="10" />
     </Cards>

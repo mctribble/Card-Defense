@@ -19,6 +19,7 @@
     <Segment startX="0" startY="2" endX="-2" endY="2" />
   </PathSegments>
   <Towers />
+  <shuffleDeck>true</shuffleDeck>
   <levelDeck name="Prototype Deck">
     <Cards>
       <Card name="Fast Tower" count="2" />

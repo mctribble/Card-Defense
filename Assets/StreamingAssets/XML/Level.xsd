@@ -70,6 +70,7 @@
             </xsd:sequence>
           </xsd:complexType>
         </xsd:element>
+        <xsd:element name="shuffleDeck" type="xsd:boolean"/>
         <xsd:element name="levelDeck">
           <xsd:complexType>
             <xsd:sequence>

@@ -48,6 +48,7 @@ public class LevelData {
 	[XmlArrayItem("Tower")]
 	public List<PremadeTower> towers;
 
+    public bool shuffleDeck;
 	public XMLDeck levelDeck;
 
 	public void Save(string path)
@@ -201,6 +202,9 @@ public class LevelManagerScript : MonoBehaviour {
 		
 		//set the deck
 		DeckManagerScript.instance.SendMessage ("SetDeck", data.levelDeck);
+        //shuffle it, if the level file says to
+        if (data.shuffleDeck)
+            DeckManagerScript.instance.SendMessage("Shuffle");
 
         //init wave stats
         UpdateWaveStats();
