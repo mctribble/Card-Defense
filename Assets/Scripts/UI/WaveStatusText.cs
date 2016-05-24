@@ -39,6 +39,9 @@ public class WaveStatusText : MonoBehaviour {
             text.text += (Mathf.RoundToInt((float)curWaveData.budget / (float)curWaveData.getEnemyData().spawnCost) - LevelManagerScript.instance.deadThisWave) +
                 " remaining with " + LevelManagerScript.instance.WaveTotalRemainingHealth + " health";
         }
-        
+
+        //if the game speed is not 1.0, add text to show what it is
+        if (Time.timeScale != 1.0f)
+            text.text += "\n(speed x" + Time.timeScale.ToString("F1") + ")";
 	}
 }
