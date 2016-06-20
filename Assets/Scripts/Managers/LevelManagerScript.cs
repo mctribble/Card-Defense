@@ -48,6 +48,7 @@ public class LevelData {
 	[XmlArrayItem("Tower")]
 	public List<PremadeTower> towers;
 
+    public bool shuffleDeck;
 	public XMLDeck levelDeck;
 
 	public void Save(string path)
@@ -97,29 +98,34 @@ public class WaveData {
 }
 
 public class LevelManagerScript : MonoBehaviour {
-	//wave generation parameters
-	//budget: absolute + (wave * linear) + (wave * squared)^2 + (exponential^wave)
-	const float WAVEGROWTH_ABSOLUTE = 40.0f;
-	const float WAVEGROWTH_LINEAR = 4.0f;
-	const float WAVEGROWTH_SQUARED = 2.2f;
-	const float WAVEGROWTH_EXPONENTIAL = 1.1f;
+    //wave generation parameters
+    //budget: absolute + (wave * linear) + (wave * squared)^2 + (exponential^wave)
+    const float WAVEGROWTH_ABSOLUTE = 40.0f;
+    const float WAVEGROWTH_LINEAR = 4.0f;
+    const float WAVEGROWTH_SQUARED = 2.2f;
+    const float WAVEGROWTH_EXPONENTIAL = 1.1f;
 
-	//time: min(wave*linear, maxwavetime)
-	const float WAVETIME_LINEAR = 1.1f;
-	const float WAVETIME_MAX = 20.0f;
+    //time: min(wave*linear, maxwavetime)
+    const float WAVETIME_LINEAR = 1.1f;
+    const float WAVETIME_MAX = 20.0f;
 
-	public bool levelLoaded;	//indicates whether a level has been loaded or not
+    public bool levelLoaded;    //indicates whether a level has been loaded or not
 
-	public GameObject spawnerPrefab; 			//prefab used to create spawners
-	public GameObject towerPrefab;				//prefab used to create towers
+    public GameObject spawnerPrefab;            //prefab used to create spawners
+    public GameObject towerPrefab;              //prefab used to create towers
 
-	public static LevelManagerScript instance;	//singleton pattern
-	public LevelData data;						//data for the level itself
-	public int  currentWave;					//which wave is current
-	public bool waveOngoing;					//indicates whether there is currently an active wave
-	public int deadThisWave { get; set; }		//number of monsters dead this wave
+    public static LevelManagerScript instance;  //singleton pattern
+    public LevelData data;                      //data for the level itself
+    public int currentWave;                     //which wave is current
+    public bool waveOngoing;                    //indicates whether there is currently an active wave
+    public int deadThisWave { get; set; }		//number of monsters dead this wave
 
-	public LevelData Data { get { return data; } set { data = value; } }
+    private int spawnCount; //how many enemies still need spawning this wave
+    private int waveTotalRemainingHealth; //health remaining across all enemies in this wave
+
+    public LevelData Data { get { return data; } set { data = value; } }
+    public int SpawnCount { get { return spawnCount; } }
+    public int WaveTotalRemainingHealth { get { return waveTotalRemainingHealth; } set { waveTotalRemainingHealth = value; } }
 
 	public List<GameObject> spawnerObjects;
 
@@ -130,6 +136,7 @@ public class LevelManagerScript : MonoBehaviour {
 		currentWave = 0;
 		deadThisWave = 0;
 		levelLoaded = false;
+        spawnCount = -1;
 	}
 
 	// Called after all objects have initialized
@@ -195,7 +202,13 @@ public class LevelManagerScript : MonoBehaviour {
 		
 		//set the deck
 		DeckManagerScript.instance.SendMessage ("SetDeck", data.levelDeck);
-	}
+        //shuffle it, if the level file says to
+        if (data.shuffleDeck)
+            DeckManagerScript.instance.SendMessage("Shuffle");
+
+        //init wave stats
+        UpdateWaveStats();
+    }
 
 	// Update is called once per frame
 	void Update () {
@@ -218,11 +231,9 @@ public class LevelManagerScript : MonoBehaviour {
 	IEnumerator spawnWave(WaveData d) {
 		//init vars
 		EnemyData 	spawnType = d.getEnemyData ();
-		int 		spawnerCount = spawnerObjects.Count;								//number of spawners
-		float 		rawSpawnCount = (float)d.budget / (float)spawnType.spawnCost;		//unrounded number of monsters to spawn
-		int 		spawnCount = Mathf.RoundToInt (rawSpawnCount);						//rounded number of monsters to spawn
+		int 		spawnerCount = spawnerObjects.Count; //number of spawners
 		if (spawnCount < 1) {spawnCount = 1; Debug.LogWarning("Wave spawn count was zero.  forced to spawn 1 monster.");} //spawn at least one monster
-		float		timeBetweenSpawns = d.time / spawnCount;							//delay between each spawn
+		float		timeBetweenSpawns = d.time / spawnCount; //delay between each spawn
 
 		GameObject.FindGameObjectWithTag ("Hand").SendMessage ("Hide"); //hide the hand
 
@@ -235,9 +246,11 @@ public class LevelManagerScript : MonoBehaviour {
 		yield return new WaitForSeconds (1.0f);
 
 		//spawn monsters.  each one is placed at a random spawn point.
-		for (uint i = 0; i < spawnCount; i++) {
-			spawnerObjects[ Random.Range(0, spawnerCount) ].SendMessage("Spawn"); 
-			yield return new WaitForSeconds (timeBetweenSpawns);						
+		while (spawnCount > 0) {
+			spawnerObjects[ Random.Range(0, spawnerCount) ].SendMessage("Spawn");
+            spawnCount--;
+			yield return new WaitForSeconds (timeBetweenSpawns);
+            d.time -= timeBetweenSpawns; //update time remaining after each spawn (TODO: make this smoother?)				
 		}
 
 		//wait for all monsters to be dead
@@ -271,5 +284,15 @@ public class LevelManagerScript : MonoBehaviour {
 		//draw new cards until seven in hand
 		yield return new WaitForSeconds (1.0f);
 		GameObject.FindGameObjectWithTag ("Hand").SendMessage ("drawToHandSize", 10);
-	}
+
+        //update stats for the next wave
+        UpdateWaveStats();
+    }
+
+    //called when the wave changes to update the enemy spawn counter and health tracker
+    public void UpdateWaveStats()
+    {
+        spawnCount = Mathf.RoundToInt(((float)data.waves[currentWave].budget / (float)data.waves[currentWave].getEnemyData().spawnCost));
+        waveTotalRemainingHealth = spawnCount * data.waves[currentWave].getEnemyData().maxHealth;
+    }
 }

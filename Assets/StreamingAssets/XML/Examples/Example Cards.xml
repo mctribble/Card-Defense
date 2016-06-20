@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- This is a fully functioning mod file.  Copy it to StreamingAssets/XML/Modded Cards to see it in action! -->
-<CardTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="../Cards.xsd">
+<CardTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Cards.xsd">
   <!-- 	Cards listed here will not appear in game unless they are listed in a deck! 
 		string Type: must be one of "tower", "upgrade", or "spell".  Each one uses different attributes (see below)
 		string Name: name of the card.  if a card of this name already exists, the existing card will be OVERWRITTEN.

@@ -93,8 +93,10 @@ public class EnemyScript : MonoBehaviour {
 		}
 
 		//take damage
-		curHealth -= Mathf.CeilToInt(e.rawDamage);
-
+        int damage = Mathf.CeilToInt(e.rawDamage);
+        damage = System.Math.Min(damage, curHealth);
+        curHealth -= damage;
+        LevelManagerScript.instance.WaveTotalRemainingHealth -= damage;
 
 		if (curHealth <= 0) {
 			//if dead, report the kill to the tower that shot it

@@ -13,7 +13,7 @@ class EffectAddCharges : IEffectSelf
     public string argument { get; set; }                                        //effect argument (unused in this effect)
 
     //this effect
-    public string Name { get { return "Card gains " + strength + "charges."; } }        //returns name and strength
+    public string Name { get { return "Card gains " + strength + " charges when cast."; } }        //returns name and strength
     public void trigger(ref Card card, GameObject card_gameObject)
     {
         card.charges += Mathf.RoundToInt(strength);
@@ -30,7 +30,7 @@ public class EffectDiscardRandom : IEffectSelf
     public string argument { get; set; }                                        //effect argument (unused in this effect)
 
     //this effect
-    public string Name { get { return "Discard " + strength + " random cards"; } }        //returns name and strength
+    public string Name { get { return "Discard up to " + strength + " random cards"; } }        //returns name and strength
     public void trigger(ref Card card, GameObject card_gameObject)
     {
         for (int i = 0; i < strength; i++)

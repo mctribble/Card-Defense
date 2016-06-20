@@ -8,7 +8,7 @@ public class HandScript : MonoBehaviour {
 	public Vector2 spawnLocation;	//where new cards appear
 	public GameObject cardPrefab;	//prefab used to spawn a new card
 	public int idealGap;			//ideal gap between cards
-	public float idleHeight;		//height at which new cards should idle
+	public float idleHeightMod;		//used to calculate height at which new cards should idle
 	public float initialDrawDelay;	//delay given between drawing each new card at the start of the level
 
 	private GameObject[] cards;		//stores the number of cards
@@ -126,11 +126,12 @@ public class HandScript : MonoBehaviour {
 		if (currentHandSize == 0)
 			return;
 
-		//retrieve card width
+		//retrieve card dims
 		int cardWidth = (int)cards [0].GetComponent<RectTransform> ().rect.width;
+        int cardHeight = (int)cards[0].GetComponent<RectTransform>().rect.height;
 
-		//figure out how far away the cards need to be from each other
-		int cardDistance = cardWidth + idealGap;
+        //figure out how far away the cards need to be from each other
+        int cardDistance = cardWidth + idealGap;
 
 		//calculate the midpoint of the hand to offset it properly
 		int lastCardPos = (cardDistance * (currentHandSize - 1));
@@ -144,6 +145,10 @@ public class HandScript : MonoBehaviour {
 			lastCardPos = (cardDistance * (currentHandSize - 1));
 			handMidpoint = lastCardPos / 2;
 		}
+
+        //calculate card idle height
+        int screenHeight = (int)transform.root.gameObject.GetComponent<RectTransform>().rect.height;
+        float idleHeight = (screenHeight / -2) + (cardHeight * idleHeightMod);
 
 		//calculate positions and send them to the cards
 		for (int c = 0; c < currentHandSize; c++) {

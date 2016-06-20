@@ -51,7 +51,7 @@
                   </xsd:sequence>
                   <xsd:attribute name="Type" type="xsd:string" use="required" />
                   <xsd:attribute name="Name" type="xsd:string" use="required" />
-                  <xsd:attribute name="Description" type="xsd:string" use="required" />
+                  <xsd:attribute name="Description" type="xsd:string" use="optional" />
                   <xsd:attribute name="Charges" type="xsd:unsignedByte" use="required" />
                   <xsd:attribute name="Art" type="xsd:string" use="required" />
                   <xsd:attribute name="Tooltip" type="xsd:string" use="required" />

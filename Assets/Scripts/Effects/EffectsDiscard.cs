@@ -15,7 +15,7 @@ class EffectReturnsToTopOfDeck : IEffectDiscard
     public string argument { get; set; }                                        //effect argument (unused in this effect)
 
     //this effect
-    public string Name { get { return "Returns to top of deck."; } }        //returns name and strength
+    public string Name { get { return "Returns to top of deck."; } } //returns name and strength
     public bool trigger(ref Card c)
     {
         DeckManagerScript.instance.addCardAtTop(c);

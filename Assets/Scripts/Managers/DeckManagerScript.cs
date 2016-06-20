@@ -96,6 +96,7 @@ public class DeckManagerScript : MonoBehaviour {
 	}
 	
 	// Sets the currentDeck based on the XMLDeck
+    // note that this does NOT shuffle the deck, since there are (rare) instances where this should not happen
 	void SetDeck (XMLDeck newDeck) {
         //init
         maxDeckCharges = 0;
@@ -120,7 +121,6 @@ public class DeckManagerScript : MonoBehaviour {
 
         curDeckCharges = maxDeckCharges; //the deck starts full, so all charges are present
 
-		Shuffle ();
 		deckSize = cardsLeft;
 	}
 	
