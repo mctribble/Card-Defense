@@ -43,8 +43,15 @@ public class PathSegmentScript : MonoBehaviour {
 		//calculate middle, length, and angle
 		Vector2 midpoint = Vector2.Lerp (pathStart, pathEnd, 0.5f);
 		float segmentLength = Vector2.Distance (pathStart, pathEnd) + 0.5f; //small buffer so there are no gaps at the corners
-		float angle = Vector2.Angle (pathStart - pathEnd, Vector2.right);
-		
+        Vector2 pathVec = pathStart - pathEnd;
+        float angle = Vector2.Angle (pathVec, Vector2.right);
+
+        //Vector2.Angle returns closest angle instead of angle in the clockwise direction
+        //use the cross product to detect when we have a "counter-clockwise angle" and update the value accordingly
+        //(see http://answers.unity3d.com/questions/162177/vector2angles-direction.html)
+        if (Vector3.Cross(pathVec, Vector3.right).z > 0.0)
+            angle = 360 - angle;
+
 		//position appropriately
 		RectTransform rTrans = GetComponent<RectTransform> ();
 		rTrans.position = midpoint;
