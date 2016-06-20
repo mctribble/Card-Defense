@@ -22,8 +22,8 @@
             <xsd:sequence>
               <xsd:element maxOccurs="unbounded" name="Spawner">
                 <xsd:complexType>
-                  <xsd:attribute name="spawnX" type="xsd:unsignedByte" use="required" />
-                  <xsd:attribute name="spawnY" type="xsd:unsignedByte" use="required" />
+                  <xsd:attribute name="spawnX" type="xsd:byte" use="required" />
+                  <xsd:attribute name="spawnY" type="xsd:byte" use="required" />
                 </xsd:complexType>
               </xsd:element>
             </xsd:sequence>
