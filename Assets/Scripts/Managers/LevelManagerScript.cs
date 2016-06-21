@@ -282,12 +282,6 @@ public class LevelManagerScript : MonoBehaviour {
 
 		deadThisWave = 0;
 
-		//print message if this is the last wave TODO: handle end of level
-		if (currentWave == data.waves.Count) {
-			Debug.Log ("LEVEL COMPLETE!");
-			Time.timeScale = 0.0f;
-		}
-
 		//draw new cards until seven in hand
 		yield return new WaitForSeconds (1.0f);
 		GameObject.FindGameObjectWithTag ("Hand").SendMessage ("drawToHandSize", 10);
@@ -295,6 +289,14 @@ public class LevelManagerScript : MonoBehaviour {
         //wave is over
         waveOngoing = false;
         currentWave++;
+
+        //print message if this is the last wave TODO: handle end of level
+        if (currentWave == data.waves.Count)
+        {
+            Debug.Log("LEVEL COMPLETE!");
+            Time.timeScale = 0.0f;
+            yield break;
+        }
 
         //update stats for the next wave
         UpdateWaveStats();
