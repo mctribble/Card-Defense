@@ -77,12 +77,14 @@ public class WaveData {
 	[XmlAttribute] public string type;
 	[XmlAttribute] public int budget;
 	[XmlAttribute] public float time;
+    [XmlAttribute] public string message;
 
 	//default.  these values are meant to be VERY noticable if a wave is left with default data
 	public WaveData () {
 		type = "Swarm";
 		budget = 999999999;
 		time = 300.0f;
+        message = "";
 	}
 
 	//specific data
@@ -305,6 +307,14 @@ public class LevelManagerScript : MonoBehaviour {
     //called when the wave changes to update the enemy spawn counter and health tracker
     public void UpdateWaveStats()
     {
+        //show the wave message, if there is one, and then blank it out so it only shows once
+        //TODO: replace this with an actual message box
+        if (data.waves[currentWave].message != "")
+        {
+            Debug.Log(data.waves[currentWave].message);
+            data.waves[currentWave].message = "";
+        }
+
         spawnCount = Mathf.RoundToInt(((float)data.waves[currentWave].budget / (float)data.waves[currentWave].getEnemyData().spawnCost));
         waveTotalRemainingHealth = spawnCount * data.waves[currentWave].getEnemyData().maxHealth;
     }
