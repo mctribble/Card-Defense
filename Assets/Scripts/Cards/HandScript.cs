@@ -10,6 +10,7 @@ public class HandScript : MonoBehaviour {
 	public int idealGap;			//ideal gap between cards
 	public float idleHeightMod;		//used to calculate height at which new cards should idle
 	public float initialDrawDelay;	//delay given between drawing each new card at the start of the level
+    public bool handHidden;         //whether or not the hand is hidden
 
 	private GameObject[] cards;		//stores the number of cards
 	private int currentHandSize;	//number of cards currently in hand
@@ -25,7 +26,8 @@ public class HandScript : MonoBehaviour {
 		cards = new GameObject[maximumHandSize]; //construct array to hold the hand
 		currentHandSize = 0; //no cards yet
 
-		//draw starting hand
+        //draw starting hand
+        handHidden = false;
 		for (int i = 0; i < startingHandSize; i++) {
 			yield return new WaitForSeconds(initialDrawDelay);
 			drawCard ();
@@ -56,15 +58,19 @@ public class HandScript : MonoBehaviour {
 		}
 
 		//card setup
-		cards [currentHandSize] = (GameObject) Instantiate(cardPrefab); 						//instantiate card prefab
-		cards [currentHandSize].transform.SetParent (transform.root); 							//declare the card a child of the UI object at the root of this tree
-		cards [currentHandSize].GetComponent<RectTransform> ().localPosition = spawnLocation; 	//position card
-		cards [currentHandSize].GetComponent<RectTransform> ().localScale = Vector3.one; 		//reset scale because changing parent changes it
-		cards [currentHandSize].SendMessage ("SetHand", gameObject); 							//tell the card which hand owns it
+		cards[currentHandSize] = (GameObject) Instantiate(cardPrefab); 						//instantiate card prefab
+		cards[currentHandSize].transform.SetParent (transform.root); 							//declare the card a child of the UI object at the root of this tree
+		cards[currentHandSize].GetComponent<RectTransform> ().localPosition = spawnLocation; 	//position card
+		cards[currentHandSize].GetComponent<RectTransform> ().localScale = Vector3.one; 		//reset scale because changing parent changes it
+		cards[currentHandSize].SendMessage ("SetHand", gameObject); 							//tell the card which hand owns it
 
-		cards [currentHandSize].SendMessage ("SetCard", DeckManagerScript.instance.Draw());	//send the card the data that defines it
+		cards[currentHandSize].SendMessage ("SetCard", DeckManagerScript.instance.Draw());	//send the card the data that defines it
 
-		currentHandSize++;	//increment card count
+        //if the hand is currently hidden, tell the new card to hide itself
+        if (handHidden)
+            cards[currentHandSize].SendMessage("Hide");
+
+        currentHandSize++;	//increment card count
 
 		//rearrange cards
 		updateCardIdleLocations (); //rearrange the cards
@@ -185,6 +191,7 @@ public class HandScript : MonoBehaviour {
 
 	//hides the hand
 	void Hide() {
+        handHidden = true;
 		foreach (GameObject c in cards) {
 			if (c != null) c.SendMessage("Hide");
 		}
@@ -192,6 +199,7 @@ public class HandScript : MonoBehaviour {
 
 	//shows the hand
 	void Show() {
+        handHidden = false;
 		foreach (GameObject c in cards) {
 			if (c != null) c.SendMessage("Show");
 		}

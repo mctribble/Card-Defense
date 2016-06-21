@@ -248,10 +248,6 @@ public class LevelManagerScript : MonoBehaviour {
         //spawn monsters.  each one is placed at a random spawn point.
         float timeToNextSpawn = timeBetweenSpawns;
 		while (spawnCount > 0) {
-            //spawnerObjects[ Random.Range(0, spawnerCount) ].SendMessage("Spawn");
-            //spawnCount--;
-            //yield return new WaitForSeconds (timeBetweenSpawns);
-            //d.time -= timeBetweenSpawns; //update time remaining after each spawn (TODO: make this smoother?)
             yield return new WaitForFixedUpdate();  //wait for the next physics update
             timeToNextSpawn -= Time.fixedDeltaTime; //reduce time until next spawn by amount of time between physics updates
             d.time -= Time.fixedDeltaTime;          //update the wave data also so that the status text can update
@@ -275,9 +271,6 @@ public class LevelManagerScript : MonoBehaviour {
 				monstersAlive = false;
 		}
 
-		//wave is over
-		waveOngoing = false;
-		currentWave++;
 		GameObject.FindGameObjectWithTag ("Hand").SendMessage ("Show"); //show the hand
 
         //find all towers in the level and tell them a wave ended
@@ -298,6 +291,10 @@ public class LevelManagerScript : MonoBehaviour {
 		//draw new cards until seven in hand
 		yield return new WaitForSeconds (1.0f);
 		GameObject.FindGameObjectWithTag ("Hand").SendMessage ("drawToHandSize", 10);
+
+        //wave is over
+        waveOngoing = false;
+        currentWave++;
 
         //update stats for the next wave
         UpdateWaveStats();
