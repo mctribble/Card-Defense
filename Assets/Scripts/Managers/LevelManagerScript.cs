@@ -245,12 +245,26 @@ public class LevelManagerScript : MonoBehaviour {
 		//slight delay before spawning
 		yield return new WaitForSeconds (1.0f);
 
-		//spawn monsters.  each one is placed at a random spawn point.
+        //spawn monsters.  each one is placed at a random spawn point.
+        float timeToNextSpawn = timeBetweenSpawns;
 		while (spawnCount > 0) {
-			spawnerObjects[ Random.Range(0, spawnerCount) ].SendMessage("Spawn");
-            spawnCount--;
-			yield return new WaitForSeconds (timeBetweenSpawns);
-            d.time -= timeBetweenSpawns; //update time remaining after each spawn (TODO: make this smoother?)				
+            //spawnerObjects[ Random.Range(0, spawnerCount) ].SendMessage("Spawn");
+            //spawnCount--;
+            //yield return new WaitForSeconds (timeBetweenSpawns);
+            //d.time -= timeBetweenSpawns; //update time remaining after each spawn (TODO: make this smoother?)
+            yield return new WaitForFixedUpdate();  //wait for the next physics update
+            timeToNextSpawn -= Time.fixedDeltaTime; //reduce time until next spawn by amount of time between physics updates
+            d.time -= Time.fixedDeltaTime;          //update the wave data also so that the status text can update
+            while (timeToNextSpawn < 0.0)           //this is a loop in case multiple spawns happen in one physics update
+            {
+                spawnerObjects[Random.Range(0, spawnerCount)].SendMessage("Spawn"); //spawn enemy
+                spawnCount--; //update spawn counter
+                timeToNextSpawn += timeBetweenSpawns; //update spawn timer
+
+                //bail if we have finished spawning baddies
+                if (spawnCount == 0)
+                    break;
+            }
 		}
 
 		//wait for all monsters to be dead
