@@ -75,6 +75,10 @@ public class PathManagerScript : MonoBehaviour {
 
         } while (result.Count <= MAX_PATH_LENGTH);
 
+        //if the result is empty, there was no path connected to the start.  throw error
+        if (result.Count == 0)
+            throw new System.Exception("There is no path connected to the start point!  Check your spawner positions.");
+
         //if the result is too long, the path probably loops back on itself.  throw error
         if (result.Count > MAX_PATH_LENGTH)
             throw new System.Exception("Path too long!  Make sure the segments defined for this level do not loop back on themselves.");
