@@ -30,9 +30,19 @@ public class PremadeTower {
 [System.Serializable]
 public class LevelData {
 
-	public int randomWaveCount;
-	
-	[XmlArray("Waves")]
+    //wave generation parameters
+    public int randomWaveCount;
+    //budget: absolute + (wave * linear) + (wave * squared)^2 + (exponential^wave)
+    public float waveGrowthAbsolute     = 40.0f;
+    public float waveGrowthLinear       = 4.0f;
+    public float waveGrowthSquared      = 2.2f;
+    public float waveGrowthExponential  = 1.1f;
+
+    //time: min(wave*linear, maxwavetime)
+    public float waveTimeLinear = 1.1f;
+    public float waveTimeMax    = 20.0f;
+
+    [XmlArray("Waves")]
 	[XmlArrayItem("Wave")]
 	public List<WaveData> waves;
 
@@ -100,17 +110,6 @@ public class WaveData {
 }
 
 public class LevelManagerScript : MonoBehaviour {
-    //wave generation parameters
-    //budget: absolute + (wave * linear) + (wave * squared)^2 + (exponential^wave)
-    const float WAVEGROWTH_ABSOLUTE = 40.0f;
-    const float WAVEGROWTH_LINEAR = 4.0f;
-    const float WAVEGROWTH_SQUARED = 2.2f;
-    const float WAVEGROWTH_EXPONENTIAL = 1.1f;
-
-    //time: min(wave*linear, maxwavetime)
-    const float WAVETIME_LINEAR = 1.1f;
-    const float WAVETIME_MAX = 20.0f;
-
     public bool levelLoaded;    //indicates whether a level has been loaded or not
 
     public GameObject spawnerPrefab;            //prefab used to create spawners
@@ -161,10 +160,10 @@ public class LevelManagerScript : MonoBehaviour {
 			int wave = data.waves.Count + 1;
 			
 			//budget: wave * linear + (wave * squared)^2 + exponential^wave
-			int waveBudget = Mathf.RoundToInt(WAVEGROWTH_ABSOLUTE +								//absolute growth
-			                                  (wave * WAVEGROWTH_LINEAR) + 	//linear growth
-			                                  (Mathf.Pow( (wave * WAVEGROWTH_SQUARED), 2.0f)) +	//squared growth
-			                                  (Mathf.Pow( WAVEGROWTH_EXPONENTIAL, wave)));		//exponential growth (WARNING: this gets HUGE!)
+			int waveBudget = Mathf.RoundToInt(data.waveGrowthAbsolute +								//absolute growth
+			                                  (wave * data.waveGrowthLinear) + 	//linear growth
+			                                  (Mathf.Pow( (wave * data.waveGrowthSquared), 2.0f)) +	//squared growth
+			                                  (Mathf.Pow( data.waveGrowthExponential, wave)));		//exponential growth (WARNING: this gets HUGE!)
 			
 			//enemy type: random (TODO: maybe make harder enemy types more common in later waves?  How would we define this?)
 			EnemyData waveEnemy = EnemyTypeManagerScript.instance.getRandomEnemyType();
@@ -175,7 +174,7 @@ public class LevelManagerScript : MonoBehaviour {
 			}
 			
 			//time: min(wave*linear, maxwavetime)
-			float waveTime = Mathf.Min(wave*WAVETIME_LINEAR, WAVETIME_MAX);
+			float waveTime = Mathf.Min(wave*data.waveTimeLinear, data.waveTimeMax);
 			
 			data.waves.Add( new WaveData(waveEnemy.name, waveBudget, waveTime) );
 		}

@@ -4,6 +4,12 @@
     <xsd:complexType>
       <xsd:sequence>
         <xsd:element name="randomWaveCount" type="xsd:unsignedByte" />
+        <xsd:element name="waveGrowthAbsolute" type="xsd:float" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="waveGrowthLinear" type="xsd:float" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="waveGrowthSquared" type="xsd:float" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="waveGrowthExponential" type="xsd:float" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="waveTimeLinear" type="xsd:float" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="waveTimeMax" type="xsd:float" minOccurs="0" maxOccurs="1"/>
         <xsd:element name="Waves">
           <xsd:complexType>
             <xsd:sequence>
