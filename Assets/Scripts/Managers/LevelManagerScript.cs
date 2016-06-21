@@ -84,7 +84,7 @@ public class WaveData {
 		type = "Swarm";
 		budget = 999999999;
 		time = 300.0f;
-        message = "";
+        message = "UNSPECIFIED WAVE!";
 	}
 
 	//specific data
@@ -309,10 +309,10 @@ public class LevelManagerScript : MonoBehaviour {
     {
         //show the wave message, if there is one, and then blank it out so it only shows once
         //TODO: replace this with an actual message box
-        if (data.waves[currentWave].message != "")
+        if (data.waves[currentWave].message != null)
         {
             Debug.Log(data.waves[currentWave].message);
-            data.waves[currentWave].message = "";
+            data.waves[currentWave].message = null;
         }
 
         spawnCount = Mathf.RoundToInt(((float)data.waves[currentWave].budget / (float)data.waves[currentWave].getEnemyData().spawnCost));

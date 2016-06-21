@@ -12,27 +12,27 @@
   </Waves>
   <!--	positions at which the enemies can spawn -->
   <Spawners>
-    <Spawner spawnX="-1" spawnY=" 15" />
-    <Spawner spawnX=" 0" spawnY=" 15" />
-    <Spawner spawnX=" 1" spawnY=" 15" />
+    <Spawner spawnX="-1"  spawnY="15" />
+    <Spawner spawnX="0"   spawnY="15" />
+    <Spawner spawnX="1"   spawnY="15" />
   </Spawners>
   <!--	positions at which each path segment starts and ends.  Make sure each spawner has a segment which starts at the same position.
-		note that the pathfinder is very basic at the moment: it will only search for other segments further down the list that start at
-		the same position their last segment ended at, and it will take the first option it finds.
-		This means you must list the segments in order, and the path can combine but not really branch off because all enemies will take the same path.-->
+		note that the pathfinder is very basic at the moment: at each step it finds all segments that start at the current position and takes one at random.
+    if it cant find any segments to take, it treats that as the "end of the road" and the enemy will damage the player when they reach that point.
+    This means you must be careful not to allow the path to loop back on itself. or travel away from the intended goal-->
   <PathSegments>
-    <Segment startX="-1" startY="15" endX="-1" endY="1" />
-    <Segment startX=" 0" startY="15" endX=" 0" endY="1" />
-    <Segment startX=" 1" startY="15" endX=" 1" endY="1" />
+    <Segment startX="-1"  startY="15" endX="-1" endY="1" />
+    <Segment startX="0"   startY="15" endX="0"  endY="1" />
+    <Segment startX="1"   startY="15" endX="1"  endY="1" />
     
-    <Segment startX="-1" startY=" 1" endX=" 0" endY="1" />
-    <Segment startX=" 1" startY=" 1" endX=" 0" endY="1" />
-    <Segment startX="-1" startY=" 1" endX="-1" endY="0" />
-    <Segment startX=" 1" startY=" 1" endX=" 1" endY="0" />
+    <Segment startX="-1"  startY="1"  endX="0"  endY="1" />
+    <Segment startX="1"   startY="1"  endX="0"  endY="1" />
+    <Segment startX="-1"  startY="1"  endX="-1" endY="0" />
+    <Segment startX="1"   startY="1"  endX="1"  endY="0" />
     
-    <Segment startX="-1" startY=" 0" endX=" 0" endY="0" />
-    <Segment startX=" 0" startY=" 1" endX=" 0" endY="0" />
-    <Segment startX=" 1" startY=" 0" endX=" 0" endY="0" />
+    <Segment startX="-1"  startY="0"  endX="0"  endY="0" />
+    <Segment startX="0"   startY="1"  endX="0"  endY="0" />
+    <Segment startX="1"   startY="0"  endX="0"  endY="0" />
   </PathSegments>
   <!--	this section is for starting the level with towers already on the field.  See Example Level.xml for details-->
   <Towers>

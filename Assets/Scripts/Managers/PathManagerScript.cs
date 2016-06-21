@@ -17,6 +17,8 @@ public class PathManagerScript : MonoBehaviour {
 	public GameObject segmentPrefab;
 	private List<PathSegment> segments;
 
+    public const int MAX_PATH_LENGTH = 30; //throws an error if the path result would be longer than this (to catch paths that loop back forever)
+
 	// Use this for initialization
 	void Awake () {
 		instance = this;
@@ -39,18 +41,45 @@ public class PathManagerScript : MonoBehaviour {
 	public List<Vector2> CalculatePathFromPos(Vector2 startPos){
 
 		List<Vector2> result = new List<Vector2> ();
+        Vector2 prevPos = startPos;
 
-		Vector2 prevPos = startPos;
-		foreach (PathSegment segment in segments) {
-			if (segment.startX == prevPos.x) {
-				if (segment.startY == prevPos.y) {
-					prevPos = new Vector2(segment.endX, segment.endY);
-					result.Add(prevPos);
-				}
-			}
-		}
+        //old: return first valid path
+        //foreach (PathSegment segment in segments) {
+        //	if (segment.startX == prevPos.x) {
+        //		if (segment.startY == prevPos.y) {
+        //			prevPos = new Vector2(segment.endX, segment.endY);
+        //			result.Add(prevPos);
+        //		}
+        //	}
+        //}
 
-		return result;
+        //return a random valid path
+        List<Vector2> pathCandidates = new List<Vector2> ();
+        do
+        {
+            //find all valid segments leading away from current position
+            pathCandidates.Clear();
+            foreach (PathSegment segment in segments)
+                if (segment.startX == prevPos.x)
+                    if (segment.startY == prevPos.y)
+                        pathCandidates.Add(new Vector2(segment.endX, segment.endY));
+
+            //if the list is empty, we are done
+            if (pathCandidates.Count == 0)
+                break;
+
+            //pick an option at random and take it
+            int i = Random.Range(0, pathCandidates.Count);
+            result.Add(pathCandidates[i]);
+            prevPos = pathCandidates[i];
+
+        } while (result.Count <= MAX_PATH_LENGTH);
+
+        //if the result is too long, the path probably loops back on itself.  throw error
+        if (result.Count > MAX_PATH_LENGTH)
+            throw new System.Exception("Path too long!  Make sure the segments defined for this level do not loop back on themselves.");
+
+        return result;
 	}
 
 	// Update is called once per frame
