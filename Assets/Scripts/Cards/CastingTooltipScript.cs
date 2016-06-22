@@ -9,10 +9,9 @@ public class CastingTooltipScript : MonoBehaviour {
 	public Image rangeImage;				//reference to image for the range overlay
 
 	private const float GRID_SCALE = 0.5f;	//size of grid to snap to. 
-	private GameObject card;				//card that produced this tooltip
+	private CardScript parentCardScript;				//card that produced this tooltip
 	private bool castable;					//whether or not the spell can be cast here
 	private GameObject targetTower;			//the tower this card is targeting.  Applies only to upgrades
-	private CardType type;					//type of card that owns this tooltip
 
 	// Use this for initialization
 	void Start () {
@@ -22,6 +21,9 @@ public class CastingTooltipScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        //skip if we dont know what the parent is yet
+        if (parentCardScript == null)
+            return;
 
 		//get position of cursor in world space
 		Vector2 mousePositionWorld = Camera.main.ScreenToWorldPoint (Input.mousePosition);
@@ -34,21 +36,39 @@ public class CastingTooltipScript : MonoBehaviour {
 		//check if this spot is free
 		Collider2D collision = Physics2D.OverlapPoint (transform.position, LayerMask.GetMask("Obstacle"));
 
-		//determine if the fcard can be cast
-		if (type == CardType.tower) {
+		//determine if the card can be cast
+		if (parentCardScript.card.data.cardType == CardType.tower) {
 			//towers only castable if unobstructed
 			if (collision)
 				castable = false;
 			else
 				castable = true;
-		} else if (type == CardType.upgrade) {
+		} else if (parentCardScript.card.data.cardType == CardType.upgrade) {
 			//only castable if there is a tower here
 			if (collision)
 			{
-				if (collision.GetComponent<Collider2D>().gameObject.tag.Equals("TowerImage")) { //test for TowerImage to only collide ith the tower itself and not its range
-					targetTower = collision.GetComponent<Collider2D>().gameObject.transform.root.gameObject;
-					castable = true;
+				if (collision.GetComponent<Collider2D>().gameObject.tag.Equals("TowerImage")) { //test for TowerImage to only collide with the tower itself and not its range
+                    //get the tower under the cursor
+                    GameObject newTargetTower = collision.GetComponent<Collider2D>().gameObject.transform.root.gameObject;
+
+                    //if this is not same tower as before, change our target
+                    if (newTargetTower != targetTower)
+                    {
+                        //tell old tower to revert to the normal tooltip
+                        if (targetTower != null)
+                            targetTower.SendMessage("UpdateTooltipText"); 
+
+                        targetTower = newTargetTower; //change target
+                        targetTower.SendMessage("UpgradeTooltip", parentCardScript.card.data.upgradeData); //tell new target to use the upgrade tooltip
+                        castable = true;
+                    }
 				} else {
+                    //there is no tower underneath.  clear the target and tell the tower it can stop showing upgrade data
+                    if (targetTower != null)
+                    {
+                        targetTower.SendMessage("UpdateTooltipText");
+                        targetTower = null;
+                    }
 					castable = false;
 				}
 			} else {
@@ -74,24 +94,19 @@ public class CastingTooltipScript : MonoBehaviour {
 	void Cast () {
 		if (castable) {
 			//error prevention: cancel cast if card no longer exists
-			if (card != null) {
-				if (type == CardType.tower)
-					card.SendMessage ("SummonTower", transform.position);
-				else if (type == CardType.upgrade)
-					card.SendMessage ("UpgradeTower", targetTower);
+			if (parentCardScript != null) {
+				if (parentCardScript.card.data.cardType == CardType.tower)
+					parentCardScript.SendMessage ("SummonTower", transform.position);
+				else if (parentCardScript.card.data.cardType == CardType.upgrade)
+					parentCardScript.SendMessage ("UpgradeTower", targetTower);
 			}
 			Destroy(gameObject);
 		}
 	}
 
 	//stores a reference to the card that created this tooltip
-	void SetParent (GameObject parent){
-		card = parent;
-	}
-
-	//sets the card type
-	void SetCardType (CardType t){
-		type = t;
+	void SetParent (CardScript parent){
+		parentCardScript = parent;
 	}
 
 	//sets the size of the range overlay

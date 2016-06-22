@@ -223,12 +223,63 @@ public class TowerScript : MonoBehaviour {
 			towerName + "\n" + 
 			upgradeCount + " upgrades\n" +
 			"attack: " + attackPower + "\n" +
-			"range: " + range + "\n" +
 			"charge time: " + rechargeTime + "\n" +
+            "Damage Per Second: " + (attackPower / rechargeTime).ToString("F1") + "\n" +
+            "range: " + range + "\n" +
             "waves remaining: " + wavesRemaining;
 
         lifespanText.text = wavesRemaining.ToString();
 	}
+
+    //updates the tooltip text to show what the given upgrade would change
+    void UpgradeTooltip(UpgradeData u)
+    {
+        //we already know how these lines change
+        tooltipText.text =
+            towerName + "\n" +
+            upgradeCount + " upgrades <color=lime>+ 1</color>\n";
+
+        //for the others, we need to do some calculations:
+        float newAttackPower = attackPower * u.attackMultiplier + u.attackModifier;
+        float newRechargeTime = rechargeTime * u.rechargeMultiplier + u.rechargeModifier;
+        float curDPS = attackPower / rechargeTime;
+        float newDPS = newAttackPower / newRechargeTime;
+        float newRange = range * u.rangeMultiplier + u.rangeModifier;
+        int   newWavesRemaining = wavesRemaining + u.waveBonus;
+
+        float attackChange = newAttackPower - attackPower;
+        float rechargeChange = newRechargeTime - rechargeTime;
+        float DPSChange = newDPS - curDPS;
+        float rangeChange = newRange - range;
+        int wavesRemainingChange = newWavesRemaining - wavesRemaining;
+
+        //now we can update the status text appropriately, with color coding 
+
+        //attack
+        string colorString = "magenta";
+        if (attackChange < 0) colorString = "red"; else if (attackChange > 0) colorString = "lime"; else colorString = "white";
+        tooltipText.text += "attack: " + attackPower + " <color=" + colorString + "> " + attackChange.ToString("+ ####0.##;- ####0.##") + "</color>\n";
+
+        //charge time
+        colorString = "magenta";
+        if (rechargeChange < 0) colorString = "lime"; else if (rechargeChange > 0) colorString = "red"; else colorString = "white";
+        tooltipText.text += "charge time: " + rechargeTime + " <color=" + colorString + "> " + rechargeChange.ToString("+ ####0.##;- ####0.##") + "</color>\n";
+
+        //DPS
+        colorString = "magenta";
+        if (DPSChange < 0) colorString = "red"; else if (DPSChange > 0) colorString = "lime"; else colorString = "white";
+        tooltipText.text += "Damage Per Second: " + curDPS + " <color=" + colorString + "> " + DPSChange.ToString("+ ####0.##;- ####0.##") + "</color>\n";
+
+        //range
+        colorString = "magenta";
+        if (rangeChange < 0) colorString = "red"; else if (rangeChange > 0) colorString = "lime"; else colorString = "white";
+        tooltipText.text += "range: " + range + " <color=" + colorString + "> " + rangeChange.ToString("+ ####0.##;- ####0.##") + "</color>\n";
+
+        //waves remaining
+        colorString = "magenta";
+        if (wavesRemainingChange < 0) colorString = "red"; else if (wavesRemainingChange > 0) colorString = "lime"; else colorString = "white";
+        tooltipText.text += "waves remaining: " + attackPower + " <color=" + colorString + "> " + wavesRemainingChange.ToString("+ ####0.##;- ####0.##") + "</color>";
+    }
 
     //called whenever a wave ends.  Updates the lifespan and destroys the tower if it hits zero.
     void WaveOver()

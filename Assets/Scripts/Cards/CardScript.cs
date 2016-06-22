@@ -289,8 +289,7 @@ public class CardScript : MonoBehaviour {
 			new Rect(0, 0, www.texture.width, www.texture.height),
 			new Vector2(0.5f, 0.5f));					
 
-		tooltipInstance.SendMessage ("SetParent", gameObject);											//tell tooltip who spawned it so it can call back later
-		tooltipInstance.SendMessage ("SetCardType", card.data.cardType);										//tell tooltip what kind of card it is
+		tooltipInstance.SendMessage ("SetParent", this); //tell tooltip who spawned it so it can call back later
 
 		//if tower, pass range to the tooltip
 		if (card.data.cardType == CardType.tower)
