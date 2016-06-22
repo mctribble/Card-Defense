@@ -77,44 +77,43 @@ public class TowerScript : MonoBehaviour {
 			tooltipPanel.rectTransform.pivot = new Vector2(x,y);
 		}
 
-		shotCharge += deltaTime / rechargeTime;		//increase shot charge
+        //increase shot charge if the gauge is not already full 
+        //it can still overcharge slightly, if the last frame was longer than the remaining charge time
+        shotCharge += deltaTime / rechargeTime;
 
-		if (shotCharge > 1.0f) {				//if shot is charged...
-			shotCharge = 1.0f;
-			if (enemiesInRange.Count != 0) {	//and there is at least one enemy in range...
+        //while a shot is charged and at least one enemy in range... 
+        //(it is technically possible to fire multiple times per frame if the frame took a long time for some reason or the tower fires extremely quickly)
+        while ((shotCharge > 1.0f) && (enemiesInRange.Count > 0))
+        {             
+            //find the closest one and shoot at it
+            GameObject closest = null;
+            float closestDistance = float.MaxValue;
+            Vector3 towerPosition = this.transform.position;
 
-				//find the closest one and shoot at it
-				GameObject closest = null;
-				float closestDistance = float.MaxValue;
-				Vector3 towerPosition = this.transform.position;
+            //search loop: finds closest enemy
+            foreach (GameObject e in enemiesInRange)
+            {
+                //skip dead enemies
+                if (e == null)
+                    continue;
 
-				//search loop: finds closest enemy
-				foreach (GameObject e in enemiesInRange){
+                Vector3 enemyPosition = e.transform.position;
+                float distance = Vector3.Distance(towerPosition, enemyPosition);
+                if (distance < closestDistance)
+                {
+                    closest = e;
+                    closestDistance = distance;
+                }
+            } //end search loop
 
-					//skip dead enemies
-					if (e == null)
-						continue;
+            //if no enemies were found, bail
+            if (closest == null)
+                break;
 
-					Vector3 enemyPosition = e.transform.position;
-					float distance = Vector3.Distance(towerPosition, enemyPosition);
-					if (distance < closestDistance) {
-						closest = e;
-						closestDistance = distance;
-					}
-				} //end search loop
-
-				//if no enemies were found, bail
-				if (closest == null)
-					return;
-
-				//call another function to actually fire
-				fire(closest);
-
-			}
+            //call another function to actually fire
+            fire(closest);
 		}
 		buttonImage.fillAmount = shotCharge;		//update guage
-
-
 	}
 
 	void TowerMouseEnter(){
@@ -157,8 +156,8 @@ public class TowerScript : MonoBehaviour {
 		//also send the data to the enemy directly so it knows what to expect to aid in targeting
 		e.dest.SendMessage ("OnExpectedDamage", e);
 
-		//reset for the next shot
-		shotCharge = 0.0f;
+		//reduce charge meter (if the gauge was overcharged, retain the excess)
+		shotCharge -= 1.0f;
 	}
 
 	//called when an enemy is killed by this tower
