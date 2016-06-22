@@ -94,7 +94,7 @@ public class WaveData {
 		type = "Swarm";
 		budget = 999999999;
 		time = 300.0f;
-        message = "UNSPECIFIED WAVE!";
+        message = null;
 	}
 
 	//specific data
@@ -151,11 +151,11 @@ public class LevelManagerScript : MonoBehaviour {
 
 		yield return null; //wait a frame to make sure things load right
 		levelLoaded = true; //set flag
-		//wait a couple frames to give other managers a chance to catch up
+		//wait a few frames to give other managers a chance to catch up
 		yield return null; 
-		yield return null; 
+		yield return null;
 
-		for (uint i = 0; i < data.randomWaveCount; i++) {
+        for (uint i = 0; i < data.randomWaveCount; i++) {
 			//figure out which wave we are making
 			int wave = data.waves.Count + 1;
 			
@@ -246,7 +246,8 @@ public class LevelManagerScript : MonoBehaviour {
 		//slight delay before spawning
 		yield return new WaitForSeconds (1.0f);
 
-        //spawn monsters.  each one is placed at a random spawn point.
+        //spawn monsters.  Distribute spawns as evenly as possible
+        int curSpawner = Random.Range(0, spawnerCount);
         float timeToNextSpawn = timeBetweenSpawns;
 		while (spawnCount > 0) {
             yield return new WaitForFixedUpdate();  //wait for the next physics update
@@ -254,7 +255,8 @@ public class LevelManagerScript : MonoBehaviour {
             d.time -= Time.fixedDeltaTime;          //update the wave data also so that the status text can update
             while (timeToNextSpawn < 0.0)           //this is a loop in case multiple spawns happen in one physics update
             {
-                spawnerObjects[Random.Range(0, spawnerCount)].SendMessage("Spawn"); //spawn enemy
+                spawnerObjects[curSpawner].SendMessage("Spawn"); //spawn enemy
+                curSpawner = (curSpawner + 1) % spawnerCount; //move to next spawner, looping back to the first if we are at the end of the list
                 spawnCount--; //update spawn counter
                 timeToNextSpawn += timeBetweenSpawns; //update spawn timer
 
