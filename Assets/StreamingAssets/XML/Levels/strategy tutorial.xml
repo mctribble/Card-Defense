@@ -6,7 +6,8 @@
   <!-- 	These waves will be gauranteed to spawn, in order.
 		type: name of the enemy type to spawn
 		budget: how much the wave spawner can "spend" on spawning enemies
-		time: how many seconds the enemies spawn for.  Shorter time spans result in more densely packed groups.-->
+		time: how many seconds the enemies spawn for.  Shorter time spans result in more densely packed groups.
+		message: optional message that appears at the start of the wave-->
   <Waves>
     <Wave type="Swarm"    budget ="1500" time="15" message="Lets look at some slightly more advanced strategy.  In this example, your defenses are already strong enough to defeat the enemy.  However, your hand consists of nothing but Basic Towers and Heavy upgrades.  You should play at least one of these so you can draw something more useful for the next wave.  Be careful, though!  Heavy upgrades slow down towers in exchange for doubling their damage.  DO NOT play these on your fast towers: they will actually become weaker since the speed penalty will outweigh the damage buff."/>
     <Wave type="Tank"     budget ="1500" time="15" message="Oh no!  This next wave will be Tank monsters, which your fast towers are ill-equipped to handle.  If you followed our advice in the last round, you should have a Summon Swarm card.  This card will harm you, but not nearly as much as the incoming tanks will.  Play Summon Swarm to turn the incoming wave into Swarm monsters so you can survive"/>

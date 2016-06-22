@@ -14,7 +14,8 @@
   <!-- 	These waves will be gauranteed to spawn, in order.
 		type: name of the enemy type to spawn
 		budget: how much the wave spawner can "spend" on spawning enemies
-		time: how many seconds the enemies spawn for.  Shorter time spans result in more densely packed groups.-->
+		time: how many seconds the enemies spawn for.  Shorter time spans result in more densely packed groups.
+		message: optional message that appears at the start of the wave-->
   <Waves>
 
   </Waves>
