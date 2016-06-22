@@ -53,8 +53,8 @@ public class EnemyScript : MonoBehaviour {
 		startPos = parentTransform.position;
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	// LateUpdate is called once per frame, after other objects have done a regular Update().  We use LateUpdate to make sure bullets get to move first this frame.
+	void LateUpdate () {
 		deltaTime = Time.deltaTime; //update frame time
 
 		Vector2 curLocation = new Vector2 (parentTransform.position.x, parentTransform.position.y); //fetch current location
