@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--This is only a template to build new levels from.  It works as a playable level, but isnt terribly interesting.-->
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd">
+  <!-- 	This many waves will be generated randomly and added to the END of the wave list -->
+  <randomWaveCount>0</randomWaveCount>
+  <!-- 	These waves will be gauranteed to spawn, in order.
+		type: name of the enemy type to spawn
+		budget: how much the wave spawner can "spend" on spawning enemies
+		time: how many seconds the enemies spawn for.  Shorter time spans result in more densely packed groups.
+		message: optional message that appears at the start of the wave-->
+  <Waves>
+    <Wave type="Swarm"    budget="600"  time="10"/>
+    <Wave type="Standard" budget="600"  time="10"/>
+    <Wave type="Tank"     budget="600"  time="10"/>
+    <Wave type="Swarm"    budget="1200" time="10"/>
+    <Wave type="Standard" budget="1200" time="10"/>
+    <Wave type="Tank"     budget="1200" time="10"/>
+    <Wave type="Swarm"    budget="1800" time="10"/>
+    <Wave type="Standard" budget="1800" time="10"/>
+    <Wave type="Tank"     budget="1800" time="10"/>
+    <Wave type="Swarm"    budget="2400" time="10"/>
+    <Wave type="Standard" budget="2400" time="10"/>
+    <Wave type="Tank"     budget="2400" time="10"/>
+  </Waves>
+  <!--	positions at which the enemies can spawn -->
+  <Spawners>
+    <Spawner spawnX="-5"  spawnY="5" />
+    <Spawner spawnX="0"   spawnY="5" />
+    <Spawner spawnX="5"   spawnY="5" />
+  </Spawners>
+  <!--	positions at which each path segment starts and ends.  Make sure each spawner has a segment which starts at the same position.
+		note that the pathfinder is very basic at the moment: at each step it finds all segments that start at the current position and takes one at random.
+    if it cant find any segments to take, it treats that as the "end of the road" and the enemy will damage the player when they reach that point.
+    This means you must be careful not to allow the path to loop back on itself. or travel away from the intended goal-->
+  <PathSegments>
+    <Segment startX="-5" startY="5" endX="-5" endY="-2" />
+    <Segment startX="0"  startY="5" endX="0"  endY="-2" />
+    <Segment startX="5"  startY="5" endX="5"  endY="-2" />
+  </PathSegments>
+  <!--	this section is for starting the level with towers already on the field.  See Example Level.xml for details-->
+  <Towers>
+    <!--various towers with various upgrades-->
+  	<Tower name="Basic Tower" x="-5.5" y="3.5"/>
+    <Tower name="Basic Tower" x="-5.5" y="2">    <Upgrades> <Upgrade Name="Basic Upgrade" Count="1"/> </Upgrades> </Tower>
+    <Tower name="Basic Tower" x="-5.5" y="0.5">  <Upgrades> <Upgrade Name="Fast Upgrade"  Count="1"/> </Upgrades> </Tower>
+    <Tower name="Basic Tower" x="-5.5" y="-1.0"> <Upgrades> <Upgrade Name="Heavy Upgrade" Count="1"/> </Upgrades> </Tower>
+  
+  	<Tower name="Fast Tower"  x="-0.5" y="3.5"/>
+    <Tower name="Fast Tower"  x="-0.5" y="2">    <Upgrades> <Upgrade Name="Basic Upgrade" Count="1"/> </Upgrades> </Tower>
+    <Tower name="Fast Tower"  x="-0.5" y="0.5">  <Upgrades> <Upgrade Name="Fast Upgrade"  Count="1"/> </Upgrades> </Tower>
+    <Tower name="Fast Tower"  x="-0.5" y="-1.0"> <Upgrades> <Upgrade Name="Heavy Upgrade" Count="1"/> </Upgrades> </Tower>
+  
+  	<Tower name="Heavy Tower" x="4.5"  y="3.5"/>
+    <Tower name="Heavy Tower" x="4.5"  y="2">    <Upgrades> <Upgrade Name="Basic Upgrade" Count="1"/> </Upgrades> </Tower>
+    <Tower name="Heavy Tower" x="4.5"  y="0.5">  <Upgrades> <Upgrade Name="Fast Upgrade"  Count="1"/> </Upgrades> </Tower>
+    <Tower name="Heavy Tower" x="4.5"  y="-1.0"> <Upgrades> <Upgrade Name="Heavy Upgrade" Count="1"/> </Upgrades> </Tower>
+  
+    <!--intentionally OP towers to kill survivors of the test track-->
+    <Tower name="Dev Purge Tower" x="-5" y="-2.5"/>
+    <Tower name="Dev Purge Tower" x="0"  y="-2.5"/>
+    <Tower name="Dev Purge Tower" x="5"  y="-2.5"/>
+  </Towers>
+  <!--  this determines whether or not the deck is shuffled at game start.  If false, cards appear in the order listed below-->
+  <shuffleDeck>true</shuffleDeck>
+  <!--	this is the deck the player is given to use in this level by default.  the deck name is currently unused.-->
+  <levelDeck name="Level Deck">
+    <!-- name: name of the card
+		 count: how many of that card are present-->
+    <Cards>
+      <Card name="Reinforce" count="30" />
+    </Cards>
+  </levelDeck>
+</Level>
