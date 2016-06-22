@@ -79,7 +79,8 @@ public class TowerScript : MonoBehaviour {
 
         //increase shot charge if the gauge is not already full 
         //it can still overcharge slightly, if the last frame was longer than the remaining charge time
-        shotCharge += deltaTime / rechargeTime;
+        if (shotCharge < 1.0f)
+            shotCharge += deltaTime / rechargeTime;
 
         //while a shot is charged and at least one enemy in range... 
         //(it is technically possible to fire multiple times per frame if the frame took a long time for some reason or the tower fires extremely quickly)
