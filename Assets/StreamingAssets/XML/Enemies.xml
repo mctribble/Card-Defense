@@ -7,7 +7,7 @@
     <Enemy name="Standard" spawnCost="20" damage="3" maxHealth="40" unitSpeed="2">
       <unitColor r="0" g="1" b="0" a="1" />
     </Enemy>
-    <Enemy name="Tank" spawnCost="100" damage="10" maxHealth="600" unitSpeed="1">
+    <Enemy name="Tank" spawnCost="100" damage="10" maxHealth="500" unitSpeed="1">
       <unitColor r="0" g="0" b="1" a="1" />
     </Enemy>
   </Enemies>
