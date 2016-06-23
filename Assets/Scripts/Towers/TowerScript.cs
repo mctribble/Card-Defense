@@ -32,12 +32,9 @@ public class TowerScript : MonoBehaviour {
 	private float 		deltaTime;			//time since last frame
 	private float 		shotCharge;			//represents how charged the next. 0.0 is empty, 1.0 is full.
 
-    private List<GameObject> enemiesInRange; //list of enemies within range of the tower
-
     // Use this for initialization
     void Awake () {
         //init vars
-        enemiesInRange = new List<GameObject>();
         rangeImage.enabled = false;
 		upgradeCount = 0;
 
@@ -50,7 +47,8 @@ public class TowerScript : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
 		deltaTime = Time.deltaTime;					//update time since last frame
 
 		//update tooltip position
@@ -87,14 +85,10 @@ public class TowerScript : MonoBehaviour {
 
         //while a shot is charged and at least one enemy in range... 
         //(it is technically possible to fire multiple times per frame if the frame took a long time for some reason or the tower fires extremely quickly)
-        while ((shotCharge > 1.0f) && (enemiesInRange.Count > 0))
+        while (shotCharge > 1.0f)
         {
             //bail if there are no enemies on the map
             if (EnemyManagerScript.instance.activeEnemies.Count == 0)
-                break;
-
-            //bail if there are no enemies in range
-            if (enemiesInRange.Count == 0)
                 break;
 
             //find the enemy within tower range that is closest to its goal
@@ -102,8 +96,13 @@ public class TowerScript : MonoBehaviour {
 
             //search loop: finds closest enemy in range
             for (int e = 0; e < EnemyManagerScript.instance.activeEnemies.Count; e++)
-                if (enemiesInRange.Contains(EnemyManagerScript.instance.activeEnemies[e]))
+            {
+                if (Vector2.Distance(transform.position, EnemyManagerScript.instance.activeEnemies[e].transform.position) <= range)
+                {
                     closest = EnemyManagerScript.instance.activeEnemies[e];
+                    break;
+                }
+            }
 
             //call another function to actually fire if we found a valid target, and break if not
             if (closest != null)
@@ -126,20 +125,6 @@ public class TowerScript : MonoBehaviour {
 		tooltipText.enabled = false;
 	}
 
-    //called when an enemy first enters range
-    void OnTriggerEnter2D(Collider2D coll)
-    {
-        if (coll.gameObject.tag.Equals("Enemy"))
-            enemiesInRange.Add(coll.gameObject);
-    }
-
-    //called when an enemy is no longer in range
-    void OnTriggerExit2D(Collider2D coll)
-    {
-        if (coll.gameObject.tag.Equals("Enemy"))
-            enemiesInRange.Remove(coll.gameObject);
-    }
-
     //fires on an enemy unit
     void fire(GameObject enemy){
 		//create a struct and fill it with data about the attack
@@ -159,18 +144,6 @@ public class TowerScript : MonoBehaviour {
 		shotCharge -= 1.0f;
 	}
 
-    //called when an enemy is killed by this tower
-    void OnEnemyKilled(GameObject enemy)
-    {
-        enemiesInRange.Remove(enemy);
-    }
-
-    //called when an enemy is expected to die
-    void OnEnemyDeath(GameObject enemy)
-    {
-        if (enemiesInRange != null) //I have no idea why this check has to be here, but it does -*-+9*
-            enemiesInRange.Remove(enemy);
-    }
     //saves new tower definition data and updates components
     IEnumerator SetData (TowerData d) {
 		towerName = d.towerName;

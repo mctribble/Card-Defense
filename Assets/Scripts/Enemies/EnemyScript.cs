@@ -98,25 +98,19 @@ public class EnemyScript : MonoBehaviour {
 
 		if (curHealth <= 0) {
             //if dead, report the kill to the tower that shot it
-            e.source.SendMessage("OnEnemyKilled", gameObject);
             LevelManagerScript.instance.deadThisWave++;
 			Destroy (gameObject);
 		}
 	}
-
+   
 	//tracks damage that WILL arrive so that towers dont keep shooting something that is about to be dead
 	void OnExpectedDamage (DamageEventData e) {
 		//expect to take damage
 		expectedHealth -= Mathf.CeilToInt(e.rawDamage);
-
-
-		if (expectedHealth <= 0) {
-            //if a death is expected, report self as dead to all towers so they ignore this unit
-            GameObject[] towers  = GameObject.FindGameObjectsWithTag("Tower");
-            foreach (GameObject t in towers)
-                t.SendMessage("OnEnemyDeath", gameObject);
+        
+        //if a death is expected, report self as dead so towers ignore this unit
+        if (expectedHealth <= 0) 
             EnemyManagerScript.instance.EnemyExpectedDeath(gameObject);
-		}
 	}
 
 	//stores a new path for this unit to follow
