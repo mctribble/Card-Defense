@@ -33,9 +33,15 @@
     if it cant find any segments to take, it treats that as the "end of the road" and the enemy will damage the player when they reach that point.
     This means you must be careful not to allow the path to loop back on itself. or travel away from the intended goal-->
   <PathSegments>
-    <Segment startX="-5" startY="5" endX="-5" endY="-2" />
+    <Segment startX="-5" startY="5" endX="-5"  endY="-2" />
     <Segment startX="0"  startY="5" endX="0"  endY="-2" />
     <Segment startX="5"  startY="5" endX="5"  endY="-2" />
+                                                    
+    <Segment startX="-5" startY="-2" endX="8" endY="-4" />
+    <Segment startX="0"  startY="-2" endX="8" endY="-4" />
+    <Segment startX="5"  startY="-2" endX="8" endY="-4" />
+
+    <Segment startX="8"  startY="-4" endX="8" endY="3" />
   </PathSegments>
   <!--	this section is for starting the level with towers already on the field.  See Example Level.xml for details-->
   <Towers>
@@ -55,10 +61,8 @@
     <Tower name="Heavy Tower" x="4.5"  y="0.5">  <Upgrades> <Upgrade Name="Fast Upgrade"  Count="1"/> </Upgrades> </Tower>
     <Tower name="Heavy Tower" x="4.5"  y="-1.0"> <Upgrades> <Upgrade Name="Heavy Upgrade" Count="1"/> </Upgrades> </Tower>
   
-    <!--intentionally OP towers to kill survivors of the test track-->
-    <Tower name="Dev Purge Tower" x="-5" y="-2.5"/>
-    <Tower name="Dev Purge Tower" x="0"  y="-2.5"/>
-    <Tower name="Dev Purge Tower" x="5"  y="-2.5"/>
+    <!--use a dev tower to kill survivors of the test track-->
+    <Tower name="Dev Purge Tower" x="8.5" y="2.5"/>
   </Towers>
   <!--  this determines whether or not the deck is shuffled at game start.  If false, cards appear in the order listed below-->
   <shuffleDeck>true</shuffleDeck>

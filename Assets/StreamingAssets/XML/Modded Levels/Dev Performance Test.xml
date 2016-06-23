@@ -11,8 +11,17 @@
 		message: optional message that appears at the start of the wave-->
   <Waves>
     <Wave type="Swarm" budget="9999" time="30"/>
+    <Wave type="Swarm" budget="9999" time="30"/>
+    <Wave type="Swarm" budget="9999" time="30"/>
+    <Wave type="Swarm" budget="9999" time="30"/>
+    <Wave type="Swarm" budget="9999" time="30"/>
+    <Wave type="Swarm" budget="9999" time="30"/>
+    <Wave type="Swarm" budget="9999" time="30"/>
+    <Wave type="Swarm" budget="9999" time="30"/>
+    <Wave type="Swarm" budget="9999" time="30"/>
+    <Wave type="Swarm" budget="9999" time="30"/>
   </Waves>
-  <!--	positions at which the enemies can spawn -->
+  <!--	positions at which the enemies can spawnS -->
   <Spawners>
     <Spawner spawnX="0"  spawnY="0" />
     <Spawner spawnX="0"  spawnY="1" />

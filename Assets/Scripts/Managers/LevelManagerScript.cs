@@ -227,8 +227,8 @@ public class LevelManagerScript : MonoBehaviour {
 				Time.timeScale = 1.0f;
 		}
 
-        //turn off fast forward automatically if framerate dips too low
-        if (Time.deltaTime > (1.0f / 10.0f) && Time.timeScale > 0.0f)
+        //turn off fast forward automatically if any frame takes over half a second
+        if ((Time.deltaTime > 0.5f) && (Time.timeScale > 0.0f))
             Time.timeScale = 1.0f;
 	}
 
