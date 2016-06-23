@@ -65,7 +65,23 @@
           <Effect name="damagePlayer" strength="3" />
         </Effects>
       </EffectData>
-    </Card>  
+    </Card>
+    <Card Type="spell" Name="Summon Standard" Description="Lets you and I get normal for a change."  Charges ="2" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+      <EffectData>
+        <Effects>
+          <Effect name="changeWaveType" argument="Swarm" />
+          <Effect name="damagePlayer" strength="3" />
+        </Effects>
+      </EffectData>
+    </Card>
+    <Card Type="spell" Name="Summon Tank" Description="Bring it on!" Charges ="2" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+      <EffectData>
+        <Effects>
+          <Effect name="changeWaveType" argument="Swarm" />
+          <Effect name="damagePlayer" strength="3" />
+        </Effects>
+      </EffectData>
+    </Card>
     <Card Type="spell" Name="Time Crunch" Description="Condensing the onslaught"  Charges ="4" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <EffectData>
         <Effects>
