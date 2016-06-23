@@ -35,7 +35,6 @@ public class EnemyScript : MonoBehaviour {
 	public EnemyData 		data;				//contains all the data specific to this type of enemy
 	public Vector2			startPos;
 
-	private float 		deltaTime;
 	private Transform 	parentTransform;	//reference to the transform of this enemy
 	private int			curHealth;			//current health
 	private int			expectedHealth;		//what health will be after all active shots reach this enemy
@@ -73,6 +72,10 @@ public class EnemyScript : MonoBehaviour {
 				//...and go back to start for another lap
 				parentTransform.position = startPos;
 				currentDestination = 0;
+
+                //if the enemy is not expected to die, update the enemy list with the new pathing info
+                if (expectedHealth > 0)
+                    EnemyManagerScript.instance.EnemyPathChanged(gameObject);
 			}
 		}
 
