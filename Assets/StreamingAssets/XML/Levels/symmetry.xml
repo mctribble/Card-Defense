@@ -86,9 +86,9 @@
     <!-- name: name of the card
 		 count: how many of that card are present-->
     <Cards>
-      <Card name="Basic Upgrade"   count="7" />
-      <Card name="Fast Upgrade"    count="8" />
-      <Card name="Heavy Upgrade"   count="8" />
+      <Card name="Basic Upgrade"   count="10" />
+      <Card name="Fast Upgrade"    count="10" />
+      <Card name="Heavy Upgrade"   count="10" />
       <Card name="Shield"          count="2"/>
       <Card name="Recycle"         count="2"/>
       <Card name="Summon Swarm"    count="1"/>
