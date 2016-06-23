@@ -53,5 +53,6 @@ public class SpawnerScript : MonoBehaviour {
 		GameObject enemy = (GameObject)Object.Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
 		enemy.SendMessage("SetData", enemyType);
 		enemy.SendMessage("SetPath", PathManagerScript.instance.CalculatePathFromPos(new Vector2(data.spawnX, data.spawnY)));
+        EnemyManagerScript.instance.EnemySpawned(enemy);
 	}
 }

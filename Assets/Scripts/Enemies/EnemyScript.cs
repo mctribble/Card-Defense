@@ -54,11 +54,10 @@ public class EnemyScript : MonoBehaviour {
 	}
 	
 	// LateUpdate is called once per frame, after other objects have done a regular Update().  We use LateUpdate to make sure bullets get to move first this frame.
-	void LateUpdate () {
-		deltaTime = Time.deltaTime; //update frame time
-
+	void LateUpdate ()
+    {
 		Vector2 curLocation = new Vector2 (parentTransform.position.x, parentTransform.position.y); //fetch current location
-		Vector2 newLocation = Vector2.MoveTowards (curLocation, path[currentDestination], data.unitSpeed * deltaTime); //calculate new location
+		Vector2 newLocation = Vector2.MoveTowards (curLocation, path[currentDestination], data.unitSpeed * Time.deltaTime); //calculate new location
 
 		//save position
 		parentTransform.position = new Vector3(newLocation.x, newLocation.y, parentTransform.position.z);
@@ -74,7 +73,6 @@ public class EnemyScript : MonoBehaviour {
 				//...and go back to start for another lap
 				parentTransform.position = startPos;
 				currentDestination = 0;
-
 			}
 		}
 
@@ -99,9 +97,9 @@ public class EnemyScript : MonoBehaviour {
         LevelManagerScript.instance.WaveTotalRemainingHealth -= damage;
 
 		if (curHealth <= 0) {
-			//if dead, report the kill to the tower that shot it
-			e.source.SendMessage("OnEnemyKilled", gameObject);
-			LevelManagerScript.instance.deadThisWave++;
+            //if dead, report the kill to the tower that shot it
+            e.source.SendMessage("OnEnemyKilled", gameObject);
+            LevelManagerScript.instance.deadThisWave++;
 			Destroy (gameObject);
 		}
 	}
@@ -113,10 +111,11 @@ public class EnemyScript : MonoBehaviour {
 
 
 		if (expectedHealth <= 0) {
-			//if a death is expected, report self as dead to all towers so they ignore this unit
-			GameObject[] towers  = GameObject.FindGameObjectsWithTag("Tower");
-			foreach (GameObject t in towers)
-				t.SendMessage("OnEnemyDeath", gameObject);
+            //if a death is expected, report self as dead to all towers so they ignore this unit
+            GameObject[] towers  = GameObject.FindGameObjectsWithTag("Tower");
+            foreach (GameObject t in towers)
+                t.SendMessage("OnEnemyDeath", gameObject);
+            EnemyManagerScript.instance.EnemyExpectedDeath(gameObject);
 		}
 	}
 
@@ -131,4 +130,16 @@ public class EnemyScript : MonoBehaviour {
 		data = d;
 		this.GetComponent<SpriteRenderer> ().color = d.unitColor.toColor();
 	}
+
+    //returns the distance from this enemy's current position to the goal, following its current path
+    public float distanceToGoal()
+    {
+        float result = Vector2.Distance(transform.position, path[currentDestination]); //start with distance to the current destination...
+        
+        //..and add the length of each subsequent segment
+        for (int segment = currentDestination + 1; segment < path.Count; segment++)
+            result += Vector2.Distance(path[segment - 1], path[segment]);
+
+        return result;
+    }
 }
