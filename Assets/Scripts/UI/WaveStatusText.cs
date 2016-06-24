@@ -42,6 +42,17 @@ public class WaveStatusText : MonoBehaviour {
 
         //if the game speed is not 1.0, add text to show what it is
         if (Time.timeScale != 1.0f)
-            text.text += "\n(speed x" + Time.timeScale.ToString("F1") + ")";
+        {
+            //decide the color of the game speed indicator based on whether or not we are below the desired speed
+            if (Time.timeScale < 1.0f)
+                text.text += "<color=red>";
+            else if (Time.timeScale < LevelManagerScript.instance.desiredTimeScale)
+                text.text += "<color=yellow>";
+            else
+                text.text += "<color=black>";
+
+            text.text += "\n(speed x" + Time.timeScale.ToString("F1") + ")</color>";
+        }
+            
 	}
 }

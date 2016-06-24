@@ -130,6 +130,8 @@ public class LevelManagerScript : MonoBehaviour {
 
 	public List<GameObject> spawnerObjects;
 
+    public float desiredTimeScale;
+
 	// Use this for initialization
 	void Awake () {
 		instance = this;
@@ -138,6 +140,7 @@ public class LevelManagerScript : MonoBehaviour {
 		deadThisWave = 0;
 		levelLoaded = false;
         spawnCount = -1;
+        desiredTimeScale = 1.0f;
 	}
 
 	// Called after all objects have initialized
@@ -211,26 +214,41 @@ public class LevelManagerScript : MonoBehaviour {
         UpdateWaveStats();
     }
 
-	// Update is called once per frame
-	void Update () {
-		//spacebar starts wave
-		if (Input.GetKeyUp (KeyCode.Space) && waveOngoing == false && currentWave < data.waves.Count) {
-			waveOngoing = true;
-			StartCoroutine("spawnWave",data.waves[currentWave]);
-		}
+    // Update is called once per frame
+    void Update() {
+        //spacebar starts wave
+        if (Input.GetKeyUp(KeyCode.Space) && waveOngoing == false && currentWave < data.waves.Count) {
+            waveOngoing = true;
+            StartCoroutine("spawnWave", data.waves[currentWave]);
+        }
 
-		//F toggles fast forward
-		if (Input.GetKeyUp (KeyCode.F) && Time.timeScale > 0.0f) {
-			if (Time.timeScale == 1.0f)
-				Time.timeScale =  3.0f;
-			else
-				Time.timeScale = 1.0f;
-		}
+        //F toggles fast forward  (actual timeScale may still be lower if performance is bad.  see below)
+        if (Input.GetKeyUp(KeyCode.F) && Time.timeScale > 0.0f) {
+            if (desiredTimeScale == 1.0f)
+                desiredTimeScale = 3.0f;
+            else
+                desiredTimeScale = 1.0f;
+        }
 
-        //turn off fast forward automatically if frame rate dips too low
-        const float maxSmoothDeltaTime = (1.0f / 10.0f);
-        if ((Time.timeScale > 1.0f) && (Time.smoothDeltaTime > (maxSmoothDeltaTime * Time.timeScale)))
-            Time.timeScale = 1.0f;
+        //attempt to regulate timeScale so the game slows down if the framerate tanks but then speeds back up when things settle down
+        //the time scale will go down if frame rate is below the reduce threshold, and up if frame rate is aove the increase threshold
+        const float timeScaleReduceThreshold = (1.0f / 10.0f);    //10 FPS
+        const float timeScaleIncreaseThreshold = (1.0f / 20.0f);  //20 FPS
+        const float timeScaleMin = 0.5f;                //minimum allowed sim speed
+        const float timeScaleInterval = 0.1f;           //amount to adjust at each change
+
+        if (Time.timeScale > desiredTimeScale) //if we are going faster than the player wants...
+            Time.timeScale = desiredTimeScale; //then slow down!
+
+        float unscaledSmoothDeltaTime = Time.smoothDeltaTime / Time.timeScale;  //smooth delta time scales by the sim speed, so we have to undo that for framerate calculations
+
+        if (unscaledSmoothDeltaTime > timeScaleReduceThreshold)                                   //if the frame rate is too low...
+            if (Time.timeScale > timeScaleMin)                                                    //and we are still above our minimum...
+                Time.timeScale = Mathf.Max(timeScaleMin, Time.timeScale - timeScaleInterval);     //reduce it by the interval without allowing it to go below the minimum
+                                                                                                  
+        if (unscaledSmoothDeltaTime < timeScaleIncreaseThreshold)                                 //if the frame rate is doing well...
+            if (Time.timeScale < desiredTimeScale)                                                //and the player wants a higher sim speed...
+                Time.timeScale = Mathf.Min(desiredTimeScale, Time.timeScale + timeScaleInterval); //increase it by the interval without allowing it to go above the desired setting         
 	}
 
 	// Handles spawning of a single wave
