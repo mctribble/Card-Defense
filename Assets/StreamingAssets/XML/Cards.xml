@@ -34,7 +34,7 @@
         </Effects>
       </EffectData>
     </Card>
-    <Card Type="spell" Name="Shield" Description="Use ths to protect more important cards from harm." Charges="15" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Type="spell" Name="Shield" Description="Use ths to protect more important cards from harm." Charges="20" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <EffectData>
         <Effects>
           <Effect name="addCharges" strength ="1" />

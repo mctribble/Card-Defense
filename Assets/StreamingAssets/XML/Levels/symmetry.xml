@@ -5,10 +5,10 @@
   <randomWaveCount>10</randomWaveCount>
   
   <!-- tougher wave gen than usual-->
-  <waveGrowthAbsolute>100</waveGrowthAbsolute>
-  <waveGrowthLinear>10</waveGrowthLinear>
-  <waveGrowthSquared>4.5</waveGrowthSquared>
-  <waveGrowthExponential>3</waveGrowthExponential>
+  <waveGrowthAbsolute>200</waveGrowthAbsolute>
+  <waveGrowthLinear>100</waveGrowthLinear>
+  <waveGrowthSquared>5</waveGrowthSquared>
+  <waveGrowthExponential>1.8</waveGrowthExponential>
   <waveTimeLinear>3</waveTimeLinear>
   
   <!-- 	These waves will be gauranteed to spawn, in order.
@@ -88,12 +88,9 @@
     <Cards>
       <Card name="Basic Upgrade"   count="10" />
       <Card name="Fast Upgrade"    count="10" />
-      <Card name="Heavy Upgrade"   count="10" />
-      <Card name="Shield"          count="2"/>
-      <Card name="Recycle"         count="2"/>
-      <Card name="Summon Swarm"    count="1"/>
-      <Card name="Summon Standard" count="1"/>
-      <Card name="Summon Tank"     count="1"/>
+      <Card name="Heavy Upgrade"   count="9" />
+      <Card name="Shield"          count="5"/>
+      <Card name="Recycle"         count="1"/>
     </Cards>
   </levelDeck>
 </Level>
