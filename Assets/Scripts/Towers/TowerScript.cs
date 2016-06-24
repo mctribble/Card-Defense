@@ -94,13 +94,16 @@ public class TowerScript : MonoBehaviour {
             //find the enemy within tower range that is closest to its goal
             GameObject closest = null;
 
-            //search loop: finds closest enemy in range
-            for (int e = 0; e < EnemyManagerScript.instance.activeEnemies.Count; e++)
+            //search loop: finds closest valid target.  Valid targets must be...
+            for (int e = 0; e < EnemyManagerScript.instance.activeEnemies.Count; e++) //active enemies...
             {
-                if (Vector2.Distance(transform.position, EnemyManagerScript.instance.activeEnemies[e].transform.position) <= range)
+                if (Vector2.Distance(transform.position, EnemyManagerScript.instance.activeEnemies[e].transform.position) <= range) //that are in range...
                 {
-                    closest = EnemyManagerScript.instance.activeEnemies[e];
-                    break;
+                    if (EnemyManagerScript.instance.activeEnemies[e].GetComponent<EnemyScript>().expectedHealth > 0) //and do not already expect to die.  (enemies that expect to die are supposed to be inactive anyway, but sometimes the list takes a frame or two to catch up)
+                    {
+                        closest = EnemyManagerScript.instance.activeEnemies[e];
+                        break;
+                    }
                 }
             }
 
@@ -137,11 +140,12 @@ public class TowerScript : MonoBehaviour {
 		GameObject bullet = (GameObject) Instantiate (bulletPrefab, transform.position, Quaternion.identity);
 		bullet.SendMessage ("InitBullet", e);
 
-		//also send the data to the enemy directly so it knows what to expect to aid in targeting
-		e.dest.SendMessage ("OnExpectedDamage", e);
+        //also send the data to the enemy directly so it knows what to expect. 
+        //If this shot will kill the enemy, it pre-emptively reports itself dead to aid in targeting
+        e.dest.SendMessage("OnExpectedDamage", e);
 
-		//reduce charge meter (if the gauge was overcharged, retain the excess)
-		shotCharge -= 1.0f;
+        //reduce charge meter (if the gauge was overcharged, retain the excess)
+        shotCharge -= 1.0f;
 	}
 
     //saves new tower definition data and updates components

@@ -10,16 +10,15 @@
 		time: how many seconds the enemies spawn for.  Shorter time spans result in more densely packed groups.
 		message: optional message that appears at the start of the wave-->
   <Waves>
-    <Wave type="Swarm" budget="9999" time="30"/>
-    <Wave type="Swarm" budget="9999" time="30"/>
-    <Wave type="Swarm" budget="9999" time="30"/>
-    <Wave type="Swarm" budget="9999" time="30"/>
-    <Wave type="Swarm" budget="9999" time="30"/>
-    <Wave type="Swarm" budget="9999" time="30"/>
-    <Wave type="Swarm" budget="9999" time="30"/>
-    <Wave type="Swarm" budget="9999" time="30"/>
-    <Wave type="Swarm" budget="9999" time="30"/>
-    <Wave type="Swarm" budget="9999" time="30"/>
+    <Wave type="Swarm"    budget="9999" time="30"/>
+    <Wave type="Standard" budget="9999" time="30"/>
+    <Wave type="Tank"     budget="9999" time="30"/>
+    <Wave type="Swarm"    budget="9999" time="30"/>
+    <Wave type="Standard" budget="9999" time="30"/>
+    <Wave type="Tank"     budget="9999" time="30"/>
+    <Wave type="Swarm"    budget="9999" time="30"/>
+    <Wave type="Standard" budget="9999" time="30"/>
+    <Wave type="Tank"     budget="9999" time="30"/>
   </Waves>
   <!--	positions at which the enemies can spawnS -->
   <Spawners>
@@ -82,12 +81,13 @@
     <Tower name="Fast Tower" x="6"    y="1"/>
   </Towers>
   <!--  this determines whether or not the deck is shuffled at game start.  If false, cards appear in the order listed below-->
-  <shuffleDeck>true</shuffleDeck>
+  <shuffleDeck>false</shuffleDeck>
   <!--	this is the deck the player is given to use in this level by default.  the deck name is currently unused.-->
   <levelDeck name="Level Deck">
     <!-- name: name of the card
 		 count: how many of that card are present-->
     <Cards>
+      <Card name="Reinforce" count="5"/>
       <Card name="Shield" count="200"/>
     </Cards>
   </levelDeck>

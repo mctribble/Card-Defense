@@ -36,8 +36,8 @@ public class EnemyScript : MonoBehaviour {
 	public Vector2			startPos;
 
 	private Transform 	parentTransform;	//reference to the transform of this enemy
-	private int			curHealth;			//current health
-	private int			expectedHealth;		//what health will be after all active shots reach this enemy
+	public int			curHealth;			//current health
+	public int			expectedHealth;		//what health will be after all active shots reach this enemy
 
 	//used for health bar
 	public Color	healthyColor;		//color when healthy
@@ -75,7 +75,7 @@ public class EnemyScript : MonoBehaviour {
 
                 //if the enemy is not expected to die, update the enemy list with the new pathing info
                 if (expectedHealth > 0)
-                    EnemyManagerScript.instance.EnemyPathChanged(gameObject);
+                    EnemyManagerScript.instance.SendMessage("EnemyPathChanged",gameObject);
 			}
 		}
 
@@ -99,7 +99,8 @@ public class EnemyScript : MonoBehaviour {
         curHealth -= damage;
         LevelManagerScript.instance.WaveTotalRemainingHealth -= damage;
 
-		if (curHealth <= 0) {
+		if (curHealth <= 0)
+        {
             //if dead, report the kill to the tower that shot it
             LevelManagerScript.instance.deadThisWave++;
 			Destroy (gameObject);
@@ -112,9 +113,9 @@ public class EnemyScript : MonoBehaviour {
 		expectedHealth -= Mathf.CeilToInt(e.rawDamage);
         
         //if a death is expected, report self as dead so towers ignore this unit
-        if (expectedHealth <= 0) 
-            EnemyManagerScript.instance.EnemyExpectedDeath(gameObject);
-	}
+        if (expectedHealth <= 0)
+            EnemyManagerScript.instance.SendMessage("EnemyExpectedDeath", gameObject);
+    }
 
 	//stores a new path for this unit to follow
 	void SetPath (List<Vector2> p) {

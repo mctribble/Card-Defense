@@ -53,5 +53,5 @@ public class BulletScript : MonoBehaviour {
 	void InitBullet (DamageEventData newData){
 		data = newData;
 		initialized = true;
-	}
+    }
 }
