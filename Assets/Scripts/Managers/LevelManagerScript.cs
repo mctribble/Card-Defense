@@ -192,7 +192,7 @@ public class LevelManagerScript : MonoBehaviour {
 		//create the towers
 		foreach (PremadeTower pt in data.towers) {
 			GameObject t = (GameObject) GameObject.Instantiate(towerPrefab, new Vector3(pt.x, pt.y, -3), Quaternion.identity);	//summon tower
-			TowerData d = CardTypeManagerScript.instance.getCardByName(pt.name).TowerData;
+			TowerData d = CardTypeManagerScript.instance.getCardByName(pt.name).towerData;
 			d.towerName = pt.name;
 			t.SendMessage("SetData", d);							//pass it the definition
 			

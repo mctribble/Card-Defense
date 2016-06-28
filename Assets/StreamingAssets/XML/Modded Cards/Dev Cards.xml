@@ -3,7 +3,7 @@
 <CardTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Cards.xsd">
   <Cards>
     <Card Type="tower" Name="Dev Purge Tower" Description="Kills EVERYTHING" Charges="99" Art="Summon_Tower_Basic" Tooltip="Tower_Fast">
-      <TowerData Recharge="0.001" Range="1" Damage="500" Lifespan="99" Sprite="Tower_Fast" />
+      <towerData Recharge="0.001" Range="1" Damage="500" Lifespan="99" Sprite="Tower_Fast" />
     </Card>
   </Cards>
 </CardTypes>

@@ -60,7 +60,7 @@ public class CardData : System.Object {
 	[DefaultValue("Default_Sprite")]
 	[XmlAttribute("Tooltip")] public string tooltipSpriteName { get; set; }
 	
-	public TowerData TowerData;			//contains info needed to summon a tower.  Only used in tower cards. 
+	public TowerData towerData;			//contains info needed to summon a tower.  Only used in tower cards. 
 	[XmlIgnore]
 	public bool TowerDataSpecified {
 		get { return cardType == CardType.tower; }
@@ -74,7 +74,7 @@ public class CardData : System.Object {
 		set {}
 	}
 
-	public EffectData EffectData;		//contains info needed to apply effects.  Only used in effect cards.
+	public EffectData effectData;		//contains info needed to apply effects.  Only used in effect cards.
 	[XmlIgnore]
 	public bool EffectDataSpecified {
 		get { return cardType == CardType.spell; }
@@ -204,9 +204,9 @@ public class CardScript : MonoBehaviour {
 				c.SendMessage ("Hide");
 
 		//this card has no target
-		if (card.data.cardType == CardType.spell && card.data.EffectData.targetingType == TargetingType.none) {
+		if (card.data.cardType == CardType.spell && card.data.effectData.targetingType == TargetingType.none) {
 			//apply effects
-			foreach (IEffect e in card.data.EffectData.effects) {
+			foreach (IEffect e in card.data.effectData.effects) {
 				//effect must be handled differently based on effect type
 				switch (e.effectType) {
 				case EffectType.wave:
@@ -249,11 +249,11 @@ public class CardScript : MonoBehaviour {
 
 		//if tower, pass range to the tooltip
 		if (card.data.cardType == CardType.tower)
-			tooltipInstance.SendMessage ("SetRange", card.data.TowerData.range);
+			tooltipInstance.SendMessage ("SetRange", card.data.towerData.range);
 
 		//if its a spell, tell it what kind of spell it is
 		if (card.data.cardType == CardType.spell)
-			tooltipInstance.SendMessage ("SetTargetingType", card.data.EffectData.targetingType);			
+			tooltipInstance.SendMessage ("SetTargetingType", card.data.effectData.targetingType);			
 	}
 
 	void Hide(){
@@ -288,8 +288,8 @@ public class CardScript : MonoBehaviour {
 	void SummonTower(Vector3 location){
 		//summon tower
 		GameObject instance = (GameObject) UnityEngine.Object.Instantiate (towerPrefab, location, Quaternion.identity);
-        card.data.TowerData.towerName = card.data.cardName;
-		instance.SendMessage("SetData", card.data.TowerData);
+        card.data.towerData.towerName = card.data.cardName;
+		instance.SendMessage("SetData", card.data.towerData);
 
 		//perform steps that must be done on every cast
 		Cast ();
@@ -314,7 +314,7 @@ public class CardScript : MonoBehaviour {
         bool discardCancelled = false;
         if (card.data.cardType == CardType.spell)
         {
-            foreach (IEffect e in card.data.EffectData.effects)
+            foreach (IEffect e in card.data.effectData.effects)
             {
                 if (e.effectType == EffectType.discard)
                 {
@@ -384,20 +384,20 @@ public class CardScript : MonoBehaviour {
         {
             case CardType.spell:
                 //make sure the effects have been parsed
-                if (card.data.EffectData.effects.Count == 0) { card.data.EffectData.parseEffects(); }
+                if (card.data.effectData.effects.Count == 0) { card.data.effectData.parseEffects(); }
 
                 //add a line of text to the description for each
-                foreach (IEffect e in card.data.EffectData.effects)
+                foreach (IEffect e in card.data.effectData.effects)
                 {
                     description.text += "* " + e.Name + '\n';
                 }
                 break;
             case CardType.tower:
                 //present tower stats
-                description.text += "Damage: " + card.data.TowerData.attackPower + '\n' +
-                                    "Range: " + card.data.TowerData.range + '\n' +
-                                    "Fires in: " + card.data.TowerData.rechargeTime + "s\n" +
-                                    "Lifespan: " + card.data.TowerData.lifespan + '\n';
+                description.text += "Damage: " + card.data.towerData.attackPower + '\n' +
+                                    "Range: " + card.data.towerData.range + '\n' +
+                                    "Fires in: " + card.data.towerData.rechargeTime + "s\n" +
+                                    "Lifespan: " + card.data.towerData.lifespan + '\n';
                 break;
             case CardType.upgrade:
                 //present upgrade stats

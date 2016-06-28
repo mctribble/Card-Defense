@@ -17,6 +17,25 @@
                         <xsd:attribute name="a" type="xsd:unsignedByte" use="required" />
                       </xsd:complexType>
                     </xsd:element>
+                    <xsd:element minOccurs="0" name="effectData">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="Effects">
+                            <xsd:complexType>
+                              <xsd:sequence>
+                                <xsd:element maxOccurs="unbounded" name="Effect">
+                                  <xsd:complexType>
+                                    <xsd:attribute name="name" type="xsd:string" use="required" />
+                                    <xsd:attribute name="strength" type="xsd:decimal" use="optional" />
+                                    <xsd:attribute name="argument" type="xsd:string" use="optional" />
+                                  </xsd:complexType>
+                                </xsd:element>
+                              </xsd:sequence>
+                            </xsd:complexType>
+                          </xsd:element>
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
                   </xsd:sequence>
                   <xsd:attribute name="name" type="xsd:string" use="required" />
                   <xsd:attribute name="spawnCost" type="xsd:unsignedByte" use="required" />

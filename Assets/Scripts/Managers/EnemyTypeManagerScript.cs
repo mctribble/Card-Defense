@@ -94,6 +94,7 @@ public class EnemyTypeManagerScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        //allows making enemy type changes from the editor and saving them back to the xml file
         if (saveEnemyChanges && reallySaveEnemyChanges && reallyReallySaveEnemyChanges)
         {
             types.Save(Path.Combine(Application.dataPath, path));

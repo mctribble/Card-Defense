@@ -9,7 +9,7 @@
               <xsd:element maxOccurs="unbounded" name="Card">
                 <xsd:complexType>
                   <xsd:sequence>
-                    <xsd:element minOccurs="0" name="EffectData">
+                    <xsd:element minOccurs="0" name="effectData">
                       <xsd:complexType>
                         <xsd:sequence>
                           <xsd:element name="Effects">
@@ -39,7 +39,7 @@
                         <xsd:attribute name="WaveBonus" type="xsd:unsignedByte" use="required" />
                       </xsd:complexType>
                     </xsd:element>
-                    <xsd:element minOccurs="0" name="TowerData">
+                    <xsd:element minOccurs="0" name="towerData">
                       <xsd:complexType>
                         <xsd:attribute name="Recharge" type="xsd:decimal" use="required" />
                         <xsd:attribute name="Range" type="xsd:decimal" use="required" />

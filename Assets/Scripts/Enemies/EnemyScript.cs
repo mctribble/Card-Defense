@@ -39,6 +39,7 @@ public class EnemyData {
     [XmlAttribute] public int			maxHealth;	//max health
 	[XmlAttribute] public float			unitSpeed;	//speed, measured in distance/second
 				   public XMLColor		unitColor;	//used to colorize the enemy sprite
+                   public EffectData    effectData; //specifies which effects are attached to this enemy type and what their parameters are
 };
 
 public class EnemyScript : MonoBehaviour {
