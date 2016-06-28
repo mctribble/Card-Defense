@@ -12,9 +12,22 @@ public class XMLColor {
 	[XmlAttribute] public float b;
 	[XmlAttribute] public float a;
 
-	public Color toColor() {
+    //returns a unity color
+	public Color toColor()
+    {
 		return new Color (r, g, b, a);
 	}
+
+    //returns a hex string for use with rich text formatting and such
+    public string toHex()
+    {
+        //each value is multiplied by 255, rounded off, and then added to the result string as a hex value
+        return
+            Mathf.RoundToInt(r * 255).ToString("X2") +
+            Mathf.RoundToInt(g * 255).ToString("X2") +
+            Mathf.RoundToInt(b * 255).ToString("X2") +
+            Mathf.RoundToInt(a * 255).ToString("X2");
+    }
 };
 
 //contains everything needed to define an enemy type

@@ -26,7 +26,8 @@ public class WaveStatusText : MonoBehaviour {
 		WaveData curWaveData = LevelManagerScript.instance.data.waves[curWave];
 
         //first line is always Wave ??/?? (?????)
-        text.text = "Wave " + (curWave + 1) + "/" + LevelManagerScript.instance.data.waves.Count + " (" + curWaveData.type + ")\n";
+        text.text = "Wave " + (curWave + 1) + "/" + LevelManagerScript.instance.data.waves.Count + 
+            " (<color=#" + curWaveData.getEnemyData().unitColor.toHex() + ">"  + curWaveData.type + "</color>)\n";
 
         //if the wave is still spawning or has not yet started, second line is ??? incoming over ??? seconds
         if (LevelManagerScript.instance.SpawnCount != 0)

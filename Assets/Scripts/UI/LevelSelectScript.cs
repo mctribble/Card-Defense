@@ -12,7 +12,11 @@ public class LevelSelectScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		//base game
+        //the menu image is disabled to hide it in the editor, but we want it to be visible in game
+        //so we turn it on again at runtime
+        gameObject.GetComponent<UnityEngine.UI.Image>().enabled = true;
+
+		//base game levels
 		DirectoryInfo dir = new DirectoryInfo (Path.Combine (Application.dataPath, levelDir));	//find level folder
 		FileInfo[] files = dir.GetFiles ("*.xml");												//get list of .xml files from it
 		foreach (FileInfo f in files) {															//for each level file
