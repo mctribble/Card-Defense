@@ -18,6 +18,7 @@ public class EffectTypeManagerScript : MonoBehaviour {
 	
 	}
 
+    //instantiates and initializes an effect object from the xmlEffect.  returns null if that effect doesnt exist
 	//TODO: find a cleaner way to implement this?
 	public IEffect parse (XMLEffect xe) {
 		IEffect ie;
@@ -32,7 +33,7 @@ public class EffectTypeManagerScript : MonoBehaviour {
             case "returnsToTopOfDeck":      ie = new EffectReturnsToTopOfDeck(); break;
             case "shuffle":                 ie = new EffectShuffle(); break;
             case "timePercentageChange":    ie = new EffectTimePercentageChange(); break;
-		    default: throw new NotImplementedException("Effect type " + xe.name + " is not implemented.");
+		    default:                        Debug.LogWarning("Effect type " + xe.name + " is not implemented."); ie = null; break;
 		}
 		ie.strength = xe.strength;
         ie.argument = xe.argument;

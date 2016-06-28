@@ -31,7 +31,7 @@ public class EffectData : System.Object
     }
 
     [XmlIgnore]
-    public List<IEffect> effects = new List<IEffect>(); //list of effect classes
+    public List<IEffect> effects = new List<IEffect>(); //list of effect objects
     [XmlIgnore]
     public TargetingType targetingType
     {
@@ -53,7 +53,11 @@ public class EffectData : System.Object
     public void parseEffects()
     {
         foreach (XMLEffect xe in XMLeffects)
-            effects.Add(EffectTypeManagerScript.instance.parse(xe));
+        {
+            IEffect ie = EffectTypeManagerScript.instance.parse(xe);
+            if (ie != null)
+                effects.Add(ie);
+        }
     }
 
 }
