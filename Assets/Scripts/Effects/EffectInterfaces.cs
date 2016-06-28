@@ -1,5 +1,62 @@
 using UnityEngine;
 using System.Collections;
+using System.Xml.Serialization;
+using System.Collections.Generic;
+
+//represents an effect in XML
+[System.Serializable]
+public class XMLEffect : System.Object
+{
+    [XmlAttribute]
+    public string name;
+    [XmlAttribute]
+    public float strength;
+    [XmlAttribute]
+    public string argument;
+}
+
+//represents everything needed to apply effects to an object
+[System.Serializable]
+public class EffectData : System.Object
+{
+    //list of effects from xml
+    [XmlArray("Effects")]
+    [XmlArrayItem("Effect")]
+    public List<XMLEffect> XMLeffects = new List<XMLEffect>();
+    [XmlIgnore]
+    public bool effectsSpecified //hide effect list if it is empty
+    {
+        get { return XMLeffects.Count > 0; }
+        set { }
+    }
+
+    [XmlIgnore]
+    public List<IEffect> effects = new List<IEffect>(); //list of effect classes
+    [XmlIgnore]
+    public TargetingType targetingType
+    {
+        get
+        {
+            if (effects.Count == 0) parseEffects(); //make sure we have actual code references to the effects
+
+            //return the target type of the first effect that requires a target.  no card can have effects that target two different types of things
+            foreach (IEffect e in effects)
+            {
+                if (e.targetingType != TargetingType.none)
+                    return e.targetingType;
+            }
+            return TargetingType.none; //if no effect needs a target, return none
+        }
+    }
+
+    //translates the XMLeffects into code references
+    public void parseEffects()
+    {
+        foreach (XMLEffect xe in XMLeffects)
+            effects.Add(EffectTypeManagerScript.instance.parse(xe));
+    }
+
+}
 
 //All effects in the game must implement one of these interfaces.  
 //Most will not use Effect directly, but instead a derivitave such as EffectInstant or EffectWave
