@@ -9,7 +9,7 @@ public class EffectTypeManagerScript : MonoBehaviour {
 	public static EffectTypeManagerScript instance;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		instance = this;
 	}
 	
@@ -24,6 +24,7 @@ public class EffectTypeManagerScript : MonoBehaviour {
 		IEffect ie;
 		switch (xe.name) {
             case "addCharges":              ie = new EffectAddCharges(); break;
+            case "armor":                   ie = new EffectArmor(); break;
             case "allTowersLifespanBonus":  ie = new EffectAllTowersLifespanBonus(); break;
             case "budgetPercentageChange":  ie = new EffectBudgetPercentageChange(); break;
             case "changeWaveType":          ie = new EffectChangeWaveType(); break;

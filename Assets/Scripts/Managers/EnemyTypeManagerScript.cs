@@ -91,6 +91,14 @@ public class EnemyTypeManagerScript : MonoBehaviour {
 		}
 	}
 	
+    //called prior to the first frame
+    void Start ()
+    {
+        //parse effects on all enemy types so we throw a warning immediately if one uses an unidentified effect
+        foreach (EnemyData i in types.enemyTypes)
+            if (i.effectData != null)
+                i.effectData.parseEffects();
+    }
 	
 	// Update is called once per frame
 	void Update () {

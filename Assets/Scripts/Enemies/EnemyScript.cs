@@ -58,7 +58,8 @@ public class EnemyScript : MonoBehaviour {
 	public Color	dyingColor;			//color when near death
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
 		//init vars
 		curHealth = data.maxHealth; 
 		expectedHealth = data.maxHealth;
@@ -100,14 +101,38 @@ public class EnemyScript : MonoBehaviour {
 		healthbar.fillAmount = normalizedHealth;
 	}
 
-	//receives damage
-	void OnDamage (DamageEventData e) {
+    //tracks damage that WILL arrive so that towers dont keep shooting something that is about to be dead
+    void OnExpectedDamage(DamageEventData e)
+    {
+        //deal with effects that need to happen when we expect damage
+        if (data.effectData != null)
+            foreach (IEffect i in data.effectData.effects)
+                if (i.effectType == EffectType.enemyDamaged)
+                    ((IEffectEnemyDamaged)i).expectedDamage(e);
+
+        //expect to take damage
+        expectedHealth -= Mathf.CeilToInt(e.rawDamage);
+
+        //if a death is expected, report self as dead so towers ignore this unit
+        if (expectedHealth <= 0)
+            EnemyManagerScript.instance.SendMessage("EnemyExpectedDeath", gameObject);
+    }
+
+    //receives damage
+    void OnDamage (DamageEventData e)
+    {
+        //dont bother if we are already dead
 		if (curHealth <= 0) {
-			//Debug.Log ("SPLEEN!");
 			return;
 		}
 
-		//take damage
+        //deal with effects that need to happen when we actually take damage
+        if (data.effectData != null)
+            foreach (IEffect i in data.effectData.effects)
+                if (i.effectType == EffectType.enemyDamaged)
+                    ((IEffectEnemyDamaged)i).actualDamage(e);
+
+        //take damage
         int damage = Mathf.CeilToInt(e.rawDamage);
         damage = System.Math.Min(damage, curHealth);
         curHealth -= damage;
@@ -120,16 +145,6 @@ public class EnemyScript : MonoBehaviour {
 			Destroy (gameObject);
 		}
 	}
-   
-	//tracks damage that WILL arrive so that towers dont keep shooting something that is about to be dead
-	void OnExpectedDamage (DamageEventData e) {
-		//expect to take damage
-		expectedHealth -= Mathf.CeilToInt(e.rawDamage);
-        
-        //if a death is expected, report self as dead so towers ignore this unit
-        if (expectedHealth <= 0)
-            EnemyManagerScript.instance.SendMessage("EnemyExpectedDeath", gameObject);
-    }
 
 	//stores a new path for this unit to follow
 	void SetPath (List<Vector2> p) {

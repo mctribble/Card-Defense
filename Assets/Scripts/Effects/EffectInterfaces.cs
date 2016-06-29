@@ -66,17 +66,20 @@ public class EffectData : System.Object
 //Most will not use Effect directly, but instead a derivitave such as EffectInstant or EffectWave
 
 //different targeting types.
-public enum TargetingType {
+public enum TargetingType
+{
 	none, 	//this effect does not require the player to select a target
 	tower, 	//this effect requires the player to target a tower 
+    noCast  //this effect does not support being cast (used for effects that are not meant to be applied to a card)
 };
 
 //different effect types
 public enum EffectType {
-	instant,
-	wave,
-    discard,
-    self
+	instant,        //effect triggers instantly without the need for a target
+	wave,           //effect alters the current wave
+    discard,        //effect triggers when the card it is attached to is discarded
+    self,           //effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
+    enemyDamaged    //effect triggers when an enemy is damaged.  Could be attached to the attacking tower or the defending enemy
 };
 
 //base interface
@@ -90,21 +93,21 @@ public interface IEffect {
 
 }
 
-//for instantaneous effects that happen once and then go away
+//effect triggers instantly without the need for a target
 public interface IEffectInstant : IEffect {
 
 	void trigger(); //called when this effect triggers
 
 };
 
-//for effects that apply to enemy waves, altering their properties
+//effect alters the current wave
 public interface IEffectWave : IEffect {
 
 	WaveData alteredWaveData (WaveData currentWaveData); //alters the current wave data and returns the new values
 
 };
 
-//for effects that apply on discard
+//effect triggers when the card it is attached to is discarded
 public interface IEffectDiscard : IEffect
 {
 
@@ -112,11 +115,20 @@ public interface IEffectDiscard : IEffect
 
 }
 
-//for effects that target the card itself
+//effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
 public interface IEffectSelf : IEffect
 {
 
     void trigger(ref Card card, GameObject card_gameObject); //called when this effect triggers.
+
+}
+
+//effect triggers when an enemy is damaged.  Could be attached to the attacking tower or the defending enemy
+public interface IEffectEnemyDamaged : IEffect
+{
+
+    void expectedDamage(DamageEventData d); //called when it is expected to deal damage (so targeting etc. can account for damage amount changes)
+    void actualDamage(DamageEventData d); //called when damage actually happens (for things that should happen when the actual hit occurs)
 
 }
 
