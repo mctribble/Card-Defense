@@ -9,6 +9,26 @@
               <xsd:element maxOccurs="unbounded" name="Card">
                 <xsd:complexType>
                   <xsd:sequence>
+                    <xsd:element minOccurs="0" name="upgradeData">
+                      <xsd:complexType>
+                        <xsd:attribute name="RechargeMult" type="xsd:decimal" use="required" />
+						            <xsd:attribute name="RechargeMod" type="xsd:decimal" use="required" />
+						            <xsd:attribute name="RangeMult" type="xsd:decimal" use="required" />
+                        <xsd:attribute name="RangeMod" type="xsd:decimal" use="required" />
+						            <xsd:attribute name="DamageMult" type="xsd:decimal" use="required" />
+                        <xsd:attribute name="DamageMod" type="xsd:decimal" use="required" />
+                        <xsd:attribute name="WaveBonus" type="xsd:unsignedByte" use="required" />
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element minOccurs="0" name="towerData">
+                      <xsd:complexType>
+                        <xsd:attribute name="Recharge" type="xsd:decimal" use="required" />
+                        <xsd:attribute name="Range" type="xsd:decimal" use="required" />
+                        <xsd:attribute name="Damage" type="xsd:decimal" use="required" />
+                        <xsd:attribute name="Lifespan" type="xsd:unsignedByte" use="required" />
+                        <xsd:attribute name="Sprite" type="xsd:string" use="required" />
+                      </xsd:complexType>
+                    </xsd:element>
                     <xsd:element minOccurs="0" name="effectData">
                       <xsd:complexType>
                         <xsd:sequence>
@@ -26,26 +46,6 @@
                             </xsd:complexType>
                           </xsd:element>
                         </xsd:sequence>
-                      </xsd:complexType>
-                    </xsd:element>
-                    <xsd:element minOccurs="0" name="upgradeData">
-                      <xsd:complexType>
-                        <xsd:attribute name="RechargeMult" type="xsd:decimal" use="required" />
-						<xsd:attribute name="RechargeMod" type="xsd:decimal" use="required" />
-						<xsd:attribute name="RangeMult" type="xsd:decimal" use="required" />
-                        <xsd:attribute name="RangeMod" type="xsd:decimal" use="required" />
-						<xsd:attribute name="DamageMult" type="xsd:decimal" use="required" />
-                        <xsd:attribute name="DamageMod" type="xsd:decimal" use="required" />
-                        <xsd:attribute name="WaveBonus" type="xsd:unsignedByte" use="required" />
-                      </xsd:complexType>
-                    </xsd:element>
-                    <xsd:element minOccurs="0" name="towerData">
-                      <xsd:complexType>
-                        <xsd:attribute name="Recharge" type="xsd:decimal" use="required" />
-                        <xsd:attribute name="Range" type="xsd:decimal" use="required" />
-                        <xsd:attribute name="Damage" type="xsd:decimal" use="required" />
-                        <xsd:attribute name="Lifespan" type="xsd:unsignedByte" use="required" />
-                        <xsd:attribute name="Sprite" type="xsd:string" use="required" />
                       </xsd:complexType>
                     </xsd:element>
                   </xsd:sequence>
