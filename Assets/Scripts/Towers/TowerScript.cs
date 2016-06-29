@@ -3,14 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-//container passed to enemy to tell them they were damaged
-public struct DamageEventData
-{
-	public float	 	rawDamage;
-	public GameObject 	source;
-	public GameObject 	dest;
-}
-
 //tower class itself
 public class TowerScript : MonoBehaviour {
 

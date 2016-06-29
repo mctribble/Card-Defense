@@ -1,6 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//container passed to enemy to tell them they were damaged
+public struct DamageEventData
+{
+    public float rawDamage;
+    public GameObject source;
+    public GameObject dest;
+}
+
 public class BulletScript : MonoBehaviour {
 
 	public float speed;				//projectile speed
