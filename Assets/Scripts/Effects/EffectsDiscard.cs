@@ -16,6 +16,7 @@ class EffectReturnsToTopOfDeck : IEffectDiscard
 
     //this effect
     public string Name { get { return "Returns to top of deck."; } } //returns name and strength
+    public string XMLName { get { return "returnsToTopOfDeck"; } } //name used to refer to this effect in XML
     public bool trigger(ref Card c)
     {
         DeckManagerScript.instance.addCardAtTop(c);

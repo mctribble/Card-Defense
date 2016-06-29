@@ -86,7 +86,8 @@ public enum EffectType {
 public interface IEffect {
 	
 	string Name { get; } 				//user-friendly name of this effect
-	TargetingType targetingType { get; }//specifies what this card must target when casting, if anything
+    string XMLName { get; }                //name used to refer to this effect in XML.  See also: EffectTypeManagerScript.parse()
+    TargetingType targetingType { get; }//specifies what this card must target when casting, if anything
 	EffectType effectType { get; }		//specifies what kind of effect this is
 	float strength { get; set; }		//specifies how strong the effect is.  not used in every effect.
     string argument { get; set; }       //specifies any other information the effect requires.  not used in every effect.

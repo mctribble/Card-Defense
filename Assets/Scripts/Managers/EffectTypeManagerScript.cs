@@ -22,7 +22,8 @@ public class EffectTypeManagerScript : MonoBehaviour {
 	//TODO: find a cleaner way to implement this?
 	public IEffect parse (XMLEffect xe) {
 		IEffect ie;
-		switch (xe.name) {
+		switch (xe.name)
+        {
             case "addCharges":              ie = new EffectAddCharges(); break;
             case "armor":                   ie = new EffectArmor(); break;
             case "allTowersLifespanBonus":  ie = new EffectAllTowersLifespanBonus(); break;
@@ -34,7 +35,7 @@ public class EffectTypeManagerScript : MonoBehaviour {
             case "returnsToTopOfDeck":      ie = new EffectReturnsToTopOfDeck(); break;
             case "shuffle":                 ie = new EffectShuffle(); break;
             case "timePercentageChange":    ie = new EffectTimePercentageChange(); break;
-		    default:                        Debug.LogWarning("Effect type " + xe.name + " is not implemented."); ie = null; break;
+		    default:                        Debug.LogWarning("Effect type " + xe.name + " is not implemented."); return null;
 		}
 		ie.strength = xe.strength;
         ie.argument = xe.argument;

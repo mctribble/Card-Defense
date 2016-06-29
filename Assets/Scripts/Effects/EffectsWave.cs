@@ -23,8 +23,9 @@ public class EffectBudgetPercentageChange : IEffectWave {
             else
                 return "wave is " + -strength + " percent weaker.";
         }
-    }	
-	public WaveData alteredWaveData(WaveData currentWaveData) {
+    }
+    public string XMLName { get { return "budgetPercentageChange"; } } //name used to refer to this effect in XML
+    public WaveData alteredWaveData(WaveData currentWaveData) {
 		currentWaveData.budget = Mathf.RoundToInt(currentWaveData.budget * (1.0f + (strength / 100.0f)));
 		return currentWaveData;
 	}
@@ -43,6 +44,7 @@ public class EffectChangeWaveType : IEffectWave
 
     //this effect
     public string Name { get { return "change monster type of next wave to " + argument + "."; } }   //returns name and strength
+    public string XMLName { get { return "changeWaveType"; } } //name used to refer to this effect in XML
     public WaveData alteredWaveData(WaveData currentWaveData)
     {
         currentWaveData.type = argument;
@@ -72,6 +74,7 @@ public class EffectTimePercentageChange : IEffectWave
                 return "wave spawns " + -strength + " percent faster.";
         }
     }
+    public string XMLName { get { return "timePercentageChange"; } } //name used to refer to this effect in XML
     public WaveData alteredWaveData(WaveData currentWaveData)
     {
         currentWaveData.time = currentWaveData.time * (1.0f + (strength / 100.0f));

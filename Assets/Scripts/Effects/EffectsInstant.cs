@@ -14,7 +14,8 @@ public class EffectDrawCard : IEffectInstant {
 
     //this effect
     public string Name { get { return "Draw up to " + strength + " cards"; } }		//returns name and strength
-	public void trigger() {
+    public string XMLName { get { return "drawCard"; } } //name used to refer to this effect in XML
+    public void trigger() {
 		for (uint i = 0; i < strength; i++)
 			GameObject.FindGameObjectWithTag("Hand").SendMessage ("drawCard");
 	}
@@ -33,6 +34,7 @@ public class EffectAllTowersLifespanBonus : IEffectInstant
 
     //this effect
     public string Name { get { return "All towers have their lifespan increased by " + strength + "."; } }        //returns name and strength
+    public string XMLName { get { return "allTowersLifespanBonus"; } } //name used to refer to this effect in XML
     public void trigger()
     {
         //create an upgrade that only increases lifespan
@@ -59,6 +61,7 @@ public class EffectShuffle : IEffectInstant
 
     //this effect
     public string Name { get { return "Shuffle the deck."; } }        //returns name and strength
+    public string XMLName { get { return "shuffle"; } } //name used to refer to this effect in XML
     public void trigger()
     {
         DeckManagerScript.instance.Shuffle();
@@ -78,6 +81,7 @@ public class EffectDamagePlayer : IEffectInstant
 
     //this effect
     public string Name { get { return "The player takes " + strength + " damage."; } }        //returns name and strength
+    public string XMLName { get { return "damagePlayer"; } } //name used to refer to this effect in XML
     public void trigger()
     {
         DeckManagerScript.instance.Damage(Mathf.RoundToInt(strength));

@@ -4,6 +4,15 @@
     <Card Type="tower" Name="Fast Tower" Description="Suitable for fighting swarms" Charges="4" Art="Summon_Tower_Basic" Tooltip="Tower_Fast">
       <towerData Recharge="0.1" Range="2" Damage="3.5" Lifespan="3" Sprite="Tower_Fast" />
     </Card>
+    <Card Type="tower" Name="Shredder Tower" Description="Does very little damage, but strips away armor" Charges="4" Art="Summon_Tower_Basic" Tooltip="Tower_Fast">
+      <towerData Recharge="1" Range="2" Damage="0" Lifespan="5" Sprite="Tower_Fast" />
+      <effectData>
+        <Effects>
+          <Effect name="reduceEnemyEffectOnDamage" strength="10" argument="armor"/>
+          <Effect name="targetArmor"/>
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="tower" Name="Basic Tower" Charges="6" Art="Summon_Tower_Basic" Tooltip="Tower_Standard">
       <towerData Recharge="1" Range="3" Damage="20" Lifespan="5" Sprite="Tower_Standard" />
     </Card>

@@ -74,10 +74,10 @@ public class CardData : System.Object {
 		set {}
 	}
 
-	public EffectData effectData;		//contains info needed to apply effects.  Only used in effect cards.
+	public EffectData effectData;		//contains info needed to apply effects. O Can be provided for any card, but upgrades currently ignore them
 	[XmlIgnore]
 	public bool EffectDataSpecified {
-		get { return cardType == CardType.spell; }
+		get { return (effectData != null) && (effectData.XMLeffects.Count != 0); } //only write effect data if there is data to write
 		set {}
 	}
 }
@@ -88,7 +88,7 @@ public class CardScript : MonoBehaviour {
 	public Vector2 discardLocation;		//location to discard self to
 	public Card card;   				//holds data specific to the card itself
 	public GameObject tooltipPrefab;	//used to create a tooltip
-	public GameObject 	towerPrefab;	//prefab used to create a tower object
+	public GameObject towerPrefab;	    //prefab used to create a tower object
 	public Image art;					//reference to card art image
 	public Text  title;					//reference to card name text
 	public Text  description;			//reference to card description text

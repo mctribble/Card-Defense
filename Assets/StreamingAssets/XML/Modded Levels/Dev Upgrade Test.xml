@@ -71,7 +71,8 @@
     <!-- name: name of the card
 		 count: how many of that card are present-->
     <Cards>
-      <Card name="Reinforce" count="30" />
+      <Card name="Reinforce" count="10" />
+      <Card name="Shredder Tower" count="10"/>
     </Cards>
   </levelDeck>
 </Level>

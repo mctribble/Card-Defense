@@ -14,6 +14,7 @@ class EffectAddCharges : IEffectSelf
 
     //this effect
     public string Name { get { return "Card gains " + strength + " charges when cast."; } }        //returns name and strength
+    public string XMLName { get { return "addCharges"; } } //name used to refer to this effect in XML
     public void trigger(ref Card card, GameObject card_gameObject)
     {
         card.charges += Mathf.RoundToInt(strength);
@@ -31,6 +32,7 @@ public class EffectDiscardRandom : IEffectSelf
 
     //this effect
     public string Name { get { return "Discard up to " + strength + " random cards"; } }        //returns name and strength
+    public string XMLName { get { return "discardRandomCard"; } } //name used to refer to this effect in XML
     public void trigger(ref Card card, GameObject card_gameObject)
     {
         for (int i = 0; i < strength; i++)
