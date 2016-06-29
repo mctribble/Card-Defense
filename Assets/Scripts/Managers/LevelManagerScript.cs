@@ -164,7 +164,7 @@ public class LevelManagerScript : MonoBehaviour
     {
         data = LevelData.Load(Path.Combine(Application.dataPath, level)); //load the level
 
-        yield return null; //wait a frame to make sure things load right
+        yield return null;  //wait a frame to make sure things load right
         levelLoaded = true; //set flag
                             //wait a few frames to give other managers a chance to catch up
         yield return null;
@@ -182,11 +182,11 @@ public class LevelManagerScript : MonoBehaviour
 			                                  (Mathf.Pow( data.waveGrowthExponential, wave)));      //exponential growth (WARNING: this gets HUGE!)
 
             //enemy type: random (TODO: maybe make harder enemy types more common in later waves?  How would we define this?)
-            EnemyData waveEnemy = EnemyTypeManagerScript.instance.getRandomEnemyType();
+            EnemyData waveEnemy = EnemyTypeManagerScript.instance.getRandomEnemyType(waveBudget);
             //dont spawn enemies that are more expensive than the entire wave budget
             while (waveEnemy.spawnCost > waveBudget)
             {
-                waveEnemy = EnemyTypeManagerScript.instance.getRandomEnemyType();
+                waveEnemy = EnemyTypeManagerScript.instance.getRandomEnemyType(waveBudget);
             }
 
             //time: min(wave*linear, maxwavetime)
@@ -209,7 +209,7 @@ public class LevelManagerScript : MonoBehaviour
             GameObject t = (GameObject) GameObject.Instantiate(towerPrefab, new Vector3(pt.x, pt.y, -3), Quaternion.identity);  //summon tower
             TowerData d = CardTypeManagerScript.instance.getCardByName(pt.name).towerData;
             d.towerName = pt.name;
-            t.SendMessage("SetData", d);                            //pass it the definition
+            t.SendMessage("SetData", d); //pass it the definition
 
             //apply upgrades
             foreach (PremadeTowerUpgrade ptu in pt.upgrades)

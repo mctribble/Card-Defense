@@ -116,14 +116,25 @@ public class EnemyTypeManagerScript : MonoBehaviour
         }
     }
 
-    //returns a random enemy type from the database
-    public EnemyData getRandomEnemyType()
+    //returns a random enemy type from the database, trying to provide one that does not have a spawnCost higher than maxSpawnCost
+    public EnemyData getRandomEnemyType(int maxSpawnCost)
     {
-        //get random index
-        int index = Mathf.RoundToInt (Random.Range (0.0f, types.enemyTypes.Count-1));
+        int maxAttempts = types.enemyTypes.Count * 3; //maximum number of times to select another random enemy type looking for one that is not above the max
+        int chosenIndex = -1; //index of chosen enemy
+
+        //repeatedly attempt to find an enemy that is within the budget
+        for (int i = 0; (chosenIndex == -1) && (i < maxAttempts); i++)
+        {
+            int candidateIndex = Mathf.RoundToInt(Random.Range(0.0f, types.enemyTypes.Count-1));
+            if (types.enemyTypes[candidateIndex].spawnCost <= maxSpawnCost)
+                chosenIndex = candidateIndex;
+        }
+        
+        //we could not find an enemy we could afford, so just pick one at random
+        chosenIndex = Mathf.RoundToInt(Random.Range(0.0f, types.enemyTypes.Count-1));
 
         //return enemy at that index
-        return types.enemyTypes[index];
+        return types.enemyTypes[chosenIndex];
     }
 
     //returns the enemy type with the given name
