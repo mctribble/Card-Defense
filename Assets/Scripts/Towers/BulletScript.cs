@@ -39,11 +39,10 @@ public class BulletScript : MonoBehaviour
         deltaTime = Time.deltaTime; //update frame time
 
         //fetch position of destination object
-        Vector2 curDestination = new Vector2 (data.dest.transform.position.x,
-                                              data.dest.transform.position.y);
+        Vector2 curDestination = data.dest.transform.position;
 
         //fetch current location
-        Vector2 curLocation = new Vector2 (gameObject.transform.position.x, gameObject.transform.position.y);
+        Vector2 curLocation = gameObject.transform.position;
 
         //calculate new location
         Vector2 newLocation = Vector2.MoveTowards (curLocation, curDestination, speed * deltaTime);
