@@ -290,6 +290,8 @@ public class CardScript : MonoBehaviour {
 		GameObject instance = (GameObject) UnityEngine.Object.Instantiate (towerPrefab, location, Quaternion.identity);
         card.data.towerData.towerName = card.data.cardName;
 		instance.SendMessage("SetData", card.data.towerData);
+        if (card.data.effectData != null)
+            instance.SendMessage("SetEffectData", card.data.effectData);
 
 		//perform steps that must be done on every cast
 		Cast ();

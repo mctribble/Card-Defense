@@ -102,13 +102,13 @@ public class EnemyScript : MonoBehaviour {
 	}
 
     //tracks damage that WILL arrive so that towers dont keep shooting something that is about to be dead
-    void OnExpectedDamage(DamageEventData e)
+    public void onExpectedDamage(ref DamageEventData e)
     {
         //deal with effects that need to happen when we expect damage
         if (data.effectData != null)
             foreach (IEffect i in data.effectData.effects)
                 if (i.effectType == EffectType.enemyDamaged)
-                    ((IEffectEnemyDamaged)i).expectedDamage(e);
+                    ((IEffectEnemyDamaged)i).expectedDamage(ref e);
 
         //expect to take damage
         expectedHealth -= Mathf.CeilToInt(e.rawDamage);
@@ -130,7 +130,7 @@ public class EnemyScript : MonoBehaviour {
         if (data.effectData != null)
             foreach (IEffect i in data.effectData.effects)
                 if (i.effectType == EffectType.enemyDamaged)
-                    ((IEffectEnemyDamaged)i).actualDamage(e);
+                    ((IEffectEnemyDamaged)i).actualDamage(ref e);
 
         //take damage
         int damage = Mathf.CeilToInt(e.rawDamage);

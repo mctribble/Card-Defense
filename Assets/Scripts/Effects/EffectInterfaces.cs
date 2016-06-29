@@ -128,8 +128,8 @@ public interface IEffectSelf : IEffect
 public interface IEffectEnemyDamaged : IEffect
 {
 
-    void expectedDamage(DamageEventData d); //called when it is expected to deal damage (so targeting etc. can account for damage amount changes)
-    void actualDamage(DamageEventData d); //called when damage actually happens (for things that should happen when the actual hit occurs)
+    void expectedDamage(ref DamageEventData d); //called when it is expected to deal damage (so targeting etc. can account for damage amount changes)
+    void actualDamage(ref DamageEventData d); //called when damage actually happens (for things that should happen when the actual hit occurs)
 
 }
 

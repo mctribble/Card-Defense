@@ -13,6 +13,7 @@ public class TowerScript : MonoBehaviour {
 	public float		range;				//distance the tower can shoot
 	public float		attackPower;		//damage done on hit
     public int          wavesRemaining;     //number of waves this tower has left before disappearing
+    public EffectData   effects;            //effects on this tower
 
 	public Image		towerImage;			//reference to image for the tower itself
 	public Image		rangeImage;			//reference to image for the range overlay
@@ -29,6 +30,7 @@ public class TowerScript : MonoBehaviour {
         //init vars
         rangeImage.enabled = false;
 		upgradeCount = 0;
+        effects = null;
 
 		//set scale of range image and collider to match range
 		rangeImage.gameObject.GetComponent<RectTransform> ().localScale = new Vector3 (range, range, 1.0f);
@@ -128,20 +130,23 @@ public class TowerScript : MonoBehaviour {
 		e.source = gameObject;
 		e.dest = enemy;
 
+        //if there are enemyDamaged effects on this tower, pass them to the bullet
+        if (effects != null)
+            e.effects = effects;
+        else
+            e.effects = null;
+
 		//create a bullet and send it the data
 		GameObject bullet = (GameObject) Instantiate (bulletPrefab, transform.position, Quaternion.identity);
 		bullet.SendMessage ("InitBullet", e);
-
-        //also send the data to the enemy directly so it knows what to expect. 
-        //If this shot will kill the enemy, it pre-emptively reports itself dead to aid in targeting
-        e.dest.SendMessage("OnExpectedDamage", e);
 
         //reduce charge meter (if the gauge was overcharged, retain the excess)
         shotCharge -= 1.0f;
 	}
 
     //saves new tower definition data and updates components
-    IEnumerator SetData (TowerData d) {
+    IEnumerator SetData (TowerData d)
+    {
 		towerName = d.towerName;
 		rechargeTime = d.rechargeTime;
 		range = d.range;
@@ -161,6 +166,12 @@ public class TowerScript : MonoBehaviour {
 		//update tooltip text
 		UpdateTooltipText ();
 	}
+
+    //sets effect data for this tower
+    void SetEffectData (EffectData d)
+    {
+        effects = d;
+    }
 
 	//receives upgrade data and uses it to modify the tower
 	void Upgrade (UpgradeData d) {

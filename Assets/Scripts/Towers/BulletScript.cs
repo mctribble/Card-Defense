@@ -5,6 +5,7 @@ using System.Collections;
 public struct DamageEventData
 {
     public float rawDamage;
+    public EffectData effects;
     public GameObject source;
     public GameObject dest;
 }
@@ -47,8 +48,14 @@ public class BulletScript : MonoBehaviour {
 		//calculate new location
 		Vector2 newLocation = Vector2.MoveTowards (curLocation, curDestination, speed * deltaTime); 
 
-		//if destination is reached, pass data to target and destroy self
-		if (newLocation == curDestination) {
+		//if destination is reached, trigger effects and pass data to target and destroy self
+		if (newLocation == curDestination)
+        {
+            if (data.effects != null)
+                foreach (IEffect i in data.effects.effects)
+                    if (i.effectType == EffectType.enemyDamaged)
+                        ((IEffectEnemyDamaged)i).actualDamage(ref data);
+
 			data.dest.SendMessage("OnDamage", data);
 			Destroy(gameObject);
 		}
@@ -58,8 +65,20 @@ public class BulletScript : MonoBehaviour {
 
 	}
 
-	void InitBullet (DamageEventData newData){
+    //sets up the bullet data and handles expectedDamage effects
+	void InitBullet (DamageEventData newData)
+    {
+        //init
 		data = newData;
 		initialized = true;
+
+        //trigger effects
+        if (data.effects != null)
+            foreach (IEffect i in data.effects.effects)
+                if (i.effectType == EffectType.enemyDamaged)
+                    ((IEffectEnemyDamaged)i).expectedDamage(ref data);
+        
+        //tell enemy to expect the damage
+        data.dest.GetComponent<EnemyScript>().onExpectedDamage(ref data);
     }
 }
