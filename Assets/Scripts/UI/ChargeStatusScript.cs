@@ -1,20 +1,20 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
 
-public class ChargeStatusScript : MonoBehaviour {
-
-	Text text;
+public class ChargeStatusScript : MonoBehaviour
+{
+    private Text text;
     public Color32 fullColor;     //font color to use when the deck is full
     public Color32 emptyColor;    //font color to use when the deck is empty
 
     // Use this for initialization
-    void Start () {
-		text = GetComponent<Text> ();
-	}
-	
-	// Update is called once per frame
-	void Update ()
+    private void Start()
+    {
+        text = GetComponent<Text>();
+    }
+
+    // Update is called once per frame
+    private void Update()
     {
         //skip if level not loaded
         if (!LevelManagerScript.instance.levelLoaded)

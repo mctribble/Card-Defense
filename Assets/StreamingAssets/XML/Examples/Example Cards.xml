@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- This is a fully functioning mod file.  Copy it to StreamingAssets/XML/Modded Cards to see it in action! -->
 <CardTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Cards.xsd">
-  <!-- 	Cards listed here will not appear in game unless they are listed in a deck! 
+  <!-- 	Cards listed here will not appear in game unless they are listed in a deck!
 		string Type: must be one of "tower", "upgrade", or "spell".  Each one uses different attributes (see below)
 		string Name: name of the card.  if a card of this name already exists, the existing card will be OVERWRITTEN.
 		string Description: describes what the card does
@@ -35,7 +35,7 @@
 	<!--	for spells, you provide a list of effects applied by the card.  The listed effects determine how the card must be cast,
 			for example, if a spell affects a tower, the player will have to select a tower in order to play the card.
 			The list of effects is hard coded, but you can combine them in whatever way you wish.  Effects are applied in the order listed.
-			
+
 			Currently, the engine supports:
 			addCharges: card gains strength charges when played
 			allTowersLifespanBonus: all cards have lifespan increased by strength
@@ -47,7 +47,7 @@
 			returnsToTopOfDeck: this card returns to the top of the deck instead of the bottom when used and there are charges remaining
 			shuffle: the deck is reshuffled
 			timePercentageChange: time taken for the wave to spawn is increased by strength%
-			
+
 			If you want to use an effect not on this list, please suggest it to the developer.-->
       <effectData>
         <Effects>

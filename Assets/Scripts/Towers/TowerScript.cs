@@ -1,75 +1,78 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 //tower class itself
-public class TowerScript : MonoBehaviour {
+public class TowerScript : MonoBehaviour
+{
+    public GameObject   bulletPrefab;   //prefab to instantiate as a bullet
+    public string       towerName;      //name of the tower
+    public ushort       upgradeCount;   //number of times this tower has been upgraded
+    public float        rechargeTime;   //time, in seconds, between shots.
+    public float        range;          //distance the tower can shoot
+    public float        attackPower;	//damage done on hit
+    public int          wavesRemaining; //number of waves this tower has left before disappearing
+    public EffectData   effects;        //effects on this tower
 
-	public GameObject	bulletPrefab;		//prefab to instantiate as a bullet
-	public string		towerName;			//name of the tower
-	public ushort		upgradeCount;		//number of times this tower has been upgraded
-	public float 		rechargeTime;		//time, in seconds, between shots.
-	public float		range;				//distance the tower can shoot
-	public float		attackPower;		//damage done on hit
-    public int          wavesRemaining;     //number of waves this tower has left before disappearing
-    public EffectData   effects;            //effects on this tower
+    public Image        towerImage;     //reference to image for the tower itself
+    public Image        rangeImage;     //reference to image for the range overlay
+    public Image        buttonImage;	//reference to image for the button object
+    public Image        tooltipPanel;   //reference to image for the tooltip background
+    public Text         tooltipText;	//reference to text for the tooltip
+    public Text         lifespanText;   //reference to text that shows the lifespan
 
-	public Image		towerImage;			//reference to image for the tower itself
-	public Image		rangeImage;			//reference to image for the range overlay
-	public Image		buttonImage;		//reference to image for the button object
-    public Image        tooltipPanel;       //reference to image for the tooltip background
-	public Text			tooltipText;		//reference to text for the tooltip
-    public Text         lifespanText;       //reference to text that shows the lifespan
-
-	private float 		deltaTime;			//time since last frame
-	private float 		shotCharge;			//represents how charged the next. 0.0 is empty, 1.0 is full.
+    private float       deltaTime;      //time since last frame
+    private float       shotCharge;		//represents how charged the next. 0.0 is empty, 1.0 is full.
 
     // Use this for initialization
-    void Awake () {
+    private void Awake()
+    {
         //init vars
         rangeImage.enabled = false;
-		upgradeCount = 0;
+        upgradeCount = 0;
         effects = null;
 
-		//set scale of range image and collider to match range
-		rangeImage.gameObject.GetComponent<RectTransform> ().localScale = new Vector3 (range, range, 1.0f);
-		GetComponent<CircleCollider2D> ().radius = range;
+        //set scale of range image and collider to match range
+        rangeImage.gameObject.GetComponent<RectTransform>().localScale = new Vector3(range, range, 1.0f);
+        GetComponent<CircleCollider2D>().radius = range;
 
-		//hide tooltip until moused over
-		tooltipText.enabled = false;
-	}
-	
-	// Update is called once per frame
-	void Update ()
+        //hide tooltip until moused over
+        tooltipText.enabled = false;
+    }
+
+    // Update is called once per frame
+    private void Update()
     {
-		deltaTime = Time.deltaTime;					//update time since last frame
+        deltaTime = Time.deltaTime;                 //update time since last frame
 
-		//update tooltip position
-		if (tooltipText.enabled) {
-			//pos
-			tooltipPanel.transform.position = Input.mousePosition;
+        //update tooltip position
+        if (tooltipText.enabled)
+        {
+            //pos
+            tooltipPanel.transform.position = Input.mousePosition;
 
-			//pivot
-			//default: pivot in lower right
-			int x = 1;
-			int y = 0;
+            //pivot
+            //default: pivot in lower right
+            int x = 1;
+            int y = 0;
 
-			//if too close to the left, move pivot to the left
-			if (Input.mousePosition.x < tooltipText.preferredWidth) {
-				x = 0;
-			}
+            //if too close to the left, move pivot to the left
+            if (Input.mousePosition.x < tooltipText.preferredWidth)
+            {
+                x = 0;
+            }
 
-			//if too close to the top, move pivot to the bottom
-			if (Input.mousePosition.y > (Screen.height - tooltipText.preferredHeight)) {
-				y = 1;
-			}
+            //if too close to the top, move pivot to the bottom
+            if (Input.mousePosition.y > (Screen.height - tooltipText.preferredHeight))
+            {
+                y = 1;
+            }
 
-			//set pivot
-			tooltipPanel.rectTransform.pivot = new Vector2(x,y);
-		}
+            //set pivot
+            tooltipPanel.rectTransform.pivot = new Vector2(x, y);
+        }
 
-        //increase shot charge if the gauge is not already full 
+        //increase shot charge if the gauge is not already full
         //it can still overcharge slightly, if the last frame was longer than the remaining charge time
         if (shotCharge < 1.0f)
         {
@@ -77,7 +80,7 @@ public class TowerScript : MonoBehaviour {
             buttonImage.fillAmount = shotCharge; //update guage
         }
 
-        //while a shot is charged and at least one enemy in range... 
+        //while a shot is charged and at least one enemy in range...
         //(it is technically possible to fire multiple times per frame if the frame took a long time for some reason or the tower fires extremely quickly)
         while (shotCharge > 1.0f)
         {
@@ -106,29 +109,32 @@ public class TowerScript : MonoBehaviour {
                 fire(closest);
             else
                 break;
-		}
-	}
+        }
+    }
 
-	void TowerMouseEnter(){
-		rangeImage.enabled = true;
+    private void TowerMouseEnter()
+    {
+        rangeImage.enabled = true;
         tooltipPanel.enabled = true;
-		tooltipText.enabled = true;
-	}
+        tooltipText.enabled = true;
+    }
 
-	//called when the mouse is no longer 
-	void TowerMouseExit(){
-		rangeImage.enabled = false;
+    //called when the mouse is no longer
+    private void TowerMouseExit()
+    {
+        rangeImage.enabled = false;
         tooltipPanel.enabled = false;
-		tooltipText.enabled = false;
-	}
+        tooltipText.enabled = false;
+    }
 
     //fires on an enemy unit
-    void fire(GameObject enemy){
-		//create a struct and fill it with data about the attack
-		DamageEventData e = new DamageEventData();
-		e.rawDamage = attackPower;
-		e.source = gameObject;
-		e.dest = enemy;
+    private void fire(GameObject enemy)
+    {
+        //create a struct and fill it with data about the attack
+        DamageEventData e = new DamageEventData();
+        e.rawDamage = attackPower;
+        e.source = gameObject;
+        e.dest = enemy;
 
         //if there are enemyDamaged effects on this tower, pass them to the bullet
         if (effects != null)
@@ -136,82 +142,84 @@ public class TowerScript : MonoBehaviour {
         else
             e.effects = null;
 
-		//create a bullet and send it the data
-		GameObject bullet = (GameObject) Instantiate (bulletPrefab, transform.position, Quaternion.identity);
-		bullet.SendMessage ("InitBullet", e);
+        //create a bullet and send it the data
+        GameObject bullet = (GameObject) Instantiate (bulletPrefab, transform.position, Quaternion.identity);
+        bullet.SendMessage("InitBullet", e);
 
         //reduce charge meter (if the gauge was overcharged, retain the excess)
         shotCharge -= 1.0f;
-	}
+    }
 
     //saves new tower definition data and updates components
-    IEnumerator SetData (TowerData d)
+    private IEnumerator SetData(TowerData d)
     {
-		towerName = d.towerName;
-		rechargeTime = d.rechargeTime;
-		range = d.range;
-		attackPower = d.attackPower;
+        towerName = d.towerName;
+        rechargeTime = d.rechargeTime;
+        range = d.range;
+        attackPower = d.attackPower;
         wavesRemaining = d.lifespan;
 
-		//set scale of range image and collider to match range
+        //set scale of range image and collider to match range
 
-		//yes, I know its awkward, but we're setting the sprite with WWW.  
-		WWW www = new WWW ("file:///" + Application.dataPath + "/StreamingAssets/Art/Sprites/" + d.towerSpriteName + ".png");
-		yield return www;
-		towerImage.sprite = Sprite.Create (www.texture, new Rect (0, 0, www.texture.width, www.texture.height), new Vector2 (0.5f, 0.5f));
+        //yes, I know its awkward, but we're setting the sprite with WWW.
+        WWW www = new WWW ("file:///" + Application.dataPath + "/StreamingAssets/Art/Sprites/" + d.towerSpriteName + ".png");
+        yield return www;
+        towerImage.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
 
-		rangeImage.gameObject.GetComponent<RectTransform> ().localScale = new Vector3 (range, range, 1.0f);
-		GetComponent<CircleCollider2D> ().radius = range;
+        rangeImage.gameObject.GetComponent<RectTransform>().localScale = new Vector3(range, range, 1.0f);
+        GetComponent<CircleCollider2D>().radius = range;
 
-		//update tooltip text
-		UpdateTooltipText ();
-	}
+        //update tooltip text
+        UpdateTooltipText();
+    }
 
     //sets effect data for this tower
-    void SetEffectData (EffectData d)
+    private void SetEffectData(EffectData d)
     {
         effects = d;
     }
 
-	//receives upgrade data and uses it to modify the tower
-	void Upgrade (UpgradeData d) {
-		//Debug.Log ("Upgrade");
+    //receives upgrade data and uses it to modify the tower
+    private void Upgrade(UpgradeData d)
+    {
+        //Debug.Log ("Upgrade");
 
-		//each stat = oldStat * statMult + statMod.
-		rechargeTime	= rechargeTime 	* d.rechargeMultiplier 	+ d.rechargeModifier;
-		attackPower		= attackPower 	* d.attackMultiplier 	+ d.attackModifier;
-		range			= range			* d.rangeMultiplier 	+ d.rangeModifier;
+        //each stat = oldStat * statMult + statMod.
+        rechargeTime    = rechargeTime  * d.rechargeMultiplier  + d.rechargeModifier;
+        attackPower     = attackPower   * d.attackMultiplier    + d.attackModifier;
+        range           = range         * d.rangeMultiplier     + d.rangeModifier;
 
         //also increase waves
         wavesRemaining += d.waveBonus;
 
-		//set scale of range image and collider to match range
-		rangeImage.gameObject.GetComponent<RectTransform> ().localScale = new Vector3 (range, range, 1.0f);
-		GetComponent<CircleCollider2D> ().radius = range;
+        //set scale of range image and collider to match range
+        rangeImage.gameObject.GetComponent<RectTransform>().localScale = new Vector3(range, range, 1.0f);
+        GetComponent<CircleCollider2D>().radius = range;
 
         //count the upgrade
         upgradeCount++;
 
         //update tooltip text
-        UpdateTooltipText ();
-	}
+        UpdateTooltipText();
+    }
 
-	//updates the tooltip text to reflect new values
-	void UpdateTooltipText () {
-		tooltipText.text = 
-			towerName + "\n" + 
-			upgradeCount + " upgrades\n" +
-			"attack: " + attackPower + "\n" +
-			"charge time: " + rechargeTime + "\n" +
+    //updates the tooltip text to reflect new values
+    private void UpdateTooltipText()
+    {
+        tooltipText.text =
+            towerName + "\n" +
+            upgradeCount + " upgrades\n" +
+            "attack: " + attackPower + "\n" +
+            "charge time: " + rechargeTime + "\n" +
             "Damage Per Second: " + (attackPower / rechargeTime).ToString("F1") + "\n" +
             "range: " + range + "\n" +
             "waves remaining: " + wavesRemaining;
 
         lifespanText.text = wavesRemaining.ToString();
-	}
+    }
 
     //updates the tooltip text to show what the given upgrade would change
-    void UpgradeTooltip(UpgradeData u)
+    private void UpgradeTooltip(UpgradeData u)
     {
         //we already know how these lines change
         tooltipText.text =
@@ -219,49 +227,74 @@ public class TowerScript : MonoBehaviour {
             upgradeCount + " upgrades <color=lime>+ 1</color>\n";
 
         //for the others, we need to do some calculations:
-        float newAttackPower = attackPower * u.attackMultiplier + u.attackModifier;
-        float newRechargeTime = rechargeTime * u.rechargeMultiplier + u.rechargeModifier;
-        float curDPS = attackPower / rechargeTime;
-        float newDPS = newAttackPower / newRechargeTime;
-        float newRange = range * u.rangeMultiplier + u.rangeModifier;
-        int   newWavesRemaining = wavesRemaining + u.waveBonus;
+        float newAttackPower     = attackPower     * u.attackMultiplier   + u.attackModifier;
+        float newRechargeTime    = rechargeTime    * u.rechargeMultiplier + u.rechargeModifier;
+        float newRange           = range           * u.rangeMultiplier    + u.rangeModifier;
+        float curDPS             = attackPower     / rechargeTime;
+        float newDPS             = newAttackPower  / newRechargeTime;
+        int   newWavesRemaining  = wavesRemaining  + u.waveBonus;
 
-        float attackChange = newAttackPower - attackPower;
-        float rechargeChange = newRechargeTime - rechargeTime;
-        float DPSChange = newDPS - curDPS;
-        float rangeChange = newRange - range;
+        float attackChange       = newAttackPower  - attackPower;
+        float rechargeChange     = newRechargeTime - rechargeTime;
+        float DPSChange          = newDPS          - curDPS;
+        float rangeChange        = newRange        - range;
         int wavesRemainingChange = newWavesRemaining - wavesRemaining;
 
-        //now we can update the status text appropriately, with color coding 
+        //now we can update the status text appropriately, with color coding
 
         //attack
         string colorString = "magenta";
-        if (attackChange < 0) colorString = "red"; else if (attackChange > 0) colorString = "lime"; else colorString = "white";
+        if (attackChange < 0)
+            colorString = "red";
+        else if (attackChange > 0)
+            colorString = "lime";
+        else
+            colorString = "white";
         tooltipText.text += "attack: " + attackPower + " <color=" + colorString + "> " + attackChange.ToString("+ ####0.##;- ####0.##") + "</color>\n";
 
         //charge time
         colorString = "magenta";
-        if (rechargeChange < 0) colorString = "lime"; else if (rechargeChange > 0) colorString = "red"; else colorString = "white";
+        if (rechargeChange < 0)
+            colorString = "lime";
+        else if (rechargeChange > 0)
+            colorString = "red";
+        else
+            colorString = "white";
         tooltipText.text += "charge time: " + rechargeTime + " <color=" + colorString + "> " + rechargeChange.ToString("+ ####0.##;- ####0.##") + "</color>\n";
 
         //DPS
         colorString = "magenta";
-        if (DPSChange < 0) colorString = "red"; else if (DPSChange > 0) colorString = "lime"; else colorString = "white";
+        if (DPSChange < 0)
+            colorString = "red";
+        else if (DPSChange > 0)
+            colorString = "lime";
+        else
+            colorString = "white";
         tooltipText.text += "Damage Per Second: " + curDPS + " <color=" + colorString + "> " + DPSChange.ToString("+ ####0.##;- ####0.##") + "</color>\n";
 
         //range
         colorString = "magenta";
-        if (rangeChange < 0) colorString = "red"; else if (rangeChange > 0) colorString = "lime"; else colorString = "white";
+        if (rangeChange < 0)
+            colorString = "red";
+        else if (rangeChange > 0)
+            colorString = "lime";
+        else
+            colorString = "white";
         tooltipText.text += "range: " + range + " <color=" + colorString + "> " + rangeChange.ToString("+ ####0.##;- ####0.##") + "</color>\n";
 
         //waves remaining
         colorString = "magenta";
-        if (wavesRemainingChange < 0) colorString = "red"; else if (wavesRemainingChange > 0) colorString = "lime"; else colorString = "white";
+        if (wavesRemainingChange < 0)
+            colorString = "red";
+        else if (wavesRemainingChange > 0)
+            colorString = "lime";
+        else
+            colorString = "white";
         tooltipText.text += "waves remaining: " + attackPower + " <color=" + colorString + "> " + wavesRemainingChange.ToString("+ ####0.##;- ####0.##") + "</color>";
     }
 
     //called whenever a wave ends.  Updates the lifespan and destroys the tower if it hits zero.
-    void WaveOver()
+    private void WaveOver()
     {
         wavesRemaining -= 1;
         UpdateTooltipText();

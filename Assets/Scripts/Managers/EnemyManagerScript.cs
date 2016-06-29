@@ -1,33 +1,32 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 //compares two enemies by their distance to their goals.  Used for sorting the enemy list (
 public class EnemyDistanceToGoalComparer : Comparer<GameObject>
 {
     public override int Compare(GameObject x, GameObject y)
     {
-        return x.GetComponent<EnemyScript>().distanceToGoal().CompareTo( y.GetComponent<EnemyScript>().distanceToGoal() );
+        return x.GetComponent<EnemyScript>().distanceToGoal().CompareTo(y.GetComponent<EnemyScript>().distanceToGoal());
     }
 }
 
 //responsible for tracking active enemies and performing group operations on them
-public class EnemyManagerScript : MonoBehaviour {
-
+public class EnemyManagerScript : MonoBehaviour
+{
     public static EnemyManagerScript instance; //this class is a singleton
     public List<GameObject> activeEnemies; //excludes enemies that expect to die but have not yet done so
     private EnemyDistanceToGoalComparer comparer;
 
     // Use this for initialization
-    void Awake () {
+    private void Awake()
+    {
         instance = this;
         activeEnemies = new List<GameObject>();
         comparer = new EnemyDistanceToGoalComparer();
-	}
-	
+    }
+
     //called when an enemy is spawned
-    public void EnemySpawned (GameObject e)
+    public void EnemySpawned(GameObject e)
     {
         //perform a sorted insert.  We expect this enemy to be near the end of the list, so start at the back
         //we insert it after the first enemy that is not further away than this one
@@ -45,26 +44,27 @@ public class EnemyManagerScript : MonoBehaviour {
     }
 
     //called when an enemy expects to die
-    public void EnemyExpectedDeath (GameObject e)
+    public void EnemyExpectedDeath(GameObject e)
     {
         activeEnemies.Remove(e);
     }
 
     //called when the enemy path changes, such as when the enemy mkaes it to the end and restarts
-    public void EnemyPathChanged (GameObject e)
+    public void EnemyPathChanged(GameObject e)
     {
         EnemyExpectedDeath(e);
         EnemySpawned(e);
     }
 
     //sorts the enemy list by how close they are to their goal
-    void sortEnemyList ()
+    private void sortEnemyList()
     {
         activeEnemies.Sort(comparer);
     }
 
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    private void Update()
+    {
         //sortEnemyList();
-	}
+    }
 }

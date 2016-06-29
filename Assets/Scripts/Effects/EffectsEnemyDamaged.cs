@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
 
 //all effects in this file trigger when an enemy is damaged.  The effect itself could be attached either to the attacking tower or the defending enemy
 
@@ -14,7 +12,7 @@ public class EffectArmor : IEffectEnemyDamaged
     public string argument { get; set; }                                        //effect argument (unused in this effect)
 
     //this effect
-    public string Name { get { return "Armor: " + strength; } }     //returns name and strength
+    public string Name { get { return "Armor: " + strength; } } //returns name and strength
     public string XMLName { get { return "armor"; } } //name used to refer to this effect in XML
 
     //alter damage calculations when we expect to deal damage, not when it actually happens, so that targeting etc. have an accurate number to work with
@@ -38,7 +36,7 @@ public class EffectReduceEnemyEffectOnDamage : IEffectEnemyDamaged
     public string argument { get; set; }                                        //effect to reduce
 
     //this effect
-    public string Name { get { return "Enemy " + argument + "strength: -" + strength; } }     //returns name and strength
+    public string Name { get { return "Enemy " + argument + "strength: -" + strength; } } //returns name and strength
     public string XMLName { get { return "reduceEnemyEffectOnDamage"; } } //name used to refer to this effect in XML
 
     public void expectedDamage(ref DamageEventData d) { } //we dont need to do anything on expected damage

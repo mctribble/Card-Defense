@@ -1,32 +1,33 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
 
-public class WaveStatusText : MonoBehaviour {
+public class WaveStatusText : MonoBehaviour
+{
+    private Text text;
 
-	Text text;
+    // Use this for initialization
+    private void Start()
+    {
+        text = GetComponent<Text>();
+    }
 
-	// Use this for initialization
-	void Start () {
-		text = GetComponent<Text> ();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		//dont update if paused or there is no level loaded
-		if ((Time.timeScale == 0.0f) || (LevelManagerScript.instance.levelLoaded == false))
-			return;
+    // Update is called once per frame
+    private void Update()
+    {
+        //dont update if paused or there is no level loaded
+        if ((Time.timeScale == 0.0f) || (LevelManagerScript.instance.levelLoaded == false))
+            return;
 
-		//also dont update if there are no waves yet
-		if (LevelManagerScript.instance.data.waves.Count == 0)
-			return;
+        //also dont update if there are no waves yet
+        if (LevelManagerScript.instance.data.waves.Count == 0)
+            return;
 
         //get variables
-		int curWave = LevelManagerScript.instance.currentWave;
-		WaveData curWaveData = LevelManagerScript.instance.data.waves[curWave];
+        int curWave = LevelManagerScript.instance.currentWave;
+        WaveData curWaveData = LevelManagerScript.instance.data.waves[curWave];
 
         //first line is always Wave ??/?? (?????)
-        text.text = "Wave " + (curWave + 1) + "/" + LevelManagerScript.instance.data.waves.Count + 
+        text.text = "Wave " + (curWave + 1) + "/" + LevelManagerScript.instance.data.waves.Count +
             " (<color=#" + curWaveData.getEnemyData().unitColor.toHex() + ">"  + curWaveData.type + "</color>)\n";
 
         //if the wave is still spawning or has not yet started, second line is ??? incoming over ??? seconds
@@ -54,6 +55,5 @@ public class WaveStatusText : MonoBehaviour {
 
             text.text += "\n(speed x" + Time.timeScale.ToString("F1") + ")</color>";
         }
-            
-	}
+    }
 }

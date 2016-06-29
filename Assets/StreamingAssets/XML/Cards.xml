@@ -8,8 +8,8 @@
       <towerData Recharge="1" Range="2" Damage="0" Lifespan="5" Sprite="Tower_Fast" />
       <effectData>
         <Effects>
-          <Effect name="reduceEnemyEffectOnDamage" strength="10" argument="armor"/>
-          <Effect name="targetArmor"/>
+          <Effect name="reduceEnemyEffectOnDamage" strength="10" argument="armor" />
+          <Effect name="targetArmor" />
         </Effects>
       </effectData>
     </Card>
@@ -98,6 +98,6 @@
           <Effect name="timePercentageChange" strength="-50" />
         </Effects>
       </effectData>
-    </Card>  
+    </Card>
   </Cards>
 </CardTypes>

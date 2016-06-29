@@ -9,12 +9,12 @@
 		byte   unitSpeed: how fast this unit moves
 		unitColor: the enemy sprite is colorized with this.  Values range from 0 to 1.-->
   <Enemies>
-    <!--because an enemy named Tank already exists in the base game, that version will be overwritten.  
+    <!--because an enemy named Tank already exists in the base game, that version will be overwritten.
 		This variation of tank has very low health. -->
     <Enemy name="Tank" spawnCost="100" damage="10" maxHealth="8" unitSpeed="1">
       <unitColor r="0" g="0" b="1" a="1" />
     </Enemy>
-	<!--because an enemy of this name does not exist in base game, this will be added to the list.  
+	<!--because an enemy of this name does not exist in base game, this will be added to the list.
 		It will only appear in levels that spawn at least some waves at random, or include it in their explicit wave list (such as the example level file in this folder)
 		these enemies are very slow and always die in one hit, but spawn in great numbers-->
     <Enemy name="ExEnemy" spawnCost="1" damage="1" maxHealth="1" unitSpeed="1">

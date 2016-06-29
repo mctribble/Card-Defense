@@ -9,18 +9,18 @@
 		time: how many seconds the enemies spawn for.  Shorter time spans result in more densely packed groups.
 		message: optional message that appears at the start of the wave-->
   <Waves>
-    <Wave type="Swarm"    budget="600"  time="10"/>
-    <Wave type="Standard" budget="600"  time="10"/>
-    <Wave type="Tank"     budget="600"  time="10"/>
-    <Wave type="Swarm"    budget="1200" time="10"/>
-    <Wave type="Standard" budget="1200" time="10"/>
-    <Wave type="Tank"     budget="1200" time="10"/>
-    <Wave type="Swarm"    budget="1800" time="10"/>
-    <Wave type="Standard" budget="1800" time="10"/>
-    <Wave type="Tank"     budget="1800" time="10"/>
-    <Wave type="Swarm"    budget="2400" time="10"/>
-    <Wave type="Standard" budget="2400" time="10"/>
-    <Wave type="Tank"     budget="2400" time="10"/>
+    <Wave type="Swarm"    budget="600"  time="10" />
+    <Wave type="Standard" budget="600"  time="10" />
+    <Wave type="Tank"     budget="600"  time="10" />
+    <Wave type="Swarm"    budget="1200" time="10" />
+    <Wave type="Standard" budget="1200" time="10" />
+    <Wave type="Tank"     budget="1200" time="10" />
+    <Wave type="Swarm"    budget="1800" time="10" />
+    <Wave type="Standard" budget="1800" time="10" />
+    <Wave type="Tank"     budget="1800" time="10" />
+    <Wave type="Swarm"    budget="2400" time="10" />
+    <Wave type="Standard" budget="2400" time="10" />
+    <Wave type="Tank"     budget="2400" time="10" />
   </Waves>
   <!--	positions at which the enemies can spawn -->
   <Spawners>
@@ -36,7 +36,7 @@
     <Segment startX="-5" startY="5" endX="-5"  endY="-2" />
     <Segment startX="0"  startY="5" endX="0"  endY="-2" />
     <Segment startX="5"  startY="5" endX="5"  endY="-2" />
-                                                    
+
     <Segment startX="-5" startY="-2" endX="8" endY="-4" />
     <Segment startX="0"  startY="-2" endX="8" endY="-4" />
     <Segment startX="5"  startY="-2" endX="8" endY="-4" />
@@ -46,23 +46,23 @@
   <!--	this section is for starting the level with towers already on the field.  See Example Level.xml for details-->
   <Towers>
     <!--various towers with various upgrades-->
-  	<Tower name="Basic Tower" x="-5.5" y="3.5"/>
-    <Tower name="Basic Tower" x="-5.5" y="2">    <Upgrades> <Upgrade Name="Basic Upgrade" Count="1"/> </Upgrades> </Tower>
-    <Tower name="Basic Tower" x="-5.5" y="0.5">  <Upgrades> <Upgrade Name="Fast Upgrade"  Count="1"/> </Upgrades> </Tower>
-    <Tower name="Basic Tower" x="-5.5" y="-1.0"> <Upgrades> <Upgrade Name="Heavy Upgrade" Count="1"/> </Upgrades> </Tower>
-  
-  	<Tower name="Fast Tower"  x="-0.5" y="3.5"/>
-    <Tower name="Fast Tower"  x="-0.5" y="2">    <Upgrades> <Upgrade Name="Basic Upgrade" Count="1"/> </Upgrades> </Tower>
-    <Tower name="Fast Tower"  x="-0.5" y="0.5">  <Upgrades> <Upgrade Name="Fast Upgrade"  Count="1"/> </Upgrades> </Tower>
-    <Tower name="Fast Tower"  x="-0.5" y="-1.0"> <Upgrades> <Upgrade Name="Heavy Upgrade" Count="1"/> </Upgrades> </Tower>
-  
-  	<Tower name="Heavy Tower" x="4.5"  y="3.5"/>
-    <Tower name="Heavy Tower" x="4.5"  y="2">    <Upgrades> <Upgrade Name="Basic Upgrade" Count="1"/> </Upgrades> </Tower>
-    <Tower name="Heavy Tower" x="4.5"  y="0.5">  <Upgrades> <Upgrade Name="Fast Upgrade"  Count="1"/> </Upgrades> </Tower>
-    <Tower name="Heavy Tower" x="4.5"  y="-1.0"> <Upgrades> <Upgrade Name="Heavy Upgrade" Count="1"/> </Upgrades> </Tower>
-  
+  	<Tower name="Basic Tower" x="-5.5" y="3.5" />
+    <Tower name="Basic Tower" x="-5.5" y="2">    <Upgrades> <Upgrade Name="Basic Upgrade" Count="1" /> </Upgrades> </Tower>
+    <Tower name="Basic Tower" x="-5.5" y="0.5">  <Upgrades> <Upgrade Name="Fast Upgrade"  Count="1" /> </Upgrades> </Tower>
+    <Tower name="Basic Tower" x="-5.5" y="-1.0"> <Upgrades> <Upgrade Name="Heavy Upgrade" Count="1" /> </Upgrades> </Tower>
+
+  	<Tower name="Fast Tower"  x="-0.5" y="3.5" />
+    <Tower name="Fast Tower"  x="-0.5" y="2">    <Upgrades> <Upgrade Name="Basic Upgrade" Count="1" /> </Upgrades> </Tower>
+    <Tower name="Fast Tower"  x="-0.5" y="0.5">  <Upgrades> <Upgrade Name="Fast Upgrade"  Count="1" /> </Upgrades> </Tower>
+    <Tower name="Fast Tower"  x="-0.5" y="-1.0"> <Upgrades> <Upgrade Name="Heavy Upgrade" Count="1" /> </Upgrades> </Tower>
+
+  	<Tower name="Heavy Tower" x="4.5"  y="3.5" />
+    <Tower name="Heavy Tower" x="4.5"  y="2">    <Upgrades> <Upgrade Name="Basic Upgrade" Count="1" /> </Upgrades> </Tower>
+    <Tower name="Heavy Tower" x="4.5"  y="0.5">  <Upgrades> <Upgrade Name="Fast Upgrade"  Count="1" /> </Upgrades> </Tower>
+    <Tower name="Heavy Tower" x="4.5"  y="-1.0"> <Upgrades> <Upgrade Name="Heavy Upgrade" Count="1" /> </Upgrades> </Tower>
+
     <!--use a dev tower to kill survivors of the test track-->
-    <Tower name="Dev Purge Tower" x="8.5" y="2.5"/>
+    <Tower name="Dev Purge Tower" x="8.5" y="2.5" />
   </Towers>
   <!--  this determines whether or not the deck is shuffled at game start.  If false, cards appear in the order listed below-->
   <shuffleDeck>true</shuffleDeck>
@@ -72,7 +72,7 @@
 		 count: how many of that card are present-->
     <Cards>
       <Card name="Reinforce" count="10" />
-      <Card name="Shredder Tower" count="10"/>
+      <Card name="Shredder Tower" count="10" />
     </Cards>
   </levelDeck>
 </Level>

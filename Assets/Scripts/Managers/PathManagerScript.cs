@@ -1,57 +1,50 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using UnityEngine;
 
 [System.Serializable]
-public class PathSegment : System.Object {
-	[XmlAttribute] public float startX;
-	[XmlAttribute] public float startY;
-	[XmlAttribute] public float endX;
-	[XmlAttribute] public float endY;
+public class PathSegment : System.Object
+{
+    [XmlAttribute] public float startX;
+    [XmlAttribute] public float startY;
+    [XmlAttribute] public float endX;
+    [XmlAttribute] public float endY;
 }
 
-public class PathManagerScript : MonoBehaviour {
-	
-	public static PathManagerScript instance;
-	public GameObject segmentPrefab;
-	private List<PathSegment> segments;
+public class PathManagerScript : MonoBehaviour
+{
+    public static PathManagerScript instance;
+    public GameObject segmentPrefab;
+    private List<PathSegment> segments;
 
     public const int MAX_PATH_LENGTH = 30; //throws an error if the path result would be longer than this (to catch paths that loop back forever)
 
-	// Use this for initialization
-	void Awake () {
-		instance = this;
-	}
+    // Use this for initialization
+    private void Awake()
+    {
+        instance = this;
+    }
 
-	//called after all objects are initialized
-	IEnumerator Start () {
-		//wait for the level to load
-		while (LevelManagerScript.instance.levelLoaded == false)
-			yield return null;
+    //called after all objects are initialized
+    private IEnumerator Start()
+    {
+        //wait for the level to load
+        while (LevelManagerScript.instance.levelLoaded == false)
+            yield return null;
 
-		//fetch path segments from the level manager
-		segments = LevelManagerScript.instance.Data.pathSegments;
+        //fetch path segments from the level manager
+        segments = LevelManagerScript.instance.Data.pathSegments;
 
-		//spawn the path objects
-		SpawnPaths ();
-	}
+        //spawn the path objects
+        SpawnPaths();
+    }
 
-	//calculates a path from position to the player's "base" //TODO: define an actual base, and maybe implement Djikstra or something here
-	public List<Vector2> CalculatePathFromPos(Vector2 startPos){
-
-		List<Vector2> result = new List<Vector2> ();
+    //calculates a path from position to the player's "base" //TODO: define an actual base, and maybe implement Djikstra or something here
+    public List<Vector2> CalculatePathFromPos(Vector2 startPos)
+    {
+        List<Vector2> result = new List<Vector2> ();
         Vector2 prevPos = startPos;
-
-        //old: return first valid path
-        //foreach (PathSegment segment in segments) {
-        //	if (segment.startX == prevPos.x) {
-        //		if (segment.startY == prevPos.y) {
-        //			prevPos = new Vector2(segment.endX, segment.endY);
-        //			result.Add(prevPos);
-        //		}
-        //	}
-        //}
 
         //return a random valid path
         List<Vector2> pathCandidates = new List<Vector2> ();
@@ -72,7 +65,6 @@ public class PathManagerScript : MonoBehaviour {
             int i = Random.Range(0, pathCandidates.Count);
             result.Add(pathCandidates[i]);
             prevPos = pathCandidates[i];
-
         } while (result.Count <= MAX_PATH_LENGTH);
 
         //if the result is empty, there was no path connected to the start.  throw error
@@ -84,20 +76,22 @@ public class PathManagerScript : MonoBehaviour {
             throw new System.Exception("Path too long!  Make sure the segments defined for this level do not loop back on themselves.");
 
         return result;
-	}
+    }
 
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    // Update is called once per frame
+    private void Update()
+    {
+    }
 
-	//spawn the paths
-	void SpawnPaths () {
-		foreach (PathSegment v in segments) {
-			GameObject s = (GameObject) Instantiate(segmentPrefab); //create segment
-			s.transform.SetParent(transform); //set this as the parent
-			PathSegmentData d = new PathSegmentData( new Vector2 (v.startX, v.startY), new Vector2 (v.endX, v.endY), 0.5f ); //create data struct
-			s.SendMessage("Reposition", d); //send data to object
-		}
-	}
+    //spawn the paths
+    private void SpawnPaths()
+    {
+        foreach (PathSegment v in segments)
+        {
+            GameObject s = (GameObject) Instantiate(segmentPrefab); //create segment
+            s.transform.SetParent(transform); //set this as the parent
+            PathSegmentData d = new PathSegmentData( new Vector2 (v.startX, v.startY), new Vector2 (v.endX, v.endY), 0.5f ); //create data struct
+            s.SendMessage("Reposition", d); //send data to object
+        }
+    }
 }

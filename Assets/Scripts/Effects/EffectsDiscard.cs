@@ -1,12 +1,9 @@
-﻿using UnityEngine;
-using System.Collections;
-
-//all effects in this file happen when the card is discarded (whether there are charges remaining or not)
+﻿//all effects in this file happen when the card is discarded (whether there are charges remaining or not)
 
 //trigger() for these effects returns true if the card no longer needs to be discarded afterwards
 
 //this card returns to the top of the deck instead of the bottom
-class EffectReturnsToTopOfDeck : IEffectDiscard
+internal class EffectReturnsToTopOfDeck : IEffectDiscard
 {
     //generic interface
     public TargetingType targetingType { get { return TargetingType.none; } }   //this effect doesnt need a target
@@ -17,6 +14,7 @@ class EffectReturnsToTopOfDeck : IEffectDiscard
     //this effect
     public string Name { get { return "Returns to top of deck."; } } //returns name and strength
     public string XMLName { get { return "returnsToTopOfDeck"; } } //name used to refer to this effect in XML
+
     public bool trigger(ref Card c)
     {
         DeckManagerScript.instance.addCardAtTop(c);

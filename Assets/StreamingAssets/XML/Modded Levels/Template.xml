@@ -9,7 +9,6 @@
 		time: how many seconds the enemies spawn for.  Shorter time spans result in more densely packed groups.
 		message: optional message that appears at the start of the wave-->
   <Waves>
-    
   </Waves>
   <!--	positions at which the enemies can spawn -->
   <Spawners>
@@ -25,20 +24,20 @@
     <Segment startX="-1"  startY="15" endX="-1" endY="1" />
     <Segment startX="0"   startY="15" endX="0"  endY="1" />
     <Segment startX="1"   startY="15" endX="1"  endY="1" />
-    
+
     <Segment startX="-1"  startY="1"  endX="0"  endY="1" />
     <Segment startX="1"   startY="1"  endX="0"  endY="1" />
     <Segment startX="-1"  startY="1"  endX="-1" endY="0" />
     <Segment startX="1"   startY="1"  endX="1"  endY="0" />
-    
+
     <Segment startX="-1"  startY="0"  endX="0"  endY="0" />
     <Segment startX="0"   startY="1"  endX="0"  endY="0" />
     <Segment startX="1"   startY="0"  endX="0"  endY="0" />
   </PathSegments>
   <!--	this section is for starting the level with towers already on the field.  See Example Level.xml for details-->
   <Towers>
-  	<Tower name="Fast Tower" x="-0.5" y="0.5"/>
-    <Tower name="Fast Tower" x=" 0.5" y="0.5"/>
+  	<Tower name="Fast Tower" x="-0.5" y="0.5" />
+    <Tower name="Fast Tower" x=" 0.5" y="0.5" />
   </Towers>
   <!--  this determines whether or not the deck is shuffled at game start.  If false, cards appear in the order listed below-->
   <shuffleDeck>true</shuffleDeck>
