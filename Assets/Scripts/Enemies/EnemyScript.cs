@@ -71,7 +71,7 @@ public class EnemyScript : MonoBehaviour
     // LateUpdate is called once per frame, after other objects have done a regular Update().  We use LateUpdate to make sure bullets get to move first this frame.
     private void LateUpdate()
     {
-        Vector2 curLocation = new Vector2 (parentTransform.position.x, parentTransform.position.y); //fetch current location
+        Vector2 curLocation = parentTransform.position; //fetch current location
         Vector2 newLocation = Vector2.MoveTowards (curLocation, path[currentDestination], data.unitSpeed * Time.deltaTime); //calculate new location
 
         //save position
