@@ -91,15 +91,15 @@ public class TowerScript : MonoBehaviour
             //find the enemy within tower range that is closest to its goal
             GameObject closest = null;
 
-            //search loop: finds closest valid target.  Valid targets must be...
+            //search loop: finds the valid target that is closest to its goal.  Valid targets must be...
             for (int e = 0; e < EnemyManagerScript.instance.activeEnemies.Count; e++) //active enemies...
             {
-                if (Vector2.Distance(transform.position, EnemyManagerScript.instance.activeEnemies[e].transform.position) <= range) //that are in range...
+                if (EnemyManagerScript.instance.activeEnemies[e].GetComponent<EnemyScript>().expectedHealth > 0) //that are not expecting to die... (enemies that expect to die are supposed to be inactive anyway, but sometimes the list takes a frame or two to catch up)
                 {
-                    if (EnemyManagerScript.instance.activeEnemies[e].GetComponent<EnemyScript>().expectedHealth > 0) //and do not already expect to die.  (enemies that expect to die are supposed to be inactive anyway, but sometimes the list takes a frame or two to catch up)
+                    if (Vector2.Distance(transform.position, EnemyManagerScript.instance.activeEnemies[e].transform.position) <= range) //and are in range
                     {
-                        closest = EnemyManagerScript.instance.activeEnemies[e];
-                        break;
+                        closest = EnemyManagerScript.instance.activeEnemies[e]; 
+                        break; 
                     }
                 }
             }
