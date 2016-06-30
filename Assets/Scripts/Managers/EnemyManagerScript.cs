@@ -57,6 +57,26 @@ public class EnemyManagerScript : BaseBehaviour
         EnemySpawned(e);
     }
 
+    //returns a list of all enemies that are within the given range of the given position, limiting it to at most max items
+    public List<GameObject> enemiesInRange(Vector2 targetPosition, float range, int max = int.MaxValue)
+    {
+        List<GameObject> targetList = new List<GameObject>();
+
+        //search loop: finds the valid target that is closest to its goal.  Valid targets must be...
+        for (int e = 0; (e < activeEnemies.Count) && (targetList.Count <= max); e++) //active enemies... (also: stop searching if we hit the max)
+        {
+            if (activeEnemies[e].GetComponent<EnemyScript>().expectedHealth > 0) //that are not expecting to die... (enemies that expect to die are supposed to be inactive anyway, but sometimes the list takes a frame or two to catch up)
+            {
+                if (Vector2.Distance(targetPosition, activeEnemies[e].transform.position) <= range) //and are in range
+                {
+                    targetList.Add(EnemyManagerScript.instance.activeEnemies[e]); //valid target found
+                }
+            }
+        }
+
+        return targetList;
+    }
+
     //sorts the enemy list by how close they are to their goal
     private void sortEnemyList()
     {
@@ -66,6 +86,5 @@ public class EnemyManagerScript : BaseBehaviour
     // Update is called once per frame
     private void Update()
     {
-        //sortEnemyList();
     }
 }

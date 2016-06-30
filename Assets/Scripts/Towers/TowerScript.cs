@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
@@ -89,27 +90,33 @@ public class TowerScript : BaseBehaviour
             if (EnemyManagerScript.instance.activeEnemies.Count == 0)
                 break;
 
-            //find the enemy within tower range that is closest to its goal
-            GameObject closest = null;
+            //look for any targeting effects on this tower and use the most recent
+            IEffectTowerTargeting targetingEffect = null;
+            if (effects != null)
+                foreach (IEffect e in effects.effects)
+                    if (e.effectType == EffectType.towerTargeting)
+                        targetingEffect = (IEffectTowerTargeting)e;
 
-            //search loop: finds the valid target that is closest to its goal.  Valid targets must be...
-            for (int e = 0; e < EnemyManagerScript.instance.activeEnemies.Count; e++) //active enemies...
-            {
-                if (EnemyManagerScript.instance.activeEnemies[e].GetComponent<EnemyScript>().expectedHealth > 0) //that are not expecting to die... (enemies that expect to die are supposed to be inactive anyway, but sometimes the list takes a frame or two to catch up)
-                {
-                    if (Vector2.Distance(transform.position, EnemyManagerScript.instance.activeEnemies[e].transform.position) <= range) //and are in range
-                    {
-                        closest = EnemyManagerScript.instance.activeEnemies[e];
-                        break;
-                    }
-                }
-            }
-
-            //call another function to actually fire if we found a valid target, and break if not
-            if (closest != null)
-                fire(closest);
+            //find the target(s) we are shooting at using the current targeting effect, or the default if there is none
+            List<GameObject> targets;
+            if (targetingEffect != null)
+                targets = targetingEffect.findTargets(transform.position, range);
             else
-                break;
+                targets = defaultTargeting();
+
+            //call another function to actually fire on each valid target, if there are any
+            if ((targets != null) && (targets.Count != 0))
+            {
+                //reduce charge meter (if the gauge was overcharged, retain the excess)
+                shotCharge -= 1.0f;
+
+                foreach (GameObject t in targets)
+                    fire(t);
+            }
+            else
+            {
+                break; //no targets
+            }
         }
     }
 
@@ -146,9 +153,6 @@ public class TowerScript : BaseBehaviour
         //create a bullet and send it the data
         GameObject bullet = (GameObject) Instantiate (bulletPrefab, transform.position, Quaternion.identity);
         bullet.SendMessage("InitBullet", e);
-
-        //reduce charge meter (if the gauge was overcharged, retain the excess)
-        shotCharge -= 1.0f;
     }
 
     //saves new tower definition data and updates components
@@ -302,5 +306,11 @@ public class TowerScript : BaseBehaviour
 
         if (wavesRemaining == 0)
             Destroy(gameObject);
+    }
+
+    //placeholder used in case the default targeting behavior changes
+    private List<GameObject> defaultTargeting()
+    {
+        return EnemyManagerScript.instance.enemiesInRange(transform.position, range, 1);
     }
 }

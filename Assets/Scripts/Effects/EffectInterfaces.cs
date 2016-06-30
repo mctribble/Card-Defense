@@ -20,7 +20,7 @@ public class XMLEffect : System.Object
 
 //represents everything needed to apply effects to an object
 [System.Serializable]
-public class EffectData : System.Object
+public class EffectData : UnityEngine.Object
 {
     //list of effects from xml
     [XmlArray("Effects")]
@@ -73,17 +73,18 @@ public enum TargetingType
 {
     none,   //this effect does not require the player to select a target
     tower, 	//this effect requires the player to target a tower
-    noCast  //this effect does not support being cast (used for effects that are not meant to be applied to a card)
+    noCast  //this effect does not support being cast (used for effects that are not meant to be applied to a spell)
 };
 
 //different effect types
 public enum EffectType
 {
-    instant,     //effect triggers instantly without the need for a target
-    wave,        //effect alters the current wave
-    discard,     //effect triggers when the card it is attached to is discarded
-    self,        //effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
-    enemyDamaged //effect triggers when an enemy is damaged.  Could be attached to the attacking tower or the defending enemy
+    instant,       //effect triggers instantly without the need for a target
+    wave,          //effect alters the current wave
+    discard,       //effect triggers when the card it is attached to is discarded
+    self,          //effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
+    enemyDamaged,  //effect triggers when an enemy is damaged.  Could be attached to the attacking tower or the defending enemy
+    towerTargeting //effect alters the way a tower taragets enemies.  if multiple are present, only the last is actually used
 };
 
 //base interface
@@ -127,4 +128,10 @@ public interface IEffectEnemyDamaged : IEffect
     void expectedDamage(ref DamageEventData d); //called when it is expected to deal damage (so targeting etc. can account for damage amount changes)
 
     void actualDamage(ref DamageEventData d); //called when damage actually happens (for things that should happen when the actual hit occurs)
+}
+
+//effect alters the way a tower taragets enemies.  if multiple are present, only the last is actually used
+public interface IEffectTowerTargeting : IEffect
+{
+    List<GameObject> findTargets(Vector2 towerPosition, float towerRange);
 }
