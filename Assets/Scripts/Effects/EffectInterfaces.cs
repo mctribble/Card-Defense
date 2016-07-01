@@ -20,7 +20,7 @@ public class XMLEffect : System.Object
 
 //represents everything needed to apply effects to an object
 [System.Serializable]
-public class EffectData : UnityEngine.Object
+public class EffectData : System.Object
 {
     //list of effects from xml
     [XmlArray("Effects")]
