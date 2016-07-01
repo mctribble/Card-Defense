@@ -6,15 +6,14 @@ using Vexe.Runtime.Types;
 //draws x cards
 public class EffectDrawCard : IEffectInstant
 {
-    //generic interface
-    public TargetingType targetingType { get { return TargetingType.none; } }   //this effect doesnt need a target
-    public EffectType effectType { get { return EffectType.instant; } }         //this is an instant effect
-    public float strength { get; set; }                                         //how strong this effect is.  (unused in this effect)
-    public string argument { get; set; }                                        //effect argument (unused in this effect)
+    [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //this effect doesnt need a target
+    [Hide] public EffectType effectType { get { return EffectType.instant; } }         //this is an instant effect
+    [Show, Display(2)] public float strength { get; set; }                             //number of cards
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
 
-    //this effect
-    public string Name { get { return "Draw up to " + strength + " cards"; } } //returns name and strength
-    public string XMLName { get { return "drawCard"; } } //name used to refer to this effect in XML
+    [Hide] public string Name { get { return "Draw up to " + strength + " cards"; } } //returns name and strength
+
+    [Show, Display(1)] public string XMLName { get { return "drawCard"; } } //name used to refer to this effect in XML
 
     public void trigger()
     {
@@ -26,15 +25,14 @@ public class EffectDrawCard : IEffectInstant
 //increases lifespan of all towers by x
 public class EffectAllTowersLifespanBonus : IEffectInstant
 {
-    //generic interface
-    public TargetingType targetingType { get { return TargetingType.none; } }   //this effect doesnt need a target
-    public EffectType effectType { get { return EffectType.instant; } }         //this is an instant effect
-    public float strength { get; set; }                                         //how strong this effect is.  (unused in this effect)
-    public string argument { get; set; }                                        //effect argument (unused in this effect)
+    [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //this effect doesnt need a target
+    [Hide] public EffectType effectType { get { return EffectType.instant; } }         //this is an instant effect
+    [Show, Display(2)] public float strength { get; set; }                                         //# of waves
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
 
-    //this effect
-    public string Name { get { return "All towers have their lifespan increased by " + strength + "."; } } //returns name and strength
-    public string XMLName { get { return "allTowersLifespanBonus"; } } //name used to refer to this effect in XML
+    [Hide] public string Name { get { return "All towers have their lifespan increased by " + strength + "."; } } //returns name and strength
+
+    [Show, Display(1)] public string XMLName { get { return "allTowersLifespanBonus"; } } //name used to refer to this effect in XML
 
     public void trigger()
     {
@@ -52,15 +50,15 @@ public class EffectAllTowersLifespanBonus : IEffectInstant
 //shuffles the deck
 public class EffectShuffle : IEffectInstant
 {
-    //generic interface
-    public TargetingType targetingType { get { return TargetingType.none; } }   //this effect doesnt need a target
-    public EffectType effectType { get { return EffectType.instant; } }         //this is an instant effect
-    public float strength { get; set; }                                         //how strong this effect is.  (unused in this effect)
-    public string argument { get; set; }                                        //effect argument (unused in this effect)
+    [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //this effect doesnt need a target
+    [Hide] public EffectType effectType { get { return EffectType.instant; } }         //this is an instant effect
+    [Hide] public float strength { get; set; }                                         //how strong this effect is.  (unused in this effect)
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
 
     //this effect
-    public string Name { get { return "Shuffle the deck."; } }        //returns name and strength
-    public string XMLName { get { return "shuffle"; } } //name used to refer to this effect in XML
+    [Hide] public string Name { get { return "Shuffle the deck."; } }        //returns name and strength
+
+    [Show] public string XMLName { get { return "shuffle"; } } //name used to refer to this effect in XML
 
     public void trigger()
     {
@@ -71,15 +69,14 @@ public class EffectShuffle : IEffectInstant
 //damages the player
 public class EffectDamagePlayer : IEffectInstant
 {
-    //generic interface
-    public TargetingType targetingType { get { return TargetingType.none; } }   //this effect doesnt need a target
-    public EffectType effectType { get { return EffectType.instant; } }         //this is an instant effect
-    public float strength { get; set; }                                         //how strong this effect is.  (unused in this effect)
-    public string argument { get; set; }                                        //effect argument (unused in this effect)
+    [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //this effect doesnt need a target
+    [Hide] public EffectType effectType { get { return EffectType.instant; } }         //this is an instant effect
+    [Show, Display(2)] public float strength { get; set; }                             //how much damage
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
 
-    //this effect
-    public string Name { get { return "The player takes " + strength + " damage."; } } //returns name and strength
-    public string XMLName { get { return "damagePlayer"; } } //name used to refer to this effect in XML
+    [Hide] public string Name { get { return "The player takes " + strength + " damage."; } } //returns name and strength
+
+    [Show, Display(1)] public string XMLName { get { return "damagePlayer"; } } //name used to refer to this effect in XML
 
     public void trigger()
     {

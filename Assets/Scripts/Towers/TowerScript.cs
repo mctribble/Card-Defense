@@ -99,8 +99,8 @@ public class TowerScript : BaseBehaviour
                 {
                     if (Vector2.Distance(transform.position, EnemyManagerScript.instance.activeEnemies[e].transform.position) <= range) //and are in range
                     {
-                        closest = EnemyManagerScript.instance.activeEnemies[e]; 
-                        break; 
+                        closest = EnemyManagerScript.instance.activeEnemies[e];
+                        break;
                     }
                 }
             }

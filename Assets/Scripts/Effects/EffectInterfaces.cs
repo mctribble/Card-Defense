@@ -3,6 +3,12 @@ using System.Xml.Serialization;
 using UnityEngine;
 using Vexe.Runtime.Types;
 
+//quick note on VFW attributes, since effects use them fairly heavily: 
+//[Hide]: prevents field from appearing in unity inspector
+//[Show]: forces field to show in unity inspector
+//[Display(x)]: alters display order in the inspector
+//Usually you dont need these, since VFW is good at figuring it out on its own, but I found myself picky on this point for effects so I specify by hand
+
 //represents an effect in XML
 [System.Serializable]
 public class XMLEffect : System.Object
@@ -19,12 +25,12 @@ public class EffectData : System.Object
     //list of effects from xml
     [XmlArray("Effects")]
     [XmlArrayItem("Effect")]
-    public List<XMLEffect> XMLeffects = new List<XMLEffect>();
+    public List<XMLEffect> XMLEffects = new List<XMLEffect>();
 
     [XmlIgnore]
     public bool effectsSpecified //hide effect list if it is empty
     {
-        get { return XMLeffects.Count > 0; }
+        get { return XMLEffects.Count > 0; }
         set { }
     }
 
@@ -50,7 +56,7 @@ public class EffectData : System.Object
     //translates the XMLeffects into code references
     public void parseEffects()
     {
-        foreach (XMLEffect xe in XMLeffects)
+        foreach (XMLEffect xe in XMLEffects)
         {
             IEffect ie = EffectTypeManagerScript.instance.parse(xe);
             if (ie != null)
@@ -119,5 +125,6 @@ public interface IEffectSelf : IEffect
 public interface IEffectEnemyDamaged : IEffect
 {
     void expectedDamage(ref DamageEventData d); //called when it is expected to deal damage (so targeting etc. can account for damage amount changes)
+
     void actualDamage(ref DamageEventData d); //called when damage actually happens (for things that should happen when the actual hit occurs)
 }

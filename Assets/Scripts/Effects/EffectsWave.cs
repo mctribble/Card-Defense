@@ -6,14 +6,12 @@ using Vexe.Runtime.Types;
 //alters wave budget by x%
 public class EffectBudgetPercentageChange : IEffectWave
 {
-    //generic interface
-    public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
-    public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
-    public float strength { get; set; }                                         //how strong this effect is.  (unused in this effect)
-    public string argument { get; set; }                                        //effect argument (unused in this effect)
+    [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
+    [Hide] public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
+    [Show, Display(2)] public float strength { get; set; }                             //% change
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
 
-    //this effect
-    public string Name //returns name and strength
+    [Hide] public string Name //returns name and strength
     {
         get
         {
@@ -24,7 +22,7 @@ public class EffectBudgetPercentageChange : IEffectWave
         }
     }
 
-    public string XMLName { get { return "budgetPercentageChange"; } } //name used to refer to this effect in XML
+    [Show, Display(1)] public string XMLName { get { return "budgetPercentageChange"; } } //name used to refer to this effect in XML
 
     public WaveData alteredWaveData(WaveData currentWaveData)
     {
@@ -36,15 +34,14 @@ public class EffectBudgetPercentageChange : IEffectWave
 //sets the enemy type to argument
 public class EffectChangeWaveType : IEffectWave
 {
-    //generic interface
-    public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
-    public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
-    public float strength { get; set; }                                         //how strong this effect is.  (unused in this effect)
-    public string argument { get; set; }                                        //effect argument (unused in this effect)
+    [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
+    [Hide] public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
+    [Hide] public float strength { get; set; }                                         //how strong this effect is.  (unused in this effect)
+    [Show, Display(2)] public string argument { get; set; }                            //new wave type
 
-    //this effect
-    public string Name { get { return "change monster type of next wave to " + argument + "."; } }   //returns name and strength
-    public string XMLName { get { return "changeWaveType"; } } //name used to refer to this effect in XML
+    [Hide] public string Name { get { return "change monster type of next wave to " + argument + "."; } }   //returns name and strength
+
+    [Show, Display(1)] public string XMLName { get { return "changeWaveType"; } } //name used to refer to this effect in XML
 
     public WaveData alteredWaveData(WaveData currentWaveData)
     {
@@ -56,14 +53,12 @@ public class EffectChangeWaveType : IEffectWave
 //adjusts the wave spawn time by X%
 public class EffectTimePercentageChange : IEffectWave
 {
-    //generic interface
-    public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
-    public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
-    public float strength { get; set; }                                         //how strong this effect is.  (unused in this effect)
-    public string argument { get; set; }                                        //effect argument (unused in this effect)
+    [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
+    [Hide] public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
+    [Show, Display(2)] public float strength { get; set; }                             //% change
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
 
-    //this effect
-    public string Name //returns name and strength
+    [Hide] public string Name //returns name and strength
     {
         get
         {
@@ -74,7 +69,7 @@ public class EffectTimePercentageChange : IEffectWave
         }
     }
 
-    public string XMLName { get { return "timePercentageChange"; } } //name used to refer to this effect in XML
+    [Show, Display(1)] public string XMLName { get { return "timePercentageChange"; } } //name used to refer to this effect in XML
 
     public WaveData alteredWaveData(WaveData currentWaveData)
     {

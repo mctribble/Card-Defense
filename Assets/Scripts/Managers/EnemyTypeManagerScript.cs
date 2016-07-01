@@ -48,6 +48,7 @@ public class EnemyTypeManagerScript : BaseBehaviour
 
     //set ALL THREE of these to true to save any debugger enemy data changes back to the XML
     public bool saveEnemyChanges;
+
     public bool reallySaveEnemyChanges;
     public bool reallyReallySaveEnemyChanges;
 
@@ -130,7 +131,7 @@ public class EnemyTypeManagerScript : BaseBehaviour
             if (types.enemyTypes[candidateIndex].spawnCost <= maxSpawnCost)
                 chosenIndex = candidateIndex;
         }
-        
+
         //we could not find an enemy we could afford, so just pick one at random
         chosenIndex = Mathf.RoundToInt(Random.Range(0.0f, types.enemyTypes.Count-1));
 

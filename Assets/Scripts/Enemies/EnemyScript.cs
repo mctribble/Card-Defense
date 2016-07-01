@@ -57,6 +57,7 @@ public class EnemyScript : BaseBehaviour
 
     //used for health bar
     public Color    healthyColor; //color when healthy
+
     public Color    dyingColor;   //color when near death
 
     // Use this for initialization

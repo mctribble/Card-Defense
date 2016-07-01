@@ -8,6 +8,7 @@ public class SpawnerData
 {
     //position new enemies will spawn at
     [XmlAttribute] public float spawnX;
+
     [XmlAttribute] public float spawnY;
 }
 

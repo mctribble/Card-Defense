@@ -36,11 +36,13 @@ public class UpgradeData : System.Object
 {
     //multiplicative modifiers
     [DefaultValueAttribute(1.0f), XmlAttribute("RechargeMult")] public float rechargeMultiplier = 1.0f;
+
     [DefaultValueAttribute(1.0f), XmlAttribute("RangeMult")]    public float rangeMultiplier    = 1.0f;
     [DefaultValueAttribute(1.0f), XmlAttribute("DamageMult")]   public float attackMultiplier   = 1.0f;
 
     //absolute modifiers
     [DefaultValueAttribute(0.0f), XmlAttribute("RechargeMod")]  public float rechargeModifier   = 0.0f;
+
     [DefaultValueAttribute(0.0f), XmlAttribute("RangeMod")]     public float rangeModifier      = 0.0f;
     [DefaultValueAttribute(0.0f), XmlAttribute("DamageMod")]    public float attackModifier     = 0.0f;
     [DefaultValueAttribute(0),    XmlAttribute("WaveBonus")]    public int waveBonus = 0;
@@ -51,6 +53,7 @@ public class CardData : System.Object
 {
     //card data
     [XmlAttribute("Type")] public CardType cardType; //determines aspects of how the card should behave and the meaning of other values.  See enum dec for more info
+
     [XmlAttribute("Name")] public string   cardName; //name of the card
 
     [XmlAttribute("Description")]
@@ -91,7 +94,7 @@ public class CardData : System.Object
     [XmlIgnore]
     public bool EffectDataSpecified
     {
-        get { return (effectData != null) && (effectData.XMLeffects.Count != 0); } //only write effect data if there is data to write
+        get { return (effectData != null) && (effectData.XMLEffects.Count != 0); } //only write effect data if there is data to write
         set { }
     }
 }
