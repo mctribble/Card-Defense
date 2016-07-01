@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using UnityEngine;
+using Vexe.Runtime.Types;
 
 //contains an upgrade and a number to indicate how many times it should be applied.  used by PremadeTower
 [System.Serializable]
@@ -118,7 +119,7 @@ public class WaveData
     }
 }
 
-public class LevelManagerScript : MonoBehaviour
+public class LevelManagerScript : BaseBehaviour
 {
     public bool levelLoaded;                    //indicates whether a level has been loaded or not
 

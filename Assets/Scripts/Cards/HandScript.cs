@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
+using Vexe.Runtime.Types;
 
-public class HandScript : MonoBehaviour
+public class HandScript : BaseBehaviour
 {
     public int          startingHandSize;   //cards the player starts with
     public int          maximumHandSize;    //max number of cards the player can have

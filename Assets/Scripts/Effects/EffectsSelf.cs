@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Vexe.Runtime.Types;
 
 //all effects in this file take place instantly, and target the card which contains them
 

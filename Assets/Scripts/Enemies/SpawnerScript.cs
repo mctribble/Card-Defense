@@ -1,5 +1,6 @@
 ﻿using System.Xml.Serialization;
 using UnityEngine;
+using Vexe.Runtime.Types;
 
 //represents everything needed to define a working spawner from xml.  This is seperated for ease of future expansion
 [System.Serializable]
@@ -10,7 +11,7 @@ public class SpawnerData
     [XmlAttribute] public float spawnY;
 }
 
-public class SpawnerScript : MonoBehaviour
+public class SpawnerScript : BaseBehaviour
 {
     public SpawnerData      data;           //xml definition of this spawner
     public EnemyData        enemyType;      //data to be assigned to new enemies

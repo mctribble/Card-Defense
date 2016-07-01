@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Vexe.Runtime.Types;
 
 //all effects in this file trigger when an enemy is damaged.  The effect itself could be attached either to the attacking tower or the defending enemy
 

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Vexe.Runtime.Types;
 
 //all effects in this file effect the current wave
 

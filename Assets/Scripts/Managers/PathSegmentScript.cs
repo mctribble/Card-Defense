@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Vexe.Runtime.Types;
 
 public struct PathSegmentData
 {
@@ -14,7 +15,7 @@ public struct PathSegmentData
     }
 }
 
-public class PathSegmentScript : MonoBehaviour
+public class PathSegmentScript : BaseBehaviour
 {
     public Vector2 pathStart;
     public Vector2 pathEnd;

@@ -2,6 +2,7 @@
 using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
+using Vexe.Runtime.Types;
 
 //a Color class that is nicely formatted in xml
 [System.Serializable]
@@ -43,7 +44,7 @@ public class EnemyData
                    public EffectData effectData; //specifies which effects are attached to this enemy type and what their parameters are
 };
 
-public class EnemyScript : MonoBehaviour
+public class EnemyScript : BaseBehaviour
 {
     public List<Vector2> path;               //list of points this unit must go to
     public int           currentDestination; //index in the path that indicates the current destination

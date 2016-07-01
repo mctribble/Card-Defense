@@ -1,8 +1,9 @@
 ﻿using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using Vexe.Runtime.Types;
 
-public class LevelSelectButtonScript : MonoBehaviour
+public class LevelSelectButtonScript : BaseBehaviour
 {
     public FileInfo levelFile;  //level file attached to this button
     public Text     buttonText; //text of this button

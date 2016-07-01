@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Vexe.Runtime.Types;
 
-public class ChargeStatusScript : MonoBehaviour
+public class ChargeStatusScript : BaseBehaviour
 {
     private Text text;
     public Color32 fullColor;     //font color to use when the deck is full

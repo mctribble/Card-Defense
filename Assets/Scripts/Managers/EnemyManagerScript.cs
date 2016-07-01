@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Vexe.Runtime.Types;
 
 //compares two enemies by their distance to their goals.  Used for sorting the enemy list (
 public class EnemyDistanceToGoalComparer : Comparer<GameObject>
@@ -11,7 +12,7 @@ public class EnemyDistanceToGoalComparer : Comparer<GameObject>
 }
 
 //responsible for tracking active enemies and performing group operations on them
-public class EnemyManagerScript : MonoBehaviour
+public class EnemyManagerScript : BaseBehaviour
 {
     public static EnemyManagerScript instance; //this class is a singleton
     public List<GameObject> activeEnemies; //excludes enemies that expect to die but have not yet done so

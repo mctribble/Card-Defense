@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using UnityEngine;
+using Vexe.Runtime.Types;
 
 [System.Serializable]
 public class PathSegment : System.Object
@@ -12,7 +13,7 @@ public class PathSegment : System.Object
     [XmlAttribute] public float endY;
 }
 
-public class PathManagerScript : MonoBehaviour
+public class PathManagerScript : BaseBehaviour
 {
     public static PathManagerScript instance;
     public GameObject segmentPrefab;

@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 using UnityEngine;
+using Vexe.Runtime.Types;
 
 //maintains the collection of card types, including saving/loading to XML
 [XmlRoot("CardTypes")]
@@ -36,7 +37,7 @@ public class CardTypeCollection
     }
 }
 
-public class CardTypeManagerScript : MonoBehaviour
+public class CardTypeManagerScript : BaseBehaviour
 {
     //singleton instance
     public static CardTypeManagerScript instance;

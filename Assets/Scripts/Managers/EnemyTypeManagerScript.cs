@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 using UnityEngine;
+using Vexe.Runtime.Types;
 
 //maintains the collection of enemy types, including saving/loading to XML
 [XmlRoot("EnemyTypes")]
@@ -36,7 +37,7 @@ public class EnemyTypeCollection
     }
 }
 
-public class EnemyTypeManagerScript : MonoBehaviour
+public class EnemyTypeManagerScript : BaseBehaviour
 {
     //singleton instance
     public static EnemyTypeManagerScript instance;

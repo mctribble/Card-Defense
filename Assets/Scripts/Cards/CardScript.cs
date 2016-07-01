@@ -4,6 +4,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
+using Vexe.Runtime.Types;
 
 //represents what type of card this is
 public enum CardType
@@ -95,7 +96,7 @@ public class CardData : System.Object
     }
 }
 
-public class CardScript : MonoBehaviour
+public class CardScript : BaseBehaviour
 {
     public float      motionSpeed;      //speed in pixels/second this card can animate
     public Vector2    discardLocation;  //location to discard self to

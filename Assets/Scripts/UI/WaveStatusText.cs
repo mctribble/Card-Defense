@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Vexe.Runtime.Types;
 
-public class WaveStatusText : MonoBehaviour
+public class WaveStatusText : BaseBehaviour
 {
     private Text text;
 

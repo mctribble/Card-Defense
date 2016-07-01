@@ -6,6 +6,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using UnityEngine;
+using Vexe.Runtime.Types;
 
 //represents a card name and number, used to represent decks in xml
 [System.Serializable]
@@ -63,7 +64,7 @@ public struct Card
     public int charges; //number of remaining charges
 }
 
-public class DeckManagerScript : MonoBehaviour
+public class DeckManagerScript : BaseBehaviour
 {
     //singleton instance
     public static DeckManagerScript instance;

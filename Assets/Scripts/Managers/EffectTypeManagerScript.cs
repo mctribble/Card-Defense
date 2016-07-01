@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
+using Vexe.Runtime.Types;
 
 //this class is responsible for taking XMLEffects and returning an IEffect to match
-public class EffectTypeManagerScript : MonoBehaviour
+public class EffectTypeManagerScript : BaseBehaviour
 {
     //singleton instance
     public static EffectTypeManagerScript instance;

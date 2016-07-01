@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Vexe.Runtime.Types;
 
 //container passed to enemy to tell them they were damaged
 public struct DamageEventData
@@ -9,7 +10,7 @@ public struct DamageEventData
     public GameObject dest;
 }
 
-public class BulletScript : MonoBehaviour
+public class BulletScript : BaseBehaviour
 {
     public float speed;             //projectile speed
 

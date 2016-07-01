@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Vexe.Runtime.Types;
 
-public class CastingTooltipScript : MonoBehaviour
+public class CastingTooltipScript : BaseBehaviour
 {
     public Color CastableColor;             //color of tooltip when cast is OK
     public Color UncastableColor;           //color of tooltip when cast is forbidden

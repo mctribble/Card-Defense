@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using Vexe.Runtime.Types;
 
 //tower class itself
-public class TowerScript : MonoBehaviour
+public class TowerScript : BaseBehaviour
 {
     public GameObject   bulletPrefab;   //prefab to instantiate as a bullet
     public string       towerName;      //name of the tower

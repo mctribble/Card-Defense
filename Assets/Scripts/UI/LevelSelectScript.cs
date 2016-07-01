@@ -1,7 +1,8 @@
 ﻿using System.IO;
 using UnityEngine;
+using Vexe.Runtime.Types;
 
-public class LevelSelectScript : MonoBehaviour
+public class LevelSelectScript : BaseBehaviour
 {
     public string       levelDir;       //directory levels are stored in
     public string       modLevelDir;    //directory mod levels are stored in
