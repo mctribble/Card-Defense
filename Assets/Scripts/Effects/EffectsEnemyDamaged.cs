@@ -50,8 +50,8 @@ public class EffectReduceEnemyEffectOnDamage : IEffectEnemyDamaged
     public void actualDamage(ref DamageEventData d)
     {
         EnemyScript enemy = d.dest.GetComponent<EnemyScript>();
-        if (enemy.data.effectData != null)
-            foreach (IEffect e in enemy.data.effectData.effects)
+        if (enemy.effectData != null)
+            foreach (IEffect e in enemy.effectData.effects)
                 if (e.XMLName == argument)
                     e.strength = Mathf.Max(0, e.strength - strength);
     }

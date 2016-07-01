@@ -48,36 +48,37 @@ public class EnemyScript : BaseBehaviour
 {
     public List<Vector2> path;               //list of points this unit must go to
     public int           currentDestination; //index in the path that indicates the current destination
-    public EnemyData     data;               //contains all the data specific to this type of enemy
     public Vector2       startPos;           //position where this enemy was spawned
     public int           curHealth;          //current health
     public int           expectedHealth;     //what health will be after all active shots reach this enemy
 
-    private Transform   parentTransform;    //reference to the transform of this enemy
+    //enemy data
+    public int        damage;        
+    public int        maxHealth;     
+    public float      unitSpeed; 
+    public EffectData effectData;
 
     //used for health bar
     public Color    healthyColor; //color when healthy
-
     public Color    dyingColor;   //color when near death
 
     // Use this for initialization
     private void Start()
     {
         //init vars
-        curHealth = data.maxHealth;
-        expectedHealth = data.maxHealth;
-        parentTransform = GetComponentInParent<Transform>();
-        startPos = parentTransform.position;
+        curHealth = maxHealth;
+        expectedHealth = maxHealth;
+        startPos = transform.position;
     }
 
     // LateUpdate is called once per frame, after other objects have done a regular Update().  We use LateUpdate to make sure bullets get to move first this frame.
     private void LateUpdate()
     {
-        Vector2 curLocation = parentTransform.position; //fetch current location
-        Vector2 newLocation = Vector2.MoveTowards (curLocation, path[currentDestination], data.unitSpeed * Time.deltaTime); //calculate new location
+        Vector2 curLocation = transform.position; //fetch current location
+        Vector2 newLocation = Vector2.MoveTowards (curLocation, path[currentDestination], unitSpeed * Time.deltaTime); //calculate new location
 
         //save position
-        parentTransform.position = new Vector3(newLocation.x, newLocation.y, parentTransform.position.z);
+        transform.position = new Vector3(newLocation.x, newLocation.y, transform.position.z);
 
         //if reached the current destination, attempt to move to the next one
         if (curLocation == newLocation)
@@ -87,10 +88,10 @@ public class EnemyScript : BaseBehaviour
             if (path.Count == currentDestination)
             {
                 //reached the end.  damage player...
-                DeckManagerScript.instance.SendMessage("Damage", data.damage);
+                DeckManagerScript.instance.SendMessage("Damage", damage);
 
                 //...and go back to start for another lap
-                parentTransform.position = startPos;
+                transform.position = startPos;
                 currentDestination = 0;
 
                 //if the enemy is not expected to die, update the enemy list with the new pathing info
@@ -101,7 +102,7 @@ public class EnemyScript : BaseBehaviour
 
         //update health bar fill and color
         Image healthbar = gameObject.GetComponentInChildren<Image> ();
-        float normalizedHealth = (float)curHealth / (float)data.maxHealth;
+        float normalizedHealth = (float)curHealth / (float)maxHealth;
         healthbar.color = Color.Lerp(dyingColor, healthyColor, normalizedHealth);
         healthbar.fillAmount = normalizedHealth;
     }
@@ -110,8 +111,8 @@ public class EnemyScript : BaseBehaviour
     public void onExpectedDamage(ref DamageEventData e)
     {
         //deal with effects that need to happen when we expect damage
-        if (data.effectData != null)
-            foreach (IEffect i in data.effectData.effects)
+        if (effectData != null)
+            foreach (IEffect i in effectData.effects)
                 if (i.effectType == EffectType.enemyDamaged)
                     ((IEffectEnemyDamaged)i).expectedDamage(ref e);
 
@@ -131,8 +132,8 @@ public class EnemyScript : BaseBehaviour
             return;
 
         //deal with effects that need to happen when we actually take damage
-        if (data.effectData != null)
-            foreach (IEffect i in data.effectData.effects)
+        if (effectData != null)
+            foreach (IEffect i in effectData.effects)
                 if (i.effectType == EffectType.enemyDamaged)
                     ((IEffectEnemyDamaged)i).actualDamage(ref e);
 
@@ -144,6 +145,14 @@ public class EnemyScript : BaseBehaviour
 
         if (curHealth <= 0)
         {
+            //catch a recurring issue where the enemy does not get thee xpected damage event and thus dies without expecting it
+            if (expectedHealth > 0)
+            {
+                Debug.LogWarning("Enemy did not expect to die, but did anyway!  This can cause targeting issues as towers attack an enemy that will die anyway.");
+                expectedHealth = 0;
+                EnemyManagerScript.instance.EnemyExpectedDeath(gameObject);
+            }
+
             //if dead, report the kill to the tower that shot it
             LevelManagerScript.instance.deadThisWave++;
             Destroy(gameObject);
@@ -160,7 +169,17 @@ public class EnemyScript : BaseBehaviour
     //stores the data specific to this type of enemy
     private void SetData(EnemyData d)
     {
-        data = d;
+        damage = d.damage;
+        maxHealth      = d.maxHealth;
+        curHealth      = d.maxHealth;
+        expectedHealth = d.maxHealth;
+        unitSpeed = d.unitSpeed;
+
+        if (d.effectData != null)
+            effectData = d.effectData.clone();
+        else
+            effectData = null;
+
         this.GetComponent<SpriteRenderer>().color = d.unitColor.toColor();
     }
 

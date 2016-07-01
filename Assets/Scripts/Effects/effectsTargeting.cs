@@ -29,7 +29,7 @@ public class EffectTargetArmor : IEffectTowerTargeting
         {
             //fetch enemy armor value
             float curArmor = 0;
-            EffectData curEnemyEffects = curEnemy.GetComponent<EnemyScript>().data.effectData;
+            EffectData curEnemyEffects = curEnemy.GetComponent<EnemyScript>().effectData;
             if (curEnemyEffects != null)
                 foreach (IEffect curEffect in curEnemyEffects.effects)
                     if (curEffect.XMLName == "armor")

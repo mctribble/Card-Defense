@@ -63,6 +63,17 @@ public class EffectData : System.Object
                 effects.Add(ie);
         }
     }
+
+    //clones this EffectData to a new object
+    public EffectData clone()
+    {
+        //we use the same list of XMLEffects, but the clone parses them again to get its own set of effects
+        //this way, changes in one enemy (e.g. armor reduction) dont propogate to all enemies of this type
+        EffectData clone = new EffectData();
+        clone.XMLEffects = XMLEffects;
+        clone.parseEffects();
+        return clone;
+    }
 }
 
 //All effects in the game must implement one of these interfaces.
