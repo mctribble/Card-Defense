@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using Vexe.Runtime.Types;
 
 //container passed to enemy to tell them they were damaged
@@ -14,7 +15,7 @@ public class BulletScript : BaseBehaviour
 {
     public float speed;             //projectile speed
 
-    private bool initialized;       //whether or not the bullet is ready for action
+    private bool initialized = false;       //whether or not the bullet is ready for action
     private DamageEventData data;   //details about the attack
     private float deltaTime;        //time since the last frame
 
@@ -56,7 +57,7 @@ public class BulletScript : BaseBehaviour
                     if (i.effectType == EffectType.enemyDamaged)
                         ((IEffectEnemyDamaged)i).actualDamage(ref data);
 
-            data.dest.SendMessage("OnDamage", data);
+            data.dest.GetComponent<EnemyScript>().onDamage(data);
             Destroy(gameObject);
         }
 
@@ -69,7 +70,6 @@ public class BulletScript : BaseBehaviour
     {
         //init
         data = newData;
-        initialized = true;
 
         //trigger effects
         if (data.effects != null)
@@ -79,5 +79,7 @@ public class BulletScript : BaseBehaviour
 
         //tell enemy to expect the damage
         data.dest.GetComponent<EnemyScript>().onExpectedDamage(ref data);
+
+        initialized = true;
     }
 }

@@ -63,7 +63,7 @@ public class EnemyScript : BaseBehaviour
     public Color    dyingColor;   //color when near death
 
     // Use this for initialization
-    private void Start()
+    private void Awake()
     {
         //init vars
         curHealth = maxHealth;
@@ -125,7 +125,7 @@ public class EnemyScript : BaseBehaviour
     }
 
     //receives damage
-    private void OnDamage(DamageEventData e)
+    public void onDamage(DamageEventData e)
     {
         //dont bother if we are already dead
         if (curHealth <= 0)

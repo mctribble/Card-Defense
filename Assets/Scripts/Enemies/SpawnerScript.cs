@@ -60,6 +60,6 @@ public class SpawnerScript : BaseBehaviour
         GameObject enemy = (GameObject)Object.Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
         enemy.SendMessage("SetData", enemyType);
         enemy.SendMessage("SetPath", PathManagerScript.instance.CalculatePathFromPos(new Vector2(data.spawnX, data.spawnY)));
-        EnemyManagerScript.instance.SendMessage("EnemySpawned", enemy);
+        EnemyManagerScript.instance.EnemySpawned(enemy);
     }
 }
