@@ -38,6 +38,10 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "shuffle":                   ie = new EffectShuffle(); break;
             case "targetAll":                 ie = new EffectTargetAll(); break;
             case "targetArmor":               ie = new EffectTargetArmor(); break;
+            case "targetHealth":              ie = new EffectTargetHealth(); break;
+            case "targetMultishot":           ie = new EffectTargetMultishot(); break;
+            case "targetRandom":              ie = new EffectTargetRandom(); break;
+            case "targetSpeed":               ie = new EffectTargetSpeed(); break;
             case "timePercentageChange":      ie = new EffectTimePercentageChange(); break;
             default:                          Debug.LogWarning("Effect type " + xe.name + " is not implemented."); return null;
         }
