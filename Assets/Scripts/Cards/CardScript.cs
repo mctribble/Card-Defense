@@ -341,6 +341,10 @@ public class CardScript : BaseBehaviour
         //send upgrade data to the target tower
         target.SendMessage("Upgrade", card.data.upgradeData);
 
+        //if there are effects on the card, send them over too
+        if ( (card.data.effectData != null) && (card.data.effectData.effects.Count > 0) )
+            target.SendMessage("AddEffects", card.data.effectData);
+
         //perform steps that must be done on every cast
         Cast();
     }
@@ -448,20 +452,20 @@ public class CardScript : BaseBehaviour
 
             case CardType.upgrade:
                 //present upgrade stats
-                if (card.data.upgradeData.waveBonus          > 0) { description.text += "lifespan: +"  + card.data.upgradeData.waveBonus                               + '\n'; }
-                if (card.data.upgradeData.attackMultiplier   > 1) { description.text += "damage: +"    + (card.data.upgradeData.attackMultiplier - 1).ToString("P1")   + '\n'; }
-                if (card.data.upgradeData.rangeMultiplier    > 1) { description.text += "range: +"     + (card.data.upgradeData.rangeMultiplier - 1).ToString("P1")    + '\n'; }
-                if (card.data.upgradeData.rechargeMultiplier > 1) { description.text += "recharge: +"  + (card.data.upgradeData.rechargeMultiplier - 1).ToString("P1") + '\n'; }
-                if (card.data.upgradeData.attackModifier     > 0) { description.text += "damage: +"    + card.data.upgradeData.attackModifier.ToString()               + '\n'; }
-                if (card.data.upgradeData.rangeModifier      > 0) { description.text += "range: +"     + card.data.upgradeData.rangeModifier.ToString()                + '\n'; }
-                if (card.data.upgradeData.rechargeModifier   > 0) { description.text += "recharge: +"  + card.data.upgradeData.rechargeModifier.ToString()             + "s\n"; }
-                if (card.data.upgradeData.waveBonus          < 0) { description.text += "lifespan: -"  + card.data.upgradeData.waveBonus                               + '\n'; }
-                if (card.data.upgradeData.attackMultiplier   < 1) { description.text += "damage: -"    + (1 - card.data.upgradeData.attackMultiplier).ToString("P1")   + '\n'; }
-                if (card.data.upgradeData.rangeMultiplier    < 1) { description.text += "range: -"     + (1 - card.data.upgradeData.rangeMultiplier).ToString("P1")    + '\n'; }
-                if (card.data.upgradeData.rechargeMultiplier < 1) { description.text += "recharge: -"  + (1 - card.data.upgradeData.rechargeMultiplier).ToString("P1") + '\n'; }
-                if (card.data.upgradeData.attackModifier     < 0) { description.text += "damage: -"    + card.data.upgradeData.attackModifier.ToString()               + '\n'; }
-                if (card.data.upgradeData.rangeModifier      < 0) { description.text += "range: -"     + card.data.upgradeData.rangeModifier.ToString()                + '\n'; }
-                if (card.data.upgradeData.rechargeModifier   < 0) { description.text += "recharge: -"  + card.data.upgradeData.rechargeModifier.ToString()             + "s\n"; }
+                if (card.data.upgradeData.waveBonus          != 0) { description.text += "lifespan: +"  + card.data.upgradeData.waveBonus                               + '\n'; }
+                if (card.data.upgradeData.attackMultiplier   != 1) { description.text += "damage: +"    + (card.data.upgradeData.attackMultiplier - 1).ToString("P1")   + '\n'; }
+                if (card.data.upgradeData.rangeMultiplier    != 1) { description.text += "range: +"     + (card.data.upgradeData.rangeMultiplier - 1).ToString("P1")    + '\n'; }
+                if (card.data.upgradeData.rechargeMultiplier != 1) { description.text += "recharge: +"  + (card.data.upgradeData.rechargeMultiplier - 1).ToString("P1") + '\n'; }
+                if (card.data.upgradeData.attackModifier     != 0) { description.text += "damage: +"    + card.data.upgradeData.attackModifier.ToString()               + '\n'; }
+                if (card.data.upgradeData.rangeModifier      != 0) { description.text += "range: +"     + card.data.upgradeData.rangeModifier.ToString()                + '\n'; }
+                if (card.data.upgradeData.rechargeModifier   != 0) { description.text += "recharge: +"  + card.data.upgradeData.rechargeModifier.ToString()             + "s\n"; }
+                if (card.data.upgradeData.waveBonus          != 0) { description.text += "lifespan: -"  + card.data.upgradeData.waveBonus                               + '\n'; }
+                if (card.data.upgradeData.attackMultiplier   != 1) { description.text += "damage: -"    + (1 - card.data.upgradeData.attackMultiplier).ToString("P1")   + '\n'; }
+                if (card.data.upgradeData.rangeMultiplier    != 1) { description.text += "range: -"     + (1 - card.data.upgradeData.rangeMultiplier).ToString("P1")    + '\n'; }
+                if (card.data.upgradeData.rechargeMultiplier != 1) { description.text += "recharge: -"  + (1 - card.data.upgradeData.rechargeMultiplier).ToString("P1") + '\n'; }
+                if (card.data.upgradeData.attackModifier     != 0) { description.text += "damage: -"    + card.data.upgradeData.attackModifier.ToString()               + '\n'; }
+                if (card.data.upgradeData.rangeModifier      != 0) { description.text += "range: -"     + card.data.upgradeData.rangeModifier.ToString()                + '\n'; }
+                if (card.data.upgradeData.rechargeModifier   != 0) { description.text += "recharge: -"  + card.data.upgradeData.rechargeModifier.ToString()             + "s\n"; }
                 break;
         }
         //end with the flavor text found in the card file

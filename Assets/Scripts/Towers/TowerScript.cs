@@ -208,6 +208,18 @@ public class TowerScript : BaseBehaviour
         UpdateTooltipText();
     }
 
+    //adds the new effects to the tower
+    public void AddEffects(EffectData newEffectData)
+    {
+        //make sure we have an effectData object to add to
+        if (effects == null)
+            effects = new EffectData();
+
+        //add the new effects to it
+        foreach (IEffect newEffect in newEffectData.effects)
+            effects.effects.Add(newEffect);
+    }
+
     //updates the tooltip text to reflect new values
     private void UpdateTooltipText()
     {

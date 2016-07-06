@@ -36,6 +36,14 @@
     <Card Type="upgrade" Name="Heavy Upgrade" Description="Best on towers with high damage" Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <upgradeData DamageMult="2" DamageMod="0" RechargeMod="0.5" RechargeMult="1.0" RangeMod="1" RangeMult="1.0" WaveBonus="3" />
     </Card>
+    <Card Type="upgrade" Name="Spitfire Upgrade" Description="Quantity over quality." Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+      <upgradeData DamageMult="0.5" DamageMod="0" RechargeMult="3" RechargeMod="0" RangeMult="1" RangeMod="0.5" WaveBonus="2" />
+      <effectData>
+        <Effects>
+          <Effect name="targetAll" />
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="spell" Name="Enrage" Description="Poking the bear." Charges="6" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <effectData>
         <Effects>
