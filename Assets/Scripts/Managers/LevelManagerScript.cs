@@ -121,6 +121,10 @@ public class WaveData
 
 public class LevelManagerScript : BaseBehaviour
 {
+    //other objects can refer to these to be informed when a level is loaded (https://unity3d.com/learn/tutorials/topics/scripting/events)
+    public delegate void LevelLoadedHandler();
+    public event LevelLoadedHandler LevelLoadedEvent;
+
     public bool levelLoaded;                    //indicates whether a level has been loaded or not
 
     public GameObject spawnerPrefab;            //prefab used to create spawners
@@ -232,6 +236,9 @@ public class LevelManagerScript : BaseBehaviour
 
         //init wave stats
         UpdateWaveStats();
+
+        //fire the level loaded event so interested objects can act on it
+        LevelLoadedEvent();
     }
 
     // Update is called once per frame

@@ -12,6 +12,13 @@ public class DeckStatusTextScript : BaseBehaviour
     private void Awake()
     {
         text = GetComponent<Text>();
+        LevelManagerScript.instance.LevelLoadedEvent += LevelLoadedHandler;
+    }
+
+    // event handler for LevelManagerScript.instance.LevelLoadedEvent
+    private void LevelLoadedHandler()
+    {
+        text.raycastTarget = true; //alloww this object to capture mouse events only after the level has loaded
     }
 
     // Update is called once per frame

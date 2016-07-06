@@ -1,15 +1,25 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
-public class WaveStatusText : BaseBehaviour
+public class WaveStatusText : BaseBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private Text text;
+    private bool mousedOver;
 
     // Use this for initialization
     private void Start()
     {
         text = GetComponent<Text>();
+        mousedOver = false;
+        LevelManagerScript.instance.LevelLoadedEvent += LevelLoadedHandler;
+    }
+
+    // event handler for LevelManagerScript.instance.LevelLoadedEvent
+    private void LevelLoadedHandler()
+    {
+        text.raycastTarget = true; //alloww this object to capture mouse events only after the level has loaded
     }
 
     // Update is called once per frame
@@ -23,6 +33,13 @@ public class WaveStatusText : BaseBehaviour
         if (LevelManagerScript.instance.data.waves.Count == 0)
             return;
 
+        //show enemy stats instead of wave stats on mouse over
+        if (mousedOver)
+        {
+            showEnemyStats();
+            return;
+        }
+            
         //get variables
         int curWave = LevelManagerScript.instance.currentWave;
         WaveData curWaveData = LevelManagerScript.instance.data.waves[curWave];
@@ -56,5 +73,28 @@ public class WaveStatusText : BaseBehaviour
 
             text.text += "\n(speed x" + Time.timeScale.ToString("F1") + ")</color>";
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        mousedOver = true;
+        Debug.Log("enter");
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        mousedOver = false;
+        Debug.Log("exit");
+    }
+
+    private void showEnemyStats()
+    {
+        WaveData curWaveData = LevelManagerScript.instance.data.waves[LevelManagerScript.instance.currentWave];
+        text.text = "<color=#" + curWaveData.getEnemyData().unitColor.toHex() + ">"  + curWaveData.type + "</color>: " + "\n" +
+            "Health: " + curWaveData.getEnemyData().maxHealth + " Attack: " + curWaveData.getEnemyData().damage + " Speed: " + curWaveData.getEnemyData().unitSpeed;
+
+        if ((curWaveData.getEnemyData().effectData != null) && (curWaveData.getEnemyData().effectData.effects.Count > 0))
+            foreach (IEffect e in curWaveData.getEnemyData().effectData.effects)
+                text.text += "\n" + e.Name;
     }
 }
