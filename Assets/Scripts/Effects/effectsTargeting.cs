@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Vexe.Runtime.Types;
 
 //all effects in this file trigger when an enemy is damaged.  The effect itself could be attached either to the attacking tower or the defending enemy
 
@@ -8,14 +9,14 @@ using UnityEngine;
 public class EffectTargetArmor : IEffectTowerTargeting
 {
     //generic interface
-    public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
-    public EffectType effectType { get { return EffectType.towerTargeting; } }    //effect type
-    public float strength { get; set; }                                         //how much armor the enemy has
-    public string argument { get; set; }                                        //effect argument (unused in this effect)
+    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
+    [Hide] public EffectType effectType { get { return EffectType.towerTargeting; } }    //effect type
+    [Show, Display(2)] public float strength { get; set; }                                         //how much armor the enemy has
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
 
     //this effect
-    public string Name { get { return "Target: highest armor"; } } //returns name and strength
-    public string XMLName { get { return "tagetArmor"; } } //name used to refer to this effect in XML
+    [Hide] public string Name { get { return "Target: highest armor"; } } //returns name and strength
+    [Show, Display(1)] public string XMLName { get { return "tagetArmor"; } } //name used to refer to this effect in XML
 
 
     public List<GameObject> findTargets(Vector2 towerPosition, float towerRange)
