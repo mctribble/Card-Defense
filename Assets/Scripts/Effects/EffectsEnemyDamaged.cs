@@ -37,7 +37,7 @@ public class EffectReduceEnemyEffectOnDamage : IEffectEnemyDamaged
     [Show, Display(3)] public float strength { get; set; }                             //how much to reduce the target effect strength (but stops at 0)
     [Show, Display(2)] public string argument { get; set; }                            //effect to reduce
 
-    [Hide] public string Name { get { return "Enemy " + argument + "strength: -" + strength; } } //returns name and strength
+    [Hide] public string Name { get { return "Enemy " + argument + " strength: -" + strength; } } //returns name and strength
 
     [Show, Display(1)] public string XMLName { get { return "reduceEnemyEffectOnDamage"; } } //name used to refer to this effect in XML
 

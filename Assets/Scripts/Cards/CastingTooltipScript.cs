@@ -66,6 +66,8 @@ public class CastingTooltipScript : BaseBehaviour
 
                         targetTower = newTargetTower; //change target
                         targetTower.SendMessage("UpgradeTooltip", parentCardScript.card.data.upgradeData); //tell new target to use the upgrade tooltip
+                        if ( (parentCardScript.card.data.effectData != null) && (parentCardScript.card.data.effectData.effects.Count > 0) )
+                            targetTower.SendMessage("NewEffectTooltip", parentCardScript.card.data.effectData); //if there are new effects, show those
                         castable = true;
                     }
                 }

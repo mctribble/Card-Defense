@@ -208,9 +208,11 @@ public class LevelManagerScript : BaseBehaviour
         foreach (PremadeTower pt in data.towers)
         {
             GameObject t = (GameObject) GameObject.Instantiate(towerPrefab, new Vector3(pt.x, pt.y, -3), Quaternion.identity);  //summon tower
-            TowerData d = CardTypeManagerScript.instance.getCardByName(pt.name).towerData;
-            d.towerName = pt.name;
-            t.SendMessage("SetData", d); //pass it the definition
+            CardData c = CardTypeManagerScript.instance.getCardByName(pt.name);
+            c.towerData.towerName = pt.name;
+            t.SendMessage("SetData", c.towerData); //pass it the definition
+            if ((c.effectData != null) && (c.effectData.effects.Count > 0)) 
+                t.SendMessage("AddEffects", c.effectData); //pass it the effects
 
             //apply upgrades
             foreach (PremadeTowerUpgrade ptu in pt.upgrades)

@@ -218,6 +218,9 @@ public class TowerScript : BaseBehaviour
         //add the new effects to it
         foreach (IEffect newEffect in newEffectData.effects)
             effects.effects.Add(newEffect);
+
+        //update tooltip text
+        UpdateTooltipText();
     }
 
     //updates the tooltip text to reflect new values
@@ -231,6 +234,10 @@ public class TowerScript : BaseBehaviour
             "Damage Per Second: " + (attackPower / rechargeTime).ToString("F1") + "\n" +
             "range: " + range + "\n" +
             "waves remaining: " + wavesRemaining;
+
+        if (effects != null)
+            foreach (IEffect e in effects.effects)
+                tooltipText.text += "\n" + e.Name;
 
         lifespanText.text = wavesRemaining.ToString();
     }
@@ -308,6 +315,17 @@ public class TowerScript : BaseBehaviour
         else
             colorString = "white";
         tooltipText.text += "waves remaining: " + attackPower + " <color=" + colorString + "> " + wavesRemainingChange.ToString("+ ####0.##;- ####0.##") + "</color>";
+    }
+
+    //shows new effects on the tooltip
+    private void NewEffectTooltip (EffectData newEffectData)
+    {
+        tooltipText.text += "<color=green>";
+
+        foreach (IEffect e in newEffectData.effects)
+            tooltipText.text += "\n" + e.Name;
+
+        tooltipText.text += "</color>";
     }
 
     //called whenever a wave ends.  Updates the lifespan and destroys the tower if it hits zero.
