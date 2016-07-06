@@ -88,6 +88,8 @@
 		 count: how many of that card are present-->
     <Cards>
       <Card name="Reinforce" count="5" />
+      <Card name="Dev Purge Tower" count="2" />
+      <Card name="AOE Tower" count="2" />
       <Card name="Shield" count="200" />
     </Cards>
   </levelDeck>

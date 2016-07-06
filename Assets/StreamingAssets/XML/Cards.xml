@@ -13,6 +13,14 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="tower" Name="AOE Tower" Description="slow and low damage, but attacks EVERYTHING in range" Charges="4" Art="Summon_Tower_Basic" Tooltip="Tower_Fast">
+      <towerData Recharge="2" Range="2.5" Damage="10" Lifespan="5" Sprite="Tower_Fast" />
+      <effectData>
+        <Effects>
+          <Effect name="targetAll" />
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="tower" Name="Basic Tower" Charges="6" Art="Summon_Tower_Basic" Tooltip="Tower_Standard">
       <towerData Recharge="1" Range="3" Damage="20" Lifespan="5" Sprite="Tower_Standard" />
     </Card>

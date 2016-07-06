@@ -4,6 +4,11 @@
   <Cards>
     <Card Type="tower" Name="Dev Purge Tower" Description="Kills EVERYTHING" Charges="99" Art="Summon_Tower_Basic" Tooltip="Tower_Fast">
       <towerData Recharge="0.001" Range="1" Damage="500" Lifespan="99" Sprite="Tower_Fast" />
+      <effectData>
+        <Effects>
+          <Effect name="targetAll" />
+        </Effects>
+      </effectData>
     </Card>
   </Cards>
 </CardTypes>

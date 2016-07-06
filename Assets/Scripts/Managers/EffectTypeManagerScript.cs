@@ -36,6 +36,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "reduceEnemyEffectOnDamage": ie = new EffectReduceEnemyEffectOnDamage(); break;
             case "returnsToTopOfDeck":        ie = new EffectReturnsToTopOfDeck(); break;
             case "shuffle":                   ie = new EffectShuffle(); break;
+            case "targetAll":                 ie = new EffectTargetAll(); break;
             case "targetArmor":               ie = new EffectTargetArmor(); break;
             case "timePercentageChange":      ie = new EffectTimePercentageChange(); break;
             default:                          Debug.LogWarning("Effect type " + xe.name + " is not implemented."); return null;

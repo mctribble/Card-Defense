@@ -5,19 +5,18 @@ using Vexe.Runtime.Types;
 
 //all effects in this file trigger when an enemy is damaged.  The effect itself could be attached either to the attacking tower or the defending enemy
 
-//reduces incoming damage by a fixed amount (but attacks always do at least 1 damage)
+//targets enemy in range with the highest armor, breaking ties by proximity to goal
 public class EffectTargetArmor : IEffectTowerTargeting
 {
     //generic interface
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
-    [Hide] public EffectType effectType { get { return EffectType.towerTargeting; } }    //effect type
-    [Show, Display(2)] public float strength { get; set; }                                         //how much armor the enemy has
+    [Hide] public EffectType effectType { get { return EffectType.towerTargeting; } }  //effect type
+    [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
     [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
 
     //this effect
     [Hide] public string Name { get { return "Target: highest armor"; } } //returns name and strength
-    [Show, Display(1)] public string XMLName { get { return "tagetArmor"; } } //name used to refer to this effect in XML
-
+    [Show] public string XMLName { get { return "tagetArmor"; } } //name used to refer to this effect in XML
 
     public List<GameObject> findTargets(Vector2 towerPosition, float towerRange)
     {
@@ -48,5 +47,23 @@ public class EffectTargetArmor : IEffectTowerTargeting
         enemiesInRange.Clear();
         enemiesInRange.Add(target);
         return enemiesInRange;
+    }
+}
+
+//targets all enemies in range
+public class EffectTargetAll : IEffectTowerTargeting
+{
+    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
+    [Hide] public EffectType effectType { get { return EffectType.towerTargeting; } }  //effect type
+    [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
+
+    //this effect
+    [Hide] public string Name { get { return "Target: highest armor"; } } //returns name and strength
+    [Show] public string XMLName { get { return "tagetArmor"; } } //name used to refer to this effect in XML
+
+    public List<GameObject> findTargets(Vector2 towerPosition, float towerRange)
+    {
+        return EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange); //simply returns all targets in range
     }
 }
