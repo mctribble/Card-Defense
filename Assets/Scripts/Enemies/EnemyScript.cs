@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
@@ -42,15 +43,20 @@ public class EnemyData
     [XmlAttribute] public float      unitSpeed;  //speed, measured in distance/second
                    public XMLColor   unitColor;  //used to colorize the enemy sprite
                    public EffectData effectData; //specifies which effects are attached to this enemy type and what their parameters are
+
+    [DefaultValue("Enemy_Basic")]
+    [XmlAttribute("sprite")]
+    public string spriteName { get; set; }
 };
 
 public class EnemyScript : BaseBehaviour
 {
-    public List<Vector2> path;               //list of points this unit must go to
-    public int           currentDestination; //index in the path that indicates the current destination
-    public Vector2       startPos;           //position where this enemy was spawned
-    public int           curHealth;          //current health
-    public int           expectedHealth;     //what health will be after all active shots reach this enemy
+    public List<Vector2>  path;               //list of points this unit must go to
+    public int            currentDestination; //index in the path that indicates the current destination
+    public Vector2        startPos;           //position where this enemy was spawned
+    public int            curHealth;          //current health
+    public int            expectedHealth;     //what health will be after all active shots reach this enemy
+    public SpriteRenderer enemyImage;         //sprite component for this enemy
 
     //enemy data
     public int        damage;        
@@ -69,6 +75,7 @@ public class EnemyScript : BaseBehaviour
         curHealth = maxHealth;
         expectedHealth = maxHealth;
         startPos = transform.position;
+        enemyImage = GetComponent<SpriteRenderer>();
     }
 
     // LateUpdate is called once per frame, after other objects have done a regular Update().  We use LateUpdate to make sure bullets get to move first this frame.
@@ -167,7 +174,7 @@ public class EnemyScript : BaseBehaviour
     }
 
     //stores the data specific to this type of enemy
-    private void SetData(EnemyData d)
+    private System.Collections.IEnumerator SetData(EnemyData d)
     {
         damage = d.damage;
         maxHealth      = d.maxHealth;
@@ -181,6 +188,11 @@ public class EnemyScript : BaseBehaviour
             effectData = null;
 
         this.GetComponent<SpriteRenderer>().color = d.unitColor.toColor();
+
+        //yes, I know its awkward, but we're setting the sprite with WWW.
+        WWW www = new WWW ("file:///" + Application.dataPath + "/StreamingAssets/Art/Sprites/" + d.spriteName + ".png");
+        yield return www;
+        enemyImage.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
     }
 
     //returns the distance from this enemy's current position to the goal, following its current path

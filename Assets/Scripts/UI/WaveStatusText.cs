@@ -78,13 +78,11 @@ public class WaveStatusText : BaseBehaviour, IPointerEnterHandler, IPointerExitH
     public void OnPointerEnter(PointerEventData eventData)
     {
         mousedOver = true;
-        Debug.Log("enter");
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         mousedOver = false;
-        Debug.Log("exit");
     }
 
     private void showEnemyStats()

@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <EnemyTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="Enemies.xsd">
   <Enemies>
-    <Enemy name="Swarm" spawnCost="5" damage="1" maxHealth="4" unitSpeed="5">
+    <Enemy name="Swarm" spawnCost="5" damage="1" maxHealth="4" unitSpeed="5" sprite="Enemy_Basic">
       <unitColor r="1" g="0" b="0" a="1" />
     </Enemy>
-    <Enemy name="Standard" spawnCost="20" damage="2" maxHealth="40" unitSpeed="2">
+    <Enemy name="Standard" spawnCost="20" damage="2" maxHealth="40" unitSpeed="2" sprite="Enemy_Basic">
       <unitColor r="0" g="1" b="0" a="1" />
     </Enemy>
-    <Enemy name="Tank" spawnCost="100" damage="5" maxHealth="450" unitSpeed="1">
+    <Enemy name="Tank" spawnCost="100" damage="5" maxHealth="450" unitSpeed="1" sprite="Enemy_Basic">
       <unitColor r="0" g="0" b="1" a="1" />
       <effectData>
         <Effects>

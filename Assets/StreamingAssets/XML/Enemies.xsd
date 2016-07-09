@@ -42,6 +42,7 @@
                   <xsd:attribute name="damage" type="xsd:unsignedByte" use="required" />
                   <xsd:attribute name="maxHealth" type="xsd:unsignedShort" use="required" />
                   <xsd:attribute name="unitSpeed" type="xsd:unsignedByte" use="required" />
+                  <xsd:attribute name="sprite" type="xsd:string" use="required" />
                 </xsd:complexType>
               </xsd:element>
             </xsd:sequence>
