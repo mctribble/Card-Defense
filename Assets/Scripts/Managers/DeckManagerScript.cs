@@ -142,6 +142,7 @@ public class DeckManagerScript : BaseBehaviour
         premadeDecks = DeckCollection.Load(Path.Combine(Application.dataPath, premadeDeckPath));
         playerDecks  = DeckCollection.Load(Path.Combine(Application.dataPath, playerDeckPath));
         currentDeck = new List<Card>();
+        deckSize = 0;
     }
 
     // Sets the currentDeck based on the XMLDeck

@@ -173,9 +173,8 @@ public class LevelManagerScript : BaseBehaviour
     {
         data = LevelData.Load(Path.Combine(Application.dataPath, level)); //load the level
 
-        yield return null;  //wait a frame to make sure things load right
-        levelLoaded = true; //set flag
-                            //wait a few frames to give other managers a chance to catch up
+        //wait a few frames to give other managers a chance to catch up
+        yield return null;  
         yield return null;
         yield return null;
 
@@ -232,29 +231,35 @@ public class LevelManagerScript : BaseBehaviour
             }
         }
 
-        //fetch level deck
-        XMLDeck levelDeck;
-        if (data.levelDeck != null)
+        //if no deck has been loaded yet, then use the level deck
+        if (DeckManagerScript.instance.deckSize == 0)
         {
-            levelDeck = data.levelDeck; //the level deck is defined in the level file
-        }
-        else
-        {
-            //the level uses one of the premade decks in Decks.XML
-            levelDeck = DeckManagerScript.instance.premadeDecks.getDeckByName(data.premadeDeckName);
-        }
+            XMLDeck levelDeck;
+            if (data.levelDeck != null)
+            {
+                levelDeck = data.levelDeck; //the level deck is defined in the level file
+            }
+            else
+            {
+                //the level uses one of the premade decks in Decks.XML
+                levelDeck = DeckManagerScript.instance.premadeDecks.getDeckByName(data.premadeDeckName);
+            }
 
-        DeckManagerScript.instance.SendMessage("SetDeck", levelDeck);
+            DeckManagerScript.instance.SendMessage("SetDeck", levelDeck);
 
-        //shuffle it, if the level file says to
-        if (data.shuffleDeck)
-            DeckManagerScript.instance.SendMessage("Shuffle");
+            //shuffle it, if the level file says to
+            if (data.shuffleDeck)
+                DeckManagerScript.instance.SendMessage("Shuffle");
+        }
 
         //init wave stats
         UpdateWaveStats();
 
         //fire the level loaded event so interested objects can act on it
         LevelLoadedEvent();
+
+        //and set the flag
+        levelLoaded = true;
     }
 
     // Update is called once per frame
