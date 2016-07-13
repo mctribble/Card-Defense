@@ -1,5 +1,6 @@
 ﻿//based on tutorial found here: http://wiki.unity3d.com/index.php?title=Saving_and_Loading_Data:_XmlSerializer
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -14,6 +15,20 @@ public class XMLDeckEntry
 {
     [XmlAttribute] public string name;
     [XmlAttribute] public int    count;
+
+    //default constructor
+    public XMLDeckEntry()
+    {
+        name = "UNDEFINED";
+        count = 0;
+    }
+
+    //explicit constructor
+    public XMLDeckEntry(string newName, int newCount)
+    {
+        name = newName;
+        count = newCount;
+    }
 };
 
 //represents a deck of cards in XMLM
@@ -36,7 +51,7 @@ public class DeckCollection
     //list of decks
     [XmlArray("Decks")]
     [XmlArrayItem("Deck")]
-    public List<XMLDeck> playerDecks;
+    public List<XMLDeck> decks;
 
     public void Save(string path)
     {
@@ -56,6 +71,32 @@ public class DeckCollection
             return serializer.Deserialize(stream) as DeckCollection;
         }
     }
+
+    public XMLDeck getDeckByName(string targetDeck)
+    {
+        //find the deck
+        XMLDeck result = null;
+        foreach (XMLDeck xDeck in decks)
+        {
+            if (xDeck.name == targetDeck)
+            {
+                result = xDeck;
+                break;
+            }
+        }
+
+        //if the deck did not exist, use a default deck and print a warning
+        if (result == null)
+        {
+            Debug.LogWarning("Deck " + targetDeck + " could not be found.  Using a default deck instead");
+            result = new XMLDeck();
+            result.contents = new List<XMLDeckEntry>();
+            result.contents.Add(new XMLDeckEntry("Basic Tower", 60));
+        }
+
+        //return the result
+        return result;
+    }
 }
 
 public struct Card
@@ -70,7 +111,7 @@ public class DeckManagerScript : BaseBehaviour
     public static DeckManagerScript instance;
 
     public string path;                 //location of player deck file
-    public DeckCollection playerDecks;  //stores player decks
+    public DeckCollection premadeDecks;  //stores player decks
 
     //number of charges in the deck
     public int curDeckCharges; //remaining
@@ -95,7 +136,7 @@ public class DeckManagerScript : BaseBehaviour
     private void Awake()
     {
         instance = this;
-        playerDecks = DeckCollection.Load(Path.Combine(Application.dataPath, path));
+        premadeDecks = DeckCollection.Load(Path.Combine(Application.dataPath, path));
         currentDeck = new List<Card>();
     }
 
@@ -138,7 +179,7 @@ public class DeckManagerScript : BaseBehaviour
         {
             for (int i = 0; i < currentDeck.Count; i++)
             {
-                int swapTarget = Random.Range(0, currentDeck.Count);
+                int swapTarget = UnityEngine.Random.Range(0, currentDeck.Count);
                 Card temp = currentDeck[i];
                 currentDeck[i] = currentDeck[swapTarget];
                 currentDeck[swapTarget] = temp;

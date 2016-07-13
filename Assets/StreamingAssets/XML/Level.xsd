@@ -78,25 +78,28 @@
           </xsd:complexType>
         </xsd:element>
         <xsd:element name="shuffleDeck" type="xsd:boolean"/>
-        <xsd:element name="levelDeck">
-          <xsd:complexType>
-            <xsd:sequence>
-              <xsd:element name="Cards">
-                <xsd:complexType>
-                  <xsd:sequence>
-                    <xsd:element maxOccurs="unbounded" name="Card">
-                      <xsd:complexType>
-                        <xsd:attribute name="name" type="xsd:string" use="required" />
-                        <xsd:attribute name="count" type="xsd:unsignedByte" use="required" />
-                      </xsd:complexType>
-                    </xsd:element>
-                  </xsd:sequence>
-                </xsd:complexType>
-              </xsd:element>
-            </xsd:sequence>
-            <xsd:attribute name="name" type="xsd:string" use="required" />
-          </xsd:complexType>
-        </xsd:element>
+        <xsd:choice>
+          <xsd:element name="levelDeck">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="Cards">
+                  <xsd:complexType>
+                    <xsd:sequence>
+                      <xsd:element maxOccurs="unbounded" name="Card">
+                        <xsd:complexType>
+                          <xsd:attribute name="name" type="xsd:string" use="required" />
+                          <xsd:attribute name="count" type="xsd:unsignedByte" use="required" />
+                        </xsd:complexType>
+                      </xsd:element>
+                    </xsd:sequence>
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="premadeDeckName" type="xsd:string" />
+        </xsd:choice>
       </xsd:sequence>
     </xsd:complexType>
   </xsd:element>

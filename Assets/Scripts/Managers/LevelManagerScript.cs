@@ -65,7 +65,11 @@ public class LevelData
     public List<PremadeTower> towers;
 
     public bool shuffleDeck;
+
+    //levelDeck is the deck set for use on this level.  
+    //It could be defined directly in the level file, or the level could just provide the name of a premade deck in Decks.xml instead.
     public XMLDeck levelDeck;
+    public string premadeDeckName;
 
     public void Save(string path)
     {
@@ -228,8 +232,20 @@ public class LevelManagerScript : BaseBehaviour
             }
         }
 
-        //set the deck
-        DeckManagerScript.instance.SendMessage("SetDeck", data.levelDeck);
+        //fetch level deck
+        XMLDeck levelDeck;
+        if (data.levelDeck != null)
+        {
+            levelDeck = data.levelDeck; //the level deck is defined in the level file
+        }
+        else
+        {
+            //the level uses one of the premade decks in Decks.XML
+            levelDeck = DeckManagerScript.instance.premadeDecks.getDeckByName(data.premadeDeckName);
+        }
+
+        DeckManagerScript.instance.SendMessage("SetDeck", levelDeck);
+
         //shuffle it, if the level file says to
         if (data.shuffleDeck)
             DeckManagerScript.instance.SendMessage("Shuffle");
