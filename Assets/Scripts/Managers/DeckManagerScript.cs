@@ -110,8 +110,11 @@ public class DeckManagerScript : BaseBehaviour
     //singleton instance
     public static DeckManagerScript instance;
 
-    public string path;                 //location of player deck file
-    public DeckCollection premadeDecks;  //stores player decks
+    public string premadeDeckPath;      //location of premade deck file
+    public DeckCollection premadeDecks; //stores premade decks
+
+    public string playerDeckPath;       //location of player deck file
+    public DeckCollection playerDecks;  //stores player decks
 
     //number of charges in the deck
     public int curDeckCharges; //remaining
@@ -136,7 +139,8 @@ public class DeckManagerScript : BaseBehaviour
     private void Awake()
     {
         instance = this;
-        premadeDecks = DeckCollection.Load(Path.Combine(Application.dataPath, path));
+        premadeDecks = DeckCollection.Load(Path.Combine(Application.dataPath, premadeDeckPath));
+        playerDecks  = DeckCollection.Load(Path.Combine(Application.dataPath, playerDeckPath));
         currentDeck = new List<Card>();
     }
 

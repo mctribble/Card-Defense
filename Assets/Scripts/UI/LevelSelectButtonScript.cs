@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
@@ -35,8 +36,13 @@ public class LevelSelectButtonScript : BaseBehaviour
     }
 
     //tells the manager to load the level associated with this button
-    private void loadLevel()
+    private IEnumerator buttonClicked()
     {
-        LevelManagerScript.instance.SendMessage("loadLevel", levelFile.FullName);
+        Debug.Log(1);
+        yield return new WaitForSeconds(1);
+        Debug.Log(2);
+        yield return LevelManagerScript.instance.StartCoroutine("loadLevel", levelFile.FullName);
+        Debug.Log(3);
+        yield break;
     }
 }

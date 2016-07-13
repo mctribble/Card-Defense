@@ -20,23 +20,23 @@ public class LevelSelectScript : BaseBehaviour
         //base game levels
         DirectoryInfo dir = new DirectoryInfo (Path.Combine (Application.dataPath, levelDir));  //find level folder
         FileInfo[] files = dir.GetFiles ("*.xml");                                              //get list of .xml files from it
-        foreach (FileInfo f in files)
-        {                                                           //for each level file
-            GameObject fButton = Instantiate(buttonPrefab);                                     //create a new button
-            fButton.SendMessage("setLevel", f);                                                 //tell it what level it belongs to
-            fButton.SendMessage("setColor", baseLevelColor);                                    //set the button color
-            fButton.transform.SetParent(this.transform, false);                                 //and add it to the menu without altering scaling settings
+        foreach (FileInfo f in files)                           //for each level file...
+        {                                                       
+            GameObject fButton = Instantiate(buttonPrefab);     //create a new button
+            fButton.SendMessage("setLevel", f);                 //tell it what level it belongs to
+            fButton.SendMessage("setColor", baseLevelColor);    //set the button color
+            fButton.transform.SetParent(this.transform, false); //and add it to the menu without altering scaling settings
         }
 
         //modded levels
         dir = new DirectoryInfo(Path.Combine(Application.dataPath, modLevelDir));   //find level folder
         files = dir.GetFiles("*.xml");                                              //get list of .xml files from it
-        foreach (FileInfo f in files)
-        {                                                           //for each level file
-            GameObject fButton = Instantiate(buttonPrefab);                                     //create a new button
-            fButton.SendMessage("setLevel", f);                                                 //tell it what level it belongs to
-            fButton.SendMessage("setColor", modLevelColor);                                 //set the button color
-            fButton.transform.SetParent(this.transform, false);                                 //and add it to the menu without altering scaling settings
+        foreach (FileInfo f in files)                           //for each level file
+        {                                                       
+            GameObject fButton = Instantiate(buttonPrefab);     //create a new button
+            fButton.SendMessage("setLevel", f);                 //tell it what level it belongs to
+            fButton.SendMessage("setColor", modLevelColor);     //set the button color
+            fButton.transform.SetParent(this.transform, false); //and add it to the menu without altering scaling settings
         }
     }
 
