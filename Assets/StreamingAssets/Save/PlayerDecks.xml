@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PlayerDecks xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../XML/Decks.xsd">
   <Decks>
-    <Deck name="Spleen Power">
+    <Deck name="Spitfire">
       <Cards>
-        <Card name="Heavy Tower" count="10" />
-        <Card name="Spitfire Upgrade" count="10" />
-        <Card name="Fast Upgrade" count="10"/>
-        <Card name="Shield" count="10"/>
+        <Card name="Heavy Tower" count="6" />
+        <Card name="Spitfire Upgrade" count="6" />
+        <Card name="Fast Upgrade" count="20"/>
+        <Card name="Shield" count="8"/>
       </Cards>
     </Deck>
   </Decks>

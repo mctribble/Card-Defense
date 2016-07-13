@@ -84,19 +84,19 @@ public class LevelSelectScript : BaseBehaviour
         ldButton.SendMessage("setColor", levelDeckColor);            //and the color
         ldButton.transform.SetParent(this.transform, false);         //add it to the menu
         menuButtons.Add(ldButton);                                    //and add it to the list of buttons
-
-        //buttons for all the premade decks
-        foreach (XMLDeck pd in DeckManagerScript.instance.premadeDecks.decks)
+        
+        //buttons for all the player decks
+        foreach (XMLDeck pd in DeckManagerScript.instance.playerDecks.decks)
         {
             GameObject pdButton = Instantiate(buttonPrefab);     //create a new button
             pdButton.SendMessage("setDeck", pd);                 //set the deck
-            pdButton.SendMessage("setColor", premadeDeckColor);  //and the color
+            pdButton.SendMessage("setColor", playerDeckColor);   //and the color
             pdButton.transform.SetParent(this.transform, false); //and add it to the menu
             menuButtons.Add(pdButton);                           //and add it to the list of buttons
         }
 
-        //buttons for all the player decks
-        foreach (XMLDeck pd in DeckManagerScript.instance.playerDecks.decks)
+        //buttons for all the premade decks
+        foreach (XMLDeck pd in DeckManagerScript.instance.premadeDecks.decks)
         {
             GameObject pdButton = Instantiate(buttonPrefab);     //create a new button
             pdButton.SendMessage("setDeck", pd);                 //set the deck
