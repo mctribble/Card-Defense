@@ -37,27 +37,30 @@ public class WaveStatusText : BaseBehaviour, IPointerEnterHandler, IPointerExitH
         if (mousedOver)
         {
             showEnemyStats();
-            return;
         }
-            
-        //get variables
-        int curWave = LevelManagerScript.instance.currentWave;
-        WaveData curWaveData = LevelManagerScript.instance.data.waves[curWave];
-
-        //first line is always Wave ??/?? (?????)
-        text.text = "Wave " + (curWave + 1) + "/" + LevelManagerScript.instance.data.waves.Count +
-            " (<color=#" + curWaveData.getEnemyData().unitColor.toHex() + ">"  + curWaveData.type + "</color>)\n";
-
-        //if the wave is still spawning or has not yet started, second line is ??? incoming over ??? seconds
-        if (LevelManagerScript.instance.SpawnCount != 0)
+        else
         {
-            text.text += LevelManagerScript.instance.SpawnCount +
-                " incoming over " + curWaveData.time.ToString("F1") + " seconds";
-        }
-        else //if the wave has finished spawning, second line is ??? remaining with ?????? health
-        {
-            text.text += (Mathf.RoundToInt((float)curWaveData.budget / (float)curWaveData.getEnemyData().spawnCost) - LevelManagerScript.instance.deadThisWave) +
-                " remaining with " + LevelManagerScript.instance.WaveTotalRemainingHealth + " health";
+            //get variables
+            int curWave = LevelManagerScript.instance.currentWave;
+            WaveData curWaveData = LevelManagerScript.instance.data.waves[curWave];
+
+            //text that is always present: "Wave ??/?? (????"
+            text.text = "Wave " + (curWave + 1) + "/" + LevelManagerScript.instance.data.waves.Count +
+                " (<color=#" + curWaveData.getEnemyData().unitColor.toHex() + ">"  + curWaveData.type + "</color>";
+
+            //additional text that varies based on game state
+            if (LevelManagerScript.instance.SpawnCount != 0)
+            {
+                //wave has not started or is still spawning: "x????): ???? seconds"
+                text.text += "x" + LevelManagerScript.instance.SpawnCount + "): " +
+                curWaveData.time.ToString("F1") + " seconds";
+            }
+            else
+            {
+                //wave has finished spawning: "): ???? remain (????? health)"
+                text.text += ")" + (Mathf.RoundToInt((float)curWaveData.budget / (float)curWaveData.getEnemyData().spawnCost) - LevelManagerScript.instance.deadThisWave) +
+                    " remain (" + LevelManagerScript.instance.WaveTotalRemainingHealth + " health)";
+            }
         }
 
         //if the game speed is not 1.0, add text to show what it is
@@ -88,7 +91,7 @@ public class WaveStatusText : BaseBehaviour, IPointerEnterHandler, IPointerExitH
     private void showEnemyStats()
     {
         WaveData curWaveData = LevelManagerScript.instance.data.waves[LevelManagerScript.instance.currentWave];
-        text.text = "<color=#" + curWaveData.getEnemyData().unitColor.toHex() + ">"  + curWaveData.type + "</color>: " + "\n" +
+        text.text = "<color=#" + curWaveData.getEnemyData().unitColor.toHex() + ">"  + curWaveData.type + "</color>: " +
             "Health: " + curWaveData.getEnemyData().maxHealth + " Attack: " + curWaveData.getEnemyData().damage + " Speed: " + curWaveData.getEnemyData().unitSpeed;
 
         if ((curWaveData.getEnemyData().effectData != null) && (curWaveData.getEnemyData().effectData.effects.Count > 0))
