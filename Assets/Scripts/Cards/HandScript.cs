@@ -82,9 +82,11 @@ public class HandScript : BaseBehaviour
     //draws until the target card count
     private IEnumerator drawToHandSize(int target)
     {
-        while ((currentHandSize < target) && (currentHandSize < maximumHandSize) && (DeckManagerScript.instance.cardsLeft > 0))
+        int drawCount = currentHandSize - target;
+        while (drawCount > 0)
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.5f);
+            drawCount--;
             drawCard();
         }
     }
