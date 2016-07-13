@@ -432,14 +432,6 @@ public class CardScript : BaseBehaviour
         switch (card.data.cardType)
         {
             case CardType.spell:
-                //make sure the effects have been parsed
-                if (card.data.effectData.effects.Count == 0) { card.data.effectData.parseEffects(); }
-
-                //add a line of text to the description for each
-                foreach (IEffect e in card.data.effectData.effects)
-                {
-                    description.text += "* " + e.Name + '\n';
-                }
                 break;
 
             case CardType.tower:
@@ -468,6 +460,16 @@ public class CardScript : BaseBehaviour
                 if (card.data.upgradeData.rechargeModifier   != 0) { description.text += "recharge: -"  + card.data.upgradeData.rechargeModifier.ToString()             + "s\n"; }
                 break;
         }
+
+        //make sure the effects have been parsed
+        if (card.data.effectData.effects.Count == 0) { card.data.effectData.parseEffects(); }
+
+        //add a line of text to the description for each
+        foreach (IEffect e in card.data.effectData.effects)
+        {
+            description.text += "\n<Color=#" + e.effectType.ToString("X") + ">" + e.Name + "</Color>";
+        }
+
         //end with the flavor text found in the card file
         description.text += "<i>" + card.data.cardDescription + "</i>";
     }
