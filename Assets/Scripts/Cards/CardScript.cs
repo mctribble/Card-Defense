@@ -461,15 +461,18 @@ public class CardScript : BaseBehaviour
                 break;
         }
 
-        //make sure the effects have been parsed
-        if (card.data.effectData.effects.Count == 0) { card.data.effectData.parseEffects(); }
-
-        //add a line of text to the description for each
-        foreach (IEffect e in card.data.effectData.effects)
+        //if there are effects, add them to the description
+        if (card.data.effectData != null)
         {
-            description.text += "\n<Color=#" + e.effectType.ToString("X") + ">" + e.Name + "</Color>";
-        }
+            //make sure the effects have been parsed
+            if (card.data.effectData.effects.Count == 0) { card.data.effectData.parseEffects(); }
 
+            //add a line of text to the description for each
+            foreach (IEffect e in card.data.effectData.effects)
+            {
+                description.text += "\n<Color=#" + e.effectType.ToString("X") + ">" + e.Name + "</Color>";
+            }
+        }
         //end with the flavor text found in the card file
         description.text += "<i>" + card.data.cardDescription + "</i>";
     }
