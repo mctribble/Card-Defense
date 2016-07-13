@@ -96,6 +96,6 @@ public class WaveStatusText : BaseBehaviour, IPointerEnterHandler, IPointerExitH
 
         if ((curWaveData.getEnemyData().effectData != null) && (curWaveData.getEnemyData().effectData.effects.Count > 0))
             foreach (IEffect e in curWaveData.getEnemyData().effectData.effects)
-                text.text += "\n" + e.Name;
+                text.text += "\n" + "<Color=#" + e.effectType.ToString("X") + ">" + e.Name + "</Color>";
     }
 }

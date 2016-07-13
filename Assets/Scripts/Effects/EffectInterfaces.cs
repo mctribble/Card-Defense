@@ -87,15 +87,15 @@ public enum TargetingType
     noCast  //this effect does not support being cast (used for effects that are not meant to be applied to a spell)
 };
 
-//different effect types
+//different effect types.  The values are hex colors to be used for text mentioning these effects (format RRGGBBAA).  unchecked syntax is to force stuffing the values into the signed int used by enums
 public enum EffectType
 {
-    instant,       //effect triggers instantly without the need for a target
-    wave,          //effect alters the current wave
-    discard,       //effect triggers when the card it is attached to is discarded
-    self,          //effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
-    enemyDamaged,  //effect triggers when an enemy is damaged.  Could be attached to the attacking tower or the defending enemy
-    towerTargeting //effect alters the way a tower taragets enemies.  if multiple are present, only the last is actually used
+    instant        = unchecked((int)0x00FFFFFF), //effect triggers instantly without the need for a target
+    wave           = unchecked((int)0x0000FFFF), //effect alters the current wave
+    discard        = unchecked((int)0xA52A2AFF), //effect triggers when the card it is attached to is discarded
+    self           = unchecked((int)0x0000A0FF), //effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
+    enemyDamaged   = unchecked((int)0x008000FF), //effect triggers when an enemy is damaged.  Could be attached to the attacking tower or the defending enemy
+    towerTargeting = unchecked((int)0xADD8E6FF)  //effect alters the way a tower taragets enemies.  if multiple are present, only the last is actually used
 };
 
 //base interface
