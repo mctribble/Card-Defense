@@ -474,6 +474,6 @@ public class CardScript : BaseBehaviour
             }
         }
         //end with the flavor text found in the card file
-        description.text += "<i>" + card.data.cardDescription + "</i>";
+        description.text += "\n<i>" + card.data.cardDescription + "</i>";
     }
 }
