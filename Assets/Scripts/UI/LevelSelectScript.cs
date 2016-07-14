@@ -4,6 +4,7 @@ using UnityEngine;
 using Vexe.Runtime.Types;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class LevelSelectScript : BaseBehaviour
 {
@@ -115,6 +116,13 @@ public class LevelSelectScript : BaseBehaviour
             menuButtons.Add(pdButton);                           //and add it to the list of buttons
         }
 
+        //a button to open the editor...
+        GameObject eButton = Instantiate(buttonPrefab);      //create a new button
+        eButton.SendMessage("setButtonText", "Deck Editor"); //set the text
+        eButton.SendMessage("setColor", menuButtonColor);    //and the color
+        eButton.transform.SetParent(this.transform, false);  //and add it to the menufor returning to the level select
+        menuButtons.Add(eButton);                            //and add it to the list of buttons
+
         //and a back button 
         GameObject backButton = Instantiate(buttonPrefab);     //create a new button
         backButton.SendMessage("setButtonText", "Back");       //set the text
@@ -156,6 +164,9 @@ public class LevelSelectScript : BaseBehaviour
     {
         switch(buttonText)
         {
+            case "Deck Editor":
+                SceneManager.LoadScene("Deck Editor");
+                break;
             case "Default Level Deck":
                 //player wants to use the predefined deck for this level.  Load the level immediately and then let the level manager load the deck for us
                 LevelManagerScript.instance.SendMessage("loadLevel", chosenLevelFile.FullName);
