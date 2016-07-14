@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Vexe.Runtime.Types;
+using UnityEngine.UI;
+using System.Collections;
 
 public class LevelSelectScript : BaseBehaviour
 {
@@ -30,15 +32,20 @@ public class LevelSelectScript : BaseBehaviour
         //so we turn it on again at runtime
         gameObject.GetComponent<UnityEngine.UI.Image>().enabled = true;
 
+        //force menu image to be at least as tall as the UI canvas
+        //we can't just use Screen.height because that is the height of the window itself and doesnt account for scaling
+        //this is especially true of playing in the editor
+        gameObject.GetComponent<UnityEngine.UI.LayoutElement>().minHeight = Screen.height / transform.root.gameObject.GetComponent<Canvas>().transform.localScale.y;
+
         //create an empty list to hold the buttons in
         menuButtons = new List<GameObject>();
 
         //start on a level select prompt
-        setupLevelButtons();
+        StartCoroutine(setupLevelButtons());
     }
 
     //creates buttons to be used as a level select
-    private void setupLevelButtons()
+    private IEnumerator setupLevelButtons()
     {
         //base game levels
         DirectoryInfo dir = new DirectoryInfo (Path.Combine (Application.dataPath, levelDir));  //find level folder
@@ -73,10 +80,13 @@ public class LevelSelectScript : BaseBehaviour
             qButton.transform.SetParent(this.transform, false); //and it to the menu
             menuButtons.Add(qButton);                           //and add it to the list of buttons
         }
+
+        yield return null; //give the scrollRect a frame to catch up
+        gameObject.transform.parent.parent.GetComponent<ScrollRect>().verticalNormalizedPosition = 1; //scroll the menu to the top after adding all these buttons
     }
 
     //creates buttons to be used as a deck select
-    private void setupDeckButtons()
+    private IEnumerator setupDeckButtons()
     {
         //create a button for using the default level deck
         GameObject ldButton = Instantiate(buttonPrefab);             //create a new button
@@ -111,6 +121,9 @@ public class LevelSelectScript : BaseBehaviour
         backButton.SendMessage("setColor", menuButtonColor);   //and the color
         backButton.transform.SetParent(this.transform, false); //and add it to the menufor returning to the level select
         menuButtons.Add(backButton);                           //and add it to the list of buttons
+
+        yield return null; //give the scrollRect a frame to catch up
+        gameObject.transform.parent.parent.GetComponent<ScrollRect>().verticalNormalizedPosition = 1; //scroll the menu to the top after adding all these buttons
     }
 
     //destroys all the menu buttons so a different menu can be shown
@@ -124,9 +137,9 @@ public class LevelSelectScript : BaseBehaviour
     //callback from level buttons
     private void LevelSelected(FileInfo levelFile)
     {
-        chosenLevelFile = levelFile; //save the chosen level
-        destroyButtons();            //get rid of the level menu
-        setupDeckButtons();          //present the deck menu
+        chosenLevelFile = levelFile;        //save the chosen level
+        destroyButtons();                   //get rid of the level menu
+        StartCoroutine(setupDeckButtons()); //present the deck menu
     }
 
     //callback from deck buttons
@@ -156,7 +169,7 @@ public class LevelSelectScript : BaseBehaviour
                 //player wants to go back to beginning
                 chosenLevelFile = null;
                 destroyButtons();
-                setupLevelButtons();
+                StartCoroutine(setupLevelButtons());
                 break;
             default:
                 Debug.LogError("LevelSelectScript doesnt know how to handle this button!");
