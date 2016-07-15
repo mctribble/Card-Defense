@@ -93,11 +93,6 @@ public class CardTypeManagerScript : BaseBehaviour
                 }
             }
         }
-
-        //parse effects on all card types so we throw a warning immediately if one is using an effect we cant find
-        foreach (CardData t in types.cardTypes)
-            if (t.effectData != null)
-                t.effectData.parseEffects();
     }
 
     // Update is called once per frame

@@ -20,18 +20,6 @@ public class MenuButtonScript : BaseBehaviour
     public FileInfo levelFile;  //level file attached to this button, if any
     public XMLDeck  xDeck;      //deck attached to this button, if any
 
-    // Use this for initialization
-    private void Awake()
-    {
-        buttonText.text = "???";
-        levelFile = null;
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-    }
-
     //sets the level file associated with this button
     private void setLevel(FileInfo file)
     {
