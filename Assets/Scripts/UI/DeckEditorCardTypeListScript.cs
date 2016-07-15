@@ -2,27 +2,16 @@
 using System.Collections;
 using System.Collections.Generic;
 
-//do-nothing struct containing static rules for deck building
-public class DeckRules
-{
-    public const ushort MAX_CARDS_OF_SAME_TYPE = 10;
-    public const ushort MAX_CARDS_IN_DECK = 60;
-    public const ushort MIN_CARDS_IN_DECK = 30;
-
-    private DeckRules() { } //hide constructor because this is just a container for constants
-}
-
-public class DeckEditorDeckListScript : MonoBehaviour
+public class DeckEditorCardTypeListScript : MonoBehaviour
 {
     public GameObject buttonPrefab; //used to instantiate deck buttons
     public Color defaultColor;   //normal button color
     public Color highlightColor; //color of highlighted button
-    public Color menuColor;      //color of menu buttons
 
     private List<GameObject> buttons;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start()
     {
         //init
         buttons = new List<GameObject>();
@@ -33,27 +22,35 @@ public class DeckEditorDeckListScript : MonoBehaviour
 
         //load up the contents of the list
         setupDeckButtons(null);
-	}
+    }
 
-    //adds deck buttons to the list.  If highlightDeck is in the list, that button is a different color
+    //adds card buttons to the list.  If the card type is in highlightDeck, that button is a different color
     void setupDeckButtons(XMLDeck highlightDeck)
     {
-        //one button for each player deck
-        foreach (XMLDeck xDeck in DeckManagerScript.instance.playerDecks.decks)
+        //one button for each card type
+        foreach (CardData type in CardTypeManagerScript.instance.types.cardTypes)
         {
+            //create the button and add it to the list
             GameObject xButton = Instantiate(buttonPrefab);
-            xButton.SendMessage("setDeck", xDeck);
-            xButton.SendMessage("setColor", defaultColor);
+            xButton.SendMessage("setCard", type);
             xButton.transform.SetParent(this.transform, false);
             buttons.Add(xButton);
-        }
 
-        //another button for making a new deck
-        GameObject ndButton = Instantiate(buttonPrefab);
-        ndButton.SendMessage("setButtonText", "New Deck");
-        ndButton.SendMessage("setColor", menuColor);
-        ndButton.transform.SetParent(this.transform, false);
-        buttons.Add(ndButton);
+            //set its color based on its presence (or lack thereof) in highlightDeck
+            Color buttonColor = defaultColor;
+            if (highlightDeck != null)
+            {
+                foreach (XMLDeckEntry e in highlightDeck.contents)
+                {
+                    if (e.name == type.cardName)
+                    {
+                        buttonColor = highlightColor;
+                        break;
+                    }
+                }
+            }
+            xButton.SendMessage("setColor", buttonColor);
+        }
     }
 
     //purges the buttons from the list

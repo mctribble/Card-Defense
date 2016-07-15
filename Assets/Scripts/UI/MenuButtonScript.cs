@@ -8,6 +8,7 @@ public enum MenuButtonType
 {
     level, //button is associated with a level
     deck,
+    card,
     text
 }
 
@@ -19,6 +20,7 @@ public class MenuButtonScript : BaseBehaviour
     //each of these may be null based on button type
     public FileInfo levelFile;  //level file attached to this button, if any
     public XMLDeck  xDeck;      //deck attached to this button, if any
+    public CardData card;       //card type attached to this button, if any
 
     //sets the level file associated with this button
     private void setLevel(FileInfo file)
@@ -35,6 +37,14 @@ public class MenuButtonScript : BaseBehaviour
         xDeck = newXDeck; //set deck
         buttonText.text = xDeck.name;
         buttonType = MenuButtonType.deck;
+    }
+
+    //sets the card type associated with this button
+    private void setCard(CardData newCard)
+    {
+        card = newCard;
+        buttonText.text = newCard.cardName;
+        buttonType = MenuButtonType.card;
     }
 
     //sets the text of the button (note: only use on text buttons, as the other types set the text automatically)
@@ -60,6 +70,9 @@ public class MenuButtonScript : BaseBehaviour
                 break;
             case MenuButtonType.deck:
                 SendMessageUpwards("DeckSelected", xDeck);
+                break;
+            case MenuButtonType.card:
+                SendMessageUpwards("CardSelected", card);
                 break;
             case MenuButtonType.text:
                 SendMessageUpwards("TextButtonSelected", buttonText.text);
