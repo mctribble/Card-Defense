@@ -66,7 +66,6 @@ public class CardTypeManagerScript : BaseBehaviour
         foreach (FileInfo f in modFiles)
         {
             modTypes = CardTypeCollection.Load(f.FullName); //load file
-            Debug.Log("Loading card file: " + f.Name); //log it
             foreach (CardData moddedCard in modTypes.cardTypes)
             {
                 //find the existing version of this card
