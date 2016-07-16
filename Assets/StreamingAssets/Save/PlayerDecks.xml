@@ -1,12 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<PlayerDecks xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../XML/Decks.xsd">
+<PlayerDecks xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Decks>
     <Deck name="Spitfire">
       <Cards>
-        <Card name="Heavy Tower" count="6" />
         <Card name="Spitfire Upgrade" count="6" />
-        <Card name="Fast Upgrade" count="20"/>
-        <Card name="Shield" count="8"/>
+        <Card name="Fast Upgrade" count="9" />
+        <Card name="Shield" count="5" />
+        <Card name="Basic Tower" count="3" />
+        <Card name="Reinforce" count="1" />
+        <Card name="Time Crunch" count="1" />
+        <Card name="Basic Upgrade" count="5" />
+      </Cards>
+    </Deck>
+    <Deck name="New Deck">
+      <Cards>
+        <Card name="Dev Purge Tower" count="50" />
       </Cards>
     </Deck>
   </Decks>

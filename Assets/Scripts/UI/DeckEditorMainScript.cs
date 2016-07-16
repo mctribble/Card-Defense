@@ -22,13 +22,10 @@ public class DeckEditorMainScript : MonoBehaviour
     //handles buttons in the deck list
     public void DeckSelected(XMLDeck selectedDeck)
     {
-        if (openDeck.name != selectedDeck.name)
-        {
-            //user wants to load a different deck
-            saveChanges();                         //save any unsaved changes
-            openDeck = selectedDeck;               //change decks
-            BroadcastMessage("refresh", openDeck); //update the menus to reflect it
-        }
+        //user wants to load a different deck
+        saveChanges();                         //save any unsaved changes
+        openDeck = selectedDeck;               //change decks
+        BroadcastMessage("refresh", openDeck); //update the menus to reflect it
     }
 
     //called when an existing deck entry changes
