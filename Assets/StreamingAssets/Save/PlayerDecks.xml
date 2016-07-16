@@ -12,9 +12,9 @@
         <Card name="Basic Upgrade" count="5" />
       </Cards>
     </Deck>
-    <Deck name="New Deck">
+    <Deck name="OP Dev Deck">
       <Cards>
-        <Card name="Dev Purge Tower" count="50" />
+        <Card name="Dev Purge Tower" count="40" />
       </Cards>
     </Deck>
   </Decks>

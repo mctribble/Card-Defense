@@ -6,13 +6,17 @@ public class DeckEditorMainScript : MonoBehaviour
 {
     public GameObject cardPreview;    //reference to the object responsible for previewing cards
     public XMLDeck    openDeck;       //the XMLDeck currently being edited
-    public bool       unsavedChanges; //whether or not there are changes that have not been written to disk
+
+    private bool unsavedChanges; //whether or not there are changes that have not been written to disk
+    private bool newDeck;        //if true, this deck is not currently in the deck collection and must be added to it in order to save changes
 
     //init
     public void Start()
     {
-        unsavedChanges = false;
-        XMLDeck openDeck = new XMLDeck();
+        unsavedChanges = false;                 //there are no changes since we just opened the editor
+        XMLDeck openDeck = new XMLDeck();       //create a new deck
+        newDeck = true;                         //flag the deck as new
+        BroadcastMessage("refresh", openDeck);  //update interfaces
     }
 
     //something in the editor wants to preview the given card, but doesnt know how to reach the card preview, so it sent it here instead.
@@ -25,6 +29,7 @@ public class DeckEditorMainScript : MonoBehaviour
         //user wants to load a different deck
         saveChanges();                         //save any unsaved changes
         openDeck = selectedDeck;               //change decks
+        newDeck = false;                       //this deck was loaded from disk, so it is not new
         BroadcastMessage("refresh", openDeck); //update the menus to reflect it
     }
 
@@ -90,6 +95,7 @@ public class DeckEditorMainScript : MonoBehaviour
             case "New Deck":                            //user wants to make a new deck
                 saveChanges();                          //save any unsaved changes
                 openDeck = new XMLDeck();               //make a new deck
+                newDeck = true;                         //flag this deck as new so that any changes to it get saved as a new deck
                 BroadcastMessage("refresh", openDeck);  //inform the lists
                 break;
 
@@ -104,6 +110,20 @@ public class DeckEditorMainScript : MonoBehaviour
         }
     }
 
+    //called when the deck name changes
+    public void DeckRenamed(string newDeckName)
+    {
+        //change the name
+        openDeck.name = newDeckName;
+
+        //force a save immediately
+        unsavedChanges = true;
+        saveChanges();
+
+        //and refresh the interface
+        BroadcastMessage("refresh", openDeck);
+    }
+
     //saves the deck collection, if there are unsaved changes
     private void saveChanges()
     {
@@ -111,21 +131,23 @@ public class DeckEditorMainScript : MonoBehaviour
         if (unsavedChanges == false)
             return;
 
-        //check if a deck by this name already exists
-        XMLDeck existingDeckWithSameName = null;
-        foreach (XMLDeck deck in DeckManagerScript.instance.playerDecks.decks)
+        unsavedChanges = false; 
+
+        //if the deck is empty, it should not be in the collection
+        if (openDeck.contents.Count == 0)
         {
-            if (deck.name == openDeck.name)
-            {
-                existingDeckWithSameName = openDeck;
-                break;
-            }
+            if (newDeck)
+                return; //the deck is already missing from the collection, so we are done
+            else
+                DeckManagerScript.instance.playerDecks.decks.Remove(openDeck); //the deck is currently in the collection.  Take it out.
         }
 
-        if (existingDeckWithSameName == null)
-            DeckManagerScript.instance.playerDecks.decks.Add(openDeck); //this deck is new.  Add it to the list and we are ready to save
-        else
-            existingDeckWithSameName = openDeck; //the deck already exists.  overwrite it (TODO: prompt for overwrite?)
+        //if this is a new deck, add it to the collection
+        if (newDeck)
+        {
+            DeckManagerScript.instance.playerDecks.decks.Add(openDeck);
+            newDeck = false;
+        }
 
         //save the collection
         DeckManagerScript.instance.savePlayerDecks();

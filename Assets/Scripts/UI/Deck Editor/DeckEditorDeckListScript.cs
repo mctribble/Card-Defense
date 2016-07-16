@@ -43,7 +43,12 @@ public class DeckEditorDeckListScript : MonoBehaviour
         {
             GameObject xButton = Instantiate(buttonPrefab);
             xButton.SendMessage("setDeck", xDeck);
-            xButton.SendMessage("setColor", defaultColor);
+
+            if (xDeck == highlightDeck)
+                xButton.SendMessage("setColor", highlightColor);
+            else
+                xButton.SendMessage("setColor", defaultColor);
+
             xButton.transform.SetParent(this.transform, false);
             buttons.Add(xButton);
         }

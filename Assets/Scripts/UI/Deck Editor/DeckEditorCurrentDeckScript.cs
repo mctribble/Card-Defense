@@ -10,7 +10,7 @@ public class DeckEditorCurrentDeckScript : MonoBehaviour
     private List<GameObject> deckEntries;
 
 	// Use this for initialization
-	void Start ()
+	void Awake ()
     {
         //init
         deckEntries = new List<GameObject>();
