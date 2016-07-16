@@ -12,8 +12,15 @@ public class CardPreviewScript : MonoBehaviour
     public Text  title;       //reference to card name text
     public Text  description; //reference to card description text
 
+    //fetches data on the deck entry and then previews that card type
+    private void PreviewXMLDeckEntry(XMLDeckEntry xC)
+    {
+        CardData c = CardTypeManagerScript.instance.getCardByName(xC.name);
+        StartCoroutine("PreviewCard", c);
+    }
+
     //saves card definition data and updates components as necessarry
-    private IEnumerator SetCard(CardData c)
+    private IEnumerator PreviewCard(CardData c)
     {
         //save the data
         data = c;

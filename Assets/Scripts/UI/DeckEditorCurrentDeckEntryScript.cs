@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class DeckEditorCurrentDeckEntryScript : MonoBehaviour, IPointerEnterHandler
 {
     //child object references
-    public Text   cardNameText;  
+    public Text   cardNameText;
     public Text   cardCountText;
 
     //XMLDeckEntry reference
@@ -18,6 +17,12 @@ public class DeckEditorCurrentDeckEntryScript : MonoBehaviour, IPointerEnterHand
         data = newData;
         cardNameText.text = data.name;
         cardCountText.text = data.count.ToString();
+
+        //if we are below the max, print count in white.  Otherwise, print count in red
+        if (data.count <= DeckRules.MAX_CARDS_OF_SAME_TYPE)
+            cardCountText.color = Color.white;
+        else
+            cardCountText.color = Color.red;
     }
 
     //called by buttons when + or - gets clicked
@@ -26,18 +31,28 @@ public class DeckEditorCurrentDeckEntryScript : MonoBehaviour, IPointerEnterHand
         if (text == "+")
         {
             //player wants to add a copy of this card.
-            if (data.count != DeckRules.MAX_CARDS_OF_SAME_TYPE) //if we are not at the max...
-            {
-                //add the card and pass a note up the tree
-                data.count++;
-                SendMessageUpwards("deckEntryUpdated", data);
-            }
+            data.count++;
+            cardCountText.text = data.count.ToString();
+            SendMessageUpwards("deckEntryUpdated", data);
+
+            //if we are below the max, print count in white.  Otherwise, print count in red
+            if (data.count <= DeckRules.MAX_CARDS_OF_SAME_TYPE)
+                cardCountText.color = Color.white;
+            else
+                cardCountText.color = Color.red;
         }
         else if (text == "-")
         {
             //player wants to remove a copy of this card.  Take it out and pass a note up the tree
             data.count--;
+            cardCountText.text = data.count.ToString();
             SendMessageUpwards("deckEntryUpdated", data);
+
+            //if we are below the max, print count in white.  Otherwise, print count in red
+            if (data.count <= DeckRules.MAX_CARDS_OF_SAME_TYPE)
+                cardCountText.color = Color.white;
+            else
+                cardCountText.color = Color.red;
 
             //and if that was the last copy, remove this entry from the list entirely
             if (data.count == 0)
@@ -52,7 +67,6 @@ public class DeckEditorCurrentDeckEntryScript : MonoBehaviour, IPointerEnterHand
     //preview card on mouse over
     public void OnPointerEnter(PointerEventData eventData)
     {
-        SendMessageUpwards("PreviewCard", data);   
+        SendMessageUpwards("PreviewXMLDeckEntry", data);
     }
-
 }

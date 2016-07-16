@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class DeckEditorCardTypeListScript : MonoBehaviour
 {
@@ -11,7 +10,7 @@ public class DeckEditorCardTypeListScript : MonoBehaviour
     private List<GameObject> buttons;
 
     // Use this for initialization
-    void Start()
+    private void Start()
     {
         //init
         buttons = new List<GameObject>();
@@ -25,7 +24,7 @@ public class DeckEditorCardTypeListScript : MonoBehaviour
     }
 
     //adds card buttons to the list.  If the card type is in highlightDeck, that button is a different color
-    void setupDeckButtons(XMLDeck highlightDeck)
+    private void setupDeckButtons(XMLDeck highlightDeck)
     {
         //one button for each card type
         foreach (CardData type in CardTypeManagerScript.instance.types.cardTypes)
@@ -54,7 +53,7 @@ public class DeckEditorCardTypeListScript : MonoBehaviour
     }
 
     //purges the buttons from the list
-    void destroyDeckButtons()
+    private void destroyDeckButtons()
     {
         foreach (GameObject button in buttons)
             Destroy(button);
@@ -62,7 +61,7 @@ public class DeckEditorCardTypeListScript : MonoBehaviour
     }
 
     //refreshes the list, highlighting the current deck
-    void refresh(XMLDeck currentDeck)
+    private void refresh(XMLDeck currentDeck)
     {
         destroyDeckButtons();
         setupDeckButtons(currentDeck);

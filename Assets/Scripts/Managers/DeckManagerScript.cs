@@ -1,6 +1,5 @@
 ﻿//based on tutorial found here: http://wiki.unity3d.com/index.php?title=Saving_and_Loading_Data:_XmlSerializer
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -41,6 +40,37 @@ public class XMLDeck
     [XmlArray("Cards")]
     [XmlArrayItem("Card")]
     public List<XMLDeckEntry> contents;
+
+    //default constructor
+    public XMLDeck()
+    {
+        name = "New Deck";
+        contents = new List<XMLDeckEntry>();
+    }
+
+    //returns whether or not this deck conforms to the rules set in DeckRules
+    public bool isValid()
+    {
+        //tracking variables
+        int cardCount = 0;
+        int maxCardsOfOneType = 0;
+
+        //deck scan
+        foreach (XMLDeckEntry entry in contents)
+        {
+            cardCount += entry.count;
+            if (entry.count > maxCardsOfOneType)
+                maxCardsOfOneType = entry.count;
+        }
+
+        //compare stats to the deck rules
+        if (cardCount         < DeckRules.MIN_CARDS_IN_DECK)      return false;
+        if (cardCount         > DeckRules.MAX_CARDS_IN_DECK)      return false;
+        if (maxCardsOfOneType > DeckRules.MAX_CARDS_OF_SAME_TYPE) return false;
+
+        //all tests passed.  deck is valid.
+        return true;
+    }
 };
 
 //maintains the collection of card types, including saving/loading to XML
@@ -143,6 +173,12 @@ public class DeckManagerScript : BaseBehaviour
         playerDecks  = DeckCollection.Load(Path.Combine(Application.dataPath, playerDeckPath));
         currentDeck = new List<Card>();
         deckSize = 0;
+    }
+
+    //saves the player decks back to the file
+    public void savePlayerDecks()
+    {
+        playerDecks.Save(Path.Combine(Application.dataPath, playerDeckPath));
     }
 
     // Sets the currentDeck based on the XMLDeck
