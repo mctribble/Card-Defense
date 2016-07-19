@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Vexe.Runtime.Types;
 
 //do-nothing struct containing static rules for deck building
 public class DeckRules
@@ -12,7 +13,7 @@ public class DeckRules
     private DeckRules() { } //hide constructor because this is just a container for constants
 }
 
-public class DeckEditorDeckListScript : MonoBehaviour
+public class DeckEditorDeckListScript : BaseBehaviour
 {
     public GameObject buttonPrefab; //used to instantiate deck buttons
     public Color defaultColor;   //normal button color

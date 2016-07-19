@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Vexe.Runtime.Types;
 
-public class DeckEditorCurrentDeckEntryScript : MonoBehaviour, IPointerEnterHandler
+public class DeckEditorCurrentDeckEntryScript : BaseBehaviour, IPointerEnterHandler
 {
     //child object references
     public Text   cardNameText;
     public Text   cardCountText;
+    public Image  background;
 
     //XMLDeckEntry reference
     private XMLDeckEntry data;
@@ -20,9 +22,15 @@ public class DeckEditorCurrentDeckEntryScript : MonoBehaviour, IPointerEnterHand
 
         //if we are below the max, print count in white.  Otherwise, print count in red
         if (data.count <= DeckRules.MAX_CARDS_OF_SAME_TYPE)
-            cardCountText.color = Color.white;
+            background.color = Color.white;
         else
-            cardCountText.color = Color.red;
+            background.color = Color.red;
+    }
+
+    //sets the background color for this entry
+    public void setColor(Color newColor)
+    {
+        background.color = newColor;
     }
 
     //called by buttons when + or - gets clicked

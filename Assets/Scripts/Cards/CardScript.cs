@@ -97,6 +97,65 @@ public class CardData : System.Object
         get { return (effectData != null) && (effectData.XMLEffects.Count != 0); } //only write effect data if there is data to write
         set { }
     }
+
+    //returns description text for this card type
+    public string getDescription()
+    {
+        //init
+        string description = "";
+
+        //add info depending on card type
+        switch (cardType)
+        {
+            case CardType.spell:
+                break;
+
+            case CardType.tower:
+                //present tower stats
+                description += "Damage: " + towerData.attackPower + '\n' +
+                               "Range: " + towerData.range + '\n' +
+                               "Fires in: " + towerData.rechargeTime + "s\n" +
+                               "Lifespan: " + towerData.lifespan + '\n';
+                break;
+
+            case CardType.upgrade:
+                //present upgrade stats
+                if (upgradeData.waveBonus          != 0) { description += "lifespan: +"  + upgradeData.waveBonus                               + '\n'; }
+                if (upgradeData.attackMultiplier   != 1) { description += "damage: +"    + (upgradeData.attackMultiplier - 1).ToString("P1")   + '\n'; }
+                if (upgradeData.rangeMultiplier    != 1) { description += "range: +"     + (upgradeData.rangeMultiplier - 1).ToString("P1")    + '\n'; }
+                if (upgradeData.rechargeMultiplier != 1) { description += "recharge: +"  + (upgradeData.rechargeMultiplier - 1).ToString("P1") + '\n'; }
+                if (upgradeData.attackModifier     != 0) { description += "damage: +"    + upgradeData.attackModifier.ToString()               + '\n'; }
+                if (upgradeData.rangeModifier      != 0) { description += "range: +"     + upgradeData.rangeModifier.ToString()                + '\n'; }
+                if (upgradeData.rechargeModifier   != 0) { description += "recharge: +"  + upgradeData.rechargeModifier.ToString()             + "s\n"; }
+                if (upgradeData.waveBonus          != 0) { description += "lifespan: -"  + upgradeData.waveBonus                               + '\n'; }
+                if (upgradeData.attackMultiplier   != 1) { description += "damage: -"    + (1 - upgradeData.attackMultiplier).ToString("P1")   + '\n'; }
+                if (upgradeData.rangeMultiplier    != 1) { description += "range: -"     + (1 - upgradeData.rangeMultiplier).ToString("P1")    + '\n'; }
+                if (upgradeData.rechargeMultiplier != 1) { description += "recharge: -"  + (1 - upgradeData.rechargeMultiplier).ToString("P1") + '\n'; }
+                if (upgradeData.attackModifier     != 0) { description += "damage: -"    + upgradeData.attackModifier.ToString()               + '\n'; }
+                if (upgradeData.rangeModifier      != 0) { description += "range: -"     + upgradeData.rangeModifier.ToString()                + '\n'; }
+                if (upgradeData.rechargeModifier   != 0) { description += "recharge: -"  + upgradeData.rechargeModifier.ToString()             + "s\n"; }
+                break;
+        }
+
+        //if there are effects, add them to the description
+        if (effectData != null)
+        {
+            //make sure the effects have been parsed
+            if (effectData.effects.Count == 0) { effectData.parseEffects(); }
+
+            //add a line of text to the description for each
+            foreach (IEffect e in effectData.effects)
+            {
+                description += "\n<Color=#" + e.effectType.ToString("X") + ">" + e.Name + "</Color>";
+            }
+        }
+
+        //end with the flavor text found in the card file
+        description += "\n<i>" + cardDescription + "</i>";
+
+        //return it
+        return description;
+    }
 }
 
 public class CardScript : BaseBehaviour
@@ -425,55 +484,6 @@ public class CardScript : BaseBehaviour
     //helper function.  updates the card description text.
     private void updateDescriptionText()
     {
-        //init
-        description.text = "";
-
-        //add info depending on card type
-        switch (card.data.cardType)
-        {
-            case CardType.spell:
-                break;
-
-            case CardType.tower:
-                //present tower stats
-                description.text += "Damage: " + card.data.towerData.attackPower + '\n' +
-                                    "Range: " + card.data.towerData.range + '\n' +
-                                    "Fires in: " + card.data.towerData.rechargeTime + "s\n" +
-                                    "Lifespan: " + card.data.towerData.lifespan + '\n';
-                break;
-
-            case CardType.upgrade:
-                //present upgrade stats
-                if (card.data.upgradeData.waveBonus          != 0) { description.text += "lifespan: +"  + card.data.upgradeData.waveBonus                               + '\n'; }
-                if (card.data.upgradeData.attackMultiplier   != 1) { description.text += "damage: +"    + (card.data.upgradeData.attackMultiplier - 1).ToString("P1")   + '\n'; }
-                if (card.data.upgradeData.rangeMultiplier    != 1) { description.text += "range: +"     + (card.data.upgradeData.rangeMultiplier - 1).ToString("P1")    + '\n'; }
-                if (card.data.upgradeData.rechargeMultiplier != 1) { description.text += "recharge: +"  + (card.data.upgradeData.rechargeMultiplier - 1).ToString("P1") + '\n'; }
-                if (card.data.upgradeData.attackModifier     != 0) { description.text += "damage: +"    + card.data.upgradeData.attackModifier.ToString()               + '\n'; }
-                if (card.data.upgradeData.rangeModifier      != 0) { description.text += "range: +"     + card.data.upgradeData.rangeModifier.ToString()                + '\n'; }
-                if (card.data.upgradeData.rechargeModifier   != 0) { description.text += "recharge: +"  + card.data.upgradeData.rechargeModifier.ToString()             + "s\n"; }
-                if (card.data.upgradeData.waveBonus          != 0) { description.text += "lifespan: -"  + card.data.upgradeData.waveBonus                               + '\n'; }
-                if (card.data.upgradeData.attackMultiplier   != 1) { description.text += "damage: -"    + (1 - card.data.upgradeData.attackMultiplier).ToString("P1")   + '\n'; }
-                if (card.data.upgradeData.rangeMultiplier    != 1) { description.text += "range: -"     + (1 - card.data.upgradeData.rangeMultiplier).ToString("P1")    + '\n'; }
-                if (card.data.upgradeData.rechargeMultiplier != 1) { description.text += "recharge: -"  + (1 - card.data.upgradeData.rechargeMultiplier).ToString("P1") + '\n'; }
-                if (card.data.upgradeData.attackModifier     != 0) { description.text += "damage: -"    + card.data.upgradeData.attackModifier.ToString()               + '\n'; }
-                if (card.data.upgradeData.rangeModifier      != 0) { description.text += "range: -"     + card.data.upgradeData.rangeModifier.ToString()                + '\n'; }
-                if (card.data.upgradeData.rechargeModifier   != 0) { description.text += "recharge: -"  + card.data.upgradeData.rechargeModifier.ToString()             + "s\n"; }
-                break;
-        }
-
-        //if there are effects, add them to the description
-        if (card.data.effectData != null)
-        {
-            //make sure the effects have been parsed
-            if (card.data.effectData.effects.Count == 0) { card.data.effectData.parseEffects(); }
-
-            //add a line of text to the description for each
-            foreach (IEffect e in card.data.effectData.effects)
-            {
-                description.text += "\n<Color=#" + e.effectType.ToString("X") + ">" + e.Name + "</Color>";
-            }
-        }
-        //end with the flavor text found in the card file
-        description.text += "\n<i>" + card.data.cardDescription + "</i>";
+        description.text = card.data.getDescription();
     }
 }

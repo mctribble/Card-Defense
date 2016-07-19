@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using Vexe.Runtime.Types;
 
-public class DeckEditorNameFieldScript : MonoBehaviour
+public class DeckEditorNameFieldScript : BaseBehaviour
 {
     public InputField inputField;
 
