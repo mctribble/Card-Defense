@@ -98,6 +98,7 @@
   <!--  this determines whether or not the deck is shuffled at game start.  If false, cards appear in the order listed below-->
   <shuffleDeck>true</shuffleDeck>
   <!--	this is the deck the player is given to use in this level by default.  the deck name is currently unused.-->
+  <!--  this entire section can be replaced with a premade deck by using <premadeDeckName>[name]</premadeDeckName> where [name] is the name of a deck in Decks.xml-->
   <levelDeck name="Heavy Buffs">
     <!-- name: name of the card
 		 count: how many of that card are present-->

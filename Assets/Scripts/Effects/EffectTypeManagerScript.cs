@@ -26,8 +26,8 @@ public class EffectTypeManagerScript : BaseBehaviour
         switch (xe.name)
         {
             case "addCharges":                ie = new EffectAddCharges(); break;
-            case "armor":                     ie = new EffectArmor(); break;
             case "allTowersLifespanBonus":    ie = new EffectAllTowersLifespanBonus(); break;
+            case "armor":                     ie = new EffectArmor(); break;
             case "budgetPercentageChange":    ie = new EffectBudgetPercentageChange(); break;
             case "changeWaveType":            ie = new EffectChangeWaveType(); break;
             case "damagePlayer":              ie = new EffectDamagePlayer(); break;
