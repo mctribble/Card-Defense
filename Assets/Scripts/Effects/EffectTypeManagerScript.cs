@@ -28,11 +28,14 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "addCharges":                ie = new EffectAddCharges(); break;
             case "allTowersLifespanBonus":    ie = new EffectAllTowersLifespanBonus(); break;
             case "armor":                     ie = new EffectArmor(); break;
+            case "attackDecreasesWithHealth": ie = new EffectAttackDecreasesWithHealth(); break;
             case "budgetPercentageChange":    ie = new EffectBudgetPercentageChange(); break;
             case "changeWaveType":            ie = new EffectChangeWaveType(); break;
             case "damagePlayer":              ie = new EffectDamagePlayer(); break;
             case "discardRandomCard":         ie = new EffectDiscardRandom(); break;
             case "drawCard":                  ie = new EffectDrawCard(); break;
+            case "fixedSpawnCount":           ie = new EffectFixedSpawnCount(); break;
+            case "healthIncreasesWithBudget": ie = new EffectHealthIncreasesWithBudget(); break;
             case "reduceEnemyEffectOnDamage": ie = new EffectReduceEnemyEffectOnDamage(); break;
             case "returnsToTopOfDeck":        ie = new EffectReturnsToTopOfDeck(); break;
             case "shuffle":                   ie = new EffectShuffle(); break;

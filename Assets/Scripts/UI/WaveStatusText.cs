@@ -46,7 +46,7 @@ public class WaveStatusText : BaseBehaviour, IPointerEnterHandler, IPointerExitH
 
             //text that is always present: "Wave ??/?? (????"
             text.text = "Wave " + (curWave + 1) + "/" + LevelManagerScript.instance.data.waves.Count +
-                " (<color=#" + curWaveData.getEnemyData().unitColor.toHex() + ">"  + curWaveData.type + "</color>";
+                " (<color=#" + curWaveData.enemyData.unitColor.toHex() + ">"  + curWaveData.type + "</color>";
 
             //additional text that varies based on game state
             if (LevelManagerScript.instance.SpawnCount != 0)
@@ -58,8 +58,14 @@ public class WaveStatusText : BaseBehaviour, IPointerEnterHandler, IPointerExitH
             else
             {
                 //wave has finished spawning: "): ???? remain (????? health)"
-                text.text += ")" + (Mathf.RoundToInt((float)curWaveData.budget / (float)curWaveData.getEnemyData().spawnCost) - LevelManagerScript.instance.deadThisWave) +
-                    " remain (" + LevelManagerScript.instance.WaveTotalRemainingHealth + " health)";
+                text.text += "): ";
+
+                if (curWaveData.forcedSpawnCount > 0)
+                    text.text += curWaveData.forcedSpawnCount - LevelManagerScript.instance.deadThisWave;
+                else
+                    text.text += (Mathf.RoundToInt((float)curWaveData.budget / (float)curWaveData.enemyData.spawnCost) - LevelManagerScript.instance.deadThisWave);
+
+                text.text += " remain (" + LevelManagerScript.instance.WaveTotalRemainingHealth + " health)";
             }
         }
 
@@ -91,11 +97,11 @@ public class WaveStatusText : BaseBehaviour, IPointerEnterHandler, IPointerExitH
     private void showEnemyStats()
     {
         WaveData curWaveData = LevelManagerScript.instance.data.waves[LevelManagerScript.instance.currentWave];
-        text.text = "<color=#" + curWaveData.getEnemyData().unitColor.toHex() + ">"  + curWaveData.type + "</color>: " +
-            "Health: " + curWaveData.getEnemyData().maxHealth + " Attack: " + curWaveData.getEnemyData().damage + " Speed: " + curWaveData.getEnemyData().unitSpeed;
+        text.text = "<color=#" + curWaveData.enemyData.unitColor.toHex() + ">"  + curWaveData.type + "</color>: " +
+            "Health: " + curWaveData.enemyData.maxHealth + " Attack: " + curWaveData.enemyData.attack + " Speed: " + curWaveData.enemyData.unitSpeed;
 
-        if ((curWaveData.getEnemyData().effectData != null) && (curWaveData.getEnemyData().effectData.effects.Count > 0))
-            foreach (IEffect e in curWaveData.getEnemyData().effectData.effects)
+        if ((curWaveData.enemyData.effectData != null) && (curWaveData.enemyData.effectData.effects.Count > 0))
+            foreach (IEffect e in curWaveData.enemyData.effectData.effects)
                 text.text += "\n" + "<Color=#" + e.effectType.ToString("X") + ">" + e.Name + "</Color>";
     }
 }

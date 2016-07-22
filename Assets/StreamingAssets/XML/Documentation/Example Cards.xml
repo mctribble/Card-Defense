@@ -32,8 +32,11 @@
       <upgradeData RechargeMult="1.1" RangeMult="1.1" DamageMult="1.1" RechargeMod="1" RangeMod="1" DamageMod="1" WaveBonus="1" />
     </Card>
     <Card Name="Free Mana Tap" Type="spell" Description="Draw five cards.  Does not consume a charge." Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
-      <!--to add effects, you provide a list of effects applied by the card.  The listed effects determine how the card must be cast,
-			for example, if a spell affects a tower, the player will have to select a tower in order to play the card.
+      <!--to add effects, you provide a list of effects applied by the card.  
+      You can add them to any type of card, but most only make sense on specific kinds of cards, and some dont make sense on cards at all
+      For a complete list, see "available effects.txt"
+      The listed effects also determine how the card must be cast.
+      For example, if a spell affects a tower, the player will have to select a tower in order to play the card.
 			The list of effects is hard coded, but you can combine them in whatever way you wish.  Effects are applied in the order listed.-->
       <effectData>
         <Effects>

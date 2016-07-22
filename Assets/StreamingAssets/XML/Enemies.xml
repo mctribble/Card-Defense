@@ -1,17 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <EnemyTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="Enemies.xsd">
   <Enemies>
-    <Enemy name="Standard" spawnCost="20" damage="2" maxHealth="40" unitSpeed="2" sprite="Enemy_Basic">
+    <Enemy name="Standard" spawnCost="20" attack="2" maxHealth="40" unitSpeed="2" sprite="Enemy_Basic">
       <unitColor r="0" g="1" b="0" a="1" />
     </Enemy>
-    <Enemy name="Swarm" spawnCost="5" damage="1" maxHealth="4" unitSpeed="5" sprite="Enemy_Basic">
+    <Enemy name="Swarm" spawnCost="5" attack="1" maxHealth="4" unitSpeed="5" sprite="Enemy_Basic">
       <unitColor r="1" g="0" b="0" a="1" />
     </Enemy>
-    <Enemy name="Tank" spawnCost="100" damage="5" maxHealth="450" unitSpeed="1" sprite="Enemy_Basic">
+    <Enemy name="Tank" spawnCost="100" attack="5" maxHealth="450" unitSpeed="1" sprite="Enemy_Basic">
       <unitColor r="0" g="0" b="1" a="1" />
       <effectData>
         <Effects>
           <Effect name="armor" strength="20" />
+        </Effects>
+      </effectData>
+    </Enemy>
+    <Enemy name="Giant" spawnCost="400" attack="10" maxHealth="600" unitSpeed="1" sprite="Enemy_Basic">
+      <unitColor r="0.75" g="0" b="0.75" a="1" />
+      <effectData>
+        <Effects>
+          <Effect name="fixedSpawnCount" strength="1" />
+          <Effect name="healthIncreasesWithBudget" />
+          <Effect name="attackDecreasesWithHealth" />
         </Effects>
       </effectData>
     </Enemy>

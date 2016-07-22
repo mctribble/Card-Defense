@@ -38,7 +38,7 @@ public class EnemyData
 {
     [XmlAttribute] public string     name;       //used to identify this enemy type
     [XmlAttribute] public int        spawnCost;	 //used for wave generation: more expensive enemies spawn in smaller numbers
-    [XmlAttribute] public int        damage;     //number of charges knocked off if the enemy reaches the goal
+    [XmlAttribute] public int        attack;     //number of charges knocked off if the enemy reaches the goal
     [XmlAttribute] public int        maxHealth;  //max health
     [XmlAttribute] public float      unitSpeed;  //speed, measured in distance/second
                    public XMLColor   unitColor;  //used to colorize the enemy sprite
@@ -94,7 +94,13 @@ public class EnemyScript : BaseBehaviour
 
             if (path.Count == currentDestination)
             {
-                //reached the end.  damage player...
+                //reached the end.  trigger effects...
+                if (effectData != null)
+                    foreach (IEffect e in effectData.effects)
+                        if (e.effectType == EffectType.enemyReachedGoal)
+                            ((IEffectEnemyReachedGoal)e).trigger(this);
+
+                //damage player...
                 DeckManagerScript.instance.SendMessage("Damage", damage);
 
                 //...and go back to start for another lap
@@ -176,11 +182,11 @@ public class EnemyScript : BaseBehaviour
     //stores the data specific to this type of enemy
     private System.Collections.IEnumerator SetData(EnemyData d)
     {
-        damage = d.damage;
+        damage         = d.attack;
         maxHealth      = d.maxHealth;
         curHealth      = d.maxHealth;
         expectedHealth = d.maxHealth;
-        unitSpeed = d.unitSpeed;
+        unitSpeed      = d.unitSpeed;
 
         if (d.effectData != null)
             effectData = d.effectData.clone();

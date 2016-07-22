@@ -11,10 +11,10 @@
                   <xsd:sequence>
                     <xsd:element name="unitColor">
                       <xsd:complexType>
-                        <xsd:attribute name="r" type="xsd:unsignedByte" use="required" />
-                        <xsd:attribute name="g" type="xsd:unsignedByte" use="required" />
-                        <xsd:attribute name="b" type="xsd:unsignedByte" use="required" />
-                        <xsd:attribute name="a" type="xsd:unsignedByte" use="required" />
+                        <xsd:attribute name="r" type="xsd:float" use="required" />
+                        <xsd:attribute name="g" type="xsd:float" use="required" />
+                        <xsd:attribute name="b" type="xsd:float" use="required" />
+                        <xsd:attribute name="a" type="xsd:float" use="required" />
                       </xsd:complexType>
                     </xsd:element>
                     <xsd:element minOccurs="0" name="effectData">
@@ -38,8 +38,8 @@
                     </xsd:element>
                   </xsd:sequence>
                   <xsd:attribute name="name" type="xsd:string" use="required" />
-                  <xsd:attribute name="spawnCost" type="xsd:unsignedByte" use="required" />
-                  <xsd:attribute name="damage" type="xsd:unsignedByte" use="required" />
+                  <xsd:attribute name="spawnCost" type="xsd:unsignedShort" use="required" />
+                  <xsd:attribute name="attack" type="xsd:unsignedByte" use="required" />
                   <xsd:attribute name="maxHealth" type="xsd:unsignedShort" use="required" />
                   <xsd:attribute name="unitSpeed" type="xsd:unsignedByte" use="required" />
                   <xsd:attribute name="sprite" type="xsd:string" use="required" />

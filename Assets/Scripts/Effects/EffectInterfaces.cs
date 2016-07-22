@@ -90,12 +90,13 @@ public enum TargetingType
 //different effect types.  The values are hex colors to be used for text mentioning these effects (format RRGGBBAA).  unchecked syntax is to force stuffing the values into the signed int used by enums
 public enum EffectType
 {
-    instant        = unchecked((int)0x00FFFFFF), //effect triggers instantly without the need for a target
-    wave           = unchecked((int)0x0000FFFF), //effect alters the current wave
-    discard        = unchecked((int)0xA52A2AFF), //effect triggers when the card it is attached to is discarded
-    self           = unchecked((int)0x0000A0FF), //effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
-    enemyDamaged   = unchecked((int)0x008000FF), //effect triggers when an enemy is damaged.  Could be attached to the attacking tower or the defending enemy
-    towerTargeting = unchecked((int)0xADD8E6FF)  //effect alters the way a tower taragets enemies.  if multiple are present, only the last is actually used
+    discard          = unchecked((int)0xA52A2AFF), //effect triggers when the card it is attached to is discarded
+    enemyDamaged     = unchecked((int)0x008000FF), //effect triggers when an enemy is damaged.  Could be attached to the attacking tower or the defending enemy
+    enemyReachedGoal = unchecked((int)0x111111FF), //effect triggers when an enemy reaches their goal
+    instant          = unchecked((int)0x00FFFFFF), //effect triggers instantly without the need for a target
+    self             = unchecked((int)0x0000A0FF), //effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
+    towerTargeting   = unchecked((int)0xADD8E6FF), //effect alters the way a tower taragets enemies.  if multiple are present, only the last is actually used
+    wave             = unchecked((int)0x0000FFFF)  //effect alters the current wave
 };
 
 //base interface
@@ -139,6 +140,11 @@ public interface IEffectEnemyDamaged : IEffect
     void expectedDamage(ref DamageEventData d); //called when it is expected to deal damage (so targeting etc. can account for damage amount changes)
 
     void actualDamage(ref DamageEventData d); //called when damage actually happens (for things that should happen when the actual hit occurs)
+}
+
+public interface IEffectEnemyReachedGoal : IEffect
+{
+    void trigger(EnemyScript enemy);
 }
 
 //effect alters the way a tower taragets enemies.  if multiple are present, only the last is actually used

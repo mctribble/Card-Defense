@@ -11,7 +11,7 @@ using Vexe.Runtime.Types;
 [System.Serializable]
 public class PremadeTowerUpgrade
 {
-    [XmlAttribute] public string Name; //upgrade to apply
+    [XmlAttribute] public string Name;  //upgrade to apply
     [XmlAttribute] public int    Count;	//number of applications
 }
 
@@ -38,14 +38,12 @@ public class LevelData
 
     //budget: absolute + (wave * linear) + (wave * squared)^2 + (exponential^wave)
     public float waveGrowthAbsolute     = 40.0f;
-
     public float waveGrowthLinear       = 4.0f;
     public float waveGrowthSquared      = 2.2f;
     public float waveGrowthExponential  = 1.1f;
 
     //time: min(wave*linear, maxwavetime)
     public float waveTimeLinear = 1.1f;
-
     public float waveTimeMax    = 20.0f;
 
     [XmlArray("Waves")]
@@ -66,7 +64,7 @@ public class LevelData
 
     public bool shuffleDeck;
 
-    //levelDeck is the deck set for use on this level.  
+    //levelDeck is the deck set for use on this level.
     //It could be defined directly in the level file, or the level could just provide the name of a premade deck in Decks.xml instead.
     public XMLDeck levelDeck;
     public string premadeDeckName;
@@ -99,6 +97,20 @@ public class WaveData
     [XmlAttribute] public int    budget;
     [XmlAttribute] public float  time;
     [XmlAttribute] public string message;
+    [XmlIgnore]    public int forcedSpawnCount; //if this is negative, no spawn count was forced
+
+    [XmlIgnore] private EnemyData data;
+    [XmlIgnore] public EnemyData enemyData
+    {
+        get
+        {
+            if (data == null)
+                data = EnemyTypeManagerScript.instance.getEnemyTypeByName(type);
+
+            return data;
+        }
+        set { data = value; }
+    }
 
     //default.  these values are meant to be VERY noticable if a wave is left with default data
     public WaveData()
@@ -107,6 +119,7 @@ public class WaveData
         budget = 999999999;
         time = 300.0f;
         message = null;
+        forcedSpawnCount = -1;
     }
 
     //specific data
@@ -115,18 +128,16 @@ public class WaveData
         type = waveType;
         budget = waveBudget;
         time = waveTime;
-    }
-
-    public EnemyData getEnemyData()
-    {
-        return EnemyTypeManagerScript.instance.getEnemyTypeByName(type);
-    }
+        message = null;
+        forcedSpawnCount = -1;
+    }    
 }
 
 public class LevelManagerScript : BaseBehaviour
 {
     //other objects can refer to these to be informed when a level is loaded (https://unity3d.com/learn/tutorials/topics/scripting/events)
     public delegate void LevelLoadedHandler();
+
     public event LevelLoadedHandler LevelLoadedEvent;
 
     public bool levelLoaded;                    //indicates whether a level has been loaded or not
@@ -174,10 +185,11 @@ public class LevelManagerScript : BaseBehaviour
         data = LevelData.Load(Path.Combine(Application.dataPath, level)); //load the level
 
         //wait a few frames to give other managers a chance to catch up
-        yield return null;  
+        yield return null;
         yield return null;
         yield return null;
 
+        //initialize waves
         for (uint i = 0; i < data.randomWaveCount; i++)
         {
             //figure out which wave we are making
@@ -200,7 +212,16 @@ public class LevelManagerScript : BaseBehaviour
             //time: min(wave*linear, maxwavetime)
             float waveTime = Mathf.Min(wave*data.waveTimeLinear, data.waveTimeMax);
 
-            data.waves.Add(new WaveData(waveEnemy.name, waveBudget, waveTime));
+            //create the wave data
+            WaveData waveData = new WaveData(waveEnemy.name, waveBudget, waveTime);
+
+            //if there are wave effects on the enemy type, apply them now
+            if (waveEnemy.effectData != null)
+                foreach(IEffect e in waveEnemy.effectData.effects)
+                    if (e.effectType == EffectType.wave)
+                        waveData = ((IEffectWave)e).alteredWaveData(waveData);
+
+            data.waves.Add(waveData);
         }
 
         //create the spawners
@@ -218,7 +239,7 @@ public class LevelManagerScript : BaseBehaviour
             CardData c = CardTypeManagerScript.instance.getCardByName(pt.name);
             c.towerData.towerName = pt.name;
             t.SendMessage("SetData", c.towerData); //pass it the definition
-            if ((c.effectData != null) && (c.effectData.effects.Count > 0)) 
+            if ((c.effectData != null) && (c.effectData.effects.Count > 0))
                 t.SendMessage("AddEffects", c.effectData); //pass it the effects
 
             //apply upgrades
@@ -306,7 +327,7 @@ public class LevelManagerScript : BaseBehaviour
     private IEnumerator spawnWave(WaveData d)
     {
         //init vars
-        EnemyData   spawnType = d.getEnemyData ();
+        EnemyData   spawnType = d.enemyData;
         int         spawnerCount = spawnerObjects.Count; //number of spawners
         if (spawnCount < 1) { spawnCount = 1; Debug.LogWarning("Wave spawn count was zero.  forced to spawn 1 monster."); } //spawn at least one monster
         float       timeBetweenSpawns = d.time / spawnCount; //delay between each spawn
@@ -394,7 +415,11 @@ public class LevelManagerScript : BaseBehaviour
             data.waves[currentWave].message = null;
         }
 
-        spawnCount = Mathf.RoundToInt(((float)data.waves[currentWave].budget / (float)data.waves[currentWave].getEnemyData().spawnCost));
-        waveTotalRemainingHealth = spawnCount * data.waves[currentWave].getEnemyData().maxHealth;
+        if (data.waves[currentWave].forcedSpawnCount > 0)
+            spawnCount = data.waves[currentWave].forcedSpawnCount;
+        else
+            spawnCount = Mathf.RoundToInt(((float)data.waves[currentWave].budget / (float)data.waves[currentWave].enemyData.spawnCost));
+
+        waveTotalRemainingHealth = spawnCount * data.waves[currentWave].enemyData.maxHealth;
     }
 }

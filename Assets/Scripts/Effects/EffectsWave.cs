@@ -77,3 +77,58 @@ public class EffectTimePercentageChange : IEffectWave
         return currentWaveData;
     }
 }
+
+//forces the wave to spawn with exactly X enemies
+public class EffectFixedSpawnCount : IEffectWave
+{
+    [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
+    [Hide] public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
+    [Show, Display(2)] public float strength { get; set; }                             //enemy count
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
+
+    [Hide] public string Name //returns name and strength
+    {
+        get
+        {
+            if (strength == 1)
+                return "Wave always spawns exactly 1 enemy";
+            else
+                return "Wave always spawns exactly " + strength + " enemies";
+        }
+    }
+
+    [Show] public string XMLName { get { return "fixedSpawnCount"; } } //name used to refer to this effect in XML
+
+    public WaveData alteredWaveData(WaveData currentWaveData)
+    {
+        WaveData newData = currentWaveData;
+        newData.forcedSpawnCount = Mathf.RoundToInt(strength);
+        return newData;
+    }
+}
+
+//enemy health increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
+public class EffectHealthIncreasesWithBudget : IEffectWave
+{
+    [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
+    [Hide] public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
+    [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
+
+    [Hide] public string Name //returns name and strength
+    {
+        get
+        {
+            return "enemy health increases on tougher waves";
+        }
+    }
+
+    [Show] public string XMLName { get { return "healthIncreasesWithBudget"; } } //name used to refer to this effect in XML
+
+    public WaveData alteredWaveData(WaveData currentWaveData)
+    {
+        WaveData newData = currentWaveData;
+        newData.enemyData.maxHealth = Mathf.RoundToInt((((float)newData.budget) / ((float)newData.enemyData.spawnCost)) * newData.enemyData.maxHealth);
+        return newData;
+    }
+}
