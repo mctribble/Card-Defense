@@ -36,6 +36,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "drawCard":                  ie = new EffectDrawCard(); break;
             case "fixedSpawnCount":           ie = new EffectFixedSpawnCount(); break;
             case "healthIncreasesWithBudget": ie = new EffectHealthIncreasesWithBudget(); break;
+            case "regeneration":              ie = new EffectRegeneration(); break;
             case "reduceEnemyEffectOnDamage": ie = new EffectReduceEnemyEffectOnDamage(); break;
             case "returnsToTopOfDeck":        ie = new EffectReturnsToTopOfDeck(); break;
             case "shuffle":                   ie = new EffectShuffle(); break;

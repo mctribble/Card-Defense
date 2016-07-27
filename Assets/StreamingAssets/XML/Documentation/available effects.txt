@@ -14,6 +14,7 @@ drawCard                  | player draws X cards
 fixedSpawnCount           | waves of this enemy type always spawn exactly this many enemies.  best when used with stat scaling effects
 healthIncreasesWithBudget | enemy health scales up with wave budget
 reduceEnemyEffectOnDamage | hit enemies have the strength of effect Y reduced by X
+regeneration			  | enemy recovers X health per second
 returnsToTopOfDeck        | this card returns to the top of the deck when played
 shuffle                   | shuffles the deck
 targetAll                 | tower targets all enemies in range

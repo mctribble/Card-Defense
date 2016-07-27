@@ -94,6 +94,7 @@ public enum EffectType
     enemyDamaged     = unchecked((int)0x008000FF), //effect triggers when an enemy is damaged.  Could be attached to the attacking tower or the defending enemy
     enemyReachedGoal = unchecked((int)0x111111FF), //effect triggers when an enemy reaches their goal
     instant          = unchecked((int)0x00FFFFFF), //effect triggers instantly without the need for a target
+    periodic         = unchecked((int)0x333333FF), //effect triggers on every update() call
     self             = unchecked((int)0x0000A0FF), //effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
     towerTargeting   = unchecked((int)0xADD8E6FF), //effect alters the way a tower taragets enemies.  if multiple are present, only the last is actually used
     wave             = unchecked((int)0x0000FFFF)  //effect alters the current wave
@@ -151,4 +152,10 @@ public interface IEffectEnemyReachedGoal : IEffect
 public interface IEffectTowerTargeting : IEffect
 {
     List<GameObject> findTargets(Vector2 towerPosition, float towerRange);
+}
+
+//effect triggers on every update
+public interface IEffectPeriodic : IEffect
+{
+    void UpdateEnemy(EnemyScript e, float deltaTime);
 }

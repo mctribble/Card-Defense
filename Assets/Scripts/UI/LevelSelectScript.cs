@@ -11,6 +11,7 @@ public class LevelSelectScript : BaseBehaviour
     public string       levelDir;         //directory levels are stored in
     public string       modLevelDir;      //directory mod levels are stored in
     public GameObject   buttonPrefab;     //prefab used to create buttons
+    public GameObject   menuRoot;         //object to be destroyed when the menu is no longer needed
 
     //colors to be used on various types of buttons
     public Color        menuButtonColor;  //misc. menu buttons such as back, quit, etc.
@@ -156,7 +157,7 @@ public class LevelSelectScript : BaseBehaviour
         DeckManagerScript.instance.SendMessage("SetDeck", deck); //send deck manager the chosen deck
         DeckManagerScript.instance.Shuffle(); //always shuffle the deck, regardless of what the level file says, if the deck did not come from the level file
         LevelManagerScript.instance.SendMessage("loadLevel", chosenLevelFile.FullName); //load the previously chosen level
-        Destroy(gameObject); //we are done with this menu.  Destroy it.
+        Destroy(menuRoot); //we are done with this menu.  Destroy it.
     }
 
     //callback from text buttons
@@ -170,7 +171,7 @@ public class LevelSelectScript : BaseBehaviour
             case "Default Level Deck":
                 //player wants to use the predefined deck for this level.  Load the level immediately and then let the level manager load the deck for us
                 LevelManagerScript.instance.SendMessage("loadLevel", chosenLevelFile.FullName);
-                Destroy(gameObject); //we are done with this menu.  Destroy it.
+                Destroy(menuRoot); //we are done with this menu.  Destroy it.
                 break;
             case "Quit":
                 //player wants to quit.

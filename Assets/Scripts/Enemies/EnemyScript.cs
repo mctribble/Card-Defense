@@ -81,6 +81,12 @@ public class EnemyScript : BaseBehaviour
     // LateUpdate is called once per frame, after other objects have done a regular Update().  We use LateUpdate to make sure bullets get to move first this frame.
     private void LateUpdate()
     {
+        //tick periodic effects
+        if (effectData != null)
+            foreach (IEffect e in effectData.effects)
+                if (e.effectType == EffectType.periodic)
+                    ((IEffectPeriodic)e).UpdateEnemy(this, Time.deltaTime);
+
         Vector2 curLocation = transform.position; //fetch current location
         Vector2 newLocation = Vector2.MoveTowards (curLocation, path[currentDestination], unitSpeed * Time.deltaTime); //calculate new location
 

@@ -13,12 +13,15 @@
     <Wave type="Swarm"    budget="9999" time="30" />
     <Wave type="Standard" budget="9999" time="30" />
     <Wave type="Tank"     budget="9999" time="30" />
+    <Wave type="Regenerative Tank"     budget="9999" time="30" />
     <Wave type="Swarm"    budget="9999" time="20" />
     <Wave type="Standard" budget="9999" time="20" />
     <Wave type="Tank"     budget="9999" time="20" />
+    <Wave type="Regenerative Tank"     budget="9999" time="30" />
     <Wave type="Swarm"    budget="9999" time="10" />
     <Wave type="Standard" budget="9999" time="10" />
     <Wave type="Tank"     budget="9999" time="10" />
+    <Wave type="Regenerative Tank"     budget="9999" time="30" />
   </Waves>
   <!--	positions at which the enemies can spawnS -->
   <Spawners>

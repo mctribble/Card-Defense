@@ -25,5 +25,13 @@
         </Effects>
       </effectData>
     </Enemy>
+    <Enemy name="Regenerative Tank" spawnCost="150" attack="4" maxHealth="400" unitSpeed="1" sprite="Enemy_Basic">
+      <unitColor r="0.3" g="0.3" b="1" a="1" />
+      <effectData>
+        <Effects>
+          <Effect name="regeneration" strength="40"/>
+        </Effects>
+      </effectData>
+    </Enemy>
   </Enemies>
 </EnemyTypes>
