@@ -42,5 +42,6 @@ public class EffectRegeneration : IEffectPeriodic
         //heal
         e.curHealth += healThisFrame;
         e.expectedHealth += healThisFrame;
+        LevelManagerScript.instance.WaveTotalRemainingHealth += healThisFrame;
     }
 }
