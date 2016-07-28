@@ -71,6 +71,16 @@ public class XMLDeck
         //all tests passed.  deck is valid.
         return true;
     }
+
+    //returns whether or not this deck contains modded cards
+    public bool isModded()
+    {
+        foreach (XMLDeckEntry entry in contents)
+            if (CardTypeManagerScript.instance.getCardByName(entry.name).isModded == true)
+                return true;
+
+        return false;
+    }
 };
 
 //maintains the collection of card types, including saving/loading to XML

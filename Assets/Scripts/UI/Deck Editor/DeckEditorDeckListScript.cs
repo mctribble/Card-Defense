@@ -17,6 +17,7 @@ public class DeckEditorDeckListScript : BaseBehaviour
 {
     public GameObject buttonPrefab; //used to instantiate deck buttons
     public Color defaultColor;   //normal button color
+    public Color moddedColor;    //color of button for modded decks
     public Color highlightColor; //color of highlighted button
     public Color menuColor;      //color of menu buttons
 
@@ -45,10 +46,15 @@ public class DeckEditorDeckListScript : BaseBehaviour
             GameObject xButton = Instantiate(buttonPrefab);
             xButton.SendMessage("setDeck", xDeck);
 
+            //set button color
+            Color targetColor;
             if (xDeck == highlightDeck)
-                xButton.SendMessage("setColor", highlightColor);
+                targetColor = highlightColor;
             else
-                xButton.SendMessage("setColor", defaultColor);
+                targetColor = defaultColor;
+            if (xDeck.isModded())
+                targetColor = Color.Lerp(targetColor, moddedColor, 0.5f);
+            xButton.SendMessage("setColor", targetColor);
 
             xButton.transform.SetParent(this.transform, false);
             buttons.Add(xButton);
