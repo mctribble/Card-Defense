@@ -51,6 +51,10 @@ public class UpgradeData : System.Object
 [System.Serializable]
 public class CardData : System.Object
 {
+    //set by card type manager to indicate if this card game from a base game file or a mod file
+    [XmlIgnore]
+    public bool isModded;
+
     //card data
     [XmlAttribute("Type")] public CardType cardType; //determines aspects of how the card should behave and the meaning of other values.  See enum dec for more info
 

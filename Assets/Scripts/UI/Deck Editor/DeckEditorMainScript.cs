@@ -12,6 +12,9 @@ public class DeckEditorFilter
     public enum SortingRule { name, charges, type };
     public SortingRule sortBy; //how to sort the lists
 
+    public bool baseCards;
+    public bool moddedCards;
+
     //returns true if the card matches the filter
     public bool match(CardData c)
     {
@@ -23,6 +26,14 @@ public class DeckEditorFilter
 
         if (type != null)
             if (c.cardType != type)
+                return false;
+
+        if (baseCards == false)
+            if (c.isModded == false)
+                return false;
+
+        if (moddedCards == false)
+            if (c.isModded == true)
                 return false;
 
         return true;
@@ -132,6 +143,8 @@ public class DeckEditorMainScript : BaseBehaviour
         filter.searchString = null;
         filter.type = null;
         filter.sortBy = DeckEditorFilter.SortingRule.name;
+        filter.baseCards = true;
+        filter.moddedCards = true;
 
         BroadcastMessage("filterChanged", filter); //report the new filter settings to children
         BroadcastMessage("refresh", openDeck);     //update interfaces
@@ -283,6 +296,10 @@ public class DeckEditorMainScript : BaseBehaviour
         BroadcastMessage("filterChanged", filter); //report the new filter settings to children
         BroadcastMessage("refresh", openDeck);     //update interfaces
     }
+
+    //called when filter check boxes change
+    public void filterToggleBaseChanged(bool newSetting) { filter.baseCards   = newSetting; BroadcastMessage("filterChanged", filter); BroadcastMessage("refresh", openDeck); }
+    public void filterToggleModChanged (bool newSetting) { filter.moddedCards = newSetting; BroadcastMessage("filterChanged", filter); BroadcastMessage("refresh", openDeck); }
 
     //saves the deck collection, if there are unsaved changes
     private void saveChanges()

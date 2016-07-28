@@ -56,7 +56,11 @@ public class CardTypeManagerScript : BaseBehaviour
     private void Awake()
     {
         instance = this;
+
+        //load base game cards
         types = CardTypeCollection.Load(Path.Combine(Application.dataPath, path));
+        foreach (CardData baseCard in types.cardTypes)
+            baseCard.isModded = false; //flag base game cards as being from the base game
 
         //integrate mod files
         CardTypeCollection modTypes;                                                                //temp storage of mod cards
@@ -68,6 +72,8 @@ public class CardTypeManagerScript : BaseBehaviour
             modTypes = CardTypeCollection.Load(f.FullName); //load file
             foreach (CardData moddedCard in modTypes.cardTypes)
             {
+                moddedCard.isModded = true; //flag it as from a mod
+
                 //find the existing version of this card
                 CardData existingCard = null;
                 foreach (CardData baseCard in types.cardTypes)
