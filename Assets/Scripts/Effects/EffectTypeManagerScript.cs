@@ -25,28 +25,40 @@ public class EffectTypeManagerScript : BaseBehaviour
         IEffect ie;
         switch (xe.name)
         {
-            case "addCharges":                ie = new EffectAddCharges(); break;
-            case "allTowersLifespanBonus":    ie = new EffectAllTowersLifespanBonus(); break;
+            //<<Enemy Effects (Periodic)>>
+            case "regeneration":              ie = new EffectRegeneration(); break;
+
+            //<<Enemy Effects (Stat Scaling)>>
+            case "fixedSpawnCount":           ie = new EffectFixedSpawnCount(); break;
+            case "invScaleAttackWithHealth":  ie = new EffectinvScaleAttackWithHealth(); break;
+            case "scaleHealthWithBudget":     ie = new EffectscaleHealthWithBudget(); break;
+
+            //<<Trigger on enemy damaged (On tower: trigger when attacking.  On Enemy type: trigger when attacked)>>
             case "armor":                     ie = new EffectArmor(); break;
+            case "reduceEnemyEffectOnDamage": ie = new EffectReduceEnemyEffectOnDamage(); break;
+
+            //<<Wave effects (On Enemy type: trigger on wave creation.  On card: trigger when played)>>
             case "budgetPercentageChange":    ie = new EffectBudgetPercentageChange(); break;
             case "changeWaveType":            ie = new EffectChangeWaveType(); break;
+            case "timePercentageChange":      ie = new EffectTimePercentageChange(); break;
+
+            //<<Trigger on card played>>
+            case "addCharges":                ie = new EffectAddCharges(); break;
+            case "allTowersLifespanBonus":    ie = new EffectAllTowersLifespanBonus(); break;
             case "damagePlayer":              ie = new EffectDamagePlayer(); break;
             case "discardRandomCard":         ie = new EffectDiscardRandom(); break;
             case "drawCard":                  ie = new EffectDrawCard(); break;
-            case "fixedSpawnCount":           ie = new EffectFixedSpawnCount(); break;
-            case "invScaleAttackWithHealth":  ie = new EffectinvScaleAttackWithHealth(); break;
-            case "regeneration":              ie = new EffectRegeneration(); break;
-            case "reduceEnemyEffectOnDamage": ie = new EffectReduceEnemyEffectOnDamage(); break;
             case "returnsToTopOfDeck":        ie = new EffectReturnsToTopOfDeck(); break;
-            case "scaleHealthWithBudget":     ie = new EffectscaleHealthWithBudget(); break;
             case "shuffle":                   ie = new EffectShuffle(); break;
+
+            //<<Targeting effects (Determines tower targeting behavior)>>
             case "targetAll":                 ie = new EffectTargetAll(); break;
             case "targetArmor":               ie = new EffectTargetArmor(); break;
             case "targetHealth":              ie = new EffectTargetHealth(); break;
             case "targetMultishot":           ie = new EffectTargetMultishot(); break;
             case "targetRandom":              ie = new EffectTargetRandom(); break;
             case "targetSpeed":               ie = new EffectTargetSpeed(); break;
-            case "timePercentageChange":      ie = new EffectTimePercentageChange(); break;
+
             default:                          Debug.LogWarning("Effect type " + xe.name + " is not implemented."); return null;
         }
         ie.strength = xe.strength;
