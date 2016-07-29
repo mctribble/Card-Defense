@@ -9,6 +9,7 @@ regeneration | enemy recovers X health per second
 fixedSpawnCount           | waves of this enemy type always spawn exactly this many enemies.  Best when used with budget scaling effects
 invScaleAttackWithHealth  | monster deals less and less damage as it gets injured
 scaleAttackhWithBudget    | enemy attack scales up with wave budget
+scaleAttackWithHealth     | monster deals more and more damage as it gets injured
 scaleEffectWithBudget     | enemy effect scales up with wave budget (scales effect Y)
 scaleHealthWithBudget     | enemy health scales up with wave budget
 scaleSpeedWithBudget      | enemy speed  scales up with wave budget
