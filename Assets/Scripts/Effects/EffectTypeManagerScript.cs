@@ -31,7 +31,10 @@ public class EffectTypeManagerScript : BaseBehaviour
             //<<Enemy Effects (Stat Scaling)>>
             case "fixedSpawnCount":           ie = new EffectFixedSpawnCount(); break;
             case "invScaleAttackWithHealth":  ie = new EffectinvScaleAttackWithHealth(); break;
+            case "scaleAttackhWithBudget":    ie = new EffectscaleAttackWithBudget(); break;
+            case "scaleEffectWithBudget":     ie = new EffectscaleEffectWithBudget(); break;
             case "scaleHealthWithBudget":     ie = new EffectscaleHealthWithBudget(); break;
+            case "scaleSpeedWithBudget":      ie = new EffectscaleSpeedWithBudget(); break;
 
             //<<Trigger on enemy damaged (On tower: trigger when attacking.  On Enemy type: trigger when attacked)>>
             case "armor":                     ie = new EffectArmor(); break;

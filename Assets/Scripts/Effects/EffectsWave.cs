@@ -107,6 +107,62 @@ public class EffectFixedSpawnCount : IEffectWave
     }
 }
 
+//enemy Attack increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
+public class EffectscaleAttackWithBudget : IEffectWave
+{
+    [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
+    [Hide] public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
+    [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
+
+    [Hide] public string Name //returns name and strength
+    {
+        get
+        {
+            return "enemy attack increases on tougher waves";
+        }
+    }
+
+    [Show] public string XMLName { get { return "scaleAttackWithBudget"; } } //name used to refer to this effect in XML
+
+    public WaveData alteredWaveData(WaveData currentWaveData)
+    {
+        WaveData newData = currentWaveData;
+        newData.enemyData.attack = Mathf.RoundToInt((((float)newData.budget) / ((float)newData.enemyData.spawnCost)) * newData.enemyData.attack);
+        return newData;
+    }
+}
+
+//enemy health increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
+public class EffectscaleEffectWithBudget : IEffectWave
+{
+    [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
+    [Hide] public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
+    [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
+    [Show, Display(2)] public string argument { get; set; }                            //effect argument (effect to be scaled up)
+
+    [Hide] public string Name //returns name and strength
+    {
+        get
+        {
+            return "enemy " + argument + " increases on tougher waves";
+        }
+    }
+
+    [Show, Display(1)] public string XMLName { get { return "scaleEffectWithBudget"; } } //name used to refer to this effect in XML
+
+    public WaveData alteredWaveData(WaveData currentWaveData)
+    {
+        WaveData newData = currentWaveData;
+
+        foreach (IEffect e in newData.enemyData.effectData.effects)
+            if (e.Name == argument)
+                e.strength = Mathf.RoundToInt((((float)newData.budget) / ((float)newData.enemyData.spawnCost)) * e.strength);
+
+        return newData;
+    }
+}
+
 //enemy health increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
 public class EffectscaleHealthWithBudget : IEffectWave
 {
@@ -129,6 +185,32 @@ public class EffectscaleHealthWithBudget : IEffectWave
     {
         WaveData newData = currentWaveData;
         newData.enemyData.maxHealth = Mathf.RoundToInt((((float)newData.budget) / ((float)newData.enemyData.spawnCost)) * newData.enemyData.maxHealth);
+        return newData;
+    }
+}
+
+//enemy health increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
+public class EffectscaleSpeedWithBudget : IEffectWave
+{
+    [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
+    [Hide] public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
+    [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
+
+    [Hide] public string Name //returns name and strength
+    {
+        get
+        {
+            return "enemy speed increases on tougher waves";
+        }
+    }
+
+    [Show] public string XMLName { get { return "scaleSpeedWithBudget"; } } //name used to refer to this effect in XML
+
+    public WaveData alteredWaveData(WaveData currentWaveData)
+    {
+        WaveData newData = currentWaveData;
+        newData.enemyData.unitSpeed = Mathf.RoundToInt((((float)newData.budget) / ((float)newData.enemyData.spawnCost)) * newData.enemyData.unitSpeed);
         return newData;
     }
 }
