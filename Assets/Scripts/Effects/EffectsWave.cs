@@ -108,7 +108,7 @@ public class EffectFixedSpawnCount : IEffectWave
 }
 
 //enemy health increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
-public class EffectHealthIncreasesWithBudget : IEffectWave
+public class EffectscaleHealthWithBudget : IEffectWave
 {
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
     [Hide] public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
@@ -123,7 +123,7 @@ public class EffectHealthIncreasesWithBudget : IEffectWave
         }
     }
 
-    [Show] public string XMLName { get { return "healthIncreasesWithBudget"; } } //name used to refer to this effect in XML
+    [Show] public string XMLName { get { return "scaleHealthWithBudget"; } } //name used to refer to this effect in XML
 
     public WaveData alteredWaveData(WaveData currentWaveData)
     {

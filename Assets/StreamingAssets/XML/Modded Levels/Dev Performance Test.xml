@@ -10,17 +10,18 @@
 		time: how many seconds the enemies spawn for.  Shorter time spans result in more densely packed groups.
 		message: optional message that appears at the start of the wave-->
   <Waves>
-    <Wave type="Swarm"    budget="9999" time="30" />
-    <Wave type="Standard" budget="9999" time="30" />
-    <Wave type="Tank"     budget="9999" time="30" />
+    <Wave type="Swarm"                 budget="9999" time="30" />
+    <Wave type="Standard"              budget="9999" time="30" />
+    <Wave type="Tank"                  budget="9999" time="30" />
     <Wave type="Regenerative Tank"     budget="9999" time="30" />
-    <Wave type="Swarm"    budget="9999" time="20" />
-    <Wave type="Standard" budget="9999" time="20" />
-    <Wave type="Tank"     budget="9999" time="20" />
+    <Wave type="Giant"                 budget="9999" time="1" />
+    <Wave type="Swarm"                 budget="9999" time="20" />
+    <Wave type="Standard"              budget="9999" time="20" />
+    <Wave type="Tank"                  budget="9999" time="20" />
     <Wave type="Regenerative Tank"     budget="9999" time="30" />
-    <Wave type="Swarm"    budget="9999" time="10" />
-    <Wave type="Standard" budget="9999" time="10" />
-    <Wave type="Tank"     budget="9999" time="10" />
+    <Wave type="Swarm"                 budget="9999" time="10" />
+    <Wave type="Standard"              budget="9999" time="10" />
+    <Wave type="Tank"                  budget="9999" time="10" />
     <Wave type="Regenerative Tank"     budget="9999" time="30" />
   </Waves>
   <!--	positions at which the enemies can spawnS -->

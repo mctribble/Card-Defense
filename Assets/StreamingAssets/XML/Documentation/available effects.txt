@@ -2,20 +2,21 @@
 X is the effect strength
 Y is the effect argument
 
+
 addCharges                | card gains X charges
 allTowersLifespanBonus    | all towers on the map last X waves longer
 armor                     | enemy receives X less damage from every hit, with a minimum of 1 damage
-attackDecreasesWithHealth | monster deals less and less damage as it gets injured
 budgetPercentageChange    | wave budget is increased by X percent
 changeWaveType            | wave type is changed to Y
 damagePlayer              | player takes X damage
 discardRandomCard         | player discards up to X cards chosen at random
 drawCard                  | player draws X cards
 fixedSpawnCount           | waves of this enemy type always spawn exactly this many enemies.  best when used with stat scaling effects
-healthIncreasesWithBudget | enemy health scales up with wave budget
+invScaleAttackWithHealth  | monster deals less and less damage as it gets injured
 reduceEnemyEffectOnDamage | hit enemies have the strength of effect Y reduced by X
 regeneration			  | enemy recovers X health per second
 returnsToTopOfDeck        | this card returns to the top of the deck when played
+scaleHealthWithBudget     | enemy health scales up with wave budget
 shuffle                   | shuffles the deck
 targetAll                 | tower targets all enemies in range
 targetArmor               | tower prioritizes targets with the highest armor

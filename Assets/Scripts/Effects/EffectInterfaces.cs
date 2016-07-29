@@ -42,7 +42,7 @@ public class EffectData : System.Object
     [XmlIgnore] private List<IEffectPeriodic>   cachedPeriodicEffectList;
 
     //list of effect objects
-    [XmlIgnore] public List<IEffect> Effects = new List<IEffect>(); 
+    [XmlIgnore] private List<IEffect> Effects = new List<IEffect>(); 
     [XmlIgnore]
     public ReadOnlyCollection<IEffect> effects
     {

@@ -5,7 +5,7 @@ using System;
 
 //effects in this file take effect when the enemy reaches its goal
 
-public class EffectAttackDecreasesWithHealth: IEffectEnemyReachedGoal
+public class EffectinvScaleAttackWithHealth: IEffectEnemyReachedGoal
 {
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }    //this effect doesnt need a target
     [Hide] public EffectType effectType { get { return EffectType.enemyReachedGoal; } } //effect type
@@ -20,7 +20,7 @@ public class EffectAttackDecreasesWithHealth: IEffectEnemyReachedGoal
         }
     }
 
-    [Show, Display(1)] public string XMLName { get { return "attackDecreasesWithHealth"; } }
+    [Show, Display(1)] public string XMLName { get { return "invScaleAttackWithHealth"; } }
 
     public void trigger(EnemyScript enemy)
     {

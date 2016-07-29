@@ -20,8 +20,8 @@
       <effectData>
         <Effects>
           <Effect name="fixedSpawnCount" strength="1" />
-          <Effect name="healthIncreasesWithBudget" />
-          <Effect name="attackDecreasesWithHealth" />
+          <Effect name="scaleHealthWithBudget" />
+          <Effect name="invScaleAttackWithHealth" />
         </Effects>
       </effectData>
     </Enemy>

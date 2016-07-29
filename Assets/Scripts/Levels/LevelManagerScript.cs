@@ -189,6 +189,13 @@ public class LevelManagerScript : BaseBehaviour
         yield return null;
         yield return null;
 
+        //apply wave effects on predefined waves
+        for( int i = 0; i < data.waves.Count; i++)
+            if (data.waves[i].enemyData.effectData != null)
+                foreach (IEffect e in data.waves[i].enemyData.effectData.effects)
+                    if (e.effectType == EffectType.wave)
+                        data.waves[i] = ((IEffectWave)e).alteredWaveData(data.waves[i]);
+
         //initialize waves
         for (uint i = 0; i < data.randomWaveCount; i++)
         {
