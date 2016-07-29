@@ -50,10 +50,7 @@ public class TowerScript : BaseBehaviour
         //update tooltip position
         if (tooltipText.enabled)
         {
-            //pos
-            tooltipPanel.transform.position = Input.mousePosition;
-
-            //pivot
+            //calculate pivot
             //default: pivot in lower right
             int x = 1;
             int y = 0;
@@ -72,6 +69,22 @@ public class TowerScript : BaseBehaviour
 
             //set pivot
             tooltipPanel.rectTransform.pivot = new Vector2(x, y);
+
+            //calculate position offset
+            Vector3 positionOffset = Vector3.zero;
+
+            if (x == 0)
+                positionOffset.x = 1;
+            else
+                positionOffset.x = -1;
+
+            if (y == 0)
+                positionOffset.y = 1;
+            else
+                positionOffset.y = -1;
+
+            //set pos
+            tooltipPanel.transform.position = Input.mousePosition + positionOffset;
         }
 
         //increase shot charge if the gauge is not already full
@@ -184,11 +197,24 @@ public class TowerScript : BaseBehaviour
         effects = d;
     }
 
+    //adds the new effects to the tower
+    public void AddEffects(EffectData newEffectData)
+    {
+        //make sure we have an effectData object to add to
+        if (effects == null)
+            effects = new EffectData();
+
+        //add the new effects to it
+        foreach (IEffect newEffect in newEffectData.effects)
+            effects.effects.Add(newEffect);
+
+        //update tooltip text
+        UpdateTooltipText();
+    }
+
     //receives upgrade data and uses it to modify the tower
     private void Upgrade(UpgradeData d)
     {
-        //Debug.Log ("Upgrade");
-
         //each stat = oldStat * statMult + statMod.
         rechargeTime    = rechargeTime  * d.rechargeMultiplier  + d.rechargeModifier;
         attackPower     = attackPower   * d.attackMultiplier    + d.attackModifier;
@@ -203,21 +229,6 @@ public class TowerScript : BaseBehaviour
 
         //count the upgrade
         upgradeCount++;
-
-        //update tooltip text
-        UpdateTooltipText();
-    }
-
-    //adds the new effects to the tower
-    public void AddEffects(EffectData newEffectData)
-    {
-        //make sure we have an effectData object to add to
-        if (effects == null)
-            effects = new EffectData();
-
-        //add the new effects to it
-        foreach (IEffect newEffect in newEffectData.effects)
-            effects.effects.Add(newEffect);
 
         //update tooltip text
         UpdateTooltipText();
@@ -321,7 +332,7 @@ public class TowerScript : BaseBehaviour
     private void NewEffectTooltip (EffectData newEffectData)
     {
         foreach (IEffect e in newEffectData.effects)
-            tooltipText.text += "\n<Color=#" + e.effectType.ToString("X") + ">" + e.Name + "</Color>";
+            tooltipText.text += "\n<Color=#" + e.effectType.ToString("X") + ">+" + e.Name + "</Color>";
     }
 
     //called whenever a wave ends.  Updates the lifespan and destroys the tower if it hits zero.
