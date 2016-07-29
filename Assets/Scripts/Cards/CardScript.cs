@@ -296,7 +296,7 @@ public class CardScript : BaseBehaviour
                 c.SendMessage("Hide");
 
         //this card has no target
-        if (card.data.cardType == CardType.spell && card.data.effectData.targetingType == TargetingType.none)
+        if (card.data.cardType == CardType.spell && card.data.effectData.cardTargetingType == TargetingType.none)
         {
             //apply effects
             foreach (IEffect e in card.data.effectData.effects)
@@ -352,7 +352,7 @@ public class CardScript : BaseBehaviour
 
         //if its a spell, tell it what kind of spell it is
         if (card.data.cardType == CardType.spell)
-            tooltipInstance.SendMessage("SetTargetingType", card.data.effectData.targetingType);
+            tooltipInstance.SendMessage("SetTargetingType", card.data.effectData.cardTargetingType);
     }
 
     private void Hide()

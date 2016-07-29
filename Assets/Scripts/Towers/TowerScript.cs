@@ -103,19 +103,17 @@ public class TowerScript : BaseBehaviour
             if (EnemyManagerScript.instance.activeEnemies.Count == 0)
                 break;
 
-            //look for any targeting effects on this tower and use the most recent
+            //get the tower targeting type from effectData.  this uses a helper function for performance reasons
             IEffectTowerTargeting targetingEffect = null;
             if (effects != null)
-                foreach (IEffect e in effects.effects)
-                    if (e.effectType == EffectType.towerTargeting)
-                        targetingEffect = (IEffectTowerTargeting)e;
+                targetingEffect = effects.towerTargetingType;
+            else
+                targetingEffect = EffectTargetDefault.instance; //EffectTargetDefault is a placeholder used when there is no target
+            Debug.Assert(targetingEffect != null); //there must always be a targeting effect
 
             //find the target(s) we are shooting at using the current targeting effect, or the default if there is none
             List<GameObject> targets;
-            if (targetingEffect != null)
-                targets = targetingEffect.findTargets(transform.position, range);
-            else
-                targets = defaultTargeting();
+            targets = targetingEffect.findTargets(transform.position, range);
 
             //call another function to actually fire on each valid target, if there are any
             if ((targets != null) && (targets.Count != 0))
@@ -206,7 +204,7 @@ public class TowerScript : BaseBehaviour
 
         //add the new effects to it
         foreach (IEffect newEffect in newEffectData.effects)
-            effects.effects.Add(newEffect);
+            effects.Add(newEffect);
 
         //update tooltip text
         UpdateTooltipText();
@@ -343,11 +341,5 @@ public class TowerScript : BaseBehaviour
 
         if (wavesRemaining == 0)
             Destroy(gameObject);
-    }
-
-    //placeholder used in case the default targeting behavior changes
-    private List<GameObject> defaultTargeting()
-    {
-        return EnemyManagerScript.instance.enemiesInRange(transform.position, range, 1);
     }
 }

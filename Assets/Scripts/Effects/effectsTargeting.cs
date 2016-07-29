@@ -5,6 +5,39 @@ using Vexe.Runtime.Types;
 
 //all effects in this file trigger when an enemy is damaged.  The effect itself could be attached either to the attacking tower or the defending enemy
 
+//default targeting effect used when no other is found
+public class EffectTargetDefault : IEffectTowerTargeting
+{
+    //generic interface
+    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
+    [Hide] public EffectType effectType { get { return EffectType.towerTargeting; } }  //effect type
+    [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
+    
+    //this effect
+    [Hide] public string Name { get { return "Target: default"; } } //returns name and strength
+    [Show] public string XMLName { get { return "<NO_XML_NAME>"; } } //name used to refer to this effect in XML.  This should never happen for this effect since it is a placeholder
+
+    public List<GameObject> findTargets(Vector2 towerPosition, float towerRange)
+    {
+        return EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange, 1);
+    }
+
+    //this effect is a singleton since it is only a placeholder for the absence of other targeting effects
+    private static EffectTargetDefault m_instance;
+    public static EffectTargetDefault instance
+    {
+        get
+        {
+            if (m_instance == null)
+                m_instance = new EffectTargetDefault();
+
+            return m_instance;
+        }
+    }
+    private EffectTargetDefault() { }
+}
+
 //targets enemy in range with the highest armor, breaking ties by proximity to goal
 public class EffectTargetArmor : IEffectTowerTargeting
 {
@@ -27,7 +60,7 @@ public class EffectTargetArmor : IEffectTowerTargeting
         GameObject target = null;
         foreach (GameObject curEnemy in enemiesInRange)
         {
-            //fetch enemy armor value
+            //fetch enemy armor value.  uses a helper function for performance
             float curArmor = 0;
             EffectData curEnemyEffects = curEnemy.GetComponent<EnemyScript>().effectData;
             if (curEnemyEffects != null)

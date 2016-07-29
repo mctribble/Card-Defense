@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Xml.Serialization;
 using UnityEngine;
 using Vexe.Runtime.Types;
@@ -34,23 +35,106 @@ public class EffectData : System.Object
         set { }
     }
 
-    [XmlIgnore] public List<IEffect> effects = new List<IEffect>(); //list of effect objects
+    //cached values for utility functions
+    //the '?' on some of these is shorthand for Nullable<T> (https://msdn.microsoft.com/en-us/library/1t3y8s4s.aspx)
+    [XmlIgnore] private TargetingType?          cachedCardTargetingType; 
+    [XmlIgnore] private IEffectTowerTargeting   cachedTowerTargetingType;
+    [XmlIgnore] private List<IEffectPeriodic>   cachedPeriodicEffectList;
 
+    //list of effect objects
+    [XmlIgnore] public List<IEffect> Effects = new List<IEffect>(); 
     [XmlIgnore]
-    public TargetingType targetingType
+    public ReadOnlyCollection<IEffect> effects
     {
         get
         {
-            if (effects.Count == 0) parseEffects(); //make sure we have actual code references to the effects
+            if (Effects.Count == 0 && XMLEffects.Count > 0)
+                parseEffects();
+
+            return Effects.AsReadOnly();
+        }
+    }
+
+    //adds the given effect to the list, clearing cached values so that future calls return correctly
+    public void Add(IEffect e)
+    {
+        Effects.Add(e);
+        resetCachedValues();
+    }
+
+    //resets cached results so they will be recalculated if something asks for them
+    private void resetCachedValues()
+    {
+        cachedCardTargetingType = null;
+        cachedTowerTargetingType = null;
+        cachedPeriodicEffectList = null;
+    }
+
+    //helper function that returns how the card containing these effects must be used.
+    //the result is cached since it is needed regularly but changes rarely
+    [XmlIgnore]
+    public TargetingType cardTargetingType
+    {
+        get
+        {
+            if (cachedCardTargetingType != null)
+                return cachedCardTargetingType.Value;
+
+            if (Effects.Count == 0) parseEffects(); //make sure we have actual code references to the effects
 
             //return the target type of the first effect that requires a target.  no card can have effects that target two different types of things
-            foreach (IEffect e in effects)
+            foreach (IEffect e in Effects)
             {
                 if (e.targetingType != TargetingType.none)
+                {
+                    cachedCardTargetingType = e.targetingType;
                     return e.targetingType;
+                }
             }
+
+            cachedCardTargetingType = TargetingType.none;
             return TargetingType.none; //if no effect needs a target, return none
         }
+    }
+
+    //helper function that returns the targeting effect currently in use by the tower
+    //the result is cached since it is needed regularly but changes rarely
+    [XmlIgnore]
+    public IEffectTowerTargeting towerTargetingType
+    {
+        get
+        {
+            if (cachedTowerTargetingType != null)
+                return cachedTowerTargetingType;
+
+            IEffectTowerTargeting res = null;
+
+            foreach (IEffect e in Effects)
+                if (e.effectType == EffectType.towerTargeting)
+                    res = (IEffectTowerTargeting)e;
+
+            if (res == null)
+                res = EffectTargetDefault.instance;
+
+            cachedTowerTargetingType = res;
+            return res;
+        }
+    }
+
+    //helper function that updates all periodic effects on an enemy
+    //the list of periodic effects is cached since it is used every frame but changes very rarely
+    public void triggerAllPeriodicEnemy (EnemyScript enemy, float deltaTime)
+    {
+        if (cachedPeriodicEffectList == null)
+        {
+            cachedPeriodicEffectList = new List<IEffectPeriodic>();
+            foreach (IEffect e in Effects)
+                if (e.effectType == EffectType.periodic)
+                    cachedPeriodicEffectList.Add((IEffectPeriodic)e);
+        }
+
+        foreach (IEffectPeriodic e in cachedPeriodicEffectList)
+            e.UpdateEnemy(enemy, deltaTime);
     }
 
     //translates the XMLeffects into code references
@@ -60,7 +144,7 @@ public class EffectData : System.Object
         {
             IEffect ie = EffectTypeManagerScript.instance.parse(xe);
             if (ie != null)
-                effects.Add(ie);
+                Effects.Add(ie);
         }
     }
 
