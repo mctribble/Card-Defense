@@ -63,7 +63,7 @@ public class EnemyManagerScript : BaseBehaviour
         List<GameObject> targetList = new List<GameObject>();
 
         //search loop: finds the valid target that is closest to its goal.  Valid targets must be...
-        for (int e = 0; (e < activeEnemies.Count) && (targetList.Count <= max); e++) //active enemies... (also: stop searching if we hit the max)
+        for (int e = 0; (e < activeEnemies.Count) && (targetList.Count < max); e++) //active enemies... (also: stop searching if we hit the max)
         {
             if (activeEnemies[e].GetComponent<EnemyScript>().expectedHealth > 0) //that are not expecting to die... (enemies that expect to die are supposed to be inactive anyway, but sometimes the list takes a frame or two to catch up)
             {
