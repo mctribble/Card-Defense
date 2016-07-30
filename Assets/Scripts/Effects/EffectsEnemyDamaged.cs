@@ -56,3 +56,29 @@ public class EffectReduceEnemyEffectOnDamage : IEffectEnemyDamaged
                     e.strength = Mathf.Max(0, e.strength - strength);
     }
 }
+
+//enemy speeds up as it takes damage
+public class EffectscaleSpeedWithDamage : IEffectEnemyDamaged
+{
+    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
+    [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
+    [Show, Display(2)] public float strength { get; set; }                             //how much to reduce the target effect strength (but stops at 0)
+    [Hide] public string argument { get; set; }                            //effect to reduce
+
+    [Hide] public string Name { get { return "Enemy gets up to " + argument + " times faster as it takes damage"; } } //returns name and strength
+
+    [Show, Display(1)] public string XMLName { get { return "scaleSpeedWithDamage"; } } //name used to refer to this effect in XML
+
+    //we dont need to do anything on expected damage
+    public void expectedDamage(ref DamageEventData d)
+    {
+    } 
+
+    //recalculate speed
+    public void actualDamage(ref DamageEventData d)
+    {
+        EnemyScript e = d.dest.GetComponent<EnemyScript>();
+        float damageRatio = 1 - (e.curHealth / e.maxHealth);
+        e.unitSpeed = e.baseUnitSpeed + (damageRatio * (strength - 1));
+    }
+}

@@ -7,12 +7,13 @@ regeneration | enemy recovers X health per second
 
 <<Enemy Effects (Stat Scaling)>>
 fixedSpawnCount           | waves of this enemy type always spawn exactly this many enemies.  Best when used with budget scaling effects
-invScaleAttackWithHealth  | monster deals less and less damage as it gets injured
+invScaleAttackWithHealth  | monster deals less damage as it gets injured
 scaleAttackhWithBudget    | enemy attack scales up with wave budget
-scaleAttackWithHealth     | monster deals more and more damage as it gets injured
+scaleAttackWithHealth     | monster deals more damage as it gets injured
 scaleEffectWithBudget     | enemy effect scales up with wave budget (scales effect Y)
 scaleHealthWithBudget     | enemy health scales up with wave budget
 scaleSpeedWithBudget      | enemy speed  scales up with wave budget
+scaleSpeedWithDamage      | enemy gets faster as it takes damage (max speed: base * X)
 
 <<Trigger on enemy damaged (On tower: trigger when attacking.  On Enemy type: trigger when attacked)>>
 armor                     | enemy receives X less damage from every hit, with a minimum of 1 damage

@@ -60,7 +60,8 @@ public class EnemyScript : BaseBehaviour
 
     //enemy data
     public int        damage;        
-    public int        maxHealth;     
+    public int        maxHealth;
+    public float      baseUnitSpeed;    
     public float      unitSpeed; 
     public EffectData effectData;
 
@@ -191,6 +192,7 @@ public class EnemyScript : BaseBehaviour
         curHealth      = d.maxHealth;
         expectedHealth = d.maxHealth;
         unitSpeed      = d.unitSpeed;
+        baseUnitSpeed  = d.unitSpeed;
 
         if (d.effectData != null)
             effectData = d.effectData.clone();
