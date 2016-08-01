@@ -107,15 +107,17 @@ public class EffectscaleEffectWithDamage : IEffectEnemyDamaged
     //recalculate speed
     public void actualDamage(ref DamageEventData d)
     {
+        EnemyScript e = d.dest.GetComponent<EnemyScript>();
+
         //on first hit, cache references
         if (effectToScale == null)
         {
-            foreach (IEffect e in d.dest.GetComponent<EnemyScript>().effectData.effects)
+            foreach (IEffect effect in e.effectData.effects)
             {
-                if (e.Name == argument)
+                if (effect.Name == argument)
                 {
-                    effectToScale = e;
-                    effectBaseStrength = e.strength;
+                    effectToScale = effect;
+                    effectBaseStrength = effect.strength;
                     break;
                 }
             }
