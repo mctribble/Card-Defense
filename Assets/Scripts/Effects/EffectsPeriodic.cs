@@ -47,7 +47,7 @@ public class EffectRegeneration : IEffectPeriodic
 }
 
 //enemy speeds up by X/second
-public class EffectScaleSpeedWithTime : IEffectPeriodic
+public class EffectscaleSpeedWithTime : IEffectPeriodic
 {
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.periodic; } }        //effect type
@@ -61,5 +61,37 @@ public class EffectScaleSpeedWithTime : IEffectPeriodic
     public void UpdateEnemy(EnemyScript e, float deltaTime)
     {
         e.unitSpeed += (strength * deltaTime);
+    }
+}
+
+//enemy effect Y gets stronger by X/second
+public class EffectscaleEffectWithTime : IEffectPeriodic
+{
+    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
+    [Hide] public EffectType effectType { get { return EffectType.periodic; } }        //effect type
+    [Show, Display(2)] public float strength { get; set; }                             //how much speed is gained per second
+    [Show, Display(3)] public string argument { get; set; }                            //effect to scale
+    
+    [Hide] public string Name { get { return argument + " increases by " + strength + "/s"; } } //returns name and strength
+    
+    [Show, Display(1)] public string XMLName { get { return "scaleEffectWithTime"; } } //name used to refer to this effect in XML
+
+    private IEffect effectToScale; //cached effect to avoid searching the list every frame
+
+    public void UpdateEnemy(EnemyScript e, float deltaTime)
+    {
+        if (effectToScale == null)
+        {
+            foreach (IEffect effect in e.effectData.effects)
+            {
+                if (effect.XMLName == argument)
+                {
+                    effectToScale = effect;
+                    break;
+                }
+            }
+        }
+
+        effectToScale.strength += (strength * deltaTime);
     }
 }
