@@ -15,6 +15,7 @@ scaleEffectWithBudget     | enemy effect scales up with wave budget (scales effe
 scaleHealthWithBudget     | enemy health scales up with wave budget
 scaleSpeedWithBudget      | enemy speed  scales up with wave budget
 scaleSpeedWithDamage      | enemy gets faster as it takes damage (max speed: base * X)
+scaleSpeedWithTime        | enemey gets faster by X/s
 
 <<Trigger on enemy damaged (On tower: trigger when attacking.  On Enemy type: trigger when attacked)>>
 armor                     | enemy receives X less damage from every hit, with a minimum of 1 damage

@@ -37,6 +37,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "scaleHealthWithBudget":     ie = new EffectscaleHealthWithBudget(); break;
             case "scaleSpeedWithBudget":      ie = new EffectscaleSpeedWithBudget(); break;
             case "scaleSpeedWithDamage":      ie = new EffectscaleSpeedWithDamage(); break;
+            case "scaleSpeedWithTime":        ie = new EffectScaleSpeedWithTime(); break;
 
             //<<Trigger on enemy damaged (On tower: trigger when attacking.  On Enemy type: trigger when attacked)>>
             case "armor":                     ie = new EffectArmor(); break;

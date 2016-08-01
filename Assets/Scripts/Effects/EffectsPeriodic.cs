@@ -45,3 +45,21 @@ public class EffectRegeneration : IEffectPeriodic
         LevelManagerScript.instance.WaveTotalRemainingHealth += healThisFrame;
     }
 }
+
+//enemy speeds up by X/second
+public class EffectScaleSpeedWithTime : IEffectPeriodic
+{
+    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
+    [Hide] public EffectType effectType { get { return EffectType.periodic; } }        //effect type
+    [Show, Display(2)] public float strength { get; set; }                             //how much speed is gained per second
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
+
+    [Hide] public string Name { get { return "Speed increases by " + strength + "/s"; } } //returns name and strength
+
+    [Show, Display(1)] public string XMLName { get { return "scaleSpeedWithTime"; } } //name used to refer to this effect in XML
+
+    public void UpdateEnemy(EnemyScript e, float deltaTime)
+    {
+        e.unitSpeed += (strength * deltaTime);
+    }
+}
