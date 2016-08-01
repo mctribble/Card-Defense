@@ -11,6 +11,7 @@ invScaleAttackWithHealth  | monster deals less damage as it gets injured
 scaleAttackhWithBudget    | enemy attack scales up with wave budget
 scaleAttackWithHealth     | monster deals more damage as it gets injured
 scaleEffectWithBudget     | enemy effect scales up with wave budget (scales effect Y)
+scaleEffectWithBudget     | enemy effect scales up with wave budget (scales effect Y, max strength: base * x)
 scaleHealthWithBudget     | enemy health scales up with wave budget
 scaleSpeedWithBudget      | enemy speed  scales up with wave budget
 scaleSpeedWithDamage      | enemy gets faster as it takes damage (max speed: base * X)
