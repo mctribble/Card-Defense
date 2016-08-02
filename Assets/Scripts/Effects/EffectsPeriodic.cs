@@ -47,7 +47,7 @@ public class EffectRegeneration : IEffectPeriodic
 }
 
 //enemy speeds up by X/second
-public class EffectscaleSpeedWithTime : IEffectPeriodic
+public class EffectScaleSpeedWithTime : IEffectPeriodic
 {
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.periodic; } }        //effect type
@@ -65,7 +65,7 @@ public class EffectscaleSpeedWithTime : IEffectPeriodic
 }
 
 //enemy effect Y gets stronger by X/second
-public class EffectscaleEffectWithTime : IEffectPeriodic
+public class EffectScaleEffectWithTime : IEffectPeriodic
 {
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.periodic; } }        //effect type

@@ -30,7 +30,7 @@ public class EffectScaleAttackWithHealth: IEffectEnemyReachedGoal
 }
 
 //enemy attack decreases as it takes damage (range: 1x to 0x, rounds up)
-public class EffectinvScaleAttackWithHealth: IEffectEnemyReachedGoal
+public class EffectInvScaleAttackWithHealth: IEffectEnemyReachedGoal
 {
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }    //this effect doesnt need a target
     [Hide] public EffectType effectType { get { return EffectType.enemyReachedGoal; } } //effect type

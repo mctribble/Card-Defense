@@ -57,8 +57,34 @@ public class EffectReduceEnemyEffectOnDamage : IEffectEnemyDamaged
     }
 }
 
-//enemy speeds up as it takes damage (range: base to base*strength)
-public class EffectscaleSpeedWithDamage : IEffectEnemyDamaged
+//enemy slows down as it takes damage (range: base -> 1)
+public class EffectInvScaleSpeedWithDamage : IEffectEnemyDamaged
+{
+    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
+    [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
+    [Show, Display(2)] public float strength { get; set; }                             //max speed multiplier 
+    [Hide] public string argument { get; set; }                                        //effect to reduce
+
+    [Hide] public string Name { get { return "Enemy gets up to " + argument + " times faster as it takes damage"; } } //returns name and strength
+
+    [Show, Display(1)] public string XMLName { get { return "invScaleSpeedWithDamage"; } } //name used to refer to this effect in XML
+
+    //we dont need to do anything on expected damage
+    public void expectedDamage(ref DamageEventData d)
+    {
+    } 
+
+    //recalculate speed
+    public void actualDamage(ref DamageEventData d)
+    {
+        EnemyScript e = d.dest.GetComponent<EnemyScript>();
+        float damageRatio = 1 - (e.curHealth / e.maxHealth);
+        e.unitSpeed = Mathf.Lerp(e.baseUnitSpeed, 1, damageRatio);
+    }
+}
+
+//enemy speeds up as it takes damage (range: base -> base*strength)
+public class EffectScaleSpeedWithDamage : IEffectEnemyDamaged
 {
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
@@ -79,19 +105,19 @@ public class EffectscaleSpeedWithDamage : IEffectEnemyDamaged
     {
         EnemyScript e = d.dest.GetComponent<EnemyScript>();
         float damageRatio = 1 - (e.curHealth / e.maxHealth);
-        e.unitSpeed = e.baseUnitSpeed + (damageRatio * (strength - 1));
+        e.unitSpeed = e.unitSpeed = Mathf.Lerp(e.baseUnitSpeed, (e.baseUnitSpeed * strength), damageRatio);
     }
 }
 
 //enemy effect scales up as it takes damage (range: base to base*strength)
-public class EffectscaleEffectWithDamage : IEffectEnemyDamaged
+public class EffectScaleEffectWithDamage : IEffectEnemyDamaged
 {
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
     [Show, Display(2)] public float strength { get; set; }                             //max effect multiplier
-    [Hide] public string argument { get; set; }                                        //effect to scale
+    [Show, Display(3)] public string argument { get; set; }                            //effect to scale
 
-    [Hide] public string Name { get { return "Enemy gets up to " + argument + " times faster as it takes damage"; } } //returns name and strength
+    [Hide] public string Name { get { return "Enemy " + argument + " increases up to " + strength + " times as it takes damage"; } } //returns name and strength
 
     //cached values to avoid searching the effect list every time
     [Hide] private IEffect effectToScale;
@@ -125,6 +151,52 @@ public class EffectscaleEffectWithDamage : IEffectEnemyDamaged
         }
 
         float damageRatio = 1 - (e.curHealth / e.maxHealth);
-        effectToScale.strength = effectBaseStrength + (damageRatio * (strength - 1));
+        effectToScale.strength = Mathf.Lerp(effectBaseStrength, (effectBaseStrength * strength), damageRatio);
+    }
+}
+
+//enemy effect scales down as it takes damage (range: base to 1)
+public class EffectInvScaleEffectWithDamage : IEffectEnemyDamaged
+{
+    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
+    [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
+    [Hide] public float strength { get; set; }                                         //effect strength (unused)
+    [Show, Display(2)] public string argument { get; set; }                            //effect to scale
+
+    [Hide] public string Name { get { return "Enemy " + argument + " drops to 1 as it takes damage"; } } //returns name and strength
+
+    //cached values to avoid searching the effect list every time
+    [Hide] private IEffect effectToScale;
+    [Hide] private float   effectBaseStrength;
+
+    [Show, Display(1)] public string XMLName { get { return "invScaleEffectWithDamage"; } } //name used to refer to this effect in XML
+
+    //we dont need to do anything on expected damage
+    public void expectedDamage(ref DamageEventData d)
+    {
+    } 
+
+    //recalculate speed
+    public void actualDamage(ref DamageEventData d)
+    {
+        EnemyScript e = d.dest.GetComponent<EnemyScript>();
+
+        //on first hit, cache references
+        if (effectToScale == null)
+        {
+            foreach (IEffect effect in e.effectData.effects)
+            {
+                if (effect.Name == argument)
+                {
+                    effectToScale = effect;
+                    effectBaseStrength = effect.strength;
+                    break;
+                }
+            }
+            Debug.LogWarning("invScaleEffectWithDamage cant find effect " + argument);
+        }
+
+        float damageRatio = 1 - (e.curHealth / e.maxHealth);
+        effectToScale.strength = Mathf.Lerp(effectBaseStrength, 1, damageRatio);
     }
 }

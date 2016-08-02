@@ -108,7 +108,7 @@ public class EffectFixedSpawnCount : IEffectWave
 }
 
 //enemy Attack increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
-public class EffectscaleAttackWithBudget : IEffectWave
+public class EffectScaleAttackWithBudget : IEffectWave
 {
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
     [Hide] public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
@@ -134,7 +134,7 @@ public class EffectscaleAttackWithBudget : IEffectWave
 }
 
 //enemy health increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
-public class EffectscaleEffectWithBudget : IEffectWave
+public class EffectScaleEffectWithBudget : IEffectWave
 {
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
     [Hide] public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
@@ -164,7 +164,7 @@ public class EffectscaleEffectWithBudget : IEffectWave
 }
 
 //enemy health increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
-public class EffectscaleHealthWithBudget : IEffectWave
+public class EffectScaleHealthWithBudget : IEffectWave
 {
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
     [Hide] public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
@@ -190,7 +190,7 @@ public class EffectscaleHealthWithBudget : IEffectWave
 }
 
 //enemy health increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
-public class EffectscaleSpeedWithBudget : IEffectWave
+public class EffectScaleSpeedWithBudget : IEffectWave
 {
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
     [Hide] public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect

@@ -30,15 +30,17 @@ public class EffectTypeManagerScript : BaseBehaviour
 
             //<<Enemy Effects (Stat Scaling)>>
             case "fixedSpawnCount":           ie = new EffectFixedSpawnCount(); break;
-            case "invScaleAttackWithHealth":  ie = new EffectinvScaleAttackWithHealth(); break;
-            case "scaleAttackhWithBudget":    ie = new EffectscaleAttackWithBudget(); break;
-            case "scaleEffectWithBudget":     ie = new EffectscaleEffectWithBudget(); break;
-            case "scaleEffectWithDamage":     ie = new EffectscaleEffectWithDamage(); break;
-            case "scaleEffectWithTime":       ie = new EffectscaleEffectWithTime(); break;
-            case "scaleHealthWithBudget":     ie = new EffectscaleHealthWithBudget(); break;
-            case "scaleSpeedWithBudget":      ie = new EffectscaleSpeedWithBudget(); break;
-            case "scaleSpeedWithDamage":      ie = new EffectscaleSpeedWithDamage(); break;
-            case "scaleSpeedWithTime":        ie = new EffectscaleSpeedWithTime(); break;
+            case "invScaleAttackWithHealth":  ie = new EffectInvScaleAttackWithHealth(); break;
+            case "invScaleEffectWithDamage":  ie = new EffectInvScaleEffectWithDamage(); break;
+            case "invScaleSpeedWithDamage":   ie = new EffectInvScaleSpeedWithDamage(); break;
+            case "scaleAttackhWithBudget":    ie = new EffectScaleAttackWithBudget(); break;
+            case "scaleEffectWithBudget":     ie = new EffectScaleEffectWithBudget(); break;
+            case "scaleEffectWithDamage":     ie = new EffectScaleEffectWithDamage(); break;
+            case "scaleEffectWithTime":       ie = new EffectScaleEffectWithTime(); break;
+            case "scaleHealthWithBudget":     ie = new EffectScaleHealthWithBudget(); break;
+            case "scaleSpeedWithBudget":      ie = new EffectScaleSpeedWithBudget(); break;
+            case "scaleSpeedWithDamage":      ie = new EffectScaleSpeedWithDamage(); break;
+            case "scaleSpeedWithTime":        ie = new EffectScaleSpeedWithTime(); break;
 
             //<<Trigger on enemy damaged (On tower: trigger when attacking.  On Enemy type: trigger when attacked)>>
             case "armor":                     ie = new EffectArmor(); break;
