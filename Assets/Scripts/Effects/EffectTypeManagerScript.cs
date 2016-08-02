@@ -32,7 +32,9 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "fixedSpawnCount":           ie = new EffectFixedSpawnCount(); break;
             case "invScaleAttackWithHealth":  ie = new EffectInvScaleAttackWithHealth(); break;
             case "invScaleEffectWithDamage":  ie = new EffectInvScaleEffectWithDamage(); break;
+            case "invScaleEffectWithTime":    ie = new EffectInvScaleEffectWithTime(); break;
             case "invScaleSpeedWithDamage":   ie = new EffectInvScaleSpeedWithDamage(); break;
+            case "invScaleSpeedWithTime":     ie = new EffectInvScaleSpeedWithTime(); break;
             case "scaleAttackhWithBudget":    ie = new EffectScaleAttackWithBudget(); break;
             case "scaleEffectWithBudget":     ie = new EffectScaleEffectWithBudget(); break;
             case "scaleEffectWithDamage":     ie = new EffectScaleEffectWithDamage(); break;
