@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using UnityEngine;
@@ -57,6 +58,10 @@ public class EnemyScript : BaseBehaviour
     public int            curHealth;          //current health
     public int            expectedHealth;     //what health will be after all active shots reach this enemy
     public SpriteRenderer enemyImage;         //sprite component for this enemy
+    public Image          healthbar;          //image used for the health bar
+    public Image          deathBurst;         //image used for the death explosion
+    public float          deathBurstSize;     //max scale of the death burst
+    public float          deathBurstTime;     //time taken to animate death burst
 
     //enemy data
     public int        damage;        
@@ -82,6 +87,10 @@ public class EnemyScript : BaseBehaviour
     // LateUpdate is called once per frame, after other objects have done a regular Update().  We use LateUpdate to make sure bullets get to move first this frame.
     private void LateUpdate()
     {
+        //skip update if dead
+        if (curHealth <= 0)
+            return;
+
         //tick periodic effects.  this uses a helper function so the effectData class can save performance and not search the list every frame
         if (effectData != null)
             effectData.triggerAllPeriodicEnemy(this, Time.deltaTime);
@@ -119,7 +128,6 @@ public class EnemyScript : BaseBehaviour
         }
 
         //update health bar fill and color
-        Image healthbar = gameObject.GetComponentInChildren<Image> ();
         float normalizedHealth = (float)curHealth / (float)maxHealth;
         healthbar.color = Color.Lerp(dyingColor, healthyColor, normalizedHealth);
         healthbar.fillAmount = normalizedHealth;
@@ -173,7 +181,9 @@ public class EnemyScript : BaseBehaviour
 
             //if dead, report the kill to the tower that shot it
             LevelManagerScript.instance.deadThisWave++;
-            Destroy(gameObject);
+
+            //and start the death coroutine
+            StartCoroutine(onDeath());
         }
     }
 
@@ -217,5 +227,29 @@ public class EnemyScript : BaseBehaviour
             result += Vector2.Distance(path[segment - 1], path[segment]);
 
         return result;
+    }
+
+    //handles enemy death
+    private IEnumerator onDeath()
+    {
+        //disable normal images and turn on the death burst instead
+        enemyImage.enabled = false;
+        healthbar.enabled = false;
+        deathBurst.enabled = true;
+        deathBurst.color = enemyImage.color;
+
+        //expand burst to deathBurstSize over deathBurstTime
+        float timer = 0.0f;
+        float curScale = 0.0f;
+        while (timer < deathBurstTime)
+        {
+            timer += Time.deltaTime;
+            curScale = Mathf.Lerp(0, deathBurstSize, (timer / deathBurstTime) );
+            deathBurst.rectTransform.localScale = new Vector3(curScale, curScale, 1 );
+            yield return null;
+        }
+        
+        Destroy(gameObject);
+        yield break;
     }
 }
