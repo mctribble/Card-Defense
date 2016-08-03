@@ -144,6 +144,7 @@ public class LevelManagerScript : BaseBehaviour
 
     public GameObject spawnerPrefab;            //prefab used to create spawners
     public GameObject towerPrefab;              //prefab used to create towers
+    public GameObject explosionPrefab;          //prefab used to create explosions
 
     public static LevelManagerScript instance;  //singleton pattern
     public LevelData data;                      //data for the level itself
@@ -428,5 +429,13 @@ public class LevelManagerScript : BaseBehaviour
             spawnCount = Mathf.RoundToInt(((float)data.waves[currentWave].budget / (float)data.waves[currentWave].enemyData.spawnCost));
 
         waveTotalRemainingHealth = spawnCount * data.waves[currentWave].enemyData.maxHealth;
+    }
+
+    //spawns an explosion
+    public void createExplosion(BurstShotData data, Vector2 position)
+    {
+        GameObject instance = Instantiate(explosionPrefab);
+        instance.transform.position = position;
+        instance.SendMessage("SetData", data);
     }
 }

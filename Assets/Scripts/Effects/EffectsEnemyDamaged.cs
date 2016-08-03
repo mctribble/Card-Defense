@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Vexe.Runtime.Types;
 
 //all effects in this file trigger when an enemy is damaged.  The effect itself could be attached either to the attacking tower or the defending enemy
@@ -105,7 +106,7 @@ public class EffectScaleSpeedWithDamage : IEffectEnemyDamaged
     {
         EnemyScript e = d.dest.GetComponent<EnemyScript>();
         float damageRatio = 1 - (e.curHealth / e.maxHealth);
-        e.unitSpeed = e.unitSpeed = Mathf.Lerp(e.baseUnitSpeed, (e.baseUnitSpeed * strength), damageRatio);
+        e.unitSpeed = Mathf.Lerp(e.baseUnitSpeed, (e.baseUnitSpeed * strength), damageRatio);
     }
 }
 
@@ -198,5 +199,41 @@ public class EffectInvScaleEffectWithDamage : IEffectEnemyDamaged
 
         float damageRatio = 1 - (e.curHealth / e.maxHealth);
         effectToScale.strength = Mathf.Lerp(effectBaseStrength, 1, damageRatio);
+    }
+}
+
+//attack causes a secondary explosion, dealing X damage to all enemies within Y of the impact site. 
+public class EffectSplashDamage : IEffectEnemyDamaged
+{
+    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
+    [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
+    [Show, Display(2)] public float strength { get; set; }                             //effect strength (damage dealt)
+    [Show, Display(3)] public string argument { get; set; }                            //effect to scale (explosion radius)
+
+    [Hide] public string Name { get { return "secondary explosion deals " + strength + " damage to enemies within " + argument; } } //returns name and strength
+
+    [Show, Display(1)] public string XMLName { get { return "splashDamage"; } } //name used to refer to this effect in XML
+
+    //we can ignore expected damage
+    public void expectedDamage(ref DamageEventData d) { }
+
+    //but actual damage creates an explosion
+    public void actualDamage(ref DamageEventData originalDamageEvent)
+    {
+        //construct a damage event for the explosion
+        DamageEventData explosionDamageEvent = new DamageEventData();
+        explosionDamageEvent.source = originalDamageEvent.source;
+        explosionDamageEvent.rawDamage = strength;
+        explosionDamageEvent.effects = null; //dont copy effects, or we get an endless explosion chain!
+        explosionDamageEvent.dest = null; //burstShot object ignores the destination anyway
+
+        //construct burst shot data
+        BurstShotData explosion = new BurstShotData();
+        explosion.damageEvent = explosionDamageEvent;
+        explosion.burstRange = Convert.ToSingle(argument);
+        explosion.targetList = EnemyManagerScript.instance.enemiesInRange(originalDamageEvent.dest.transform.position, explosion.burstRange);
+
+        //call on the level manager to create the actual explosion, since this effect doesnt have a prefab reference
+        LevelManagerScript.instance.createExplosion(explosion, originalDamageEvent.dest.transform.position);
     }
 }

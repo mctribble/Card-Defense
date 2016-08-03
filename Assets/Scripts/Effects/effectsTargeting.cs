@@ -101,6 +101,48 @@ public class EffectTargetAll : IEffectTowerTargeting
     }
 }
 
+//targets the enemy closest to the tower itself
+public class EffectTargetClosest : IEffectTowerTargeting
+{
+    //generic interface
+    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
+    [Hide] public EffectType effectType { get { return EffectType.towerTargeting; } }  //effect type
+    [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
+    
+    //this effect
+    [Hide] public string Name { get { return "Target: closest"; } } //returns name and strength
+    [Show] public string XMLName { get { return "targetClosest"; } } //name used to refer to this effect in XML.  This should never happen for this effect since it is a placeholder
+
+    public List<GameObject> findTargets(Vector2 towerPosition, float towerRange)
+    {
+        //fetch all valid targets
+        List <GameObject> validTargets = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange, 1);
+
+        //find the closest one
+        GameObject closest = null;
+        float closestDist = float.MaxValue;
+        foreach (GameObject candidate in validTargets)
+        {
+            float curDist = Vector2.Distance(candidate.transform.localPosition, towerPosition);
+            if ( curDist < closestDist )
+            {
+                closest = candidate;
+                closestDist = curDist;
+            }
+        }
+
+        //if closest is still null, then we have no valid target.
+        if (closest == null)
+            return null;
+
+        //target it
+        List<GameObject> result = new List<GameObject>();
+        result.Add(closest);
+        return result;
+    }
+}
+
 //targets up to X enemies closest to their goals
 public class EffectTargetMultishot : IEffectTowerTargeting
 {

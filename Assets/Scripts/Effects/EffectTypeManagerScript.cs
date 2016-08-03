@@ -47,6 +47,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             //<<Trigger on enemy damaged (On tower: trigger when attacking.  On Enemy type: trigger when attacked)>>
             case "armor":                     ie = new EffectArmor(); break;
             case "reduceEnemyEffectOnDamage": ie = new EffectReduceEnemyEffectOnDamage(); break;
+            case "splashDamage":              ie = new EffectSplashDamage(); break;
 
             //<<Wave effects (On Enemy type: trigger on wave creation.  On card: trigger when played)>>
             case "budgetPercentageChange":    ie = new EffectBudgetPercentageChange(); break;
@@ -65,6 +66,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             //<<Targeting effects (Determines tower targeting behavior)>>
             case "targetAll":                 ie = new EffectTargetAll(); break;
             case "targetArmor":               ie = new EffectTargetArmor(); break;
+            case "targetClosest":             ie = new EffectTargetClosest(); break;
             case "targetHealth":              ie = new EffectTargetHealth(); break;
             case "targetMultishot":           ie = new EffectTargetMultishot(); break;
             case "targetRandom":              ie = new EffectTargetRandom(); break;

@@ -23,6 +23,15 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Name="Explosive Tower" Type="tower" Description="Deals splash damage.  Good for tightly-packed enemies." Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Fast">
+      <towerData Recharge="1.5" Range="2" Damage="10" Lifespan="5" Sprite="Tower_Standard" />
+      <effectData>
+        <Effects>
+          <Effect name="splashDamage" strength="5" argument="1.0"/>
+          <Effect name="targetClosest" />
+        </Effects>
+      </effectData>
+    </Card>
     <Card Name="Fast Tower" Type="tower" Description="Suitable for fighting swarms" Charges="4" Art="Summon_Tower_Basic" Tooltip="Tower_Fast">
       <towerData Recharge="0.1" Range="2" Damage="3.5" Lifespan="3" Sprite="Tower_Fast" />
     </Card>

@@ -25,6 +25,7 @@ scaleSpeedWithTime        | enemey gets faster by X/s
 <<Trigger on enemy damaged (On tower: trigger when attacking.  On Enemy type: trigger when attacked)>>
 armor                     | enemy receives X less damage from every hit, with a minimum of 1 damage
 reduceEnemyEffectOnDamage | hit enemies have the strength of effect Y reduced by X
+splashDamage			  | attack causes a secondary explosion, dealing X damage to all enemies within Y of the impact site.
 
 <<Wave effects (On Enemy type: trigger on wave creation.  On card: trigger when played)>>
 budgetPercentageChange | wave budget is increased by X percent
@@ -43,6 +44,7 @@ shuffle                | shuffles the deck
 <<Targeting effects (Determines tower targeting behavior)>>
 targetAll       | tower targets all enemies in range
 targetArmor     | tower prioritizes targets with the highest armor
+targetClosest   | tower targets the enemy closest to the tower itself
 targetHealth    | tower prioritizes targets with the highest health
 targetMultishot | tower attacks up to X enemies closest to their goals
 targetRandom    | tower attacks a target at random
