@@ -8,6 +8,7 @@ using Vexe.Runtime.Types;
 public class TowerScript : BaseBehaviour
 {
     public GameObject   bulletPrefab;   //prefab to instantiate as a bullet
+    public GameObject   burstShotPrefab;//prefab to instantiate a burst shot
     public string       towerName;      //name of the tower
     public ushort       upgradeCount;   //number of times this tower has been upgraded
     public float        rechargeTime;   //time, in seconds, between shots.
@@ -114,6 +115,14 @@ public class TowerScript : BaseBehaviour
             //find the target(s) we are shooting at using the current targeting effect, or the default if there is none
             List<GameObject> targets;
             targets = targetingEffect.findTargets(transform.position, range);
+            
+            //special case: use burst shot for targetAll
+            if (targetingEffect.GetType() == typeof(EffectTargetAll))
+            {
+                shotCharge -= 1.0f;
+                burstFire(targets);
+                break;
+            }
 
             //call another function to actually fire on each valid target, if there are any
             if ((targets != null) && (targets.Count != 0))
@@ -155,15 +164,35 @@ public class TowerScript : BaseBehaviour
         e.source = gameObject;
         e.dest = enemy;
 
-        //if there are enemyDamaged effects on this tower, pass them to the bullet
+        //if there are enemyDamaged effects on this tower, pass them to the event
         if (effects != null)
             e.effects = effects;
         else
             e.effects = null;
 
-        //create a bullet and send it the data
         GameObject bullet = (GameObject) Instantiate (bulletPrefab, transform.position, Quaternion.identity);
         bullet.SendMessage("InitBullet", e);
+    }
+
+    //fires on all enemy units in range
+    private void burstFire(List<GameObject> targets)
+    {
+        //construct damage event
+        DamageEventData e = new DamageEventData();
+        e.rawDamage = attackPower;
+        e.source = gameObject;
+        e.effects = effects;
+        
+        //construct burst shot event
+        BurstShotData data = new BurstShotData();
+        data.targetList = targets;
+        data.burstRange = range;
+        data.damageEvent = e;
+
+        //create a burst shot and give it the data
+        GameObject shot = Instantiate(burstShotPrefab); //create it
+        shot.transform.position = transform.position;   //center it on the tower
+        shot.SendMessage("SetData", data);              //initialize it
     }
 
     //saves new tower definition data and updates components
