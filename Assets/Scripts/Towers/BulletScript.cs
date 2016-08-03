@@ -13,16 +13,9 @@ public struct DamageEventData
 
 public class BulletScript : BaseBehaviour
 {
-    public float speed;             //projectile speed
-
-    private bool initialized = false;       //whether or not the bullet is ready for action
-    private DamageEventData data;   //details about the attack
-    private float deltaTime;        //time since the last frame
-
-    // Use this for initialization
-    private void Start()
-    {
-    }
+    public float speed;               //projectile speed
+    private bool initialized = false; //whether or not the bullet is ready for action
+    private DamageEventData data;     //details about the attack
 
     // Update is called once per frame
     private void Update()
@@ -38,8 +31,6 @@ public class BulletScript : BaseBehaviour
             return;
         }
 
-        deltaTime = Time.deltaTime; //update frame time
-
         //fetch position of destination object
         Vector2 curDestination = data.dest.transform.position;
 
@@ -47,7 +38,7 @@ public class BulletScript : BaseBehaviour
         Vector2 curLocation = gameObject.transform.position;
 
         //calculate new location
-        Vector2 newLocation = Vector2.MoveTowards (curLocation, curDestination, speed * deltaTime);
+        Vector2 newLocation = Vector2.MoveTowards (curLocation, curDestination, speed * Time.deltaTime);
 
         //if destination is reached, trigger effects and pass data to target and destroy self
         if (newLocation == curDestination)
