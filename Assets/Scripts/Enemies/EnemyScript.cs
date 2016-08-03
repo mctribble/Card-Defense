@@ -74,6 +74,8 @@ public class EnemyScript : BaseBehaviour
     public Color    healthyColor; //color when healthy
     public Color    dyingColor;   //color when near death
 
+    public bool goalFinalChance; //this is true for the very short period between reaching the goal and dealing damage to give attacks a final chance to kill this enemy
+
     // Use this for initialization
     private void Awake()
     {
@@ -82,6 +84,7 @@ public class EnemyScript : BaseBehaviour
         expectedHealth = maxHealth;
         startPos = transform.position;
         enemyImage = GetComponent<SpriteRenderer>();
+        goalFinalChance = false;
     }
 
     // LateUpdate is called once per frame, after other objects have done a regular Update().  We use LateUpdate to make sure bullets get to move first this frame.
@@ -89,6 +92,10 @@ public class EnemyScript : BaseBehaviour
     {
         //skip update if dead
         if (curHealth <= 0)
+            return;
+
+        //skip update if paused for the reachedGoal() coroutine
+        if (goalFinalChance)
             return;
 
         //tick periodic effects.  this uses a helper function so the effectData class can save performance and not search the list every frame
@@ -106,31 +113,59 @@ public class EnemyScript : BaseBehaviour
         {
             currentDestination++;
 
+            //if we reached the end, trigger the proper coroutine
             if (path.Count == currentDestination)
-            {
-                //reached the end.  trigger effects...
-                if (effectData != null)
-                    foreach (IEffect e in effectData.effects)
-                        if (e.effectType == EffectType.enemyReachedGoal)
-                            ((IEffectEnemyReachedGoal)e).trigger(this);
-
-                //damage player...
-                DeckManagerScript.instance.SendMessage("Damage", damage);
-
-                //...and go back to start for another lap
-                transform.position = startPos;
-                currentDestination = 0;
-
-                //if the enemy is not expected to die, update the enemy list with the new pathing info
-                if (expectedHealth > 0)
-                    EnemyManagerScript.instance.SendMessage("EnemyPathChanged", gameObject);
-            }
+                StartCoroutine(reachedGoal());
         }
 
         //update health bar fill and color
         float normalizedHealth = (float)curHealth / (float)maxHealth;
         healthbar.color = Color.Lerp(dyingColor, healthyColor, normalizedHealth);
         healthbar.fillAmount = normalizedHealth;
+    }
+
+    //handles the enemy reaching the goal
+    private IEnumerator reachedGoal()
+    {
+        //pause normal enemy behavior while we handle this
+        goalFinalChance = true;
+
+        //if we are expecting damage that hasnt happened yet, give those a moment to land before continuing
+        if (expectedHealth < curHealth)
+        {
+            yield return null; //(force pause to be at least 2 frames no matter how bad the framerate is)
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        //if we are still expecting damage after that window, cancel it and tell attackers to abort
+        if (expectedHealth < curHealth)
+        {
+            expectedHealth = curHealth;
+            GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
+            foreach (GameObject b in bullets)
+                b.SendMessage("AbortAttack", gameObject);
+        }
+
+        //trigger effects...
+        if (effectData != null)
+            foreach (IEffect e in effectData.effects)
+                if (e.effectType == EffectType.enemyReachedGoal)
+                    ((IEffectEnemyReachedGoal)e).trigger(this);
+
+        //damage player...
+        DeckManagerScript.instance.SendMessage("Damage", damage);
+
+        //...and go back to start for another lap
+        transform.position = startPos;
+        currentDestination = 0;
+
+        //if the enemy is not expected to die, update the enemy list with the new pathing info
+        if (expectedHealth > 0)
+            EnemyManagerScript.instance.SendMessage("EnemyPathChanged", gameObject);
+
+        //resume normal behavior
+        goalFinalChance = false;
+        yield break;
     }
 
     //tracks damage that WILL arrive so that towers dont keep shooting something that is about to be dead

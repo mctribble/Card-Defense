@@ -14,8 +14,11 @@ public struct DamageEventData
 public class BulletScript : BaseBehaviour
 {
     public float speed;               //projectile speed
+    public float finalChanceSpeed;    //projectile speed when the target is in "final chance"
+
     private bool initialized = false; //whether or not the bullet is ready for action
     private DamageEventData data;     //details about the attack
+    private EnemyScript enemyRef;     //reference to the EnemyScript attached to the target
 
     // Update is called once per frame
     private void Update()
@@ -48,19 +51,24 @@ public class BulletScript : BaseBehaviour
                     if (i.effectType == EffectType.enemyDamaged)
                         ((IEffectEnemyDamaged)i).actualDamage(ref data);
 
-            data.dest.GetComponent<EnemyScript>().onDamage(data);
+            enemyRef.onDamage(data);
             Destroy(gameObject);
         }
+
+        //if the enemy is in the brief "final chance" state between reaching the goal and dealing damage, increase speed dramatically
+        if (enemyRef.goalFinalChance)
+            speed = finalChanceSpeed;
 
         //save position
         gameObject.transform.position = new Vector3(newLocation.x, newLocation.y, gameObject.transform.position.z);
     }
 
     //sets up the bullet data and handles expectedDamage effects
-    private void InitBullet(DamageEventData newData)
+    public void InitBullet(DamageEventData newData)
     {
         //init
         data = newData;
+        enemyRef = data.dest.GetComponent<EnemyScript>();
 
         //trigger effects
         if (data.effects != null)
@@ -69,8 +77,15 @@ public class BulletScript : BaseBehaviour
                     ((IEffectEnemyDamaged)i).expectedDamage(ref data);
 
         //tell enemy to expect the damage
-        data.dest.GetComponent<EnemyScript>().onExpectedDamage(ref data);
+        enemyRef.onExpectedDamage(ref data);
 
         initialized = true;
+    }
+
+    //destroys self immediately if the target is e
+    public void AbortAttack(GameObject e)
+    {
+        if (data.dest == e)
+            Destroy(gameObject);
     }
 }
