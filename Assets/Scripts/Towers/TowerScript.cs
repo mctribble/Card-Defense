@@ -116,13 +116,13 @@ public class TowerScript : BaseBehaviour
             List<GameObject> targets;
             targets = targetingEffect.findTargets(transform.position, range);
             
-            //special case: use burst shot for targetAll
-            if (targetingEffect.GetType() == typeof(EffectTargetAll))
-            {
-                shotCharge -= 1.0f;
-                burstFire(targets);
-                break;
-            }
+            ////special case: use burst shot for targetAll
+            //if (targetingEffect.GetType() == typeof(EffectTargetAll))
+            //{
+            //    shotCharge -= 1.0f;
+            //    burstFire(targets);
+            //    break;
+            //}
 
             //call another function to actually fire on each valid target, if there are any
             if ((targets != null) && (targets.Count != 0))
