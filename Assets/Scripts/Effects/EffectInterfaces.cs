@@ -19,6 +19,12 @@ public class XMLEffect : System.Object
     [XmlAttribute] public string argument;
 }
 
+//convenience struct that indicates which property effects are contained in this effectData
+public struct PropertyEffects
+{
+    public bool returnsToTopOfDeck;
+}
+
 //represents everything needed to apply effects to an object
 [System.Serializable]
 public class EffectData : System.Object
@@ -37,9 +43,10 @@ public class EffectData : System.Object
 
     //cached values for utility functions
     //the '?' on some of these is shorthand for Nullable<T> (https://msdn.microsoft.com/en-us/library/1t3y8s4s.aspx)
-    [XmlIgnore] private TargetingType?          cachedCardTargetingType; 
-    [XmlIgnore] private IEffectTowerTargeting   cachedTowerTargetingType;
-    [XmlIgnore] private List<IEffectPeriodic>   cachedPeriodicEffectList;
+    [XmlIgnore] private TargetingType?         cachedCardTargetingType; 
+    [XmlIgnore] private IEffectTowerTargeting  cachedTowerTargetingType;
+    [XmlIgnore] private List<IEffectPeriodic>  cachedPeriodicEffectList;
+    [XmlIgnore] private PropertyEffects?      cachedPropertyEffects;
 
     //list of effect objects
     [XmlIgnore] private List<IEffect> Effects = new List<IEffect>(); 
@@ -65,9 +72,10 @@ public class EffectData : System.Object
     //resets cached results so they will be recalculated if something asks for them
     private void resetCachedValues()
     {
-        cachedCardTargetingType = null;
+        cachedCardTargetingType  = null;
         cachedTowerTargetingType = null;
         cachedPeriodicEffectList = null;
+        cachedPropertyEffects   = null;
     }
 
     //helper function that returns how the card containing these effects must be used.
@@ -118,6 +126,33 @@ public class EffectData : System.Object
 
             cachedTowerTargetingType = res;
             return res;
+        }
+    }
+
+    //helper that returns a struct containing information on all property effects in this set
+    //results are cached to save performance
+    public PropertyEffects propertyEffects
+    {
+        get
+        {
+            if (cachedPropertyEffects == null)
+            {
+                PropertyEffects newPropertyEffects = new PropertyEffects();
+                foreach (IEffect e in Effects)
+                {
+                    if (e.effectType == EffectType.property)
+                    {
+                        switch (e.XMLName)
+                        {
+                            case "returnsToTopOfDeck": newPropertyEffects.returnsToTopOfDeck = true; break;
+                            default: Debug.LogWarning("Unknown property effect."); break;
+                        }
+                    }
+                }
+                cachedPropertyEffects = newPropertyEffects;
+            }
+
+            return cachedPropertyEffects.Value;
         }
     }
 
@@ -174,7 +209,7 @@ public enum TargetingType
 //different effect types.  The values are hex colors to be used for text mentioning these effects (format RRGGBBAA).  unchecked syntax is to force stuffing the values into the signed int used by enums
 public enum EffectType
 {
-    discard          = unchecked((int)0xA52A2AFF), //effect triggers when the card it is attached to is discarded
+    property         = unchecked((int)0xA52A2AFF), //effect is never triggered.  instead, other code tests whether or not it exists on a given object and behave accordingly
     enemyDamaged     = unchecked((int)0x008000FF), //effect triggers when an enemy is damaged.  Could be attached to the attacking tower or the defending enemy
     enemyReachedGoal = unchecked((int)0x111111FF), //effect triggers when an enemy reaches their goal
     instant          = unchecked((int)0x00FFFFFF), //effect triggers instantly without the need for a target
@@ -207,10 +242,13 @@ public interface IEffectWave : IEffect
     WaveData alteredWaveData(WaveData currentWaveData); //alters the current wave data and returns the new values
 };
 
-//effect triggers when the card it is attached to is discarded
-public interface IEffectDiscard : IEffect
+//effect is never triggered or called at all.  Used for effects that dont do anything directly but need to be checked for by other code
+//examples:
+//EffectReturnsToTopOfDeck doesnt do anything.  CardScript just checks whether or not it exists when a card is played and sends it to the top or bottom accordingly
+//IgnoreLifespan causes a tower to never decay.  This does something, but does not make sense to "trigger" in any sense.  TowerScript just behaves differently if it is present
+public interface IEffectProperty : IEffect
 {
-    bool trigger(ref Card c); //called when this effect triggers.  returns true if the card no longer needs discarding
+
 }
 
 //effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
@@ -223,7 +261,6 @@ public interface IEffectSelf : IEffect
 public interface IEffectEnemyDamaged : IEffect
 {
     void expectedDamage(ref DamageEventData d); //called when it is expected to deal damage (so targeting etc. can account for damage amount changes)
-
     void actualDamage(ref DamageEventData d); //called when damage actually happens (for things that should happen when the actual hit occurs)
 }
 

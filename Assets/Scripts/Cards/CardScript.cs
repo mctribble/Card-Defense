@@ -319,11 +319,11 @@ public class CardScript : BaseBehaviour
                         ((IEffectSelf)e).trigger(ref card, gameObject);
                         break;
 
-                    case EffectType.discard:
-                        break; //discard effects are handled elsewhere
+                    case EffectType.property:
+                        break; //ignore property effects here
 
                     default:
-                        Debug.LogError("I dont know how to apply an effect of type " + e.effectType);
+                        Debug.LogWarning("I dont know how to apply an effect of type " + e.effectType);
                         break;
                 }
             }
@@ -352,7 +352,10 @@ public class CardScript : BaseBehaviour
 
         //if its a spell, tell it what kind of spell it is
         if (card.data.cardType == CardType.spell)
+        {
+            Debug.Assert(card.data.effectData.cardTargetingType != TargetingType.noCast); //if an effect on this card is not meant for casting, it should not be here
             tooltipInstance.SendMessage("SetTargetingType", card.data.effectData.cardTargetingType);
+        }
     }
 
     private void Hide()
@@ -419,26 +422,14 @@ public class CardScript : BaseBehaviour
         targetLocation = discardLocation;
         hand.SendMessage("Discard", gameObject);
 
-        //run discard effects
-        bool discardCancelled = false;
-        if (card.data.cardType == CardType.spell)
-        {
-            foreach (IEffect e in card.data.effectData.effects)
-            {
-                if (e.effectType == EffectType.discard)
-                {
-                    discardCancelled = discardCancelled || ((IEffectDiscard)e).trigger(ref card);
-                }
-            }
-        }
-
-        //return here if the discard has been cancelled by one of the effects
-        if (discardCancelled) return;
-
         //If any charges are left, return this card to the deck
         if (card.charges > 0)
         {
-            DeckManagerScript.instance.addCardAtBottom(card);
+            //send card to top or bottom depending on the presence of "returnsToTopOfDeck" property effect
+            if ((card.data.effectData != null) && (card.data.effectData.propertyEffects.returnsToTopOfDeck))
+                DeckManagerScript.instance.addCardAtTop(card);
+            else
+                DeckManagerScript.instance.addCardAtBottom(card);
         }
     }
 

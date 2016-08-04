@@ -61,7 +61,6 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "damagePlayer":              ie = new EffectDamagePlayer(); break;
             case "discardRandomCard":         ie = new EffectDiscardRandom(); break;
             case "drawCard":                  ie = new EffectDrawCard(); break;
-            case "returnsToTopOfDeck":        ie = new EffectReturnsToTopOfDeck(); break;
             case "shuffle":                   ie = new EffectShuffle(); break;
 
             //<<Targeting effects (Determines tower targeting behavior)>>
@@ -72,6 +71,9 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "targetMultishot":           ie = new EffectTargetMultishot(); break;
             case "targetRandom":              ie = new EffectTargetRandom(); break;
             case "targetSpeed":               ie = new EffectTargetSpeed(); break;
+
+            //<<Behavior effects(changes how something behaves, but is never triggered) >>
+            case "returnsToTopOfDeck":        ie = new EffectReturnsToTopOfDeck(); break;
 
             default:                          Debug.LogWarning("Effect type " + xe.name + " is not implemented."); return null;
         }

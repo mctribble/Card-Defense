@@ -39,7 +39,6 @@ allTowersLifespanBonus | all towers on the map last X waves longer
 damagePlayer           | player takes X damage
 discardRandomCard      | player discards up to X cards chosen at random
 drawCard               | player draws X cards
-returnsToTopOfDeck     | this card returns to the top of the deck when played
 shuffle                | shuffles the deck
 
 <<Targeting effects (Determines tower targeting behavior)>>
@@ -50,3 +49,6 @@ targetHealth    | tower prioritizes targets with the highest health
 targetMultishot | tower attacks up to X enemies closest to their goals
 targetRandom    | tower attacks a target at random
 targetSpeed     | tower prioritizes targets with the highest speed
+
+<<Behavior effects (changes how something behaves, but is never triggered)>>
+returnsToTopOfDeck | this card returns to the top of the deck when played
