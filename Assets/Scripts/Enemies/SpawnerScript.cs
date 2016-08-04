@@ -55,11 +55,12 @@ public class SpawnerScript : BaseBehaviour
     }
 
     //spawns an enemy
-    private void Spawn()
+    private void Spawn(float timePassedSinceSpawn)
     {
-        GameObject enemy = (GameObject)Object.Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
-        enemy.SendMessage("SetData", enemyType);
-        enemy.SendMessage("SetPath", PathManagerScript.instance.CalculatePathFromPos(new Vector2(data.spawnX, data.spawnY)));
-        EnemyManagerScript.instance.EnemySpawned(enemy);
+        GameObject enemy = (GameObject)Object.Instantiate(enemyPrefab, spawnPos, Quaternion.identity);                          //spawn the enemy
+        enemy.SendMessage("SetData", enemyType);                                                                                //set its type
+        enemy.SendMessage("SetPath", PathManagerScript.instance.CalculatePathFromPos(new Vector2(data.spawnX, data.spawnY)));   //set its path
+        enemy.SendMessage("moveForwardByTime", timePassedSinceSpawn);                                                           //move the enemy forward to account for how much time has passed between when this enemy should have spawned and when the spawner got told about it
+        EnemyManagerScript.instance.EnemySpawned(enemy);                                                                        //report it to the enemy manager
     }
 }

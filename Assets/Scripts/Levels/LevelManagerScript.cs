@@ -356,15 +356,15 @@ public class LevelManagerScript : BaseBehaviour
         float timeToNextSpawn = timeBetweenSpawns;
         while (spawnCount > 0)
         {
-            yield return new WaitForFixedUpdate();  //wait for the next physics update
-            timeToNextSpawn -= Time.fixedDeltaTime; //reduce time until next spawn by amount of time between physics updates
-            d.time -= Time.fixedDeltaTime;          //update the wave data also so that the status text can update
-            while (timeToNextSpawn < 0.0)           //this is a loop in case multiple spawns happen in one physics update
+            yield return null;                 //wait for the next frame
+            timeToNextSpawn -= Time.deltaTime; //reduce time until next spawn by amount of time between frames
+            d.time -= Time.deltaTime;          //update the wave data also so that the status text can update
+            while (timeToNextSpawn < 0.0)      //this is a loop in case multiple spawns happen in one frame
             {
-                spawnerObjects[curSpawner].SendMessage("Spawn"); //spawn enemy
+                timeToNextSpawn += timeBetweenSpawns; //update spawn timer
+                spawnerObjects[curSpawner].SendMessage("Spawn", timeToNextSpawn); //spawn enemy.  spawn timer provided so the enemy can place itself properly when framerate is low
                 curSpawner = (curSpawner + 1) % spawnerCount; //move to next spawner, looping back to the first if we are at the end of the list
                 spawnCount--; //update spawn counter
-                timeToNextSpawn += timeBetweenSpawns; //update spawn timer
 
                 //bail if we have finished spawning baddies
                 if (spawnCount == 0)

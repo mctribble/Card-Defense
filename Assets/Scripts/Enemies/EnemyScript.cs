@@ -102,8 +102,20 @@ public class EnemyScript : BaseBehaviour
         if (effectData != null)
             effectData.triggerAllPeriodicEnemy(this, Time.deltaTime);
 
+        moveForwardByTime(Time.deltaTime);
+
+        //update health bar fill and color
+        float normalizedHealth = (float)curHealth / (float)maxHealth;
+        healthbar.color = Color.Lerp(dyingColor, healthyColor, normalizedHealth);
+        healthbar.fillAmount = normalizedHealth;
+    }
+
+    //moves the enemy forward this far in time.  seperate from update function so it can be called elsewhere, such as during enemy spawning to account for low frame rate
+    private void moveForwardByTime(float time)
+    {
+
         Vector2 curLocation = transform.position; //fetch current location
-        Vector2 newLocation = Vector2.MoveTowards (curLocation, path[currentDestination], unitSpeed * Time.deltaTime); //calculate new location
+        Vector2 newLocation = Vector2.MoveTowards (curLocation, path[currentDestination], unitSpeed * time); //calculate new location
 
         //save position
         transform.position = new Vector3(newLocation.x, newLocation.y, transform.position.z);
@@ -117,11 +129,6 @@ public class EnemyScript : BaseBehaviour
             if (path.Count == currentDestination)
                 StartCoroutine(reachedGoal());
         }
-
-        //update health bar fill and color
-        float normalizedHealth = (float)curHealth / (float)maxHealth;
-        healthbar.color = Color.Lerp(dyingColor, healthyColor, normalizedHealth);
-        healthbar.fillAmount = normalizedHealth;
     }
 
     //handles the enemy reaching the goal
