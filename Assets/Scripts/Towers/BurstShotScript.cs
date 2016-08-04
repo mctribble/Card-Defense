@@ -56,7 +56,6 @@ public class BurstShotScript : BaseBehaviour
 
             damageEvents.Add(curEvent); //and add it to the list
         }
-
         //flag ourselves as set up
         initialized = true;
     }

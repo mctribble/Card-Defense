@@ -14,7 +14,8 @@
     </Deck>
     <Deck name="OP Dev Deck">
       <Cards>
-        <Card name="Dev Purge Tower" count="40" />
+        <Card name="Dev Purge Tower" count="20" />
+        <Card name="Dev Chain Purge Tower" count="20" />
       </Cards>
     </Deck>
   </Decks>

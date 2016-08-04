@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Vexe.Runtime.Types;
 
@@ -232,6 +233,66 @@ public class EffectSplashDamage : IEffectEnemyDamaged
         explosion.damageEvent = explosionDamageEvent;
         explosion.burstRange = Convert.ToSingle(argument);
         explosion.targetList = EnemyManagerScript.instance.enemiesInRange(originalDamageEvent.dest.transform.position, explosion.burstRange);
+
+        //call on the level manager to create the actual explosion, since this effect doesnt have a prefab reference
+        LevelManagerScript.instance.createExplosion(explosion, originalDamageEvent.dest.transform.position);
+    }
+}
+
+//attack damages and spreads effects to all enemies within X of each other through a series of consecutive explosions.  No enemy will be hit twice.  
+public class EffectChainHit : IEffectEnemyDamaged
+{
+    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
+    [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
+    [Show, Display(2)] public float strength { get; set; }                             //chain range
+    [Hide] public string argument { get; set; }                                        //effect argument(unused)
+
+    [Hide] public string Name { get { return "damage and effects chain to all enemies in the group (range: " + strength + ")"; } } //returns name and strength
+
+    [Show, Display(1)] public string XMLName { get { return "chainHit"; } } //name used to refer to this effect in XML
+
+    private List<GameObject> enemiesAlreadyHit;
+
+    //constructor
+    public EffectChainHit()
+    {
+        enemiesAlreadyHit = new List<GameObject>();
+    }
+
+    //we can ignore expected damage
+    public void expectedDamage(ref DamageEventData d) { }
+
+    //but actual damage creates an explosion
+    public void actualDamage(ref DamageEventData originalDamageEvent)
+    {
+        //if this enemy has already been hit, nullify the attack
+        if (enemiesAlreadyHit.Contains(originalDamageEvent.dest))
+        {
+            originalDamageEvent.rawDamage = 0;
+            originalDamageEvent.effects = null;
+            return;
+        }
+        
+        //otherwise, add it to the list and chain the attack
+        enemiesAlreadyHit.Add(originalDamageEvent.dest);
+
+        //construct a damage event for the explosion
+        DamageEventData explosionDamageEvent = new DamageEventData();
+        explosionDamageEvent.source    = originalDamageEvent.source;
+        explosionDamageEvent.rawDamage = originalDamageEvent.rawDamage;
+        explosionDamageEvent.effects   = originalDamageEvent.effects; 
+        explosionDamageEvent.dest = null; //burstShot object ignores the destination anyway
+
+        //construct burst shot data
+        BurstShotData explosion = new BurstShotData();
+        explosion.damageEvent   = explosionDamageEvent;
+        explosion.burstRange    = strength;
+        explosion.targetList    = EnemyManagerScript.instance.enemiesInRange(originalDamageEvent.dest.transform.position, explosion.burstRange);
+        
+        //remove any targets that have already been hit from the target list
+        foreach (GameObject t in explosion.targetList)
+            if (enemiesAlreadyHit.Contains(t))
+                explosion.targetList.Remove(t);
 
         //call on the level manager to create the actual explosion, since this effect doesnt have a prefab reference
         LevelManagerScript.instance.createExplosion(explosion, originalDamageEvent.dest.transform.position);
