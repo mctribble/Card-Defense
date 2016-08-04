@@ -113,15 +113,35 @@ public class EnemyScript : BaseBehaviour
     //moves the enemy forward this far in time.  seperate from update function so it can be called elsewhere, such as during enemy spawning to account for low frame rate
     private void moveForwardByTime(float time)
     {
+        float distanceToTravel = unitSpeed * time;                                                           //calculate distance to travel
+        Vector2 prevLocation = transform.position;                                                           //fetch current location
+        Vector2 newLocation = Vector2.MoveTowards(prevLocation, path[currentDestination], distanceToTravel); //perform movement
+        distanceToTravel -= Vector2.Distance(prevLocation, newLocation);                                     //check how far we actually moved
 
-        Vector2 curLocation = transform.position; //fetch current location
-        Vector2 newLocation = Vector2.MoveTowards (curLocation, path[currentDestination], unitSpeed * time); //calculate new location
+        //if we havent moved far enough yet, repeat until we have (with a small margin of error to account for float math)
+        while (distanceToTravel > 0.001f) 
+        {
+            currentDestination++; //since we didn't travel the full distance, we reached our destination and need to advance to the next one
+            
+            //if we hit the end of the line, stop moving and handle that instead
+            if (path.Count == currentDestination)
+            {
+                transform.position = new Vector3(newLocation.x, newLocation.y, transform.position.z); //save position
+                StartCoroutine(reachedGoal()); //handle having reached the goal
+                return; //bail early
+            }
+
+            prevLocation = newLocation;
+            newLocation = Vector2.MoveTowards(prevLocation, path[currentDestination], distanceToTravel);
+            distanceToTravel -= Vector2.Distance(prevLocation, newLocation);
+        }
+        
 
         //save position
         transform.position = new Vector3(newLocation.x, newLocation.y, transform.position.z);
 
         //if reached the current destination, attempt to move to the next one
-        if (curLocation == newLocation)
+        if (path[currentDestination] == newLocation)
         {
             currentDestination++;
 
