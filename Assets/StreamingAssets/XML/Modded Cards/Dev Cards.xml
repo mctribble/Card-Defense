@@ -11,7 +11,7 @@
       </effectData>
     </Card>
     <Card Type="tower" Name="Dev Chain Purge Tower" Description="kills entire waves of enemies with one hit" Charges="99" Art="Summon_Tower_Basic" Tooltip="Tower_Fast">
-      <towerData Recharge="3" Range="1" Damage="999999" Lifespan="99" Sprite="Tower_Fast" />
+      <towerData Recharge="1" Range="1" Damage="999999" Lifespan="99" Sprite="Tower_Fast" />
       <effectData>
         <Effects>
           <Effect name="chainHit" strength="0.75" />
