@@ -288,11 +288,6 @@ public class EffectChainHit : IEffectEnemyDamaged
         explosion.damageEvent   = explosionDamageEvent;
         explosion.burstRange    = strength;
         explosion.targetList    = EnemyManagerScript.instance.enemiesInRange(originalDamageEvent.dest.transform.position, explosion.burstRange);
-        
-        //remove any targets that have already been hit from the target list
-        foreach (GameObject t in explosion.targetList)
-            if (enemiesAlreadyHit.Contains(t))
-                explosion.targetList.Remove(t);
 
         //call on the level manager to create the actual explosion, since this effect doesnt have a prefab reference
         LevelManagerScript.instance.createExplosion(explosion, originalDamageEvent.dest.transform.position);
