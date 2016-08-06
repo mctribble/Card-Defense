@@ -49,7 +49,7 @@ public class EffectTargetArmor : IEffectTowerTargeting
 
     //this effect
     [Hide] public string Name { get { return "Target: highest armor"; } } //returns name and strength
-    [Show] public string XMLName { get { return "tagetArmor"; } } //name used to refer to this effect in XML
+    [Show] public string XMLName { get { return "targetArmor"; } } //name used to refer to this effect in XML
 
     public List<GameObject> findTargets(Vector2 towerPosition, float towerRange)
     {
@@ -93,7 +93,7 @@ public class EffectTargetAll : IEffectTowerTargeting
 
     //this effect
     [Hide] public string Name { get { return "Target: all in range"; } } //returns name and strength
-    [Show] public string XMLName { get { return "tagetAll"; } } //name used to refer to this effect in XML
+    [Show] public string XMLName { get { return "targetAll"; } } //name used to refer to this effect in XML
 
     public List<GameObject> findTargets(Vector2 towerPosition, float towerRange)
     {
@@ -153,7 +153,7 @@ public class EffectTargetMultishot : IEffectTowerTargeting
 
     //this effect
     [Hide] public string Name { get { return "Target: up to " + Mathf.Floor(strength) + " enemies"; } } //returns name and strength
-    [Show, Display(1)] public string XMLName { get { return "tagetMultishot"; } } //name used to refer to this effect in XML
+    [Show, Display(1)] public string XMLName { get { return "targetMultishot"; } } //name used to refer to this effect in XML
 
     public List<GameObject> findTargets(Vector2 towerPosition, float towerRange)
     {
@@ -183,7 +183,7 @@ public class EffectTargetRandom : IEffectTowerTargeting
 
     //this effect
     [Hide] public string Name { get { return "Target: random"; } } //returns name and strength
-    [Show] public string XMLName { get { return "tagetRandom"; } } //name used to refer to this effect in XML
+    [Show] public string XMLName { get { return "targetRandom"; } } //name used to refer to this effect in XML
 
     public List<GameObject> findTargets(Vector2 towerPosition, float towerRange)
     {

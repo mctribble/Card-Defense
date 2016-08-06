@@ -15,12 +15,24 @@ public struct BurstShotData
 public class BurstShotScript : BaseBehaviour
 {
     public float speed; //speed of the attack wave
-    public Color color; //color to use for the burst
+    public Color color; //default color to use for the burst
+
+    public SpriteRenderer spriteRenderer; //component reference
 
     private bool                  initialized;  //whether or not this shot has been initialized
     private List<DamageEventData> damageEvents; //damage events to be used for each enemy hit
     private float                 curScale;     //current scale of this attack
     private float                 maxScale;     //maximum scale this attack should reach
+
+    //set default color when spawned
+    private void Start() { spriteRenderer.color = color; }
+
+    //overrides the default color
+    public void SetColor(Color newColor)
+    {
+        color = newColor;
+        spriteRenderer.color = newColor;
+    }
 
     //init attack
     void SetData (BurstShotData d)

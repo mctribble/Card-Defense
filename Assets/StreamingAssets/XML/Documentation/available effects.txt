@@ -4,6 +4,7 @@ Y is the effect argument
 
 <<Enemy Effects (Periodic)>>
 regeneration | enemy recovers X health per second.  
+poison       | enemy takes Y damage per second for Y seconds
 
 <<Enemy Effects (Stat Scaling)>>
 fixedSpawnCount           | waves of this enemy type always spawn exactly this many enemies.  Best when used with budget scaling effects
@@ -24,9 +25,9 @@ scaleSpeedWithTime        | enemey gets faster by X/s
 
 <<Trigger on enemy damaged (On tower: trigger when attacking.  On Enemy type: trigger when attacked)>>
 armor                     | enemy receives X less damage from every hit, with a minimum of 1 damage
+chainHit				  | attack damages and spreads effects to all enemies within X of each other through a series of consecutive explosions.  No enemy will be hit twice.  
 reduceEnemyEffectOnDamage | hit enemies have the strength of effect Y reduced by X
 splashDamage			  | attack causes a secondary explosion, dealing X damage to all enemies within Y of the impact site.  Effects do not spread to secondary targets
-chainHit				  | attack damages and spreads effects to all enemies within X of each other through a series of consecutive explosions.  No enemy will be hit twice.  
 
 <<Wave effects (On Enemy type: trigger on wave creation.  On card: trigger when played)>>
 budgetPercentageChange | wave budget is increased by X percent
@@ -51,4 +52,7 @@ targetRandom    | tower attacks a target at random
 targetSpeed     | tower prioritizes targets with the highest speed
 
 <<Behavior effects (changes how something behaves, but is never triggered)>>
-returnsToTopOfDeck | this card returns to the top of the deck when played
+attackColor            | purely cosmetic.  Y is either a hex color, in the format #RRGGBBAA, or one of the following constants: red, cyan, blue, darkblue, lightblue, purple, yellow, lime, fuchsia, white, silver, grey, black, orange, brown, maroon, green, olive, navy, teal, aqua, magenta.
+infiniteTowerLifespan  | stop a tower's lifespan from decreasing or being displayed
+limitedAmmo            | tower can only fire X times before being destroyed
+returnsToTopOfDeck     | this card returns to the top of the deck when played

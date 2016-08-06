@@ -22,7 +22,10 @@ public class XMLEffect : System.Object
 //convenience struct that indicates which property effects are contained in this effectData
 public struct PropertyEffects
 {
-    public bool returnsToTopOfDeck;
+    public bool   infiniteTowerLifespan;
+    public bool   returnsToTopOfDeck;
+    public Color? attackColor;
+    public int?   limitedAmmo;
 }
 
 //represents everything needed to apply effects to an object
@@ -133,6 +136,33 @@ public class EffectData : System.Object
     //results are cached to save performance
     public PropertyEffects propertyEffects
     {
+        set
+        {
+            //change effect list to account for any properties that have been altered.  Most properties have no reason to actually change, so changing them is not currently supported
+            foreach (IEffect e in Effects)
+            {
+                if (e.effectType == EffectType.property)
+                {
+                    switch (e.XMLName)
+                    {
+                        case "attackColor": if (value.attackColor != propertyEffects.attackColor) Debug.Log("updating that property is not supported"); break;
+                        case "infiniteTowerLifespan": if (value.infiniteTowerLifespan != propertyEffects.infiniteTowerLifespan) Debug.Log("updating that property is not supported"); break;
+                        case "returnsToTopOfDeck": if (value.returnsToTopOfDeck != propertyEffects.infiniteTowerLifespan) Debug.Log("updating that property is not supported"); break;
+
+                        case "limitedAmmo":
+                            if (value.limitedAmmo != propertyEffects.limitedAmmo)
+                            {
+                                e.strength = value.limitedAmmo.Value; Debug.Log(e.strength); //update effect
+                                cachedPropertyEffects = null; //and force recalculating the property effects on the next get call
+                            }
+                            break;
+
+                        default: Debug.Log("propertyEffects set does not recognize " + e.XMLName); break;
+                    }
+
+                }
+            }
+        }
         get
         {
             if (cachedPropertyEffects == null)
@@ -144,6 +174,17 @@ public class EffectData : System.Object
                     {
                         switch (e.XMLName)
                         {
+                            case "attackColor":
+                                Color temp;
+                                bool successful = ColorUtility.TryParseHtmlString(e.argument, out temp);
+                                if (successful)
+                                    newPropertyEffects.attackColor = temp;
+                                else
+                                    Debug.LogWarning("Could not convert " + e.argument + " to a color");
+                                break;
+
+                            case "infiniteTowerLifespan": newPropertyEffects.infiniteTowerLifespan = true; break;
+                            case "limitedAmmo": newPropertyEffects.limitedAmmo = Mathf.RoundToInt(e.strength); break;
                             case "returnsToTopOfDeck": newPropertyEffects.returnsToTopOfDeck = true; break;
                             default: Debug.LogWarning("Unknown property effect."); break;
                         }
@@ -193,6 +234,19 @@ public class EffectData : System.Object
         clone.parseEffects();
         return clone;
     }
+
+    //clones an individual IEffect without needing to know its type
+    public static IEffect cloneEffect(IEffect original)
+    {
+        //make a new XMLEffect from the original effect, parse it to get an effect object of the proper type, then return that
+        XMLEffect temp = new XMLEffect();
+        temp.name = original.XMLName;
+        temp.strength = original.strength;
+        temp.argument = original.argument;
+        IEffect result = EffectTypeManagerScript.instance.parse(temp);
+        Debug.Assert(result != null);
+        return result;
+    }
 }
 
 //All effects in the game must implement one of these interfaces.
@@ -213,7 +267,7 @@ public enum EffectType
     enemyDamaged     = unchecked((int)0x008000FF), //effect triggers when an enemy is damaged.  Could be attached to the attacking tower or the defending enemy
     enemyReachedGoal = unchecked((int)0x111111FF), //effect triggers when an enemy reaches their goal
     instant          = unchecked((int)0x00FFFFFF), //effect triggers instantly without the need for a target
-    periodic         = unchecked((int)0x333333FF), //effect triggers on every update() call
+    periodic         = unchecked((int)0x777777FF), //effect triggers on every update() call
     self             = unchecked((int)0x0000A0FF), //effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
     towerTargeting   = unchecked((int)0xADD8E6FF), //effect alters the way a tower taragets enemies.  if multiple are present, only the last is actually used
     wave             = unchecked((int)0x0000FFFF)  //effect alters the current wave

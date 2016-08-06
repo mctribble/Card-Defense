@@ -5,7 +5,7 @@ using System;
 
 //all effects in this file trigger when the object they are attached to is updated.  They can be applied to multiple types of entities
 
-//reduces incoming damage by a fixed amount (but attacks always do at least 1 damage)
+//enemy recovers X health per second
 public class EffectRegeneration : IEffectPeriodic
 {
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
@@ -43,6 +43,58 @@ public class EffectRegeneration : IEffectPeriodic
         e.curHealth += healThisFrame;
         e.expectedHealth += healThisFrame;
         LevelManagerScript.instance.WaveTotalRemainingHealth += healThisFrame;
+    }
+}
+
+//enemy loses X health per second for Y seconds 
+public class EffectPoison : IEffectPeriodic
+{
+    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
+    [Hide] public EffectType effectType { get { return EffectType.periodic; } }        //effect type
+    [Show, Display(2)] public float strength { get; set; }                             //how much health is healed per second
+
+    //effect lifespan (this is a string to match the interface, but actually updates the float maxPoisonTime)
+    [Hide] public string argument
+    {
+        get
+        {
+            return Convert.ToString(maxPoisonTime);
+        }
+        set
+        {
+            maxPoisonTime = Convert.ToSingle(value);
+            curPoisonTime = 0;
+        }
+    }              
+
+    [Hide] public string Name { get { return "Poison: " + strength + "/s for " + maxPoisonTime + " seconds"; } } //returns name and strength
+
+    [Show, Display(1)] public string XMLName { get { return "poison"; } } //name used to refer to this effect in XML
+
+    [Show, Display(3)] public float curPoisonTime; //how much time has passed
+    [Show, Display(4)] public float maxPoisonTime; //stop dealing damage after this window has passed
+
+    public EffectPoison() { curPoisonTime = 0; maxPoisonTime = 0; }  //default constructor inits internal variables to 0
+
+    public void UpdateEnemy(EnemyScript e, float deltaTime)
+    {
+        ////do nothing if the effect time is already over
+        //if (curPoisonTime > maxPoisonTime)
+        //    return;
+
+        //update timer
+        curPoisonTime += Time.deltaTime;
+
+        //construct event
+        DamageEventData damageEvent = new DamageEventData();
+        damageEvent.source = null;
+        damageEvent.dest = e.gameObject;
+        damageEvent.rawDamage = strength * Time.deltaTime;
+        damageEvent.effects = null;
+
+        //deal damage
+        e.onExpectedDamage(ref damageEvent);
+        e.onDamage(damageEvent);
     }
 }
 

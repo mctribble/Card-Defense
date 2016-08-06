@@ -15,6 +15,18 @@
     <Card Name="Basic Upgrade" Type="upgrade" Description="Useful on most towers, but be mindful of the speed penalty" Charges="5" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <upgradeData RechargeMult="1" RechargeMod="0.0" RangeMult="1.0" RangeMod="0.5" DamageMult="1.3" DamageMod="0" WaveBonus="1" />
     </Card>
+    <Card Name="Black Plague Tower" Type="tower" Description="" Charges="1" Art="Summon_Tower_Basic" Tooltip="Tower_Heavy" >
+      <towerData Recharge="10" Range="1" Damage="1" Lifespan="1" Sprite="Tower_Heavy" />
+      <effectData>
+        <Effects>
+          <Effect name="infiniteTowerLifespan" />
+          <Effect name="limitedAmmo" strength="3" />
+          <Effect name="chainHit" strength="0.65" />
+          <Effect name="poison" strength="2" argument="60" />
+          <Effect name="attackColor" argument="black"/>
+        </Effects>
+      </effectData>
+    </Card>
     <Card Name="Enrage" Type="spell" Description="Poking the bear." Charges="6" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <effectData>
         <Effects>

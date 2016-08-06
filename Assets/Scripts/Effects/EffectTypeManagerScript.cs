@@ -26,6 +26,7 @@ public class EffectTypeManagerScript : BaseBehaviour
         switch (xe.name)
         {
             //<<Enemy Effects (Periodic)>>
+            case "poison":                    ie = new EffectPoison(); break;
             case "regeneration":              ie = new EffectRegeneration(); break;
 
             //<<Enemy Effects (Stat Scaling)>>
@@ -73,12 +74,22 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "targetSpeed":               ie = new EffectTargetSpeed(); break;
 
             //<<Behavior effects(changes how something behaves, but is never triggered) >>
+            case "attackColor":               ie = new EffectAttackColor(); break;
+            case "infiniteTowerLifespan":     ie = new EffectInfiniteTowerLifespan(); break;
+            case "limitedAmmo":               ie = new EffectLimitedAmmo(); break;
             case "returnsToTopOfDeck":        ie = new EffectReturnsToTopOfDeck(); break;
 
             default:                          Debug.LogWarning("Effect type " + xe.name + " is not implemented."); return null;
         }
         ie.strength = xe.strength;
         ie.argument = xe.argument;
+
+        //catch effect classes returning the wrong xml name, which can cause weird issues elsewhere that are difficult to diagnose
+        if (Debug.isDebugBuild)
+            if (ie != null)
+                if (xe.name != ie.XMLName)
+                    Debug.LogWarning(xe.name + " is returning the wrong XML name (" + ie.XMLName + ")");
+
         return ie;
     }
 }

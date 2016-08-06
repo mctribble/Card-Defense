@@ -219,11 +219,28 @@ public class EnemyScript : BaseBehaviour
         if (curHealth <= 0)
             return;
 
-        //deal with effects that need to happen when we actually take damage
+        //enemyDamaged effects get triggered, others are copied to the enemy
         if (effectData != null)
             foreach (IEffect i in effectData.effects)
                 if (i.effectType == EffectType.enemyDamaged)
                     ((IEffectEnemyDamaged)i).actualDamage(ref e);
+
+        //copy periodic effects from the attack onto this unit so they can take effect
+        if (e.effects != null)
+        {
+            foreach (IEffect toCopy in e.effects.effects)
+            {
+                if (toCopy.effectType == EffectType.periodic)
+                {
+                    //found an effect we need to copy.  first make sure we have an object to copy it to.
+                    if (effectData == null)
+                        effectData = new EffectData();
+
+                    //then copy it
+                    effectData.Add(EffectData.cloneEffect(toCopy));
+                }
+            }
+        }
 
         //take damage
         int damage = Mathf.CeilToInt(e.rawDamage);
@@ -282,6 +299,10 @@ public class EnemyScript : BaseBehaviour
     //returns the distance from this enemy's current position to the goal, following its current path
     public float distanceToGoal()
     {
+        //distance is 0 if we are at the goal
+        if (path.Count == currentDestination)
+            return 0.0f;
+
         float result = Vector2.Distance(transform.position, path[currentDestination]); //start with distance to the current destination...
 
         //..and add the length of each subsequent segment

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+//using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
 //container passed to enemy to tell them they were damaged
@@ -13,12 +14,25 @@ public struct DamageEventData
 
 public class BulletScript : BaseBehaviour
 {
-    public float speed;               //projectile speed
-    public float finalChanceSpeed;    //projectile speed when the target is in "final chance"
+    public float  speed;            //projectile speed
+    public float  finalChanceSpeed; //projectile speed when the target is in "final chance"
+    public Color  color;            //default color to use for the bullet
+
+    public SpriteRenderer spriteRenderer; //component reference
 
     private bool initialized = false; //whether or not the bullet is ready for action
     private DamageEventData data;     //details about the attack
     private EnemyScript enemyRef;     //reference to the EnemyScript attached to the target
+
+    //set default color when spawned
+    private void Start() { spriteRenderer.color = color; }
+
+    //overrides the default color
+    public void SetColor(Color newColor)
+    {
+        color = newColor;
+        spriteRenderer.color = newColor;
+    }
 
     // Update is called once per frame
     private void Update()
@@ -46,6 +60,7 @@ public class BulletScript : BaseBehaviour
         //if destination is reached, trigger effects and pass data to target and destroy self
         if (newLocation == curDestination)
         {
+            //trigger enemyDamaged effects
             if (data.effects != null)
                 foreach (IEffect i in data.effects.effects)
                     if (i.effectType == EffectType.enemyDamaged)
@@ -88,4 +103,6 @@ public class BulletScript : BaseBehaviour
         if (data.dest == e)
             Destroy(gameObject);
     }
+
+    //overrides the default color with the new one
 }

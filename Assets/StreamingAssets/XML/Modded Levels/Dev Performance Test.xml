@@ -93,8 +93,8 @@
     <Cards>
       <Card name="Dev Purge Tower" count="2" />
       <Card name="Dev Chain Purge Tower" count="2" />
-      <Card name="AOE Tower" count="2" />
       <Card name="Explosive Tower" count="2" />
+      <Card name="Black Plague Tower" count="2" />
       <Card name="Reinforce" count="5" />
       <Card name="Shield" count="200" />
     </Cards>
