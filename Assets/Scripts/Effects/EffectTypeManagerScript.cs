@@ -77,6 +77,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "attackColor":               ie = new EffectAttackColor(); break;
             case "infiniteTowerLifespan":     ie = new EffectInfiniteTowerLifespan(); break;
             case "limitedAmmo":               ie = new EffectLimitedAmmo(); break;
+            case "manualFire":                ie = new EffectManualFire(); break;
             case "returnsToTopOfDeck":        ie = new EffectReturnsToTopOfDeck(); break;
 
             default:                          Debug.LogWarning("Effect type " + xe.name + " is not implemented."); return null;

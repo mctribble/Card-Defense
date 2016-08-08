@@ -24,6 +24,7 @@
           <Effect name="chainHit" strength="0.65" />
           <Effect name="poison" strength="2" argument="60" />
           <Effect name="attackColor" argument="black"/>
+          <Effect name="manualFire" />
         </Effects>
       </effectData>
     </Card>

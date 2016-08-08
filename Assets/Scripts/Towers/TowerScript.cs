@@ -30,8 +30,9 @@ public class TowerScript : BaseBehaviour
     public Text  tooltipText;  //reference to text for the tooltip
     public Text  lifespanText; //reference to text that shows the lifespan
 
-    private float deltaTime;  //time since last frame
-    private float shotCharge; //represents how charged the next. 0.0 is empty, 1.0 is full.
+    private float deltaTime;            //time since last frame
+    private float shotCharge;           //represents how charged the next. 0.0 is empty, 1.0 is full.
+    private bool  waitingForManualFire; //whether user is being prompeted to fire manually
 
     // Use this for initialization
     private void Awake()
@@ -118,60 +119,35 @@ public class TowerScript : BaseBehaviour
             buttonImage.fillAmount = shotCharge; //update guage
         }
 
-        //while a shot is charged and at least one enemy in range...
-        //(it is technically possible to fire multiple times per frame if the frame took a long time for some reason or the tower fires extremely quickly)
+        //fire gauge fades in and out if we are waiting on the user to fire
+        if (waitingForManualFire)
+        {
+            Color temp = buttonImage.color;
+            temp.a = Mathf.PingPong(Time.time, 1);
+            buttonImage.color = temp;
+        }
+            
+
+        //while a shot is charged...
+        //(this is a loop because it is technically possible to fire multiple times per frame if the frame took a long time for some reason or the tower fires extremely quickly)
         while (shotCharge > 1.0f)
         {
-            //bail if there are no enemies on the map
-            if (EnemyManagerScript.instance.activeEnemies.Count == 0)
-                break;
-
-            //if we are limited by ammo and are out of ammo, bail
-            if (effects != null)
-                if (effects.propertyEffects.limitedAmmo != null)
-                    if (effects.propertyEffects.limitedAmmo == 0)
-                        break;
-
-            //get the tower targeting type from effectData.  this uses a helper function for performance reasons
-            IEffectTowerTargeting targetingEffect = null;
-            if (effects != null)
-                targetingEffect = effects.towerTargetingType;
-            else
-                targetingEffect = EffectTargetDefault.instance; //EffectTargetDefault is a placeholder used when there is no target
-            Debug.Assert(targetingEffect != null); //there must always be a targeting effect
-
-            //find the target(s) we are shooting at using the current targeting effect, or the default if there is none
-            List<GameObject> targets;
-            targets = targetingEffect.findTargets(transform.position, range);
-
-            //call another function to actually fire on each valid target, if there are any
-            if ((targets != null) && (targets.Count != 0))
+            //if the tower has the manualFire property effect, flag that we are waiting for the player instead of firing now
+            if ((effects != null) && (effects.propertyEffects.manualFire == true))
             {
-                //reduce charge meter (if the gauge was overcharged, retain the excess)
-                shotCharge -= 1.0f;
-
-                //if we are operating on ammo, decrease that too
-                if (effects != null)
-                {
-                    if (effects.propertyEffects.limitedAmmo != null)
-                    {
-                        PropertyEffects temp = effects.propertyEffects;
-                        temp.limitedAmmo--;
-                        effects.propertyEffects = temp;
-                        UpdateTooltipText();
-                    }
-                }
-
-                foreach (GameObject t in targets)
-                    fire(t);
+                waitingForManualFire = true;
+                return;
             }
-            else
-            {
-                break; //no targets
-            }
+
+            //call helpers to perform targeting and shooting
+            List<GameObject> targets = target();
+            bool result = fire(targets);
+            if (result == false)
+                break; //bail if we failed to fire for any reason
         }
     }
 
+    //called when the mouse is over the tower
     private void TowerMouseEnter()
     {
         rangeImage.enabled = true;
@@ -179,7 +155,7 @@ public class TowerScript : BaseBehaviour
         tooltipText.enabled = true;
     }
 
-    //called when the mouse is no longer
+    //called when the mouse is no longer over the tower
     private void TowerMouseExit()
     {
         rangeImage.enabled = false;
@@ -187,8 +163,86 @@ public class TowerScript : BaseBehaviour
         tooltipText.enabled = false;
     }
 
-    //fires on an enemy unit
-    private void fire(GameObject enemy)
+    //called when the tower is clicked on
+    private void TowerMouseClick()
+    {
+        if (waitingForManualFire)
+        {
+            //call helpers to perform targeting and shooting
+            List<GameObject> targets = target();
+            bool result = fire(targets);
+            if (result == false)
+                return; //bail if we failed to fire for any reason
+
+            //return the gauge opacity to full
+            Color temp = buttonImage.color;
+            temp.a = 1.0f;
+            buttonImage.color = temp;
+
+            //unflag the wait
+            waitingForManualFire = false;
+        }
+    }
+
+    //returns a list of all the enemies to fire on
+    private List<GameObject> target()
+    {
+        //bail if there are no enemies on the map
+        if (EnemyManagerScript.instance.activeEnemies.Count == 0)
+            return null;
+
+        //if we are limited by ammo and are out of ammo, bail
+        if (effects != null)
+            if (effects.propertyEffects.limitedAmmo != null)
+                if (effects.propertyEffects.limitedAmmo == 0)
+                    return null;
+
+        //get the tower targeting type from effectData.  this uses a helper function for performance reasons
+        IEffectTowerTargeting targetingEffect = null;
+        if (effects != null)
+            targetingEffect = effects.towerTargetingType;
+        else
+            targetingEffect = EffectTargetDefault.instance; //EffectTargetDefault is a placeholder used when there is no target
+        Debug.Assert(targetingEffect != null); //there must always be a targeting effect
+
+        //find the target(s) we are shooting at using the current targeting effect, or the default if there is none
+        return targetingEffect.findTargets(transform.position, range);
+    }
+
+    //fires on each enemy in the given list, if possible
+    private bool fire(List<GameObject> targets)
+    {
+        //only fire if we have valid targets
+        if ((targets != null) && (targets.Count != 0))
+        {
+            //reduce charge meter (if the gauge was overcharged, retain the excess)
+            shotCharge -= 1.0f;
+
+            //if we are operating on ammo, decrease that too
+            if (effects != null)
+            {
+                if (effects.propertyEffects.limitedAmmo != null)
+                {
+                    PropertyEffects temp = effects.propertyEffects;
+                    temp.limitedAmmo--;
+                    effects.propertyEffects = temp;
+                    UpdateTooltipText();
+                }
+            }
+
+            foreach (GameObject t in targets)
+                spawnBullet(t);
+
+            return true; //success
+        }
+        else
+        {
+            return false; //failure
+        }
+    }
+
+    //spawns a bullet to attack an enemy unit
+    private void spawnBullet(GameObject enemy)
     {
         //create a struct and fill it with data about the attack
         DamageEventData e = new DamageEventData();

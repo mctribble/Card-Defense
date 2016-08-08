@@ -24,6 +24,7 @@ public struct PropertyEffects
 {
     public bool   infiniteTowerLifespan;
     public bool   returnsToTopOfDeck;
+    public bool   manualFire;
     public Color? attackColor;
     public int?   limitedAmmo;
 }
@@ -148,6 +149,7 @@ public class EffectData : System.Object
                         case "attackColor": if (value.attackColor != propertyEffects.attackColor) Debug.Log("updating that property is not supported"); break;
                         case "infiniteTowerLifespan": if (value.infiniteTowerLifespan != propertyEffects.infiniteTowerLifespan) Debug.Log("updating that property is not supported"); break;
                         case "returnsToTopOfDeck": if (value.returnsToTopOfDeck != propertyEffects.infiniteTowerLifespan) Debug.Log("updating that property is not supported"); break;
+                        case "manualFire": if (value.manualFire != propertyEffects.manualFire) Debug.Log("updating that property is not supported"); break;
 
                         case "limitedAmmo":
                             if (value.limitedAmmo != propertyEffects.limitedAmmo)
@@ -185,6 +187,7 @@ public class EffectData : System.Object
 
                             case "infiniteTowerLifespan": newPropertyEffects.infiniteTowerLifespan = true; break;
                             case "limitedAmmo": newPropertyEffects.limitedAmmo = Mathf.RoundToInt(e.strength); break;
+                            case "manualFire": newPropertyEffects.manualFire = true; break;
                             case "returnsToTopOfDeck": newPropertyEffects.returnsToTopOfDeck = true; break;
                             default: Debug.LogWarning("Unknown property effect."); break;
                         }

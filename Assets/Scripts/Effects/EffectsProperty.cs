@@ -15,7 +15,7 @@ class EffectReturnsToTopOfDeck : IEffectProperty
     
     //this effect
     [Hide] public string Name { get { return "put this card on top of the deck"; } } //returns name and strength
-    [Show] public string XMLName { get { return "returnsToTopOfDeck"; } } //name used to refer to this effect in XML.  This should never happen for this effect since it is a placeholder
+    [Show] public string XMLName { get { return "returnsToTopOfDeck"; } } //name used to refer to this effect in XML.
 }
 
 //tower lifespan does not decrease and is displayed as ∞.
@@ -29,7 +29,7 @@ class EffectInfiniteTowerLifespan : IEffectProperty
     
     //this effect
     [Hide] public string Name { get { return "tower does not decay"; } } //returns name and strength
-    [Show] public string XMLName { get { return "infiniteTowerLifespan"; } } //name used to refer to this effect in XML.  This should never happen for this effect since it is a placeholder
+    [Show] public string XMLName { get { return "infiniteTowerLifespan"; } } //name used to refer to this effect in XML.
 }
 
 //colorizes attacks associated with this effect
@@ -43,7 +43,7 @@ class EffectAttackColor : IEffectProperty
     
     //this effect
     [Hide] public string Name { get { return "Attack uses <color=" + argument + "> this</color> color"; } } //returns name and strength
-    [Show] public string XMLName { get { return "attackColor"; } } //name used to refer to this effect in XML.  This should never happen for this effect since it is a placeholder
+    [Show] public string XMLName { get { return "attackColor"; } } //name used to refer to this effect in XML.
 }
 
 //tower can only fire X times before disappearing
@@ -57,5 +57,19 @@ class EffectLimitedAmmo : IEffectProperty
     
     //this effect
     [Hide] public string Name { get { return "Ammo: " + strength; } } //returns name and strength
-    [Show] public string XMLName { get { return "limitedAmmo"; } } //name used to refer to this effect in XML.  This should never happen for this effect since it is a placeholder
+    [Show] public string XMLName { get { return "limitedAmmo"; } } //name used to refer to this effect in XML.
+}
+
+//tower only fires if clicked on 
+class EffectManualFire : IEffectProperty
+{
+    //generic interface
+    [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //property effects are not targeted
+    [Hide] public EffectType effectType { get { return EffectType.property; } }        //effect type
+    [Hide] public float strength { get; set; }                                         //number of shots the tower has
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
+    
+    //this effect
+    [Hide] public string Name { get { return "Manual Fire"; } } //returns name and strength
+    [Show] public string XMLName { get { return "manualFire"; } } //name used to refer to this effect in XML.
 }
