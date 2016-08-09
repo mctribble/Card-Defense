@@ -43,9 +43,8 @@ public class TowerScript : BaseBehaviour
         upgradeCount = 0;
         effects = null;
 
-        //set scale of range image and collider to match range
+        //set scale of range image
         rangeImage.gameObject.GetComponent<RectTransform>().localScale = new Vector3(range, range, 1.0f);
-        GetComponent<CircleCollider2D>().radius = range;
 
         //hide tooltip until moused over
         tooltipText.enabled = false;
@@ -287,15 +286,13 @@ public class TowerScript : BaseBehaviour
         attackPower = d.attackPower;
         wavesRemaining = d.lifespan;
 
-        //set scale of range image and collider to match range
-
         //yes, I know its awkward, but we're setting the sprite with WWW.
         WWW www = new WWW ("file:///" + Application.dataPath + "/StreamingAssets/Art/Sprites/" + d.towerSpriteName + ".png");
         yield return www;
         towerImage.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
 
+        //set scale of range image
         rangeImage.gameObject.GetComponent<RectTransform>().localScale = new Vector3(range, range, 1.0f);
-        GetComponent<CircleCollider2D>().radius = range;
 
         //update tooltip text
         UpdateTooltipText();
@@ -365,9 +362,8 @@ public class TowerScript : BaseBehaviour
         //also increase waves
         wavesRemaining += d.waveBonus;
 
-        //set scale of range image and collider to match range
+        //set scale of range image
         rangeImage.gameObject.GetComponent<RectTransform>().localScale = new Vector3(range, range, 1.0f);
-        GetComponent<CircleCollider2D>().radius = range;
 
         //count the upgrade
         upgradeCount++;
