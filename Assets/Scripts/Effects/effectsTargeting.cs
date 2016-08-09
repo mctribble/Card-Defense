@@ -283,3 +283,35 @@ public class EffectTargetSpeed : IEffectTowerTargeting
         return enemiesInRange;
     }
 }
+
+//targets all enemies in a horizontal line with this tower, so long as at least one is in range
+public class EffectTargetOrthogonal : IEffectTowerTargeting
+{
+    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
+    [Hide] public EffectType effectType { get { return EffectType.towerTargeting; } }  //effect type
+    [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
+
+    //this effect
+    [Hide] public string Name { get { return "Target: Orthogonal"; } } //returns name and strength
+    [Show] public string XMLName { get { return "targetOrthogonal"; } } //name used to refer to this effect in XML
+
+    public List<GameObject> findTargets(Vector2 towerPosition, float towerRange)
+    {
+        List<GameObject> enemiesInRange = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange); //get a list of all valid targets
+        
+        //bail if the list is empty
+        if ((enemiesInRange == null) || (enemiesInRange.Count == 0))
+            return enemiesInRange;
+
+        //construct a box around the tower position
+        Rect region = new Rect(towerPosition.x - 100.0f, towerPosition.y - 0.25f, 200.0f, 0.5f);
+
+        //attack all enemies in that region
+        List<GameObject> targets = new List<GameObject>();
+        foreach (GameObject t in EnemyManagerScript.instance.activeEnemies)
+            if (region.Contains(t.transform.position))
+                targets.Add(t);
+        return targets;
+    }
+}

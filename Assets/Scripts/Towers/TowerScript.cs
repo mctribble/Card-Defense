@@ -7,8 +7,9 @@ using Vexe.Runtime.Types;
 //tower class itself
 public class TowerScript : BaseBehaviour
 {
-    public GameObject bulletPrefab;    //prefab to instantiate as a bullet
-    public GameObject burstShotPrefab; //prefab to instantiate a burst shot
+    public GameObject bulletPrefab;          //prefab to instantiate as a bullet
+    public GameObject burstShotPrefab;       //prefab to instantiate a burst shot
+    public GameObject directionalShotPrefab; //prefab to instantiate a directional shot
 
     public Color textColorLifespan; //color of the tower text when the tower has a limited lifespan
     public Color textColorAmmo;     //color of the tower text when the tower has limited ammo
@@ -251,8 +252,31 @@ public class TowerScript : BaseBehaviour
                         ((IEffectOvercharge)effect).trigger(ref e, usedOvercharge);
             }
 
-            foreach (GameObject t in targets)
-                spawnBullet(t, e);
+            //determine projectile spawning by targeting effect
+            if ( (effects != null) && (effects.towerTargetingType != null) )
+            {
+                switch (effects.towerTargetingType.XMLName)
+                {
+                    case "targetOrthogonal":
+                        //split target list into four others, one for each direcion
+                        List<GameObject> left = new List<GameObject>();
+                        foreach (GameObject t in targets)
+                            if (t.transform.position.x < this.transform.position.x)
+                                left.Add(t);
+                        //TODO: other three
+
+                        //and fire each seperately
+                        directionalShot(left, e, Vector2.left);
+                        //TODO: other three
+                        break;
+                    default:
+                        foreach (GameObject t in targets)
+                            spawnBullet(t, e);
+                        break;
+                }
+            }
+
+            
 
             return true; //success
         }
@@ -288,6 +312,21 @@ public class TowerScript : BaseBehaviour
 
         //create a burst shot and give it the data
         GameObject shot = Instantiate(burstShotPrefab); //create it
+        shot.transform.position = transform.position;   //center it on the tower
+        shot.SendMessage("SetData", data);              //initialize it
+    }
+
+    //fires on all enemy units in a straight line
+    private void directionalShot(List<GameObject> targets, DamageEventData damageEvent, Vector2 attackDir)
+    {
+        //construct event
+        DirectionalShotData data = new DirectionalShotData();
+        data.attackDir = attackDir;
+        data.damageEvent = damageEvent;
+        data.targetList = targets;
+
+        //spawn it
+        GameObject shot = Instantiate(directionalShotPrefab);
         shot.transform.position = transform.position;   //center it on the tower
         shot.SendMessage("SetData", data);              //initialize it
     }

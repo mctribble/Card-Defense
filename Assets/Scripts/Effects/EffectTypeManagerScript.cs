@@ -70,6 +70,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "targetClosest":             ie = new EffectTargetClosest(); break;
             case "targetHealth":              ie = new EffectTargetHealth(); break;
             case "targetMultishot":           ie = new EffectTargetMultishot(); break;
+            case "targetOrthogonal":          ie = new EffectTargetOrthogonal(); break;
             case "targetRandom":              ie = new EffectTargetRandom(); break;
             case "targetSpeed":               ie = new EffectTargetSpeed(); break;
 
