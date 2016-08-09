@@ -23,12 +23,13 @@ public class TowerScript : BaseBehaviour
     public int         wavesRemaining; //number of waves this tower has left before disappearing
     public EffectData  effects;        //effects on this tower
 
-    public Image towerImage;   //reference to image for the tower itself
-    public Image rangeImage;   //reference to image for the range overlay
-    public Image buttonImage;  //reference to image for the button object
-    public Image tooltipPanel; //reference to image for the tooltip background
-    public Text  tooltipText;  //reference to text for the tooltip
-    public Text  lifespanText; //reference to text that shows the lifespan
+    public Image towerImage;                   //reference to image for the tower itself
+    public Image rangeImage;                   //reference to image for the range overlay
+    public Image buttonImage;                  //reference to image for the button object
+    public Image tooltipPanel;                 //reference to image for the tooltip background
+    public Text  tooltipText;                  //reference to text for the tooltip
+    public Text  lifespanText;                 //reference to text that shows the lifespan
+    public ParticleSystem manualFireParticles; //reference to particle effect to play when a manual fire is ready
 
     private float deltaTime;            //time since last frame
     private float shotCharge;           //represents how charged the next. 0.0 is empty, 1.0 is full.
@@ -119,15 +120,6 @@ public class TowerScript : BaseBehaviour
             buttonImage.fillAmount = shotCharge; //update guage
         }
 
-        //fire gauge fades in and out if we are waiting on the user to fire
-        if (waitingForManualFire)
-        {
-            Color temp = buttonImage.color;
-            temp.a = Mathf.PingPong(Time.time, 1);
-            buttonImage.color = temp;
-        }
-            
-
         //while a shot is charged...
         //(this is a loop because it is technically possible to fire multiple times per frame if the frame took a long time for some reason or the tower fires extremely quickly)
         while (shotCharge > 1.0f)
@@ -135,7 +127,11 @@ public class TowerScript : BaseBehaviour
             //if the tower has the manualFire property effect, flag that we are waiting for the player instead of firing now
             if ((effects != null) && (effects.propertyEffects.manualFire == true))
             {
-                waitingForManualFire = true;
+                if (waitingForManualFire == false)
+                {
+                    waitingForManualFire = true;
+                    manualFireParticles.Play(true);
+                }
                 return;
             }
 
@@ -174,12 +170,8 @@ public class TowerScript : BaseBehaviour
             if (result == false)
                 return; //bail if we failed to fire for any reason
 
-            //return the gauge opacity to full
-            Color temp = buttonImage.color;
-            temp.a = 1.0f;
-            buttonImage.color = temp;
-
             //unflag the wait
+            manualFireParticles.Stop(true);
             waitingForManualFire = false;
         }
     }

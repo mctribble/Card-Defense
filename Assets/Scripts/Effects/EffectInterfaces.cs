@@ -154,7 +154,7 @@ public class EffectData : System.Object
                         case "limitedAmmo":
                             if (value.limitedAmmo != propertyEffects.limitedAmmo)
                             {
-                                e.strength = value.limitedAmmo.Value; Debug.Log(e.strength); //update effect
+                                e.strength = value.limitedAmmo.Value; //update effect
                                 cachedPropertyEffects = null; //and force recalculating the property effects on the next get call
                             }
                             break;
