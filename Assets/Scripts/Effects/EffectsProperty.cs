@@ -73,3 +73,16 @@ class EffectManualFire : IEffectProperty
     [Hide] public string Name { get { return "Manual Fire"; } } //returns name and strength
     [Show] public string XMLName { get { return "manualFire"; } } //name used to refer to this effect in XML.
 }
+
+//tower can have up to X points of overcharge
+class EffectMaxOvercharge : IEffectProperty
+{
+    [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //property effects are not targeted
+    [Hide] public EffectType effectType { get { return EffectType.property; } }        //effect type
+    [Hide] public float strength { get; set; }                                         //max points of overcharge
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
+    
+    //this effect
+    [Hide] public string Name { get { return "overcharge: " + strength; } } //returns name and strength
+    [Show] public string XMLName { get { return "maxOvercharge"; } } //name used to refer to this effect in XML.
+}

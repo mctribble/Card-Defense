@@ -57,3 +57,7 @@ infiniteTowerLifespan | stop a tower's lifespan from decreasing or being display
 limitedAmmo           | tower can only fire X times before being destroyed
 manualFire            | this tower only fires when clicked on by the player 
 returnsToTopOfDeck    | this card returns to the top of the deck when played
+
+<<overcharge effects (tower maximum charge increases by 100% per point of overcharge.  Towers with at least one point of overcharge apply overcharge effects before firing)>>
+maxOvercharge    | tower can have up to X points of overcharge (currently we can only render 2 points, but it can continue charging above this)
+overchargeDamage | tower deals (1+X) times as much damage when overcharged

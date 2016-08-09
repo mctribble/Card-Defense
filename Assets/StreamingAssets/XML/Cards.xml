@@ -25,6 +25,7 @@
           <Effect name="poison" strength="2" argument="60" />
           <Effect name="attackColor" argument="black"/>
           <Effect name="manualFire" />
+          <Effect name="targetClosest" />
         </Effects>
       </effectData>
     </Card>
@@ -61,6 +62,15 @@
       <effectData>
         <Effects>
           <Effect name="drawCard" strength="5" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Name="Overcharge Tower" Type="tower"  Charges="2" Art="Summon_Tower_Basic" Tooltip="Tower_Standard">
+      <towerData Recharge="3" Range="2" Damage="100" Lifespan="3" Sprite="Tower_Heavy" />
+      <effectData>
+        <Effects>
+          <Effect name="maxOvercharge" strength="2" />
+          <Effect name="overchargeDamage" strength="2" />
         </Effects>
       </effectData>
     </Card>

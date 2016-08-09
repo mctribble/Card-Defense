@@ -27,6 +27,7 @@ public struct PropertyEffects
     public bool   manualFire;
     public Color? attackColor;
     public int?   limitedAmmo;
+    public int?   maxOvercharge;
 }
 
 //represents everything needed to apply effects to an object
@@ -150,6 +151,7 @@ public class EffectData : System.Object
                         case "infiniteTowerLifespan": if (value.infiniteTowerLifespan != propertyEffects.infiniteTowerLifespan) Debug.Log("updating that property is not supported"); break;
                         case "returnsToTopOfDeck": if (value.returnsToTopOfDeck != propertyEffects.infiniteTowerLifespan) Debug.Log("updating that property is not supported"); break;
                         case "manualFire": if (value.manualFire != propertyEffects.manualFire) Debug.Log("updating that property is not supported"); break;
+                        case "maximumOvercharge": if (value.maxOvercharge != propertyEffects.maxOvercharge) Debug.Log("updating that property is not supported"); break;
 
                         case "limitedAmmo":
                             if (value.limitedAmmo != propertyEffects.limitedAmmo)
@@ -188,6 +190,7 @@ public class EffectData : System.Object
                             case "infiniteTowerLifespan": newPropertyEffects.infiniteTowerLifespan = true; break;
                             case "limitedAmmo": newPropertyEffects.limitedAmmo = Mathf.RoundToInt(e.strength); break;
                             case "manualFire": newPropertyEffects.manualFire = true; break;
+                            case "maxOvercharge": newPropertyEffects.maxOvercharge = Mathf.FloorToInt(e.strength); break;
                             case "returnsToTopOfDeck": newPropertyEffects.returnsToTopOfDeck = true; break;
                             default: Debug.LogWarning("Unknown property effect."); break;
                         }
@@ -270,6 +273,7 @@ public enum EffectType
     enemyDamaged     = unchecked((int)0x008000FF), //effect triggers when an enemy is damaged.  Could be attached to the attacking tower or the defending enemy
     enemyReachedGoal = unchecked((int)0x111111FF), //effect triggers when an enemy reaches their goal
     instant          = unchecked((int)0x00FFFFFF), //effect triggers instantly without the need for a target
+    overcharge       = unchecked((int)0xFF00FFFF), //effect triggers when a tower attacks with at least one full point of overcharge, before enemyDamaged effects
     periodic         = unchecked((int)0x777777FF), //effect triggers on every update() call
     self             = unchecked((int)0x0000A0FF), //effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
     towerTargeting   = unchecked((int)0xADD8E6FF), //effect alters the way a tower taragets enemies.  if multiple are present, only the last is actually used
@@ -336,4 +340,11 @@ public interface IEffectTowerTargeting : IEffect
 public interface IEffectPeriodic : IEffect
 {
     void UpdateEnemy(EnemyScript e, float deltaTime);
+}
+
+//effect triggers when a tower fires and has at least one point of overcharge
+//these effects alter the given damage event and take effect before enemyDamaged effects
+public interface IEffectOvercharge : IEffect
+{
+    void trigger(ref DamageEventData d, int pointsOfOvercharge);
 }

@@ -10,10 +10,10 @@ public class TowerScript : BaseBehaviour
     public GameObject bulletPrefab;    //prefab to instantiate as a bullet
     public GameObject burstShotPrefab; //prefab to instantiate a burst shot
 
-    public Color gaugeColorLifespan; //color of the attack guage when the tower has a limited lifespan
-    public Color gaugeColorAmmo;     //color of the attack guage when the tower has limited ammo
-    public Color gaugeColorBoth;     //color of the attack guage when the tower has both a limited lifespan and limited ammo
-    public Color gaugeColorNeither;  //color of the attack guage when the tower has neither a limited lifespan nor limited ammo
+    public Color textColorLifespan; //color of the tower text when the tower has a limited lifespan
+    public Color textColorAmmo;     //color of the tower text when the tower has limited ammo
+    public Color textColorBoth;     //color of the tower text when the tower has both a limited lifespan and limited ammo
+    public Color textColorNeither;  //color of the tower text when the tower has neither a limited lifespan nor limited ammo
 
     public string      towerName;      //name of the tower
     public ushort      upgradeCount;   //number of times this tower has been upgraded
@@ -25,14 +25,17 @@ public class TowerScript : BaseBehaviour
 
     public Image towerImage;                   //reference to image for the tower itself
     public Image rangeImage;                   //reference to image for the range overlay
-    public Image buttonImage;                  //reference to image for the button object
+    public Image chargeGaugeImage1x;           //reference to image for the charge gauge
+    public Image chargeGaugeImage2x;           //reference to image for the charge gauge
+    public Image chargeGaugeImage3x;           //reference to image for the charge gauge
     public Image tooltipPanel;                 //reference to image for the tooltip background
     public Text  tooltipText;                  //reference to text for the tooltip
     public Text  lifespanText;                 //reference to text that shows the lifespan
     public ParticleSystem manualFireParticles; //reference to particle effect to play when a manual fire is ready
 
     private float deltaTime;            //time since last frame
-    private float shotCharge;           //represents how charged the next. 0.0 is empty, 1.0 is full.
+    private float shotCharge;           //represents how charged the next. 0.0 is empty, maxCharge is full
+    private float maxCharge;            //max shot charge (default 1.0)
     private bool  waitingForManualFire; //whether user is being prompeted to fire manually
 
     // Use this for initialization
@@ -41,6 +44,7 @@ public class TowerScript : BaseBehaviour
         //init vars
         rangeImage.enabled = false;
         upgradeCount = 0;
+        maxCharge = 1.0f;
         effects = null;
 
         //set scale of range image
@@ -53,16 +57,16 @@ public class TowerScript : BaseBehaviour
         if ( (effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false) )
         {
             if ((effects == null) || (effects.propertyEffects.limitedAmmo == null))
-                buttonImage.color = gaugeColorLifespan;
+                lifespanText.color = textColorLifespan;
             else
-                buttonImage.color = gaugeColorBoth;
+                lifespanText.color = textColorBoth;
         }
         else
         {
             if ((effects == null) || (effects.propertyEffects.limitedAmmo == null))
-                buttonImage.color = gaugeColorNeither;
+                lifespanText.color = textColorNeither;
             else
-                buttonImage.color = gaugeColorAmmo;
+                lifespanText.color = textColorAmmo;
         }
     }
 
@@ -112,15 +116,22 @@ public class TowerScript : BaseBehaviour
         }
 
         //increase shot charge if the gauge is not already full
-        //it can still overcharge slightly, if the last frame was longer than the remaining charge time
-        if (shotCharge < 1.0f)
+        //note that this is a "soft cap": a single frame can bring the value over, but it woull stop charging afterwards
+        //this avoids issues when towers should be shooting every frame, or even multiple times per frame
+        if (shotCharge < maxCharge)
         {
-            shotCharge += deltaTime / rechargeTime;
-            buttonImage.fillAmount = shotCharge; //update guage
+            shotCharge += deltaTime / rechargeTime; //charge
+
+            //update charge gauges
+            float fillAmount = Mathf.Min(shotCharge, maxCharge); //we fill the gauges based on max charge instead of current charge if we are over, so the wonkiness of a soft cap is hidden from the player
+            chargeGaugeImage1x.fillAmount = fillAmount; 
+            chargeGaugeImage2x.fillAmount = fillAmount - 1.0f; 
+            chargeGaugeImage3x.fillAmount = fillAmount - 2.0f; 
         }
 
         //while a shot is charged...
         //(this is a loop because it is technically possible to fire multiple times per frame if the frame took a long time for some reason or the tower fires extremely quickly)
+        //(towers with overcharge effects will usse multiple charges on one shot, but those without will simply fire multiple times on account of this loop
         while (shotCharge > 1.0f)
         {
             //if the tower has the manualFire property effect, flag that we are waiting for the player instead of firing now
@@ -221,8 +232,27 @@ public class TowerScript : BaseBehaviour
                 }
             }
 
+            //create a struct and fill it with data about the attack
+            DamageEventData e = new DamageEventData();
+            e.rawDamage = attackPower;
+            e.source = gameObject;
+            e.effects = effects;
+
+            //if overcharged and there are overcharge effects, try to apply them
+            if ( (shotCharge >= 1.0f) && (effects != null) && (effects.propertyEffects.maxOvercharge != null) )
+            {
+                int availableOvercharge = Mathf.FloorToInt(shotCharge); //calculate available points of overcharge
+                int usedOvercharge = Mathf.Min(availableOvercharge, effects.propertyEffects.maxOvercharge.Value); //if there are more available than our max, still only use the max
+                shotCharge -= usedOvercharge; //decrement gauge
+
+                //apply effects
+                foreach (IEffect effect in effects.effects)
+                    if (effect.effectType == EffectType.overcharge)
+                        ((IEffectOvercharge)effect).trigger(ref e, usedOvercharge);
+            }
+
             foreach (GameObject t in targets)
-                spawnBullet(t);
+                spawnBullet(t, e);
 
             return true; //success
         }
@@ -233,22 +263,13 @@ public class TowerScript : BaseBehaviour
     }
 
     //spawns a bullet to attack an enemy unit
-    private void spawnBullet(GameObject enemy)
+    private void spawnBullet(GameObject enemy, DamageEventData damageEvent)
     {
-        //create a struct and fill it with data about the attack
-        DamageEventData e = new DamageEventData();
-        e.rawDamage = attackPower;
-        e.source = gameObject;
-        e.dest = enemy;
-
-        //if there are effects on this tower, pass them to the event
-        if (effects != null)
-            e.effects = effects;
-        else
-            e.effects = null;
+        //tell the event who our target is
+        damageEvent.dest = enemy;
 
         GameObject bullet = (GameObject) Instantiate (bulletPrefab, transform.position, Quaternion.identity);
-        bullet.SendMessage("InitBullet", e);
+        bullet.SendMessage("InitBullet", damageEvent);
 
         //apply attackColor property, if it is present
         if (effects != null)
@@ -257,19 +278,13 @@ public class TowerScript : BaseBehaviour
     }
 
     //fires on all enemy units in range
-    private void burstFire(List<GameObject> targets)
-    {
-        //construct damage event
-        DamageEventData e = new DamageEventData();
-        e.rawDamage = attackPower;
-        e.source = gameObject;
-        e.effects = effects;
-        
+    private void burstFire(List<GameObject> targets, DamageEventData damageEvent)
+    {    
         //construct burst shot event
         BurstShotData data = new BurstShotData();
         data.targetList = targets;
         data.burstRange = range;
-        data.damageEvent = e;
+        data.damageEvent = damageEvent;
 
         //create a burst shot and give it the data
         GameObject shot = Instantiate(burstShotPrefab); //create it
@@ -307,17 +322,24 @@ public class TowerScript : BaseBehaviour
         if ((effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false))
         {
             if ((effects == null) || (effects.propertyEffects.limitedAmmo == null))
-                buttonImage.color = gaugeColorLifespan;
+                lifespanText.color = textColorLifespan;
             else
-                buttonImage.color = gaugeColorBoth;
+                lifespanText.color = textColorBoth;
         }
         else
         {
             if ((effects == null) || (effects.propertyEffects.limitedAmmo == null))
-                buttonImage.color = gaugeColorNeither;
+                lifespanText.color = textColorNeither;
             else
-                buttonImage.color = gaugeColorAmmo;
+                lifespanText.color = textColorAmmo;
         }
+
+        //max tower charge is 1.0 unless an effect overrides it
+        maxCharge = 1.0f;
+        maxCharge = 1.0f;
+        if (effects != null)
+            if (effects.propertyEffects.maxOvercharge != null)
+                maxCharge += effects.propertyEffects.maxOvercharge.Value;
     }
 
     //adds the new effects to the tower
@@ -338,17 +360,23 @@ public class TowerScript : BaseBehaviour
         if ((effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false))
         {
             if ((effects == null) || (effects.propertyEffects.limitedAmmo == null))
-                buttonImage.color = gaugeColorLifespan;
+                lifespanText.color = textColorLifespan;
             else
-                buttonImage.color = gaugeColorBoth;
+                lifespanText.color = textColorBoth;
         }
         else
         {
             if ((effects == null) || (effects.propertyEffects.limitedAmmo == null))
-                buttonImage.color = gaugeColorNeither;
+                lifespanText.color = textColorNeither;
             else
-                buttonImage.color = gaugeColorAmmo;
+                lifespanText.color = textColorAmmo;
         }
+
+        //max tower charge is 1.0 unless an effect overrides it
+        maxCharge = 1.0f;
+        if (effects != null)
+            if (effects.propertyEffects.maxOvercharge != null)
+                maxCharge += effects.propertyEffects.maxOvercharge.Value;
     }
 
     //receives upgrade data and uses it to modify the tower

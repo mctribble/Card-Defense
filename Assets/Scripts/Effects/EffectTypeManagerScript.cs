@@ -80,6 +80,10 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "manualFire":                ie = new EffectManualFire(); break;
             case "returnsToTopOfDeck":        ie = new EffectReturnsToTopOfDeck(); break;
 
+            //<<overcharge effects (tower maximum charge increases by 100% per point of overcharge.  Towers with at least one point of overcharge apply overcharge effects before firing)>>
+            case "maxOvercharge":             ie = new EffectMaxOvercharge(); break;
+            case "overchargeDamage":          ie = new EffectOverchargeDamage(); break;
+
             default:                          Debug.LogWarning("Effect type " + xe.name + " is not implemented."); return null;
         }
         ie.strength = xe.strength;
