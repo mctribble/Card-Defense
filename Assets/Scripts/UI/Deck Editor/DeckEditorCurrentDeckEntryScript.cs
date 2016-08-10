@@ -10,6 +10,9 @@ public class DeckEditorCurrentDeckEntryScript : BaseBehaviour, IPointerEnterHand
     public Text   cardCountText;
     public Image  background;
 
+    public Color normalColor; //color to use normally
+    public Color overColor;   //color to use when there are too many
+
     //XMLDeckEntry reference
     private XMLDeckEntry data;
 
@@ -20,11 +23,11 @@ public class DeckEditorCurrentDeckEntryScript : BaseBehaviour, IPointerEnterHand
         cardNameText.text = data.name;
         cardCountText.text = data.count.ToString();
 
-        //if we are below the max, print count in white.  Otherwise, print count in red
+        //set color based on card count
         if (data.count <= DeckRules.MAX_CARDS_OF_SAME_TYPE)
-            background.color = Color.white;
+            cardCountText.color = normalColor;
         else
-            background.color = Color.red;
+            cardCountText.color = overColor;
     }
 
     //sets the background color for this entry
@@ -43,11 +46,11 @@ public class DeckEditorCurrentDeckEntryScript : BaseBehaviour, IPointerEnterHand
             cardCountText.text = data.count.ToString();
             SendMessageUpwards("deckEntryUpdated", data);
 
-            //if we are below the max, print count in white.  Otherwise, print count in red
+            //set color based on card count
             if (data.count <= DeckRules.MAX_CARDS_OF_SAME_TYPE)
-                cardCountText.color = Color.white;
+                cardCountText.color = normalColor;
             else
-                cardCountText.color = Color.red;
+                cardCountText.color = overColor;
         }
         else if (text == "-")
         {
@@ -56,15 +59,18 @@ public class DeckEditorCurrentDeckEntryScript : BaseBehaviour, IPointerEnterHand
             cardCountText.text = data.count.ToString();
             SendMessageUpwards("deckEntryUpdated", data);
 
-            //if we are below the max, print count in white.  Otherwise, print count in red
+            //set color based on card count
             if (data.count <= DeckRules.MAX_CARDS_OF_SAME_TYPE)
-                cardCountText.color = Color.white;
+                cardCountText.color = normalColor;
             else
-                cardCountText.color = Color.red;
+                cardCountText.color = overColor;
 
             //and if that was the last copy, remove this entry from the list entirely
             if (data.count == 0)
+            {
                 Destroy(gameObject);
+
+            }
         }
         else
         {

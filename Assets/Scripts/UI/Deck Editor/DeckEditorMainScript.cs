@@ -195,6 +195,7 @@ public class DeckEditorMainScript : BaseBehaviour
             oldEntry.count = updatedEntry.count;
 
         unsavedChanges = true; //mark the deck as having changed
+        BroadcastMessage("refresh", openDeck); //update the menus to reflect it
     }
 
     //handles button clicks from the card type list
