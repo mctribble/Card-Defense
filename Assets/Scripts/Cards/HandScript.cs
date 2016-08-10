@@ -167,6 +167,31 @@ public class HandScript : BaseBehaviour
         }
     }
 
+    //attempts to remove d charges from random cards in the hand, discarding any that hit 0 charges.  returns how much damage was actually dealt
+    public int Damage(int d)
+    {
+        int alreadyDealt = 0;
+
+        while ( (currentHandSize > 0) && (alreadyDealt < d) )
+        {
+            //pick a random card in the hand
+            GameObject toDamage = cards[ Random.Range(0, currentHandSize) ];
+            CardScript scriptRef = toDamage.GetComponent<CardScript>();
+
+            //deal damage to it
+            int toDeal = Mathf.Min (scriptRef.card.charges, (d - alreadyDealt) );
+            scriptRef.card.charges -= toDeal;
+            alreadyDealt += toDeal;
+
+            if (scriptRef.card.charges == 0)
+                toDamage.SendMessage("Discard"); //discard the card if it is out of charges
+            else
+                scriptRef.updateChargeText(); //otherwise, tell the card to update its header text
+        }
+
+        return alreadyDealt;
+    }
+
     //removes a card from the hand (the card is NOT destroyed; the card does that part)
     private void Discard(GameObject card)
     {

@@ -6,6 +6,9 @@ Y is the effect argument
 regeneration | enemy recovers X health per second.  
 poison       | enemy takes Y damage per second for Y seconds
 
+<<Enemy Effects (Reached Goal)>>
+damageHand | deals X damage to the players hand
+
 <<Enemy Effects (Stat Scaling)>>
 fixedSpawnCount           | waves of this enemy type always spawn exactly this many enemies.  Best when used with budget scaling effects
 invScaleAttackWithHealth  | enemy deals less damage as it gets injured
@@ -23,7 +26,7 @@ scaleSpeedWithBudget      | enemy speed  scales up with wave budget
 scaleSpeedWithDamage      | enemy gets faster as it takes damage (max speed: base * X)
 scaleSpeedWithTime        | enemey gets faster by X/s
 
-<<Trigger on enemy damaged (On tower: trigger when attacking.  On Enemy type: trigger when attacked)>>
+<<Enemy Damaged Effects (On tower: trigger when attacking.  On Enemy type: trigger when attacked)>>
 armor                     | enemy receives X less damage from every hit, with a minimum of 1 damage
 chainHit				  | attack damages and spreads effects to all enemies within X of each other through a series of consecutive explosions.  No enemy will be hit twice.  
 reduceEnemyEffectOnDamage | hit enemies have the strength of effect Y reduced by X
@@ -34,7 +37,7 @@ budgetPercentageChange | wave budget is increased by X percent
 changeWaveType         | wave type is changed to Y
 timePercentageChange   | wave time is increased by X percent
 
-<<Trigger on card played>>
+<<Card effects (trigger on play)>>
 addCharges             | card gains X charges
 allTowersLifespanBonus | all towers on the map last X waves longer
 damagePlayer           | player takes X damage

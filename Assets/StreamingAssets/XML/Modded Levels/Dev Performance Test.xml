@@ -10,7 +10,6 @@
 		time: how many seconds the enemies spawn for.  Shorter time spans result in more densely packed groups.
 		message: optional message that appears at the start of the wave-->
   <Waves>
-    <Wave type="Swarm"                 budget="10000" time="30" />
     <Wave type="Standard"              budget="10000" time="30" />
     <Wave type="Tank"                  budget="10000" time="30" />
     <Wave type="Swarm"                 budget="20000" time="30" />

@@ -29,6 +29,9 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "poison":                    ie = new EffectPoison(); break;
             case "regeneration":              ie = new EffectRegeneration(); break;
 
+            //<<Enemy Effects (Reached Goal)>>
+            case "damageHand":                ie = new EffectDamageHand(); break;
+
             //<<Enemy Effects (Stat Scaling)>>
             case "fixedSpawnCount":           ie = new EffectFixedSpawnCount(); break;
             case "invScaleAttackWithHealth":  ie = new EffectInvScaleAttackWithHealth(); break;
@@ -45,7 +48,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "scaleSpeedWithDamage":      ie = new EffectScaleSpeedWithDamage(); break;
             case "scaleSpeedWithTime":        ie = new EffectScaleSpeedWithTime(); break;
 
-            //<<Trigger on enemy damaged (On tower: trigger when attacking.  On Enemy type: trigger when attacked)>>
+            //<<Enemy Damaged Effects (On tower: trigger when attacking.  On Enemy type: trigger when attacked)>>
             case "armor":                     ie = new EffectArmor(); break;
             case "chainHit":                  ie = new EffectChainHit(); break;
             case "reduceEnemyEffectOnDamage": ie = new EffectReduceEnemyEffectOnDamage(); break;
@@ -56,7 +59,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "changeWaveType":            ie = new EffectChangeWaveType(); break;
             case "timePercentageChange":      ie = new EffectTimePercentageChange(); break;
 
-            //<<Trigger on card played>>
+            //<<Card effects (trigger on play)>>
             case "addCharges":                ie = new EffectAddCharges(); break;
             case "allTowersLifespanBonus":    ie = new EffectAllTowersLifespanBonus(); break;
             case "damagePlayer":              ie = new EffectDamagePlayer(); break;

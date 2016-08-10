@@ -147,19 +147,16 @@ public struct Card
 
 public class DeckManagerScript : BaseBehaviour
 {
-    //singleton instance
-    public static DeckManagerScript instance;
-
+    public static DeckManagerScript instance; //singleton instance
     public string premadeDeckPath;      //location of premade deck file
     public DeckCollection premadeDecks; //stores premade decks
-
     public string playerDeckPath;       //location of player deck file
     public DeckCollection playerDecks;  //stores player decks
 
     //number of charges in the deck
-    public int curDeckCharges; //remaining
-
-    public int maxDeckCharges; //max
+    public int curDeckCharges;    //remaining
+    public int maxDeckCharges;    //max
+    public HandScript playerHand; //reference to the player's hand, if present
 
     private List<Card> currentDeck; //current deck
 
@@ -261,9 +258,13 @@ public class DeckManagerScript : BaseBehaviour
         currentDeck.Insert(0, c);    //and add the card
     }
 
-    // removes d charges from cards, starting at the top.  cards that hit zero charges in this way are removed
+    //removes d charges from cards in the deck, starting at the top.  cards that hit zero charges in this way are removed
     public void Damage(int d)
     {
+        //skip if no damage
+        if (d == 0)
+            return;
+
         Debug.Log("The enemy dealt " + d + " damage!");
         while (d > 0)
         {
@@ -288,5 +289,26 @@ public class DeckManagerScript : BaseBehaviour
                 currentDeck[0] = topCard;
             }
         }
+    }
+
+    //removes d charges from cards in the hand, starting at the top.  cards that hit zero charges in this way are removed.  If the hand is empty, damage is redirected to the deck
+    public void DamageHand(int d)
+    {
+        //if the player doesnt have a hand, something is seriously wrong
+        if (playerHand == null)
+        {
+            Debug.LogError("The player doesnt have a hand to damage!");
+            return;
+        }
+
+        //delegate to the hand object to deal damage
+        int damageDealt = playerHand.Damage(d);
+
+        if (damageDealt != 0)
+            Debug.Log("The enemy dealt " + damageDealt + " damage TO THE HAND!");
+
+        //if the damage wasnt all dealt, forward the rest to the deck
+        if (damageDealt < d)
+            Damage(d - damageDealt);
     }
 }

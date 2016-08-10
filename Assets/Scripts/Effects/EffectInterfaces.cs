@@ -10,6 +10,31 @@ using Vexe.Runtime.Types;
 //[Display(x)]: alters display order in the inspector
 //Usually you dont need these, since VFW is good at figuring it out on its own, but I found myself picky on this point for effects so I specify by hand
 
+//All effects in the game must implement one of these interfaces.
+//However, they should not use IEffect directly, but instead a derivitave such as IEffectInstant or IEffectWave
+
+//different targeting types.
+public enum TargetingType
+{
+    none,   //this effect does not require the player to select a target
+    tower, 	//this effect requires the player to target a tower
+    noCast  //this effect does not support being cast (used for effects that are not meant to be applied to a spell)
+};
+
+//different effect types.  The values are hex colors to be used for text mentioning these effects (format RRGGBBAA).  unchecked syntax is to force stuffing the values into the signed int used by enums
+public enum EffectType
+{
+    property         = unchecked((int)0xA52A2AFF), //effect is never triggered.  instead, other code tests whether or not it exists on a given object and behave accordingly
+    enemyDamaged     = unchecked((int)0x008000FF), //effect triggers when an enemy is damaged.  Could be attached to the attacking tower or the defending enemy
+    enemyReachedGoal = unchecked((int)0x111111FF), //effect triggers when an enemy reaches their goal
+    instant          = unchecked((int)0x00FFFFFF), //effect triggers instantly without the need for a target
+    overcharge       = unchecked((int)0xFF00FFFF), //effect triggers when a tower attacks with at least one full point of overcharge, before enemyDamaged effects
+    periodic         = unchecked((int)0x777777FF), //effect triggers on every update() call
+    self             = unchecked((int)0x0000A0FF), //effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
+    towerTargeting   = unchecked((int)0xADD8E6FF), //effect alters the way a tower taragets enemies.  if multiple are present, only the last is actually used
+    wave             = unchecked((int)0x0000FFFF)  //effect alters the current wave
+};
+
 //represents an effect in XML
 [System.Serializable]
 public class XMLEffect : System.Object
@@ -254,31 +279,6 @@ public class EffectData : System.Object
         return result;
     }
 }
-
-//All effects in the game must implement one of these interfaces.
-//Most will not use Effect directly, but instead a derivitave such as EffectInstant or EffectWave
-
-//different targeting types.
-public enum TargetingType
-{
-    none,   //this effect does not require the player to select a target
-    tower, 	//this effect requires the player to target a tower
-    noCast  //this effect does not support being cast (used for effects that are not meant to be applied to a spell)
-};
-
-//different effect types.  The values are hex colors to be used for text mentioning these effects (format RRGGBBAA).  unchecked syntax is to force stuffing the values into the signed int used by enums
-public enum EffectType
-{
-    property         = unchecked((int)0xA52A2AFF), //effect is never triggered.  instead, other code tests whether or not it exists on a given object and behave accordingly
-    enemyDamaged     = unchecked((int)0x008000FF), //effect triggers when an enemy is damaged.  Could be attached to the attacking tower or the defending enemy
-    enemyReachedGoal = unchecked((int)0x111111FF), //effect triggers when an enemy reaches their goal
-    instant          = unchecked((int)0x00FFFFFF), //effect triggers instantly without the need for a target
-    overcharge       = unchecked((int)0xFF00FFFF), //effect triggers when a tower attacks with at least one full point of overcharge, before enemyDamaged effects
-    periodic         = unchecked((int)0x777777FF), //effect triggers on every update() call
-    self             = unchecked((int)0x0000A0FF), //effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
-    towerTargeting   = unchecked((int)0xADD8E6FF), //effect alters the way a tower taragets enemies.  if multiple are present, only the last is actually used
-    wave             = unchecked((int)0x0000FFFF)  //effect alters the current wave
-};
 
 //base interface
 public interface IEffect

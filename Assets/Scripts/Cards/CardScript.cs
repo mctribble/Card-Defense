@@ -467,7 +467,7 @@ public class CardScript : BaseBehaviour
         card = c;
 
         //update card text
-        title.text = card.data.cardName + "\n" + card.charges + "/" + card.data.cardMaxCharges;
+        updateChargeText();
         updateDescriptionText();
 
         //load art with WWW (yes, really!  I couldn't find an easier way to do this and still let the user access the image files)
@@ -480,5 +480,11 @@ public class CardScript : BaseBehaviour
     private void updateDescriptionText()
     {
         description.text = card.data.getDescription();
+    }
+
+    //updates card charge counts
+    public void updateChargeText()
+    {
+        title.text = card.data.cardName + "\n" + card.charges + "/" + card.data.cardMaxCharges;
     }
 }
