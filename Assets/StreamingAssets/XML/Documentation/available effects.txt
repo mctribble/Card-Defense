@@ -43,8 +43,9 @@ drawCard               | player draws X cards
 shuffle                | shuffles the deck
 
 <<Targeting effects (Determines tower targeting behavior)>>
-targetAll        | tower targets all enemies in range
+targetAll        | tower targets all enemies in range with multiple projectiles
 targetArmor      | tower prioritizes targets with the highest armor
+targetBurst      | tower targets all enemies in range with a single wave
 targetClosest    | tower targets the enemy closest to the tower itself
 targetHealth     | tower prioritizes targets with the highest health
 targetMultishot  | tower attacks up to X enemies closest to their goals

@@ -92,8 +92,26 @@ public class EffectTargetAll : IEffectTowerTargeting
     [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
 
     //this effect
-    [Hide] public string Name { get { return "Target: all in range"; } } //returns name and strength
+    [Hide] public string Name { get { return "Target: all in range (projectiles)"; } } //returns name and strength
     [Show] public string XMLName { get { return "targetAll"; } } //name used to refer to this effect in XML
+
+    public List<GameObject> findTargets(Vector2 towerPosition, float towerRange)
+    {
+        return EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange); //simply returns all targets in range
+    }
+}
+
+//like targetAll, but uses a burst shot instead of individual projectiles
+public class EffectTargetBurst : IEffectTowerTargeting
+{
+    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
+    [Hide] public EffectType effectType { get { return EffectType.towerTargeting; } }  //effect type
+    [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
+
+    //this effect
+    [Hide] public string Name { get { return "Target: all in range (burst)"; } } //returns name and strength
+    [Show] public string XMLName { get { return "targetBurst"; } } //name used to refer to this effect in XML
 
     public List<GameObject> findTargets(Vector2 towerPosition, float towerRange)
     {

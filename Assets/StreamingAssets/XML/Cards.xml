@@ -73,6 +73,17 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Name="Nova Tower" Type="tower" Charges="2" Art="Summon_Tower_Basic" Tooltip="Tower_Basic" Description="The fury of a single sun tends to be sufficient">
+      <towerData Recharge="30" Range="20" Damage="300" Lifespan="1" Sprite="Tower_Fast" />
+      <effectData>
+        <Effects>
+          <Effect name="targetBurst" />
+          <Effect name="manualFire" />
+          <Effect name="infiniteTowerLifespan" />
+          <Effect name="limitedAmmo" strength="3" />
+        </Effects>
+      </effectData>
+    </Card>
     <Card Name="Overcharge Tower" Type="tower"  Charges="2" Art="Summon_Tower_Basic" Tooltip="Tower_Standard">
       <towerData Recharge="3" Range="2" Damage="100" Lifespan="3" Sprite="Tower_Heavy" />
       <effectData>

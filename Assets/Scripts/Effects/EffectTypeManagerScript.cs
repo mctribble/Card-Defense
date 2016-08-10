@@ -67,6 +67,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             //<<Targeting effects (Determines tower targeting behavior)>>
             case "targetAll":                 ie = new EffectTargetAll(); break;
             case "targetArmor":               ie = new EffectTargetArmor(); break;
+            case "targetBurst":               ie = new EffectTargetBurst(); break;
             case "targetClosest":             ie = new EffectTargetClosest(); break;
             case "targetHealth":              ie = new EffectTargetHealth(); break;
             case "targetMultishot":           ie = new EffectTargetMultishot(); break;

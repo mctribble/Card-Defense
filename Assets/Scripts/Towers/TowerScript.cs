@@ -234,10 +234,10 @@ public class TowerScript : BaseBehaviour
             }
 
             //create a struct and fill it with data about the attack
-            DamageEventData e = new DamageEventData();
-            e.rawDamage = attackPower;
-            e.source = gameObject;
-            e.effects = effects;
+            DamageEventData ded = new DamageEventData();
+            ded.rawDamage = attackPower;
+            ded.source = gameObject;
+            ded.effects = effects;
 
             //if overcharged and there are overcharge effects, try to apply them
             if ( (shotCharge >= 1.0f) && (effects != null) && (effects.propertyEffects.maxOvercharge != null) )
@@ -249,7 +249,7 @@ public class TowerScript : BaseBehaviour
                 //apply effects
                 foreach (IEffect effect in effects.effects)
                     if (effect.effectType == EffectType.overcharge)
-                        ((IEffectOvercharge)effect).trigger(ref e, usedOvercharge);
+                        ((IEffectOvercharge)effect).trigger(ref ded, usedOvercharge);
             }
 
             //determine projectile spawning by targeting effect
@@ -277,25 +277,28 @@ public class TowerScript : BaseBehaviour
 
                         //and fire each seperately
                         if (left.Count > 0)
-                            directionalShot(left, e, Vector2.left);
+                            directionalShot(left, ded, Vector2.left);
                         if (right.Count > 0)
-                            directionalShot(right, e, Vector2.right);
+                            directionalShot(right, ded, Vector2.right);
                         if (up.Count > 0)
-                            directionalShot(up, e, Vector2.up);
+                            directionalShot(up, ded, Vector2.up);
                         if (down.Count > 0)
-                            directionalShot(down, e, Vector2.down);
+                            directionalShot(down, ded, Vector2.down);
 
+                        break;
+                    case "targetBurst":
+                        burstFire(targets, ded);
                         break;
                     default:
                         foreach (GameObject t in targets)
-                            spawnBullet(t, e);
+                            spawnBullet(t, ded);
                         break;
                 }
             }        
             else //no targeting effects present: use bullets
             {
                 foreach (GameObject t in targets)
-                    spawnBullet(t, e);
+                    spawnBullet(t, ded);
             }
 
             return true; //success
@@ -486,7 +489,7 @@ public class TowerScript : BaseBehaviour
             if ((effects == null) || (effects.propertyEffects.limitedAmmo == null))
                 lifespanText.text = wavesRemaining.ToString(); //lifespan only
             else
-                lifespanText.text = wavesRemaining.ToString() + effects.propertyEffects.limitedAmmo.ToString(); //lifespan and ammo
+                lifespanText.text = wavesRemaining.ToString() + "/" + effects.propertyEffects.limitedAmmo.ToString(); //lifespan and ammo
         }
         else
         {
