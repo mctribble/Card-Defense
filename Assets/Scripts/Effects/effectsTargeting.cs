@@ -304,14 +304,16 @@ public class EffectTargetOrthogonal : IEffectTowerTargeting
         if ((enemiesInRange == null) || (enemiesInRange.Count == 0))
             return enemiesInRange;
 
-        //construct a box around the tower position
-        Rect region = new Rect(towerPosition.x - 100.0f, towerPosition.y - 0.25f, 200.0f, 0.5f);
+        //construct two boxes around the tower position
+        Rect regionH = new Rect(towerPosition.x - towerRange - 0.25f, towerPosition.y - 0.25f, towerRange + towerRange + 0.5f , 0.5f);
+        Rect regionV = new Rect(towerPosition.x - 0.25f, towerPosition.y - towerRange - 0.25f, 0.5f , towerRange + towerRange +  0.5f);
 
-        //attack all enemies in that region
+        //attack all enemies that are in either region region
         List<GameObject> targets = new List<GameObject>();
         foreach (GameObject t in EnemyManagerScript.instance.activeEnemies)
-            if (region.Contains(t.transform.position))
+            if ( (regionH.Contains(t.transform.position)) || (regionV.Contains(t.transform.position)) )
                 targets.Add(t);
+
         return targets;
     }
 }

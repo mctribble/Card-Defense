@@ -259,24 +259,44 @@ public class TowerScript : BaseBehaviour
                 {
                     case "targetOrthogonal":
                         //split target list into four others, one for each direcion
-                        List<GameObject> left = new List<GameObject>();
+                        List<GameObject> left  = new List<GameObject>();
+                        List<GameObject> right = new List<GameObject>();
+                        List<GameObject> up    = new List<GameObject>();
+                        List<GameObject> down  = new List<GameObject>();
                         foreach (GameObject t in targets)
-                            if (t.transform.position.x < this.transform.position.x)
+                        {
+                            if      (t.transform.position.x < this.transform.position.x)
                                 left.Add(t);
-                        //TODO: other three
+                            else if (t.transform.position.x > this.transform.position.x)
+                                right.Add(t);
+                            else if (t.transform.position.y < this.transform.position.y)
+                                up.Add(t);
+                            else if (t.transform.position.y > this.transform.position.y)
+                                down.Add(t);
+                        }
 
                         //and fire each seperately
-                        directionalShot(left, e, Vector2.left);
-                        //TODO: other three
+                        if (left.Count > 0)
+                            directionalShot(left, e, Vector2.left);
+                        if (right.Count > 0)
+                            directionalShot(right, e, Vector2.right);
+                        if (up.Count > 0)
+                            directionalShot(up, e, Vector2.up);
+                        if (down.Count > 0)
+                            directionalShot(down, e, Vector2.down);
+
                         break;
                     default:
                         foreach (GameObject t in targets)
                             spawnBullet(t, e);
                         break;
                 }
+            }        
+            else //no targeting effects present: use bullets
+            {
+                foreach (GameObject t in targets)
+                    spawnBullet(t, e);
             }
-
-            
 
             return true; //success
         }

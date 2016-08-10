@@ -59,7 +59,7 @@
       <upgradeData DamageMult="2" DamageMod="0" RechargeMod="0.5" RechargeMult="1.0" RangeMod="1" RangeMult="1.0" WaveBonus="3" />
     </Card>
     <Card Name="Orthogonal Tower" Type="tower" Charges="4" Art="Summon_Tower_Basic" Tooltip="Tower_Standard">
-      <towerData Recharge="1" Range="3" Damage="20" Lifespan="5" Sprite="Tower_Standard" />
+      <towerData Recharge="1" Range="3" Damage="5" Lifespan="5" Sprite="Tower_Standard" />
       <effectData>
         <Effects>
           <Effect name="targetOrthogonal" />

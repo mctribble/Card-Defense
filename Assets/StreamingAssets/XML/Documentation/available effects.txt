@@ -43,13 +43,14 @@ drawCard               | player draws X cards
 shuffle                | shuffles the deck
 
 <<Targeting effects (Determines tower targeting behavior)>>
-targetAll       | tower targets all enemies in range
-targetArmor     | tower prioritizes targets with the highest armor
-targetClosest   | tower targets the enemy closest to the tower itself
-targetHealth    | tower prioritizes targets with the highest health
-targetMultishot | tower attacks up to X enemies closest to their goals
-targetRandom    | tower attacks a target at random
-targetSpeed     | tower prioritizes targets with the highest speed
+targetAll        | tower targets all enemies in range
+targetArmor      | tower prioritizes targets with the highest armor
+targetClosest    | tower targets the enemy closest to the tower itself
+targetHealth     | tower prioritizes targets with the highest health
+targetMultishot  | tower attacks up to X enemies closest to their goals
+targetOrthogonal | tower attacks all enemies in a straight vertical or horizontal line, using special proectiles, if there is at least one enemy in range in that direction
+targetRandom     | tower attacks a target at random
+targetSpeed      | tower prioritizes targets with the highest speed
 
 <<property effects (changes how something behaves, but is never triggered)>>
 attackColor           | purely cosmetic.  Y is either a hex color, in the format #RRGGBBAA, or one of the following constants: red, cyan, blue, darkblue, lightblue, purple, yellow, lime, fuchsia, white, silver, grey, black, orange, brown, maroon, green, olive, navy, teal, aqua, magenta.
