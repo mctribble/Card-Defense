@@ -91,7 +91,7 @@
 		 count: how many of that card are present-->
     <Cards>
       <Card name="Dev Purge Tower" count="2" />
-      <Card name="Dev Chain Purge Tower" count="2" />
+      <Card name="Black Plague Tower" count="2" />
       <Card name="Nova Tower" count="2" />
       <Card name="Orthogonal Tower" count="2" />
       <Card name="Reinforce" count="5" />

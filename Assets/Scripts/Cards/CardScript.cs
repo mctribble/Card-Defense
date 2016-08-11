@@ -118,26 +118,34 @@ public class CardData : System.Object
                 //present tower stats
                 description += "Damage: " + towerData.attackPower + '\n' +
                                "Range: " + towerData.range + '\n' +
-                               "Fires in: " + towerData.rechargeTime + "s\n" +
-                               "Lifespan: " + towerData.lifespan + '\n';
+                               "Fires in: " + towerData.rechargeTime + 's';
+
+                //lifespan/ammo, if applicable
+                if ((effectData == null) || (effectData.propertyEffects.infiniteTowerLifespan == false))
+                    description += "\nLifespan: " + towerData.lifespan;
+                if ((effectData != null) && (effectData.propertyEffects.limitedAmmo != null))
+                    description += "\nAmmo: " + effectData.propertyEffects.limitedAmmo.Value;
+
                 break;
 
             case CardType.upgrade:
                 //present upgrade stats
-                if (upgradeData.waveBonus          != 0) { description += "lifespan: +"  + upgradeData.waveBonus                               + '\n'; }
+                if (upgradeData.waveBonus          != 0) { description += "lifespan: +"  + upgradeData.waveBonus; }
                 if (upgradeData.attackMultiplier   != 1) { description += "damage: +"    + (upgradeData.attackMultiplier - 1).ToString("P1")   + '\n'; }
                 if (upgradeData.rangeMultiplier    != 1) { description += "range: +"     + (upgradeData.rangeMultiplier - 1).ToString("P1")    + '\n'; }
                 if (upgradeData.rechargeMultiplier != 1) { description += "recharge: +"  + (upgradeData.rechargeMultiplier - 1).ToString("P1") + '\n'; }
                 if (upgradeData.attackModifier     != 0) { description += "damage: +"    + upgradeData.attackModifier.ToString()               + '\n'; }
                 if (upgradeData.rangeModifier      != 0) { description += "range: +"     + upgradeData.rangeModifier.ToString()                + '\n'; }
-                if (upgradeData.rechargeModifier   != 0) { description += "recharge: +"  + upgradeData.rechargeModifier.ToString()             + "s\n"; }
+                if (upgradeData.rechargeModifier   != 0) { description += "recharge: +"  + upgradeData.rechargeModifier.ToString() + 's'       + '\n'; }
                 if (upgradeData.waveBonus          != 0) { description += "lifespan: -"  + upgradeData.waveBonus                               + '\n'; }
                 if (upgradeData.attackMultiplier   != 1) { description += "damage: -"    + (1 - upgradeData.attackMultiplier).ToString("P1")   + '\n'; }
                 if (upgradeData.rangeMultiplier    != 1) { description += "range: -"     + (1 - upgradeData.rangeMultiplier).ToString("P1")    + '\n'; }
                 if (upgradeData.rechargeMultiplier != 1) { description += "recharge: -"  + (1 - upgradeData.rechargeMultiplier).ToString("P1") + '\n'; }
                 if (upgradeData.attackModifier     != 0) { description += "damage: -"    + upgradeData.attackModifier.ToString()               + '\n'; }
                 if (upgradeData.rangeModifier      != 0) { description += "range: -"     + upgradeData.rangeModifier.ToString()                + '\n'; }
-                if (upgradeData.rechargeModifier   != 0) { description += "recharge: -"  + upgradeData.rechargeModifier.ToString()             + "s\n"; }
+                if (upgradeData.rechargeModifier   != 0) { description += "recharge: -"  + upgradeData.rechargeModifier.ToString() + 's'       + '\n'; }
+                //cut off excess \n
+                description = description.TrimEnd('\n');
                 break;
         }
 
@@ -155,7 +163,10 @@ public class CardData : System.Object
         }
 
         //end with the flavor text found in the card file
-        description += "\n<i>" + cardDescription + "</i>";
+        if ( (cardDescription != null) && (cardDescription.Length > 0) )
+            description += "\n\n<i>" + cardDescription + "</i>";
+
+        description += '\n'; //TODO: remove this when a future version of unity fixes best fit
 
         //return it
         return description;
@@ -486,5 +497,6 @@ public class CardScript : BaseBehaviour
     public void updateChargeText()
     {
         title.text = card.data.cardName + "\n" + card.charges + "/" + card.data.cardMaxCharges;
+        title.text += '\n'; //TODO: remove this when a future version of unity fixes best fit
     }
 }

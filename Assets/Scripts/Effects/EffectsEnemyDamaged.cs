@@ -247,7 +247,7 @@ public class EffectChainHit : IEffectEnemyDamaged
     [Show, Display(2)] public float strength { get; set; }                             //chain range
     [Hide] public string argument { get; set; }                                        //effect argument(unused)
 
-    [Hide] public string Name { get { return "damage and effects chain to all enemies in the group (range: " + strength + ")"; } } //returns name and strength
+    [Hide] public string Name { get { return "attack chains to all nearby enemies (range: " + strength + ")"; } } //returns name and strength
 
     [Show, Display(1)] public string XMLName { get { return "chainHit"; } } //name used to refer to this effect in XML
 

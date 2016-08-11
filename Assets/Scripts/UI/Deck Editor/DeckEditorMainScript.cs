@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
 //filters/sorts card lists to be used by the various editor elements.
@@ -130,6 +132,30 @@ public class DeckEditorMainScript : BaseBehaviour
 
     private bool unsavedChanges; //whether or not there are changes that have not been written to disk
     private bool newDeck;        //if true, this deck is not currently in the deck collection and must be added to it in order to save changes
+
+    //creates a clickable button in the UNITY inspector that test previews all card types and warns about any that dont fit on the card
+    [Show] public void testCardSizes() { StartCoroutine(testCardSizesCoroutine()); }
+    private IEnumerator testCardSizesCoroutine()
+    {
+        Debug.Log("Testing...");
+        foreach (CardData c in CardTypeManagerScript.instance.types.cardTypes)
+        {
+            cardPreview.SendMessage("PreviewCard", c);
+            yield return new WaitForSeconds(0.1f);
+
+            //title
+            Text t = cardPreview.GetComponent<CardPreviewScript>().title;
+            if (t.cachedTextGenerator.characterCountVisible < t.text.Length)
+                Debug.LogWarning("Card type " + c.cardName + " does not fit! (title)");
+
+            //description
+            t = cardPreview.GetComponent<CardPreviewScript>().description;
+            if (t.cachedTextGenerator.characterCountVisible < t.text.Length)
+                Debug.LogWarning("Card type " + c.cardName + " does not fit! (description)");
+        }
+        Debug.Log("Done.");
+        yield break;
+    }
 
     //init
     public void Start()

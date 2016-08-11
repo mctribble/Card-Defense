@@ -26,7 +26,7 @@ public class CardPreviewScript : MonoBehaviour
         data = c;
 
         //update card text
-        title.text = data.cardName + "\n" + data.cardMaxCharges + "/" + data.cardMaxCharges;
+        updateChargeText();
         updateDescriptionText();
 
         //load art with WWW (yes, really!  I couldn't find an easier way to do this and still let the user access the image files)
@@ -39,5 +39,12 @@ public class CardPreviewScript : MonoBehaviour
     private void updateDescriptionText()
     {
         description.text = data.getDescription();
+    }
+
+    //updates card charge counts
+    public void updateChargeText()
+    {
+        title.text = data.cardName + "\n" + data.cardMaxCharges + "/" + data.cardMaxCharges;
+        title.text += '\n'; //TODO: remove this when a future version of unity fixes best fit
     }
 }
