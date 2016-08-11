@@ -57,6 +57,7 @@ targetRandom     | tower attacks a target at random
 targetSpeed      | tower prioritizes targets with the highest speed
 
 <<property effects (changes how something behaves, but is never triggered)>>
+armorPierce           | attacks ignore enemy armor
 attackColor           | purely cosmetic.  Y is either a hex color, in the format #RRGGBBAA, or one of the following constants: red, cyan, blue, darkblue, lightblue, purple, yellow, lime, fuchsia, white, silver, grey, black, orange, brown, maroon, green, olive, navy, teal, aqua, magenta.
 infiniteTowerLifespan | stop a tower's lifespan from decreasing or being displayed
 limitedAmmo           | tower can only fire X times before being destroyed

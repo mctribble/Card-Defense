@@ -47,6 +47,7 @@ public class XMLEffect : System.Object
 //convenience struct that indicates which property effects are contained in this effectData
 public struct PropertyEffects
 {
+    public bool   armorPierce;
     public bool   infiniteTowerLifespan;
     public bool   returnsToTopOfDeck;
     public bool   manualFire;
@@ -172,6 +173,7 @@ public class EffectData : System.Object
                 {
                     switch (e.XMLName)
                     {
+                        case "armorPierce": if (value.armorPierce != propertyEffects.armorPierce) Debug.Log("updating that property is not supported"); break;
                         case "attackColor": if (value.attackColor != propertyEffects.attackColor) Debug.Log("updating that property is not supported"); break;
                         case "infiniteTowerLifespan": if (value.infiniteTowerLifespan != propertyEffects.infiniteTowerLifespan) Debug.Log("updating that property is not supported"); break;
                         case "returnsToTopOfDeck": if (value.returnsToTopOfDeck != propertyEffects.infiniteTowerLifespan) Debug.Log("updating that property is not supported"); break;
@@ -212,6 +214,7 @@ public class EffectData : System.Object
                                     Debug.LogWarning("Could not convert " + e.argument + " to a color");
                                 break;
 
+                            case "armorPierce": newPropertyEffects.armorPierce = true; break;
                             case "infiniteTowerLifespan": newPropertyEffects.infiniteTowerLifespan = true; break;
                             case "limitedAmmo": newPropertyEffects.limitedAmmo = Mathf.RoundToInt(e.strength); break;
                             case "manualFire": newPropertyEffects.manualFire = true; break;

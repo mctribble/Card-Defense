@@ -20,6 +20,11 @@ public class EffectArmor : IEffectEnemyDamaged
     //alter damage calculations when we expect to deal damage, not when it actually happens, so that targeting etc. have an accurate number to work with
     public void expectedDamage(ref DamageEventData d)
     {
+        //skip if the attack ignores armor
+        if (d.effects != null)
+            if (d.effects.propertyEffects.armorPierce)
+                return;
+
         if (d.rawDamage <= 1) return; //dont bother applying armor if the incoming attack is already at or below the min
         d.rawDamage -= strength; //reduce damage by armor value
         d.rawDamage = Mathf.Max(d.rawDamage, 1.0f); //but must deal at least one

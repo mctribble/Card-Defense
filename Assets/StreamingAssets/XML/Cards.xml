@@ -81,6 +81,7 @@
           <Effect name="manualFire" />
           <Effect name="infiniteTowerLifespan" />
           <Effect name="limitedAmmo" strength="3" />
+          <Effect name="armorPierce" />
         </Effects>
       </effectData>
     </Card>

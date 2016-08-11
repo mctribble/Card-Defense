@@ -79,10 +79,23 @@ class EffectMaxOvercharge : IEffectProperty
 {
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //property effects are not targeted
     [Hide] public EffectType effectType { get { return EffectType.property; } }        //effect type
-    [Hide] public float strength { get; set; }                                         //max points of overcharge
+    [Show, Display(2)] public float strength { get; set; }                             //max points of overcharge
     [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
     
     //this effect
     [Hide] public string Name { get { return "overcharge: " + strength; } } //returns name and strength
-    [Show] public string XMLName { get { return "maxOvercharge"; } } //name used to refer to this effect in XML.
+    [Show, Display(1)] public string XMLName { get { return "maxOvercharge"; } } //name used to refer to this effect in XML.
+}
+
+//attacks ignore armor
+class EffectArmorPierce : IEffectProperty
+{
+    [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //property effects are not targeted
+    [Hide] public EffectType effectType { get { return EffectType.property; } }        //effect type
+    [Hide] public float strength { get; set; }                                         //max points of overcharge
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
+    
+    //this effect
+    [Hide] public string Name { get { return "attacks ignore armor"; } } //returns name and strength
+    [Show] public string XMLName { get { return "armorPierce"; } } //name used to refer to this effect in XML.
 }

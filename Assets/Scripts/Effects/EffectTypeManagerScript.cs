@@ -79,6 +79,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "targetSpeed":               ie = new EffectTargetSpeed(); break;
 
             //<<Behavior effects(changes how something behaves, but is never triggered) >>
+            case "armorPierce":               ie = new EffectArmorPierce(); break;
             case "attackColor":               ie = new EffectAttackColor(); break;
             case "infiniteTowerLifespan":     ie = new EffectInfiniteTowerLifespan(); break;
             case "limitedAmmo":               ie = new EffectLimitedAmmo(); break;
