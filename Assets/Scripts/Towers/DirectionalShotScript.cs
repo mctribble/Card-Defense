@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Linq;
 
 //data required to initialize one of these projectiles
 public struct DirectionalShotData
@@ -14,8 +15,9 @@ public struct DirectionalShotData
 //projectile intended to hit everything along a straight line
 public class DirectionalShotScript : MonoBehaviour
 {
-    public SpriteRenderer sprite; //reference to the sprite
-    public ParticleSystem trail; //reference to the particle trail
+    public SpriteRenderer sprite;       //reference to the sprite
+    public ParticleSystem trail;        //reference to the particle trail
+    public Color          defaultColor; //default color
 
     public float speed;      //projectile speed
     public float timeToLive; //max lifetime of this projectile
@@ -23,16 +25,17 @@ public class DirectionalShotScript : MonoBehaviour
 
     private bool             initialized;   //whether or not this object is ready for action
     private Vector3          attackDir;     //direction the attack is moving
-    private List<GameObject> expectedToHit; //list of enemies that we told to expect damage
+    private List<DamageEventData> expectedToHit; //list of enemies that we told to expect damage and the events associated with those hits
     private List<GameObject> alreadyHit;    //list of enemies we already dealt damage
     private DamageEventData  baseDamageEvent; //damage event to base all the others on
 
 	// Use this for initialization
 	void Awake ()
     {
-        trail.startColor = sprite.color;
+        trail.startColor = defaultColor;
+        sprite.color = defaultColor;
         initialized = false;
-        expectedToHit = new List<GameObject>();
+        expectedToHit = new List<DamageEventData>();
         alreadyHit = new List<GameObject>();
 	}
 	
@@ -46,8 +49,6 @@ public class DirectionalShotScript : MonoBehaviour
         //put the initial target list on the expected list and inform those enemies
         foreach (GameObject t in data.targetList)
         {
-            expectedToHit.Add(t);
-
             DamageEventData ded = new DamageEventData();
             ded.source = baseDamageEvent.source;
             ded.rawDamage = baseDamageEvent.rawDamage;
@@ -55,9 +56,17 @@ public class DirectionalShotScript : MonoBehaviour
             ded.dest = t;
 
             t.SendMessage("onExpectedDamage", ded);
+            expectedToHit.Add(ded);
         }
 
         initialized = true; //flag ready
+    }
+
+    //changes the color
+    void SetColor (Color c)
+    {
+        trail.startColor = c;
+        sprite.color = c;
     }
 
 	// Update is called once per frame
@@ -95,40 +104,35 @@ public class DirectionalShotScript : MonoBehaviour
             List<GameObject> toWarnThisFrame = new List<GameObject>();
             foreach (GameObject enemy in EnemyManagerScript.instance.activeEnemies)
                 if (lookAheadRegion.Contains(enemy.transform.position))
-                    if (expectedToHit.Contains(enemy) == false)
+                    if (expectedToHit.Exists(ded => ded.dest == enemy) == false)  //(if there is a damage event with enemy as the destination) (https://msdn.microsoft.com/en-us/library/bb397687.aspx)
                         if (alreadyHit.Contains(enemy) == false)
                             toWarnThisFrame.Add(enemy);
 
             foreach (GameObject enemy in toWarnThisFrame)
             {
-                expectedToHit.Add(enemy);
                 DamageEventData ded = new DamageEventData();
                 ded.source = baseDamageEvent.source;
                 ded.dest = enemy;
                 ded.rawDamage = baseDamageEvent.rawDamage;
                 ded.effects = baseDamageEvent.effects;
                 enemy.SendMessage("onExpectedDamage", ded);
+                expectedToHit.Add(ded);
             }
 
             //figure out which enemies we need to attack this frame
             Plane plane = new Plane(attackDir, transform.position);
-            List<GameObject> toHitThisFrame = new List<GameObject>();
-            foreach (GameObject enemy in expectedToHit)
-                if (plane.GetSide(enemy.transform.position) == false)
-                    toHitThisFrame.Add(enemy);
+            List<DamageEventData> toHitThisFrame = new List<DamageEventData>();
+            foreach (DamageEventData ded in expectedToHit)
+                if (plane.GetSide(ded.dest.transform.position) == false)
+                    toHitThisFrame.Add(ded);
              
             //attack them
-            foreach(GameObject enemy in toHitThisFrame)
+            foreach(DamageEventData ded in toHitThisFrame)
             {
-                DamageEventData ded = new DamageEventData();
-                ded.source = baseDamageEvent.source;
-                ded.dest = enemy;
-                ded.rawDamage = baseDamageEvent.rawDamage;
-                ded.effects = baseDamageEvent.effects;
-                enemy.SendMessage("onDamage", ded);
+                ded.dest.SendMessage("onDamage", ded);
                 
-                expectedToHit.Remove(enemy);
-                alreadyHit.Add(enemy);
+                expectedToHit.Remove(ded);
+                alreadyHit.Add(ded.dest);
             }
         }
 	}
