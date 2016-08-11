@@ -104,7 +104,7 @@ public class DirectionalShotScript : MonoBehaviour
             List<GameObject> toWarnThisFrame = new List<GameObject>();
             foreach (GameObject enemy in EnemyManagerScript.instance.activeEnemies)
                 if (lookAheadRegion.Contains(enemy.transform.position))
-                    if (expectedToHit.Exists(ded => ded.dest == enemy) == false)  //(if there is a damage event with enemy as the destination) (https://msdn.microsoft.com/en-us/library/bb397687.aspx)
+                    if (expectedToHit.Exists(ded => ded.dest == enemy) == false)  //(if there is not already a damage event with enemy as the destination) (https://msdn.microsoft.com/en-us/library/bb397687.aspx)
                         if (alreadyHit.Contains(enemy) == false)
                             toWarnThisFrame.Add(enemy);
 

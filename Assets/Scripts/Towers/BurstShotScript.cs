@@ -14,18 +14,49 @@ public struct BurstShotData
 //round burst attack used by towers with TargetAll.  expands to the towers range and attacks enemies as it reaches them.
 public class BurstShotScript : BaseBehaviour
 {
-    public float speed; //speed of the attack wave
-    public Color color; //default color to use for the burst
+    public float speed;     //speed of the attack wave
+    public Color color;     //default color to use for the burst
+    public float lookAhead; //seconds to look ahead when warning enemies about oncoming damage
 
     public SpriteRenderer spriteRenderer; //component reference
 
-    private bool                  initialized;  //whether or not this shot has been initialized
-    private List<DamageEventData> damageEvents; //damage events to be used for each enemy hit
-    private float                 curScale;     //current scale of this attack
-    private float                 maxScale;     //maximum scale this attack should reach
+    private bool                  initialized;     //whether or not this shot has been initialized
+    private List<DamageEventData> expectedToHit;   //list of enemies that we told to expect damage and the events associated with those hits
+    private List<GameObject>      alreadyHit;      //list of enemies we already dealt damage
+    private DamageEventData       baseDamageEvent; //damage event to base all the others on
+    private float                 curScale;        //current scale of this attack
+    private float                 maxScale;        //maximum scale this attack should reach
 
-    //set default color when spawned
-    private void Start() { spriteRenderer.color = color; }
+    //init
+    private void Awake()
+    {
+        spriteRenderer.color = color;
+        curScale = 0.0f;
+        expectedToHit = new List<DamageEventData>();
+        alreadyHit = new List<GameObject>();
+    }
+
+    //init attack
+    void SetData (BurstShotData data)
+    {
+        maxScale = data.burstRange;
+        baseDamageEvent = data.damageEvent;
+
+        //put the initial target list on the expected list and inform those enemies
+        //foreach (GameObject t in data.targetList)
+        //{
+        //    DamageEventData ded = new DamageEventData();
+        //    ded.source = baseDamageEvent.source;
+        //    ded.rawDamage = baseDamageEvent.rawDamage;
+        //    ded.effects = baseDamageEvent.effects;
+        //    ded.dest = t;
+        //
+        //    t.GetComponent<EnemyScript>().onExpectedDamage(ref ded);
+        //    expectedToHit.Add(ded);
+        //}
+
+        initialized = true; //flag ready
+    }
 
     //overrides the default color
     public void SetColor(Color newColor)
@@ -33,90 +64,58 @@ public class BurstShotScript : BaseBehaviour
         color = newColor;
         spriteRenderer.color = newColor;
     }
-
-    //init attack
-    void SetData (BurstShotData d)
-    {
-        //only allow this to be setup once
-        if (initialized)
-        {
-            Debug.LogWarning("duplicate burst init ignored!");
-            return;
-        }
-
-        curScale = 0.0f; //start at size 0
-        maxScale = d.burstRange; //save range
-
-        //populate event list
-        damageEvents = new List<DamageEventData>(d.targetList.Count);
-        foreach (GameObject curTarget in d.targetList)
-        {
-            //each target gets its own copy of the damage event with a different value for dest
-            //this way changes from one enemy (i. e, armor) dont propagate to all enemies attacked by the same shot
-            DamageEventData curEvent = new DamageEventData();
-            curEvent.rawDamage = d.damageEvent.rawDamage;
-            curEvent.source = d.damageEvent.source;
-            curEvent.dest = curTarget;
-            curEvent.effects = d.damageEvent.effects;
-
-            //also perform the onDamageExpected calls
-            if (curEvent.effects != null)
-                foreach (IEffect effect in curEvent.effects.effects)
-                    if (effect.effectType == EffectType.enemyDamaged)
-                        ((IEffectEnemyDamaged)effect).expectedDamage(ref curEvent);
-            curEvent.dest.GetComponent<EnemyScript>().onExpectedDamage(ref curEvent);
-
-            damageEvents.Add(curEvent); //and add it to the list
-        }
-        //flag ourselves as set up
-        initialized = true;
-    }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        if (initialized == false)
-            return; //only update once we've been initialized
-
-        curScale += speed * Time.deltaTime;                        //expand the burst
-        curScale = Mathf.Min(curScale, maxScale);                  //enforce max size
-        transform.localScale = new Vector3(curScale, curScale, 1); //update transform
-
-        //deal damage to enemies that are now within range and remove them from the list
-        //we cant modify the list while iterating on it, so we have to do removals in a second pass
-        List<DamageEventData> eventsToRemove = new List<DamageEventData>(); 
-        for (int i = 0; i < damageEvents.Count; i++)
+        if (initialized)
         {
-            DamageEventData curEvent = damageEvents[i];
-
-            //calculate distance
-            float dist;
-            if (curScale == maxScale)
-                dist = 0.0f; //if the explosion is over, hit everything still on the list
-            else
-                dist = Vector2.Distance(transform.position, curEvent.dest.transform.position);
-            
-            // if the enemy is in range
-            if ( dist < curScale )
+            //update scale and destroy if dead
+            curScale += speed * Time.deltaTime;
+            transform.localScale = new Vector3(curScale, curScale, 1);
+            if (curScale > maxScale)
             {
-                //damage effects
-                if (curEvent.effects != null)
-                    foreach (IEffect effect in curEvent.effects.effects)
-                        if (effect.effectType == EffectType.enemyDamaged)
-                            ((IEffectEnemyDamaged)effect).actualDamage(ref curEvent);
+                Destroy(gameObject);
+                return;
+            }
 
-                //damage
-                curEvent.dest.GetComponent<EnemyScript>().onDamage(curEvent);
+            float lookAheadDist = (Mathf.Max(lookAhead, Time.deltaTime) * speed) + curScale; //expand the box to include where we expect to be in lookAhead seconds, or in Time.deltaTime seconds, whichever is larger
 
-                eventsToRemove.Add(curEvent); //mark for removal
+            //find any enemies we are about to hit that dont already know its coming, and warn them
+            List<GameObject> toWarnThisFrame = new List<GameObject>();
+            foreach (GameObject enemy in EnemyManagerScript.instance.activeEnemies)
+            {
+                float enemyDist = Vector2.Distance (enemy.transform.position, transform.position);
+                if (enemyDist <= lookAheadDist) 
+                    if (expectedToHit.Exists(ded => ded.dest == enemy) == false)  //(if there is not already a damage event with enemy as the destination) (https://msdn.microsoft.com/en-us/library/bb397687.aspx)
+                        if (alreadyHit.Contains(enemy) == false)
+                            toWarnThisFrame.Add(enemy);
+            }
+
+            foreach (GameObject enemy in toWarnThisFrame)
+            {
+                DamageEventData ded = new DamageEventData();
+                ded.source = baseDamageEvent.source;
+                ded.dest = enemy;
+                ded.rawDamage = baseDamageEvent.rawDamage;
+                ded.effects = baseDamageEvent.effects;
+                enemy.SendMessage("onExpectedDamage", ded);
+                expectedToHit.Add(ded);
+            }
+
+            //figure out which enemies we need to attack this frame
+            List<DamageEventData> toHitThisFrame = new List<DamageEventData>();
+            foreach (DamageEventData ded in expectedToHit)
+                if ( Vector2.Distance(ded.dest.transform.position, transform.position) <= curScale )
+                    toHitThisFrame.Add(ded);
+
+            //attack them
+            foreach (DamageEventData ded in toHitThisFrame)
+            {
+                ded.dest.SendMessage("onDamage", ded);
+                expectedToHit.Remove(ded);
+                alreadyHit.Add(ded.dest);
             }
         }
-
-        foreach (DamageEventData curEvent in eventsToRemove)
-            damageEvents.Remove(curEvent);
-
-        //if we are at max range, destroy this shot
-        if (curScale == maxScale)
-            Destroy(gameObject);
     }
 }
