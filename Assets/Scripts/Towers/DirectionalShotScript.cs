@@ -23,11 +23,11 @@ public class DirectionalShotScript : MonoBehaviour
     public float timeToLive; //max lifetime of this projectile
     public float lookAhead;  //how far ahead, in seconds, to look for future targets
 
-    private bool             initialized;   //whether or not this object is ready for action
-    private Vector3          attackDir;     //direction the attack is moving
-    private List<DamageEventData> expectedToHit; //list of enemies that we told to expect damage and the events associated with those hits
-    private List<GameObject> alreadyHit;    //list of enemies we already dealt damage
-    private DamageEventData  baseDamageEvent; //damage event to base all the others on
+    private bool                  initialized;     //whether or not this object is ready for action
+    private Vector3               attackDir;       //direction the attack is moving
+    private List<DamageEventData> expectedToHit;   //list of enemies that we told to expect damage and the events associated with those hits
+    private List<GameObject>      alreadyHit;      //list of enemies we already dealt damage
+    private DamageEventData       baseDamageEvent; //damage event to base all the others on
 
 	// Use this for initialization
 	void Awake ()
@@ -55,7 +55,7 @@ public class DirectionalShotScript : MonoBehaviour
             ded.effects = baseDamageEvent.effects;
             ded.dest = t;
 
-            t.SendMessage("onExpectedDamage", ded);
+            t.GetComponent<EnemyScript>().onExpectedDamage(ref ded);
             expectedToHit.Add(ded);
         }
 
