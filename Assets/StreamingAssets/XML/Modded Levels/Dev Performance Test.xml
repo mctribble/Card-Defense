@@ -10,6 +10,7 @@
 		time: how many seconds the enemies spawn for.  Shorter time spans result in more densely packed groups.
 		message: optional message that appears at the start of the wave-->
   <Waves>
+    <Wave type="Swarm"                 budget="10000" time="30" />
     <Wave type="Standard"              budget="10000" time="30" />
     <Wave type="Tank"                  budget="10000" time="30" />
     <Wave type="Swarm"                 budget="20000" time="30" />
@@ -79,9 +80,11 @@
     <Tower name="Fast Tower" x="5.5"  y="1" />
     <Tower name="Fast Tower" x="6"    y="1" />
   
-    <Tower name="Shredder Tower" x="-0.5" y="0.5"> <Upgrades> <Upgrade Name="Fast Upgrade" Count="5" /> </Upgrades> </Tower>
-    <Tower name="Shredder Tower" x=" 0"   y="0.5"> <Upgrades> <Upgrade Name="Fast Upgrade" Count="5" /> </Upgrades> </Tower>
-    <Tower name="Shredder Tower" x=" 0.5" y="0.5"> <Upgrades> <Upgrade Name="Fast Upgrade" Count="5" /> </Upgrades> </Tower>
+    <Tower name="Shredder Tower" x="-0.5" y="0.0"> <Upgrades> <Upgrade Name="Fast Upgrade" Count="5" /> </Upgrades> </Tower>
+    <Tower name="Shredder Tower" x="-0.5" y="1.0"> <Upgrades> <Upgrade Name="Fast Upgrade" Count="5" /> </Upgrades> </Tower>
+    
+    <Tower name="Shredder Tower" x=" 0.5" y="0.0"> <Upgrades> <Upgrade Name="Fast Upgrade" Count="5" /> </Upgrades> </Tower>
+    <Tower name="Shredder Tower" x=" 0.5" y="1.0"> <Upgrades> <Upgrade Name="Fast Upgrade" Count="5" /> </Upgrades> </Tower>
   </Towers>
   <!--  this determines whether or not the deck is shuffled at game start.  If false, cards appear in the order listed below-->
   <shuffleDeck>false</shuffleDeck>
