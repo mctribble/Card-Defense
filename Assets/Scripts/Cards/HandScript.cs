@@ -209,7 +209,7 @@ public class HandScript : BaseBehaviour
         //bail and print warning if that card didnt exist
         if (index == -1)
         {
-            Debug.Log("Attempted to discard something that doesn't exist!");
+            MessageHandlerScript.Warning("Attempted to discard something that doesn't exist!");
             return;
         }
 

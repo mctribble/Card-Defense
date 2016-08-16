@@ -173,12 +173,12 @@ public class EffectData : System.Object
                 {
                     switch (e.XMLName)
                     {
-                        case "armorPierce": if (value.armorPierce != propertyEffects.armorPierce) Debug.Log("updating that property is not supported"); break;
-                        case "attackColor": if (value.attackColor != propertyEffects.attackColor) Debug.Log("updating that property is not supported"); break;
-                        case "infiniteTowerLifespan": if (value.infiniteTowerLifespan != propertyEffects.infiniteTowerLifespan) Debug.Log("updating that property is not supported"); break;
-                        case "returnsToTopOfDeck": if (value.returnsToTopOfDeck != propertyEffects.infiniteTowerLifespan) Debug.Log("updating that property is not supported"); break;
-                        case "manualFire": if (value.manualFire != propertyEffects.manualFire) Debug.Log("updating that property is not supported"); break;
-                        case "maximumOvercharge": if (value.maxOvercharge != propertyEffects.maxOvercharge) Debug.Log("updating that property is not supported"); break;
+                        case "armorPierce": if (value.armorPierce != propertyEffects.armorPierce) Debug.LogWarning("updating that property is not supported"); break;
+                        case "attackColor": if (value.attackColor != propertyEffects.attackColor) Debug.LogWarning("updating that property is not supported"); break;
+                        case "infiniteTowerLifespan": if (value.infiniteTowerLifespan != propertyEffects.infiniteTowerLifespan) Debug.LogWarning("updating that property is not supported"); break;
+                        case "returnsToTopOfDeck": if (value.returnsToTopOfDeck != propertyEffects.infiniteTowerLifespan) Debug.LogWarning("updating that property is not supported"); break;
+                        case "manualFire": if (value.manualFire != propertyEffects.manualFire) Debug.LogWarning("updating that property is not supported"); break;
+                        case "maximumOvercharge": if (value.maxOvercharge != propertyEffects.maxOvercharge) Debug.LogWarning("updating that property is not supported"); break;
 
                         case "limitedAmmo":
                             if (value.limitedAmmo != propertyEffects.limitedAmmo)
@@ -188,7 +188,7 @@ public class EffectData : System.Object
                             }
                             break;
 
-                        default: Debug.Log("propertyEffects set does not recognize " + e.XMLName); break;
+                        default: Debug.LogWarning("propertyEffects set does not recognize " + e.XMLName); break;
                     }
 
                 }

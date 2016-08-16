@@ -58,4 +58,22 @@ public class MessageHandlerScript : MonoBehaviour
 
     //helper: calls ShowAndYield but returns without waiting for a response.  Useful for places (like Update()) where the engine does not allow you to yield
     public static void ShowNoYield(string message) { instance.StartCoroutine(ShowAndYield(message)); }
+
+    //helper: like ShowNoYield, but reroutes the message to the log if we are running a debug build
+    public static void Warning(string message)
+    {
+        if (Debug.isDebugBuild)
+            Debug.LogWarning(message);
+        else
+            MessageHandlerScript.ShowNoYield("WARNING: " + message);
+    }
+
+    //helper: like ShowNoYield, but duplicates to the log if we are running a debug build
+    public static void Error(string message)
+    {
+        if (Debug.isDebugBuild)
+            Debug.LogError(message);
+
+        MessageHandlerScript.ShowNoYield("ERROR: " + message);
+    }
 }

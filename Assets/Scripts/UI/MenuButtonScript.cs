@@ -78,7 +78,7 @@ public class MenuButtonScript : BaseBehaviour
                 SendMessageUpwards("TextButtonSelected", buttonText.text);
                 break;
             default:
-                Debug.LogError("MenuButtonScript cant handle this button type!");
+                MessageHandlerScript.Error("MenuButtonScript cant handle this button type!");
                 break;
         }
     }

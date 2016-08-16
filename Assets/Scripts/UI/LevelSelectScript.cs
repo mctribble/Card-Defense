@@ -184,7 +184,7 @@ public class LevelSelectScript : BaseBehaviour
                 StartCoroutine(setupLevelButtons());
                 break;
             default:
-                Debug.LogError("LevelSelectScript doesnt know how to handle this button!");
+                MessageHandlerScript.Error("LevelSelectScript doesnt know how to handle this button!");
                 break;
         }
     }

@@ -69,7 +69,7 @@ public class DeckEditorFilter
             case SortingRule.type:    sorted.Sort(new CardTypeComparer());    break;
             case SortingRule.charges: sorted.Sort(new CardChargesComparer()); break;
             default:
-                Debug.LogWarning("sortCardData doesnt know how to handle this sorting rule");
+                MessageHandlerScript.Error("sortCardData doesnt know how to handle this sorting rule");
                 break;
         }
 
@@ -88,7 +88,7 @@ public class DeckEditorFilter
             case SortingRule.type: sorted.Sort(new CardTypeComparer()); break;
             case SortingRule.charges: sorted.Sort(new CardChargesComparer()); break;
             default:
-                Debug.LogWarning("sortCardData doesnt know how to handle this sorting rule");
+                MessageHandlerScript.Error("sortCardData doesnt know how to handle this sorting rule");
                 break;
         }
 
@@ -146,12 +146,12 @@ public class DeckEditorMainScript : BaseBehaviour
             //title
             Text t = cardPreview.GetComponent<CardPreviewScript>().title;
             if (t.cachedTextGenerator.characterCountVisible < t.text.Length)
-                Debug.LogWarning("Card type " + c.cardName + " does not fit! (title)");
+                Debug.LogWarning("Card title for " + c.cardName + " does not fit on the card!");
 
             //description
             t = cardPreview.GetComponent<CardPreviewScript>().description;
             if (t.cachedTextGenerator.characterCountVisible < t.text.Length)
-                Debug.LogWarning("Card type " + c.cardName + " does not fit! (description)");
+                Debug.LogWarning("Card description for " + c.cardName + " does not fit on the card!");
         }
         Debug.Log("Done.");
         yield break;
@@ -208,7 +208,7 @@ public class DeckEditorMainScript : BaseBehaviour
         //if the entry was not in the deck, bail
         if (oldEntry == null)
         {
-            Debug.LogError("updated an entry that is not in the deck!");
+            MessageHandlerScript.Error("updated an entry that is not in the deck!");
             return;
         }
 
@@ -264,7 +264,7 @@ public class DeckEditorMainScript : BaseBehaviour
                 break;
 
             default: //button has not been implemented.  Print warning.
-                Debug.LogWarning("DeckEditorMainScript doesn't know how to respond to this button");
+                MessageHandlerScript.Error("DeckEditorMainScript doesn't know how to respond to this button");
                 break;
         }
     }
@@ -292,7 +292,7 @@ public class DeckEditorMainScript : BaseBehaviour
             case 1: filter.type = CardType.tower; break;
             case 2: filter.type = CardType.spell; break;
             case 3: filter.type = CardType.upgrade; break;
-            default: Debug.LogError("unknown filter type"); break;
+            default: MessageHandlerScript.Error("unknown filter type"); break;
         }
         BroadcastMessage("filterChanged", filter); //report the new filter settings to children
         BroadcastMessage("refresh", openDeck);     //update interfaces
@@ -306,7 +306,7 @@ public class DeckEditorMainScript : BaseBehaviour
             case 0: filter.sortBy = DeckEditorFilter.SortingRule.name; break;
             case 1: filter.sortBy = DeckEditorFilter.SortingRule.charges; break;
             case 2: filter.sortBy = DeckEditorFilter.SortingRule.type; break;
-            default: Debug.LogError("unknown sort type"); break;
+            default: MessageHandlerScript.Error("unknown sort type"); break;
         }
         BroadcastMessage("filterChanged", filter); //report the new filter settings to children
         BroadcastMessage("refresh", openDeck);     //update interfaces

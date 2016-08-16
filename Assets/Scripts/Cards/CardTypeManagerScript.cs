@@ -134,7 +134,7 @@ public class CardTypeManagerScript : BaseBehaviour
             }
         }
 
-        Debug.LogError("Could not find card type " + name + ".");
+        MessageHandlerScript.Error("Could not find card type " + name + ".");
         return null;
     }
 }

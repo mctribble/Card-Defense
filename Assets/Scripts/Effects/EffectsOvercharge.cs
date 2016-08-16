@@ -20,9 +20,7 @@ class EffectOverchargeDamage : IEffectOvercharge
 
     public void trigger(ref DamageEventData d, int pointsOfOvercharge)
     {
-        Debug.Log(d.rawDamage);
         d.rawDamage = (1 + (strength * pointsOfOvercharge)) * d.rawDamage;
-        Debug.Log(d.rawDamage);
     }
 }
 

@@ -128,7 +128,7 @@ public class DeckCollection
         //if the deck did not exist, use a default deck and print a warning
         if (result == null)
         {
-            Debug.LogWarning("Deck " + targetDeck + " could not be found.  Using a default deck instead");
+            MessageHandlerScript.Warning("Deck " + targetDeck + " could not be found.  Using a default deck instead");
             result = new XMLDeck();
             result.contents = new List<XMLDeckEntry>();
             result.contents.Add(new XMLDeckEntry("Basic Tower", 60));
@@ -270,8 +270,8 @@ public class DeckManagerScript : BaseBehaviour
         {
             if (currentDeck.Count == 0)
             {
-                Debug.Log("GAME OVER!"); //todo: properly handle game over
-                Time.timeScale = 0.0f;
+                MessageHandlerScript.ShowNoYield("GAME OVER!"); 
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
                 return;
             }
 
@@ -297,7 +297,7 @@ public class DeckManagerScript : BaseBehaviour
         //if the player doesnt have a hand, something is seriously wrong
         if (playerHand == null)
         {
-            Debug.LogError("The player doesnt have a hand to damage!");
+            MessageHandlerScript.Error("The player doesnt have a hand to damage!");
             return;
         }
 
