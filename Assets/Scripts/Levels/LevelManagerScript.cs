@@ -109,7 +109,7 @@ public class WaveData
     {
         get
         {
-            if (data == null)
+            if ( (data == null) || (data.name != type) )
                 data = EnemyTypeManagerScript.instance.getEnemyTypeByName(type);
 
             return data;
