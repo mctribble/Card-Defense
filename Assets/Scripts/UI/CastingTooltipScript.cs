@@ -52,7 +52,7 @@ public class CastingTooltipScript : BaseBehaviour
             //only castable if there is a tower here
             if (collision)
             {
-                if (collision.GetComponent<Collider2D>().gameObject.tag.Equals("TowerImage")) //test for TowerImage to only collide with the tower itself and not its range
+                if (collision.GetComponent<Collider2D>().gameObject.tag.Equals("Tower")) //test for TowerImage to only collide with the tower itself and not its range
                 {
                     //get the tower under the cursor
                     GameObject newTargetTower = collision.GetComponent<Collider2D>().gameObject.transform.root.gameObject;
