@@ -420,11 +420,11 @@ public class LevelManagerScript : BaseBehaviour
         waveOngoing = false;
         currentWave++;
 
-        //print message if this is the last wave TODO: handle end of level
+        //print message if this is the last wave
         if (currentWave == data.waves.Count)
         {
-            Debug.Log("LEVEL COMPLETE!");
-            Time.timeScale = 0.0f;
+            yield return StartCoroutine(MessageHandlerScript.ShowAndYield("Level Complete!")); //tell user they won and wait for them to answer
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Game"); //then restart the scene
             yield break;
         }
 
@@ -436,10 +436,9 @@ public class LevelManagerScript : BaseBehaviour
     public void UpdateWaveStats()
     {
         //show the wave message, if there is one, and then blank it out so it only shows once
-        //TODO: replace this with an actual message box
         if (data.waves[currentWave].message != null)
         {
-            Debug.Log(data.waves[currentWave].message);
+            MessageHandlerScript.ShowNoYield(data.waves[currentWave].message);
             data.waves[currentWave].message = null;
         }
 
