@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using UnityEngine;
+using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
 //contains an upgrade and a number to indicate how many times it should be applied.  used by PremadeTower
@@ -33,6 +34,10 @@ public class PremadeTower
 [System.Serializable]
 public class LevelData
 {
+    //level background
+    [XmlAttribute("background")]
+    public string background = "Default_bg";
+
     //wave generation parameters
     public int randomWaveCount;
 
@@ -138,6 +143,8 @@ public class LevelManagerScript : BaseBehaviour
     //other objects can refer to these to be informed when a level is loaded (https://unity3d.com/learn/tutorials/topics/scripting/events)
     public delegate void LevelLoadedHandler();
 
+    public RawImage background; //reference to the background texture
+
     public event LevelLoadedHandler LevelLoadedEvent;
 
     public bool levelLoaded;                    //indicates whether a level has been loaded or not
@@ -184,6 +191,19 @@ public class LevelManagerScript : BaseBehaviour
     private IEnumerator loadLevel(string level)
     {
         data = LevelData.Load(Path.Combine(Application.dataPath, level)); //load the level
+
+        //set background
+        string filename = Application.dataPath + "/StreamingAssets/Art/Backgrounds/" + data.background + ".png";
+        if (File.Exists(filename))
+        {
+            WWW www = new WWW ("file:///" + filename);
+            yield return www;
+            background.texture = www.texture;
+        }
+        else
+        {
+            Debug.LogWarning("Could not find background: " + filename);
+        }
 
         //wait a few frames to give other managers a chance to catch up
         yield return null;

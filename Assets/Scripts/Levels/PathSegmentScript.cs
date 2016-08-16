@@ -63,6 +63,11 @@ public class PathSegmentScript : BaseBehaviour
         rTrans.sizeDelta = new Vector2(segmentLength, pathWidth);
         rTrans.Rotate(0.0f, 0.0f, angle);
 
+        //update texture UV coords
+        Rect temp = this.GetComponent<UnityEngine.UI.RawImage>().uvRect;
+        temp.Set(midpoint.x, midpoint.y, segmentLength, pathWidth);
+        this.GetComponent<UnityEngine.UI.RawImage>().uvRect = temp;
+
         //also scale collider
         BoxCollider2D collider = gameObject.GetComponent<BoxCollider2D>();
         collider.size = new Vector2(segmentLength, pathWidth);
