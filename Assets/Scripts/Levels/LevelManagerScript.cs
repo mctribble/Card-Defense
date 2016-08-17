@@ -360,7 +360,7 @@ public class LevelManagerScript : BaseBehaviour
         if (spawnCount < 1) { spawnCount = 1; Debug.LogWarning("Wave spawn count was zero.  forced to spawn 1 monster."); } //spawn at least one monster
         float       timeBetweenSpawns = d.time / spawnCount; //delay between each spawn
 
-        GameObject.FindGameObjectWithTag("Hand").SendMessage("Hide"); //hide the hand
+        HandScript.playerHand.SendMessage("Hide"); //hide the hand
 
         //set type to spawners
         foreach (GameObject s in spawnerObjects)
@@ -401,7 +401,7 @@ public class LevelManagerScript : BaseBehaviour
                 monstersAlive = false;
         }
 
-        GameObject.FindGameObjectWithTag("Hand").SendMessage("Show"); //show the hand
+        HandScript.playerHand.SendMessage("Show"); //show the hand
 
         //find all towers in the level and tell them a wave ended
         GameObject[] towers = GameObject.FindGameObjectsWithTag("Tower");
@@ -414,7 +414,7 @@ public class LevelManagerScript : BaseBehaviour
 
         //draw new cards until seven in hand
         yield return new WaitForSeconds(1.0f);
-        GameObject.FindGameObjectWithTag("Hand").SendMessage("drawToHandSize", 10);
+        HandScript.playerHand.SendMessage("drawToHandSize", 10);
 
         //wave is over
         waveOngoing = false;

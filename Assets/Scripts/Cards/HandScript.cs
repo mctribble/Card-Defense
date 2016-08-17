@@ -3,17 +3,25 @@ using UnityEngine;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
+//used to indicate hand ownership
+public enum HandFaction { player, enemy, neutral };
+
 public class HandScript : BaseBehaviour
 {
-    public int        startingHandSize; //cards the player starts with
-    public int        maximumHandSize;  //max number of cards the player can have
-    public Image      playerDeckImage;  //image that serves as the spawn point for new cards
-    public GameObject cardPrefab;       //prefab used to spawn a new card
-    public int        idealGap;         //ideal gap between cards
-    public float      idleHeightMod;    //used to calculate height at which new cards should idle
-    public float      drawDelay;	    //delay given between drawing multiple cards
-    public float      discardDelay;     //delay given between discarding multiple cards
-    public bool       handHidden;       //whether or not the hand is hidden
+    //static references to the player hand and the enemy hand so other objects can easily access them
+    [Hide] public static HandScript playerHand;
+    [Hide] public static HandScript enemyHand;
+
+    public HandFaction handOwner;        //indicates ownership of the hand
+    public int         startingHandSize; //cards the player starts with
+    public int         maximumHandSize;  //max number of cards the player can have
+    public Image       playerDeckImage;  //image that serves as the spawn point for new cards
+    public GameObject  cardPrefab;       //prefab used to spawn a new card
+    public int         idealGap;         //ideal gap between cards
+    public float       idleHeightMod;    //used to calculate height at which new cards should idle
+    public float       drawDelay;	     //delay given between drawing multiple cards
+    public float       discardDelay;     //delay given between discarding multiple cards
+    public bool        handHidden;       //whether or not the hand is hidden
 
     private GameObject[] cards;  //stores the number of cards
     private int currentHandSize; //number of cards currently in hand
@@ -26,6 +34,11 @@ public class HandScript : BaseBehaviour
         //wait for the level to load
         while (LevelManagerScript.instance.levelLoaded == false)
             yield return null;
+
+        if (handOwner == HandFaction.player)
+            HandScript.playerHand = this;
+        else if (handOwner == HandFaction.enemy)
+            HandScript.enemyHand = this;
 
         cards = new GameObject[maximumHandSize]; //construct array to hold the hand
         currentHandSize = 0; //no cards yet

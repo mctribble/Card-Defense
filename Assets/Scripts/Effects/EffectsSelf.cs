@@ -35,7 +35,7 @@ public class EffectDiscardRandom : IEffectSelf
 
     public void trigger(ref Card card, GameObject card_gameObject)
     {
-        HandScript handRef = GameObject.FindGameObjectWithTag("Hand").GetComponent<HandScript>();
+        HandScript handRef = HandScript.playerHand;
         handRef.StartCoroutine(handRef.discardRandomCards(card_gameObject, Mathf.FloorToInt(strength)));
     }
 }
