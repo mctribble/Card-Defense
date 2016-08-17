@@ -4,17 +4,19 @@ using Vexe.Runtime.Types;
 
 public class HandScript : BaseBehaviour
 {
-    public int          startingHandSize;   //cards the player starts with
-    public int          maximumHandSize;    //max number of cards the player can have
-    public Vector2      spawnLocation;      //where new cards appear
-    public GameObject   cardPrefab;         //prefab used to spawn a new card
-    public int          idealGap;           //ideal gap between cards
-    public float        idleHeightMod;      //used to calculate height at which new cards should idle
-    public float        initialDrawDelay;	//delay given between drawing each new card at the start of the level
-    public bool         handHidden;         //whether or not the hand is hidden
+    public int        startingHandSize; //cards the player starts with
+    public int        maximumHandSize;  //max number of cards the player can have
+    public Vector2    spawnLocation;    //where new cards appear
+    public GameObject cardPrefab;       //prefab used to spawn a new card
+    public int        idealGap;         //ideal gap between cards
+    public float      idleHeightMod;    //used to calculate height at which new cards should idle
+    public float      drawDelay;	    //delay given between drawing multiple cards
+    public float      discardDelay;     //delay given between discarding multiple cards
+    public bool       handHidden;       //whether or not the hand is hidden
 
-    private GameObject[] cards;     //stores the number of cards
-    private int currentHandSize;    //number of cards currently in hand
+    private GameObject[] cards;  //stores the number of cards
+    private int currentHandSize; //number of cards currently in hand
+    private bool discarding;     //if true, multiple cards are currently being discarded and we need to wait before drawing
 
     // Use this for initialization
     // it is a coroutine for animation purposes
@@ -26,14 +28,11 @@ public class HandScript : BaseBehaviour
 
         cards = new GameObject[maximumHandSize]; //construct array to hold the hand
         currentHandSize = 0; //no cards yet
+        discarding = false; //we are not discarding cards
 
         //draw starting hand
         handHidden = false;
-        for (int i = 0; i < startingHandSize; i++)
-        {
-            yield return new WaitForSeconds(initialDrawDelay);
-            drawCard();
-        }
+        yield return drawToHandSize(startingHandSize);
 
         yield break;
     }
@@ -43,8 +42,8 @@ public class HandScript : BaseBehaviour
     {
     }
 
-    //draws a card from the deck
-    private void drawCard()
+    //draws a card from the deck, and flips it face up if flipOver is true
+    private void drawCard(bool flipOver = true)
     {
         //bail if reached max
         if (currentHandSize == maximumHandSize)
@@ -61,13 +60,16 @@ public class HandScript : BaseBehaviour
         }
 
         //card setup
-        cards[currentHandSize] = (GameObject)Instantiate(cardPrefab);                       //instantiate card prefab
+        cards[currentHandSize] = Instantiate(cardPrefab);                                   //instantiate card prefab
         cards[currentHandSize].transform.SetParent(transform.root);                         //declare the card a child of the UI object at the root of this tree
         cards[currentHandSize].GetComponent<RectTransform>().localPosition = spawnLocation; //position card
         cards[currentHandSize].GetComponent<RectTransform>().localScale = Vector3.one;      //reset scale because changing parent changes it
         cards[currentHandSize].SendMessage("SetHand", gameObject);                          //tell the card which hand owns it
-
         cards[currentHandSize].SendMessage("SetCard", DeckManagerScript.instance.Draw());	//send the card the data that defines it
+
+        //if set, tell it to flip face up after its done moving
+        if (flipOver)
+            cards[currentHandSize].SendMessage("flipWhenIdle");
 
         //if the hand is currently hidden, tell the new card to hide itself
         if (handHidden)
@@ -80,19 +82,56 @@ public class HandScript : BaseBehaviour
     }
 
     //draws until the target card count
-    private IEnumerator drawToHandSize(int target)
+    public IEnumerator drawToHandSize(int target)
     {
         int drawCount = target - currentHandSize;
-        while (drawCount > 0)
-        {
-            yield return new WaitForSeconds(0.5f);
-            drawCount--;
-            drawCard();
-        }
+        yield return drawCards(drawCount);
     }
 
+    //draws multiple cards
+    public IEnumerator drawCards(int drawCount)
+    {
+        //wait to make sure we dont attempt to discard and draw at the same time (i. e., cards like Recycle that cause bothd iscarding and drawing simultaneously)
+        do
+        { yield return null; }
+        while (discarding);
+
+        //draw the cards
+        while (drawCount > 0)
+        {
+            yield return new WaitForSeconds(drawDelay);
+            drawCount--;
+            drawCard(false); //dont flip them over just yet: we want to do them all at once since they were drawn as a group
+        }
+
+        //wait for the last card to be idle, since it will be the last one to finish moving around
+        CardScript waitCard = cards[currentHandSize - 1].GetComponent<CardScript>();
+        yield return StartCoroutine(waitCard.waitForIdle());
+
+        //flip the entire hand face up at once
+        foreach (GameObject c in cards)
+            if (c != null)
+                c.SendMessage("faceUp");
+
+        yield break;
+    }
+
+    //helper: calls the normal version repeatedly
+    public IEnumerator discardRandomCards(GameObject exemption, int count)
+    {
+        discarding = true;
+        for (uint i = 0; i < count; i++)
+        {
+            discardRandomCard(exemption);
+            if (currentHandSize == 0)
+                break;
+            yield return new WaitForSeconds(discardDelay);
+        }
+        discarding = false;
+    } 
+    
     //discard a random card from the hand.  exemption card is safe
-    private void discardRandom(GameObject exemption)
+    public void discardRandomCard(GameObject exemption)
     {
         //special case: no cards
         if (currentHandSize == 0)
@@ -164,6 +203,7 @@ public class HandScript : BaseBehaviour
         for (int c = 0; c < currentHandSize; c++)
         {
             cards[c].SendMessage("SetIdleLocation", new Vector2((cardDistance * c) - handMidpoint, idleHeight));
+            cards[c].transform.SetSiblingIndex(c); //update draw order also
         }
     }
 

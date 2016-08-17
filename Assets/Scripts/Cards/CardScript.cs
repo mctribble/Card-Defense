@@ -175,15 +175,24 @@ public class CardData : System.Object
 
 public class CardScript : BaseBehaviour
 {
-    public float      motionSpeed;      //speed in pixels/second this card can animate
-    public Vector2    discardLocation;  //location to discard self to
-    public Card       card;             //holds data specific to the card itself
-    public GameObject tooltipPrefab;    //used to create a tooltip
-    public GameObject towerPrefab;      //prefab used to create a tower object
-    public Image      art;              //reference to card art image
-    public Text       title;            //reference to card name text
-    public Text       description;      //reference to card description text
+    //prefabs
+    public GameObject tooltipPrefab; //used to create a tooltip
+    public GameObject towerPrefab;   //prefab used to create a tower object
 
+    //component references
+    public Image art;         //reference to card art image
+    public Text  title;       //reference to card name text
+    public Text  description; //reference to card description text
+    public Image cardBack;    //reference to card back image
+
+    //public data
+    public float   motionSpeed;     //speed in pixels/second this card can move
+    public float   rotationSpeed;   //speed in degrees/second this card can rotate
+    public Vector2 discardLocation; //location to discard self to
+    public Card    card;            //holds data specific to the card itself
+    public bool    faceDown;        //whether or not the card is face down
+
+    //private data
     private GameObject hand;            //reference to the hand object managing this card
     private Vector2    idleLocation;    //location this card sits when it is resting
     private Vector2    targetLocation;  //location this card will move towards if it is not already there
@@ -209,8 +218,10 @@ public class CardScript : BaseBehaviour
         idleLocation = transform.localPosition;
         targetLocation = idleLocation;
 
-        //start idle
+        //start idle and face down
         state = State.idle;
+        faceDown = true;
+        cardBack.enabled = true;
 
         tooltipInstance = null;
     }
@@ -247,6 +258,41 @@ public class CardScript : BaseBehaviour
                 state = State.idle;
             }
         }
+    }
+
+    //helper coroutine that simply waits until this card is idle (initial delay of one frame in case the card starts moving in the same frame as this is called)
+    public IEnumerator waitForIdle() { yield return null; while (state != State.idle) yield return null; }
+
+    //card flip helpers
+    public void flipOver() { StartCoroutine(flipCoroutine()); } //returns immediately
+    public void faceUp() { if (faceDown) flipOver(); } //calls flipOver only if the card is currently face down
+    public IEnumerator flipWhenIdle() { yield return waitForIdle(); yield return flipCoroutine(); }
+
+    //main card flip coroutine
+    private IEnumerator flipCoroutine()
+    {
+        Quaternion flipQuaternion = Quaternion.AngleAxis(90, Vector3.up); //rotation to move towards to flip the card at
+        faceDown = !faceDown; //flag the flip as complete before it technically even starts to make sure it isn't erroneously triggered again
+
+        //turn 90 degrees so the player doesnt see the back blink into existence
+        while ( transform.rotation != flipQuaternion )
+        {
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, flipQuaternion, rotationSpeed * Time.deltaTime);
+            yield return null;
+        }
+        
+        //flip the card
+        cardBack.enabled = faceDown;
+
+        //turn back to the baseline
+        while ( transform.rotation != Quaternion.identity )
+        {
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.identity, rotationSpeed * Time.deltaTime);
+            yield return null;
+        }
+        
+        //done
+        yield break;
     }
 
     private void OnMouseEnter()

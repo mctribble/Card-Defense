@@ -15,11 +15,7 @@ public class EffectDrawCard : IEffectInstant
 
     [Show, Display(1)] public string XMLName { get { return "drawCard"; } } //name used to refer to this effect in XML
 
-    public void trigger()
-    {
-        for (uint i = 0; i < strength; i++)
-            GameObject.FindGameObjectWithTag("Hand").SendMessage("drawCard");
-    }
+    public void trigger() { GameObject.FindGameObjectWithTag("Hand").SendMessage("drawCards", strength); }
 }
 
 //increases lifespan of all towers by x
