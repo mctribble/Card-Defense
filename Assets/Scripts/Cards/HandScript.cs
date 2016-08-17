@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
 public class HandScript : BaseBehaviour
 {
     public int        startingHandSize; //cards the player starts with
     public int        maximumHandSize;  //max number of cards the player can have
-    public Vector2    spawnLocation;    //where new cards appear
+    public Image      playerDeckImage;  //image that serves as the spawn point for new cards
     public GameObject cardPrefab;       //prefab used to spawn a new card
     public int        idealGap;         //ideal gap between cards
     public float      idleHeightMod;    //used to calculate height at which new cards should idle
@@ -42,8 +43,8 @@ public class HandScript : BaseBehaviour
     {
     }
 
-    //draws a card from the deck, and flips it face up if flipOver is true
-    private void drawCard(bool flipOver = true)
+    //draws a card from the deck.  The card spawns face down at the same position, rotation, and scale as the spawn point image, so there are flags to flip the card over, turn it upright, and to scale it up
+    private void drawCard(bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true)
     {
         //bail if reached max
         if (currentHandSize == maximumHandSize)
@@ -62,10 +63,23 @@ public class HandScript : BaseBehaviour
         //card setup
         cards[currentHandSize] = Instantiate(cardPrefab);                                   //instantiate card prefab
         cards[currentHandSize].transform.SetParent(transform.root);                         //declare the card a child of the UI object at the root of this tree
-        cards[currentHandSize].GetComponent<RectTransform>().localPosition = spawnLocation; //position card
-        cards[currentHandSize].GetComponent<RectTransform>().localScale = Vector3.one;      //reset scale because changing parent changes it
+
+        //position card to match up with the player deck image
+        RectTransform spawnT = playerDeckImage.rectTransform;
+        cards[currentHandSize].GetComponent<RectTransform>().position   = spawnT.position;
+        cards[currentHandSize].GetComponent<RectTransform>().rotation   = spawnT.rotation;
+        cards[currentHandSize].GetComponent<RectTransform>().localScale = spawnT.localScale;
+
         cards[currentHandSize].SendMessage("SetHand", gameObject);                          //tell the card which hand owns it
         cards[currentHandSize].SendMessage("SetCard", DeckManagerScript.instance.Draw());	//send the card the data that defines it
+
+        //if set, tell it to turn upright
+        if (turnToIdentity)
+            cards[currentHandSize].SendMessage("turnToQuaternion", Quaternion.identity);
+
+        //if set, tell it to scale to its normal size
+        if (scaleToIdentity)
+            cards[currentHandSize].SendMessage("scaleToVector", Vector3.one);
 
         //if set, tell it to flip face up after its done moving
         if (flipOver)
@@ -111,7 +125,7 @@ public class HandScript : BaseBehaviour
         //flip the entire hand face up at once
         foreach (GameObject c in cards)
             if (c != null)
-                c.SendMessage("faceUp");
+                c.SendMessage("flipFaceUp");
 
         yield break;
     }

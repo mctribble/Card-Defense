@@ -188,6 +188,7 @@ public class CardScript : BaseBehaviour
     //public data
     public float   motionSpeed;     //speed in pixels/second this card can move
     public float   rotationSpeed;   //speed in degrees/second this card can rotate
+    public float   scaleSpeed;      //speed in points/second this card can scale
     public Vector2 discardLocation; //location to discard self to
     public Card    card;            //holds data specific to the card itself
     public bool    faceDown;        //whether or not the card is face down
@@ -265,34 +266,38 @@ public class CardScript : BaseBehaviour
 
     //card flip helpers
     public void flipOver() { StartCoroutine(flipCoroutine()); } //returns immediately
-    public void faceUp() { if (faceDown) flipOver(); } //calls flipOver only if the card is currently face down
+    public void flipFaceUp() { if (faceDown) flipOver(); } //calls flipOver only if the card is currently face down
     public IEnumerator flipWhenIdle() { yield return waitForIdle(); yield return flipCoroutine(); }
 
     //main card flip coroutine
-    private IEnumerator flipCoroutine()
+    public IEnumerator flipCoroutine()
     {
         Quaternion flipQuaternion = Quaternion.AngleAxis(90, Vector3.up); //rotation to move towards to flip the card at
         faceDown = !faceDown; //flag the flip as complete before it technically even starts to make sure it isn't erroneously triggered again
+        yield return StartCoroutine(turnToQuaternion(flipQuaternion)); //turn to the flip position the player doesnt see the back blink in or out of existence
+        cardBack.enabled = faceDown; //flip the card
+        yield return StartCoroutine(turnToQuaternion(Quaternion.identity)); //turn back to the baseline
+        yield break; //done
+    }
 
-        //turn 90 degrees so the player doesnt see the back blink into existence
-        while ( transform.rotation != flipQuaternion )
+    //turns the card to the given quaternion at rotationSpeed degrees/second
+    public IEnumerator turnToQuaternion(Quaternion target)
+    {
+        while (transform.rotation != target)
         {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, flipQuaternion, rotationSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, target, rotationSpeed * Time.deltaTime);
             yield return null;
         }
-        
-        //flip the card
-        cardBack.enabled = faceDown;
+    }
 
-        //turn back to the baseline
-        while ( transform.rotation != Quaternion.identity )
+    //scales the card to the given size over time
+    public IEnumerator scaleToVector(Vector3 targetSize)
+    {
+        while (transform.localScale != targetSize)
         {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.identity, rotationSpeed * Time.deltaTime);
+            transform.localScale = Vector3.MoveTowards(transform.localScale, targetSize, scaleSpeed * Time.deltaTime);
             yield return null;
         }
-        
-        //done
-        yield break;
     }
 
     private void OnMouseEnter()

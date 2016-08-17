@@ -38,7 +38,6 @@ public class DeckStatusTextScript : BaseBehaviour
             lerpColor.b.ToString("X2") +
             lerpColor.a.ToString("X2");
 
-        text.text = "Deck: " +
-            "<color=#" + lerpHex + ">" + DeckManagerScript.instance.cardsLeft + "</color>/" + DeckManagerScript.instance.deckSize;
+        text.text = "<color=#" + lerpHex + ">" + DeckManagerScript.instance.cardsLeft + "</color>/" + DeckManagerScript.instance.deckSize;
     }
 }

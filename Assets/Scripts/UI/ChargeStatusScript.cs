@@ -38,7 +38,6 @@ public class ChargeStatusScript : BaseBehaviour
             lerpColor.b.ToString("X2") +
             lerpColor.a.ToString("X2");
 
-        text.text = "Charges: " +
-            "<color=#" + lerpHex + ">" + DeckManagerScript.instance.curDeckCharges + "</color>/" + DeckManagerScript.instance.maxDeckCharges;
+        text.text = "(Charges: " + "<color=#" + lerpHex + ">" + DeckManagerScript.instance.curDeckCharges + "</color>/" + DeckManagerScript.instance.maxDeckCharges + ')';
     }
 }
