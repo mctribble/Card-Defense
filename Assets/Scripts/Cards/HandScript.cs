@@ -44,21 +44,23 @@ public class HandScript : BaseBehaviour
         currentHandSize = 0; //no cards yet
         discarding = false; //we are not discarding cards
 
-        //draw starting hand
-        handHidden = false;
-        yield return drawToHandSize(startingHandSize);
+        //if player, draw starting hand
+        if (handOwner == HandFaction.player)
+        {
+            handHidden = false;
+            yield return drawToHandSize(startingHandSize);
+        }
 
         yield break;
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
     }
 
     //draws a card from the deck.  The card spawns face down at the same position, rotation, and scale as the spawn point image, so there are flags to flip the card over, turn it upright, and to scale it up
     private void drawCard(bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true)
     {
+        //currently only compatible with player hands
+        if (handOwner != HandFaction.player)
+            throw new System.NotImplementedException();
+
         //bail if reached max
         if (currentHandSize == maximumHandSize)
         {
@@ -74,8 +76,8 @@ public class HandScript : BaseBehaviour
         }
 
         //card setup
-        cards[currentHandSize] = Instantiate(cardPrefab);                                   //instantiate card prefab
-        cards[currentHandSize].transform.SetParent(transform.root);                         //declare the card a child of the UI object at the root of this tree
+        cards[currentHandSize] = Instantiate(cardPrefab);           //instantiate card prefab
+        cards[currentHandSize].transform.SetParent(transform.root); //declare the card a child of the UI object at the root of this tree
 
         //position card to match up with the player deck image
         RectTransform spawnT = playerDeckImage.rectTransform;
@@ -237,6 +239,10 @@ public class HandScript : BaseBehaviour
     //attempts to remove d charges from random cards in the hand, discarding any that hit 0 charges.  returns how much damage was actually dealt
     public int Damage(int d)
     {
+        //currently only compatible with player hands
+        if (handOwner != HandFaction.player)
+            throw new System.NotImplementedException();
+
         int alreadyDealt = 0;
 
         while ( (currentHandSize > 0) && (alreadyDealt < d) )
