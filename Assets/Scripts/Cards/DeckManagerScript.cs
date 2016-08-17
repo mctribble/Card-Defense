@@ -1,5 +1,6 @@
 ﻿//based on tutorial found here: http://wiki.unity3d.com/index.php?title=Saving_and_Loading_Data:_XmlSerializer
 
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -270,8 +271,7 @@ public class DeckManagerScript : BaseBehaviour
         {
             if (currentDeck.Count == 0)
             {
-                MessageHandlerScript.ShowNoYield("GAME OVER!"); 
-                UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
+                StartCoroutine(playerDead());
                 return;
             }
 
@@ -310,5 +310,13 @@ public class DeckManagerScript : BaseBehaviour
         //if the damage wasnt all dealt, forward the rest to the deck
         if (damageDealt < d)
             Damage(d - damageDealt);
+    }
+
+    //handles player death
+    public IEnumerator playerDead()
+    {
+        yield return MessageHandlerScript.ShowAndYield("GAME OVER!");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
+        yield break;
     }
 }
