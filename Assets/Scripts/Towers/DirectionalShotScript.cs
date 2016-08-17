@@ -123,8 +123,9 @@ public class DirectionalShotScript : MonoBehaviour
             Plane plane = new Plane(attackDir, transform.position);
             List<DamageEventData> toHitThisFrame = new List<DamageEventData>();
             foreach (DamageEventData ded in expectedToHit)
-                if (plane.GetSide(ded.dest.transform.position) == false)
-                    toHitThisFrame.Add(ded);
+                if (ded.dest != null) //null dest events can happen if the enemy dies at just the wrong time
+                    if (plane.GetSide(ded.dest.transform.position) == false)
+                        toHitThisFrame.Add(ded);
              
             //attack them
             foreach(DamageEventData ded in toHitThisFrame)
