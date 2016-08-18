@@ -48,6 +48,19 @@ public class EnemyData
     [DefaultValue("Enemy_Basic")]
     [XmlAttribute("sprite")]
     public string spriteName { get; set; }
+
+    public string getDescription()
+    {
+        string description = "Health: " + maxHealth + '\n' +
+                             "Attack: " + attack    + '\n' +
+                             "Speed: "  + unitSpeed;
+
+        if ((effectData != null) && (effectData.effects.Count > 0))
+            foreach (IEffect e in effectData.effects)
+                description += "\n" + "<Color=#" + e.effectType.ToString("X") + ">" + e.Name + "</Color>";
+
+        return description;
+    }
 };
 
 public class EnemyScript : BaseBehaviour
@@ -246,7 +259,7 @@ public class EnemyScript : BaseBehaviour
         int damage = Mathf.CeilToInt(e.rawDamage);
         damage = System.Math.Min(damage, curHealth);
         curHealth -= damage;
-        LevelManagerScript.instance.WaveTotalRemainingHealth -= damage;
+        LevelManagerScript.instance.totalRemainingHealth -= damage;
 
         if (curHealth <= 0)
         {

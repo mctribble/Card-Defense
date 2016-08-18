@@ -98,14 +98,15 @@ public class LevelData
 [System.Serializable]
 public class WaveData
 {
-    [XmlAttribute] public string type;
-    [XmlAttribute] public int    budget;
-    [XmlAttribute] public float  time;
-    [XmlAttribute] public string message;
-    [XmlIgnore]    public int forcedSpawnCount; //if this is negative, no spawn count was forced
+    [XmlAttribute]    public string type;
+    [XmlAttribute]    public int    budget;
+    [XmlAttribute]    public float  time;
+    [XmlAttribute]    public string message;
+    [Hide, XmlIgnore] public int    forcedSpawnCount; //if this is negative, no spawn count was forced
+    [Hide, XmlIgnore] public int    spawnedThisWave;  //number of enemies in this wave that have already been spawned
 
     [XmlIgnore] private EnemyData data;
-    [XmlIgnore] public EnemyData enemyData
+    [XmlIgnore] public  EnemyData enemyData
     {
         get
         {
@@ -125,6 +126,7 @@ public class WaveData
         time = 300.0f;
         message = null;
         forcedSpawnCount = -1;
+        spawnedThisWave = 0;
     }
 
     //specific data
@@ -135,7 +137,27 @@ public class WaveData
         time = waveTime;
         message = null;
         forcedSpawnCount = -1;
-    }    
+        spawnedThisWave = 0;
+    }
+
+    //returns number of enemies to spawn this wave
+    public int spawnCount
+    {
+        get
+        {
+            int result = 0;
+
+            if (forcedSpawnCount > 0)
+                result = forcedSpawnCount;
+            else
+                result = Mathf.FloorToInt(budget / enemyData.spawnCost);
+
+            if (result < 1)
+                result = 1; //always spawn at least one enemy
+
+            return result;
+        }
+    }
 }
 
 public class LevelManagerScript : BaseBehaviour
@@ -155,16 +177,17 @@ public class LevelManagerScript : BaseBehaviour
 
     public static LevelManagerScript instance;  //singleton pattern
     public LevelData data;                      //data for the level itself
-    public int currentWave;                     //which wave is current
-    public bool waveOngoing;                    //indicates whether there is currently an active wave
+    public int wavesInDeck;                     //number of enemy groups remaining in the deck
+    public int wavesOngoing;                    //number of waves currently attacking
     public int deadThisWave { get; set; }		//number of monsters dead this wave
+    public int totalSpawnedThisWave;           //how many enemies have already spawned this wave
 
-    private int spawnCount;                     //how many enemies still need spawning this wave
+    private int totalSpawnCount;                //how many enemies still need spawning this wave
     private int waveTotalRemainingHealth;       //health remaining across all enemies in this wave
 
     public LevelData Data { get { return data; } set { data = value; } }
-    public int SpawnCount { get { return spawnCount; } }
-    public int WaveTotalRemainingHealth { get { return waveTotalRemainingHealth; } set { waveTotalRemainingHealth = value; } }
+    public int SpawnCount { get { return totalSpawnCount; } }
+    public int totalRemainingHealth { get { return waveTotalRemainingHealth; } set { waveTotalRemainingHealth = value; } }
 
     public List<GameObject> spawnerObjects;
 
@@ -174,17 +197,12 @@ public class LevelManagerScript : BaseBehaviour
     private void Awake()
     {
         instance = this;
-        waveOngoing = false;
-        currentWave = 0;
+        wavesOngoing = 0;
+        wavesInDeck = 0;
         deadThisWave = 0;
         levelLoaded = false;
-        spawnCount = -1;
+        totalSpawnCount = -1;
         desiredTimeScale = 1.0f;
-    }
-
-    // Called after all objects have initialized
-    private void Start()
-    {
     }
 
     //loads the given level
@@ -205,6 +223,27 @@ public class LevelManagerScript : BaseBehaviour
             Debug.LogWarning("Could not find background: " + filename);
         }
 
+        //if no deck has been loaded yet, then use the level deck
+        if (DeckManagerScript.instance.deckSize == 0)
+        {
+            XMLDeck levelDeck;
+            if (data.levelDeck != null)
+            {
+                levelDeck = data.levelDeck; //the level deck is defined in the level file
+            }
+            else
+            {
+                //the level uses one of the premade decks in Decks.XML
+                levelDeck = DeckManagerScript.instance.premadeDecks.getDeckByName(data.premadeDeckName);
+            }
+
+            DeckManagerScript.instance.SendMessage("SetDeck", levelDeck);
+
+            //shuffle it, if the level file says to
+            if (data.shuffleDeck)
+                DeckManagerScript.instance.SendMessage("Shuffle");
+        }
+
         //wait a few frames to give other managers a chance to catch up
         yield return null;
         yield return null;
@@ -217,7 +256,7 @@ public class LevelManagerScript : BaseBehaviour
                     if (e.effectType == EffectType.wave)
                         data.waves[i] = ((IEffectWave)e).alteredWaveData(data.waves[i]);
 
-        //initialize waves
+        //generate the random waves
         for (uint i = 0; i < data.randomWaveCount; i++)
         {
             //figure out which wave we are making
@@ -252,6 +291,9 @@ public class LevelManagerScript : BaseBehaviour
             data.waves.Add(waveData);
         }
 
+        //init wave count
+        wavesInDeck = data.waves.Count;
+
         //create the spawners
         foreach (SpawnerData sd in data.spawners)
         {
@@ -280,45 +322,24 @@ public class LevelManagerScript : BaseBehaviour
             }
         }
 
-        //if no deck has been loaded yet, then use the level deck
-        if (DeckManagerScript.instance.deckSize == 0)
-        {
-            XMLDeck levelDeck;
-            if (data.levelDeck != null)
-            {
-                levelDeck = data.levelDeck; //the level deck is defined in the level file
-            }
-            else
-            {
-                //the level uses one of the premade decks in Decks.XML
-                levelDeck = DeckManagerScript.instance.premadeDecks.getDeckByName(data.premadeDeckName);
-            }
-
-            DeckManagerScript.instance.SendMessage("SetDeck", levelDeck);
-
-            //shuffle it, if the level file says to
-            if (data.shuffleDeck)
-                DeckManagerScript.instance.SendMessage("Shuffle");
-        }
+        //set the flag and wait a moment to let objects that were waiting on this finish their initializations
+        levelLoaded = true;
+        yield return null;
 
         //init wave stats
         UpdateWaveStats();
 
         //fire the level loaded event so interested objects can act on it
         LevelLoadedEvent();
-
-        //and set the flag
-        levelLoaded = true;
     }
 
     // Update is called once per frame
     private void Update()
     {
         //spacebar starts wave
-        if (Input.GetKeyUp(KeyCode.Space) && waveOngoing == false && currentWave < data.waves.Count)
+        if (Input.GetKeyUp(KeyCode.Space) && wavesOngoing == 0 && HandScript.enemyHand.currentHandSize > 0)
         {
-            waveOngoing = true;
-            StartCoroutine("spawnWave", data.waves[currentWave]);
+            StartCoroutine("spawnWaves");
         }
 
         //F toggles fast forward  (actual timeScale may still be lower if performance is bad.  see below)
@@ -351,46 +372,16 @@ public class LevelManagerScript : BaseBehaviour
                 Time.timeScale = Mathf.Min(desiredTimeScale, Time.timeScale + timeScaleInterval); //increase it by the interval without allowing it to go above the desired setting
     }
 
-    // Handles spawning of a single wave
-    private IEnumerator spawnWave(WaveData d)
+    //spawns all of the incoming waves
+    private IEnumerator spawnWaves()
     {
-        //init vars
-        EnemyData   spawnType = d.enemyData;
-        int         spawnerCount = spawnerObjects.Count; //number of spawners
-        if (spawnCount < 1) { spawnCount = 1; Debug.LogWarning("Wave spawn count was zero.  forced to spawn 1 monster."); } //spawn at least one monster
-        float       timeBetweenSpawns = d.time / spawnCount; //delay between each spawn
+        //start the waves
+        foreach (WaveData d in HandScript.enemyHand.IncomingWaves)
+            StartCoroutine(spawnWave(d));
 
-        HandScript.playerHand.SendMessage("Hide"); //hide the hand
-
-        //set type to spawners
-        foreach (GameObject s in spawnerObjects)
-        {
-            s.SendMessage("SetType", spawnType);
-        }
-
-        //slight delay before spawning
-        yield return new WaitForSeconds(1.0f);
-
-        //spawn monsters.  Distribute spawns as evenly as possible
-        int curSpawner = Random.Range(0, spawnerCount);
-        float timeToNextSpawn = timeBetweenSpawns;
-        while (spawnCount > 0)
-        {
-            yield return null;                 //wait for the next frame
-            timeToNextSpawn -= Time.deltaTime; //reduce time until next spawn by amount of time between frames
-            d.time -= Time.deltaTime;          //update the wave data also so that the status text can update
-            while (timeToNextSpawn < 0.0)      //this is a loop in case multiple spawns happen in one frame
-            {
-                timeToNextSpawn += timeBetweenSpawns; //update spawn timer
-                spawnerObjects[curSpawner].SendMessage("Spawn", timeToNextSpawn); //spawn enemy.  spawn timer provided so the enemy can place itself properly when framerate is low
-                curSpawner = (curSpawner + 1) % spawnerCount; //move to next spawner, looping back to the first if we are at the end of the list
-                spawnCount--; //update spawn counter
-
-                //bail if we have finished spawning baddies
-                if (spawnCount == 0)
-                    break;
-            }
-        }
+        //wait for them to finish
+        while (wavesOngoing > 0)
+            yield return null;
 
         //wait for all monsters to be dead
         bool monstersAlive = true;
@@ -399,6 +390,14 @@ public class LevelManagerScript : BaseBehaviour
             yield return new WaitForSeconds(1.0f);
             if (GameObject.FindGameObjectsWithTag("Enemy").Length == 0)
                 monstersAlive = false;
+        }
+
+        //show message if we finished the last wave
+        if (wavesInDeck == 0)
+        {
+            yield return StartCoroutine(MessageHandlerScript.ShowAndYield("Level Complete!")); //tell user they won and wait for them to answer
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Game"); //then restart the scene
+            yield break;
         }
 
         HandScript.playerHand.SendMessage("Show"); //show the hand
@@ -416,38 +415,74 @@ public class LevelManagerScript : BaseBehaviour
         yield return new WaitForSeconds(1.0f);
         HandScript.playerHand.SendMessage("drawToHandSize", 10);
 
-        //wave is over
-        waveOngoing = false;
-        currentWave++;
-
-        //print message if this is the last wave
-        if (currentWave == data.waves.Count)
-        {
-            yield return StartCoroutine(MessageHandlerScript.ShowAndYield("Level Complete!")); //tell user they won and wait for them to answer
-            UnityEngine.SceneManagement.SceneManager.LoadScene("Game"); //then restart the scene
-            yield break;
-        }
+        //draw a new enemy card
+        HandScript.enemyHand.drawCard();
 
         //update stats for the next wave
         UpdateWaveStats();
     }
 
+    // Handles spawning of a single wave
+    private IEnumerator spawnWave(WaveData d)
+    {
+        //flag the wave as started
+        wavesOngoing++;
+
+        //init vars
+        EnemyData   spawnType = d.enemyData;
+        int         spawnerCount = spawnerObjects.Count; //number of spawners
+        float       timeBetweenSpawns = d.time / totalSpawnCount; //delay between each spawn
+        
+        //spawn at least one monster
+        if (d.spawnCount < 1)
+        {
+            d.forcedSpawnCount = 1;
+            Debug.LogWarning("Wave spawn count was zero.  forced to spawn 1 monster.");
+        }
+
+        HandScript.playerHand.SendMessage("Hide"); //hide the hand
+
+        //slight delay before spawning
+        yield return new WaitForSeconds(1.0f);
+
+        //spawn monsters.  Distribute spawns as evenly as possible
+        int curSpawner = Random.Range(0, spawnerCount);
+        float timeToNextSpawn = timeBetweenSpawns;
+        while ( (d.spawnCount - d.spawnedThisWave) > 0)
+        {
+            yield return null;                 //wait for the next frame
+            timeToNextSpawn -= Time.deltaTime; //reduce time until next spawn by amount of time between frames
+            d.time -= Time.deltaTime;          //update the wave data also so that the status text can update
+            while (timeToNextSpawn < 0.0)      //this is a loop in case multiple spawns happen in one frame
+            {
+                timeToNextSpawn += timeBetweenSpawns; //update spawn timer
+                spawnerObjects[curSpawner].GetComponent<SpawnerScript>().Spawn(timeToNextSpawn, d.enemyData); //spawn enemy.  spawn timer provided so the enemy can place itself properly when framerate is low
+                curSpawner = (curSpawner + 1) % spawnerCount; //move to next spawner, looping back to the first if we are at the end of the list
+
+                //update spawn counters
+                d.spawnedThisWave++;
+                totalSpawnedThisWave++;
+
+                //bail if we have finished spawning baddies
+                if (d.spawnedThisWave == d.spawnCount)
+                    break;
+            }
+        }
+
+        //wave is over
+        wavesOngoing--;
+
+        //discard the card associated with this wave
+        HandScript.enemyHand.discardWave(d);
+    }
+
     //called when the wave changes to update the enemy spawn counter and health tracker
     public void UpdateWaveStats()
     {
-        //show the wave message, if there is one, and then blank it out so it only shows once
-        if (data.waves[currentWave].message != null)
-        {
-            MessageHandlerScript.ShowNoYield(data.waves[currentWave].message);
-            data.waves[currentWave].message = null;
-        }
-
-        if (data.waves[currentWave].forcedSpawnCount > 0)
-            spawnCount = data.waves[currentWave].forcedSpawnCount;
-        else
-            spawnCount = Mathf.RoundToInt(((float)data.waves[currentWave].budget / (float)data.waves[currentWave].enemyData.spawnCost));
-
-        waveTotalRemainingHealth = spawnCount * data.waves[currentWave].enemyData.maxHealth;
+        HandScript.enemyHand.UpdateWaveStats();
+        totalSpawnCount = HandScript.enemyHand.spawnCount;
+        totalRemainingHealth = HandScript.enemyHand.totalRemainingHealth;
+        totalSpawnedThisWave = 0;
     }
 
     //spawns an explosion
@@ -461,5 +496,16 @@ public class LevelManagerScript : BaseBehaviour
         if (data.damageEvent.effects != null)
             if (data.damageEvent.effects.propertyEffects.attackColor != null)
                 instance.SendMessage("SetColor", data.damageEvent.effects.propertyEffects.attackColor);
+    }
+
+    //called by the enemy hand when it wants to draw a new enemy card.  Updates the counter and returns the wave on top of the deck
+    public WaveData DrawEnemy()
+    {
+        if (wavesInDeck > 0)
+        {
+            return data.waves[data.waves.Count - wavesInDeck--];
+        }
+        else
+            return null;
     }
 }

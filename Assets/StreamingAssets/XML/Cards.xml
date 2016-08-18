@@ -32,7 +32,7 @@
     <Card Name="Enrage" Type="spell" Description="Poking the bear." Charges="6" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <effectData>
         <Effects>
-          <Effect name="budgetPercentageChange" strength="50" />
+          <Effect name="drawEnemyCard" strength="1" />
           <Effect name="drawCard" strength="5" />
         </Effects>
       </effectData>

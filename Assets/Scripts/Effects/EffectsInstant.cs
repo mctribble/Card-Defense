@@ -15,7 +15,22 @@ public class EffectDrawCard : IEffectInstant
 
     [Show, Display(1)] public string XMLName { get { return "drawCard"; } } //name used to refer to this effect in XML
 
-    public void trigger() { HandScript.playerHand.drawCards( Mathf.FloorToInt(strength)); }
+    public void trigger() { HandScript.playerHand.StartCoroutine(HandScript.playerHand.drawCards( Mathf.FloorToInt(strength) ) ); }
+}
+
+//draws x enemy cards
+public class EffectDrawEnemyCard : IEffectInstant
+{
+    [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //this effect doesnt need a target
+    [Hide] public EffectType effectType { get { return EffectType.instant; } }         //this is an instant effect
+    [Show, Display(2)] public float strength { get; set; }                             //number of cards
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
+    
+    [Hide] public string Name { get { return "Draw up to " + strength + " enemy cards"; } } //returns name and strength
+    
+    [Show, Display(1)] public string XMLName { get { return "drawEnemyCard"; } } //name used to refer to this effect in XML
+    
+    public void trigger() { HandScript.enemyHand.StartCoroutine(HandScript.enemyHand.drawCards( Mathf.FloorToInt(strength) ) ); }
 }
 
 //increases lifespan of all towers by x

@@ -13,11 +13,6 @@ public class EffectTypeManagerScript : BaseBehaviour
         instance = this;
     }
 
-    // Update is called once per frame
-    private void Update()
-    {
-    }
-
     //instantiates and initializes an effect object from the xmlEffect.  returns null if that effect doesnt exist
     //TODO: find a cleaner way to implement this?
     public IEffect parse(XMLEffect xe)
@@ -65,6 +60,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "damagePlayer":              ie = new EffectDamagePlayer(); break;
             case "discardRandomCard":         ie = new EffectDiscardRandom(); break;
             case "drawCard":                  ie = new EffectDrawCard(); break;
+            case "drawEnemyCard":             ie = new EffectDrawEnemyCard(); break;
             case "shuffle":                   ie = new EffectShuffle(); break;
 
             //<<Targeting effects (Determines tower targeting behavior)>>

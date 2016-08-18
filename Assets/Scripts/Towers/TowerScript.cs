@@ -103,14 +103,14 @@ public class TowerScript : BaseBehaviour
             Vector3 positionOffset = Vector3.zero;
 
             if (x == 0)
-                positionOffset.x = 1;
+                positionOffset.x = 2;
             else
-                positionOffset.x = -1;
+                positionOffset.x = -2;
 
             if (y == 0)
-                positionOffset.y = 1;
+                positionOffset.y = 2;
             else
-                positionOffset.y = -1;
+                positionOffset.y = -2;
 
             //set pos
             tooltipPanel.transform.position = Input.mousePosition + positionOffset;

@@ -3,23 +3,21 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
-public class WaveStatusText : BaseBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class WaveStatusText : BaseBehaviour
 {
-    private Text text;
-    private bool mousedOver;
+    public Text enemyStatText;
+    public Text enemyDeckText;
 
     // Use this for initialization
     private void Start()
     {
-        text = GetComponent<Text>();
-        mousedOver = false;
         LevelManagerScript.instance.LevelLoadedEvent += LevelLoadedHandler;
     }
 
     // event handler for LevelManagerScript.instance.LevelLoadedEvent
     private void LevelLoadedHandler()
     {
-        text.raycastTarget = true; //alloww this object to capture mouse events only after the level has loaded
+        enemyStatText.raycastTarget = true; //alloww this object to capture mouse events only after the level has loaded
     }
 
     // Update is called once per frame
@@ -33,40 +31,21 @@ public class WaveStatusText : BaseBehaviour, IPointerEnterHandler, IPointerExitH
         if (LevelManagerScript.instance.data.waves.Count == 0)
             return;
 
-        //show enemy stats instead of wave stats on mouse over
-        if (mousedOver)
+        //enemy deck counter
+        enemyDeckText.text = LevelManagerScript.instance.wavesInDeck + "/" + LevelManagerScript.instance.data.waves.Count;
+
+        //wave stats
+        int stillToSpawn = LevelManagerScript.instance.SpawnCount - LevelManagerScript.instance.totalSpawnedThisWave;
+        if (stillToSpawn > 0)
         {
-            showEnemyStats();
+            //wave has not started or is still spawning: "???? total over ???? seconds"
+            enemyStatText.text = stillToSpawn + " incoming (" +
+            HandScript.enemyHand.longestTime.ToString("F1") + "s)";
         }
         else
         {
-            //get variables
-            int curWave = LevelManagerScript.instance.currentWave;
-            WaveData curWaveData = LevelManagerScript.instance.data.waves[curWave];
-
-            //text that is always present: "Wave ??/?? (????"
-            text.text = "Wave " + (curWave + 1) + "/" + LevelManagerScript.instance.data.waves.Count +
-                " (<color=#" + curWaveData.enemyData.unitColor.toHex() + ">"  + curWaveData.type + "</color>";
-
-            //additional text that varies based on game state
-            if (LevelManagerScript.instance.SpawnCount != 0)
-            {
-                //wave has not started or is still spawning: "x????): ???? seconds"
-                text.text += "x" + LevelManagerScript.instance.SpawnCount + "): " +
-                curWaveData.time.ToString("F1") + " seconds";
-            }
-            else
-            {
-                //wave has finished spawning: "): ???? remain (????? health)"
-                text.text += "): ";
-
-                if (curWaveData.forcedSpawnCount > 0)
-                    text.text += curWaveData.forcedSpawnCount - LevelManagerScript.instance.deadThisWave;
-                else
-                    text.text += (Mathf.RoundToInt((float)curWaveData.budget / (float)curWaveData.enemyData.spawnCost) - LevelManagerScript.instance.deadThisWave);
-
-                text.text += " remain (" + LevelManagerScript.instance.WaveTotalRemainingHealth + " health)";
-            }
+            //wave has finished spawning: "???? remain (????? health)"
+            enemyStatText.text = (LevelManagerScript.instance.SpawnCount - LevelManagerScript.instance.deadThisWave) + " remain (" + LevelManagerScript.instance.totalRemainingHealth + " health)";
         }
 
         //if the game speed is not 1.0, add text to show what it is
@@ -74,34 +53,13 @@ public class WaveStatusText : BaseBehaviour, IPointerEnterHandler, IPointerExitH
         {
             //decide the color of the game speed indicator based on whether or not we are below the desired speed
             if (Time.timeScale < 1.0f)
-                text.text += "<color=red>";
+                enemyStatText.text += "<color=red>";
             else if (Time.timeScale < LevelManagerScript.instance.desiredTimeScale)
-                text.text += "<color=yellow>";
+                enemyStatText.text += "<color=yellow>";
             else
-                text.text += "<color=black>";
+                enemyStatText.text += "<color=black>";
 
-            text.text += "\n(speed x" + Time.timeScale.ToString("F1") + ")</color>";
+            enemyStatText.text += "\n(speed x" + Time.timeScale.ToString("F1") + ")</color>";
         }
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        mousedOver = true;
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        mousedOver = false;
-    }
-
-    private void showEnemyStats()
-    {
-        WaveData curWaveData = LevelManagerScript.instance.data.waves[LevelManagerScript.instance.currentWave];
-        text.text = "<color=#" + curWaveData.enemyData.unitColor.toHex() + ">"  + curWaveData.type + "</color>: " +
-            "Health: " + curWaveData.enemyData.maxHealth + " Attack: " + curWaveData.enemyData.attack + " Speed: " + curWaveData.enemyData.unitSpeed;
-
-        if ((curWaveData.enemyData.effectData != null) && (curWaveData.enemyData.effectData.effects.Count > 0))
-            foreach (IEffect e in curWaveData.enemyData.effectData.effects)
-                text.text += "\n" + "<Color=#" + e.effectType.ToString("X") + ">" + e.Name + "</Color>";
     }
 }

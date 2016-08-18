@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Xml;
 using System.Xml.Serialization;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
@@ -173,7 +174,7 @@ public class CardData : System.Object
     }
 }
 
-public class CardScript : BaseBehaviour
+public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     //prefabs
     public GameObject tooltipPrefab; //used to create a tooltip
@@ -300,7 +301,7 @@ public class CardScript : BaseBehaviour
         }
     }
 
-    private void OnMouseEnter()
+    public void OnPointerEnter(PointerEventData eventData)
     {
         //ignore this event if hidden or discarding
         if (hidden || (state == State.discarding))
@@ -315,7 +316,7 @@ public class CardScript : BaseBehaviour
         state = State.moving;
     }
 
-    private void OnMouseExit()
+    public void OnPointerExit(PointerEventData eventData)
     {
         //ignore this event if hidden or discarding
         if (hidden || (state == State.discarding))
@@ -328,6 +329,8 @@ public class CardScript : BaseBehaviour
         state = State.moving;
     }
 
+    //this one needs a coroutine, so the event handler just passes the buck
+    public void OnPointerClick(PointerEventData eventData) { StartCoroutine(OnClick()); }
     private IEnumerator OnClick()
     {
         GameObject[] cards = GameObject.FindGameObjectsWithTag ("Card"); //used for sending messages to all other cards
@@ -367,10 +370,10 @@ public class CardScript : BaseBehaviour
                 switch (e.effectType)
                 {
                     case EffectType.wave:
-                        LevelManagerScript.instance.data.waves[LevelManagerScript.instance.currentWave] =
-                            ((IEffectWave)e).alteredWaveData(LevelManagerScript.instance.data.waves[LevelManagerScript.instance.currentWave]);
+                        HandScript.enemyHand.applyWaveEffect((IEffectWave)e);
 
                         LevelManagerScript.instance.UpdateWaveStats();
+                        HandScript.enemyHand.updateEnemyCards();
                         break;
 
                     case EffectType.instant:

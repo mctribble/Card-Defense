@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
@@ -12,19 +13,26 @@ public class HandScript : BaseBehaviour
     [Hide] public static HandScript playerHand;
     [Hide] public static HandScript enemyHand;
 
+    //references
+    public Image       deckImage;        //image that serves as the spawn point for new cards
+    public GameObject  playerCardPrefab; //prefab used to spawn a new  playercard
+    public GameObject  enemyCardPrefab;  //prefab used to spawn a new enemy card
+
+    //hand status
     public HandFaction handOwner;        //indicates ownership of the hand
     public int         startingHandSize; //cards the player starts with
     public int         maximumHandSize;  //max number of cards the player can have
-    public Image       playerDeckImage;  //image that serves as the spawn point for new cards
-    public GameObject  cardPrefab;       //prefab used to spawn a new card
-    public int         idealGap;         //ideal gap between cards
-    public float       idleHeightMod;    //used to calculate height at which new cards should idle
-    public float       drawDelay;	     //delay given between drawing multiple cards
-    public float       discardDelay;     //delay given between discarding multiple cards
+    public int         currentHandSize;  //number of cards currently in hand
     public bool        handHidden;       //whether or not the hand is hidden
 
+    //positioning and timing
+    public int   idealGap;      //ideal gap between cards
+    public float idleHeightMod; //used to calculate height at which new cards should idle
+    public float drawDelay;	    //delay given between drawing multiple cards
+    public float discardDelay;  //delay given between discarding multiple cards
+    
+    //private info
     private GameObject[] cards;  //stores the number of cards
-    private int currentHandSize; //number of cards currently in hand
     private bool discarding;     //if true, multiple cards are currently being discarded and we need to wait before drawing
 
     // Use this for initialization
@@ -44,21 +52,18 @@ public class HandScript : BaseBehaviour
         currentHandSize = 0; //no cards yet
         discarding = false; //we are not discarding cards
 
-        //if player, draw starting hand
-        if (handOwner == HandFaction.player)
-        {
-            handHidden = false;
-            yield return drawToHandSize(startingHandSize);
-        }
+        //draw starting hand
+        handHidden = false;
+        yield return drawToHandSize(startingHandSize);
 
         yield break;
     }
 
     //draws a card from the deck.  The card spawns face down at the same position, rotation, and scale as the spawn point image, so there are flags to flip the card over, turn it upright, and to scale it up
-    private void drawCard(bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true)
+    public void drawCard(bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true)
     {
-        //currently only compatible with player hands
-        if (handOwner != HandFaction.player)
+        //unsupported for neutral hands
+        if (handOwner == HandFaction.neutral)
             throw new System.NotImplementedException();
 
         //bail if reached max
@@ -68,25 +73,41 @@ public class HandScript : BaseBehaviour
             return;
         }
 
-        //bail if deck out of cards
-        if (DeckManagerScript.instance.cardsLeft == 0)
+        //bail if the relevant deck out of cards
+        if ((handOwner == HandFaction.player) && (DeckManagerScript.instance.cardsLeft == 0))
         {
             Debug.Log("Can't draw: out of cards.");
             return;
         }
+        else if ((handOwner == HandFaction.enemy) && (LevelManagerScript.instance.wavesInDeck == 0))
+        {
+            Debug.Log("Can't draw: enemy deck empty.");
+            return;
+        }
 
-        //card setup
-        cards[currentHandSize] = Instantiate(cardPrefab);           //instantiate card prefab
-        cards[currentHandSize].transform.SetParent(transform.root); //declare the card a child of the UI object at the root of this tree
+        //instantiate card prefab
+        if (handOwner == HandFaction.player)
+            cards[currentHandSize] = Instantiate(playerCardPrefab);
+        else if (handOwner == HandFaction.enemy)
+            cards[currentHandSize] = Instantiate(enemyCardPrefab);
 
-        //position card to match up with the player deck image
-        RectTransform spawnT = playerDeckImage.rectTransform;
+        cards[currentHandSize].transform.SetParent(transform.root); //declare the new card a child of the UI object at the root of this tree
+
+        //position card to match up with the deck image we are spawning at
+        RectTransform spawnT = deckImage.rectTransform;
         cards[currentHandSize].GetComponent<RectTransform>().position   = spawnT.position;
         cards[currentHandSize].GetComponent<RectTransform>().rotation   = spawnT.rotation;
         cards[currentHandSize].GetComponent<RectTransform>().localScale = spawnT.localScale;
 
-        cards[currentHandSize].SendMessage("SetHand", gameObject);                          //tell the card which hand owns it
-        cards[currentHandSize].SendMessage("SetCard", DeckManagerScript.instance.Draw());	//send the card the data that defines it
+        cards[currentHandSize].SendMessage("SetHand", gameObject); //tell the card which hand owns it
+
+        //send the card the data that defines it
+        if (handOwner == HandFaction.player)
+            cards[currentHandSize].SendMessage("SetCard", DeckManagerScript.instance.Draw());
+        else if (handOwner == HandFaction.enemy)
+            cards[currentHandSize].SendMessage("SetWave", LevelManagerScript.instance.DrawEnemy());
+        else
+            MessageHandlerScript.Error("don't know how to draw for a hand with this owner");
 
         //if set, tell it to turn upright
         if (turnToIdentity)
@@ -108,6 +129,10 @@ public class HandScript : BaseBehaviour
 
         //rearrange cards
         updateCardIdleLocations(); //rearrange the cards
+
+        //if this is an enemy hand, also update the wave stats
+        if (handOwner == HandFaction.enemy)
+            LevelManagerScript.instance.UpdateWaveStats();
     }
 
     //draws until the target card count
@@ -122,20 +147,34 @@ public class HandScript : BaseBehaviour
     {
         //wait to make sure we dont attempt to discard and draw at the same time (i. e., cards like Recycle that cause bothd iscarding and drawing simultaneously)
         do
-        { yield return null; }
+        {
+            yield return null;
+        }
         while (discarding);
 
         //draw the cards
         while (drawCount > 0)
         {
-            yield return new WaitForSeconds(drawDelay);
             drawCount--;
             drawCard(false); //dont flip them over just yet: we want to do them all at once since they were drawn as a group
+            yield return new WaitForSeconds(drawDelay);
         }
 
+        //if the deck is empty, we may not be able to draw any cards.  bail if the hand is still empty at this point.
+        if (currentHandSize == 0)
+            yield break;
+
         //wait for the last card to be idle, since it will be the last one to finish moving around
-        CardScript waitCard = cards[currentHandSize - 1].GetComponent<CardScript>();
-        yield return StartCoroutine(waitCard.waitForIdle());
+        if (handOwner == HandFaction.player)
+        {
+            CardScript waitCard = cards[currentHandSize - 1].GetComponent<CardScript>();
+            yield return StartCoroutine(waitCard.waitForIdle());
+        }
+        else
+        {
+            EnemyCardScript waitCard = cards[currentHandSize - 1].GetComponent<EnemyCardScript>();
+            yield return StartCoroutine(waitCard.waitForIdle());
+        }
 
         //flip the entire hand face up at once
         foreach (GameObject c in cards)
@@ -204,9 +243,13 @@ public class HandScript : BaseBehaviour
             return;
 
         //retrieve card dims
-        int cardWidth  = (int)cards [0].GetComponent<RectTransform> ().rect.width;
+        int cardWidth  = (int)cards[0].GetComponent<RectTransform>().rect.width;
         int cardHeight = (int)cards[0].GetComponent<RectTransform>().rect.height;
 
+        //figure out how much horizontal space we have to work with and where it is relative to the canvas
+        int handRegionWidth  = (int)transform.GetComponent<RectTransform>().rect.width;
+        int handRegionMidpoint = (int)(transform.position.x - transform.root.position.x);
+        
         //figure out how far away the cards need to be from each other
         int cardDistance = cardWidth + idealGap;
 
@@ -214,55 +257,26 @@ public class HandScript : BaseBehaviour
         int lastCardPos  = (cardDistance * (currentHandSize - 1));
         int handMidpoint = lastCardPos / 2;
 
-        //allow cards to overlap if they dont fit on screen by using a different distance formula
-        int screenWidth  = (int)transform.root.gameObject.GetComponent<RectTransform> ().rect.width;
-        if ((lastCardPos + cardDistance) > screenWidth)
+        //allow cards to overlap if they dont fit in the space by using a different distance formula
+        if ((lastCardPos + cardDistance) > handRegionWidth)
         {
             //recalculate variables
-            cardDistance = (screenWidth - (cardWidth/2)) / currentHandSize;
+            cardDistance = (handRegionWidth - (cardWidth/2)) / currentHandSize;
             lastCardPos  = (cardDistance * (currentHandSize - 1));
             handMidpoint = lastCardPos / 2;
         }
 
-        //calculate card idle height
-        int screenHeight = (int)transform.root.gameObject.GetComponent<RectTransform>().rect.height;
-        float idleHeight = (screenHeight / -2) + (cardHeight * idleHeightMod);
+        //calculate card idle height from global position instead of local position because nested layout elements can mess with the local one
+        float globalHandHeight = transform.GetComponent<RectTransform>().position.y ;
+        float localHandHeight = globalHandHeight - (transform.root.GetComponent<RectTransform>().rect.height / 2);
+        float idleHeight = localHandHeight + (cardHeight * idleHeightMod);
 
         //calculate positions and send them to the cards
         for (int c = 0; c < currentHandSize; c++)
         {
-            cards[c].SendMessage("SetIdleLocation", new Vector2((cardDistance * c) - handMidpoint, idleHeight));
-            cards[c].transform.SetSiblingIndex(c); //update draw order also
+            cards[c].SendMessage("SetIdleLocation", new Vector2((cardDistance * c) - handMidpoint + handRegionMidpoint, idleHeight));
+            cards[c].transform.SetAsLastSibling(); //update draw order also
         }
-    }
-
-    //attempts to remove d charges from random cards in the hand, discarding any that hit 0 charges.  returns how much damage was actually dealt
-    public int Damage(int d)
-    {
-        //currently only compatible with player hands
-        if (handOwner != HandFaction.player)
-            throw new System.NotImplementedException();
-
-        int alreadyDealt = 0;
-
-        while ( (currentHandSize > 0) && (alreadyDealt < d) )
-        {
-            //pick a random card in the hand
-            GameObject toDamage = cards[ Random.Range(0, currentHandSize) ];
-            CardScript scriptRef = toDamage.GetComponent<CardScript>();
-
-            //deal damage to it
-            int toDeal = Mathf.Min (scriptRef.card.charges, (d - alreadyDealt) );
-            scriptRef.card.charges -= toDeal;
-            alreadyDealt += toDeal;
-
-            if (scriptRef.card.charges == 0)
-                toDamage.SendMessage("Discard"); //discard the card if it is out of charges
-            else
-                scriptRef.updateChargeText(); //otherwise, tell the card to update its header text
-        }
-
-        return alreadyDealt;
     }
 
     //removes a card from the hand (the card is NOT destroyed; the card does that part)
@@ -312,4 +326,104 @@ public class HandScript : BaseBehaviour
             if (c != null)
                 c.SendMessage("Show");
     }
+
+    //(player hands only) attempts to remove d charges from random cards in the hand, discarding any that hit 0 charges.  returns how much damage was actually dealt
+    public int Damage(int d)
+    {
+        //currently only compatible with player hands
+        if (handOwner != HandFaction.player)
+            throw new System.InvalidOperationException("Cannot damage hands other than the player hand");
+
+        int alreadyDealt = 0;
+
+        while ( (currentHandSize > 0) && (alreadyDealt < d) )
+        {
+            //pick a random card in the hand
+            GameObject toDamage = cards[ Random.Range(0, currentHandSize) ];
+            CardScript scriptRef = toDamage.GetComponent<CardScript>();
+
+            //deal damage to it
+            int toDeal = Mathf.Min (scriptRef.card.charges, (d - alreadyDealt) );
+            scriptRef.card.charges -= toDeal;
+            alreadyDealt += toDeal;
+
+            if (scriptRef.card.charges == 0)
+                toDamage.SendMessage("Discard"); //discard the card if it is out of charges
+            else
+                scriptRef.updateChargeText(); //otherwise, tell the card to update its header text
+        }
+
+        return alreadyDealt;
+    }
+
+    //(enemy hands only) returns a list of all WaveData objects associated with cards in the hand
+    public List<WaveData> IncomingWaves
+    {
+        get
+        {
+            List<WaveData> result = new List<WaveData>();
+            foreach (GameObject ec in cards)
+                if (ec != null)
+                    result.Add( ec.GetComponent<EnemyCardScript>().wave );
+            return result;
+        }
+    }
+
+    //(enemy hands only) returns total spawn count of all waves in the hand
+    public int spawnCount
+    {
+        get
+        {
+            int result = 0;
+            foreach(WaveData ew in IncomingWaves)
+                    result += ew.spawnCount;
+            return result;
+        }
+    }
+
+    //(enemy hands only) returns total remaining health of all waves in the hand
+    public int totalRemainingHealth
+    {
+        get
+        {
+            int result = 0;
+            foreach (WaveData ew in IncomingWaves)
+                result += (ew.spawnCount * ew.enemyData.maxHealth);
+            return result;
+        }
+    }
+
+    //(enemy hands only) returns longest spawn time among all cards in the hand
+    public float longestTime
+    {
+        get
+        {
+            float result = 0.0f;
+            foreach (WaveData ew in IncomingWaves)
+                result = Mathf.Max(result, ew.time);
+            return result;
+        }
+    }
+
+    //(enemy hands only) discards the card associated with the given wave
+    public void discardWave(WaveData toDiscard)
+    {
+        //only valid on enemy hands
+        if (handOwner != HandFaction.enemy)
+            throw new System.InvalidOperationException();
+
+        //find the card to discard
+        GameObject card = null;
+        foreach (GameObject i in cards)
+            if (i != null)
+                if (i.GetComponent<EnemyCardScript>().wave == toDiscard)
+                    card = i;
+
+        //and discard it
+        card.SendMessage("Discard");
+    }
+
+    public void updateEnemyCards()             { foreach (GameObject ec in cards) if (ec != null) ec.SendMessage("updateWaveStats"); }    //(enemy hands only) instructs all cards in the hand to refresh themselves
+    public void applyWaveEffect(IEffectWave e) { foreach (GameObject ec in cards) if (ec != null) ec.SendMessage("applyWaveEffect", e); } //(enemy hands only) applies the wave effect to all cards in the hand
+    public void UpdateWaveStats()              { foreach (GameObject ec in cards) if (ec != null) ec.SendMessage("updateWaveStats"); }    //(enemy hands only) updates wave stats for all cards in the hand
 }
