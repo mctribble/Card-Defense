@@ -429,9 +429,8 @@ public class LevelManagerScript : BaseBehaviour
         wavesOngoing++;
 
         //init vars
-        EnemyData   spawnType = d.enemyData;
-        int         spawnerCount = spawnerObjects.Count; //number of spawners
-        float       timeBetweenSpawns = d.time / totalSpawnCount; //delay between each spawn
+        int   spawnerCount = spawnerObjects.Count;          //number of spawners
+        float timeBetweenSpawns = d.time / totalSpawnCount; //delay between each spawn
         
         //spawn at least one monster
         if (d.spawnCount < 1)
