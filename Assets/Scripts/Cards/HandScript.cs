@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
@@ -59,8 +60,12 @@ public class HandScript : BaseBehaviour
         yield break;
     }
 
-    //draws a card from the deck.  The card spawns face down at the same position, rotation, and scale as the spawn point image, so there are flags to flip the card over, turn it upright, and to scale it up
-    public void drawCard(bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true)
+    //draws a card from the deck.  The card spawns face down at the same position, rotation, and scale as the spawn point image.
+    //flipOver: card should flip over AFTER moving
+    //turnToIdentity: card should straighten itself while moving
+    //scaleToIdentity: card should scale itself to (1,1,1) while moving
+    //drawSurvivorWave: (enemy hands only) sets up the new card with a survivor wave instead of a wave from the deck
+    public void drawCard(bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true, bool drawSurvivorWave = false)
     {
         //unsupported for neutral hands
         if (handOwner == HandFaction.neutral)
@@ -103,11 +108,20 @@ public class HandScript : BaseBehaviour
 
         //send the card the data that defines it
         if (handOwner == HandFaction.player)
+        {
             cards[currentHandSize].SendMessage("SetCard", DeckManagerScript.instance.Draw());
+        }
         else if (handOwner == HandFaction.enemy)
-            cards[currentHandSize].SendMessage("SetWave", LevelManagerScript.instance.DrawEnemy());
+        {
+            if (drawSurvivorWave == false)
+                cards[currentHandSize].SendMessage("SetWave", LevelManagerScript.instance.DrawEnemy());
+            else
+                cards[currentHandSize].SendMessage("SurvivorWave");
+        }
         else
+        {
             MessageHandlerScript.Error("don't know how to draw for a hand with this owner");
+        }
 
         //if set, tell it to turn upright
         if (turnToIdentity)
@@ -386,10 +400,7 @@ public class HandScript : BaseBehaviour
     {
         get
         {
-            int result = 0;
-            foreach (WaveData ew in IncomingWaves)
-                result += (ew.spawnCount * ew.enemyData.maxHealth);
-            return result;
+            return IncomingWaves.Sum(x => x.totalRemainingHealth);
         }
     }
 

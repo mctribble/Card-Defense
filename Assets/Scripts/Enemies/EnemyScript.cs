@@ -195,17 +195,20 @@ public class EnemyScript : BaseBehaviour
         //damage player...
         DeckManagerScript.instance.SendMessage("Damage", damage);
 
-        //...and go back to start for another lap
+        //reset the enemy
         transform.position = startPos;
         currentDestination = 0;
-
-        //if the enemy is not expected to die, update the enemy list with the new pathing info
-        if (expectedHealth > 0)
-            EnemyManagerScript.instance.SendMessage("EnemyPathChanged", gameObject);
-
-        //resume normal behavior
         goalFinalChance = false;
-        yield break;
+
+        //update wave stats
+        LevelManagerScript.instance.deadThisWave++;
+        LevelManagerScript.instance.totalRemainingHealth -= curHealth;
+
+        //report it as a survivor, and then disable it until it is spawned into the next wave
+        EnemyManagerScript.instance.EnemySurvived(gameObject);
+        gameObject.SetActive(false);        
+
+        yield break; //done
     }
 
     //tracks damage that WILL arrive so that towers dont keep shooting something that is about to be dead

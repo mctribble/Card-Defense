@@ -1,8 +1,134 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
+
+//contains all the data required to spawn a wave
+[System.Serializable]
+public class WaveData
+{
+    [XmlAttribute]    public string type;
+    [XmlAttribute]    public int    budget;
+    [XmlAttribute]    public float  time;
+    [XmlAttribute]    public string message;
+    [Hide, XmlIgnore] public int    forcedSpawnCount; //if this is negative, no spawn count was forced
+    [Hide, XmlIgnore] public int    spawnedThisWave;  //number of enemies in this wave that have already been spawned
+
+    [XmlIgnore] private EnemyData data;
+    [XmlIgnore] public  EnemyData enemyData
+    {
+        get
+        {
+            if ( (data == null) || (data.name != type) )
+                data = EnemyTypeManagerScript.instance.getEnemyTypeByName(type);
+
+            return data;
+        }
+        set { data = value; }
+    }
+
+    [XmlIgnore] private List<GameObject> enemyList;
+
+    //default.  these values are meant to be VERY noticable if a wave is left with default data
+    public WaveData()
+    {
+        type = "Swarm";
+        budget = 999999999;
+        time = 300.0f;
+        message = null;
+        forcedSpawnCount = -1;
+        spawnedThisWave = 0;
+    }
+
+    //specific data
+    public WaveData(string waveType, int waveBudget, float waveTime)
+    {
+        type = waveType;
+        budget = waveBudget;
+        time = waveTime;
+        message = null;
+        forcedSpawnCount = -1;
+        spawnedThisWave = 0;
+    }
+
+    //survivor wave constructor
+    public WaveData(List<GameObject> enemies, int spawnCount, int totalRemainingHealth, float waveTime)
+    {
+        data = null; //enemy data doesnt apply for survival waves, since they have multiple enemy types
+        budget = int.MaxValue; //budget doesnt apply either, so make sure it stands out if used accidentally
+        time = waveTime;
+        message = null;
+        forcedSpawnCount = -1;
+        spawnedThisWave = 0;
+        enemyList = enemies;
+        cachedSpawnCount = enemies.Count;
+    }
+
+    //returns number of enemies to spawn this wave.  Cache the value to make sure we give the original spawn count, unaltered by anything that happens during the wave
+    private int? cachedSpawnCount;
+    public int spawnCount
+    {
+        get
+        {
+            if (cachedSpawnCount == null)
+            {
+                int result = 0;
+
+                if (forcedSpawnCount > 0)
+                    result = forcedSpawnCount;
+                else if (data == null)
+                    result = enemyList.Count;
+                else
+                    result = Mathf.FloorToInt(budget / enemyData.spawnCost);
+
+                if (result < 1)
+                {
+                    result = 1; //always spawn at least one enemy
+                    Debug.LogWarning("Wave spawn count was zero.  forced to spawn 1 monster.");
+                }
+
+                cachedSpawnCount = result;
+            }
+
+            return cachedSpawnCount.Value;
+        }
+    }
+
+    //returns the total health of all remaining enemies
+    public int totalRemainingHealth
+    {
+        get
+        {
+            if (enemyList == null)
+                return (spawnCount - spawnedThisWave) * data.maxHealth;
+            else
+                return enemyList.Sum(x => x.GetComponent<EnemyScript>().curHealth);
+        }
+    }
+
+    //returns whether or not this is a survivor wave
+    public bool isSurvivorWave { get { return enemyList != null; } }
+
+    //used for survivor waves.  reactivates the first survivor on the list and removes it from said list
+    public void spawn()
+    {
+        //error if the enemy list is empty
+        if ((enemyList == null) || (enemyList.Count == 0))
+        {
+            MessageHandlerScript.Error("WaveData can't spawn an enemy because the list is already empty");
+            return;
+        }
+
+        GameObject e = enemyList.First();
+        enemyList.Remove(e);
+        e.SetActive(true);
+        EnemyManagerScript.instance.EnemySpawned(e);
+    }
+}
 
 public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -10,9 +136,10 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
     public Text       description;
     public GameObject art;
     public Text       title;
-    public Image      cardBack; 
+    public Image      cardBack;
 
-    //animation settings
+    //object settings
+    public float survivorWaveTime; //time assigned to survivor waves
     public float motionSpeed;
     public float rotationSpeed;
     public float scaleSpeed;
@@ -33,6 +160,8 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
     private int        siblingIndex;   //temp storage of this cards proper place in the sibling list, used to restore proper draw order after a card is no longer being moused over
     private string     enemyType;      //name of the enemy type currently depicted.  Cached to detect enemy type changes
 
+    private List<GameObject> survivorList;
+
     //init
     private void Awake()
     {
@@ -42,6 +171,7 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
         hidden = false;
         faceDown = true;
         cardBack.enabled = true;
+        survivorList = null;
     }
   
     //sets the wave
@@ -52,6 +182,51 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
         foreach (Image i in art.GetComponentsInChildren<Image>())
             i.color = w.enemyData.unitColor.toColor();
         enemyType = w.enemyData.name;
+    }
+
+    //sets this up as a survivor wave
+    public void SurvivorWave()
+    {
+        description.text = "These are survivors from the previous round, come to attack again.";
+
+        //use a list of surviving enemies to initialize the card, and remove said list from the enemy manager so that it makes a new one for anything that survives this wave instead of putting them back into the same one
+        wave = null;
+        survivorList = EnemyManagerScript.instance.survivors;
+        EnemyManagerScript.instance.survivors = null;
+
+        //search the list to find what we need to finish the setup
+        spawnCount = 0;
+        totalRemainingHealth = 0;
+        int numTypesFound = 0;
+        string[] typesFound = new string[6];
+        SpriteRenderer[] spritesToSet = new SpriteRenderer[6];
+        foreach (GameObject go in survivorList)
+        {
+            EnemyScript e = go.GetComponent<EnemyScript>();
+            spawnCount++;
+            totalRemainingHealth += e.curHealth;
+
+            if ( (numTypesFound <= 6) && (typesFound.Contains(e.name) == false) )
+            {
+                typesFound[numTypesFound] = e.name;
+                spritesToSet[numTypesFound] = e.enemyImage;
+                numTypesFound++;
+            }
+        }
+
+        //set the sprites
+        Image[] artImages = art.GetComponentsInChildren<Image>();
+        for (int t = 0; t < numTypesFound; t++)
+        {
+            for (int i = t; i < artImages.Length; i += numTypesFound)
+            {
+                artImages[i].sprite = spritesToSet[t].sprite;
+                artImages[i].color = spritesToSet[t].color;
+            }
+        }
+
+        //setup the WaveData object
+        wave = new WaveData(survivorList, spawnCount, totalRemainingHealth, survivorWaveTime);
     }
 
     //simple FSM
@@ -80,10 +255,13 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
     private void Update()
     {
         //update title text (???????x????)
-        title.text = "<color=#" + wave.enemyData.unitColor.toHex() + ">" + wave.enemyData.name + "</color>x" + (wave.spawnCount - wave.spawnedThisWave);
+        if (survivorList == null)
+            title.text = "<color=#" + wave.enemyData.unitColor.toHex() + ">" + wave.enemyData.name + "</color> x" + (wave.spawnCount - wave.spawnedThisWave);
+        else
+            title.text = "Survivors x" + (wave.spawnCount - wave.spawnedThisWave);
 
-        //if the enemy type changed, update description and art as well
-        if (enemyType != wave.enemyData.name)
+        //if this is not a survivor wave, and the enemy type changed, update description and art as well
+        if ((survivorList == null) && (enemyType != wave.enemyData.name))
         {
             description.text = wave.enemyData.getDescription();
             foreach (Image i in art.GetComponentsInChildren<Image>())
@@ -238,12 +416,9 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
             wave.message = null;
         }
 
-        if (wave.forcedSpawnCount > 0)
-            spawnCount = wave.forcedSpawnCount;
-        else
-            spawnCount = Mathf.RoundToInt(((float)wave.budget / (float)wave.enemyData.spawnCost));
-
-        totalRemainingHealth = spawnCount * wave.enemyData.maxHealth;
+        //fetch wave stats
+        spawnCount = wave.spawnCount;
+        totalRemainingHealth = wave.totalRemainingHealth;
     }
 
     public void applyWaveEffect(IEffectWave e) { wave = e.alteredWaveData(wave); } //applies the given effect to the wave

@@ -2,7 +2,7 @@
 using UnityEngine;
 using Vexe.Runtime.Types;
 
-//compares two enemies by their distance to their goals.  Used for sorting the enemy list (
+//compares two enemies by their distance to their goals.  Used for sorting the enemy list
 public class EnemyDistanceToGoalComparer : Comparer<GameObject>
 {
     public override int Compare(GameObject x, GameObject y)
@@ -16,6 +16,7 @@ public class EnemyManagerScript : BaseBehaviour
 {
     public static EnemyManagerScript instance; //this class is a singleton
     public List<GameObject> activeEnemies; //excludes enemies that expect to die but have not yet done so
+    public List<GameObject> survivors; //list of enemies that survived their run and should be added as a new wave on the next round
     private EnemyDistanceToGoalComparer comparer;
 
     // Use this for initialization
@@ -23,6 +24,7 @@ public class EnemyManagerScript : BaseBehaviour
     {
         instance = this;
         activeEnemies = new List<GameObject>();
+        survivors = null;
         comparer = new EnemyDistanceToGoalComparer();
     }
 
@@ -55,6 +57,17 @@ public class EnemyManagerScript : BaseBehaviour
     {
         EnemyExpectedDeath(e);
         EnemySpawned(e);
+    }
+
+    //called when the enemy has reached the goal and is to be respawned into the next wave
+    public void EnemySurvived(GameObject e)
+    { 
+        activeEnemies.Remove(e);
+
+        if (survivors == null)
+            survivors = new List<GameObject>();
+
+        survivors.Add(e);
     }
 
     //returns a list of all enemies that are within the given range of the given position, limiting it to at most max items

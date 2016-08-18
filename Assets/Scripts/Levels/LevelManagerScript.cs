@@ -94,72 +94,6 @@ public class LevelData
     }
 }
 
-//contains all the data required to spawn a wave
-[System.Serializable]
-public class WaveData
-{
-    [XmlAttribute]    public string type;
-    [XmlAttribute]    public int    budget;
-    [XmlAttribute]    public float  time;
-    [XmlAttribute]    public string message;
-    [Hide, XmlIgnore] public int    forcedSpawnCount; //if this is negative, no spawn count was forced
-    [Hide, XmlIgnore] public int    spawnedThisWave;  //number of enemies in this wave that have already been spawned
-
-    [XmlIgnore] private EnemyData data;
-    [XmlIgnore] public  EnemyData enemyData
-    {
-        get
-        {
-            if ( (data == null) || (data.name != type) )
-                data = EnemyTypeManagerScript.instance.getEnemyTypeByName(type);
-
-            return data;
-        }
-        set { data = value; }
-    }
-
-    //default.  these values are meant to be VERY noticable if a wave is left with default data
-    public WaveData()
-    {
-        type = "Swarm";
-        budget = 999999999;
-        time = 300.0f;
-        message = null;
-        forcedSpawnCount = -1;
-        spawnedThisWave = 0;
-    }
-
-    //specific data
-    public WaveData(string waveType, int waveBudget, float waveTime)
-    {
-        type = waveType;
-        budget = waveBudget;
-        time = waveTime;
-        message = null;
-        forcedSpawnCount = -1;
-        spawnedThisWave = 0;
-    }
-
-    //returns number of enemies to spawn this wave
-    public int spawnCount
-    {
-        get
-        {
-            int result = 0;
-
-            if (forcedSpawnCount > 0)
-                result = forcedSpawnCount;
-            else
-                result = Mathf.FloorToInt(budget / enemyData.spawnCost);
-
-            if (result < 1)
-                result = 1; //always spawn at least one enemy
-
-            return result;
-        }
-    }
-}
-
 public class LevelManagerScript : BaseBehaviour
 {
     //other objects can refer to these to be informed when a level is loaded (https://unity3d.com/learn/tutorials/topics/scripting/events)
@@ -415,6 +349,11 @@ public class LevelManagerScript : BaseBehaviour
         yield return new WaitForSeconds(1.0f);
         HandScript.playerHand.SendMessage("drawToHandSize", 10);
 
+        //if there are any survivors, draw a new survivor card to represent them
+        if (EnemyManagerScript.instance.survivors != null)
+            if (EnemyManagerScript.instance.survivors.Count > 0)
+                HandScript.enemyHand.drawCard(true, true, true, true); 
+
         //draw a new enemy card
         HandScript.enemyHand.drawCard();
 
@@ -431,13 +370,6 @@ public class LevelManagerScript : BaseBehaviour
         //init vars
         int   spawnerCount = spawnerObjects.Count;          //number of spawners
         float timeBetweenSpawns = d.time / totalSpawnCount; //delay between each spawn
-        
-        //spawn at least one monster
-        if (d.spawnCount < 1)
-        {
-            d.forcedSpawnCount = 1;
-            Debug.LogWarning("Wave spawn count was zero.  forced to spawn 1 monster.");
-        }
 
         HandScript.playerHand.SendMessage("Hide"); //hide the hand
 
@@ -455,8 +387,18 @@ public class LevelManagerScript : BaseBehaviour
             while (timeToNextSpawn < 0.0)      //this is a loop in case multiple spawns happen in one frame
             {
                 timeToNextSpawn += timeBetweenSpawns; //update spawn timer
-                spawnerObjects[curSpawner].GetComponent<SpawnerScript>().Spawn(timeToNextSpawn, d.enemyData); //spawn enemy.  spawn timer provided so the enemy can place itself properly when framerate is low
-                curSpawner = (curSpawner + 1) % spawnerCount; //move to next spawner, looping back to the first if we are at the end of the list
+
+                if (d.isSurvivorWave)
+                {
+                    //special case: survivor waves are responsible for their own spawning
+                    d.spawn();
+                }
+                else
+                {
+                    //standard case: we are responsible for spawning
+                    spawnerObjects[curSpawner].GetComponent<SpawnerScript>().Spawn(timeToNextSpawn, d.enemyData); //spawn enemy.  spawn timer provided so the enemy can place itself properly when framerate is low
+                    curSpawner = (curSpawner + 1) % spawnerCount; //move to next spawner, looping back to the first if we are at the end of the list
+                }
 
                 //update spawn counters
                 d.spawnedThisWave++;
