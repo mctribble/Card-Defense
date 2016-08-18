@@ -11,8 +11,11 @@ namespace Vexe.Editor.Drawers
 {
 	public class AssignableDrawer : CompositeDrawer<object, AssignableAttribute>
 	{
-		private int kFoldout, kTarget, kMember, kSource;
-		private int targetIdx, memberIdx;
+        #pragma warning disable 0414
+        private int kFoldout, kTarget, kMember, kSource;
+        #pragma warning restore 0414
+
+        private int targetIdx, memberIdx;
 		private GameObject source;
 		private Component target;
 		private MemberInfo targetMember;
