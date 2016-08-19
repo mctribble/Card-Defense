@@ -65,6 +65,7 @@ public class EnemyData
 
 public class EnemyScript : BaseBehaviour
 {
+    public string         enemyTypeName;      //name of this type of enemy
     public List<Vector2>  path;               //list of points this unit must go to
     public int            currentDestination; //index in the path that indicates the current destination
     public Vector2        startPos;           //position where this enemy was spawned
@@ -292,6 +293,7 @@ public class EnemyScript : BaseBehaviour
     //stores the data specific to this type of enemy
     private System.Collections.IEnumerator SetData(EnemyData d)
     {
+        enemyTypeName           = d.name;
         damage         = d.attack;
         maxHealth      = d.maxHealth;
         curHealth      = d.maxHealth;

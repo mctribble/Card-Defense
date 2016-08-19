@@ -86,8 +86,11 @@ public class HandScript : BaseBehaviour
         }
         else if ((handOwner == HandFaction.enemy) && (LevelManagerScript.instance.wavesInDeck == 0))
         {
-            Debug.Log("Can't draw: enemy deck empty.");
-            return;
+            if (drawSurvivorWave == false) //an empty enemy deck is fine if we're drawing a survivor wave instead of from the deck
+            {
+                Debug.Log("Can't draw: enemy deck empty.");
+                return;
+            }
         }
 
         //instantiate card prefab

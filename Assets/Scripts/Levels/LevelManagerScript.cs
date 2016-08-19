@@ -326,14 +326,6 @@ public class LevelManagerScript : BaseBehaviour
                 monstersAlive = false;
         }
 
-        //show message if we finished the last wave
-        if (wavesInDeck == 0)
-        {
-            yield return StartCoroutine(MessageHandlerScript.ShowAndYield("Level Complete!")); //tell user they won and wait for them to answer
-            UnityEngine.SceneManagement.SceneManager.LoadScene("Game"); //then restart the scene
-            yield break;
-        }
-
         HandScript.playerHand.SendMessage("Show"); //show the hand
 
         //find all towers in the level and tell them a wave ended
@@ -350,9 +342,16 @@ public class LevelManagerScript : BaseBehaviour
         HandScript.playerHand.SendMessage("drawToHandSize", 10);
 
         //if there are any survivors, draw a new survivor card to represent them
-        if (EnemyManagerScript.instance.survivors != null)
-            if (EnemyManagerScript.instance.survivors.Count > 0)
-                HandScript.enemyHand.drawCard(true, true, true, true); 
+        if ((EnemyManagerScript.instance.survivors != null) && (EnemyManagerScript.instance.survivors.Count > 0))
+        {
+            HandScript.enemyHand.drawCard(true, true, true, true);
+        }
+        else if (wavesInDeck == 0) //if there were no survivors, and the enemy deck is empty, then the player wins.
+        {
+            yield return StartCoroutine(MessageHandlerScript.ShowAndYield("Level Complete!")); //tell user they won and wait for them to answer
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Game"); //then restart the scene
+            yield break;
+        }
 
         //draw a new enemy card
         HandScript.enemyHand.drawCard();

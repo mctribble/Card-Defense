@@ -206,9 +206,9 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
             spawnCount++;
             totalRemainingHealth += e.curHealth;
 
-            if ( (numTypesFound <= 6) && (typesFound.Contains(e.name) == false) )
+            if ( (numTypesFound <= 6) && (typesFound.Contains(e.enemyTypeName) == false) )
             {
-                typesFound[numTypesFound] = e.name;
+                typesFound[numTypesFound] = e.enemyTypeName;
                 spritesToSet[numTypesFound] = e.enemyImage;
                 numTypesFound++;
             }
@@ -216,13 +216,12 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
 
         //set the sprites
         Image[] artImages = art.GetComponentsInChildren<Image>();
-        for (int t = 0; t < numTypesFound; t++)
+        int spriteIndex = 0;
+        foreach(Image i in artImages)
         {
-            for (int i = t; i < artImages.Length; i += numTypesFound)
-            {
-                artImages[i].sprite = spritesToSet[t].sprite;
-                artImages[i].color = spritesToSet[t].color;
-            }
+            i.sprite = spritesToSet[spriteIndex].sprite;
+            i.color = spritesToSet[spriteIndex].color;
+            spriteIndex = (spriteIndex + 1) % numTypesFound;
         }
 
         //setup the WaveData object
