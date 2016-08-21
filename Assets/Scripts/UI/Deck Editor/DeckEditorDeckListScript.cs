@@ -48,14 +48,15 @@ public class DeckEditorDeckListScript : BaseBehaviour
 
             //set button color
             Color targetColor;
-            if (xDeck == highlightDeck)
-                targetColor = highlightColor;
+
+            if (xDeck.isModded())
+                targetColor = moddedColor;
             else
                 targetColor = defaultColor;
-            if (xDeck.isModded())
-                targetColor = Color.Lerp(targetColor, moddedColor, 0.5f);
-            xButton.SendMessage("setColor", targetColor);
+            if (xDeck == highlightDeck)
+                targetColor = Color.Lerp(targetColor, highlightColor, 0.5f);
 
+            xButton.SendMessage("setColor", targetColor);
             xButton.transform.SetParent(this.transform, false);
             buttons.Add(xButton);
         }
