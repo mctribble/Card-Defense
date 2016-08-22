@@ -35,7 +35,7 @@ public class CameraControlScript : BaseBehaviour
         transform.position = newPos; //update the transform
 
         //zoom controls
-        cameraRef.orthographicSize -= Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * zoomSpeed;
+        cameraRef.orthographicSize -= Input.GetAxis("Zoom") * Time.deltaTime * zoomSpeed;
         cameraRef.orthographicSize = Mathf.Clamp(cameraRef.orthographicSize, minSize, maxSize);
     }
 	
