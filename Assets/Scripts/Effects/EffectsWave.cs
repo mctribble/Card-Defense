@@ -16,9 +16,9 @@ public class EffectBudgetPercentageChange : IEffectWave
         get
         {
             if (strength >= 0)
-                return "wave is " + strength + " percent stronger.";
+                return "wave strength: +" + strength + '%';
             else
-                return "wave is " + -strength + " percent weaker.";
+                return "wave strength: " + -strength + '%';
         }
     }
 
@@ -39,7 +39,7 @@ public class EffectChangeWaveType : IEffectWave
     [Hide] public float strength { get; set; }                                         //how strong this effect is.  (unused in this effect)
     [Show, Display(2)] public string argument { get; set; }                            //new wave type
 
-    [Hide] public string Name { get { return "change monster type of next wave to " + argument + "."; } }   //returns name and strength
+    [Hide] public string Name { get { return "change monster type of incoming waves to " + argument + "."; } }   //returns name and strength
 
     [Show, Display(1)] public string XMLName { get { return "changeWaveType"; } } //name used to refer to this effect in XML
 

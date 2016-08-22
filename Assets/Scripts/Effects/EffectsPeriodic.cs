@@ -13,7 +13,7 @@ public class EffectRegeneration : IEffectPeriodic
     [Show, Display(2)] public float strength { get; set; }                             //how much health is healed per second
     [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
 
-    [Hide] public string Name { get { return "Regeneration: " + strength; } } //returns name and strength
+    [Hide] public string Name { get { return "Regeneration: " + strength + "/s"; } } //returns name and strength
 
     [Show, Display(1)] public string XMLName { get { return "regeneration"; } } //name used to refer to this effect in XML
 
@@ -185,9 +185,9 @@ public class EffectInvScaleEffectWithTime : IEffectPeriodic
     [Show, Display(2)] public float strength { get; set; }                             //how much speed is gained per second
     [Show, Display(3)] public string argument { get; set; }                            //effect to scale
     
-    [Hide] public string Name { get { return argument + " increases by " + strength + "/s"; } } //returns name and strength
+    [Hide] public string Name { get { return argument + " decreases by " + strength + "/s"; } } //returns name and strength
     
-    [Show, Display(1)] public string XMLName { get { return "scaleEffectWithTime"; } } //name used to refer to this effect in XML
+    [Show, Display(1)] public string XMLName { get { return "InvScaleEffectWithTime"; } } //name used to refer to this effect in XML
 
     private IEffect effectToScale; //cached effect to avoid searching the list every frame
 

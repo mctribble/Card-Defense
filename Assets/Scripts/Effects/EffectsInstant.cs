@@ -38,10 +38,10 @@ public class EffectAllTowersLifespanBonus : IEffectInstant
 {
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //this effect doesnt need a target
     [Hide] public EffectType effectType { get { return EffectType.instant; } }         //this is an instant effect
-    [Show, Display(2)] public float strength { get; set; }                                         //# of waves
+    [Show, Display(2)] public float strength { get; set; }                             //# of waves
     [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
 
-    [Hide] public string Name { get { return "All towers have their lifespan increased by " + strength + "."; } } //returns name and strength
+    [Hide] public string Name { get { return "All towers last " + strength + " waves longer."; } } //returns name and strength
 
     [Show, Display(1)] public string XMLName { get { return "allTowersLifespanBonus"; } } //name used to refer to this effect in XML
 

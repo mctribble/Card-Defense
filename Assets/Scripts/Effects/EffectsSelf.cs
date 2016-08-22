@@ -29,7 +29,7 @@ public class EffectDiscardRandom : IEffectSelf
     [Show, Display(2)] public float strength { get; set; }                             //how strong this effect is.  (unused in this effect)
     [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
 
-    [Hide] public string Name { get { return "Discard up to " + strength + " random cards"; } } //returns name and strength
+    [Hide] public string Name { get { return "Discard " + strength + " random cards"; } } //returns name and strength
 
     [Show, Display(1)] public string XMLName { get { return "discardRandomCard"; } } //name used to refer to this effect in XML
 

@@ -72,7 +72,7 @@ public class EffectInvScaleSpeedWithDamage : IEffectEnemyDamaged
     [Show, Display(2)] public float strength { get; set; }                             //max speed multiplier 
     [Hide] public string argument { get; set; }                                        //effect to reduce
 
-    [Hide] public string Name { get { return "Enemy gets up to " + argument + " times faster as it takes damage"; } } //returns name and strength
+    [Hide] public string Name { get { return "Enemy slows down as it takes damage"; } } //returns name and strength
 
     [Show, Display(1)] public string XMLName { get { return "invScaleSpeedWithDamage"; } } //name used to refer to this effect in XML
 
@@ -252,7 +252,7 @@ public class EffectChainHit : IEffectEnemyDamaged
     [Show, Display(2)] public float strength { get; set; }                             //chain range
     [Hide] public string argument { get; set; }                                        //effect argument(unused)
 
-    [Hide] public string Name { get { return "attack chains to all nearby enemies (range: " + strength + ")"; } } //returns name and strength
+    [Hide] public string Name { get { return "attack chains to all enemies within " + strength; } } //returns name and strength
 
     [Show, Display(1)] public string XMLName { get { return "chainHit"; } } //name used to refer to this effect in XML
 
