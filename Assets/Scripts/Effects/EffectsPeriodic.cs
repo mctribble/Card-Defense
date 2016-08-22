@@ -62,7 +62,17 @@ public class EffectPoison : IEffectPeriodic
         }
         set
         {
-            maxPoisonTime = Convert.ToSingle(value);
+            //convert argument to a float, if possible
+            try
+            {
+                maxPoisonTime = Convert.ToSingle(value);
+            }
+            catch (FormatException ex)
+            {
+                MessageHandlerScript.Warning("poison effect could not convert the argument to a number (" + ex.Message + ")");
+                maxPoisonTime = 999999.9f;
+            }
+
             curPoisonTime = 0;
         }
     }              
