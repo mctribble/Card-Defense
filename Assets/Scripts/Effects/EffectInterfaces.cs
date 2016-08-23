@@ -42,6 +42,9 @@ public class XMLEffect : System.Object
     [XmlAttribute] public string name;
     [XmlAttribute] public float strength;
     [XmlAttribute] public string argument;
+
+    [XmlElement("Effect")]
+    public XMLEffect innerEffect;
 }
 
 //convenience struct that indicates which property effects are contained in this effectData
@@ -350,4 +353,10 @@ public interface IEffectPeriodic : IEffect
 public interface IEffectOvercharge : IEffect
 {
     void trigger(ref DamageEventData d, int pointsOfOvercharge);
+}
+
+//effect targets another effect
+public interface IEffectMeta : IEffect, IEffectEnemyDamaged, IEffectEnemyReachedGoal, IEffectInstant, IEffectOvercharge, IEffectPeriodic, IEffectProperty, IEffectSelf, IEffectTowerTargeting, IEffectWave
+{
+    IEffect innerEffect { get; set; } //effect targeted by this metaEffect
 }

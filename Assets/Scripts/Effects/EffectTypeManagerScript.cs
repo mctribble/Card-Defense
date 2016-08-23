@@ -89,10 +89,26 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "maxOvercharge":             ie = new EffectMaxOvercharge(); break;
             case "overchargeDamage":          ie = new EffectOverchargeDamage(); break;
 
+            //<<meta effects (target another effect)>>
+            case "percentageChance":          ie = new EffectPercentageChance(); break;
+
             default:                          Debug.LogWarning("Effect type " + xe.name + " is not implemented."); return null;
         }
         ie.strength = xe.strength;
         ie.argument = xe.argument;
+
+        //if there is an inner effect,attempt to pass that too
+        if (xe.innerEffect != null)
+        {
+            try
+            {
+                ((IEffectMeta)ie).innerEffect = parse(xe.innerEffect);
+            }
+            catch (InvalidCastException)
+            {
+                MessageHandlerScript.Warning("Found an inner effect on an effect that can't use them.");
+            }
+        }
 
         //catch effect classes returning the wrong xml name, which can cause weird issues elsewhere that are difficult to diagnose
         if (Debug.isDebugBuild)
