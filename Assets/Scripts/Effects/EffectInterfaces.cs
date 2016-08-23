@@ -251,11 +251,11 @@ public class EffectData : System.Object
     }
 
     //translates the XMLeffects into code references
-    public void parseEffects()
+    public void parseEffects(string cardName = "<UNKNOWN_CARD>")
     {
         foreach (XMLEffect xe in XMLEffects)
         {
-            IEffect ie = EffectTypeManagerScript.instance.parse(xe);
+            IEffect ie = EffectTypeManagerScript.instance.parse(xe, cardName);
             if (ie != null)
                 Effects.Add(ie);
         }
@@ -280,7 +280,7 @@ public class EffectData : System.Object
         temp.name = original.XMLName;
         temp.strength = original.strength;
         temp.argument = original.argument;
-        IEffect result = EffectTypeManagerScript.instance.parse(temp);
+        IEffect result = EffectTypeManagerScript.instance.parse(temp, original.cardName);
         Debug.Assert(result != null);
         return result;
     }
@@ -289,6 +289,7 @@ public class EffectData : System.Object
 //base interface
 public interface IEffect
 {
+    string        cardName      { get; set; } //name of the card containing this effect
     string        Name          { get; } 	  //user-friendly name of this effect
     string        XMLName       { get; }      //name used to refer to this effect in XML.  See also: EffectTypeManagerScript.parse()
     TargetingType targetingType { get; }      //specifies what this card must target when casting, if anything

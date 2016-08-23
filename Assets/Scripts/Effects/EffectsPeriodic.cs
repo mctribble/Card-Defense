@@ -8,13 +8,13 @@ using System;
 //enemy recovers X health per second
 public class EffectRegeneration : IEffectPeriodic
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.periodic; } }        //effect type
     [Show, Display(2)] public float strength { get; set; }                             //how much health is healed per second
     [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
 
     [Hide] public string Name { get { return "Regeneration: " + strength + "/s"; } } //returns name and strength
-
     [Show, Display(1)] public string XMLName { get { return "regeneration"; } } //name used to refer to this effect in XML
 
     [Hide] private float carryOver; //enemy health is an int, and rounding every frame will cause issues, so fractions are carried to the next frame
@@ -49,6 +49,7 @@ public class EffectRegeneration : IEffectPeriodic
 //enemy loses X health per second for Y seconds 
 public class EffectPoison : IEffectPeriodic
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.periodic; } }        //effect type
     [Show, Display(2)] public float strength { get; set; }                             //how much health is healed per second
@@ -67,10 +68,10 @@ public class EffectPoison : IEffectPeriodic
             {
                 maxPoisonTime = Convert.ToSingle(value);
             }
-            catch (FormatException ex)
+            catch (FormatException)
             {
-                MessageHandlerScript.Warning("poison effect could not convert the argument to a number (" + ex.Message + ")");
-                maxPoisonTime = 999999.9f;
+                MessageHandlerScript.Warning("<" + cardName + ">" + XMLName + " effect could not convert the argument to a number and defaulted to 1.0");
+                maxPoisonTime = 1.0f;
             }
 
             curPoisonTime = 0;
@@ -78,7 +79,6 @@ public class EffectPoison : IEffectPeriodic
     }              
 
     [Hide] public string Name { get { return "Poison: " + strength + "/s for " + maxPoisonTime + " seconds"; } } //returns name and strength
-
     [Show, Display(1)] public string XMLName { get { return "poison"; } } //name used to refer to this effect in XML
 
     [Show, Display(3)] public float curPoisonTime; //how much time has passed
@@ -88,9 +88,9 @@ public class EffectPoison : IEffectPeriodic
 
     public void UpdateEnemy(EnemyScript e, float deltaTime)
     {
-        ////do nothing if the effect time is already over
-        //if (curPoisonTime > maxPoisonTime)
-        //    return;
+        //do nothing if the effect time is already over
+        if (curPoisonTime > maxPoisonTime)
+            return;
 
         //update timer
         curPoisonTime += Time.deltaTime;
@@ -111,13 +111,13 @@ public class EffectPoison : IEffectPeriodic
 //enemy slows down by X/second (min 1)
 public class EffectInvScaleSpeedWithTime : IEffectPeriodic
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.periodic; } }        //effect type
     [Show, Display(2)] public float strength { get; set; }                             //how much speed is gained per second
     [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
 
     [Hide] public string Name { get { return "Speed decreases by " + strength + "/s"; } } //returns name and strength
-
     [Show, Display(1)] public string XMLName { get { return "invScaleSpeedWithTime"; } } //name used to refer to this effect in XML
 
     public void UpdateEnemy(EnemyScript e, float deltaTime)
@@ -130,6 +130,7 @@ public class EffectInvScaleSpeedWithTime : IEffectPeriodic
 //enemy speeds up by X/second
 public class EffectScaleSpeedWithTime : IEffectPeriodic
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.periodic; } }        //effect type
     [Show, Display(2)] public float strength { get; set; }                             //how much speed is gained per second
@@ -148,13 +149,13 @@ public class EffectScaleSpeedWithTime : IEffectPeriodic
 //enemy effect Y gets stronger by X/second
 public class EffectScaleEffectWithTime : IEffectPeriodic
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.periodic; } }        //effect type
     [Show, Display(2)] public float strength { get; set; }                             //how much speed is gained per second
     [Show, Display(3)] public string argument { get; set; }                            //effect to scale
     
     [Hide] public string Name { get { return argument + " increases by " + strength + "/s"; } } //returns name and strength
-    
     [Show, Display(1)] public string XMLName { get { return "scaleEffectWithTime"; } } //name used to refer to this effect in XML
 
     private IEffect effectToScale; //cached effect to avoid searching the list every frame
@@ -171,6 +172,11 @@ public class EffectScaleEffectWithTime : IEffectPeriodic
                     break;
                 }
             }
+            if (effectToScale == null)
+            {
+                MessageHandlerScript.Warning("<" + cardName + ">" + XMLName + " could not find the target effect and did nothing");
+                return;
+            }
         }
 
         effectToScale.strength += (strength * deltaTime);
@@ -180,13 +186,13 @@ public class EffectScaleEffectWithTime : IEffectPeriodic
 //enemy effect Y gets weaker by X/second (min 0)
 public class EffectInvScaleEffectWithTime : IEffectPeriodic
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.periodic; } }        //effect type
     [Show, Display(2)] public float strength { get; set; }                             //how much speed is gained per second
     [Show, Display(3)] public string argument { get; set; }                            //effect to scale
     
     [Hide] public string Name { get { return argument + " decreases by " + strength + "/s"; } } //returns name and strength
-    
     [Show, Display(1)] public string XMLName { get { return "InvScaleEffectWithTime"; } } //name used to refer to this effect in XML
 
     private IEffect effectToScale; //cached effect to avoid searching the list every frame
@@ -202,6 +208,11 @@ public class EffectInvScaleEffectWithTime : IEffectPeriodic
                     effectToScale = effect;
                     break;
                 }
+            }
+            if (effectToScale == null)
+            {
+                MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + " could not find the target effect and did nothing.");
+                return;
             }
         }
 

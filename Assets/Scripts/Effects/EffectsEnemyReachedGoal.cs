@@ -8,6 +8,7 @@ using System;
 //enemy attack increases as it takes damage (range: 1x to 2x, rounds down)
 public class EffectScaleAttackWithHealth: IEffectEnemyReachedGoal
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }    //this effect doesnt need a target
     [Hide] public EffectType effectType { get { return EffectType.enemyReachedGoal; } } //effect type
     [Hide] public float strength { get; set; }                                          //effect strength (unused in this effect)
@@ -25,6 +26,7 @@ public class EffectScaleAttackWithHealth: IEffectEnemyReachedGoal
 //enemy attack decreases as it takes damage (range: 1x to 0x, rounds up)
 public class EffectInvScaleAttackWithHealth: IEffectEnemyReachedGoal
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }    //this effect doesnt need a target
     [Hide] public EffectType effectType { get { return EffectType.enemyReachedGoal; } } //effect type
     [Hide] public float strength { get; set; }                                          //effect strength (unused in this effect)
@@ -42,6 +44,7 @@ public class EffectInvScaleAttackWithHealth: IEffectEnemyReachedGoal
 //deals X damage to the players hand
 public class EffectDamageHand : IEffectEnemyReachedGoal
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }    //this effect doesnt need a target
     [Hide] public EffectType effectType { get { return EffectType.enemyReachedGoal; } } //effect type
     [Hide] public float strength { get; set; }                                          //effect strength (unused in this effect)

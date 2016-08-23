@@ -6,6 +6,7 @@ using Vexe.Runtime.Types;
 //alters wave budget by x%
 public class EffectBudgetPercentageChange : IEffectWave
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
     [Hide] public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
     [Show, Display(2)] public float strength { get; set; }                             //% change
@@ -34,10 +35,32 @@ public class EffectBudgetPercentageChange : IEffectWave
 //sets the enemy type to argument
 public class EffectChangeWaveType : IEffectWave
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
     [Hide] public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
     [Hide] public float strength { get; set; }                                         //how strong this effect is.  (unused in this effect)
-    [Show, Display(2)] public string argument { get; set; }                            //new wave type
+
+    //new wave type
+    [Hide] private string m_argument;
+    [Show, Display(2)] public string argument
+    {
+        get { return m_argument; }
+        set
+        {
+            m_argument = value;
+
+            //validate argument: must be an existing enemy type
+            try
+            {
+                EnemyTypeManagerScript.instance.getEnemyTypeByName(m_argument);
+            }
+            catch (System.Collections.Generic.KeyNotFoundException)
+            {
+                MessageHandlerScript.Warning("<" + cardName + ">Could not find an enemy type named " + m_argument + ": defaulting to Standard.");
+                m_argument = "Standard";
+            }
+        }
+    }
 
     [Hide] public string Name { get { return "change monster type of incoming waves to " + argument + "."; } }   //returns name and strength
 
@@ -53,6 +76,7 @@ public class EffectChangeWaveType : IEffectWave
 //adjusts the wave spawn time by X%
 public class EffectTimePercentageChange : IEffectWave
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
     [Hide] public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
     [Show, Display(2)] public float strength { get; set; }                             //% change
@@ -81,6 +105,7 @@ public class EffectTimePercentageChange : IEffectWave
 //forces the wave to spawn with exactly X enemies
 public class EffectFixedSpawnCount : IEffectWave
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
     [Hide] public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
     [Show, Display(2)] public float strength { get; set; }                             //enemy count
@@ -110,19 +135,13 @@ public class EffectFixedSpawnCount : IEffectWave
 //enemy Attack increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
 public class EffectScaleAttackWithBudget : IEffectWave
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
     [Hide] public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
     [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
     [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
 
-    [Hide] public string Name //returns name and strength
-    {
-        get
-        {
-            return "enemy attack increases on tougher waves";
-        }
-    }
-
+    [Hide] public string Name { get { return "enemy attack increases on tougher waves"; } } //returns name and strength
     [Show] public string XMLName { get { return "scaleAttackWithBudget"; } } //name used to refer to this effect in XML
 
     public WaveData alteredWaveData(WaveData currentWaveData)
@@ -136,28 +155,31 @@ public class EffectScaleAttackWithBudget : IEffectWave
 //enemy health increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
 public class EffectScaleEffectWithBudget : IEffectWave
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
     [Hide] public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
     [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
     [Show, Display(2)] public string argument { get; set; }                            //effect argument (effect to be scaled up)
 
-    [Hide] public string Name //returns name and strength
-    {
-        get
-        {
-            return "enemy " + argument + " increases on tougher waves";
-        }
-    }
-
+    [Hide] public string Name { get { return "enemy " + argument + " increases on tougher waves"; } } //returns name and strength
     [Show, Display(1)] public string XMLName { get { return "scaleEffectWithBudget"; } } //name used to refer to this effect in XML
 
     public WaveData alteredWaveData(WaveData currentWaveData)
     {
         WaveData newData = currentWaveData;
 
+        bool targetFound = false;
         foreach (IEffect e in newData.enemyData.effectData.effects)
+        {
             if (e.Name == argument)
+            {
                 e.strength = Mathf.RoundToInt((((float)newData.budget) / ((float)newData.enemyData.spawnCost)) * e.strength);
+                targetFound = true;
+            }
+        }
+
+        if (targetFound == false)
+            MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + " could not find the target effect, and did nothing.");
 
         return newData;
     }
@@ -166,19 +188,13 @@ public class EffectScaleEffectWithBudget : IEffectWave
 //enemy health increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
 public class EffectScaleHealthWithBudget : IEffectWave
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
     [Hide] public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
     [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
     [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
 
-    [Hide] public string Name //returns name and strength
-    {
-        get
-        {
-            return "enemy health increases on tougher waves";
-        }
-    }
-
+    [Hide] public string Name { get { return "enemy health increases on tougher waves"; } } 
     [Show] public string XMLName { get { return "scaleHealthWithBudget"; } } //name used to refer to this effect in XML
 
     public WaveData alteredWaveData(WaveData currentWaveData)
@@ -192,19 +208,13 @@ public class EffectScaleHealthWithBudget : IEffectWave
 //enemy health increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
 public class EffectScaleSpeedWithBudget : IEffectWave
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //wave effects dont need a target
     [Hide] public EffectType effectType { get { return EffectType.wave; } }            //this is a wave effect
     [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
     [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
 
-    [Hide] public string Name //returns name and strength
-    {
-        get
-        {
-            return "enemy speed increases on tougher waves";
-        }
-    }
-
+    [Hide] public string Name { get { return "enemy speed increases on tougher waves"; } }
     [Show] public string XMLName { get { return "scaleSpeedWithBudget"; } } //name used to refer to this effect in XML
 
     public WaveData alteredWaveData(WaveData currentWaveData)

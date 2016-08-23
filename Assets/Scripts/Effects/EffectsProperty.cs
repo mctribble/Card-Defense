@@ -8,6 +8,7 @@ using Vexe.Runtime.Types;
 class EffectReturnsToTopOfDeck : IEffectProperty
 {
     //generic interface
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //property effects are not targeted
     [Hide] public EffectType effectType { get { return EffectType.property; } }        //effect type
     [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
@@ -22,6 +23,7 @@ class EffectReturnsToTopOfDeck : IEffectProperty
 class EffectInfiniteTowerLifespan : IEffectProperty
 {
     //generic interface
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //property effects are not targeted
     [Hide] public EffectType effectType { get { return EffectType.property; } }        //effect type
     [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
@@ -36,6 +38,7 @@ class EffectInfiniteTowerLifespan : IEffectProperty
 class EffectAttackColor : IEffectProperty
 {
     //generic interface
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //property effects are not targeted
     [Hide] public EffectType effectType { get { return EffectType.property; } }        //effect type
     [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
@@ -50,6 +53,7 @@ class EffectAttackColor : IEffectProperty
 class EffectLimitedAmmo : IEffectProperty
 {
     //generic interface
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //property effects are not targeted
     [Hide] public EffectType effectType { get { return EffectType.property; } }        //effect type
     [Hide] public float strength { get; set; }                                         //number of shots the tower has
@@ -64,6 +68,7 @@ class EffectLimitedAmmo : IEffectProperty
 class EffectManualFire : IEffectProperty
 {
     //generic interface
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //property effects are not targeted
     [Hide] public EffectType effectType { get { return EffectType.property; } }        //effect type
     [Hide] public float strength { get; set; }                                         //number of shots the tower has
@@ -77,6 +82,7 @@ class EffectManualFire : IEffectProperty
 //tower can have up to X points of overcharge
 class EffectMaxOvercharge : IEffectProperty
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //property effects are not targeted
     [Hide] public EffectType effectType { get { return EffectType.property; } }        //effect type
     [Show, Display(2)] public float strength { get; set; }                             //max points of overcharge
@@ -90,6 +96,7 @@ class EffectMaxOvercharge : IEffectProperty
 //attacks ignore armor
 class EffectArmorPierce : IEffectProperty
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //property effects are not targeted
     [Hide] public EffectType effectType { get { return EffectType.property; } }        //effect type
     [Hide] public float strength { get; set; }                                         //max points of overcharge

@@ -15,6 +15,7 @@ public abstract class BaseMetaEffect : IEffectMeta
     public TargetingType targetingType { get { return innerEffect.targetingType; } }
 
     //properties we can leave as default
+    public string cardName     { get; set; } 
     public float   strength    { get; set; }
     public string  argument    { get; set; }
     public IEffect innerEffect { get; set; } 
@@ -44,7 +45,7 @@ public abstract class BaseMetaEffect : IEffectMeta
         //it doesnt make sense for a property to be targeted by another effect, since it doesnt actually do anything on its own
         if (innerEffect.effectType == EffectType.property)
         {
-            MessageHandlerScript.Warning("meta effects should not target property effects!");
+            MessageHandlerScript.Warning("<" + cardName + ">meta effects should not target property effects!");
             return true;
         }
 
@@ -56,11 +57,27 @@ public abstract class BaseMetaEffect : IEffectMeta
 public class EffectPercentageChance : BaseMetaEffect
 {
     public override string XMLName { get { return "percentageChance"; } }
-    public override string Name { get { return strength + "% chance: " + innerEffect.Name; } }
+    public override string Name
+    {
+        get
+        {
+            if (innerEffect == null)
+                return strength + "% chance: <NO_TARGET_EFFECT!>";
+            else
+                return strength + "% chance: " + innerEffect.Name;
+        }
+    }
 
     private bool? cachedApplyInner;
     public override bool shouldApplyInnerEffect()
     {
+        //never apply inner effect if it is null
+        if (innerEffect == null)
+        {
+            MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + " has no target and did nothing.");
+            return false;
+        }
+
         if (shouldCacheValue())
         {
             if (cachedApplyInner == null)

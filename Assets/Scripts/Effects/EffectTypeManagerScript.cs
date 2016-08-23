@@ -17,8 +17,9 @@ public class EffectTypeManagerScript : BaseBehaviour
     }
 
     //instantiates and initializes an effect object from the xmlEffect.  returns null if that effect doesnt exist
+    //the card name is simply passed unaltered to the new effect
     //TODO: find a cleaner way to implement this?  Code reflection is an option but may be insecure
-    public IEffect parse(XMLEffect xe)
+    public IEffect parse(XMLEffect xe, string cardName)
     {
         IEffect ie;
         switch (xe.name)
@@ -96,13 +97,14 @@ public class EffectTypeManagerScript : BaseBehaviour
         }
         ie.strength = xe.strength;
         ie.argument = xe.argument;
+        ie.cardName = cardName;
 
         //if there is an inner effect,attempt to pass that too
         if (xe.innerEffect != null)
         {
             try
             {
-                ((IEffectMeta)ie).innerEffect = parse(xe.innerEffect);
+                ((IEffectMeta)ie).innerEffect = parse(xe.innerEffect, cardName);
             }
             catch (InvalidCastException)
             {
@@ -131,6 +133,12 @@ public class EffectTypeManagerScript : BaseBehaviour
     //provides a button in the unity inspector to print out a list of all effect names sorted by length.  To be used for looking for effect names that are either too long or are unhelpful
     [Show] private void listEffectNames()
     {
+        if ( (LevelManagerScript.instance == null) || (LevelManagerScript.instance.levelLoaded == false) )
+        {
+            Debug.Log("This only works when a level is loaded");
+            return;
+        }
+
         //effect names vary on strength and argument, so we create a series of effect objects with strength 999 and argument "argument"
         Debug.Log("creating objects...");
         List<IEffect> effectObjects = new List<IEffect>();
