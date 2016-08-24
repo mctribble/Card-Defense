@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Vexe.Runtime.Types;
 
 //all effects in this file take place instantly with no particular target
@@ -92,5 +93,34 @@ public class EffectDamagePlayer : IEffectInstant
     public void trigger()
     {
         DeckManagerScript.instance.Damage(Mathf.RoundToInt(strength));
+    }
+}
+
+//rolls an x-sided die.  the result can be fetched from a static variable and used by other effects.
+class EffectDieRoll : IEffectInstant
+{
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
+    [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //property effects are not targeted
+    [Hide] public EffectType effectType { get { return EffectType.instant; } }         //effect type
+    [Show, Display(2)] public float strength { get; set; }                             //effect strength (max roll)
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
+
+    //this effect
+    [Hide] public string Name { get { return "roll a " + strength + "-sided die:"; } } //returns name and strength
+    [Show, Display(1)] public string XMLName { get { return "dieRoll"; } } //name used to refer to this effect in XML.
+    [Show, Display(3)] public static int roll = -1;
+
+    public void trigger()
+    {
+        int rollMax = Mathf.RoundToInt(strength);
+        if (rollMax < 2)
+        {
+            MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + " could not roll the die because it has less than 2 sides.");
+            roll = -1;
+        }
+        else
+        {
+            roll = UnityEngine.Random.Range(0, rollMax) + 1;
+        }
     }
 }

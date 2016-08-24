@@ -66,6 +66,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "drawCard":                  ie = new EffectDrawCard(); break;
             case "drawEnemyCard":             ie = new EffectDrawEnemyCard(); break;
             case "shuffle":                   ie = new EffectShuffle(); break;
+            case "dieRoll":                   ie = new EffectDieRoll(); break;
 
             //<<Targeting effects (Determines tower targeting behavior)>>
             case "targetAll":                 ie = new EffectTargetAll(); break;
@@ -92,6 +93,7 @@ public class EffectTypeManagerScript : BaseBehaviour
 
             //<<meta effects (target another effect)>>
             case "percentageChance":          ie = new EffectPercentageChance(); break;
+            case "ifRollRange":               ie = new EffectIfRollRange(); break;
 
             default:                          Debug.LogWarning("Effect type " + xe.name + " is not implemented."); return null;
         }

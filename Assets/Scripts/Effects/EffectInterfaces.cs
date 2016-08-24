@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Xml.Serialization;
 using UnityEngine;
 using Vexe.Runtime.Types;
@@ -99,8 +100,40 @@ public class EffectData : System.Object
     //adds the given effect to the list, clearing cached values so that future calls return correctly
     public void Add(IEffect e)
     {
-        Effects.Add(e);
-        resetCachedValues();
+        if (testForEffectRequirements(e))
+        {
+            Effects.Add(e);
+            resetCachedValues();
+        }
+    }
+
+    //verification step: called when an effect is added to see if everything it needs is present
+    private bool testForEffectRequirements(IEffect e)
+    {
+        switch (e.XMLName)
+        {
+            //budget scaling effects should have fixedSpawnCount
+            case "scaleAttackhWithBudget":
+            case "scaleEffectWithBudget":
+            case "scaleHealthWithBudget":
+            case "scaleSpeedWithBudget":
+                if (effects.Any(x => x.XMLName == "fixedSpawnCount") == false)
+                {
+                    MessageHandlerScript.Warning("<" + e.cardName + ">: units must have fixedSpawnCount in order to use budget scaling effects.  Skipping " + e.XMLName);
+                    return false;
+                }
+                break;
+
+            //die rolling effects should have a die roll
+            case "ifRollRange":
+                if (effects.Any(x => x.XMLName == "dieRoll") == false)
+                {
+                    MessageHandlerScript.Warning("<" + e.cardName + ">: units must have dieRoll in order to use roll effects.  Skipping " + e.XMLName);
+                    return false;
+                }
+                break;
+        }
+        return true;
     }
 
     //resets cached results so they will be recalculated if something asks for them

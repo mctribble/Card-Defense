@@ -16,9 +16,9 @@ public abstract class BaseMetaEffect : IEffectMeta
 
     //properties we can leave as default
     public string cardName     { get; set; } 
-    public float   strength    { get; set; }
-    public string  argument    { get; set; }
-    public IEffect innerEffect { get; set; } 
+    public virtual float   strength    { get; set; }
+    public virtual string  argument    { get; set; }
+    public virtual IEffect innerEffect { get; set; } 
 
     //properties the inherited class has to deal with
     public abstract string XMLName { get; }
@@ -62,7 +62,7 @@ public class EffectPercentageChance : BaseMetaEffect
         get
         {
             if (innerEffect == null)
-                return strength + "% chance: <NO_TARGET_EFFECT!>";
+                return strength + "% chance: do nothing";
             else
                 return strength + "% chance: " + innerEffect.Name;
         }
@@ -88,5 +88,84 @@ public class EffectPercentageChance : BaseMetaEffect
         }
         else
             return strength < UnityEngine.Random.Range(0.0f, 100.0f);
+    }
+}
+
+//child effect triggers if the die roll is between X and Y (inclusive)
+public class EffectIfRollRange : BaseMetaEffect
+{
+    private int rangeMin = -1;
+    private int rangeMax = -1;
+
+    //override property accessors to use the integer min/max
+    public override float strength
+    {
+        get { return rangeMin; }
+        set { rangeMin = Mathf.RoundToInt(value); }
+    }
+    public override string argument
+    {
+        get { return rangeMax.ToString(); }
+        set
+        {
+            try
+            {
+                rangeMax = Convert.ToInt32(value);
+            }
+            catch (Exception)
+            {
+                MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + " could not convert argument to an int.  defaulted to 2");
+                rangeMax = 2;
+            }
+        }
+    }
+
+    public override string XMLName { get { return "ifRollRange"; } }
+    public override string Name
+    {
+        get
+        {
+            if (innerEffect == null)
+                return rangeMin + " - " + rangeMax + ": " + "do nothing";
+            else
+                return rangeMin + " - " + rangeMax + ": " + innerEffect.Name;
+        }
+    }
+    public override IEffect innerEffect
+    {
+        get
+        {
+            return base.innerEffect;
+        }
+
+        set
+        {
+            base.innerEffect = value;
+
+            //because the die roll is an instant effect, a die roll can only happen when a card is played.
+            //Therefore, applying this to an effect marked noCast, such as any kind of targeting effect, will try to access a roll without having made one.
+            //such behavior would cause all kinds of strange problems, so we refuse to support such usage
+            if (innerEffect.targetingType == TargetingType.noCast)
+            {
+                MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + " is not compatible with this target effect. ");
+                base.innerEffect = null;
+            }
+        }
+    }
+
+    public override bool shouldApplyInnerEffect()
+    {
+        if (rangeMin <= rangeMax)
+        {
+            if (EffectDieRoll.roll < rangeMin) return false;
+            if (EffectDieRoll.roll > rangeMax) return false;
+
+            return true;
+        }
+        else
+        {
+            MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + ": range max is lower than range min!  Try switching strength and argument");
+            return false;
+        }
     }
 }
