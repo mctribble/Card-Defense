@@ -3,6 +3,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
@@ -82,6 +83,9 @@ public class XMLDeck
 
         return false;
     }
+
+    //returns total card count in this deck
+    public int cardCount { get { return contents.Sum(x => x.count); } }
 };
 
 //maintains the collection of card types, including saving/loading to XML

@@ -17,5 +17,32 @@
         <Card name="Time Crunch" count="1" />
       </Cards>
     </Deck>
+    <Deck name="Variety">
+      <Cards>
+        <Card name="AOE Tower" count="2" />
+        <Card name="Basic Tower" count="2" />
+        <Card name="Basic Upgrade" count="2" />
+        <Card name="Black Plague Tower" count="2" />
+        <Card name="Enrage" count="2" />
+        <Card name="Explosive Tower" count="2" />
+        <Card name="Fast Tower" count="2" />
+        <Card name="Fast Upgrade" count="2" />
+        <Card name="Heavy Tower" count="2" />
+        <Card name="Heavy Upgrade" count="2" />
+        <Card name="Mana Tap" count="2" />
+        <Card name="Nova Tower" count="2" />
+        <Card name="Orthogonal Tower" count="2" />
+        <Card name="Overcharge Tower" count="2" />
+        <Card name="Recycle" count="2" />
+        <Card name="Reinforce" count="2" />
+        <Card name="Shield" count="2" />
+        <Card name="Shredder Tower" count="2" />
+        <Card name="Spitfire Upgrade" count="2" />
+        <Card name="Summon Standard" count="2" />
+        <Card name="Summon Swarm" count="2" />
+        <Card name="Summon Tank" count="2" />
+        <Card name="Time Crunch" count="2" />
+      </Cards>
+    </Deck>
   </Decks>
 </PlayerDecks>
