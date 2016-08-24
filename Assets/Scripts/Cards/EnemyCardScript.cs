@@ -187,7 +187,7 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
     //sets this up as a survivor wave
     public void SurvivorWave()
     {
-        description.text = "These are survivors from the previous round, come to attack again.";
+        description.text = "These are survivors from the previous round, come to attack again.  Other cards cannot alter this wave.";
 
         //use a list of surviving enemies to initialize the card, and remove said list from the enemy manager so that it makes a new one for anything that survives this wave instead of putting them back into the same one
         wave = null;
@@ -420,5 +420,6 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
         totalRemainingHealth = wave.totalRemainingHealth;
     }
 
-    public void applyWaveEffect(IEffectWave e) { wave = e.alteredWaveData(wave); } //applies the given effect to the wave
+    //applies the given effect to the wave, provided it is not a survivor wave
+    public void applyWaveEffect(IEffectWave e) { if(wave.isSurvivorWave == false) wave = e.alteredWaveData(wave); } 
 }

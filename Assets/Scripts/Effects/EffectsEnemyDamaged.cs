@@ -8,13 +8,13 @@ using Vexe.Runtime.Types;
 //reduces incoming damage by a fixed amount (but attacks always do at least 1 damage)
 public class EffectArmor : IEffectEnemyDamaged
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
     [Show, Display(2)] public float strength { get; set; }                             //how much armor the enemy has
     [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
 
     [Hide] public string Name { get { return "Armor: " + strength; } } //returns name and strength
-
     [Show, Display(1)] public string XMLName { get { return "armor"; } } //name used to refer to this effect in XML
 
     //alter damage calculations when we expect to deal damage, not when it actually happens, so that targeting etc. have an accurate number to work with
@@ -31,55 +31,61 @@ public class EffectArmor : IEffectEnemyDamaged
     }
 
     //since damage is already recalculated, we dont need to do anything here
-    public void actualDamage(ref DamageEventData d)
-    {
-    } 
+    public void actualDamage(ref DamageEventData d) { } 
 }
 
 //reduces target effect by a fixed amount (but stops at 0)
 public class EffectReduceEnemyEffectOnDamage : IEffectEnemyDamaged
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
     [Show, Display(3)] public float strength { get; set; }                             //how much to reduce the target effect strength (but stops at 0)
     [Show, Display(2)] public string argument { get; set; }                            //effect to reduce
 
     [Hide] public string Name { get { return "Enemy " + argument + " strength: -" + strength; } } //returns name and strength
-
     [Show, Display(1)] public string XMLName { get { return "reduceEnemyEffectOnDamage"; } } //name used to refer to this effect in XML
 
     //we dont need to do anything on expected damage
-    public void expectedDamage(ref DamageEventData d)
-    {
-    } 
+    public void expectedDamage(ref DamageEventData d) { } 
 
     //reduce the effect
     public void actualDamage(ref DamageEventData d)
     {
         EnemyScript enemy = d.dest.GetComponent<EnemyScript>();
+
+        bool targetFound = false;
         if (enemy.effectData != null)
+        {
             foreach (IEffect e in enemy.effectData.effects)
+            {
                 if (e.XMLName == argument)
+                {
                     e.strength = Mathf.Max(0, e.strength - strength);
+                    targetFound = true;
+                }
+            }
+        }
+
+        if(targetFound == false)
+            MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + " could not find the target and did nothing.");
     }
 }
 
 //enemy slows down as it takes damage (range: base -> 1)
 public class EffectInvScaleSpeedWithDamage : IEffectEnemyDamaged
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
     [Show, Display(2)] public float strength { get; set; }                             //max speed multiplier 
     [Hide] public string argument { get; set; }                                        //effect to reduce
 
-    [Hide] public string Name { get { return "Enemy gets up to " + argument + " times faster as it takes damage"; } } //returns name and strength
-
+    [Hide] public string Name { get { return "Enemy slows down as it takes damage"; } } //returns name and strength
     [Show, Display(1)] public string XMLName { get { return "invScaleSpeedWithDamage"; } } //name used to refer to this effect in XML
 
     //we dont need to do anything on expected damage
-    public void expectedDamage(ref DamageEventData d)
-    {
-    } 
+    public void expectedDamage(ref DamageEventData d) { } 
 
     //recalculate speed
     public void actualDamage(ref DamageEventData d)
@@ -93,19 +99,17 @@ public class EffectInvScaleSpeedWithDamage : IEffectEnemyDamaged
 //enemy speeds up as it takes damage (range: base -> base*strength)
 public class EffectScaleSpeedWithDamage : IEffectEnemyDamaged
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
     [Show, Display(2)] public float strength { get; set; }                             //max speed multiplier 
     [Hide] public string argument { get; set; }                                        //effect to reduce
 
     [Hide] public string Name { get { return "Enemy gets up to " + argument + " times faster as it takes damage"; } } //returns name and strength
-
     [Show, Display(1)] public string XMLName { get { return "scaleSpeedWithDamage"; } } //name used to refer to this effect in XML
 
     //we dont need to do anything on expected damage
-    public void expectedDamage(ref DamageEventData d)
-    {
-    } 
+    public void expectedDamage(ref DamageEventData d) { } 
 
     //recalculate speed
     public void actualDamage(ref DamageEventData d)
@@ -119,6 +123,7 @@ public class EffectScaleSpeedWithDamage : IEffectEnemyDamaged
 //enemy effect scales up as it takes damage (range: base to base*strength)
 public class EffectScaleEffectWithDamage : IEffectEnemyDamaged
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
     [Show, Display(2)] public float strength { get; set; }                             //max effect multiplier
@@ -133,9 +138,7 @@ public class EffectScaleEffectWithDamage : IEffectEnemyDamaged
     [Show, Display(1)] public string XMLName { get { return "scaleEffectWithDamage"; } } //name used to refer to this effect in XML
 
     //we dont need to do anything on expected damage
-    public void expectedDamage(ref DamageEventData d)
-    {
-    } 
+    public void expectedDamage(ref DamageEventData d) { } 
 
     //recalculate speed
     public void actualDamage(ref DamageEventData d)
@@ -154,7 +157,8 @@ public class EffectScaleEffectWithDamage : IEffectEnemyDamaged
                     break;
                 }
             }
-            Debug.LogWarning("ScaleEffectWithDamage cant find effect " + argument);
+            Debug.LogWarning("<" + cardName + "> " + XMLName + " cant find the target and did nothing");
+            return;
         }
 
         float damageRatio = 1 - (e.curHealth / e.maxHealth);
@@ -165,6 +169,7 @@ public class EffectScaleEffectWithDamage : IEffectEnemyDamaged
 //enemy effect scales down as it takes damage (range: base to 1)
 public class EffectInvScaleEffectWithDamage : IEffectEnemyDamaged
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
     [Hide] public float strength { get; set; }                                         //effect strength (unused)
@@ -179,9 +184,7 @@ public class EffectInvScaleEffectWithDamage : IEffectEnemyDamaged
     [Show, Display(1)] public string XMLName { get { return "invScaleEffectWithDamage"; } } //name used to refer to this effect in XML
 
     //we dont need to do anything on expected damage
-    public void expectedDamage(ref DamageEventData d)
-    {
-    } 
+    public void expectedDamage(ref DamageEventData d) { } 
 
     //recalculate speed
     public void actualDamage(ref DamageEventData d)
@@ -200,7 +203,8 @@ public class EffectInvScaleEffectWithDamage : IEffectEnemyDamaged
                     break;
                 }
             }
-            Debug.LogWarning("invScaleEffectWithDamage cant find effect " + argument);
+            Debug.LogWarning("< " + cardName + ">" + XMLName + " cant find the target and did nothing.");
+            return;
         }
 
         float damageRatio = 1 - (e.curHealth / e.maxHealth);
@@ -211,13 +215,30 @@ public class EffectInvScaleEffectWithDamage : IEffectEnemyDamaged
 //attack causes a secondary explosion, dealing X damage to all enemies within Y of the impact site. 
 public class EffectSplashDamage : IEffectEnemyDamaged
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
     [Show, Display(2)] public float strength { get; set; }                             //effect strength (damage dealt)
-    [Show, Display(3)] public string argument { get; set; }                            //effect to scale (explosion radius)
+
+    //explosion radius
+    private float explosionRadius;
+    [Show, Display(3)] public string argument
+    {
+        get { return explosionRadius.ToString(); }
+        set
+        {
+            try
+            {
+                explosionRadius = Convert.ToSingle(value);
+            }
+            catch (Exception)
+            {
+                MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + " could not convert the argument to a valid number.  Defaulting to 1.0");
+            }
+        }
+    }
 
     [Hide] public string Name { get { return "secondary explosion deals " + strength + " damage to enemies within " + argument; } } //returns name and strength
-
     [Show, Display(1)] public string XMLName { get { return "splashDamage"; } } //name used to refer to this effect in XML
 
     //we can ignore expected damage
@@ -236,7 +257,7 @@ public class EffectSplashDamage : IEffectEnemyDamaged
         //construct burst shot data
         BurstShotData explosion = new BurstShotData();
         explosion.damageEvent = explosionDamageEvent;
-        explosion.burstRange = Convert.ToSingle(argument);
+        explosion.burstRange = explosionRadius;
         explosion.targetList = EnemyManagerScript.instance.enemiesInRange(originalDamageEvent.dest.transform.position, explosion.burstRange);
 
         //call on the level manager to create the actual explosion, since this effect doesnt have a prefab reference
@@ -247,13 +268,13 @@ public class EffectSplashDamage : IEffectEnemyDamaged
 //attack damages and spreads effects to all enemies within X of each other through a series of consecutive explosions.  No enemy will be hit twice.  
 public class EffectChainHit : IEffectEnemyDamaged
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
     [Show, Display(2)] public float strength { get; set; }                             //chain range
     [Hide] public string argument { get; set; }                                        //effect argument(unused)
 
-    [Hide] public string Name { get { return "attack chains to all nearby enemies (range: " + strength + ")"; } } //returns name and strength
-
+    [Hide] public string Name { get { return "attack chains to all enemies within " + strength; } } //returns name and strength
     [Show, Display(1)] public string XMLName { get { return "chainHit"; } } //name used to refer to this effect in XML
 
     private List<GameObject> enemiesAlreadyHit;

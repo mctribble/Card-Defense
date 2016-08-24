@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Xml.Serialization;
 using UnityEngine;
 using Vexe.Runtime.Types;
@@ -42,6 +43,9 @@ public class XMLEffect : System.Object
     [XmlAttribute] public string name;
     [XmlAttribute] public float strength;
     [XmlAttribute] public string argument;
+
+    [XmlElement("Effect")]
+    public XMLEffect innerEffect;
 }
 
 //convenience struct that indicates which property effects are contained in this effectData
@@ -96,8 +100,40 @@ public class EffectData : System.Object
     //adds the given effect to the list, clearing cached values so that future calls return correctly
     public void Add(IEffect e)
     {
-        Effects.Add(e);
-        resetCachedValues();
+        if (testForEffectRequirements(e))
+        {
+            Effects.Add(e);
+            resetCachedValues();
+        }
+    }
+
+    //verification step: called when an effect is added to see if everything it needs is present
+    private bool testForEffectRequirements(IEffect e)
+    {
+        switch (e.XMLName)
+        {
+            //budget scaling effects should have fixedSpawnCount
+            case "scaleAttackhWithBudget":
+            case "scaleEffectWithBudget":
+            case "scaleHealthWithBudget":
+            case "scaleSpeedWithBudget":
+                if (effects.Any(x => x.XMLName == "fixedSpawnCount") == false)
+                {
+                    MessageHandlerScript.Warning("<" + e.cardName + ">: units must have fixedSpawnCount in order to use budget scaling effects.  Skipping " + e.XMLName);
+                    return false;
+                }
+                break;
+
+            //die rolling effects should have a die roll
+            case "ifRollRange":
+                if (effects.Any(x => x.XMLName == "dieRoll") == false)
+                {
+                    MessageHandlerScript.Warning("<" + e.cardName + ">: units must have dieRoll in order to use roll effects.  Skipping " + e.XMLName);
+                    return false;
+                }
+                break;
+        }
+        return true;
     }
 
     //resets cached results so they will be recalculated if something asks for them
@@ -248,11 +284,11 @@ public class EffectData : System.Object
     }
 
     //translates the XMLeffects into code references
-    public void parseEffects()
+    public void parseEffects(string cardName = "<UNKNOWN_CARD>")
     {
         foreach (XMLEffect xe in XMLEffects)
         {
-            IEffect ie = EffectTypeManagerScript.instance.parse(xe);
+            IEffect ie = EffectTypeManagerScript.instance.parse(xe, cardName);
             if (ie != null)
                 Effects.Add(ie);
         }
@@ -277,7 +313,7 @@ public class EffectData : System.Object
         temp.name = original.XMLName;
         temp.strength = original.strength;
         temp.argument = original.argument;
-        IEffect result = EffectTypeManagerScript.instance.parse(temp);
+        IEffect result = EffectTypeManagerScript.instance.parse(temp, original.cardName);
         Debug.Assert(result != null);
         return result;
     }
@@ -286,6 +322,7 @@ public class EffectData : System.Object
 //base interface
 public interface IEffect
 {
+    string        cardName      { get; set; } //name of the card containing this effect
     string        Name          { get; } 	  //user-friendly name of this effect
     string        XMLName       { get; }      //name used to refer to this effect in XML.  See also: EffectTypeManagerScript.parse()
     TargetingType targetingType { get; }      //specifies what this card must target when casting, if anything
@@ -350,4 +387,10 @@ public interface IEffectPeriodic : IEffect
 public interface IEffectOvercharge : IEffect
 {
     void trigger(ref DamageEventData d, int pointsOfOvercharge);
+}
+
+//effect targets another effect
+public interface IEffectMeta : IEffect, IEffectEnemyDamaged, IEffectEnemyReachedGoal, IEffectInstant, IEffectOvercharge, IEffectPeriodic, IEffectProperty, IEffectSelf, IEffectTowerTargeting, IEffectWave
+{
+    IEffect innerEffect { get; set; } //effect targeted by this metaEffect
 }

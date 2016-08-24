@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 using UnityEngine;
 using Vexe.Runtime.Types;
@@ -15,8 +16,10 @@ public class PathSegment : System.Object
 
 public class PathManagerScript : BaseBehaviour
 {
-    public static PathManagerScript instance;
+    [Hide] public static PathManagerScript instance;
     public GameObject segmentPrefab;
+    public GameObject enemyGoalMakerPrefab;
+
     private List<PathSegment> segments;
 
     public const int MAX_PATH_LENGTH = 30; //throws an error if the path result would be longer than this (to catch paths that loop back forever)
@@ -79,11 +82,6 @@ public class PathManagerScript : BaseBehaviour
         return result;
     }
 
-    // Update is called once per frame
-    private void Update()
-    {
-    }
-
     //spawn the paths
     private void SpawnPaths()
     {
@@ -93,6 +91,15 @@ public class PathManagerScript : BaseBehaviour
             s.transform.SetParent(transform); //set this as the parent
             PathSegmentData d = new PathSegmentData( new Vector2 (v.startX, v.startY), new Vector2 (v.endX, v.endY), 0.5f ); //create data struct
             s.SendMessage("Reposition", d); //send data to object
+
+            //if there is no segment that begins at the same place this segment ends, spawn a marker
+            if (segments.Any(x => (x.startX == v.endX) && (x.startY == v.endY)) == false)
+            {
+                GameObject m = (GameObject) Instantiate(enemyGoalMakerPrefab);
+                m.transform.SetParent(this.transform);
+                m.transform.position = new Vector2(v.endX, v.endY);
+            }
+
         }
     }
 }

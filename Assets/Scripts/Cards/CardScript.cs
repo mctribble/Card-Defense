@@ -154,7 +154,7 @@ public class CardData : System.Object
         if (effectData != null)
         {
             //make sure the effects have been parsed
-            if (effectData.effects.Count == 0) { effectData.parseEffects(); }
+            if (effectData.effects.Count == 0) { effectData.parseEffects(cardName); }
 
             //add a line of text to the description for each
             foreach (IEffect e in effectData.effects)

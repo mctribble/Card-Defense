@@ -9,6 +9,7 @@ using System;
 //tower deals (1+X) times as much damage when overcharged
 class EffectOverchargeDamage : IEffectOvercharge
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //overcharge effects are not targeted
     [Hide] public EffectType effectType { get { return EffectType.overcharge; } }      //effect type
     [Hide] public float strength { get; set; }                                         //damage multiplier

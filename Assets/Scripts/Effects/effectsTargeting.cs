@@ -9,6 +9,7 @@ using Vexe.Runtime.Types;
 public class EffectTargetDefault : IEffectTowerTargeting
 {
     //generic interface
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.towerTargeting; } }  //effect type
     [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
@@ -42,6 +43,7 @@ public class EffectTargetDefault : IEffectTowerTargeting
 public class EffectTargetArmor : IEffectTowerTargeting
 {
     //generic interface
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.towerTargeting; } }  //effect type
     [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
@@ -86,6 +88,7 @@ public class EffectTargetArmor : IEffectTowerTargeting
 //targets all enemies in range
 public class EffectTargetAll : IEffectTowerTargeting
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.towerTargeting; } }  //effect type
     [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
@@ -104,6 +107,7 @@ public class EffectTargetAll : IEffectTowerTargeting
 //like targetAll, but uses a burst shot instead of individual projectiles
 public class EffectTargetBurst : IEffectTowerTargeting
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.towerTargeting; } }  //effect type
     [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
@@ -123,6 +127,7 @@ public class EffectTargetBurst : IEffectTowerTargeting
 public class EffectTargetClosest : IEffectTowerTargeting
 {
     //generic interface
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.towerTargeting; } }  //effect type
     [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
@@ -164,6 +169,7 @@ public class EffectTargetClosest : IEffectTowerTargeting
 //targets up to X enemies closest to their goals
 public class EffectTargetMultishot : IEffectTowerTargeting
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.towerTargeting; } }  //effect type
     [Show, Display(2)] public float strength { get; set; }                             //effect strength (unused in this effect)
@@ -194,6 +200,7 @@ public class EffectTargetMultishot : IEffectTowerTargeting
 //targets random enemy in range
 public class EffectTargetRandom : IEffectTowerTargeting
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.towerTargeting; } }  //effect type
     [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
@@ -221,6 +228,7 @@ public class EffectTargetRandom : IEffectTowerTargeting
 //targets highest health
 public class EffectTargetHealth : IEffectTowerTargeting
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.towerTargeting; } }  //effect type
     [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
@@ -263,6 +271,7 @@ public class EffectTargetHealth : IEffectTowerTargeting
 //targets highest Speed
 public class EffectTargetSpeed : IEffectTowerTargeting
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.towerTargeting; } }  //effect type
     [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)
@@ -305,6 +314,7 @@ public class EffectTargetSpeed : IEffectTowerTargeting
 //targets all enemies in a horizontal line with this tower, so long as at least one is in range
 public class EffectTargetOrthogonal : IEffectTowerTargeting
 {
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
     [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public EffectType effectType { get { return EffectType.towerTargeting; } }  //effect type
     [Hide] public float strength { get; set; }                                         //effect strength (unused in this effect)

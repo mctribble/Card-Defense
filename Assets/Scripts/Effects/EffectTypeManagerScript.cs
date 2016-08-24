@@ -1,11 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using Vexe.Runtime.Types;
 
 //this class is responsible for taking XMLEffects and returning an IEffect to match
 public class EffectTypeManagerScript : BaseBehaviour
 {
     //singleton instance
-    public static EffectTypeManagerScript instance;
+    [Hide] public static EffectTypeManagerScript instance;
 
     // Use this for initialization
     private void Awake()
@@ -14,8 +17,9 @@ public class EffectTypeManagerScript : BaseBehaviour
     }
 
     //instantiates and initializes an effect object from the xmlEffect.  returns null if that effect doesnt exist
-    //TODO: find a cleaner way to implement this?
-    public IEffect parse(XMLEffect xe)
+    //the card name is simply passed unaltered to the new effect
+    //TODO: find a cleaner way to implement this?  Code reflection is an option but may be insecure
+    public IEffect parse(XMLEffect xe, string cardName)
     {
         IEffect ie;
         switch (xe.name)
@@ -62,6 +66,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "drawCard":                  ie = new EffectDrawCard(); break;
             case "drawEnemyCard":             ie = new EffectDrawEnemyCard(); break;
             case "shuffle":                   ie = new EffectShuffle(); break;
+            case "dieRoll":                   ie = new EffectDieRoll(); break;
 
             //<<Targeting effects (Determines tower targeting behavior)>>
             case "targetAll":                 ie = new EffectTargetAll(); break;
@@ -86,10 +91,28 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "maxOvercharge":             ie = new EffectMaxOvercharge(); break;
             case "overchargeDamage":          ie = new EffectOverchargeDamage(); break;
 
+            //<<meta effects (target another effect)>>
+            case "percentageChance":          ie = new EffectPercentageChance(); break;
+            case "ifRollRange":               ie = new EffectIfRollRange(); break;
+
             default:                          Debug.LogWarning("Effect type " + xe.name + " is not implemented."); return null;
         }
         ie.strength = xe.strength;
         ie.argument = xe.argument;
+        ie.cardName = cardName;
+
+        //if there is an inner effect,attempt to pass that too
+        if (xe.innerEffect != null)
+        {
+            try
+            {
+                ((IEffectMeta)ie).innerEffect = parse(xe.innerEffect, cardName);
+            }
+            catch (InvalidCastException)
+            {
+                MessageHandlerScript.Warning("Found an inner effect on an effect that can't use them.");
+            }
+        }
 
         //catch effect classes returning the wrong xml name, which can cause weird issues elsewhere that are difficult to diagnose
         if (Debug.isDebugBuild)
@@ -98,5 +121,53 @@ public class EffectTypeManagerScript : BaseBehaviour
                     Debug.LogWarning(xe.name + " is returning the wrong XML name (" + ie.XMLName + ")");
 
         return ie;
+    }
+
+    //returns a list of all classes that implement IEffect
+    public IEnumerable<Type> IEffectTypes()
+    {
+        return AppDomain.CurrentDomain.GetAssemblies()
+               .SelectMany(s => s.GetTypes())
+               .Where(p => typeof(IEffect).IsAssignableFrom(p) && 
+                           p.IsClass);
+    }
+
+    //provides a button in the unity inspector to print out a list of all effect names sorted by length.  To be used for looking for effect names that are either too long or are unhelpful
+    [Show] private void listEffectNames()
+    {
+        if ( (LevelManagerScript.instance == null) || (LevelManagerScript.instance.levelLoaded == false) )
+        {
+            Debug.Log("This only works when a level is loaded");
+            return;
+        }
+
+        //effect names vary on strength and argument, so we create a series of effect objects with strength 999 and argument "argument"
+        Debug.Log("creating objects...");
+        List<IEffect> effectObjects = new List<IEffect>();
+        foreach (Type t in IEffectTypes())
+        {
+            //not all effects have public constructors (ex: targetDefault).  These are not meant to be named anyway, so we can safely skip them
+            IEffect ie;
+            try
+            {
+                ie = (IEffect) Activator.CreateInstance(t);
+            }
+            catch (MissingMethodException) { continue; }
+            
+            //Debug.Log(ie.XMLName); //use when effect creation is spewing errors
+            ie.strength = 99.9f;
+            ie.argument = "argument";
+            effectObjects.Add(ie);
+        }
+        Debug.Log("Effect names: ");
+
+        effectObjects.Sort((ie1, ie2) => ie2.Name.Length.CompareTo(ie1.Name.Length));   //sort them by name length
+
+        //print them
+        foreach(IEffect ie in effectObjects)
+        {
+            Debug.Log(ie.Name + "\n(" + ie.XMLName + ')');
+        }
+        Debug.Log("Done!");
     }
 }

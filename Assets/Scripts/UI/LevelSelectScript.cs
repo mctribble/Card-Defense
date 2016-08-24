@@ -18,6 +18,7 @@ public class LevelSelectScript : BaseBehaviour
     public Color        baseLevelColor;   //base game levels
     public Color        modLevelColor;    //modded game levels
     public Color        levelDeckColor;   //the level deck
+    public Color        moddedDeckColor;  //modded decks
     public Color        premadeDeckColor; //premade decks
     public Color        playerDeckColor;  //player decks
 
@@ -102,7 +103,14 @@ public class LevelSelectScript : BaseBehaviour
         {
             GameObject pdButton = Instantiate(buttonPrefab);     //create a new button
             pdButton.SendMessage("setDeck", pd);                 //set the deck
-            pdButton.SendMessage("setColor", playerDeckColor);   //and the color
+
+            //and the color (varies based on modded/not modded
+            if (pd.isModded())
+                pdButton.SendMessage("setColor", moddedDeckColor);
+            else
+                pdButton.SendMessage("setColor", playerDeckColor);   
+
+
             pdButton.transform.SetParent(this.transform, false); //and add it to the menu
             menuButtons.Add(pdButton);                           //and add it to the list of buttons
         }
@@ -187,10 +195,5 @@ public class LevelSelectScript : BaseBehaviour
                 MessageHandlerScript.Error("LevelSelectScript doesnt know how to handle this button!");
                 break;
         }
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
     }
 }

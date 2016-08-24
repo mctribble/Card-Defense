@@ -52,6 +52,16 @@
     <Card Name="Fast Upgrade" Type="upgrade" Description="small damage increase per shot.  best on fast towers" Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
       <upgradeData RechargeMult="0.9" RechargeMod="0.0" RangeMult="1.0" RangeMod="0" DamageMult="1.0" DamageMod="1" WaveBonus="3" />
     </Card>
+    <Card Name="Gambit" Type ="spell" Charges="5" Art="Summon_Tower_Basic" Tooltip="Tower_Basic" Description="Feeling lucky?">
+      <effectData>
+        <Effects>
+          <Effect name="percentageChance" strength="75"> <Effect name="drawCard" strength="4" /> </Effect>
+          <Effect name="percentageChance" strength="25"> <Effect name="drawEnemyCard" strength="1" /> </Effect>
+          <Effect name="percentageChance" strength="25"> <Effect name="damagePlayer" strength="5" /> </Effect>
+          <Effect name="percentageChance" strength="25"> <Effect name="discardRandomCard" strength="1" /> </Effect>
+        </Effects>
+      </effectData>
+    </Card>
     <Card Name="Heavy Tower" Type="tower" Description="Suitable for fighting tanks" Charges="4" Art="Summon_Tower_Basic" Tooltip="Tower_Heavy">
       <towerData Recharge="3" Range="2" Damage="100" Lifespan="3" Sprite="Tower_Heavy" />
     </Card>
@@ -107,6 +117,16 @@
       <effectData>
         <Effects>
           <Effect name="allTowersLifespanBonus" strength ="3" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Name="Risky Draw" Type ="spell" Charges="5" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+      <effectData>
+        <Effects>
+          <Effect name="dieRoll" strength="6" />
+          <Effect name="ifRollRange" strength="1" argument="1"> <Effect name="drawEnemyCard" strength="1" /> </Effect>
+          <Effect name="ifRollRange" strength="2" argument="4"> <Effect name="drawCard" strength="1" /> </Effect>
+          <Effect name="ifRollRange" strength="5" argument="6"> <Effect name="drawCard" strength="2" /> </Effect>
         </Effects>
       </effectData>
     </Card>
