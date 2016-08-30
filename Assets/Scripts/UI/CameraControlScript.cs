@@ -36,7 +36,7 @@ public class CameraControlScript : BaseBehaviour
 
         //zoom controls
         cameraRef.orthographicSize -= Input.GetAxis("Zoom") * Time.deltaTime * zoomSpeed;
-        cameraRef.orthographicSize = Mathf.Clamp(cameraRef.orthographicSize, minSize, maxSize);
+        cameraRef.orthographicSize  = Mathf.Clamp(cameraRef.orthographicSize, minSize, maxSize);
     }
 	
 }
