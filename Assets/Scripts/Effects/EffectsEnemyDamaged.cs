@@ -66,9 +66,6 @@ public class EffectReduceEnemyEffectOnDamage : IEffectEnemyDamaged
                 }
             }
         }
-
-        if(targetFound == false)
-            MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + " could not find the target and did nothing.");
     }
 }
 
