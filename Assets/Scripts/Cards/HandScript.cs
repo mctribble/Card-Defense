@@ -283,9 +283,9 @@ public class HandScript : BaseBehaviour
             handMidpoint = lastCardPos / 2;
         }
 
-        //calculate card idle height from global position instead of local position because nested layout elements can mess with the local one
+        //calculate card idle height relative to the root instead of local position because nested layout elements can mess with the local one
         float globalHandHeight = transform.GetComponent<RectTransform>().position.y ;
-        float localHandHeight = globalHandHeight - (transform.root.GetComponent<RectTransform>().rect.height / 2);
+        float localHandHeight = transform.root.InverseTransformPoint(0, globalHandHeight, 0).y;
         float idleHeight = localHandHeight + (cardHeight * idleHeightMod);
 
         //calculate positions and send them to the cards

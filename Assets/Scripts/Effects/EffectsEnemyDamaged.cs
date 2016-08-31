@@ -54,18 +54,10 @@ public class EffectReduceEnemyEffectOnDamage : IEffectEnemyDamaged
     {
         EnemyScript enemy = d.dest.GetComponent<EnemyScript>();
 
-        bool targetFound = false;
         if (enemy.effectData != null)
-        {
             foreach (IEffect e in enemy.effectData.effects)
-            {
                 if (e.XMLName == argument)
-                {
                     e.strength = Mathf.Max(0, e.strength - strength);
-                    targetFound = true;
-                }
-            }
-        }
     }
 }
 
