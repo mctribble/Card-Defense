@@ -1,0 +1,23 @@
+presentation:
+visible player discard pile?
+visible enemy discard pile?
+enemy attack animations
+animated enemy sprites
+more art
+sound!
+==================================================================================
+content and balence:
+many more levels/cards
+overbuilding not punished that harshly, but enemies breaking through can be disastrous, especially swarms.  Maybe rebalence card charges and/or enemy attacks?  Maybe this isnt really a problem at all?
+difficulty settings??
+scoring/progression a la gemcraft?
+==================================================================================
+engine:
+mod file dependencies
+Level editor?
+Card editor?
+Enemy editor?
+==================================================================================
+deferred:
+bug in unity 5.3.5f1 is cutting off the last line on title text when it isnt necessarry. Temporarily added newline to the end of card titles and descriptions.  When 5.4 hits, Check if this is fixed and turn best fit back on if so.
+card types rewarded by completing levels, cannot be used in editor until they are obtained (not enough content to matter)
