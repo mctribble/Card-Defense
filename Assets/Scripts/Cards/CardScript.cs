@@ -167,8 +167,6 @@ public class CardData : System.Object
         if ( (cardDescription != null) && (cardDescription.Length > 0) )
             description += "\n\n<i>" + cardDescription + "</i>";
 
-        description += '\n'; //TODO: remove this when a future version of unity fixes best fit
-
         //return it
         return description;
     }
@@ -551,6 +549,5 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
     public void updateChargeText()
     {
         title.text = card.data.cardName + "\n" + card.charges + "/" + card.data.cardMaxCharges;
-        title.text += '\n'; //TODO: remove this when a future version of unity fixes best fit
     }
 }

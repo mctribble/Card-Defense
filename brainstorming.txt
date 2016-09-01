@@ -19,5 +19,4 @@ Card editor?
 Enemy editor?
 ==================================================================================
 deferred:
-bug in unity 5.3.5f1 is cutting off the last line on title text when it isnt necessarry. Temporarily added newline to the end of card titles and descriptions.  When 5.4 hits, Check if this is fixed and turn best fit back on if so.
 card types rewarded by completing levels, cannot be used in editor until they are obtained (not enough content to matter)

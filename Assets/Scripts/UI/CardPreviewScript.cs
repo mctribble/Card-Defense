@@ -45,6 +45,5 @@ public class CardPreviewScript : MonoBehaviour
     public void updateChargeText()
     {
         title.text = data.cardName + "\n" + data.cardMaxCharges + "/" + data.cardMaxCharges;
-        title.text += '\n'; //TODO: remove this when a future version of unity fixes best fit
     }
 }
