@@ -6,17 +6,23 @@ animated enemy sprites
 more art
 sound!
 ==================================================================================
-content and balence:
-many more levels/cards
+balence:
 overbuilding not punished that harshly, but enemies breaking through can be disastrous, especially swarms.  Maybe rebalence card charges and/or enemy attacks?  Maybe this isnt really a problem at all?
+
+allow fractional enemy damage??
+
 difficulty settings??
 scoring/progression a la gemcraft?
 ==================================================================================
 engine:
+spawnEnemy effect
 mod file dependencies
 Level editor?
 Card editor?
 Enemy editor?
 ==================================================================================
 deferred:
-card types rewarded by completing levels, cannot be used in editor until they are obtained (not enough content to matter)
+card types rewarded by player level, cannot be used in editor until they are obtained (need progression system)
+==================================================================================
+card/level ideas
+some sort of expensive to use card that gives rewards over time as a sort of investment?
