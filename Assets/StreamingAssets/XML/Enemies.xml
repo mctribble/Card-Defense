@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <EnemyTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="Enemies.xsd">
   <Enemies>
-    <Enemy name="Assassin" spawnCost="50" attack="0" maxHealth="40" unitSpeed="4" sprite="Enemy_Basic">
+    <Enemy name="Assassin" spawnCost="50" attack="0" maxHealth="40" unitSpeed="4" sprite="Enemy_Basic.png">
       <unitColor r="0.75" g="0.75" b="0.75" a="0.75" />
       <effectData>
         <Effects>
@@ -9,13 +9,13 @@
         </Effects>
       </effectData>
     </Enemy> 
-    <Enemy name="Standard" spawnCost="20" attack="2" maxHealth="40" unitSpeed="2" sprite="Enemy_Basic">
+    <Enemy name="Standard" spawnCost="20" attack="2" maxHealth="40" unitSpeed="2" sprite="Enemy_Basic.png">
       <unitColor r="0" g="1" b="0" a="1" />
     </Enemy>
-    <Enemy name="Swarm" spawnCost="10" attack="1" maxHealth="8" unitSpeed="5" sprite="Enemy_Basic">
+    <Enemy name="Swarm" spawnCost="10" attack="1" maxHealth="8" unitSpeed="5" sprite="Enemy_Basic.png">
       <unitColor r="1" g="0" b="0" a="1" />
     </Enemy>
-    <Enemy name="Tank" spawnCost="100" attack="5" maxHealth="450" unitSpeed="1" sprite="Enemy_Basic">
+    <Enemy name="Tank" spawnCost="100" attack="5" maxHealth="450" unitSpeed="1" sprite="Enemy_Basic.png">
       <unitColor r="0" g="0" b="1" a="1" />
       <effectData>
         <Effects>
@@ -23,7 +23,7 @@
         </Effects>
       </effectData>
     </Enemy>
-    <Enemy name="Giant" spawnCost="400" attack="10" maxHealth="600" unitSpeed="1" sprite="Enemy_Basic">
+    <Enemy name="Giant" spawnCost="400" attack="10" maxHealth="600" unitSpeed="1" sprite="Enemy_Basic.png">
       <unitColor r="0.75" g="0" b="0.75" a="1" />
       <effectData>
         <Effects>
@@ -33,7 +33,7 @@
         </Effects>
       </effectData>
     </Enemy>
-    <Enemy name="Regenerative Tank" spawnCost="150" attack="4" maxHealth="400" unitSpeed="1" sprite="Enemy_Basic">
+    <Enemy name="Regenerative Tank" spawnCost="150" attack="4" maxHealth="400" unitSpeed="1" sprite="Enemy_Basic.png">
       <unitColor r="0.3" g="0.3" b="1" a="1" />
       <effectData>
         <Effects>

@@ -145,7 +145,7 @@ public class LevelManagerScript : BaseBehaviour
         data = LevelData.Load(Path.Combine(Application.dataPath, level)); //load the level
 
         //set background
-        string filename = Application.dataPath + "/StreamingAssets/Art/Backgrounds/" + data.background + ".png";
+        string filename = Application.dataPath + "/StreamingAssets/Art/Backgrounds/" + data.background;
         if (File.Exists(filename))
         {
             WWW www = new WWW ("file:///" + filename);

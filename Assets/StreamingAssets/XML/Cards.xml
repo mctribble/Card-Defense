@@ -1,22 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <CardTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="Cards.xsd">
   <Cards>
-    <Card Name="AOE Tower" Type="tower" Description="slow and low damage, but attacks EVERYTHING in range" Charges="4" Art="Summon_Tower_Basic" Tooltip="Tower_Fast">
-      <towerData Recharge="2" Range="2.5" Damage="10" Lifespan="5" Sprite="Tower_Fast" />
+    <Card Name="AOE Tower" Type="tower" Description="slow and low damage, but attacks EVERYTHING in range" Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Fast.png">
+      <towerData Recharge="2" Range="2.5" Damage="10" Lifespan="5" Sprite="Tower_Fast.png" />
       <effectData>
         <Effects>
           <Effect name="targetAll" />
         </Effects>
       </effectData>
     </Card>
-    <Card Name="Basic Tower" Type="tower" Charges="6" Art="Summon_Tower_Basic" Tooltip="Tower_Standard">
-      <towerData Recharge="1" Range="3" Damage="20" Lifespan="5" Sprite="Tower_Standard" />
+    <Card Name="Basic Tower" Type="tower" Charges="6" Art="Summon_Tower_Basic.png" Tooltip="Tower_Standard.png">
+      <towerData Recharge="1" Range="3" Damage="20" Lifespan="5" Sprite="Tower_Standard.png" />
     </Card>
-    <Card Name="Basic Upgrade" Type="upgrade" Description="Useful on most towers, but be mindful of the speed penalty" Charges="5" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Name="Basic Upgrade" Type="upgrade" Description="Useful on most towers, but be mindful of the speed penalty" Charges="5" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <upgradeData RechargeMult="1" RechargeMod="0.0" RangeMult="1.0" RangeMod="0.5" DamageMult="1.3" DamageMod="0" WaveBonus="1" />
     </Card>
-    <Card Name="Black Plague Tower" Type="tower" Description="" Charges="1" Art="Summon_Tower_Basic" Tooltip="Tower_Heavy" >
-      <towerData Recharge="10" Range="1" Damage="1" Lifespan="1" Sprite="Tower_Heavy" />
+    <Card Name="Black Plague Tower" Type="tower" Description="" Charges="1" Art="Summon_Tower_Basic.png" Tooltip="Tower_Heavy.png" >
+      <towerData Recharge="10" Range="1" Damage="1" Lifespan="1" Sprite="Tower_Heavy.png" />
       <effectData>
         <Effects>
           <Effect name="infiniteTowerLifespan" />
@@ -29,7 +29,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Name="Enrage" Type="spell" Description="Poking the bear." Charges="6" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Name="Enrage" Type="spell" Description="Poking the bear." Charges="6" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
           <Effect name="drawEnemyCard" strength="1" />
@@ -37,8 +37,8 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Name="Explosive Tower" Type="tower" Description="Deals splash damage.  Good for tightly-packed enemies." Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Fast">
-      <towerData Recharge="1.5" Range="2" Damage="10" Lifespan="5" Sprite="Tower_Standard" />
+    <Card Name="Explosive Tower" Type="tower" Description="Deals splash damage.  Good for tightly-packed enemies." Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Fast.png">
+      <towerData Recharge="1.5" Range="2" Damage="10" Lifespan="5" Sprite="Tower_Standard.png" />
       <effectData>
         <Effects>
           <Effect name="splashDamage" strength="5" argument="1.0"/>
@@ -46,13 +46,13 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Name="Fast Tower" Type="tower" Description="Suitable for fighting swarms" Charges="4" Art="Summon_Tower_Basic" Tooltip="Tower_Fast">
-      <towerData Recharge="0.1" Range="2" Damage="3.5" Lifespan="3" Sprite="Tower_Fast" />
+    <Card Name="Fast Tower" Type="tower" Description="Suitable for fighting swarms" Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Fast.png">
+      <towerData Recharge="0.1" Range="2" Damage="3.5" Lifespan="3" Sprite="Tower_Fast.png" />
     </Card>
-    <Card Name="Fast Upgrade" Type="upgrade" Description="small damage increase per shot.  best on fast towers" Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Name="Fast Upgrade" Type="upgrade" Description="small damage increase per shot.  best on fast towers" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <upgradeData RechargeMult="0.9" RechargeMod="0.0" RangeMult="1.0" RangeMod="0" DamageMult="1.0" DamageMod="1" WaveBonus="3" />
     </Card>
-    <Card Name="Gambit" Type ="spell" Charges="5" Art="Summon_Tower_Basic" Tooltip="Tower_Basic" Description="Feeling lucky?">
+    <Card Name="Gambit" Type ="spell" Charges="5" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png" Description="Feeling lucky?">
       <effectData>
         <Effects>
           <Effect name="percentageChance" strength="75"> <Effect name="drawCard" strength="4" /> </Effect>
@@ -62,29 +62,29 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Name="Heavy Tower" Type="tower" Description="Suitable for fighting tanks" Charges="4" Art="Summon_Tower_Basic" Tooltip="Tower_Heavy">
-      <towerData Recharge="3" Range="2" Damage="100" Lifespan="3" Sprite="Tower_Heavy" />
+    <Card Name="Heavy Tower" Type="tower" Description="Suitable for fighting tanks" Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Heavy.png">
+      <towerData Recharge="3" Range="2" Damage="100" Lifespan="3" Sprite="Tower_Heavy.png" />
     </Card>
-    <Card Name="Heavy Upgrade" Type="upgrade" Description="Best on towers with high damage" Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Name="Heavy Upgrade" Type="upgrade" Description="Best on towers with high damage" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <upgradeData DamageMult="2" DamageMod="0" RechargeMod="0.5" RechargeMult="1.0" RangeMod="1" RangeMult="1.0" WaveBonus="3" />
     </Card>
-    <Card Name="Orthogonal Tower" Type="tower" Charges="4" Art="Summon_Tower_Basic" Tooltip="Tower_Standard">
-      <towerData Recharge="1" Range="3" Damage="5" Lifespan="5" Sprite="Tower_Standard" />
+    <Card Name="Orthogonal Tower" Type="tower" Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Standard.png">
+      <towerData Recharge="1" Range="3" Damage="5" Lifespan="5" Sprite="Tower_Standard.png" />
       <effectData>
         <Effects>
           <Effect name="targetOrthogonal" />
         </Effects>
       </effectData>
     </Card>
-    <Card Name="Mana Tap" Type="spell" Charges="1" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Name="Mana Tap" Type="spell" Charges="1" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
           <Effect name="drawCard" strength="5" />
         </Effects>
       </effectData>
     </Card>
-    <Card Name="Nova Tower" Type="tower" Charges="2" Art="Summon_Tower_Basic" Tooltip="Tower_Basic" Description="The fury of a single sun tends to be sufficient">
-      <towerData Recharge="30" Range="20" Damage="300" Lifespan="1" Sprite="Tower_Fast" />
+    <Card Name="Nova Tower" Type="tower" Charges="2" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png" Description="The fury of a single sun tends to be sufficient">
+      <towerData Recharge="30" Range="20" Damage="300" Lifespan="1" Sprite="Tower_Fast.png" />
       <effectData>
         <Effects>
           <Effect name="targetBurst" />
@@ -95,8 +95,8 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Name="Overcharge Tower" Type="tower"  Charges="2" Art="Summon_Tower_Basic" Tooltip="Tower_Standard">
-      <towerData Recharge="3" Range="2" Damage="100" Lifespan="3" Sprite="Tower_Heavy" />
+    <Card Name="Overcharge Tower" Type="tower"  Charges="2" Art="Summon_Tower_Basic.png" Tooltip="Tower_Standard.png">
+      <towerData Recharge="3" Range="2" Damage="100" Lifespan="3" Sprite="Tower_Heavy.png" />
       <effectData>
         <Effects>
           <Effect name="maxOvercharge" strength="2" />
@@ -104,7 +104,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Name="Recycle" Type="spell" Description="Does not guarantee your new hand will be better than the one you have."  Charges ="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Name="Recycle" Type="spell" Description="Does not guarantee your new hand will be better than the one you have."  Charges ="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
           <Effect name="discardRandomCard" strength ="30" />
@@ -113,14 +113,14 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Name="Reinforce" Type="spell" Charges ="1" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Name="Reinforce" Type="spell" Charges ="1" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
           <Effect name="allTowersLifespanBonus" strength ="3" />
         </Effects>
       </effectData>
     </Card>
-    <Card Name="Risky Draw" Type ="spell" Charges="5" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Name="Risky Draw" Type ="spell" Charges="5" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
           <Effect name="dieRoll" strength="6" />
@@ -130,7 +130,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Name="Shield" Type="spell" Description="Use ths to protect more important cards from harm." Charges="20" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Name="Shield" Type="spell" Description="Use ths to protect more important cards from harm." Charges="20" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
           <Effect name="addCharges" strength ="1" />
@@ -138,8 +138,8 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Name="Shredder Tower" Type="tower" Description="Does very little damage, but strips away armor" Charges="4" Art="Summon_Tower_Basic" Tooltip="Tower_Fast">
-      <towerData Recharge="1" Range="2" Damage="0" Lifespan="5" Sprite="Tower_Fast" />
+    <Card Name="Shredder Tower" Type="tower" Description="Does very little damage, but strips away armor" Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Fast.png">
+      <towerData Recharge="1" Range="2" Damage="0" Lifespan="5" Sprite="Tower_Fast.png" />
       <effectData>
         <Effects>
           <Effect name="reduceEnemyEffectOnDamage" strength="10" argument="armor" />
@@ -147,7 +147,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Name="Spitfire Upgrade" Type="upgrade" Description="Quantity over quality." Charges="3" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Name="Spitfire Upgrade" Type="upgrade" Description="Quantity over quality." Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <upgradeData DamageMult="0.5" DamageMod="0" RechargeMult="3" RechargeMod="0" RangeMult="1" RangeMod="0.5" WaveBonus="2" />
       <effectData>
         <Effects>
@@ -155,7 +155,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Name="Summon Swarm" Type="spell" Description="BEES!"  Charges ="2" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Name="Summon Swarm" Type="spell" Description="BEES!"  Charges ="2" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
           <Effect name="changeWaveType" argument="Swarm" />
@@ -163,7 +163,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Name="Summon Standard" Type="spell" Description="Lets you and I get normal for a change."  Charges ="2" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Name="Summon Standard" Type="spell" Description="Lets you and I get normal for a change."  Charges ="2" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
           <Effect name="changeWaveType" argument="Standard" />
@@ -171,7 +171,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Name="Summon Tank" Type="spell" Description="Bring it on!" Charges ="2" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Name="Summon Tank" Type="spell" Description="Bring it on!" Charges ="2" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
           <Effect name="changeWaveType" argument="Tank" />
@@ -179,7 +179,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Name="Time Crunch" Type="spell" Description="Condensing the onslaught"  Charges ="4" Art="Summon_Tower_Basic" Tooltip="Tower_Basic">
+    <Card Name="Time Crunch" Type="spell" Description="Condensing the onslaught"  Charges ="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
           <Effect name="allTowersLifespanBonus" strength ="1" />

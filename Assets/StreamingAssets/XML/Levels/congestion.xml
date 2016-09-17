@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!--This is only a template to build new levels from.  It works as a playable level, but isnt terribly interesting.-->
-<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Grass">
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Grass.png">
   <!-- 	This many waves will be generated randomly and added to the END of the wave list -->
   <randomWaveCount>20</randomWaveCount>
   <!-- 	These waves will be gauranteed to spawn, in order.
