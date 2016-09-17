@@ -364,7 +364,7 @@ public class TowerScript : BaseBehaviour
         wavesRemaining = d.lifespan;
 
         //yes, I know its awkward, but we're setting the sprite with WWW.
-        WWW www = new WWW ("file:///" + Application.dataPath + "/StreamingAssets/Art/Sprites/" + d.towerSpriteName + ".png");
+        WWW www = new WWW ("file:///" + Application.dataPath + "/StreamingAssets/Art/Sprites/" + d.towerSpriteName);
         yield return www;
         towerImage.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
 

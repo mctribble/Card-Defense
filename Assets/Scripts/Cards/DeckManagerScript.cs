@@ -319,7 +319,7 @@ public class DeckManagerScript : BaseBehaviour
     //handles player death
     public IEnumerator playerDead()
     {
-        yield return MessageHandlerScript.ShowAndYield("GAME OVER!");
+        yield return MessageHandlerScript.ShowAndYield("GAME OVER!\n" + ScoreManagerScript.instance.report(false));
         UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
         yield break;
     }
