@@ -185,6 +185,7 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
     public Image cardBack;    //reference to card back image
 
     //public data
+    public float   mouseOverMod;    //amount the card should move up when moused over, expressed as a multiplier to card height
     public float   motionSpeed;     //speed in pixels/second this card can move
     public float   rotationSpeed;   //speed in degrees/second this card can rotate
     public float   scaleSpeed;      //speed in points/second this card can scale
@@ -310,7 +311,7 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
 
         //tell card to move up when moused over
         targetLocation = idleLocation;
-        targetLocation.y += 150;
+        targetLocation.y += GetComponent<RectTransform>().rect.height * mouseOverMod;
         state = State.moving;
     }
 

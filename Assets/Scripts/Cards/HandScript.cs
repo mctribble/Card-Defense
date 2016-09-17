@@ -264,9 +264,10 @@ public class HandScript : BaseBehaviour
         int cardHeight = (int)cards[0].GetComponent<RectTransform>().rect.height;
 
         //figure out how much horizontal space we have to work with and where it is relative to the canvas
-        int handRegionWidth  = (int)transform.GetComponent<RectTransform>().rect.width;
+        RectTransform handRectTrans = transform.GetComponent<RectTransform>();
+        int handRegionWidth  = (int)handRectTrans.rect.width;
         int handRegionMidpoint = (int)(transform.position.x - transform.root.position.x);
-        
+
         //figure out how far away the cards need to be from each other
         int cardDistance = cardWidth + idealGap;
 
