@@ -348,7 +348,7 @@ public class LevelManagerScript : BaseBehaviour
         }
         else if (wavesInDeck == 0) //if there were no survivors, and the enemy deck is empty, then the player wins.
         {
-            yield return StartCoroutine(MessageHandlerScript.ShowAndYield("Level Complete!")); //tell user they won and wait for them to answer
+            yield return StartCoroutine(MessageHandlerScript.ShowAndYield("Level Complete!\n" + ScoreManagerScript.instance.report(true))); //tell user they won and wait for them to answer
             UnityEngine.SceneManagement.SceneManager.LoadScene("Game"); //then restart the scene
             yield break;
         }
@@ -414,6 +414,10 @@ public class LevelManagerScript : BaseBehaviour
 
         //discard the card associated with this wave
         HandScript.enemyHand.discardWave(d);
+
+        //count this as a cleared wave for scoring (this counts waves that still had surviving enemies, but does not count waves made up from those survivors.)
+        if (d.isSurvivorWave == false)
+            ScoreManagerScript.instance.wavesCleared++;
     }
 
     //called when the wave changes to update the enemy spawn counter and health tracker

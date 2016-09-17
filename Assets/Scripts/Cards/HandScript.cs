@@ -419,6 +419,8 @@ public class HandScript : BaseBehaviour
         }
     }
 
+    public bool isFull { get { return currentHandSize >= maximumHandSize; } } //helper: returns whether or not this hand is full
+
     //(enemy hands only) discards the card associated with the given wave
     public void discardWave(WaveData toDiscard)
     {

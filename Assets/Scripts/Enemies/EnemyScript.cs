@@ -195,6 +195,7 @@ public class EnemyScript : BaseBehaviour
 
         //damage player...
         DeckManagerScript.instance.SendMessage("Damage", damage);
+        ScoreManagerScript.instance.flawless = false;
 
         //reset the enemy
         transform.position = startPos;

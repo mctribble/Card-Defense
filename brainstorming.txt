@@ -7,12 +7,8 @@ more art
 sound!
 ==================================================================================
 balence:
-overbuilding not punished that harshly, but enemies breaking through can be disastrous, especially swarms.  Maybe rebalence card charges and/or enemy attacks?  Maybe this isnt really a problem at all?
-
-allow fractional enemy damage??
-
 difficulty settings??
-scoring/progression a la gemcraft?
+use scoring to make gemcraft style progression?
 ==================================================================================
 engine:
 spawnEnemy effect

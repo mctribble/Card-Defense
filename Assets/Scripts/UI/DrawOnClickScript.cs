@@ -16,7 +16,11 @@ public class DrawOnClickScript : BaseBehaviour, IPointerClickHandler
                 HandScript.playerHand.drawCard();
                 break;
             case HandFaction.enemy:
-                HandScript.enemyHand.drawCard();
+                if (HandScript.enemyHand.isFull == false)
+                {
+                    HandScript.enemyHand.drawCard();
+                    ScoreManagerScript.instance.enemyCardsDrawn++;
+                }
                 break;
             default:
                 MessageHandlerScript.Warning("DrawOnClickScript doesnt know how to draw to a hand of that type");
