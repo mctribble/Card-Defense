@@ -6,6 +6,11 @@ animated enemy sprites
 more art
 sound!
 ==================================================================================
+content goals:
+enemies: ??/15
+levels: ??/30
+cards: ??/100
+==================================================================================
 balence:
 difficulty settings??
 use scoring to make gemcraft style progression?
