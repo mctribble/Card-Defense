@@ -1,22 +1,29 @@
 presentation:
-visible player discard pile?
-visible enemy discard pile?
+player/enemy discard piles?
 enemy attack animations
+better range display
 animated enemy sprites
 more art
 sound!
 ==================================================================================
 content goals:
-enemies: ??/15
-levels: ??/30
-cards: ??/100
+enemies: 06/15
+levels:  04/30
+cards:   25/100
+decks:   02/10
 ==================================================================================
 balence:
 difficulty settings??
 use scoring to make gemcraft style progression?
 ==================================================================================
+effects:
+spawnEnemy
+stealth
+detectStealth
+stun
+score
+==================================================================================
 engine:
-spawnEnemy effect
 mod file dependencies
 Level editor?
 Card editor?
