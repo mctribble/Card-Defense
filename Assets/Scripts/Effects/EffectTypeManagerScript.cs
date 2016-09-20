@@ -50,6 +50,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             //<<Enemy Damaged Effects (On tower: trigger when attacking.  On Enemy type: trigger when attacked)>>
             case "armor":                     ie = new EffectArmor(); break;
             case "chainHit":                  ie = new EffectChainHit(); break;
+            case "damagePercent":             ie = new EffectDamagePercent(); break;
             case "reduceEnemyEffectOnDamage": ie = new EffectReduceEnemyEffectOnDamage(); break;
             case "splashDamage":              ie = new EffectSplashDamage(); break;
 

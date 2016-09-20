@@ -308,3 +308,23 @@ public class EffectChainHit : IEffectEnemyDamaged
         LevelManagerScript.instance.createExplosion(explosion, originalDamageEvent.dest.transform.position);
     }
 }
+
+//damages the enemy by X% of their maximum health
+public class EffectDamagePercent : IEffectEnemyDamaged
+{
+    [Hide] public string cardName { get; set; }                                        //name of the card containing this effect
+    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
+    [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
+    [Show, Display(2)] public float strength { get; set; }                             //damage as percentage of enemy max health
+    [Hide] public string argument { get; set; }                                        //effect argument(unused)
+
+    [Hide] public string Name { get { return "enemy loses " + strength + "% of health" ; } } //returns name and strength
+    [Show, Display(1)] public string XMLName { get { return "damagePercent"; } } //name used to refer to this effect in XML
+
+    public void expectedDamage(ref DamageEventData d)
+    {
+        d.rawDamage += d.dest.GetComponent<EnemyScript>().maxHealth * (strength / 100.0f);
+    }
+
+    public void actualDamage(ref DamageEventData d) { }
+}

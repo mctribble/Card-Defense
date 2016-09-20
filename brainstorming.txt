@@ -22,6 +22,8 @@ stealth
 detectStealth
 stun
 score
+effectCooldown (forced min delay between effect triggers)
+effectCharges (effect can only trigger X times)
 ==================================================================================
 engine:
 mod file dependencies
