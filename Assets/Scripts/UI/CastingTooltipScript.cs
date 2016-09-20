@@ -55,7 +55,7 @@ public class CastingTooltipScript : BaseBehaviour
                 if (collision.GetComponent<Collider2D>().gameObject.tag.Equals("Tower")) //test for TowerImage to only collide with the tower itself and not its range
                 {
                     //get the tower under the cursor
-                    GameObject newTargetTower = collision.GetComponent<Collider2D>().gameObject.transform.root.gameObject;
+                    TowerScript newTargetTower = collision.GetComponent<Collider2D>().gameObject.transform.root.gameObject.GetComponent<TowerScript>();
 
                     //if this is not same tower as before, change our target
                     if (newTargetTower != targetTower)
@@ -64,11 +64,17 @@ public class CastingTooltipScript : BaseBehaviour
                         if (targetTower != null)
                             targetTower.SendMessage("UpdateTooltipText");
 
-                        targetTower = newTargetTower; //change target
+                        targetTower = newTargetTower.gameObject; //change target
                         targetTower.SendMessage("UpgradeTooltip", parentCardScript.card.data.upgradeData); //tell new target to use the upgrade tooltip
                         if ( (parentCardScript.card.data.effectData != null) && (parentCardScript.card.data.effectData.effects.Count > 0) )
                             targetTower.SendMessage("NewEffectTooltip", parentCardScript.card.data.effectData); //if there are new effects, show those
+
+                        //castable unless the target has upgradesForbidden
                         castable = true;
+                        if (newTargetTower.effects != null)
+                            if (newTargetTower.effects.propertyEffects.upgradesForbidden)
+                                castable = false;
+                        
                     }
                 }
                 else

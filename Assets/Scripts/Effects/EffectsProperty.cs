@@ -106,3 +106,17 @@ class EffectArmorPierce : IEffectProperty
     [Hide] public string Name { get { return "attacks ignore armor"; } } //returns name and strength
     [Show] public string XMLName { get { return "armorPierce"; } } //name used to refer to this effect in XML.
 }
+
+//tower cannot receive upgrades
+class EffectUpgradesForbidden : IEffectProperty
+{
+    [Hide] public string cardName { get; set; }                                        //name of the card containing this effect
+    [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //property effects are not targeted
+    [Hide] public EffectType effectType { get { return EffectType.property; } }        //effect type
+    [Hide] public float strength { get; set; }                                         //max points of overcharge
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
+    
+    //this effect
+    [Hide] public string Name { get { return "Cannot be upgraded"; } } //returns name and strength
+    [Show] public string XMLName { get { return "upgradesForbidden"; } } //name used to refer to this effect in XML.
+}

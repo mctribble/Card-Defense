@@ -55,6 +55,7 @@ public struct PropertyEffects
     public bool   infiniteTowerLifespan;
     public bool   returnsToTopOfDeck;
     public bool   manualFire;
+    public bool   upgradesForbidden;
     public Color? attackColor;
     public int?   limitedAmmo;
     public int?   maxOvercharge;
@@ -215,6 +216,7 @@ public class EffectData : System.Object
                         case "returnsToTopOfDeck": if (value.returnsToTopOfDeck != propertyEffects.infiniteTowerLifespan) Debug.LogWarning("updating that property is not supported"); break;
                         case "manualFire": if (value.manualFire != propertyEffects.manualFire) Debug.LogWarning("updating that property is not supported"); break;
                         case "maximumOvercharge": if (value.maxOvercharge != propertyEffects.maxOvercharge) Debug.LogWarning("updating that property is not supported"); break;
+                        case "upgradesForbidden": if (value.upgradesForbidden != propertyEffects.upgradesForbidden) Debug.LogWarning("updating that property is not supported"); break;
 
                         case "limitedAmmo":
                             if (value.limitedAmmo != propertyEffects.limitedAmmo)
@@ -256,6 +258,7 @@ public class EffectData : System.Object
                             case "manualFire": newPropertyEffects.manualFire = true; break;
                             case "maxOvercharge": newPropertyEffects.maxOvercharge = Mathf.FloorToInt(e.strength); break;
                             case "returnsToTopOfDeck": newPropertyEffects.returnsToTopOfDeck = true; break;
+                            case "upgradesForbidden": newPropertyEffects.upgradesForbidden = true; break;
                             default: Debug.LogWarning("Unknown property effect."); break;
                         }
                     }

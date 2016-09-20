@@ -79,13 +79,14 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "targetRandom":              ie = new EffectTargetRandom(); break;
             case "targetSpeed":               ie = new EffectTargetSpeed(); break;
 
-            //<<Behavior effects(changes how something behaves, but is never triggered) >>
+            //<<property effects(changes how something behaves, but is never triggered) >>
             case "armorPierce":               ie = new EffectArmorPierce(); break;
             case "attackColor":               ie = new EffectAttackColor(); break;
             case "infiniteTowerLifespan":     ie = new EffectInfiniteTowerLifespan(); break;
             case "limitedAmmo":               ie = new EffectLimitedAmmo(); break;
             case "manualFire":                ie = new EffectManualFire(); break;
             case "returnsToTopOfDeck":        ie = new EffectReturnsToTopOfDeck(); break;
+            case "upgradesForbidden":         ie = new EffectUpgradesForbidden(); break;
 
             //<<overcharge effects (tower maximum charge increases by 100% per point of overcharge.  Towers with at least one point of overcharge apply overcharge effects before firing)>>
             case "maxOvercharge":             ie = new EffectMaxOvercharge(); break;
