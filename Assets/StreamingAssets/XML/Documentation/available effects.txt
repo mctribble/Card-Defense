@@ -45,6 +45,7 @@ damagePlayer           | player takes X damage
 discardRandomCard      | player discards up to X cards chosen at random
 drawCard               | player draws X cards
 drawEnemyCard          | enemy draws X cards
+score                  | player gains X points
 shuffle                | shuffles the deck
 
 <<Targeting effects (Determines tower targeting behavior)>>

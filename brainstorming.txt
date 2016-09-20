@@ -18,10 +18,8 @@ use scoring to make gemcraft style progression?
 ==================================================================================
 effects:
 spawnEnemy
-stealth
-detectStealth
+stealth + detectStealth ?
 stun
-score
 effectCooldown (forced min delay between effect triggers)
 effectCharges (effect can only trigger X times)
 ==================================================================================

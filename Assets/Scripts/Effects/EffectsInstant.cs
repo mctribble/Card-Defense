@@ -124,3 +124,37 @@ class EffectDieRoll : IEffectInstant
         }
     }
 }
+
+//player score increases by X
+public class EffectScore : IEffectInstant
+{
+    [Hide] public string cardName { get; set; }                                        //name of the card containing this effect
+    [Hide] public TargetingType targetingType { get { return TargetingType.none; } }   //instant effects are not targeted
+    [Hide] public EffectType effectType { get { return EffectType.instant; } }         //effect type
+    [Show, Display(2)] public float strength { get; set; }                             //effect strength (score bonus)
+    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
+
+    //this effect
+
+    [Hide] public string Name //returns name and strength
+    {
+        get
+        {
+            string result = "Score: ";
+            int bonus = Mathf.RoundToInt(strength);
+
+            if (bonus >= 0)
+                result += '+';
+            result += bonus;
+
+            return result;
+        }
+    } 
+
+    [Show, Display(1)] public string XMLName { get { return "dieRoll"; } } //name used to refer to this effect in XML.
+
+    public void trigger()
+    {
+        ScoreManagerScript.instance.bonusPoints += Mathf.RoundToInt(strength);
+    }
+}
