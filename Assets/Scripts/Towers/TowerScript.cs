@@ -184,6 +184,10 @@ public class TowerScript : BaseBehaviour
             //unflag the wait
             manualFireParticles.Stop(true);
             waitingForManualFire = false;
+
+            //if out of ammo, destroy tower
+            if (effects.propertyEffects.limitedAmmo == 0)
+                Destroy(gameObject);
         }
     }
 
