@@ -36,6 +36,8 @@ public abstract class BaseMetaEffect : IEffectMeta
     public void trigger(EnemyScript enemy) { if (shouldApplyInnerEffect()) { ((IEffectEnemyReachedGoal)innerEffect).trigger(enemy); } }
     public void expectedDamage(ref DamageEventData d) { if (shouldApplyInnerEffect()) { ((IEffectEnemyDamaged)innerEffect).expectedDamage(ref d); } }
     public void actualDamage(ref DamageEventData d) { if (shouldApplyInnerEffect()) { ((IEffectEnemyDamaged)innerEffect).actualDamage(ref d); } }
+    public void onEnemyDeath(EnemyScript enemy) { if (shouldApplyInnerEffect()) { ((IEffectDeath)innerEffect).onEnemyDeath(enemy); } }
+    public void onTowerDeath(TowerScript tower) { if (shouldApplyInnerEffect()) { ((IEffectDeath)innerEffect).onTowerDeath(tower); } }
 
     //returns whether or not the inner effect requires us to cache values
     protected bool shouldCacheValue()
@@ -166,6 +168,35 @@ public class EffectIfRollRange : BaseMetaEffect
         {
             MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + ": range max is lower than range min!  Try switching strength and argument");
             return false;
+        }
+    }
+}
+
+//child effect triggers under normal conditions, but only if it has been at least X seconds since the last trigger
+public class EffectEffectCooldown : BaseMetaEffect
+{
+    public override string Name    { get { return "(" + strength + "s cooldown):" + innerEffect.Name; } }
+    public override string XMLName { get { return "effectCooldown"; } }
+
+    private bool onCooldown = false;
+
+    private IEnumerator cooldown()
+    {
+        onCooldown = true;
+        yield return new WaitForSeconds(strength);
+        onCooldown = false;
+    }
+
+    public override bool shouldApplyInnerEffect()
+    {
+        if (onCooldown)
+        {
+            return false;
+        }
+        else
+        {
+            LevelManagerScript.instance.StartCoroutine(cooldown());
+            return true;
         }
     }
 }

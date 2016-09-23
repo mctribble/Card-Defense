@@ -74,6 +74,7 @@ maxOvercharge    | tower can have up to X points of overcharge (currently we can
 overchargeDamage | tower deals (1+X) times as much damage when overcharged
 
 <<meta effects (target another effect)>>
+effectCooldown   | child effect triggers under normal conditions, but only if it has been at least X seconds since the last trigger
 percentageChance | child effect has an X% chance of triggering
 ifRollRange      | child effect triggers if the die rolled anything from X to Y.  Requires dieRoll effect to work
 

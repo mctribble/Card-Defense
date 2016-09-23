@@ -20,7 +20,6 @@ effects:
 spawnEnemy
 stealth + detectStealth ?
 stun
-effectCooldown (forced min delay between effect triggers)
 effectCharges (effect can only trigger X times)
 ==================================================================================
 engine:

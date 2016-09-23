@@ -95,6 +95,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "overchargeDamage":          ie = new EffectOverchargeDamage(); break;
 
             //<<meta effects (target another effect)>>
+            case "effectCooldown":            ie = new EffectEffectCooldown(); break;
             case "percentageChance":          ie = new EffectPercentageChance(); break;
             case "ifRollRange":               ie = new EffectIfRollRange(); break;
 

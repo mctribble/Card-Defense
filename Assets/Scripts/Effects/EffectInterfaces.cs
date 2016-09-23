@@ -394,7 +394,7 @@ public interface IEffectOvercharge : IEffect
 }
 
 //effect targets another effect
-public interface IEffectMeta : IEffect, IEffectEnemyDamaged, IEffectEnemyReachedGoal, IEffectInstant, IEffectOvercharge, IEffectPeriodic, IEffectProperty, IEffectSelf, IEffectTowerTargeting, IEffectWave
+public interface IEffectMeta : IEffect, IEffectEnemyDamaged, IEffectEnemyReachedGoal, IEffectInstant, IEffectOvercharge, IEffectPeriodic, IEffectProperty, IEffectSelf, IEffectTowerTargeting, IEffectWave, IEffectDeath
 {
     IEffect innerEffect { get; set; } //effect targeted by this metaEffect
 }
