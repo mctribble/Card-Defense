@@ -93,6 +93,18 @@
     <Card Name="Basic Upgrade" Type="upgrade" Description="Useful on most towers, but be mindful of the speed penalty" Charges="5" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <upgradeData RechargeMult="1" RechargeMod="0.0" RangeMult="1.0" RangeMod="0.5" DamageMult="1.3" DamageMod="0" WaveBonus="1" />
     </Card>
+    <Card Name="Chain Hit" Type="upgrade" Description="Powerful, but easily squandered" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+      <upgradeData RechargeMult="1" RechargeMod="0" RangeMult="1" RangeMod="0" DamageMult="1" DamageMod="0" WaveBonus="1" />
+      <effectData>
+        <Effects>
+          <Effect name="effectCooldown" strength="5">
+            <Effect name="effectCharges" strength="3">
+              <Effect name="chainHit" strength="2" />
+            </Effect>
+          </Effect>
+        </Effects>
+      </effectData>
+    </Card>
     <Card Name="Preservation Upgrade" Type="upgrade" Description="Don't leave me!" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <upgradeData RechargeMult="1.1" RechargeMod="0.0" RangeMult="0.9" RangeMod="0.0" DamageMult="0.9" DamageMod="0.0" WaveBonus="5" />
       <effectData>

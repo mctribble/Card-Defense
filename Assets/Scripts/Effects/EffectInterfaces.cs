@@ -314,11 +314,17 @@ public class EffectData : System.Object
     {
         //make a new XMLEffect from the original effect, parse it to get an effect object of the proper type, then return that
         XMLEffect temp = new XMLEffect();
-        temp.name = original.XMLName;
-        temp.strength = original.strength;
-        temp.argument = original.argument;
+        temp.name      = original.XMLName;
+        temp.strength  = original.strength;
+        temp.argument  = original.argument;
+
         IEffect result = EffectTypeManagerScript.instance.parse(temp, original.cardName);
         Debug.Assert(result != null);
+
+        //special handling of meta effects: clone the inner effect as well
+        if (original.GetType().IsSubclassOf(typeof(BaseMetaEffect)))
+            ((BaseMetaEffect)result).innerEffect = cloneEffect(((BaseMetaEffect)original).innerEffect);
+
         return result;
     }
 }

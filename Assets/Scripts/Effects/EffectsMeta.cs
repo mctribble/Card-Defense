@@ -34,10 +34,27 @@ public abstract class BaseMetaEffect : IEffectMeta
     public void trigger(ref DamageEventData d, int pointsOfOvercharge) { if (shouldApplyInnerEffect()) { ((IEffectOvercharge)innerEffect).trigger(ref d, pointsOfOvercharge); } }
     public void trigger() { if (shouldApplyInnerEffect()) { ((IEffectInstant)innerEffect).trigger(); } }
     public void trigger(EnemyScript enemy) { if (shouldApplyInnerEffect()) { ((IEffectEnemyReachedGoal)innerEffect).trigger(enemy); } }
-    public void expectedDamage(ref DamageEventData d) { if (shouldApplyInnerEffect()) { ((IEffectEnemyDamaged)innerEffect).expectedDamage(ref d); } }
-    public void actualDamage(ref DamageEventData d) { if (shouldApplyInnerEffect()) { ((IEffectEnemyDamaged)innerEffect).actualDamage(ref d); } }
     public void onEnemyDeath(EnemyScript enemy) { if (shouldApplyInnerEffect()) { ((IEffectDeath)innerEffect).onEnemyDeath(enemy); } }
     public void onTowerDeath(TowerScript tower) { if (shouldApplyInnerEffect()) { ((IEffectDeath)innerEffect).onTowerDeath(tower); } }
+
+    //enemyDamage effects need special care since they are handled twice but should only be tested once
+    ushort enemyDamageEFfectTriggers;
+    public void expectedDamage(ref DamageEventData d)
+    {
+        if ( shouldApplyInnerEffect() )
+        {
+            enemyDamageEFfectTriggers++;
+            ((IEffectEnemyDamaged)innerEffect).expectedDamage(ref d);
+        }
+    } 
+    public void actualDamage(ref DamageEventData d)
+    {
+        if (enemyDamageEFfectTriggers > 0)
+        {
+            enemyDamageEFfectTriggers--;
+            ((IEffectEnemyDamaged)innerEffect).actualDamage(ref d);
+        }
+    } 
 
     //returns whether or not the inner effect requires us to cache values
     protected bool shouldCacheValue()
@@ -64,9 +81,9 @@ public class EffectPercentageChance : BaseMetaEffect
         get
         {
             if (innerEffect == null)
-                return strength + "% chance: do nothing";
+                return strength + "[% chance]do nothing";
             else
-                return strength + "% chance: " + innerEffect.Name;
+                return strength + "[% chance]" + innerEffect.Name;
         }
     }
 
@@ -128,9 +145,9 @@ public class EffectIfRollRange : BaseMetaEffect
         get
         {
             if (innerEffect == null)
-                return rangeMin + " - " + rangeMax + ": " + "do nothing";
+                return "[" + rangeMin + " - " + rangeMax + "]" + "do nothing";
             else
-                return rangeMin + " - " + rangeMax + ": " + innerEffect.Name;
+                return "[" + rangeMin + " - " + rangeMax + "]" + innerEffect.Name;
         }
     }
     public override IEffect innerEffect
@@ -172,10 +189,36 @@ public class EffectIfRollRange : BaseMetaEffect
     }
 }
 
+//child effect can only occur up to X times
+public class EffectEffectCharges : BaseMetaEffect
+{
+    public override float strength
+    {
+        get { return base.strength; }
+        set { base.strength = Mathf.RoundToInt(value); }
+    }
+
+    public override string Name { get { return "[x" + strength + "]" + innerEffect.Name; } }
+    public override string XMLName { get { return "effectCharges"; } }
+
+    public override bool shouldApplyInnerEffect()
+    {
+        if (strength > 0)
+        {
+            strength--;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+}
+
 //child effect triggers under normal conditions, but only if it has been at least X seconds since the last trigger
 public class EffectEffectCooldown : BaseMetaEffect
 {
-    public override string Name    { get { return "(" + strength + "s cooldown):" + innerEffect.Name; } }
+    public override string Name    { get { return "[" + strength + "s cooldown]" + innerEffect.Name; } }
     public override string XMLName { get { return "effectCooldown"; } }
 
     private bool onCooldown = false;

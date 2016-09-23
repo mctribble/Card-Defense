@@ -9,7 +9,7 @@ sound!
 content goals:
 enemies: 06/15
 levels:  04/30
-cards:   28/100
+cards:   29/100
 decks:   02/10
 ==================================================================================
 balence:
@@ -20,7 +20,7 @@ effects:
 spawnEnemy
 stealth + detectStealth ?
 stun
-effectCharges (effect can only trigger X times)
+allow effects to remove themselves
 ==================================================================================
 engine:
 mod file dependencies

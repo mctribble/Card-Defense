@@ -29,5 +29,13 @@
         <Card name="Dev Purge Tower" count="3" />
       </Cards>
     </Deck>
+    <Deck name="Dev Test Deck">
+      <Cards>
+        <Card name="Heavy Tower" count="8" />
+        <Card name="Fast Tower" count="8" />
+        <Card name="Basic Tower" count="8" />
+        <Card name="Chain Hit" count="8" />
+      </Cards>
+    </Deck>
   </Decks>
 </PlayerDecks>

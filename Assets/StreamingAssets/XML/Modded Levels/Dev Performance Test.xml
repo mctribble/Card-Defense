@@ -94,7 +94,7 @@
 		 count: how many of that card are present-->
     <Cards>
       <Card name="Dev Purge Tower" count="2" />
-      <Card name="Risky Draw" count="2" />
+      <Card name="Chain Hit" count="2" />
       <Card name="Gambit" count="2" />
       <Card name="Orthogonal Tower" count="2" />
       <Card name="Reinforce" count="5" />
