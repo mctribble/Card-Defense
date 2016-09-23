@@ -112,7 +112,7 @@ public class LevelManagerScript : BaseBehaviour
     public static LevelManagerScript instance;  //singleton pattern
     public LevelData data;                      //data for the level itself
     public int wavesInDeck;                     //number of enemy groups remaining in the deck
-    public int wavesOngoing;                    //number of waves currently attacking
+    public int wavesSpawning;                    //number of waves currently attacking
     public int deadThisWave { get; set; }		//number of monsters dead this wave
     public int totalSpawnedThisWave;           //how many enemies have already spawned this wave
 
@@ -131,7 +131,7 @@ public class LevelManagerScript : BaseBehaviour
     private void Awake()
     {
         instance = this;
-        wavesOngoing = 0;
+        wavesSpawning = 0;
         wavesInDeck = 0;
         deadThisWave = 0;
         levelLoaded = false;
@@ -271,7 +271,7 @@ public class LevelManagerScript : BaseBehaviour
     private void Update()
     {
         //spacebar starts wave
-        if (Input.GetKeyUp(KeyCode.Space) && wavesOngoing == 0 && HandScript.enemyHand.currentHandSize > 0)
+        if (Input.GetKeyUp(KeyCode.Space) && wavesSpawning == 0 && HandScript.enemyHand.currentHandSize > 0)
         {
             StartCoroutine("spawnWaves");
         }
@@ -314,16 +314,16 @@ public class LevelManagerScript : BaseBehaviour
             StartCoroutine(spawnWave(d));
 
         //wait for them to finish
-        while (wavesOngoing > 0)
+        while (wavesSpawning > 0)
             yield return null;
 
         //wait for all monsters to be dead
-        bool monstersAlive = true;
-        while (monstersAlive)
+        while (true)
         {
             yield return new WaitForSeconds(1.0f);
-            if (GameObject.FindGameObjectsWithTag("Enemy").Length == 0)
-                monstersAlive = false;
+            if (wavesSpawning <= 0)
+                if (GameObject.FindGameObjectsWithTag("Enemy").Length == 0)
+                    break;
         }
 
         HandScript.playerHand.SendMessage("Show"); //show the hand
@@ -364,7 +364,7 @@ public class LevelManagerScript : BaseBehaviour
     private IEnumerator spawnWave(WaveData d)
     {
         //flag the wave as started
-        wavesOngoing++;
+        wavesSpawning++;
 
         //init vars
         int   spawnerCount = spawnerObjects.Count;          //number of spawners
@@ -377,7 +377,7 @@ public class LevelManagerScript : BaseBehaviour
 
         //spawn monsters.  Distribute spawns as evenly as possible
         int curSpawner = Random.Range(0, spawnerCount);
-        float timeToNextSpawn = timeBetweenSpawns;
+        float timeToNextSpawn = 0;
         while ( (d.spawnCount - d.spawnedThisWave) > 0)
         {
             yield return null;                 //wait for the next frame
@@ -385,8 +385,6 @@ public class LevelManagerScript : BaseBehaviour
             d.time -= Time.deltaTime;          //update the wave data also so that the status text can update
             while (timeToNextSpawn < 0.0)      //this is a loop in case multiple spawns happen in one frame
             {
-                timeToNextSpawn += timeBetweenSpawns; //update spawn timer
-
                 if (d.isSurvivorWave)
                 {
                     //special case: survivor waves are responsible for their own spawning
@@ -395,9 +393,11 @@ public class LevelManagerScript : BaseBehaviour
                 else
                 {
                     //standard case: we are responsible for spawning
-                    spawnerObjects[curSpawner].GetComponent<SpawnerScript>().Spawn(timeToNextSpawn, d.enemyData); //spawn enemy.  spawn timer provided so the enemy can place itself properly when framerate is low
+                    spawnerObjects[curSpawner].GetComponent<SpawnerScript>().Spawn(-timeToNextSpawn, d.enemyData); //spawn enemy.  spawn timer provided so the enemy can place itself properly when framerate is low
                     curSpawner = (curSpawner + 1) % spawnerCount; //move to next spawner, looping back to the first if we are at the end of the list
                 }
+
+                timeToNextSpawn += timeBetweenSpawns; //update spawn timer
 
                 //update spawn counters
                 d.spawnedThisWave++;
@@ -410,7 +410,7 @@ public class LevelManagerScript : BaseBehaviour
         }
 
         //wave is over
-        wavesOngoing--;
+        wavesSpawning--;
 
         //discard the card associated with this wave
         HandScript.enemyHand.discardWave(d);
@@ -418,6 +418,50 @@ public class LevelManagerScript : BaseBehaviour
         //count this as a cleared wave for scoring (this counts waves that still had surviving enemies, but does not count waves made up from those survivors.)
         if (d.isSurvivorWave == false)
             ScoreManagerScript.instance.wavesCleared++;
+    }
+
+    //called when effects want to spawn enemies mid-wave
+    public IEnumerator spawnWaveAt(WaveData wave, Vector2 spawnLocation, Vector2 firstDestination)
+    {
+        //flag the wave as started
+        wavesSpawning++;
+
+        totalRemainingHealth += wave.totalRemainingHealth;
+        totalSpawnCount += wave.spawnCount;
+
+        //init
+        float timeBetweenSpawns = wave.time / wave.spawnCount; //delay between each spawn
+        SpawnerScript spawner = ((GameObject)Instantiate(spawnerPrefab)).GetComponent<SpawnerScript>();
+        spawner.forceFirstPath(spawnLocation, firstDestination);
+
+        //slight delay before spawning
+        yield return new WaitForSeconds(0.1f);
+
+        //spawn monsters.
+        float timeToNextSpawn = 0;
+        while ((wave.spawnCount - wave.spawnedThisWave) > 0)
+        {
+            yield return null;                 //wait for the next frame
+            timeToNextSpawn -= Time.deltaTime; //reduce time until next spawn by amount of time between frames
+            wave.time -= Time.deltaTime;       //update the wave data also so that the status text can update
+            while (timeToNextSpawn < 0.0)      //this is a loop in case multiple spawns happen in one frame
+            {
+                spawner.Spawn(-timeToNextSpawn, wave.enemyData); //spawn enemy.  spawn timer provided so the enemy can place itself properly when framerate is low
+
+                timeToNextSpawn += timeBetweenSpawns; //update spawn timer
+
+                //update spawn counter
+                wave.spawnedThisWave++;
+
+                //bail if we have finished spawning baddies
+                if (wave.spawnedThisWave == wave.spawnCount)
+                    break;
+            }
+        }
+
+        //wave is over
+        wavesSpawning--;
+        yield break;
     }
 
     //called when the wave changes to update the enemy spawn counter and health tracker

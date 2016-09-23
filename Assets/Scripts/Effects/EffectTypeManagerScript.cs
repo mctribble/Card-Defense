@@ -98,6 +98,9 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "percentageChance":          ie = new EffectPercentageChance(); break;
             case "ifRollRange":               ie = new EffectIfRollRange(); break;
 
+            //<<death effects (occur when the tower/enemy dies)>>
+            case "spawnEnemyOnDeath":         ie = new EffectSpawnEnemyOnDeath(); break;
+
             default:                          Debug.LogWarning("Effect type " + xe.name + " is not implemented."); return null;
         }
         ie.strength = xe.strength;

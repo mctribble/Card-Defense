@@ -104,7 +104,7 @@ public class WaveData
         get
         {
             if (enemyList == null)
-                return (spawnCount - spawnedThisWave) * data.maxHealth;
+                return (spawnCount - spawnedThisWave) * enemyData.maxHealth;
             else
                 return enemyList.Sum(x => x.GetComponent<EnemyScript>().curHealth);
         }

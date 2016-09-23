@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.Collections.Generic;
+using System.Xml.Serialization;
 using UnityEngine;
 using Vexe.Runtime.Types;
 
@@ -15,6 +16,10 @@ public class SpawnerScript : BaseBehaviour
 {
     public SpawnerData      data;           //xml definition of this spawner
     public GameObject       enemyPrefab;    //prefab used to create enemies
+
+    public Vector2? forcedFirstDestination;
+
+    public void Awake() { forcedFirstDestination = null; } //init
 
     //accessor to allow treating spawn position as a vector
     public Vector2 spawnPos
@@ -36,12 +41,41 @@ public class SpawnerScript : BaseBehaviour
         data = newData;
     }
 
+    //allows setting a spawn position that isnt at the end of a path segment by starting the path with spawnLocation->firstDestination and doing a normal pathfind from there
+    public void forceFirstPath(Vector2 spawnLocation, Vector2 firstDestination)
+    {
+        spawnPos = spawnLocation;
+        forcedFirstDestination = firstDestination;
+    }
+
     //spawns an enemy
     public void Spawn(float timePassedSinceSpawn, EnemyData type)
     {
         GameObject enemy = (GameObject)Object.Instantiate(enemyPrefab, spawnPos, Quaternion.identity);  //spawn the enemy
         enemy.SendMessage("SetData", type);                                                             //set its type
-        enemy.SendMessage("SetPath", PathManagerScript.instance.CalculatePathFromPos(spawnPos));        //set its path
+
+        //set its path
+        List<Vector2> path = null;
+        if (forcedFirstDestination == null)
+        {
+            path = PathManagerScript.instance.CalculatePathFromPos(spawnPos);
+        }
+        else
+        {
+            //put the pathfinding in a try-catch since it can fail if we spawn on the last path segment
+            try
+            {
+                path = PathManagerScript.instance.CalculatePathFromPos(forcedFirstDestination.Value);
+            }
+            catch (System.InvalidOperationException)
+            {
+                path = new List<Vector2>();
+            }
+            
+            path.Insert(0, forcedFirstDestination.Value);
+        }
+        enemy.SendMessage("SetPath", path);        
+
         enemy.SendMessage("moveForwardByTime", timePassedSinceSpawn);                                   //move the enemy forward to account for how much time has passed between when this enemy should have spawned and when the spawner got told about it
         EnemyManagerScript.instance.EnemySpawned(enemy);                                                //report it to the enemy manager
     }

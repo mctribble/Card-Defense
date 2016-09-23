@@ -127,6 +127,10 @@ public class EnemyScript : BaseBehaviour
     //moves the enemy forward this far in time.  seperate from update function so it can be called elsewhere, such as during enemy spawning to account for low frame rate
     private void moveForwardByTime(float time)
     {
+        //bail immediately if time is 0 or negative
+        if (time <= 0)
+            return;
+
         float distanceToTravel = unitSpeed * time;                                                           //calculate distance to travel
         Vector2 prevLocation = transform.position;                                                           //fetch current location
         Vector2 newLocation = Vector2.MoveTowards(prevLocation, path[currentDestination], distanceToTravel); //perform movement
@@ -350,7 +354,13 @@ public class EnemyScript : BaseBehaviour
             deathBurst.rectTransform.localScale = new Vector3(curScale, curScale, 1 );
             yield return null;
         }
-        
+
+        //trigger effects
+        if (effectData != null)
+            foreach (IEffect ie in effectData.effects)
+                if (ie.effectType == EffectType.death)
+                    ((IEffectDeath)ie).onEnemyDeath(this);
+
         Destroy(gameObject);
         yield break;
     }

@@ -33,7 +33,8 @@ public enum EffectType
     periodic         = unchecked((int)0x777777FF), //effect triggers on every update() call
     self             = unchecked((int)0x0000A0FF), //effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
     towerTargeting   = unchecked((int)0xADD8E6FF), //effect alters the way a tower taragets enemies.  if multiple are present, only the last is actually used
-    wave             = unchecked((int)0x0000FFFF)  //effect alters the current wave
+    wave             = unchecked((int)0x0000FFFF), //effect alters the current wave
+    death            = unchecked((int)0xFF0000FF)  //effect triggers when the tower/enemy is destroyed
 };
 
 //represents an effect in XML
@@ -396,4 +397,11 @@ public interface IEffectOvercharge : IEffect
 public interface IEffectMeta : IEffect, IEffectEnemyDamaged, IEffectEnemyReachedGoal, IEffectInstant, IEffectOvercharge, IEffectPeriodic, IEffectProperty, IEffectSelf, IEffectTowerTargeting, IEffectWave
 {
     IEffect innerEffect { get; set; } //effect targeted by this metaEffect
+}
+
+//effect is triggered when a tower or enemy dies
+public interface IEffectDeath : IEffect
+{
+    void onEnemyDeath(EnemyScript e);
+    void onTowerDeath(TowerScript t);
 }

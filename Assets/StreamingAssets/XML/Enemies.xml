@@ -41,5 +41,13 @@
         </Effects>
       </effectData>
     </Enemy>
+    <Enemy name="Carrier" spawnCost="150" attack="4" maxHealth="350" unitSpeed="2" sprite="Enemy_Basic.png">
+      <unitColor r="0.2" g="0.2" b="0.2" a="1" />
+      <effectData>
+        <Effects>
+          <Effect name="spawnEnemyOnDeath" strength="5" argument="Swarm" />
+        </Effects>
+      </effectData>
+    </Enemy>
   </Enemies>
 </EnemyTypes>

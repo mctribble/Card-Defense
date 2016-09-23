@@ -187,7 +187,7 @@ public class TowerScript : BaseBehaviour
 
             //if out of ammo, destroy tower
             if (effects.propertyEffects.limitedAmmo == 0)
-                Destroy(gameObject);
+                onDeath();
         }
     }
 
@@ -598,6 +598,19 @@ public class TowerScript : BaseBehaviour
         UpdateTooltipText();
 
         if (wavesRemaining == 0)
-            Destroy(gameObject);
+            onDeath();
+    }
+
+    //called when the tower is destroyed
+    private void onDeath()
+    {
+        //trigger effects
+        if (effects != null)
+            foreach (IEffect ie in effects.effects)
+                if (ie.effectType == EffectType.death)
+                    ((IEffectDeath)ie).onTowerDeath(this);
+
+        //destroy self
+        Destroy(gameObject);
     }
 }

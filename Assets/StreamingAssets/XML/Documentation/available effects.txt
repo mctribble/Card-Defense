@@ -76,3 +76,6 @@ overchargeDamage | tower deals (1+X) times as much damage when overcharged
 <<meta effects (target another effect)>>
 percentageChance | child effect has an X% chance of triggering
 ifRollRange      | child effect triggers if the die rolled anything from X to Y.  Requires dieRoll effect to work
+
+<<death effects (occur when the tower/enemy dies)>>
+spawnEnemyOnDeath | spawns X enemies of type Y.  On enemies, it spawns where the enemy died.  On towers, this is unsupported

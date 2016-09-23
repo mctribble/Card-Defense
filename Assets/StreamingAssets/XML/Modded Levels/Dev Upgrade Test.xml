@@ -9,11 +9,11 @@
 		time: how many seconds the enemies spawn for.  Shorter time spans result in more densely packed groups.
 		message: optional message that appears at the start of the wave-->
   <Waves>
-    <Wave type="Regenerative Tank"    budget="150"  time="10" />
-    <Wave type="Regenerative Tank"    budget="600"  time="10" />
-    <Wave type="Regenerative Tank"    budget="1200" time="10" />
-    <Wave type="Regenerative Tank"    budget="1800" time="10" />
-    <Wave type="Regenerative Tank"    budget="2400" time="10" />
+    <Wave type="Carrier"    budget="150"  time="1" />
+    <Wave type="Carrier"    budget="600"  time="2" />
+    <Wave type="Carrier"    budget="1200" time="4" />
+    <Wave type="Carrier"    budget="1800" time="8" />
+    <Wave type="Carrier"    budget="2400" time="10" />
   </Waves>
   <!--	positions at which the enemies can spawn -->
   <Spawners>
