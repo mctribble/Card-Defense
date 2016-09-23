@@ -464,6 +464,11 @@ public class TowerScript : BaseBehaviour
     //receives upgrade data and uses it to modify the tower
     private void Upgrade(UpgradeData d)
     {
+        //ignore if upgrades are forbidden
+        if (effects != null)
+            if (effects.propertyEffects.upgradesForbidden)
+                return;
+
         //each stat = oldStat * statMult + statMod.
         rechargeTime    = rechargeTime  * d.rechargeMultiplier  + d.rechargeModifier;
         attackPower     = attackPower   * d.attackMultiplier    + d.attackModifier;
