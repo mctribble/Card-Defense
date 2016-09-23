@@ -34,7 +34,8 @@ public enum EffectType
     self             = unchecked((int)0x0000A0FF), //effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
     towerTargeting   = unchecked((int)0xADD8E6FF), //effect alters the way a tower taragets enemies.  if multiple are present, only the last is actually used
     wave             = unchecked((int)0x0000FFFF), //effect alters the current wave
-    death            = unchecked((int)0xFF0000FF)  //effect triggers when the tower/enemy is destroyed
+    death            = unchecked((int)0xFF0000FF), //effect triggers when the tower/enemy is destroyed
+    everyRound       = unchecked((int)0x00FF00FF)  //effect triggers once every round (uses IEffectInstant)
 };
 
 //represents an effect in XML

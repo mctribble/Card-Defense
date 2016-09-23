@@ -251,3 +251,26 @@ public class EffectEffectCooldown : BaseEffectMeta
         }
     }
 }
+
+//target instant effect triggers once every round (using IEffectInstant)
+public class EffectEveryRound : BaseEffectMeta
+{
+    public override string Name    { get { return "[every round]" + innerEffect.Name; } }
+    public override string XMLName { get { return "everyRound"; } }
+    public override bool   shouldApplyInnerEffect() { return true; }
+
+    public override EffectType effectType { get { return EffectType.everyRound; } } //override the target effect type since we are changing how it triggers
+
+    //because we use IEffectInstant, we can only target instant or everyRound effects
+    public override IEffect innerEffect
+    {
+        get { return base.innerEffect; }
+        set
+        {
+            if (value.effectType == EffectType.instant || value.effectType == EffectType.everyRound)
+                base.innerEffect = value;
+            else
+                MessageHandlerScript.Error(cardName + ": EffectEveryRound can only target instant or everyRound effects");
+        }
+    }
+}

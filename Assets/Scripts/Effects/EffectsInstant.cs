@@ -112,7 +112,7 @@ public class EffectScore : BaseEffectInstant
         }
     } 
 
-    [Show] public override string XMLName { get { return "dieRoll"; } } //name used to refer to this effect in XML.
+    [Show] public override string XMLName { get { return "score"; } } //name used to refer to this effect in XML.
 
     public override void trigger()
     {

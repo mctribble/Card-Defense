@@ -29,12 +29,20 @@
         <Card name="Dev Purge Tower" count="3" />
       </Cards>
     </Deck>
-    <Deck name="Dev Test Deck">
+    <Deck name="Deck A">
       <Cards>
-        <Card name="Heavy Tower" count="8" />
-        <Card name="Fast Tower" count="8" />
-        <Card name="Basic Tower" count="8" />
-        <Card name="Chain Hit" count="8" />
+        <Card name="Heavy Tower" count="3" />
+        <Card name="Fast Tower" count="3" />
+        <Card name="Basic Tower" count="3" />
+        <Card name="Chain Hit" count="3" />
+        <Card name="Challenger Tower" count="2" />
+        <Card name="Explosive Tower" count="2" />
+        <Card name="Fast Upgrade" count="4" />
+        <Card name="Basic Upgrade" count="4" />
+        <Card name="Orthogonal Tower" count="2" />
+        <Card name="Recycle" count="1" />
+        <Card name="Shield" count="3" />
+        <Card name="Sniper Tower" count="3" />
       </Cards>
     </Deck>
   </Decks>

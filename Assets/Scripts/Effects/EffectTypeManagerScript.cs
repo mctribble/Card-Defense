@@ -59,7 +59,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "changeWaveType":            ie = new EffectChangeWaveType(); break;
             case "timePercentageChange":      ie = new EffectTimePercentageChange(); break;
 
-            //<<Card effects (trigger on play)>>
+            //<<instant effects (trigger immediately when card is played)>>
             case "addCharges":                ie = new EffectAddCharges(); break;
             case "allTowersLifespanBonus":    ie = new EffectAllTowersLifespanBonus(); break;
             case "damagePlayer":              ie = new EffectDamagePlayer(); break;
@@ -97,6 +97,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             //<<meta effects (target another effect)>>
             case "effectCharges":             ie = new EffectEffectCharges(); break;
             case "effectCooldown":            ie = new EffectEffectCooldown(); break;
+            case "everyRound":                ie = new EffectEveryRound(); break;
             case "percentageChance":          ie = new EffectPercentageChance(); break;
             case "ifRollRange":               ie = new EffectIfRollRange(); break;
 

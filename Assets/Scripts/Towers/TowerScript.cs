@@ -416,6 +416,12 @@ public class TowerScript : BaseBehaviour
         if (effects != null)
             if (effects.propertyEffects.maxOvercharge != null)
                 maxCharge += effects.propertyEffects.maxOvercharge.Value;
+
+        //if the tower has any everyRound effects, trigger them now
+        if (effects != null)
+            foreach (IEffect ie in effects.effects)
+                if (ie.effectType == EffectType.everyRound)
+                    ((IEffectInstant)ie).trigger();
     }
 
     //adds the new effects to the tower
@@ -604,6 +610,13 @@ public class TowerScript : BaseBehaviour
     {
         if ( (effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false)) //dont reduce lifespan if we have infinite lifespan
             wavesRemaining -= 1;
+
+        //if the tower is not dead, trigger everyRound effects
+        if (wavesRemaining > 0)
+            if (effects != null)
+                foreach (IEffect ie in effects.effects)
+                    if (ie.effectType == EffectType.everyRound)
+                        ((IEffectInstant)ie).trigger();
 
         UpdateTooltipText();
 
