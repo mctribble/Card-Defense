@@ -20,7 +20,6 @@ effects:
 spawnEnemy
 stealth + detectStealth ?
 stun
-allow effects to remove themselves
 ==================================================================================
 engine:
 mod file dependencies

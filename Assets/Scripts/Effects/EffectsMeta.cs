@@ -63,6 +63,18 @@ public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
 
         return false;
     }
+
+    //if the inner effect can be cleaned out, or there is no inner effect, then this can be removed
+    public override bool shouldBeRemoved()
+    {
+        if (innerEffect == null)
+            return true;
+
+        if (innerEffect.shouldBeRemoved())
+            return true;
+
+        return false;
+    }
 }
 
 //child effect has an X% chance of triggering
@@ -206,6 +218,9 @@ public class EffectEffectCharges : BaseEffectMeta
             return false;
         }
     }
+
+    //the effect can be cleaned up if it is out of charges, or if the base call says so
+    public override bool shouldBeRemoved() { return ( strength <= 0 || base.shouldBeRemoved() ); }
 }
 
 //child effect triggers under normal conditions, but only if it has been at least X seconds since the last trigger

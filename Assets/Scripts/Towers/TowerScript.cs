@@ -74,7 +74,17 @@ public class TowerScript : BaseBehaviour
     // Update is called once per frame
     private void Update()
     {
-        deltaTime = Time.deltaTime;                 //update time since last frame
+        //clean out the effect list every 32 frames
+        if (effects != null)
+        {
+            if ((Time.frameCount % 32) == 0)
+            {
+                effects.cleanEffects();
+                UpdateTooltipText();
+            }
+        }
+
+        deltaTime = Time.deltaTime; //update time since last frame
 
         //update tooltip position
         if (tooltipText.enabled)

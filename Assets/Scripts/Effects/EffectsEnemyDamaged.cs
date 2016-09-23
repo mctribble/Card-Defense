@@ -33,7 +33,13 @@ public class EffectArmor : BaseEffectEnemyDamaged
     }
 
     //since damage is already recalculated, we dont need to do anything here
-    public override void actualDamage(ref DamageEventData d) { } 
+    public override void actualDamage(ref DamageEventData d) { }
+
+    //effect can be removed if it drops to 0
+    public override bool shouldBeRemoved()
+    {
+        return strength == 0;
+    }
 }
 
 //reduces target effect by a fixed amount (but stops at 0)

@@ -80,6 +80,12 @@ public class EffectPoison : BaseEffectPeriodic
     [Show, Display(3)] public float curPoisonTime; //how much time has passed
     [Show, Display(4)] public float maxPoisonTime; //stop dealing damage after this window has passed
 
+    //effect can be removed once it has expired
+    public override bool shouldBeRemoved()
+    {
+        return curPoisonTime > maxPoisonTime;
+    }
+
     public EffectPoison() { curPoisonTime = 0; maxPoisonTime = 0; }  //default constructor inits internal variables to 0
 
     public override void UpdateEnemy(EnemyScript e, float deltaTime)
@@ -114,7 +120,13 @@ public class EffectInvScaleSpeedWithTime : BaseEffectPeriodic
     {
         e.unitSpeed -= (strength * deltaTime);
         e.unitSpeed = Mathf.Max(e.unitSpeed, 1.0f);
+        if (e.unitSpeed == 1.0f)
+            done = true;
     }
+
+    //effect can be removed once it has hit the floor
+    private bool done = false;
+    public override bool shouldBeRemoved() { return done; }
 }
 
 //enemy speeds up by X/second
@@ -188,6 +200,12 @@ public class EffectInvScaleEffectWithTime : BaseEffectPeriodic
         }
 
         effectToScale.strength -= (strength * deltaTime);
-        effectToScale.strength = Mathf.Max(effectToScale.strength, 1.0f);
+        effectToScale.strength = Mathf.Max(effectToScale.strength, 0.0f);
+        if (effectToScale.strength == 0.0f)
+            done = true;
     }
+
+    //effect can be removed once it has hit the floor
+    private bool done = false;
+    public override bool shouldBeRemoved() { return done; }
 }

@@ -104,6 +104,11 @@ public class EnemyScript : BaseBehaviour
     // LateUpdate is called once per frame, after other objects have done a regular Update().  We use LateUpdate to make sure bullets get to move first this frame.
     private void LateUpdate()
     {
+        //clean out the effect list every 32 frames
+        if (effectData != null)
+            if ((Time.frameCount % 32) == 0)
+                effectData.cleanEffects();
+
         //skip update if dead
         if (curHealth <= 0)
             return;

@@ -327,6 +327,12 @@ public class EffectData : System.Object
 
         return result;
     }
+
+    //cleans anything unnecessary out of the effect list 
+    public void cleanEffects()
+    {
+        Effects.RemoveAll(ie => ie.shouldBeRemoved());
+    }
 }
 
 //base interface
