@@ -26,6 +26,10 @@ class EffectSpawnEnemyOnDeath : BaseEffectDeath
         newWave.forcedSpawnCount = Mathf.FloorToInt(strength);
         newWave.time = 1.0f;
 
+        //if the enemy died after reaching the goal, cancel to avoid throwing pathing exceptions
+        if (e.currentDestination == e.path.Count)
+            return;
+
         LevelManagerScript.instance.StartCoroutine(LevelManagerScript.instance.spawnWaveAt(newWave, e.transform.position, e.path[e.currentDestination]));
     }
 
