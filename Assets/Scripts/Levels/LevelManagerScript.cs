@@ -339,7 +339,7 @@ public class LevelManagerScript : BaseBehaviour
 
         //draw new cards until seven in hand
         yield return new WaitForSeconds(1.0f);
-        HandScript.playerHand.SendMessage("drawToHandSize", 10);
+        HandScript.playerHand.SendMessage("drawToHandSize", HandScript.playerHand.startingHandSize);
 
         //if there are any survivors, draw a new survivor card to represent them
         if ((EnemyManagerScript.instance.survivors != null) && (EnemyManagerScript.instance.survivors.Count > 0))
