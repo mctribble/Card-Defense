@@ -131,20 +131,22 @@ public class CardData : System.Object
 
             case CardType.upgrade:
                 //present upgrade stats
-                if (upgradeData.waveBonus          != 0) { description += "lifespan: +"  + upgradeData.waveBonus; }
-                if (upgradeData.attackMultiplier   != 1) { description += "damage: +"    + (upgradeData.attackMultiplier - 1).ToString("P1")   + '\n'; }
-                if (upgradeData.rangeMultiplier    != 1) { description += "range: +"     + (upgradeData.rangeMultiplier - 1).ToString("P1")    + '\n'; }
-                if (upgradeData.rechargeMultiplier != 1) { description += "recharge: +"  + (upgradeData.rechargeMultiplier - 1).ToString("P1") + '\n'; }
-                if (upgradeData.attackModifier     != 0) { description += "damage: +"    + upgradeData.attackModifier.ToString()               + '\n'; }
-                if (upgradeData.rangeModifier      != 0) { description += "range: +"     + upgradeData.rangeModifier.ToString()                + '\n'; }
-                if (upgradeData.rechargeModifier   != 0) { description += "recharge: +"  + upgradeData.rechargeModifier.ToString() + 's'       + '\n'; }
-                if (upgradeData.waveBonus          != 0) { description += "lifespan: -"  + upgradeData.waveBonus                               + '\n'; }
-                if (upgradeData.attackMultiplier   != 1) { description += "damage: -"    + (1 - upgradeData.attackMultiplier).ToString("P1")   + '\n'; }
-                if (upgradeData.rangeMultiplier    != 1) { description += "range: -"     + (1 - upgradeData.rangeMultiplier).ToString("P1")    + '\n'; }
-                if (upgradeData.rechargeMultiplier != 1) { description += "recharge: -"  + (1 - upgradeData.rechargeMultiplier).ToString("P1") + '\n'; }
-                if (upgradeData.attackModifier     != 0) { description += "damage: -"    + upgradeData.attackModifier.ToString()               + '\n'; }
-                if (upgradeData.rangeModifier      != 0) { description += "range: -"     + upgradeData.rangeModifier.ToString()                + '\n'; }
-                if (upgradeData.rechargeModifier   != 0) { description += "recharge: -"  + upgradeData.rechargeModifier.ToString() + 's'       + '\n'; }
+                if (upgradeData.waveBonus          > 0) { description += "lifespan: +"  + upgradeData.waveBonus                               + '\n'; }
+                if (upgradeData.attackMultiplier   > 1) { description += "damage: +"    + (upgradeData.attackMultiplier - 1).ToString("P1")   + '\n'; }
+                if (upgradeData.rangeMultiplier    > 1) { description += "range: +"     + (upgradeData.rangeMultiplier - 1).ToString("P1")    + '\n'; }
+                if (upgradeData.rechargeMultiplier > 1) { description += "recharge: +"  + (upgradeData.rechargeMultiplier - 1).ToString("P1") + '\n'; }
+                if (upgradeData.attackModifier     > 0) { description += "damage: +"    + upgradeData.attackModifier.ToString()               + '\n'; }
+                if (upgradeData.rangeModifier      > 0) { description += "range: +"     + upgradeData.rangeModifier.ToString()                + '\n'; }
+                if (upgradeData.rechargeModifier   > 0) { description += "recharge: +"  + upgradeData.rechargeModifier.ToString() + 's'       + '\n'; }
+
+                if (upgradeData.waveBonus          < 0) { description += "lifespan: -"  + upgradeData.waveBonus                               + '\n'; }
+                if (upgradeData.attackMultiplier   < 1) { description += "damage: -"    + (1 - upgradeData.attackMultiplier).ToString("P1")   + '\n'; }
+                if (upgradeData.rangeMultiplier    < 1) { description += "range: -"     + (1 - upgradeData.rangeMultiplier).ToString("P1")    + '\n'; }
+                if (upgradeData.rechargeMultiplier < 1) { description += "recharge: -"  + (1 - upgradeData.rechargeMultiplier).ToString("P1") + '\n'; }
+                if (upgradeData.attackModifier     < 0) { description += "damage: -"    + upgradeData.attackModifier.ToString()               + '\n'; }
+                if (upgradeData.rangeModifier      < 0) { description += "range: -"     + upgradeData.rangeModifier.ToString()                + '\n'; }
+                if (upgradeData.rechargeModifier   < 0) { description += "recharge: -"  + upgradeData.rechargeModifier.ToString() + 's'       + '\n'; }
+
                 //cut off excess \n
                 description = description.TrimEnd('\n');
                 break;
