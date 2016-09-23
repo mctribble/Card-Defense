@@ -3,25 +3,26 @@ using System.Collections;
 using Vexe.Runtime.Types;
 using System;
 
-//all effects in this file trigger when the object they are attached to is updated.  They can be applied to multiple types of entities
+//all effects in this file trigger when the object they are attached to is updated.  They can be applied to multiple types of entities.  This base effect handles behavior common to them all
+public abstract class BaseEffectPeriodic : BaseEffect, IEffectPeriodic
+{
+    [Hide] public override TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
+    [Hide] public override EffectType effectType { get { return EffectType.periodic; } }        //effect type
+
+    public abstract void UpdateEnemy(EnemyScript e, float deltaTime);
+}
 
 //enemy recovers X health per second
-public class EffectRegeneration : IEffectPeriodic
+public class EffectRegeneration : BaseEffectPeriodic
 {
-    [Hide] public string cardName { get; set; } //name of the card containing this effect
-    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
-    [Hide] public EffectType effectType { get { return EffectType.periodic; } }        //effect type
-    [Show, Display(2)] public float strength { get; set; }                             //how much health is healed per second
-    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
-
-    [Hide] public string Name { get { return "Regeneration: " + strength + "/s"; } } //returns name and strength
-    [Show, Display(1)] public string XMLName { get { return "regeneration"; } } //name used to refer to this effect in XML
+    [Hide] public override string Name { get { return "Regeneration: " + strength + "/s"; } } //returns name and strength
+    [Show] public override string XMLName { get { return "regeneration"; } } //name used to refer to this effect in XML
 
     [Hide] private float carryOver; //enemy health is an int, and rounding every frame will cause issues, so fractions are carried to the next frame
 
     public EffectRegeneration () { carryOver = 0; }  //default constructor inits carryover to 0
 
-    public void UpdateEnemy(EnemyScript e, float deltaTime)
+    public override void UpdateEnemy(EnemyScript e, float deltaTime)
     {
         //skip if the enemy already expects to die, so we dont screw with targeting in all manner of broken ways
         if (e.expectedHealth <= 0)
@@ -47,15 +48,10 @@ public class EffectRegeneration : IEffectPeriodic
 }
 
 //enemy loses X health per second for Y seconds 
-public class EffectPoison : IEffectPeriodic
+public class EffectPoison : BaseEffectPeriodic
 {
-    [Hide] public string cardName { get; set; } //name of the card containing this effect
-    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
-    [Hide] public EffectType effectType { get { return EffectType.periodic; } }        //effect type
-    [Show, Display(2)] public float strength { get; set; }                             //how much health is healed per second
-
     //effect lifespan (this is a string to match the interface, but actually updates the float maxPoisonTime)
-    [Hide] public string argument
+    [Hide] public override string argument
     {
         get
         {
@@ -78,15 +74,15 @@ public class EffectPoison : IEffectPeriodic
         }
     }              
 
-    [Hide] public string Name { get { return "Poison: " + strength + "/s for " + maxPoisonTime + " seconds"; } } //returns name and strength
-    [Show, Display(1)] public string XMLName { get { return "poison"; } } //name used to refer to this effect in XML
+    [Hide] public override string Name { get { return "Poison: " + strength + "/s for " + maxPoisonTime + " seconds"; } } //returns name and strength
+    [Show] public override string XMLName { get { return "poison"; } } //name used to refer to this effect in XML
 
     [Show, Display(3)] public float curPoisonTime; //how much time has passed
     [Show, Display(4)] public float maxPoisonTime; //stop dealing damage after this window has passed
 
     public EffectPoison() { curPoisonTime = 0; maxPoisonTime = 0; }  //default constructor inits internal variables to 0
 
-    public void UpdateEnemy(EnemyScript e, float deltaTime)
+    public override void UpdateEnemy(EnemyScript e, float deltaTime)
     {
         //do nothing if the effect time is already over
         if (curPoisonTime > maxPoisonTime)
@@ -109,18 +105,12 @@ public class EffectPoison : IEffectPeriodic
 }
 
 //enemy slows down by X/second (min 1)
-public class EffectInvScaleSpeedWithTime : IEffectPeriodic
+public class EffectInvScaleSpeedWithTime : BaseEffectPeriodic
 {
-    [Hide] public string cardName { get; set; } //name of the card containing this effect
-    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
-    [Hide] public EffectType effectType { get { return EffectType.periodic; } }        //effect type
-    [Show, Display(2)] public float strength { get; set; }                             //how much speed is gained per second
-    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
+    [Hide] public override string Name { get { return "Speed decreases by " + strength + "/s"; } } //returns name and strength
+    [Show] public override string XMLName { get { return "invScaleSpeedWithTime"; } } //name used to refer to this effect in XML
 
-    [Hide] public string Name { get { return "Speed decreases by " + strength + "/s"; } } //returns name and strength
-    [Show, Display(1)] public string XMLName { get { return "invScaleSpeedWithTime"; } } //name used to refer to this effect in XML
-
-    public void UpdateEnemy(EnemyScript e, float deltaTime)
+    public override void UpdateEnemy(EnemyScript e, float deltaTime)
     {
         e.unitSpeed -= (strength * deltaTime);
         e.unitSpeed = Mathf.Max(e.unitSpeed, 1.0f);
@@ -128,39 +118,26 @@ public class EffectInvScaleSpeedWithTime : IEffectPeriodic
 }
 
 //enemy speeds up by X/second
-public class EffectScaleSpeedWithTime : IEffectPeriodic
+public class EffectScaleSpeedWithTime : BaseEffectPeriodic
 {
-    [Hide] public string cardName { get; set; } //name of the card containing this effect
-    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
-    [Hide] public EffectType effectType { get { return EffectType.periodic; } }        //effect type
-    [Show, Display(2)] public float strength { get; set; }                             //how much speed is gained per second
-    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
+    [Hide] public override string Name { get { return "Speed increases by " + strength + "/s"; } } //returns name and strength
+    [Show] public override string XMLName { get { return "scaleSpeedWithTime"; } } //name used to refer to this effect in XML
 
-    [Hide] public string Name { get { return "Speed increases by " + strength + "/s"; } } //returns name and strength
-
-    [Show, Display(1)] public string XMLName { get { return "scaleSpeedWithTime"; } } //name used to refer to this effect in XML
-
-    public void UpdateEnemy(EnemyScript e, float deltaTime)
+    public override void UpdateEnemy(EnemyScript e, float deltaTime)
     {
         e.unitSpeed += (strength * deltaTime);
     }
 }
 
 //enemy effect Y gets stronger by X/second
-public class EffectScaleEffectWithTime : IEffectPeriodic
+public class EffectScaleEffectWithTime : BaseEffectPeriodic
 {
-    [Hide] public string cardName { get; set; } //name of the card containing this effect
-    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
-    [Hide] public EffectType effectType { get { return EffectType.periodic; } }        //effect type
-    [Show, Display(2)] public float strength { get; set; }                             //how much speed is gained per second
-    [Show, Display(3)] public string argument { get; set; }                            //effect to scale
-    
-    [Hide] public string Name { get { return argument + " increases by " + strength + "/s"; } } //returns name and strength
-    [Show, Display(1)] public string XMLName { get { return "scaleEffectWithTime"; } } //name used to refer to this effect in XML
+    [Hide] public override string Name { get { return argument + " increases by " + strength + "/s"; } } //returns name and strength
+    [Show] public override string XMLName { get { return "scaleEffectWithTime"; } } //name used to refer to this effect in XML
 
     private IEffect effectToScale; //cached effect to avoid searching the list every frame
 
-    public void UpdateEnemy(EnemyScript e, float deltaTime)
+    public override void UpdateEnemy(EnemyScript e, float deltaTime)
     {
         if (effectToScale == null)
         {
@@ -184,20 +161,14 @@ public class EffectScaleEffectWithTime : IEffectPeriodic
 }
 
 //enemy effect Y gets weaker by X/second (min 0)
-public class EffectInvScaleEffectWithTime : IEffectPeriodic
+public class EffectInvScaleEffectWithTime : BaseEffectPeriodic
 {
-    [Hide] public string cardName { get; set; } //name of the card containing this effect
-    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
-    [Hide] public EffectType effectType { get { return EffectType.periodic; } }        //effect type
-    [Show, Display(2)] public float strength { get; set; }                             //how much speed is gained per second
-    [Show, Display(3)] public string argument { get; set; }                            //effect to scale
-    
-    [Hide] public string Name { get { return argument + " decreases by " + strength + "/s"; } } //returns name and strength
-    [Show, Display(1)] public string XMLName { get { return "InvScaleEffectWithTime"; } } //name used to refer to this effect in XML
+    [Hide] public override string Name { get { return argument + " decreases by " + strength + "/s"; } } //returns name and strength
+    [Show] public override string XMLName { get { return "InvScaleEffectWithTime"; } } //name used to refer to this effect in XML
 
     private IEffect effectToScale; //cached effect to avoid searching the list every frame
 
-    public void UpdateEnemy(EnemyScript e, float deltaTime)
+    public override void UpdateEnemy(EnemyScript e, float deltaTime)
     {
         if (effectToScale == null)
         {

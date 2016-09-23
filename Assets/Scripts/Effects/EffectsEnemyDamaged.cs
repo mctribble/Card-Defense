@@ -3,22 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using Vexe.Runtime.Types;
 
-//all effects in this file trigger when an enemy is damaged.  The effect itself could be attached either to the attacking tower or the defending enemy
+//all effects in this file trigger when an enemy is damaged.  The effect itself could be attached either to the attacking tower or the defending enemy.  This base effect handles behavior common to them all
+public abstract class BaseEffectEnemyDamaged : BaseEffect, IEffectEnemyDamaged
+{
+    [Hide] public override TargetingType targetingType { get { return TargetingType.noCast; } }    //this effect should never be on a card, and thus should never be cast
+    [Hide] public override EffectType    effectType    { get { return EffectType.enemyDamaged; } } //effect type
+
+    public abstract void expectedDamage(ref DamageEventData d);
+    public abstract void actualDamage(ref DamageEventData d);
+}
 
 //reduces incoming damage by a fixed amount (but attacks always do at least 1 damage)
-public class EffectArmor : IEffectEnemyDamaged
+public class EffectArmor : BaseEffectEnemyDamaged
 {
-    [Hide] public string cardName { get; set; } //name of the card containing this effect
-    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
-    [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
-    [Show, Display(2)] public float strength { get; set; }                             //how much armor the enemy has
-    [Hide] public string argument { get; set; }                                        //effect argument (unused in this effect)
-
-    [Hide] public string Name { get { return "Armor: " + strength; } } //returns name and strength
-    [Show, Display(1)] public string XMLName { get { return "armor"; } } //name used to refer to this effect in XML
+    [Hide] public override string Name { get { return "Armor: " + strength; } } //returns name and strength
+    [Show] public override string XMLName { get { return "armor"; } } //name used to refer to this effect in XML
 
     //alter damage calculations when we expect to deal damage, not when it actually happens, so that targeting etc. have an accurate number to work with
-    public void expectedDamage(ref DamageEventData d)
+    public override void expectedDamage(ref DamageEventData d)
     {
         //skip if the attack ignores armor
         if (d.effects != null)
@@ -31,26 +33,20 @@ public class EffectArmor : IEffectEnemyDamaged
     }
 
     //since damage is already recalculated, we dont need to do anything here
-    public void actualDamage(ref DamageEventData d) { } 
+    public override void actualDamage(ref DamageEventData d) { } 
 }
 
 //reduces target effect by a fixed amount (but stops at 0)
-public class EffectReduceEnemyEffectOnDamage : IEffectEnemyDamaged
+public class EffectReduceEnemyEffectOnDamage : BaseEffectEnemyDamaged
 {
-    [Hide] public string cardName { get; set; } //name of the card containing this effect
-    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
-    [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
-    [Show, Display(3)] public float strength { get; set; }                             //how much to reduce the target effect strength (but stops at 0)
-    [Show, Display(2)] public string argument { get; set; }                            //effect to reduce
-
-    [Hide] public string Name { get { return "Enemy " + argument + " strength: -" + strength; } } //returns name and strength
-    [Show, Display(1)] public string XMLName { get { return "reduceEnemyEffectOnDamage"; } } //name used to refer to this effect in XML
+    [Hide] public override string Name { get { return "Enemy " + argument + " strength: -" + strength; } } //returns name and strength
+    [Show] public override string XMLName { get { return "reduceEnemyEffectOnDamage"; } } //name used to refer to this effect in XML
 
     //we dont need to do anything on expected damage
-    public void expectedDamage(ref DamageEventData d) { } 
+    public override void expectedDamage(ref DamageEventData d) { } 
 
     //reduce the effect
-    public void actualDamage(ref DamageEventData d)
+    public override void actualDamage(ref DamageEventData d)
     {
         EnemyScript enemy = d.dest.GetComponent<EnemyScript>();
 
@@ -62,22 +58,16 @@ public class EffectReduceEnemyEffectOnDamage : IEffectEnemyDamaged
 }
 
 //enemy slows down as it takes damage (range: base -> 1)
-public class EffectInvScaleSpeedWithDamage : IEffectEnemyDamaged
+public class EffectInvScaleSpeedWithDamage : BaseEffectEnemyDamaged
 {
-    [Hide] public string cardName { get; set; } //name of the card containing this effect
-    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
-    [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
-    [Show, Display(2)] public float strength { get; set; }                             //max speed multiplier 
-    [Hide] public string argument { get; set; }                                        //effect to reduce
-
-    [Hide] public string Name { get { return "Enemy slows down as it takes damage"; } } //returns name and strength
-    [Show, Display(1)] public string XMLName { get { return "invScaleSpeedWithDamage"; } } //name used to refer to this effect in XML
+    [Hide] public override string Name { get { return "Enemy slows down as it takes damage"; } } //returns name and strength
+    [Show] public override string XMLName { get { return "invScaleSpeedWithDamage"; } } //name used to refer to this effect in XML
 
     //we dont need to do anything on expected damage
-    public void expectedDamage(ref DamageEventData d) { } 
+    public override void expectedDamage(ref DamageEventData d) { } 
 
     //recalculate speed
-    public void actualDamage(ref DamageEventData d)
+    public override void actualDamage(ref DamageEventData d)
     {
         EnemyScript e = d.dest.GetComponent<EnemyScript>();
         float damageRatio = 1 - (e.curHealth / e.maxHealth);
@@ -86,22 +76,16 @@ public class EffectInvScaleSpeedWithDamage : IEffectEnemyDamaged
 }
 
 //enemy speeds up as it takes damage (range: base -> base*strength)
-public class EffectScaleSpeedWithDamage : IEffectEnemyDamaged
+public class EffectScaleSpeedWithDamage : BaseEffectEnemyDamaged
 {
-    [Hide] public string cardName { get; set; } //name of the card containing this effect
-    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
-    [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
-    [Show, Display(2)] public float strength { get; set; }                             //max speed multiplier 
-    [Hide] public string argument { get; set; }                                        //effect to reduce
-
-    [Hide] public string Name { get { return "Enemy gets up to " + argument + " times faster as it takes damage"; } } //returns name and strength
-    [Show, Display(1)] public string XMLName { get { return "scaleSpeedWithDamage"; } } //name used to refer to this effect in XML
+    [Hide] public override string Name { get { return "Enemy gets up to " + argument + " times faster as it takes damage"; } } //returns name and strength
+    [Show] public override string XMLName { get { return "scaleSpeedWithDamage"; } } //name used to refer to this effect in XML
 
     //we dont need to do anything on expected damage
-    public void expectedDamage(ref DamageEventData d) { } 
+    public override void expectedDamage(ref DamageEventData d) { } 
 
     //recalculate speed
-    public void actualDamage(ref DamageEventData d)
+    public override void actualDamage(ref DamageEventData d)
     {
         EnemyScript e = d.dest.GetComponent<EnemyScript>();
         float damageRatio = 1 - (e.curHealth / e.maxHealth);
@@ -110,27 +94,21 @@ public class EffectScaleSpeedWithDamage : IEffectEnemyDamaged
 }
 
 //enemy effect scales up as it takes damage (range: base to base*strength)
-public class EffectScaleEffectWithDamage : IEffectEnemyDamaged
+public class EffectScaleEffectWithDamage : BaseEffectEnemyDamaged
 {
-    [Hide] public string cardName { get; set; } //name of the card containing this effect
-    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
-    [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
-    [Show, Display(2)] public float strength { get; set; }                             //max effect multiplier
-    [Show, Display(3)] public string argument { get; set; }                            //effect to scale
-
-    [Hide] public string Name { get { return "Enemy " + argument + " increases up to " + strength + " times as it takes damage"; } } //returns name and strength
+    [Hide] public override string Name { get { return "Enemy " + argument + " increases up to " + strength + " times as it takes damage"; } } //returns name and strength
 
     //cached values to avoid searching the effect list every time
     [Hide] private IEffect effectToScale;
     [Hide] private float   effectBaseStrength;
 
-    [Show, Display(1)] public string XMLName { get { return "scaleEffectWithDamage"; } } //name used to refer to this effect in XML
+    [Show] public override string XMLName { get { return "scaleEffectWithDamage"; } } //name used to refer to this effect in XML
 
     //we dont need to do anything on expected damage
-    public void expectedDamage(ref DamageEventData d) { } 
+    public override void expectedDamage(ref DamageEventData d) { } 
 
     //recalculate speed
-    public void actualDamage(ref DamageEventData d)
+    public override void actualDamage(ref DamageEventData d)
     {
         EnemyScript e = d.dest.GetComponent<EnemyScript>();
 
@@ -156,27 +134,21 @@ public class EffectScaleEffectWithDamage : IEffectEnemyDamaged
 }
 
 //enemy effect scales down as it takes damage (range: base to 1)
-public class EffectInvScaleEffectWithDamage : IEffectEnemyDamaged
+public class EffectInvScaleEffectWithDamage : BaseEffectEnemyDamaged
 {
-    [Hide] public string cardName { get; set; } //name of the card containing this effect
-    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
-    [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
-    [Hide] public float strength { get; set; }                                         //effect strength (unused)
-    [Show, Display(2)] public string argument { get; set; }                            //effect to scale
-
-    [Hide] public string Name { get { return "Enemy " + argument + " drops to 1 as it takes damage"; } } //returns name and strength
+    [Hide] public override string Name { get { return "Enemy " + argument + " drops to 1 as it takes damage"; } } //returns name and strength
 
     //cached values to avoid searching the effect list every time
     [Hide] private IEffect effectToScale;
     [Hide] private float   effectBaseStrength;
 
-    [Show, Display(1)] public string XMLName { get { return "invScaleEffectWithDamage"; } } //name used to refer to this effect in XML
+    [Show] public override string XMLName { get { return "invScaleEffectWithDamage"; } } //name used to refer to this effect in XML
 
     //we dont need to do anything on expected damage
-    public void expectedDamage(ref DamageEventData d) { } 
+    public override void expectedDamage(ref DamageEventData d) { } 
 
     //recalculate speed
-    public void actualDamage(ref DamageEventData d)
+    public override void actualDamage(ref DamageEventData d)
     {
         EnemyScript e = d.dest.GetComponent<EnemyScript>();
 
@@ -202,16 +174,11 @@ public class EffectInvScaleEffectWithDamage : IEffectEnemyDamaged
 }
 
 //attack causes a secondary explosion, dealing X damage to all enemies within Y of the impact site. 
-public class EffectSplashDamage : IEffectEnemyDamaged
+public class EffectSplashDamage : BaseEffectEnemyDamaged
 {
-    [Hide] public string cardName { get; set; } //name of the card containing this effect
-    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
-    [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
-    [Show, Display(2)] public float strength { get; set; }                             //effect strength (damage dealt)
-
     //explosion radius
     private float explosionRadius;
-    [Show, Display(3)] public string argument
+    [Show] public override string argument
     {
         get { return explosionRadius.ToString(); }
         set
@@ -227,14 +194,14 @@ public class EffectSplashDamage : IEffectEnemyDamaged
         }
     }
 
-    [Hide] public string Name { get { return "secondary explosion deals " + strength + " damage to enemies within " + argument; } } //returns name and strength
-    [Show, Display(1)] public string XMLName { get { return "splashDamage"; } } //name used to refer to this effect in XML
+    [Hide] public override string Name { get { return "secondary explosion deals " + strength + " damage to enemies within " + argument; } } //returns name and strength
+    [Show] public override string XMLName { get { return "splashDamage"; } } //name used to refer to this effect in XML
 
     //we can ignore expected damage
-    public void expectedDamage(ref DamageEventData d) { }
+    public override void expectedDamage(ref DamageEventData d) { }
 
     //but actual damage creates an explosion
-    public void actualDamage(ref DamageEventData originalDamageEvent)
+    public override void actualDamage(ref DamageEventData originalDamageEvent)
     {
         //construct a damage event for the explosion
         DamageEventData explosionDamageEvent = new DamageEventData();
@@ -255,16 +222,10 @@ public class EffectSplashDamage : IEffectEnemyDamaged
 }
 
 //attack damages and spreads effects to all enemies within X of each other through a series of consecutive explosions.  No enemy will be hit twice.  
-public class EffectChainHit : IEffectEnemyDamaged
+public class EffectChainHit : BaseEffectEnemyDamaged
 {
-    [Hide] public string cardName { get; set; } //name of the card containing this effect
-    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
-    [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
-    [Show, Display(2)] public float strength { get; set; }                             //chain range
-    [Hide] public string argument { get; set; }                                        //effect argument(unused)
-
-    [Hide] public string Name { get { return "attack chains to all enemies within " + strength; } } //returns name and strength
-    [Show, Display(1)] public string XMLName { get { return "chainHit"; } } //name used to refer to this effect in XML
+    [Hide] public override string Name { get { return "attack chains to all enemies within " + strength; } } //returns name and strength
+    [Show] public override string XMLName { get { return "chainHit"; } } //name used to refer to this effect in XML
 
     private List<GameObject> enemiesAlreadyHit;
 
@@ -275,10 +236,10 @@ public class EffectChainHit : IEffectEnemyDamaged
     }
 
     //we can ignore expected damage
-    public void expectedDamage(ref DamageEventData d) { }
+    public override void expectedDamage(ref DamageEventData d) { }
 
     //but actual damage creates an explosion
-    public void actualDamage(ref DamageEventData originalDamageEvent)
+    public override void actualDamage(ref DamageEventData originalDamageEvent)
     {
         //if this enemy has already been hit, nullify the attack
         if (enemiesAlreadyHit.Contains(originalDamageEvent.dest))
@@ -310,21 +271,15 @@ public class EffectChainHit : IEffectEnemyDamaged
 }
 
 //damages the enemy by X% of their maximum health
-public class EffectDamagePercent : IEffectEnemyDamaged
+public class EffectDamagePercent : BaseEffectEnemyDamaged
 {
-    [Hide] public string cardName { get; set; }                                        //name of the card containing this effect
-    [Hide] public TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
-    [Hide] public EffectType effectType { get { return EffectType.enemyDamaged; } }    //effect type
-    [Show, Display(2)] public float strength { get; set; }                             //damage as percentage of enemy max health
-    [Hide] public string argument { get; set; }                                        //effect argument(unused)
+    [Hide] public override string Name { get { return "enemy loses " + strength + "% of health" ; } } //returns name and strength
+    [Show] public override string XMLName { get { return "damagePercent"; } } //name used to refer to this effect in XML
 
-    [Hide] public string Name { get { return "enemy loses " + strength + "% of health" ; } } //returns name and strength
-    [Show, Display(1)] public string XMLName { get { return "damagePercent"; } } //name used to refer to this effect in XML
-
-    public void expectedDamage(ref DamageEventData d)
+    public override void expectedDamage(ref DamageEventData d)
     {
         d.rawDamage += d.dest.GetComponent<EnemyScript>().maxHealth * (strength / 100.0f);
     }
 
-    public void actualDamage(ref DamageEventData d) { }
+    public override void actualDamage(ref DamageEventData d) { }
 }

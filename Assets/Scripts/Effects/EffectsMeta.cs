@@ -6,23 +6,16 @@ using System.Collections.Generic;
 //this file contains effects that apply to other effects.
 //they are implemented as wrappers around another effect, so they don't have an interface or type of their own: they use that of whichever the target effect is
 //this means they must implement ALL effect interfaces, since we dont know what type the underlying effect has
+//This base effect handles behavior common to them all
 
 //provides basic handling of the wrapper shenanigans that should work for most effects
-public abstract class BaseMetaEffect : IEffectMeta
+public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
 {
     //effect properties we fetch from the child instead of handling ourselves so we can mimic their usage
-    public EffectType effectType { get { return innerEffect.effectType; } }
-    public TargetingType targetingType { get { return innerEffect.targetingType; } }
+    public override EffectType    effectType    { get { return innerEffect.effectType; } }
+    public override TargetingType targetingType { get { return innerEffect.targetingType; } }
 
-    //properties we can leave as default
-    public string cardName     { get; set; } 
-    public virtual float   strength    { get; set; }
-    public virtual string  argument    { get; set; }
-    public virtual IEffect innerEffect { get; set; } 
-
-    //properties the inherited class has to deal with
-    public abstract string XMLName { get; }
-    public abstract string Name { get; }
+    public virtual IEffect innerEffect { get; set; } //effect targeted by this effect
 
     public abstract bool shouldApplyInnerEffect(); //determines whether the inner effect should be applied
 
@@ -73,7 +66,7 @@ public abstract class BaseMetaEffect : IEffectMeta
 }
 
 //child effect has an X% chance of triggering
-public class EffectPercentageChance : BaseMetaEffect
+public class EffectPercentageChance : BaseEffectMeta
 {
     public override string XMLName { get { return "percentageChance"; } }
     public override string Name
@@ -111,7 +104,7 @@ public class EffectPercentageChance : BaseMetaEffect
 }
 
 //child effect triggers if the die roll is between X and Y (inclusive)
-public class EffectIfRollRange : BaseMetaEffect
+public class EffectIfRollRange : BaseEffectMeta
 {
     private int rangeMin = -1;
     private int rangeMax = -1;
@@ -190,7 +183,7 @@ public class EffectIfRollRange : BaseMetaEffect
 }
 
 //child effect can only occur up to X times
-public class EffectEffectCharges : BaseMetaEffect
+public class EffectEffectCharges : BaseEffectMeta
 {
     public override float strength
     {
@@ -216,7 +209,7 @@ public class EffectEffectCharges : BaseMetaEffect
 }
 
 //child effect triggers under normal conditions, but only if it has been at least X seconds since the last trigger
-public class EffectEffectCooldown : BaseMetaEffect
+public class EffectEffectCooldown : BaseEffectMeta
 {
     public override string Name    { get { return "[" + strength + "s cooldown]" + innerEffect.Name; } }
     public override string XMLName { get { return "effectCooldown"; } }

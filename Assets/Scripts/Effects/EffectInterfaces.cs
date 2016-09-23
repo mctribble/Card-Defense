@@ -322,8 +322,8 @@ public class EffectData : System.Object
         Debug.Assert(result != null);
 
         //special handling of meta effects: clone the inner effect as well
-        if (original.GetType().IsSubclassOf(typeof(BaseMetaEffect)))
-            ((BaseMetaEffect)result).innerEffect = cloneEffect(((BaseMetaEffect)original).innerEffect);
+        if (original.GetType().IsSubclassOf(typeof(BaseEffectMeta)))
+            ((BaseEffectMeta)result).innerEffect = cloneEffect(((BaseEffectMeta)original).innerEffect);
 
         return result;
     }
@@ -333,12 +333,32 @@ public class EffectData : System.Object
 public interface IEffect
 {
     string        cardName      { get; set; } //name of the card containing this effect
+    float         strength      { get; set; } //specifies how strong the effect is.  not used in every effect.
+    string        argument      { get; set; } //specifies any other information the effect requires.  not used in every effect.
+
     string        Name          { get; } 	  //user-friendly name of this effect
     string        XMLName       { get; }      //name used to refer to this effect in XML.  See also: EffectTypeManagerScript.parse()
     TargetingType targetingType { get; }      //specifies what this card must target when casting, if anything
     EffectType    effectType    { get; }      //specifies what kind of effect this is
-    float         strength      { get; set; } //specifies how strong the effect is.  not used in every effect.
-    string        argument      { get; set; } //specifies any other information the effect requires.  not used in every effect.
+
+    bool shouldBeRemoved(); //returns true if this effect is no longer necessary and can be removed
+}
+
+//base effect class
+public abstract class BaseEffect : IEffect
+{
+    [Hide] public string cardName { get; set; } //name of the card containing this effect
+
+    [Show] public virtual float  strength { get; set; } //specifies how strong the effect is.  not used in every effect.
+    [Show] public virtual string argument { get; set; } //specifies any other information the effect requires.  not used in every effect.
+
+    [Hide] public abstract TargetingType targetingType { get; } //specifies what this card must target when casting, if anything
+    [Hide] public abstract EffectType    effectType    { get; } //specifies what kind of effect this is
+
+    [Hide] public abstract string Name    { get; } //user-friendly name of this effect
+    [Show] public abstract string XMLName { get; } //name used to refer to this effect in XML.  See also: EffectTypeManagerScript.parse()
+
+    public virtual bool shouldBeRemoved() { return false; }
 }
 
 //effect triggers instantly without the need for a target
