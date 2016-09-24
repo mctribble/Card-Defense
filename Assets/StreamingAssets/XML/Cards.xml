@@ -61,7 +61,7 @@
       </effectData>
     </Card>
     <Card Name="Nova Tower" Type="tower" Charges="2" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png" Description="The fury of a single sun tends to be sufficient">
-      <towerData Recharge="30" Range="20" Damage="300" Lifespan="1" Sprite="Tower_Fast.png" />
+      <towerData Recharge="30" Range="10" Damage="200" Lifespan="1" Sprite="Tower_Fast.png" />
       <effectData>
         <Effects>
           <Effect name="targetBurst" />
