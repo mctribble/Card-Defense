@@ -14,11 +14,12 @@ decks:   02/10
 ================================================================
 balence:
 institute upgrade cap?
-find a way to record statistics to aid in balancing content?s
+find a way to record statistics to aid in balancing content?
 difficulty settings??
 use scoring to make gemcraft style progression?
 ================================================================
 effects:
+redo effect-targeting effects as meta effects where poss.
 stun
 ================================================================
 engine:
