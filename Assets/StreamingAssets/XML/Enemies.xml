@@ -45,7 +45,11 @@
       <unitColor r="0.2" g="0.2" b="0.2" a="1" />
       <effectData>
         <Effects>
-          <Effect name="spawnEnemyOnDeath" strength="5" argument="Swarm" />
+          <Effect name="fixedSpawnCount" strength="1" />
+          <Effect name="scaleHealthWithBudget" />
+          <Effect name="scaleEffectWithBudget">
+            <Effect name="spawnEnemyOnDeath" strength="5" argument="Swarm" />
+          </Effect>
         </Effects>
       </effectData>
     </Enemy>
