@@ -34,6 +34,9 @@ public class PremadeTower
 [System.Serializable]
 public class LevelData
 {
+    //where this level was loaded from
+    [XmlIgnore] public string fileName;
+
     //level background
     [XmlAttribute("background")]
     public string background = "Default_bg";
@@ -53,18 +56,22 @@ public class LevelData
 
     [XmlArray("Waves")]
     [XmlArrayItem("Wave")]
+    [Display(Seq.GuiBox | Seq.LineNumbers | Seq.PerItemRemove)]
     public List<WaveData> waves;
 
     [XmlArray("Spawners")]
     [XmlArrayItem("Spawner")]
+    [Display(Seq.GuiBox | Seq.LineNumbers | Seq.PerItemRemove)]
     public List<SpawnerData> spawners;
 
     [XmlArray("PathSegments")]
     [XmlArrayItem("Segment")]
+    [Display(Seq.GuiBox | Seq.LineNumbers | Seq.PerItemRemove)]
     public List<PathSegment> pathSegments;
 
     [XmlArray("Towers")]
     [XmlArrayItem("Tower")]
+    [Display(Seq.GuiBox | Seq.LineNumbers | Seq.PerItemRemove)]
     public List<PremadeTower> towers;
 
     public bool shuffleDeck;
@@ -74,6 +81,8 @@ public class LevelData
     public XMLDeck levelDeck;
     public string premadeDeckName;
 
+    [Show] public void SaveChanges() { Save(fileName); } //DEV: provides a button in the editor to save the level data
+    //saves the level data to a file of the given name
     public void Save(string path)
     {
         XmlSerializer serializer = new XmlSerializer(typeof(LevelData));
@@ -98,34 +107,37 @@ public class LevelManagerScript : BaseBehaviour
 {
     //other objects can refer to these to be informed when a level is loaded (https://unity3d.com/learn/tutorials/topics/scripting/events)
     public delegate void LevelLoadedHandler();
-
-    public RawImage background; //reference to the background texture
-
     public event LevelLoadedHandler LevelLoadedEvent;
 
-    public bool levelLoaded;                    //indicates whether a level has been loaded or not
+    [Hide] public static LevelManagerScript instance;  //singleton pattern
+    
+    //object references (not visible during play, since there is no reason to modify them in-game)
+    private bool shouldShowRef() { return !Application.isPlaying; }   //function used to hide these when in game
+    [VisibleWhen("shouldShowRef")] public GameObject spawnerPrefab;   //prefab used to create spawners
+    [VisibleWhen("shouldShowRef")] public GameObject towerPrefab;     //prefab used to create towers
+    [VisibleWhen("shouldShowRef")] public GameObject explosionPrefab; //prefab used to create explosions
+    [VisibleWhen("shouldShowRef")] public RawImage   background;      //reference to the background texture
 
-    public GameObject spawnerPrefab;            //prefab used to create spawners
-    public GameObject towerPrefab;              //prefab used to create towers
-    public GameObject explosionPrefab;          //prefab used to create explosions
+    //data for the level itself
+    [Hide] public bool levelLoaded;                     //indicates whether a level has been loaded or not
+    [VisibleWhen("levelLoaded")] public LevelData data; //the actual level data (only visible if there is a loaded level to show)
+    [Hide] public List<GameObject> spawnerObjects;      //list of the enemy spawner objects
 
-    public static LevelManagerScript instance;  //singleton pattern
-    public LevelData data;                      //data for the level itself
-    public int wavesInDeck;                     //number of enemy groups remaining in the deck
-    public int wavesSpawning;                    //number of waves currently attacking
-    public int deadThisWave { get; set; }		//number of monsters dead this wave
-    public int totalSpawnedThisWave;           //how many enemies have already spawned this wave
+    //current status (only visible if there is a loaded level, since the values are only meaningful in that context)
+    [VisibleWhen("levelLoaded")] public int   wavesInDeck;               //number of enemy groups remaining in the deck
+    [VisibleWhen("levelLoaded")] public int   wavesSpawning;             //number of waves currently attacking
+    [VisibleWhen("levelLoaded")] public int   deadThisWave { get; set; } //number of monsters dead this wave
+    [VisibleWhen("levelLoaded")] public int   totalSpawnedThisWave;      //how many enemies have already spawned this wave
+    [VisibleWhen("levelLoaded")] public float desiredTimeScale;          //the game speed the player wants to play at
 
-    private int totalSpawnCount;                //how many enemies still need spawning this wave
-    private int waveTotalRemainingHealth;       //health remaining across all enemies in this wave
+    //private vars
+    private int totalSpawnCount;          //how many enemies still need spawning this wave
+    private int waveTotalRemainingHealth; //health remaining across all enemies in this wave
 
+    //properties
     public LevelData Data { get { return data; } set { data = value; } }
     public int SpawnCount { get { return totalSpawnCount; } }
     public int totalRemainingHealth { get { return waveTotalRemainingHealth; } set { waveTotalRemainingHealth = value; } }
-
-    public List<GameObject> spawnerObjects;
-
-    public float desiredTimeScale;
 
     // Use this for initialization
     private void Awake()
@@ -143,6 +155,8 @@ public class LevelManagerScript : BaseBehaviour
     private IEnumerator loadLevel(string level)
     {
         data = LevelData.Load(Path.Combine(Application.dataPath, level)); //load the level
+
+        data.fileName = level; //save the file name in case we need to save changes later
 
         //set background
         string filename = Application.dataPath + "/StreamingAssets/Art/Backgrounds/" + data.background;
@@ -495,5 +509,34 @@ public class LevelManagerScript : BaseBehaviour
         }
         else
             return null;
+    }
+
+    //DEV: creates a button in the unity debugger to reload the level from scratch
+    [Show][VisibleWhen("levelLoaded")] public void reloadLevel() { StopAllCoroutines(); StartCoroutine(reloadLevelCoroutine()); }
+    public IEnumerator reloadLevelCoroutine()
+    {
+        yield return null;
+
+        //clean up the level we already have open
+        levelLoaded = false;
+        foreach (GameObject e in GameObject.FindGameObjectsWithTag("Enemy")) Destroy(e);
+        foreach (GameObject e in GameObject.FindGameObjectsWithTag("EnemySpawner")) Destroy(e);
+        foreach (GameObject e in GameObject.FindGameObjectsWithTag("Tower")) Destroy(e);
+        foreach (GameObject e in GameObject.FindGameObjectsWithTag("Path")) Destroy(e);
+        HandScript.playerHand.SendMessage("Show");
+        yield return StartCoroutine(HandScript.playerHand.discardRandomCards(null, 999));
+        yield return StartCoroutine(HandScript.enemyHand.discardRandomCards(null, 999));
+
+        //re-init game objects
+        EnemyManagerScript.instance.SendMessage("Awake");
+        DeckManagerScript.instance.SendMessage("Awake");
+        ScoreManagerScript.instance.SendMessage("Awake");
+        PathManagerScript.instance.SendMessage("Start");
+        HandScript.playerHand.SendMessage("Start");
+        HandScript.enemyHand.SendMessage("Start");
+
+        //reload the level
+        Awake();
+        yield return StartCoroutine(loadLevel(data.fileName));
     }
 }

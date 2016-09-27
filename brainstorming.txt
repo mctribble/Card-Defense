@@ -19,12 +19,10 @@ difficulty settings??
 use scoring to make gemcraft style progression?
 ================================================================
 effects:
-redo effect-targeting effects as meta effects??
 stun
 ================================================================
 engine:
 mod file dependencies
-Level editor?
 Card editor?
 Enemy editor?
 ================================================================
