@@ -262,7 +262,7 @@ public class TowerScript : BaseBehaviour
 
                 //apply effects
                 foreach (IEffect effect in effects.effects)
-                    if (effect.effectType == EffectType.overcharge)
+                    if (effect.triggersAs(EffectType.overcharge))
                         ((IEffectOvercharge)effect).trigger(ref ded, usedOvercharge);
             }
 
@@ -420,7 +420,7 @@ public class TowerScript : BaseBehaviour
         //if the tower has any everyRound effects, trigger them now
         if (effects != null)
             foreach (IEffect ie in effects.effects)
-                if (ie.effectType == EffectType.everyRound)
+                if (ie.triggersAs(EffectType.everyRound))
                     ((IEffectInstant)ie).trigger();
     }
 
@@ -506,7 +506,7 @@ public class TowerScript : BaseBehaviour
 
         if (effects != null)
             foreach (IEffect e in effects.effects)
-                tooltipText.text += "\n<Color=#" + e.effectType.ToString("X") + ">" + e.Name + "</Color>";
+                tooltipText.text += "\n<Color=#" + e.effectColorHex + ">" + e.Name + "</Color>";
 
         //show any stats that indicate when the tower will die
         if ((effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false))
@@ -607,7 +607,7 @@ public class TowerScript : BaseBehaviour
     private void NewEffectTooltip (EffectData newEffectData)
     {
         foreach (IEffect e in newEffectData.effects)
-            tooltipText.text += "\n<Color=#" + e.effectType.ToString("X") + ">+" + e.Name + "</Color>";
+            tooltipText.text += "\n<Color=#" + e.effectColorHex + ">+" + e.Name + "</Color>";
     }
 
     //called whenever a wave ends.  Updates the lifespan and destroys the tower if it hits zero.
@@ -620,7 +620,7 @@ public class TowerScript : BaseBehaviour
         if (wavesRemaining > 0)
             if (effects != null)
                 foreach (IEffect ie in effects.effects)
-                    if (ie.effectType == EffectType.everyRound)
+                    if (ie.triggersAs(EffectType.everyRound))
                         ((IEffectInstant)ie).trigger();
 
         UpdateTooltipText();
@@ -635,7 +635,7 @@ public class TowerScript : BaseBehaviour
         //trigger effects
         if (effects != null)
             foreach (IEffect ie in effects.effects)
-                if (ie.effectType == EffectType.death)
+                if (ie.triggersAs(EffectType.death))
                     ((IEffectDeath)ie).onTowerDeath(this);
 
         //destroy self

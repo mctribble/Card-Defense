@@ -57,7 +57,7 @@ public class EnemyData
 
         if ((effectData != null) && (effectData.effects.Count > 0))
             foreach (IEffect e in effectData.effects)
-                description += "\n" + "<Color=#" + e.effectType.ToString("X") + ">" + e.Name + "</Color>";
+                description += "\n" + "<Color=#" + e.effectColorHex + ">" + e.Name + "</Color>";
 
         return description;
     }
@@ -199,7 +199,7 @@ public class EnemyScript : BaseBehaviour
         //trigger effects...
         if (effectData != null)
             foreach (IEffect e in effectData.effects)
-                if (e.effectType == EffectType.enemyReachedGoal)
+                if (e.triggersAs(EffectType.enemyReachedGoal))
                     ((IEffectEnemyReachedGoal)e).trigger(this);
 
         //damage player...
@@ -228,7 +228,7 @@ public class EnemyScript : BaseBehaviour
         //deal with effects that need to happen when we expect damage
         if (effectData != null)
             foreach (IEffect i in effectData.effects)
-                if (i.effectType == EffectType.enemyDamaged)
+                if (i.triggersAs(EffectType.enemyDamaged))
                     ((IEffectEnemyDamaged)i).expectedDamage(ref e);
 
         //expect to take damage
@@ -249,7 +249,7 @@ public class EnemyScript : BaseBehaviour
         //enemyDamaged effects get triggered, others are copied to the enemy
         if (effectData != null)
             foreach (IEffect i in effectData.effects)
-                if (i.effectType == EffectType.enemyDamaged)
+                if (i.triggersAs(EffectType.enemyDamaged))
                     ((IEffectEnemyDamaged)i).actualDamage(ref e);
 
         //copy periodic effects from the attack onto this unit so they can take effect
@@ -257,7 +257,7 @@ public class EnemyScript : BaseBehaviour
         {
             foreach (IEffect toCopy in e.effects.effects)
             {
-                if (toCopy.effectType == EffectType.periodic)
+                if (toCopy.triggersAs(EffectType.periodic))
                 {
                     //found an effect we need to copy.  first make sure we have an object to copy it to.
                     if (effectData == null)
@@ -363,7 +363,7 @@ public class EnemyScript : BaseBehaviour
         //trigger effects
         if (effectData != null)
             foreach (IEffect ie in effectData.effects)
-                if (ie.effectType == EffectType.death)
+                if (ie.triggersAs(EffectType.death))
                     ((IEffectDeath)ie).onEnemyDeath(this);
 
         Destroy(gameObject);

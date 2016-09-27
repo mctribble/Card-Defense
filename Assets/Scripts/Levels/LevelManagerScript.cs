@@ -187,7 +187,7 @@ public class LevelManagerScript : BaseBehaviour
         for( int i = 0; i < data.waves.Count; i++)
             if (data.waves[i].enemyData.effectData != null)
                 foreach (IEffect e in data.waves[i].enemyData.effectData.effects)
-                    if (e.effectType == EffectType.wave)
+                    if (e.triggersAs(EffectType.wave))
                         data.waves[i] = ((IEffectWave)e).alteredWaveData(data.waves[i]);
 
         //generate the random waves
@@ -219,7 +219,7 @@ public class LevelManagerScript : BaseBehaviour
             //if there are wave effects on the enemy type, apply them now
             if (waveEnemy.effectData != null)
                 foreach(IEffect e in waveEnemy.effectData.effects)
-                    if (e.effectType == EffectType.wave)
+                    if (e.triggersAs(EffectType.wave))
                         waveData = ((IEffectWave)e).alteredWaveData(waveData);
 
             data.waves.Add(waveData);

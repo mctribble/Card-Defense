@@ -161,7 +161,7 @@ public class CardData : System.Object
             //add a line of text to the description for each
             foreach (IEffect e in effectData.effects)
             {
-                description += "\n<Color=#" + e.effectType.ToString("X") + ">" + e.Name + "</Color>";
+                description += "\n<Color=#" + e.effectColorHex + ">" + e.Name + "</Color>";
             }
         }
 
@@ -367,32 +367,36 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
             //apply effects
             foreach (IEffect e in card.data.effectData.effects)
             {
-                //effect must be handled differently based on effect type
-                switch (e.effectType)
+                //effect must be handled differently based on how they trigger
+                bool effectApplied = false;
+
+                if (e.triggersAs(EffectType.wave))
                 {
-                    case EffectType.wave:
-                        HandScript.enemyHand.applyWaveEffect((IEffectWave)e);
-
-                        LevelManagerScript.instance.UpdateWaveStats();
-                        HandScript.enemyHand.updateEnemyCards();
-                        break;
-
-                    case EffectType.instant:
-                        ((IEffectInstant)e).trigger();
-                        break;
-
-                    case EffectType.self:
-                        ((IEffectSelf)e).trigger(ref card, gameObject);
-                        break;
-
-                    case EffectType.property:
-                        break; //ignore property effects here
-
-                    default:
-                        Debug.LogWarning("I dont know how to apply an effect of type " + e.effectType);
-                        break;
+                    HandScript.enemyHand.applyWaveEffect((IEffectWave)e);
+                    LevelManagerScript.instance.UpdateWaveStats();
+                    HandScript.enemyHand.updateEnemyCards();
                 }
+
+                if (e.triggersAs(EffectType.instant))
+                {
+                    ((IEffectInstant)e).trigger();
+                    effectApplied = true;
+                }
+
+                if (e.triggersAs(EffectType.self))
+                {
+                    ((IEffectSelf)e).trigger(ref card, gameObject);
+                    effectApplied = true;
+                }
+
+                //property effects are never applied, so we'll just treat it as if we have to suppress the warning
+                if (e.triggersAs(EffectType.property))
+                    effectApplied = true; 
+
+                if (effectApplied == false)
+                    MessageHandlerScript.Warning("I dont know how to apply " + e.XMLName + " on a card.");
             }
+
             //perform steps that must be done on every cast
             Cast();
 

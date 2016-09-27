@@ -35,7 +35,8 @@ public enum EffectType
     towerTargeting   = unchecked((int)0xADD8E6FF), //effect alters the way a tower taragets enemies.  if multiple are present, only the last is actually used
     wave             = unchecked((int)0x0000FFFF), //effect alters the current wave
     death            = unchecked((int)0xFF0000FF), //effect triggers when the tower/enemy is destroyed
-    everyRound       = unchecked((int)0x00FF00FF)  //effect triggers once every round (uses IEffectInstant)
+    everyRound       = unchecked((int)0x00FF00FF), //effect triggers once every round (uses IEffectInstant)
+    meta             = unchecked((int)0x000000FF)  //effect targets another effect.  These usually trigger in the same manner as their target
 };
 
 //represents an effect in XML
@@ -188,7 +189,7 @@ public class EffectData : System.Object
             IEffectTowerTargeting res = null;
 
             foreach (IEffect e in Effects)
-                if (e.effectType == EffectType.towerTargeting)
+                if (e.triggersAs(EffectType.towerTargeting))
                     res = (IEffectTowerTargeting)e;
 
             if (res == null)
@@ -208,7 +209,7 @@ public class EffectData : System.Object
             //change effect list to account for any properties that have been altered.  Most properties have no reason to actually change, so changing them is not currently supported
             foreach (IEffect e in Effects)
             {
-                if (e.effectType == EffectType.property)
+                if (e.triggersAs(EffectType.property))
                 {
                     switch (e.XMLName)
                     {
@@ -241,7 +242,7 @@ public class EffectData : System.Object
                 PropertyEffects newPropertyEffects = new PropertyEffects();
                 foreach (IEffect e in Effects)
                 {
-                    if (e.effectType == EffectType.property)
+                    if (e.triggersAs(EffectType.property))
                     {
                         switch (e.XMLName)
                         {
@@ -280,7 +281,7 @@ public class EffectData : System.Object
         {
             cachedPeriodicEffectList = new List<IEffectPeriodic>();
             foreach (IEffect e in Effects)
-                if (e.effectType == EffectType.periodic)
+                if (e.triggersAs(EffectType.periodic))
                     cachedPeriodicEffectList.Add((IEffectPeriodic)e);
         }
 
@@ -323,7 +324,7 @@ public class EffectData : System.Object
         Debug.Assert(result != null);
 
         //special handling of meta effects: clone the inner effect as well
-        if (original.GetType().IsSubclassOf(typeof(BaseEffectMeta)))
+        if (original.triggersAs(EffectType.meta))
             ((BaseEffectMeta)result).innerEffect = cloneEffect(((BaseEffectMeta)original).innerEffect);
 
         return result;
@@ -343,12 +344,14 @@ public interface IEffect
     float         strength      { get; set; } //specifies how strong the effect is.  not used in every effect.
     string        argument      { get; set; } //specifies any other information the effect requires.  not used in every effect.
 
-    string        Name          { get; } 	  //user-friendly name of this effect
-    string        XMLName       { get; }      //name used to refer to this effect in XML.  See also: EffectTypeManagerScript.parse()
-    TargetingType targetingType { get; }      //specifies what this card must target when casting, if anything
-    EffectType    effectType    { get; }      //specifies what kind of effect this is
+    string        Name            { get; } //user-friendly name of this effect
+    string        XMLName         { get; } //name used to refer to this effect in XML.  See also: EffectTypeManagerScript.parse()
+    TargetingType targetingType   { get; } //specifies what this card must target when casting, if anything
+    string        effectColorHex  { get; } //hex string that gives the color that should be used for this effect
+    //EffectType    effectType    { get; }   //specifies what kind of effect this is
 
     bool shouldBeRemoved(); //returns true if this effect is no longer necessary and can be removed
+    bool triggersAs(EffectType triggerType); //returns true if this effect triggers as an effect of this type (usually only true if it IS an effect of that type, but there are exceptions)
 }
 
 //base effect class
@@ -358,6 +361,7 @@ public abstract class BaseEffect : IEffect
 
     [Show] public virtual float  strength { get; set; } //specifies how strong the effect is.  not used in every effect.
     [Show] public virtual string argument { get; set; } //specifies any other information the effect requires.  not used in every effect.
+    [Hide] public virtual string effectColorHex { get { return effectType.ToString("X"); } } //returns the hex color of this effect by extracting it from the enum value
 
     [Hide] public abstract TargetingType targetingType { get; } //specifies what this card must target when casting, if anything
     [Hide] public abstract EffectType    effectType    { get; } //specifies what kind of effect this is
@@ -365,7 +369,11 @@ public abstract class BaseEffect : IEffect
     [Hide] public abstract string Name    { get; } //user-friendly name of this effect
     [Show] public abstract string XMLName { get; } //name used to refer to this effect in XML.  See also: EffectTypeManagerScript.parse()
 
-    public virtual bool shouldBeRemoved() { return false; }
+    //returns true if this effect is no longer necessary and can be removed
+    public virtual bool shouldBeRemoved() { return false; } 
+
+    //returns true if this effect triggers as an effect of this type (usually only true if it IS an effect of that type, but there are exceptions)
+    public virtual bool triggersAs(EffectType triggerType) { return triggerType == effectType; } 
 }
 
 //effect triggers instantly without the need for a target

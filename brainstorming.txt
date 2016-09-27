@@ -19,7 +19,7 @@ difficulty settings??
 use scoring to make gemcraft style progression?
 ================================================================
 effects:
-redo effect-targeting effects as meta effects where poss.
+redo effect-targeting effects as meta effects??
 stun
 ================================================================
 engine:

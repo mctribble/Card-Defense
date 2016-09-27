@@ -63,7 +63,7 @@ public class BulletScript : BaseBehaviour
             //trigger enemyDamaged effects
             if (data.effects != null)
                 foreach (IEffect i in data.effects.effects)
-                    if (i.effectType == EffectType.enemyDamaged)
+                    if (i.triggersAs(EffectType.enemyDamaged))
                         ((IEffectEnemyDamaged)i).actualDamage(ref data);
 
             enemyRef.onDamage(data);
@@ -88,7 +88,7 @@ public class BulletScript : BaseBehaviour
         //trigger effects
         if (data.effects != null)
             foreach (IEffect i in data.effects.effects)
-                if (i.effectType == EffectType.enemyDamaged)
+                if (i.triggersAs(EffectType.enemyDamaged))
                     ((IEffectEnemyDamaged)i).expectedDamage(ref data);
 
         //tell enemy to expect the damage

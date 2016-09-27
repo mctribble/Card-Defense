@@ -11,9 +11,11 @@ using System.Collections.Generic;
 //provides basic handling of the wrapper shenanigans that should work for most effects
 public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
 {
-    //effect properties we fetch from the child instead of handling ourselves so we can mimic their usage
-    public override EffectType    effectType    { get { return innerEffect.effectType; } }
+    //this is a meta effect, but we mimic our target so that we can trigger and display in the same way they do
+    public override EffectType    effectType    { get { return EffectType.meta; } }
     public override TargetingType targetingType { get { return innerEffect.targetingType; } }
+    public override bool triggersAs(EffectType triggerType) { return (base.triggersAs(triggerType) || innerEffect.triggersAs(triggerType)); } //trigger as a meta effect, but also as whatever the target effect is
+    public override string effectColorHex { get { if (innerEffect == null) return "000000FF"; else return innerEffect.effectColorHex; } } //if no target, color black.  otherwise, use same color as the target
 
     public virtual IEffect innerEffect { get; set; } //effect targeted by this effect
 
@@ -52,10 +54,10 @@ public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
     //returns whether or not the inner effect requires us to cache values
     protected bool shouldCacheValue()
     {
-        if (innerEffect.effectType == EffectType.enemyDamaged) return true; 
+        if (innerEffect.triggersAs(EffectType.enemyDamaged)) return true; 
 
         //it doesnt make sense for a property to be targeted by another effect, since it doesnt actually do anything on its own
-        if (innerEffect.effectType == EffectType.property)
+        if (innerEffect.triggersAs(EffectType.property))
         {
             MessageHandlerScript.Warning("<" + cardName + ">meta effects should not target property effects!");
             return true;
@@ -65,16 +67,7 @@ public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
     }
 
     //if the inner effect can be cleaned out, or there is no inner effect, then this can be removed
-    public override bool shouldBeRemoved()
-    {
-        if (innerEffect == null)
-            return true;
-
-        if (innerEffect.shouldBeRemoved())
-            return true;
-
-        return false;
-    }
+    public override bool shouldBeRemoved() { return ( (innerEffect == null) || (innerEffect.shouldBeRemoved()) ); }
 }
 
 //child effect has an X% chance of triggering
@@ -259,7 +252,11 @@ public class EffectEveryRound : BaseEffectMeta
     public override string XMLName { get { return "everyRound"; } }
     public override bool   shouldApplyInnerEffect() { return true; }
 
-    public override EffectType effectType { get { return EffectType.everyRound; } } //override the target effect type since we are changing how it triggers
+    //regardless of how the inner effect normally triggers, we want it to fire once every round.  We need to keep the triggertype == EffectType.meta so we dont break EffectData.cloneEffect()
+    public override bool triggersAs(EffectType triggerType)
+    {
+        return (triggerType == EffectType.everyRound) || (triggerType == EffectType.meta);
+    }
 
     //because we use IEffectInstant, we can only target instant or everyRound effects
     public override IEffect innerEffect
@@ -267,7 +264,7 @@ public class EffectEveryRound : BaseEffectMeta
         get { return base.innerEffect; }
         set
         {
-            if (value.effectType == EffectType.instant || value.effectType == EffectType.everyRound)
+            if (value.triggersAs(EffectType.instant) || value.triggersAs(EffectType.everyRound))
                 base.innerEffect = value;
             else
                 MessageHandlerScript.Error(cardName + ": EffectEveryRound can only target instant or everyRound effects");
