@@ -14,6 +14,8 @@ public class PremadeTowerUpgrade
 {
     [XmlAttribute] public string Name;  //upgrade to apply
     [XmlAttribute] public int    Count;	//number of applications
+
+    public override string ToString() { return Name + "x" + Count; }
 }
 
 //container that holds everything needed to create a tower at level start
@@ -28,6 +30,8 @@ public class PremadeTower
 
     [XmlAttribute] public float x; //x to spawn at
     [XmlAttribute] public float y; //y to spawn at
+
+    public override string ToString() { return name + "(" + upgrades.Count + " upgrades)"; }
 };
 
 [XmlRoot("Level")]
@@ -61,17 +65,17 @@ public class LevelData
 
     [XmlArray("Spawners")]
     [XmlArrayItem("Spawner")]
-    [Display(Seq.GuiBox | Seq.LineNumbers | Seq.PerItemRemove)]
+    [Display(Seq.GuiBox | Seq.PerItemRemove)]
     public List<SpawnerData> spawners;
 
     [XmlArray("PathSegments")]
     [XmlArrayItem("Segment")]
-    [Display(Seq.GuiBox | Seq.LineNumbers | Seq.PerItemRemove)]
+    [Display(Seq.GuiBox | Seq.PerItemRemove)]
     public List<PathSegment> pathSegments;
 
     [XmlArray("Towers")]
     [XmlArrayItem("Tower")]
-    [Display(Seq.GuiBox | Seq.LineNumbers | Seq.PerItemRemove)]
+    [Display(Seq.GuiBox| Seq.PerItemRemove)]
     public List<PremadeTower> towers;
 
     public bool shuffleDeck;

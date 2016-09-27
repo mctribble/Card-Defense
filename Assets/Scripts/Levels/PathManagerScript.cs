@@ -12,6 +12,8 @@ public class PathSegment : System.Object
     [XmlAttribute] public float startY;
     [XmlAttribute] public float endX;
     [XmlAttribute] public float endY;
+
+    public override string ToString() { return "{" + startX.ToString("F1") + ", " + startY.ToString("F1") + "} -> {" + endX.ToString("F1") + ", " + endY.ToString("F1") + "}"; }
 }
 
 public class PathManagerScript : BaseBehaviour

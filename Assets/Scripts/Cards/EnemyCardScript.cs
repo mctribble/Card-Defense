@@ -23,6 +23,9 @@ public class WaveData
     {
         get
         {
+            if (isSurvivorWave)
+                return null;
+
             if ( (data == null) || (data.name != type) )
                 data = EnemyTypeManagerScript.instance.getEnemyTypeByName(type);
 
@@ -80,7 +83,7 @@ public class WaveData
 
                 if (forcedSpawnCount > 0)
                     result = forcedSpawnCount;
-                else if (data == null)
+                else if (enemyData == null)
                     result = enemyList.Count;
                 else
                     result = Mathf.FloorToInt(budget / enemyData.spawnCost);
@@ -127,6 +130,12 @@ public class WaveData
         enemyList.Remove(e);
         e.SetActive(true);
         EnemyManagerScript.instance.EnemySpawned(e);
+    }
+
+    //returns a user-friendly string showing the contents of this wave for the debugger
+    public override string ToString()
+    {
+        return type + "(" + spawnCount + ")" + " {Bu: " + budget + " Ti: " + time.ToString("F1") + "}"; 
     }
 }
 

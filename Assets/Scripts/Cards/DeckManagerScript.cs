@@ -30,6 +30,8 @@ public class XMLDeckEntry
         name = newName;
         count = newCount;
     }
+
+    public override string ToString() { return name + "x" + count; }
 };
 
 //represents a deck of cards in XMLM
@@ -41,6 +43,7 @@ public class XMLDeck
     //list of cards and how many instances of them exist
     [XmlArray("Cards")]
     [XmlArrayItem("Card")]
+    [Display(Seq.GuiBox | Seq.PerItemDuplicate | Seq.PerItemRemove)]
     public List<XMLDeckEntry> contents;
 
     //default constructor
@@ -86,6 +89,8 @@ public class XMLDeck
 
     //returns total card count in this deck
     public int cardCount { get { return contents.Sum(x => x.count); } }
+
+    public override string ToString() { return name + "(" + cardCount + " cards"; }
 };
 
 //maintains the collection of card types, including saving/loading to XML
