@@ -76,7 +76,16 @@ public class EnemyData
         return description;
     }
 
-    public override string ToString() { return name; }
+    //makes a copy of this enemyData
+    public EnemyData clone()
+    {
+        EnemyData clone = (EnemyData)this.MemberwiseClone();
+        if (effectData != null)
+            clone.effectData = this.effectData.clone();
+        return clone;
+    }
+
+    public override string ToString() { return name; } //for friendlier display in debugger
 };
 
 public class EnemyScript : BaseBehaviour

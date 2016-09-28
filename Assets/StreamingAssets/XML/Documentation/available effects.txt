@@ -31,6 +31,7 @@ armor                     | enemy receives X less damage from every hit, with a 
 chainHit				  | attack spreads to all enemies within X of each other through a series of consecutive explosions.  No enemy will be hit twice.  
 damagePercent             | enemy takes damage equal to X% of their max health
 reduceEnemyEffectOnDamage | hit enemies have the strength of effect Y reduced by X
+secondaryBurst            | when a valid attack is made, the tower also creates a burst attack with radius X and strength Y
 splashDamage			  | attack causes a secondary explosion, dealing X damage to all enemies within Y of the impact site.  Effects do not spread to secondary targets
 
 <<Wave effects (On Enemy type: trigger on wave creation.  On card: trigger when played)>>

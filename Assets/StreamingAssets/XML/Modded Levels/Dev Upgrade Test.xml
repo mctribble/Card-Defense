@@ -84,7 +84,7 @@
     <Cards>
       <Card name="Reinforce" count="10" />
       <Card name="Preservation Upgrade" count="10" />
-      <Card name="Test Upgrade" count="10" />
+      <Card name="Pulse Upgrade" count="10" />
       <Card name="Sniper Tower" count="10" />
     </Cards>
   </levelDeck>

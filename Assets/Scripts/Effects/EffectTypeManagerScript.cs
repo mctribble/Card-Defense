@@ -52,6 +52,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "chainHit":                  ie = new EffectChainHit(); break;
             case "damagePercent":             ie = new EffectDamagePercent(); break;
             case "reduceEnemyEffectOnDamage": ie = new EffectReduceEnemyEffectOnDamage(); break;
+            case "secondaryBurst":            ie = new EffectSecondaryBurst(); break;
             case "splashDamage":              ie = new EffectSplashDamage(); break;
 
             //<<Wave effects (On Enemy type: trigger on wave creation.  On card: trigger when played)>>

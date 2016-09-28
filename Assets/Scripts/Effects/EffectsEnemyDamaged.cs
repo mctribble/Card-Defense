@@ -209,3 +209,49 @@ public class EffectDamagePercent : BaseEffectEnemyDamaged
 
     public override void actualDamage(ref DamageEventData d) { }
 }
+
+//when a valid attack is made, the tower also creates a burst attack with strength X and radius Y
+public class EffectSecondaryBurst : BaseEffectEnemyDamaged
+{
+    //explosion radius
+    private float explosionRadius;
+    [Show] public override string argument
+    {
+        get { return explosionRadius.ToString(); }
+        set
+        {
+            try
+            {
+                explosionRadius = Convert.ToSingle(value);
+            }
+            catch (Exception)
+            {
+                MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + " could not convert the argument to a valid number.  Defaulting to 1.0");
+            }
+        }
+    }
+
+    public override string Name { get { return "[secondary attack]" + strength + "damage to enemies within " + explosionRadius; } }
+    public override string XMLName { get { return "secondaryBurst"; } }
+
+    public override void expectedDamage(ref DamageEventData d)
+    {
+        //construct a damage event for the explosion
+        DamageEventData explosionDamageEvent = new DamageEventData();
+        explosionDamageEvent.source = d.source;
+        explosionDamageEvent.rawDamage = strength;
+        explosionDamageEvent.effects = null; //dont copy effects, or we get an endless explosion chain!
+        explosionDamageEvent.dest = null; //burstShot object ignores the destination anyway
+
+        //construct burst shot data
+        BurstShotData explosion = new BurstShotData();
+        explosion.damageEvent = explosionDamageEvent;
+        explosion.burstRange = explosionRadius;
+        explosion.targetList = EnemyManagerScript.instance.enemiesInRange(d.source.transform.position, explosion.burstRange);
+
+        //call on the level manager to create the actual explosion, since this effect doesnt have a prefab reference
+        LevelManagerScript.instance.createExplosion(explosion, d.source.transform.position);
+    }
+
+    public override void actualDamage(ref DamageEventData d) { }
+}

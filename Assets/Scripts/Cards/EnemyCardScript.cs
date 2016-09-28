@@ -27,7 +27,7 @@ public class WaveData
                 return null;
 
             if ( (data == null) || (data.name != type) )
-                data = EnemyTypeManagerScript.instance.getEnemyTypeByName(type);
+                data = EnemyTypeManagerScript.instance.getEnemyTypeByName(type).clone();
 
             return data;
         }

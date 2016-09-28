@@ -134,7 +134,7 @@
       <effectData>
         <Effects>
           <Effect name="effectCooldown" strength="3">
-            <Effect name="secondaryBurst" strength="1.5" argument="10" />
+            <Effect name="secondaryBurst" strength="10" argument="1.5" />
           </Effect>
         </Effects>
       </effectData>
