@@ -47,6 +47,10 @@ public class XMLEffect : System.Object
     [XmlAttribute] public float  strength;
     [XmlAttribute] public string argument;
 
+    //only write strength/argument if they contain an actual value
+    [XmlIgnore] public bool strengthSpecified { get { return strength != 0.0f; } set { } }
+    [XmlIgnore] public bool argumentSpecified { get { return (argument != null) && (argument != ""); } set { } }
+
     [XmlElement("Effect")]
     public XMLEffect innerEffect;
 
@@ -101,6 +105,9 @@ public class EffectData : System.Object
     [Display(Seq.GuiBox | Seq.PerItemRemove)]
     public List<XMLEffect> XMLEffects = new List<XMLEffect>();
 
+    //only write effect data if there is data to write
+    [XmlIgnore] public bool XMLEffectsSpecified { get { return (XMLEffects != null) && (XMLEffects.Count > 0); } set { } }
+
     [XmlIgnore] [Hide]
     public bool effectsSpecified //hide effect list if it is empty
     {
@@ -113,7 +120,7 @@ public class EffectData : System.Object
     [XmlIgnore] private TargetingType?         cachedCardTargetingType; 
     [XmlIgnore] private IEffectTowerTargeting  cachedTowerTargetingType;
     [XmlIgnore] private List<IEffectPeriodic>  cachedPeriodicEffectList;
-    [XmlIgnore] private PropertyEffects?      cachedPropertyEffects;
+    [XmlIgnore] private PropertyEffects?       cachedPropertyEffects;
 
     //list of effect objects
     [XmlIgnore] private List<IEffect> Effects = new List<IEffect>(); 
@@ -230,6 +237,7 @@ public class EffectData : System.Object
 
     //helper that returns a struct containing information on all property effects in this set
     //results are cached to save performance
+    [XmlIgnore]
     public PropertyEffects propertyEffects
     {
         set

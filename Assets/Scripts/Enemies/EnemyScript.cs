@@ -51,6 +51,14 @@ public class EnemyData
     public XMLColor   unitColor;  //used to colorize the enemy sprite
     public EffectData effectData; //specifies which effects are attached to this enemy type and what their parameters are
 
+    //only write effect data if there is data to write
+    [XmlIgnore]
+    public bool effectDataSpecified
+    {
+        get { return (effectData != null) && (effectData.XMLEffects.Count != 0); }
+        set { }
+    }
+
     [DefaultValue("Enemy_Basic")]
     [XmlAttribute("sprite")]
     public string spriteName { get; set; }

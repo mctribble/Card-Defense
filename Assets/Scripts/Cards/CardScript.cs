@@ -96,10 +96,11 @@ public class CardData : System.Object
 
     public EffectData effectData; //contains info needed to apply effects. O Can be provided for any card, but upgrades currently ignore them
 
+    //only write effect data if there is data to write
     [XmlIgnore]
-    public bool EffectDataSpecified
+    public bool effectDataSpecified
     {
-        get { return (effectData != null) && (effectData.XMLEffects.Count != 0); } //only write effect data if there is data to write
+        get { return (effectData != null) && (effectData.XMLEffects.Count != 0); } 
         set { }
     }
 
