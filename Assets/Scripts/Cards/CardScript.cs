@@ -21,14 +21,23 @@ public class TowerData : System.Object
 {
     [XmlIgnore] public string towerName; //name of the card which summoned this tower.  Populated when the tower is summoned
 
-    [DefaultValue("Default_Sprite")]
     [XmlAttribute("Sprite")]
     public string towerSpriteName { get; set; }
 
-    [DefaultValueAttribute(0.0f), XmlAttribute("Recharge")] public float rechargeTime; //how long it takes tthe tower to charge
-    [DefaultValueAttribute(0.0f), XmlAttribute("Range")]    public float range;        //how far away from itself, in world space, the tower can shoot
-    [DefaultValueAttribute(0.0f), XmlAttribute("Damage")]   public float attackPower;  // amount of damage this dower does before any modifiers susch as armor
-    [DefaultValueAttribute(1.0f), XmlAttribute("Lifespan")] public int   lifespan;	   // amount of waves this tower remains on the field
+    [XmlAttribute("Recharge")] public float rechargeTime; //how long it takes tthe tower to charge
+    [XmlAttribute("Range")]    public float range;        //how far away from itself, in world space, the tower can shoot
+    [XmlAttribute("Damage")]   public float attackPower;  // amount of damage this dower does before any modifiers susch as armor
+    [XmlAttribute("Lifespan")] public int   lifespan;	   // amount of waves this tower remains on the field
+
+    //provides a short string for the debugger
+    public override string ToString()
+    {
+        return towerName + 
+            "{recharge:" + rechargeTime +
+            " range:"    + range +
+            " damage:"   + attackPower +
+            " lifespan:" + lifespan + "}";
+    }
 }
 
 //represents everything needed to upgrade a tower
@@ -36,29 +45,51 @@ public class TowerData : System.Object
 public class UpgradeData : System.Object
 {
     //multiplicative modifiers
-    [DefaultValueAttribute(1.0f), XmlAttribute("RechargeMult")] public float rechargeMultiplier = 1.0f;
-
-    [DefaultValueAttribute(1.0f), XmlAttribute("RangeMult")]    public float rangeMultiplier    = 1.0f;
-    [DefaultValueAttribute(1.0f), XmlAttribute("DamageMult")]   public float attackMultiplier   = 1.0f;
+    [XmlAttribute("RechargeMult")] public float rechargeMultiplier = 1.0f;
+    [XmlAttribute("RangeMult")]    public float rangeMultiplier    = 1.0f;
+    [XmlAttribute("DamageMult")]   public float attackMultiplier   = 1.0f;
 
     //absolute modifiers
-    [DefaultValueAttribute(0.0f), XmlAttribute("RechargeMod")]  public float rechargeModifier   = 0.0f;
+    [XmlAttribute("RechargeMod")]  public float rechargeModifier   = 0.0f;
+    [XmlAttribute("RangeMod")]     public float rangeModifier      = 0.0f;
+    [XmlAttribute("DamageMod")]    public float attackModifier     = 0.0f;
+    [XmlAttribute("WaveBonus")]    public int waveBonus = 0;
 
-    [DefaultValueAttribute(0.0f), XmlAttribute("RangeMod")]     public float rangeModifier      = 0.0f;
-    [DefaultValueAttribute(0.0f), XmlAttribute("DamageMod")]    public float attackModifier     = 0.0f;
-    [DefaultValueAttribute(0),    XmlAttribute("WaveBonus")]    public int waveBonus = 0;
+    //provides a short string for the debugger
+    public override string ToString()
+    {
+        string result = "{";
+
+        if (waveBonus          > 0) { result += "lifespan: +"  +  waveBonus                             ; }
+        if (attackMultiplier   > 1) { result += "damage: +"    + (attackMultiplier - 1).ToString("P1")  ; }
+        if (rangeMultiplier    > 1) { result += "range: +"     + (rangeMultiplier - 1).ToString("P1")   ; }
+        if (rechargeMultiplier > 1) { result += "recharge: +"  + (rechargeMultiplier - 1).ToString("P1"); }
+        if (attackModifier     > 0) { result += "damage: +"    +  attackModifier.ToString()             ; }
+        if (rangeModifier      > 0) { result += "range: +"     +  rangeModifier.ToString()              ; }
+        if (rechargeModifier   > 0) { result += "recharge: +"  +  rechargeModifier.ToString() + 's'     ; }
+                                      
+        if (waveBonus          < 0) { result += "lifespan: -"  +      waveBonus                         ; }
+        if (attackMultiplier   < 1) { result += "damage: -"    + (1 - attackMultiplier).ToString("P1")  ; }
+        if (rangeMultiplier    < 1) { result += "range: -"     + (1 - rangeMultiplier).ToString("P1")   ; }
+        if (rechargeMultiplier < 1) { result += "recharge: -"  + (1 - rechargeMultiplier).ToString("P1"); }
+        if (attackModifier     < 0) { result += "damage: -"    +      attackModifier.ToString()         ; }
+        if (rangeModifier      < 0) { result += "range: -"     +      rangeModifier.ToString()          ; }
+        if (rechargeModifier   < 0) { result += "recharge: -"  +      rechargeModifier.ToString() + 's' ; }
+
+        result += "}";
+
+        return result;
+    }
 }
 
 [System.Serializable]
 public class CardData : System.Object
 {
     //set by card type manager to indicate if this card game from a base game file or a mod file
-    [XmlIgnore]
-    public bool isModded;
+    [XmlIgnore] public bool isModded;
 
     //card data
     [XmlAttribute("Type")] public CardType cardType; //determines aspects of how the card should behave and the meaning of other values.  See enum dec for more info
-
     [XmlAttribute("Name")] public string   cardName; //name of the card
 
     [XmlAttribute("Description")]
@@ -66,26 +97,28 @@ public class CardData : System.Object
     public string   cardDescription; //description of the card
 
     [XmlAttribute("Charges")]
-    public int      cardMaxCharges;  //how much it costs to use this card
+    public int      cardMaxCharges;  //how many charges this card starts with
 
     [DefaultValue("Default_Art")]
     [XmlAttribute("Art")]
+    [Show]
     public string cardArtName { get; set; }
 
     [DefaultValue("Default_Sprite")]
     [XmlAttribute("Tooltip")]
+    [Show]
     public string tooltipSpriteName { get; set; }
 
-    public TowerData towerData; //contains info needed to summon a tower.  Only used in tower cards.
+    [VisibleWhen("towerDataSpecified")] public TowerData towerData; //contains info needed to summon a tower.  Only used in tower cards.
 
     [XmlIgnore]
-    public bool TowerDataSpecified
+    public bool towerDataSpecified
     {
         get { return cardType == CardType.tower; }
         set { }
     }
 
-    public UpgradeData upgradeData; //contains info needed to upgrade a tower.  Only used in upgrade cards.
+    [VisibleWhen("upgradeDataSpecified")] public UpgradeData upgradeData; //contains info needed to upgrade a tower.  Only used in upgrade cards.
 
     [XmlIgnore]
     public bool upgradeDataSpecified
@@ -173,6 +206,9 @@ public class CardData : System.Object
         //return it
         return description;
     }
+
+    //returns a short string for the debugger
+    public override string ToString() { return cardName; }
 }
 
 public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler

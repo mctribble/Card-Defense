@@ -112,7 +112,13 @@ class CardNameComparer : IComparer<CardData>, IComparer<XMLDeckEntry>
 //comparer used to sort card lists by type
 class CardTypeComparer : IComparer<CardData>, IComparer<XMLDeckEntry>
 {
-    public int Compare(CardData a, CardData b) { return a.cardType - b.cardType; }
+    public int Compare(CardData a, CardData b)
+    {
+        if (a.cardType != b.cardType)
+            return a.cardType - b.cardType;
+        else
+            return string.Compare(a.cardName, b.cardName);
+    }
     public int Compare(XMLDeckEntry a, XMLDeckEntry b) { return Compare(CardTypeManagerScript.instance.getCardByName(a.name), CardTypeManagerScript.instance.getCardByName(b.name)); }
 }
 

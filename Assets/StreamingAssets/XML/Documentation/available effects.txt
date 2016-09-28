@@ -12,15 +12,15 @@ damageHand | deals X damage to the players hand
 <<Enemy Effects (Stat Scaling)>>
 fixedSpawnCount           | waves of this enemy type always spawn exactly this many enemies.  Best when used with budget scaling effects
 invScaleAttackWithHealth  | enemy deals less damage as it gets injured
-invScaleEffectWithDamage  | enemy effect weakens as it takes damage (scales effect Y)
-invScaleEffectWithTime    | enemy effect Y weakens by x/s (min 0)
+invScaleEffectWithDamage  | target enemy effect weakens as it takes damage
+invScaleEffectWithTime    | target enemy effect weakens by x/s (min 0)
 invScaleSpeedWithDamage   | enemy slows down (to 1) as it takes damage
 invScaleSpedWithTime      | enemy slows down by x/s (min 1)
 scaleAttackhWithBudget    | enemy attack scales up with wave budget
 scaleAttackWithHealth     | monster deals more damage as it gets injured
-scaleEffectWithBudget     | enemy effect scales up with wave budget (scales effect Y)
-scaleEffectWithDamage     | enemy effect scales up as the enemy takes damage (scales effect Y, max strength: base * x)
-scaleEffectWithTime       | enemy effect Y gets stronger by X/s
+scaleEffectWithBudget     | target enemy effect scales up with wave budget
+scaleEffectWithDamage     | target enemy effect scales up as the enemy takes damage (max strength: base * x)
+scaleEffectWithTime       | target enemy effect gets stronger by X/s
 scaleHealthWithBudget     | enemy health scales up with wave budget
 scaleSpeedWithBudget      | enemy speed  scales up with wave budget
 scaleSpeedWithDamage      | enemy gets faster as it takes damage (max speed: base * X)

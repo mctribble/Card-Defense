@@ -1,7 +1,6 @@
-﻿//based on tutorial found here: http://wiki.unity3d.com/index.php?title=Saving_and_Loading_Data:_XmlSerializer
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using UnityEngine;
@@ -15,16 +14,25 @@ public class CardTypeCollection
     //list of different card types
     [XmlArray("Cards")]
     [XmlArrayItem("Card")]
+    [Display(Seq.GuiBox | Seq.PerItemDuplicate | Seq.PerItemRemove)]
     public List<CardData> cardTypes = new List<CardData>();
 
     public void Save(string path)
     {
+        //temporarily remove all modded cards
+        List<CardData> temp = new List<CardData>(cardTypes);
+        cardTypes.RemoveAll(ct => ct.isModded);
+
+        //save normally
         XmlSerializer serializer = new XmlSerializer(typeof(CardTypeCollection));
 
         using (StreamWriter stream = new StreamWriter(path, false, Encoding.GetEncoding("UTF-8")))
         {
             serializer.Serialize(stream, this);
         }
+
+        //put the list back
+        cardTypes = temp;
     }
 
     public static CardTypeCollection Load(string path)
@@ -35,22 +43,31 @@ public class CardTypeCollection
             return serializer.Deserialize(stream) as CardTypeCollection;
         }
     }
+
+    //DEV: gives a button in the editor to sort the type list
+    [Hide] public bool cardTypesLoaded() { return (cardTypes != null) && (cardTypes.Count > 0); }
+    [Show][VisibleWhen("cardTypesLoaded")] public void sortCardTypes ()
+    {
+        cardTypes.Sort(new CardTypeComparer());
+    }
 }
 
 public class CardTypeManagerScript : BaseBehaviour
 {
-    //singleton instance
-    public static CardTypeManagerScript instance;
+    //manager settings: only shown outside of gameplay
+    [Hide] public bool shouldShowSettings() { return !Application.isPlaying; }
+    [VisibleWhen("shouldShowSettings")] public static CardTypeManagerScript instance; //singleton instance
+    [VisibleWhen("shouldShowSettings")] public string path;                           //path of base game cards
+    [VisibleWhen("shouldShowSettings")] public string modPath;                        //path of modded cards
 
-    public string path;                     //path of base game cards
-    public string modPath;                  //path of modded cards
-    public CardTypeCollection types;		//contains all card types
+    //contains all card types.  Only shown if it has data
+    [Hide] public bool areTypesLoaded() { return (types != null) && (types.cardTypes != null) && (types.cardTypes.Count > 0); }
+    [VisibleWhen("areTypesLoaded")] public CardTypeCollection types; 
 
     //set ALL THREE of these to true to save any debugger card data changes back to the XML
-    public bool saveCardChanges;
-
-    public bool reallySaveCardChanges;
-    public bool reallyReallySaveCardChanges;
+    [VisibleWhen("areTypesLoaded")]        public bool saveCardChanges;
+    [VisibleWhen("saveCardChanges")]       public bool reallySaveCardChanges;
+    [VisibleWhen("reallySaveCardChanges")] public bool reallyReallySaveCardChanges;
 
     // Use this for initialization
     private void Awake()
@@ -109,7 +126,7 @@ public class CardTypeManagerScript : BaseBehaviour
             saveCardChanges = false;
             reallySaveCardChanges = false;
             reallyReallySaveCardChanges = false;
-            Debug.Log("Card changes saved.");
+            Debug.Log("Card changes saved. <UNMODDED CARDS ONLY!>");
         }
     }
 

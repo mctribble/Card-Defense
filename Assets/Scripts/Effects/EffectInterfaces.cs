@@ -371,6 +371,17 @@ public class EffectData : System.Object
     {
         Effects.RemoveAll(ie => ie.shouldBeRemoved());
     }
+
+    //provides a short string for the debugger
+    public override string ToString()
+    {
+        if (effects.Count == 0)
+            return "no effects.";
+        else if (effects.Count == 1)
+            return effects[0].ToString();
+        else
+            return effects.Count + " effects.";
+    }
 }
 
 //base interface
