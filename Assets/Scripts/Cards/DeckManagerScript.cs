@@ -101,7 +101,20 @@ public class DeckCollection
     //list of decks
     [XmlArray("Decks")]
     [XmlArrayItem("Deck")]
+    [Display(Seq.GuiBox | Seq.PerItemDuplicate | Seq.PerItemRemove)]
     public List<XMLDeck> decks;
+
+    //DEV: saves changes to this deck collection, with a confirmation box
+    private string curPath;
+    [Show] private IEnumerator saveDecks()
+    {
+        yield return DeckManagerScript.instance.StartCoroutine(MessageHandlerScript.PromptYesNo("Are you sure you want to save these decks?"));
+        if (MessageHandlerScript.responseToLastPrompt == "Yes")
+        {
+            Save(curPath);
+            Debug.Log("Decks Saved.");
+        }
+    }
 
     public void Save(string path)
     {
@@ -118,7 +131,9 @@ public class DeckCollection
         XmlSerializer serializer = new XmlSerializer(typeof(DeckCollection));
         using (var stream = new FileStream(path, FileMode.Open))
         {
-            return serializer.Deserialize(stream) as DeckCollection;
+            DeckCollection result = serializer.Deserialize(stream) as DeckCollection;
+            result.curPath = path;
+            return result;
         }
     }
 
@@ -157,16 +172,21 @@ public struct Card
 
 public class DeckManagerScript : BaseBehaviour
 {
-    public static DeckManagerScript instance; //singleton instance
-    public string premadeDeckPath;      //location of premade deck file
-    public DeckCollection premadeDecks; //stores premade decks
-    public string playerDeckPath;       //location of player deck file
-    public DeckCollection playerDecks;  //stores player decks
+    //manager settings (only shown in editor)
+    private bool shouldShowSettings() { return !Application.isPlaying; }
+    [VisibleWhen("shouldShowSettings")] public static     DeckManagerScript instance; //singleton instance
+    [VisibleWhen("shouldShowSettings")] public string     premadeDeckPath;            //location of premade deck file
+    [VisibleWhen("shouldShowSettings")] public string     playerDeckPath;             //location of player deck file
+    [VisibleWhen("shouldShowSettings")] public HandScript playerHand;                 //reference to the player's hand, if present
+
+    //deck lists (only shown if loaded)
+    private bool deckListsLoaded() { return (premadeDecks != null) && (playerDecks != null); }
+    [VisibleWhen("deckListsLoaded")] public DeckCollection premadeDecks; //stores premade decks
+    [VisibleWhen("deckListsLoaded")] public DeckCollection playerDecks;  //stores player decks
 
     //number of charges in the deck
-    public int curDeckCharges;    //remaining
-    public int maxDeckCharges;    //max
-    public HandScript playerHand; //reference to the player's hand, if present
+    [Hide] public int curDeckCharges; //remaining
+    [Hide] public int maxDeckCharges; //max
 
     private List<Card> currentDeck; //current deck
 

@@ -17,11 +17,6 @@ find a way to record statistics to aid in balancing content?
 difficulty settings??
 use scoring to make gemcraft style progression?
 ================================================================
-effects:
-stun
-================================================================
 engine:
+progression system?
 mod file dependencies
-================================================================
-deferred:
-card types rewarded by player level, cannot be used in editor until they are obtained (need progression system)
