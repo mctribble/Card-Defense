@@ -27,7 +27,7 @@
       </effectData>
     </Card>
     <Card Type="tower" Name="Challenger Tower" Description="Do you have what it takes?" Charges="1" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
-      <towerData Recharge="1" Range="2" Damage="75" Lifespan="3" UpgradeCap="3" Sprite="Tower_Basic.png" />
+      <towerData Recharge="1" Range="2" Damage="75" Lifespan="3" UpgradeCap="0" Sprite="Tower_Basic.png" />
       <effectData>
         <Effects>
           <Effect name="everyRound">
@@ -36,7 +36,6 @@
           <Effect name="everyRound">
             <Effect name="score" strength="500" />
           </Effect>
-          <Effect name="upgradesForbidden" />
         </Effects>
       </effectData>
     </Card>
@@ -94,11 +93,10 @@
       </effectData>
     </Card>
     <Card Type="tower" Name="Sniper Tower" Description="Specializes in slaying Giants" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Heavy.png">
-      <towerData Recharge="10" Range="999" Damage="300" Lifespan="5" UpgradeCap="3" Sprite="Tower_Heavy.png" />
+      <towerData Recharge="10" Range="999" Damage="300" Lifespan="5" UpgradeCap="0" Sprite="Tower_Heavy.png" />
       <effectData>
         <Effects>
           <Effect name="damagePercent" strength="10" />
-          <Effect name="upgradesForbidden" />
         </Effects>
       </effectData>
     </Card>

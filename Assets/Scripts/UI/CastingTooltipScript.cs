@@ -69,12 +69,16 @@ public class CastingTooltipScript : BaseBehaviour
                         if ( (parentCardScript.card.data.effectData != null) && (parentCardScript.card.data.effectData.effects.Count > 0) )
                             targetTower.SendMessage("NewEffectTooltip", parentCardScript.card.data.effectData); //if there are new effects, show those
 
-                        //castable unless the target has upgradesForbidden
                         castable = true;
+
+                        //not castable if the target has upgradesForbidden
                         if (newTargetTower.effects != null)
                             if (newTargetTower.effects.propertyEffects.upgradesForbidden)
                                 castable = false;
-                        
+
+                        //not castable if the target is at the upgrade cap
+                        if (newTargetTower.upgradeCount >= newTargetTower.upgradeCap)
+                            castable = false;
                     }
                 }
                 else

@@ -18,6 +18,7 @@ public class TowerScript : BaseBehaviour
 
     public string      towerName;      //name of the tower
     public ushort      upgradeCount;   //number of times this tower has been upgraded
+    public ushort      upgradeCap;     //max number of times this tower can be upgraded
     public float       rechargeTime;   //time, in seconds, between shots.
     public float       range;          //distance the tower can shoot
     public float       attackPower;	   //damage done on hit
@@ -376,6 +377,7 @@ public class TowerScript : BaseBehaviour
         range = d.range;
         attackPower = d.attackPower;
         wavesRemaining = d.lifespan;
+        upgradeCap = (ushort)d.upgradeCap;
 
         //yes, I know its awkward, but we're setting the sprite with WWW.
         WWW www = new WWW ("file:///" + Application.dataPath + "/StreamingAssets/Art/Sprites/" + d.towerSpriteName);
@@ -469,6 +471,10 @@ public class TowerScript : BaseBehaviour
             if (effects.propertyEffects.upgradesForbidden)
                 return;
 
+        //ignore if at the upgrade cap
+        if (upgradeCount >= upgradeCap)
+            return;
+
         //each stat = oldStat * statMult + statMod.
         rechargeTime    = rechargeTime  * d.rechargeMultiplier  + d.rechargeModifier;
         attackPower     = attackPower   * d.attackMultiplier    + d.attackModifier;
@@ -492,7 +498,7 @@ public class TowerScript : BaseBehaviour
     {
         tooltipText.text =
             towerName + "\n" +
-            upgradeCount + " upgrades\n" +
+            upgradeCount + "/" + upgradeCap + " upgrades\n" +
             "attack: " + attackPower + "\n" +
             "charge time: " + rechargeTime + "\n" +
             "Damage Per Second: " + (attackPower / rechargeTime).ToString("F1") + "\n" +
@@ -528,10 +534,27 @@ public class TowerScript : BaseBehaviour
     //updates the tooltip text to show what the given upgrade would change
     private void UpgradeTooltip(UpgradeData u)
     {
+        //show special message if the target has upgradesForbidden
+        if (effects != null)
+        {
+            if (effects.propertyEffects.upgradesForbidden)
+            {
+                tooltipText.text = "<color=red>This tower is forbidden from receiving upgrades!</color>";
+                return;
+            }
+        }
+
+        //show special message if the target is at the upgrade cap
+        if (upgradeCount >= upgradeCap)
+        {
+            tooltipText.text = "<color=red>This tower cannot hold any more upgrades!</color>";
+            return;
+        }
+
         //we already know how these lines change
         tooltipText.text =
             towerName + "\n" +
-            upgradeCount + " upgrades <color=lime>+ 1</color>\n";
+            upgradeCount + " upgrades <color=lime>+ 1</color>/" + upgradeCap + "\n";
 
         //for the others, we need to do some calculations:
         float newAttackPower     = attackPower     * u.attackMultiplier   + u.attackModifier;
@@ -606,6 +629,13 @@ public class TowerScript : BaseBehaviour
     //shows new effects on the tooltip
     private void NewEffectTooltip (EffectData newEffectData)
     {
+        //ignore if the tower cannot be upgraded
+        if (effects != null)
+            if (effects.propertyEffects.upgradesForbidden)
+                return;
+        if (upgradeCount >= upgradeCap)
+            return;
+
         foreach (IEffect e in newEffectData.effects)
             tooltipText.text += "\n<Color=#" + e.effectColorHex + ">+" + e.Name + "</Color>";
     }
