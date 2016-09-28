@@ -46,37 +46,16 @@ public class CardTypeCollection
 
     //DEV: gives a button in the editor to sort the type list
     [Hide] public bool cardTypesLoaded() { return (cardTypes != null) && (cardTypes.Count > 0); }
-    [Show][VisibleWhen("cardTypesLoaded")] public void sortCardTypes ()
+    [Show][VisibleWhen("cardTypesLoaded")] private void sortCardTypes ()
     {
         cardTypes.Sort(new CardTypeComparer());
-    }
-
-    //DEV: (temp)
-    [Show]
-    public void initUpgradeCaps()
-    {
-        foreach (CardData c in cardTypes)
-        {
-            if (c.cardType == CardType.tower)
-            {
-                if (c.isModded)
-                    Debug.Log(c.cardName);
-                else
-                {
-                    if ((c.effectData != null) && (c.effectData.propertyEffects.upgradesForbidden == true))
-                        c.towerData.upgradeCap = 0;
-                    else
-                        c.towerData.upgradeCap = 3;
-                }
-            }
-        }
     }
 }
 
 public class CardTypeManagerScript : BaseBehaviour
 {
     //manager settings: only shown outside of gameplay
-    [Hide] public bool shouldShowSettings() { return !Application.isPlaying; }
+    [Hide] private bool shouldShowSettings() { return !Application.isPlaying; }
     [VisibleWhen("shouldShowSettings")] public static CardTypeManagerScript instance; //singleton instance
     [VisibleWhen("shouldShowSettings")] public string path;                           //path of base game cards
     [VisibleWhen("shouldShowSettings")] public string modPath;                        //path of modded cards
@@ -133,7 +112,7 @@ public class CardTypeManagerScript : BaseBehaviour
         }
     }
 
-    // Update is called once per frame
+    //Dev: shows a button in the inspector to save the card types, provided there are some loaded
     [Show][VisibleWhen("areTypesLoaded")] private System.Collections.IEnumerator saveCardChanges()
     {
         yield return StartCoroutine(MessageHandlerScript.PromptYesNo("Are you sure you want to overwrite the card definitions?"));

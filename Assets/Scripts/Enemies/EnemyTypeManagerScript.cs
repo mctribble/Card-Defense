@@ -43,7 +43,7 @@ public class EnemyTypeCollection
 public class EnemyTypeManagerScript : BaseBehaviour
 {
     //Manager settings.  only shown in the editor since they dont need editing at runtime
-    public bool shouldShowSettings() { return !Application.isPlaying; }
+    private bool shouldShowSettings() { return !Application.isPlaying; }
     [VisibleWhen("shouldShowSettings")] public static EnemyTypeManagerScript instance; //singleton instance
     [VisibleWhen("shouldShowSettings")] public string path;                            //path of base game enemies
     [VisibleWhen("shouldShowSettings")] public string modPath;                         //path of modded enemies
@@ -51,11 +51,6 @@ public class EnemyTypeManagerScript : BaseBehaviour
     //collection of all enemy types.  Only shown if loaded
     public bool areTypesLoaded() { return (types != null && types.enemyTypes.Count > 0); }
     [VisibleWhen("areTypesLoaded")] public EnemyTypeCollection types;
-
-    //set ALL THREE of these to true to save any debugger enemy data changes back to the XML.  Only shows in-game.
-    [VisibleWhen("areTypesLoaded")] public bool saveEnemyChanges;
-    [VisibleWhen("saveEnemyChanges")] public bool reallySaveEnemyChanges;
-    [VisibleWhen("reallySaveEnemyChanges")] public bool reallyReallySaveEnemyChanges;
 
     // Use this for initialization
     private void Awake()
@@ -109,18 +104,15 @@ public class EnemyTypeManagerScript : BaseBehaviour
                 i.effectData.parseEffects();
     }
 
-    // Update is called once per frame
-    private void Update()
+    //DEV: provides a button in the inspector to save enemy type definitions
+    [Show][VisibleWhen("areTypesLoaded")] private System.Collections.IEnumerator saveEnemyChanges()
     {
-        //allows making enemy type changes from the editor and saving them back to the xml file
-        if (saveEnemyChanges && reallySaveEnemyChanges && reallyReallySaveEnemyChanges)
+        yield return StartCoroutine(MessageHandlerScript.PromptYesNo("Are you sure you want to overwrite the enemy definitions?"));
+        if (MessageHandlerScript.responseToLastPrompt == "Yes")
         {
             types.Save(Path.Combine(Application.dataPath, path));
-            saveEnemyChanges = false;
-            reallySaveEnemyChanges = false;
-            reallyReallySaveEnemyChanges = false;
-            Debug.Log("Enemy changes saved.");
-        }
+            Debug.Log("Enemy types saved.");
+        }  
     }
 
     //returns a random enemy type from the database, trying to provide one that does not have a spawnCost higher than maxSpawnCost

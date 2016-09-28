@@ -93,7 +93,8 @@ public class LevelData
     public XMLDeck levelDeck;
     public string premadeDeckName;
 
-    [Show] public void SaveChanges() { Save(fileName); } //DEV: provides a button in the editor to save the level data
+    [Show] private void SaveChanges() { Save(fileName); } //DEV: provides a button in the editor to save the level data
+
     //saves the level data to a file of the given name
     public void Save(string path)
     {
@@ -524,7 +525,7 @@ public class LevelManagerScript : BaseBehaviour
     }
 
     //DEV: creates a button in the unity debugger to reload the level from scratch
-    [Show][VisibleWhen("levelLoaded")] public void reloadLevel() { StopAllCoroutines(); StartCoroutine(reloadLevelCoroutine()); }
+    [Show][VisibleWhen("levelLoaded")] private void reloadLevel() { StopAllCoroutines(); StartCoroutine(reloadLevelCoroutine()); }
     public IEnumerator reloadLevelCoroutine()
     {
         yield return null;

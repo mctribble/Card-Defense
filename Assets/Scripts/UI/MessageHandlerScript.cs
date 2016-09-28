@@ -4,15 +4,16 @@ using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
 //provides static utilities to show dialog boxes to the player and return a result
-public class MessageHandlerScript : MonoBehaviour
+public class MessageHandlerScript : BaseBehaviour
 {
     //object references
-    [Inline] public GameObject messageBox;
-    [Inline] public Text       messageText;
-    [Inline] public GameObject buttonA;
-    [Inline] public GameObject buttonB;
-    [Inline] public GameObject buttonC;
-    [Inline] public GameObject buttonD;
+    private bool shouldShowRefs() { return !Application.isPlaying; }
+    [VisibleWhen("shouldShowRefs")] public GameObject messageBox;
+    [VisibleWhen("shouldShowRefs")] public Text       messageText;
+    [VisibleWhen("shouldShowRefs")] public GameObject buttonA;
+    [VisibleWhen("shouldShowRefs")] public GameObject buttonB;
+    [VisibleWhen("shouldShowRefs")] public GameObject buttonC;
+    [VisibleWhen("shouldShowRefs")] public GameObject buttonD;
 
     [Show] public static string responseToLastPrompt;
     public static MessageHandlerScript instance;
@@ -30,7 +31,7 @@ public class MessageHandlerScript : MonoBehaviour
     }
 	
     //result handler
-	private void TextButtonSelected(string response) { responseToLastPrompt = response; messageBox.SetActive(false); Debug.Log(response); }
+	private void TextButtonSelected(string response) { responseToLastPrompt = response; messageBox.SetActive(false); }
 
     //handles messages whose only valid response is "OK".  does not return until the box is answered
     public static IEnumerator ShowAndYield(string message)
