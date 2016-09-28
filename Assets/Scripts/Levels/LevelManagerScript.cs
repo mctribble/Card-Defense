@@ -278,7 +278,7 @@ public class LevelManagerScript : BaseBehaviour
             {
                 for (int i = 0; i < ptu.Count; i++)
                 {
-                    t.SendMessage("Upgrade", CardTypeManagerScript.instance.getCardByName(ptu.Name).upgradeData);
+                    t.SendMessage("UpgradeIgnoreCap", CardTypeManagerScript.instance.getCardByName(ptu.Name).upgradeData);
                 }
             }
         }

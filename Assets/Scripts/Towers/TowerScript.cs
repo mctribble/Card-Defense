@@ -463,8 +463,10 @@ public class TowerScript : BaseBehaviour
                 maxCharge += effects.propertyEffects.maxOvercharge.Value;
     }
 
-    //receives upgrade data and uses it to modify the tower
-    private void Upgrade(UpgradeData d)
+    //receives upgrade data and uses it to modify the tower.  If ignoreCap is true, then it can exceed the upgrade cap to do so
+    private void UpgradeIgnoreCap(UpgradeData d) { Upgrade(d, true); } //helper function to allow calling through sendMessage (sendMessage doesn't seem to understand default parameters)
+    private void Upgrade(UpgradeData d) { Upgrade(d, false); } //helper function to allow calling through sendMessage (sendMessage doesn't seem to understand default parameters)
+    private void Upgrade(UpgradeData d, bool ignoreCap)
     {
         //ignore if upgrades are forbidden
         if (effects != null)
@@ -472,8 +474,9 @@ public class TowerScript : BaseBehaviour
                 return;
 
         //ignore if at the upgrade cap
-        if (upgradeCount >= upgradeCap)
-            return;
+        if (ignoreCap == false)
+            if (upgradeCount >= upgradeCap)
+                return;
 
         //each stat = oldStat * statMult + statMod.
         rechargeTime    = rechargeTime  * d.rechargeMultiplier  + d.rechargeModifier;
