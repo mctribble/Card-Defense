@@ -60,21 +60,21 @@ public class UpgradeData : System.Object
     {
         string result = "{";
 
-        if (waveBonus          > 0) { result += "lifespan: +"  +  waveBonus                             ; }
-        if (attackMultiplier   > 1) { result += "damage: +"    + (attackMultiplier - 1).ToString("P1")  ; }
-        if (rangeMultiplier    > 1) { result += "range: +"     + (rangeMultiplier - 1).ToString("P1")   ; }
-        if (rechargeMultiplier > 1) { result += "recharge: +"  + (rechargeMultiplier - 1).ToString("P1"); }
-        if (attackModifier     > 0) { result += "damage: +"    +  attackModifier.ToString()             ; }
-        if (rangeModifier      > 0) { result += "range: +"     +  rangeModifier.ToString()              ; }
-        if (rechargeModifier   > 0) { result += "recharge: +"  +  rechargeModifier.ToString() + 's'     ; }
-                                      
-        if (waveBonus          < 0) { result += "lifespan: -"  +      waveBonus                         ; }
-        if (attackMultiplier   < 1) { result += "damage: -"    + (1 - attackMultiplier).ToString("P1")  ; }
-        if (rangeMultiplier    < 1) { result += "range: -"     + (1 - rangeMultiplier).ToString("P1")   ; }
-        if (rechargeMultiplier < 1) { result += "recharge: -"  + (1 - rechargeMultiplier).ToString("P1"); }
-        if (attackModifier     < 0) { result += "damage: -"    +      attackModifier.ToString()         ; }
-        if (rangeModifier      < 0) { result += "range: -"     +      rangeModifier.ToString()          ; }
-        if (rechargeModifier   < 0) { result += "recharge: -"  +      rechargeModifier.ToString() + 's' ; }
+        if (waveBonus          > 0) { result += "lifespan+ "  +  waveBonus                              + ","; }
+        if (attackMultiplier   > 1) { result += "damage+ "    + (attackMultiplier - 1).ToString("P1")   + ","; }
+        if (rangeMultiplier    > 1) { result += "range+ "     + (rangeMultiplier - 1).ToString("P1")    + ","; }
+        if (rechargeMultiplier > 1) { result += "recharge+ "  + (rechargeMultiplier - 1).ToString("P1") + ","; }
+        if (attackModifier     > 0) { result += "damage+ "    +  attackModifier.ToString()              + ","; }
+        if (rangeModifier      > 0) { result += "range+ "     +  rangeModifier.ToString()               + ","; }
+        if (rechargeModifier   > 0) { result += "recharge+ "  +  rechargeModifier.ToString() + 's'      + ","; }
+                                                                                                        
+        if (waveBonus          < 0) { result += "lifespan- "  +      waveBonus                          + ","; }
+        if (attackMultiplier   < 1) { result += "damage- "    + (1 - attackMultiplier).ToString("P1")   + ","; }
+        if (rangeMultiplier    < 1) { result += "range- "     + (1 - rangeMultiplier).ToString("P1")    + ","; }
+        if (rechargeMultiplier < 1) { result += "recharge- "  + (1 - rechargeMultiplier).ToString("P1") + ","; }
+        if (attackModifier     < 0) { result += "damage- "    +      attackModifier.ToString()          + ","; }
+        if (rangeModifier      < 0) { result += "range- "     +      rangeModifier.ToString()           + ","; }
+        if (rechargeModifier   < 0) { result += "recharge- "  +      rechargeModifier.ToString() + 's'  + ","; }
 
         result += "}";
 
