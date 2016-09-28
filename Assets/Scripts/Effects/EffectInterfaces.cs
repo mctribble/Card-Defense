@@ -44,11 +44,38 @@ public enum EffectType
 public class XMLEffect : System.Object
 {
     [XmlAttribute] public string name;
-    [XmlAttribute] public float strength;
+    [XmlAttribute] public float  strength;
     [XmlAttribute] public string argument;
 
     [XmlElement("Effect")]
     public XMLEffect innerEffect;
+
+    public override string ToString()
+    {
+        string result = name;
+
+        if (strength != 0.0f || ((argument != null) && (argument != "")))
+        {
+            result += "(";
+
+            if (strength != 0.0f)
+                result += "S: " + strength;
+
+            if ((strength != 0.0f) && (argument != null) && (argument != ""))
+                result += ", ";
+
+            if (argument != null)
+                if (argument != "")
+                    result += "Y: " + argument;
+
+                result += ")";
+        }
+
+        if (innerEffect != null)
+            result += "{" + innerEffect.ToString() + "}";
+
+        return result;
+    }
 }
 
 //convenience struct that indicates which property effects are contained in this effectData
@@ -71,9 +98,10 @@ public class EffectData : System.Object
     //list of effects from xml
     [XmlArray("Effects")]
     [XmlArrayItem("Effect")]
+    [Display(Seq.GuiBox | Seq.PerItemRemove)]
     public List<XMLEffect> XMLEffects = new List<XMLEffect>();
 
-    [XmlIgnore]
+    [XmlIgnore] [Hide]
     public bool effectsSpecified //hide effect list if it is empty
     {
         get { return XMLEffects.Count > 0; }

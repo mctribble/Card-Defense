@@ -24,7 +24,6 @@ stun
 engine:
 mod file dependencies
 Card editor?
-Enemy editor?
 ================================================================
 deferred:
 card types rewarded by player level, cannot be used in editor until they are obtained (need progression system)

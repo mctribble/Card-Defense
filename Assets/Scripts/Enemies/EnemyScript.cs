@@ -31,19 +31,25 @@ public class XMLColor
             Mathf.RoundToInt(b * 255).ToString("X2") +
             Mathf.RoundToInt(a * 255).ToString("X2");
     }
+
+    public override string ToString()
+    {
+        return "{" + r.ToString("2F") + ", " + g.ToString("2F") + ", " + b.ToString("2F") + ", " + a.ToString("2F") + "}";
+    }
 };
 
 //contains everything needed to define an enemy type
 [System.Serializable]
 public class EnemyData
 {
-    [XmlAttribute] public string     name;       //used to identify this enemy type
-    [XmlAttribute] public int        spawnCost;	 //used for wave generation: more expensive enemies spawn in smaller numbers
-    [XmlAttribute] public int        attack;     //number of charges knocked off if the enemy reaches the goal
-    [XmlAttribute] public int        maxHealth;  //max health
-    [XmlAttribute] public float      unitSpeed;  //speed, measured in distance/second
-                   public XMLColor   unitColor;  //used to colorize the enemy sprite
-                   public EffectData effectData; //specifies which effects are attached to this enemy type and what their parameters are
+    [XmlAttribute]             public string name;       //used to identify this enemy type
+    [XmlAttribute][iMin(1)]    public int    spawnCost;	 //used for wave generation: more expensive enemies spawn in smaller numbers
+    [XmlAttribute][iMin(1)]    public int    attack;     //number of charges knocked off if the enemy reaches the goal
+    [XmlAttribute][iMin(1)]    public int    maxHealth;  //max health
+    [XmlAttribute][fMin(0.1f)] public float  unitSpeed;  //speed, measured in distance/second
+
+    public XMLColor   unitColor;  //used to colorize the enemy sprite
+    public EffectData effectData; //specifies which effects are attached to this enemy type and what their parameters are
 
     [DefaultValue("Enemy_Basic")]
     [XmlAttribute("sprite")]
@@ -61,6 +67,8 @@ public class EnemyData
 
         return description;
     }
+
+    public override string ToString() { return name; }
 };
 
 public class EnemyScript : BaseBehaviour

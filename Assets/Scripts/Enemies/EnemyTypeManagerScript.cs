@@ -15,6 +15,7 @@ public class EnemyTypeCollection
     //list of different enemy types
     [XmlArray("Enemies")]
     [XmlArrayItem("Enemy")]
+    [Display(Seq.GuiBox | Seq.PerItemDuplicate | Seq.PerItemRemove)]
     public List<EnemyData> enemyTypes = new List<EnemyData>();
 
     public void Save(string path)
@@ -35,22 +36,26 @@ public class EnemyTypeCollection
             return serializer.Deserialize(stream) as EnemyTypeCollection;
         }
     }
+
+    public override string ToString() { return "Enemy Types: (" + enemyTypes.Count + " types)"; }
 }
 
 public class EnemyTypeManagerScript : BaseBehaviour
 {
-    //singleton instance
-    public static EnemyTypeManagerScript instance;
+    //Manager settings.  only shown in the editor since they dont need editing at runtime
+    public bool shouldShowSettings() { return !Application.isPlaying; }
+    [VisibleWhen("shouldShowSettings")] public static EnemyTypeManagerScript instance; //singleton instance
+    [VisibleWhen("shouldShowSettings")] public string path;                            //path of base game enemies
+    [VisibleWhen("shouldShowSettings")] public string modPath;                         //path of modded enemies
 
-    public string path;                     //path of base game enemies
-    public string modPath;                  //path of modded enemies
-    public EnemyTypeCollection types;		//collection of all enemy types
+    //collection of all enemy types.  Only shown if loaded
+    public bool areTypesLoaded() { return (types != null && types.enemyTypes.Count > 0); }
+    [VisibleWhen("areTypesLoaded")] public EnemyTypeCollection types;
 
-    //set ALL THREE of these to true to save any debugger enemy data changes back to the XML
-    public bool saveEnemyChanges;
-
-    public bool reallySaveEnemyChanges;
-    public bool reallyReallySaveEnemyChanges;
+    //set ALL THREE of these to true to save any debugger enemy data changes back to the XML.  Only shows in-game.
+    [VisibleWhen("areTypesLoaded")] public bool saveEnemyChanges;
+    [VisibleWhen("saveEnemyChanges")] public bool reallySaveEnemyChanges;
+    [VisibleWhen("reallySaveEnemyChanges")] public bool reallyReallySaveEnemyChanges;
 
     // Use this for initialization
     private void Awake()
