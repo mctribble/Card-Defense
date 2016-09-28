@@ -22,19 +22,19 @@ public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
     public abstract bool shouldApplyInnerEffect(); //determines whether the inner effect should be applied
 
     //each of these trigger functions check shouldApplyInnerEffect() and pass the call through if it returns true
-    public WaveData alteredWaveData(WaveData currentWaveData) { if (shouldApplyInnerEffect()) { return ((IEffectWave)innerEffect).alteredWaveData(currentWaveData); } else { return currentWaveData;} }
-    public List<GameObject> findTargets(Vector2 towerPosition, float towerRange) { if (shouldApplyInnerEffect()) { return ((IEffectTowerTargeting)innerEffect).findTargets(towerPosition, towerRange); } else { return EffectTargetDefault.instance.findTargets(towerPosition, towerRange); } }
-    public void UpdateEnemy(EnemyScript e, float deltaTime) { if (shouldApplyInnerEffect()) { ((IEffectPeriodic)innerEffect).UpdateEnemy(e, deltaTime); } }
-    public void trigger(ref Card card, GameObject card_gameObject) { if (shouldApplyInnerEffect()) { ((IEffectSelf)innerEffect).trigger(ref card, card_gameObject); } }
-    public void trigger(ref DamageEventData d, int pointsOfOvercharge) { if (shouldApplyInnerEffect()) { ((IEffectOvercharge)innerEffect).trigger(ref d, pointsOfOvercharge); } }
-    public void trigger() { if (shouldApplyInnerEffect()) { ((IEffectInstant)innerEffect).trigger(); } }
-    public void trigger(EnemyScript enemy) { if (shouldApplyInnerEffect()) { ((IEffectEnemyReachedGoal)innerEffect).trigger(enemy); } }
-    public void onEnemyDeath(EnemyScript enemy) { if (shouldApplyInnerEffect()) { ((IEffectDeath)innerEffect).onEnemyDeath(enemy); } }
-    public void onTowerDeath(TowerScript tower) { if (shouldApplyInnerEffect()) { ((IEffectDeath)innerEffect).onTowerDeath(tower); } }
+    public virtual WaveData alteredWaveData(WaveData currentWaveData) { if (shouldApplyInnerEffect()) { return ((IEffectWave)innerEffect).alteredWaveData(currentWaveData); } else { return currentWaveData;} }
+    public virtual List<GameObject> findTargets(Vector2 towerPosition, float towerRange) { if (shouldApplyInnerEffect()) { return ((IEffectTowerTargeting)innerEffect).findTargets(towerPosition, towerRange); } else { return EffectTargetDefault.instance.findTargets(towerPosition, towerRange); } }
+    public virtual void UpdateEnemy(EnemyScript e, float deltaTime) { if (shouldApplyInnerEffect()) { ((IEffectPeriodic)innerEffect).UpdateEnemy(e, deltaTime); } }
+    public virtual void trigger(ref Card card, GameObject card_gameObject) { if (shouldApplyInnerEffect()) { ((IEffectSelf)innerEffect).trigger(ref card, card_gameObject); } }
+    public virtual void trigger(ref DamageEventData d, int pointsOfOvercharge) { if (shouldApplyInnerEffect()) { ((IEffectOvercharge)innerEffect).trigger(ref d, pointsOfOvercharge); } }
+    public virtual void trigger() { if (shouldApplyInnerEffect()) { ((IEffectInstant)innerEffect).trigger(); } }
+    public virtual void trigger(EnemyScript enemy) { if (shouldApplyInnerEffect()) { ((IEffectEnemyReachedGoal)innerEffect).trigger(enemy); } }
+    public virtual void onEnemyDeath(EnemyScript enemy) { if (shouldApplyInnerEffect()) { ((IEffectDeath)innerEffect).onEnemyDeath(enemy); } }
+    public virtual void onTowerDeath(TowerScript tower) { if (shouldApplyInnerEffect()) { ((IEffectDeath)innerEffect).onTowerDeath(tower); } }
 
     //enemyDamage effects need special care since they are handled twice but should only be tested once
     ushort enemyDamageEFfectTriggers;
-    public void expectedDamage(ref DamageEventData d)
+    public virtual void expectedDamage(ref DamageEventData d)
     {
         if ( shouldApplyInnerEffect() )
         {
@@ -42,7 +42,7 @@ public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
             ((IEffectEnemyDamaged)innerEffect).expectedDamage(ref d);
         }
     } 
-    public void actualDamage(ref DamageEventData d)
+    public virtual void actualDamage(ref DamageEventData d)
     {
         if (enemyDamageEFfectTriggers > 0)
         {
@@ -269,5 +269,145 @@ public class EffectEveryRound : BaseEffectMeta
             else
                 MessageHandlerScript.Error(cardName + ": EffectEveryRound can only target instant or everyRound effects");
         }
+    }
+}
+
+//enemy effect scales up as it takes damage (range: base to base*strength)
+public class EffectScaleEffectWithDamage : BaseEffectMeta
+{
+    public override string Name { get { return "Enemy " + argument + " increases up to " + strength + " times as it takes damage"; } } //returns name and strength
+    public override string XMLName { get { return "scaleEffectWithDamage"; } } //name used to refer to this effect in XML
+
+    private float? effectBaseStrength; //original strength of the inner effect
+
+    public override bool shouldApplyInnerEffect() { return true; } //always trigger inner effect
+
+    //allow this to trigger as an onDamage effect even if the child does not
+    public override bool triggersAs(EffectType triggerType)
+    {
+        return triggerType == EffectType.enemyDamaged || base.triggersAs(triggerType);
+    }
+
+    //we dont need to do anything on expected damage
+    public override void expectedDamage(ref DamageEventData d) { if (innerEffect.triggersAs(EffectType.enemyDamaged)) base.expectedDamage(ref d); } //pass to child if it is also an enemyDamaged effect
+
+    //recalculate effect strength
+    public override void actualDamage(ref DamageEventData d)
+    {
+        EnemyScript e = d.dest.GetComponent<EnemyScript>();
+
+        //on first hit, cache base strength
+        if (effectBaseStrength == null)
+            effectBaseStrength = innerEffect.strength;
+
+        float damageRatio = 1 - (e.curHealth / e.maxHealth);
+        innerEffect.strength = Mathf.Lerp(effectBaseStrength.Value, (effectBaseStrength.Value * strength), damageRatio);
+
+        if (innerEffect.triggersAs(EffectType.enemyDamaged)) base.expectedDamage(ref d); //pass to child if it is also an enemyDamaged effect
+    }
+}
+
+//enemy effect scales down as it takes damage (range: base to 1)
+public class EffectInvScaleEffectWithDamage : BaseEffectMeta
+{
+    public override string Name { get { return "Enemy " + argument + " drops to 1 as it takes damage"; } } //returns name and strength
+    public override string XMLName { get { return "invScaleEffectWithDamage"; } } //name used to refer to this effect in XML
+
+    private float? effectBaseStrength; //original strength of the inner effect
+
+    public override bool shouldApplyInnerEffect() { return true; } //always trigger inner effect
+
+    //allow this to trigger as an onDamage effect even if the child does not
+    public override bool triggersAs(EffectType triggerType)
+    {
+        return triggerType == EffectType.enemyDamaged || base.triggersAs(triggerType);
+    }
+
+    //we dont need to do anything on expected damage
+    public override void expectedDamage(ref DamageEventData d) { if (innerEffect.triggersAs(EffectType.enemyDamaged)) base.expectedDamage(ref d); } //pass to child if it is also an enemyDamaged effect
+
+    //recalculate effect strength
+    public override void actualDamage(ref DamageEventData d)
+    {
+        EnemyScript e = d.dest.GetComponent<EnemyScript>();
+
+        //on first hit, cache references
+        if (effectBaseStrength == null)
+            effectBaseStrength = innerEffect.strength;
+
+        float damageRatio = 1 - (e.curHealth / e.maxHealth);
+        innerEffect.strength = Mathf.Lerp(effectBaseStrength.Value, 1, damageRatio);
+
+        if (innerEffect.triggersAs(EffectType.enemyDamaged)) base.expectedDamage(ref d); //pass to child if it is also an enemyDamaged effect
+    }
+}
+
+//enemy effect Y gets stronger by X/second
+public class EffectScaleEffectWithTime : BaseEffectMeta
+{
+    public override string Name { get { return argument + " increases by " + strength + "/s"; } } //returns name and strength
+    public override string XMLName { get { return "scaleEffectWithTime"; } } //name used to refer to this effect in XML
+
+    public override bool shouldApplyInnerEffect() { return true; } //always trigger inner effect
+
+    //allow this to trigger as an onDamage effect even if the child does not
+    public override bool triggersAs(EffectType triggerType)
+    {
+        return triggerType == EffectType.periodic || base.triggersAs(triggerType);
+    }
+
+    public override void UpdateEnemy(EnemyScript e, float deltaTime)
+    {
+        innerEffect.strength += (strength * deltaTime);
+
+        if (innerEffect.triggersAs(EffectType.periodic)) base.UpdateEnemy(e, deltaTime); //pass to child if it is also a periodic effect
+    }
+}
+
+//enemy effect Y gets weaker by X/second (min 0)
+public class EffectInvScaleEffectWithTime : BaseEffectMeta
+{
+    public override string Name { get { return argument + " decreases by " + strength + "/s"; } } //returns name and strength
+    public override string XMLName { get { return "InvScaleEffectWithTime"; } } //name used to refer to this effect in XML
+
+    public override bool shouldApplyInnerEffect() { return true; } //always trigger inner effect
+
+    //allow this to trigger as an onDamage effect even if the child does not
+    public override bool triggersAs(EffectType triggerType)
+    {
+        return triggerType == EffectType.periodic || base.triggersAs(triggerType);
+    }
+
+    public override void UpdateEnemy(EnemyScript e, float deltaTime)
+    {
+        innerEffect.strength -= (strength * deltaTime);
+        innerEffect.strength = Mathf.Max(innerEffect.strength, 0.0f);
+
+        if (innerEffect.triggersAs(EffectType.periodic)) base.UpdateEnemy(e, deltaTime); //pass to child if it is also a periodic effect
+    }
+}
+
+//enemy health increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
+public class EffectScaleEffectWithBudget : BaseEffectMeta
+{
+    public override string Name { get { return "enemy " + argument + " increases on tougher waves"; } } //returns name and strength
+    public override string XMLName { get { return "scaleEffectWithBudget"; } } //name used to refer to this effect in XML
+
+    public override bool shouldApplyInnerEffect() { return true; } //always trigger inner effect
+
+    //allow this to trigger as an onDamage effect even if the child does not
+    public override bool triggersAs(EffectType triggerType)
+    {
+        return triggerType == EffectType.wave || base.triggersAs(triggerType);
+    }
+
+    public override WaveData alteredWaveData(WaveData currentWaveData)
+    {
+        innerEffect.strength = Mathf.RoundToInt((((float)currentWaveData.budget) / ((float)currentWaveData.enemyData.spawnCost)) * innerEffect.strength);
+
+        if (innerEffect.triggersAs(EffectType.wave))
+            return base.alteredWaveData(currentWaveData);
+        else
+            return currentWaveData;
     }
 }

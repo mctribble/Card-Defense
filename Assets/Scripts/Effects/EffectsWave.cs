@@ -129,33 +129,6 @@ public class EffectScaleAttackWithBudget : BaseEffectWave
 }
 
 //enemy health increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
-public class EffectScaleEffectWithBudget : BaseEffectWave
-{
-    [Hide] public override string Name { get { return "enemy " + argument + " increases on tougher waves"; } } //returns name and strength
-    [Show] public override string XMLName { get { return "scaleEffectWithBudget"; } } //name used to refer to this effect in XML
-
-    public override WaveData alteredWaveData(WaveData currentWaveData)
-    {
-        WaveData newData = currentWaveData;
-
-        bool targetFound = false;
-        foreach (IEffect e in newData.enemyData.effectData.effects)
-        {
-            if (e.Name == argument)
-            {
-                e.strength = Mathf.RoundToInt((((float)newData.budget) / ((float)newData.enemyData.spawnCost)) * e.strength);
-                targetFound = true;
-            }
-        }
-
-        if (targetFound == false)
-            MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + " could not find the target effect, and did nothing.");
-
-        return newData;
-    }
-}
-
-//enemy health increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
 public class EffectScaleHealthWithBudget : BaseEffectWave
 {
     [Hide] public override string Name { get { return "enemy health increases on tougher waves"; } } 
