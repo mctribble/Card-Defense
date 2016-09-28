@@ -26,6 +26,7 @@
                         <xsd:attribute name="Range" type="xsd:decimal" use="required" />
                         <xsd:attribute name="Damage" type="xsd:decimal" use="required" />
                         <xsd:attribute name="Lifespan" type="xsd:unsignedByte" use="required" />
+                        <xsd:attribute name="UpgradeCap" type="xsd:unsignedByte" use="required" />
                         <xsd:attribute name="Sprite" type="xsd:string" use="required" />
                       </xsd:complexType>
                     </xsd:element>

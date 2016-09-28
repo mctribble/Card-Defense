@@ -50,6 +50,27 @@ public class CardTypeCollection
     {
         cardTypes.Sort(new CardTypeComparer());
     }
+
+    //DEV: (temp)
+    [Show]
+    public void initUpgradeCaps()
+    {
+        foreach (CardData c in cardTypes)
+        {
+            if (c.cardType == CardType.tower)
+            {
+                if (c.isModded)
+                    Debug.Log(c.cardName);
+                else
+                {
+                    if ((c.effectData != null) && (c.effectData.propertyEffects.upgradesForbidden == true))
+                        c.towerData.upgradeCap = 0;
+                    else
+                        c.towerData.upgradeCap = 3;
+                }
+            }
+        }
+    }
 }
 
 public class CardTypeManagerScript : BaseBehaviour
@@ -63,11 +84,6 @@ public class CardTypeManagerScript : BaseBehaviour
     //contains all card types.  Only shown if it has data
     [Hide] public bool areTypesLoaded() { return (types != null) && (types.cardTypes != null) && (types.cardTypes.Count > 0); }
     [VisibleWhen("areTypesLoaded")] public CardTypeCollection types; 
-
-    //set ALL THREE of these to true to save any debugger card data changes back to the XML
-    [VisibleWhen("areTypesLoaded")]        public bool saveCardChanges;
-    [VisibleWhen("saveCardChanges")]       public bool reallySaveCardChanges;
-    [VisibleWhen("reallySaveCardChanges")] public bool reallyReallySaveCardChanges;
 
     // Use this for initialization
     private void Awake()
@@ -118,14 +134,12 @@ public class CardTypeManagerScript : BaseBehaviour
     }
 
     // Update is called once per frame
-    private void Update()
+    [Show][VisibleWhen("areTypesLoaded")] private System.Collections.IEnumerator saveCardChanges()
     {
-        if (saveCardChanges && reallySaveCardChanges && reallyReallySaveCardChanges)
+        yield return StartCoroutine(MessageHandlerScript.PromptYesNo("Are you sure you want to overwrite the card definitions?"));
+        if (MessageHandlerScript.responseToLastPrompt == "Yes")
         {
             types.Save(Path.Combine(Application.dataPath, path));
-            saveCardChanges = false;
-            reallySaveCardChanges = false;
-            reallyReallySaveCardChanges = false;
             Debug.Log("Card changes saved. <UNMODDED CARDS ONLY!>");
         }
     }

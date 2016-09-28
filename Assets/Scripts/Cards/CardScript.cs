@@ -24,10 +24,11 @@ public class TowerData : System.Object
     [XmlAttribute("Sprite")]
     public string towerSpriteName { get; set; }
 
-    [XmlAttribute("Recharge")] public float rechargeTime; //how long it takes tthe tower to charge
-    [XmlAttribute("Range")]    public float range;        //how far away from itself, in world space, the tower can shoot
-    [XmlAttribute("Damage")]   public float attackPower;  // amount of damage this dower does before any modifiers susch as armor
-    [XmlAttribute("Lifespan")] public int   lifespan;	   // amount of waves this tower remains on the field
+    [XmlAttribute("Recharge")]   public float rechargeTime; //how long it takes tthe tower to charge
+    [XmlAttribute("Range")]      public float range;        //how far away from itself, in world space, the tower can shoot
+    [XmlAttribute("Damage")]     public float attackPower;  // amount of damage this dower does before any modifiers susch as armor
+    [XmlAttribute("Lifespan")]   public int   lifespan;	  // amount of waves this tower remains on the field
+    [XmlAttribute("UpgradeCap")] public int   upgradeCap;   //max number of upgrades this tower can have
 
     //provides a short string for the debugger
     public override string ToString()
