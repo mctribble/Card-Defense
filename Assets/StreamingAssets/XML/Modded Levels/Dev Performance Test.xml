@@ -49,60 +49,24 @@
     <Segment startX="5" startY="0" endX="6" endY="0" />
   </PathSegments>
   <Towers>
-    <Tower name="Fast Tower" x="-6.5" y="0.5">
-      <Upgrades />
-    </Tower>
-    <Tower name="Fast Tower" x="-5.5" y="0.5">
-      <Upgrades />
-    </Tower>
-    <Tower name="Fast Tower" x="-6.5" y="-0.5">
-      <Upgrades />
-    </Tower>
-    <Tower name="Fast Tower" x="-5.5" y="-0.5">
-      <Upgrades />
-    </Tower>
-    <Tower name="Fast Tower" x="-6.5" y="0">
-      <Upgrades />
-    </Tower>
-    <Tower name="Fast Tower" x="-6" y="0.5">
-      <Upgrades />
-    </Tower>
-    <Tower name="Fast Tower" x="-6" y="-0.5">
-      <Upgrades />
-    </Tower>
-    <Tower name="Fast Tower" x="-5.5" y="0">
-      <Upgrades />
-    </Tower>
-    <Tower name="Fast Tower" x="-6" y="0">
-      <Upgrades />
-    </Tower>
-    <Tower name="Fast Tower" x="6.5" y="1.5">
-      <Upgrades />
-    </Tower>
-    <Tower name="Fast Tower" x="5.5" y="1.5">
-      <Upgrades />
-    </Tower>
-    <Tower name="Fast Tower" x="6.5" y="0.5">
-      <Upgrades />
-    </Tower>
-    <Tower name="Fast Tower" x="5.5" y="0.5">
-      <Upgrades />
-    </Tower>
-    <Tower name="Fast Tower" x="6.5" y="1">
-      <Upgrades />
-    </Tower>
-    <Tower name="Fast Tower" x="6" y="1.5">
-      <Upgrades />
-    </Tower>
-    <Tower name="Fast Tower" x="6" y="0.5">
-      <Upgrades />
-    </Tower>
-    <Tower name="Fast Tower" x="5.5" y="1">
-      <Upgrades />
-    </Tower>
-    <Tower name="Fast Tower" x="6" y="1">
-      <Upgrades />
-    </Tower>
+    <Tower name="Fast Tower" x="-6.5" y="0.5" />
+    <Tower name="Fast Tower" x="-5.5" y="0.5" />
+    <Tower name="Fast Tower" x="-6.5" y="-0.5" />
+    <Tower name="Fast Tower" x="-5.5" y="-0.5" />
+    <Tower name="Fast Tower" x="-6.5" y="0" />
+    <Tower name="Fast Tower" x="-6" y="0.5" />
+    <Tower name="Fast Tower" x="-6" y="-0.5" />
+    <Tower name="Fast Tower" x="-5.5" y="0" />
+    <Tower name="Fast Tower" x="-6" y="0" />
+    <Tower name="Fast Tower" x="6.5" y="1.5" />
+    <Tower name="Fast Tower" x="5.5" y="1.5" />
+    <Tower name="Fast Tower" x="6.5" y="0.5" />
+    <Tower name="Fast Tower" x="5.5" y="0.5" />
+    <Tower name="Fast Tower" x="6.5" y="1" />
+    <Tower name="Fast Tower" x="6" y="1.5" />
+    <Tower name="Fast Tower" x="6" y="0.5" />
+    <Tower name="Fast Tower" x="5.5" y="1" />
+    <Tower name="Fast Tower" x="6" y="1" />
     <Tower name="Shredder Tower" x="-0.5" y="0">
       <Upgrades>
         <Upgrade Name="Fast Upgrade" Count="5" />

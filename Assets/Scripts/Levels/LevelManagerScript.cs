@@ -28,6 +28,14 @@ public class PremadeTower
     [XmlArrayItem("Upgrade")]
     public List<PremadeTowerUpgrade> upgrades;  //a list of all upgrades to apply, in order
 
+    //dont serialize the upgrade list if it is empty
+    [XmlIgnore]
+    public bool upgradesSpecified
+    {
+        get { return (upgrades != null) && (upgrades.Count > 0); }
+        set { }
+    }
+
     [XmlAttribute] public float x; //x to spawn at
     [XmlAttribute] public float y; //y to spawn at
 

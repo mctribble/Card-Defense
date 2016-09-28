@@ -11,7 +11,7 @@ public class SpawnerData
     [XmlAttribute][Hide] public float spawnX;
     [XmlAttribute][Hide] public float spawnY;
 
-    [Show] public Vector2 spawnVec { get { return new Vector2(spawnX, spawnY); } set { spawnX = value.x; spawnY = value.y; } } //convenience accessor
+    [XmlIgnore][Show] public Vector2 spawnVec { get { return new Vector2(spawnX, spawnY); } set { spawnX = value.x; spawnY = value.y; } } //convenience accessor
     public override string ToString() { return spawnVec.ToString(); } //for better display in the debugger
 }
 
