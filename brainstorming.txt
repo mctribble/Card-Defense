@@ -12,8 +12,7 @@ levels:  04/30
 cards:   30/100
 decks:   02/10
 ================================================================
-balence:
-institute upgrade cap?
+balance:
 find a way to record statistics to aid in balancing content?
 difficulty settings??
 use scoring to make gemcraft style progression?
@@ -26,6 +25,3 @@ mod file dependencies
 ================================================================
 deferred:
 card types rewarded by player level, cannot be used in editor until they are obtained (need progression system)
-================================================================
-card/level ideas
-some sort of expensive to use card that gives rewards over time as a sort of investment?
