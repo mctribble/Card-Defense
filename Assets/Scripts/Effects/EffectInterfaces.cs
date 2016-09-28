@@ -117,10 +117,10 @@ public class EffectData : System.Object
 
     //cached values for utility functions
     //the '?' on some of these is shorthand for Nullable<T> (https://msdn.microsoft.com/en-us/library/1t3y8s4s.aspx)
-    [XmlIgnore] private TargetingType?         cachedCardTargetingType; 
-    [XmlIgnore] private IEffectTowerTargeting  cachedTowerTargetingType;
-    [XmlIgnore] private List<IEffectPeriodic>  cachedPeriodicEffectList;
-    [XmlIgnore] private PropertyEffects?       cachedPropertyEffects;
+    [XmlIgnore] private TargetingType?              cachedCardTargetingType; 
+    [XmlIgnore] private List<IEffectTowerTargeting> cachedTowerTargetingList;
+    [XmlIgnore] private List<IEffectPeriodic>       cachedPeriodicEffectList;
+    [XmlIgnore] private PropertyEffects?            cachedPropertyEffects;
 
     //list of effect objects
     [XmlIgnore] private List<IEffect> Effects = new List<IEffect>(); 
@@ -179,9 +179,10 @@ public class EffectData : System.Object
     private void resetCachedValues()
     {
         cachedCardTargetingType  = null;
-        cachedTowerTargetingType = null;
+        cachedTowerTargetingList = null;
         cachedPeriodicEffectList = null;
-        cachedPropertyEffects   = null;
+        cachedPropertyEffects    = null;
+        lastUsedTargetingEffect  = null;
     }
 
     //helper function that returns how the card containing these effects must be used.
@@ -213,24 +214,52 @@ public class EffectData : System.Object
 
     //helper function that returns the targeting effect currently in use by the tower
     //the result is cached since it is needed regularly but changes rarely
-    [XmlIgnore]
-    public IEffectTowerTargeting towerTargetingType
+    //the XMLName of the actual effect used is cached for use by anything that wants to know how the targeting happened
+    public string lastUsedTargetingEffect { get; set; }
+    public List<GameObject> doTowerTargeting(Vector2 towerPosition, float towerRange)
     {
-        get
+        //cache a list of targeting effects on this object.  each one is tested in turn, and the first that returns a non-null response has its result returned to the tower
+        if (cachedTowerTargetingList == null)
         {
-            if (cachedTowerTargetingType != null)
-                return cachedTowerTargetingType;
-
-            IEffectTowerTargeting res = null;
+            cachedTowerTargetingList = new List<IEffectTowerTargeting>();
+            cachedTowerTargetingList.Add(EffectTargetDefault.instance);
 
             foreach (IEffect e in Effects)
                 if (e.triggersAs(EffectType.towerTargeting))
-                    res = (IEffectTowerTargeting)e;
+                    cachedTowerTargetingList.Add( (IEffectTowerTargeting)e );
+
+            cachedTowerTargetingList.Reverse();
+        }
+
+        //find the first targeting effect that returns an actual result
+        List<GameObject> res = null;
+        foreach (IEffectTowerTargeting ie in cachedTowerTargetingList)
+        {
+            res = ie.findTargets(towerPosition, towerRange);
 
             if (res == null)
-                res = EffectTargetDefault.instance;
+            {
+                continue;
+            }
+            else
+            {
+                //found a targeting effect that works.  Cache the XMLName and leave the loop
+                IEffect lastUsed = ie;
+                while (lastUsed.triggersAs(EffectType.meta))
+                    lastUsed = ((IEffectMeta)lastUsed).innerEffect;
 
-            cachedTowerTargetingType = res;
+                lastUsedTargetingEffect = lastUsed.XMLName;
+                break;
+            }
+        }
+
+        if (res == null)
+        {
+            MessageHandlerScript.Error("no targeting effect, not even the default, provided a result list!");
+            return new List<GameObject>();
+        }
+        else
+        {
             return res;
         }
     }
@@ -395,7 +424,6 @@ public interface IEffect
     string        XMLName         { get; } //name used to refer to this effect in XML.  See also: EffectTypeManagerScript.parse()
     TargetingType targetingType   { get; } //specifies what this card must target when casting, if anything
     string        effectColorHex  { get; } //hex string that gives the color that should be used for this effect
-    //EffectType    effectType    { get; }   //specifies what kind of effect this is
 
     bool shouldBeRemoved(); //returns true if this effect is no longer necessary and can be removed
     bool triggersAs(EffectType triggerType); //returns true if this effect triggers as an effect of this type (usually only true if it IS an effect of that type, but there are exceptions)

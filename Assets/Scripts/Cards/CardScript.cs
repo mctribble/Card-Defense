@@ -19,7 +19,7 @@ public enum CardType
 [System.Serializable]
 public class TowerData : System.Object
 {
-    [XmlIgnore] public string towerName; //name of the card which summoned this tower.  Populated when the tower is summoned
+    [Hide][XmlIgnore] public string towerName; //name of the card which summoned this tower.  Populated when the tower is summoned
 
     [XmlAttribute("Sprite")]
     public string towerSpriteName { get; set; }

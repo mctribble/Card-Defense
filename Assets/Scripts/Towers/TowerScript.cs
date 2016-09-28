@@ -215,23 +215,23 @@ public class TowerScript : BaseBehaviour
                 if (effects.propertyEffects.limitedAmmo == 0)
                     return null;
 
-        //get the tower targeting type from effectData.  this uses a helper function for performance reasons
-        IEffectTowerTargeting targetingEffect = null;
+        //get the target list from effect data. (this is for performance reasons: effectData can cache the list of different targeting effects on the object and return the first that doesn't error)
+        List<GameObject> targets;
         if (effects != null)
-            targetingEffect = effects.towerTargetingType;
+            targets = effects.doTowerTargeting(transform.position, range);
         else
-            targetingEffect = EffectTargetDefault.instance; //EffectTargetDefault is a placeholder used when there is no target
-        Debug.Assert(targetingEffect != null); //there must always be a targeting effect
+            targets = EffectTargetDefault.instance.findTargets(transform.position, range); //EffectTargetDefault is a placeholder used when there is no target
 
-        //find the target(s) we are shooting at using the current targeting effect, or the default if there is none
-        return targetingEffect.findTargets(transform.position, range);
+        Debug.Assert(targets != null); //there must always be a target list, even if it is empty
+
+        return targets;
     }
 
     //fires on each enemy in the given list, if possible
     private bool fire(List<GameObject> targets)
     {
         //only fire if we have valid targets
-        if ((targets != null) && (targets.Count != 0))
+        if ( (targets != null) && (targets.Count != 0) )
         {
             //reduce charge meter (if the gauge was overcharged, retain the excess)
             shotCharge -= 1.0f;
@@ -268,9 +268,9 @@ public class TowerScript : BaseBehaviour
             }
 
             //determine projectile spawning by targeting effect
-            if ( (effects != null) && (effects.towerTargetingType != null) )
+            if ( effects != null )
             {
-                switch (effects.towerTargetingType.XMLName)
+                switch (effects.lastUsedTargetingEffect)
                 {
                     case "targetOrthogonal":
                         //split target list into four others, one for each direcion

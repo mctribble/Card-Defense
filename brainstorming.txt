@@ -9,7 +9,7 @@ sound!
 content goals:
 enemies: 06/15
 levels:  04/30
-cards:   30/100
+cards:   31/100
 decks:   02/10
 ================================================================
 balance:

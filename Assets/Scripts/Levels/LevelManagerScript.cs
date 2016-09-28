@@ -534,6 +534,7 @@ public class LevelManagerScript : BaseBehaviour
         levelLoaded = false;
         foreach (GameObject e in GameObject.FindGameObjectsWithTag("Enemy")) Destroy(e);
         foreach (GameObject e in GameObject.FindGameObjectsWithTag("EnemySpawner")) Destroy(e);
+        spawnerObjects.Clear();
         foreach (GameObject e in GameObject.FindGameObjectsWithTag("Tower")) Destroy(e);
         foreach (GameObject e in GameObject.FindGameObjectsWithTag("Path")) Destroy(e);
         HandScript.playerHand.SendMessage("Show");

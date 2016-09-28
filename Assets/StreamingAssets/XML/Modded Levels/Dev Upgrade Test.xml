@@ -8,10 +8,10 @@
   <waveTimeLinear>1.1</waveTimeLinear>
   <waveTimeMax>20</waveTimeMax>
   <Waves>
-    <Wave type="Carrier" budget="150" time="1" />
-    <Wave type="Carrier" budget="600" time="2" />
-    <Wave type="Carrier" budget="1200" time="4" />
-    <Wave type="Carrier" budget="1800" time="8" />
+    <Wave type="Carrier" budget="150" time="0.9836545" />
+    <Wave type="Swarm" budget="600" time="1.98383343" />
+    <Wave type="Swarm" budget="1200" time="3.98440981" />
+    <Wave type="Carrier" budget="1800" time="7.98343372" />
     <Wave type="Carrier" budget="2400" time="10" />
   </Waves>
   <Spawners>
@@ -84,7 +84,7 @@
     <Cards>
       <Card name="Reinforce" count="10" />
       <Card name="Preservation Upgrade" count="10" />
-      <Card name="Self-Destruct Upgrade" count="10" />
+      <Card name="Test Upgrade" count="10" />
       <Card name="Sniper Tower" count="10" />
     </Cards>
   </levelDeck>

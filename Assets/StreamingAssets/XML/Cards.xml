@@ -10,10 +10,10 @@
       </effectData>
     </Card>
     <Card Type="tower" Name="Basic Tower" Charges="6" Art="Summon_Tower_Basic.png" Tooltip="Tower_Standard.png">
-      <towerData Recharge="1" Range="3" Damage="20" Lifespan="5" UpgradeCap="3" Sprite="Tower_Standard.png" />
+      <towerData Recharge="1" Range="3" Damage="20" Lifespan="5" UpgradeCap="5" Sprite="Tower_Standard.png" />
     </Card>
     <Card Type="tower" Name="Black Plague Tower" Charges="1" Art="Summon_Tower_Basic.png" Tooltip="Tower_Heavy.png">
-      <towerData Recharge="10" Range="1" Damage="1" Lifespan="1" UpgradeCap="3" Sprite="Tower_Heavy.png" />
+      <towerData Recharge="10" Range="1" Damage="1" Lifespan="1" UpgradeCap="1" Sprite="Tower_Heavy.png" />
       <effectData>
         <Effects>
           <Effect name="infiniteTowerLifespan" />
@@ -54,14 +54,6 @@
     <Card Type="tower" Name="Heavy Tower" Description="Suitable for fighting tanks" Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Heavy.png">
       <towerData Recharge="3" Range="2" Damage="100" Lifespan="3" UpgradeCap="3" Sprite="Tower_Heavy.png" />
     </Card>
-    <Card Type="tower" Name="Orthogonal Tower" Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Standard.png">
-      <towerData Recharge="1" Range="3" Damage="5" Lifespan="5" UpgradeCap="3" Sprite="Tower_Standard.png" />
-      <effectData>
-        <Effects>
-          <Effect name="targetOrthogonal" />
-        </Effects>
-      </effectData>
-    </Card>
     <Card Type="tower" Name="Nova Tower" Description="The fury of a single sun tends to be sufficient" Charges="2" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <towerData Recharge="30" Range="10" Damage="200" Lifespan="1" UpgradeCap="3" Sprite="Tower_Fast.png" />
       <effectData>
@@ -71,6 +63,14 @@
           <Effect name="infiniteTowerLifespan" />
           <Effect name="limitedAmmo" strength="3" />
           <Effect name="armorPierce" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="tower" Name="Orthogonal Tower" Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Standard.png">
+      <towerData Recharge="1" Range="3" Damage="5" Lifespan="5" UpgradeCap="3" Sprite="Tower_Standard.png" />
+      <effectData>
+        <Effects>
+          <Effect name="targetOrthogonal" />
         </Effects>
       </effectData>
     </Card>
@@ -115,11 +115,27 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="upgrade" Name="Fast Upgrade" Description="small damage increase per shot.  best on fast towers" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+      <upgradeData RechargeMult="0.9" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="1" WaveBonus="2" />
+    </Card>
+    <Card Type="upgrade" Name="Heavy Upgrade" Description="Best on towers with high damage" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="2" RechargeMod="0.5" RangeMod="1" DamageMod="0" WaveBonus="2" />
+    </Card>
     <Card Type="upgrade" Name="Preservation Upgrade" Description="Don't leave me!" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <upgradeData RechargeMult="1.1" RangeMult="0.9" DamageMult="0.9" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="5" />
       <effectData>
         <Effects>
           <Effect name="upgradesForbidden" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="upgrade" Name="Pulse Upgrade" Description="Adds a secondary area attack" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Standard.png">
+      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="1" />
+      <effectData>
+        <Effects>
+          <Effect name="effectCooldown" strength="3">
+            <Effect name="secondaryBurst" strength="1.5" argument="10" />
+          </Effect>
         </Effects>
       </effectData>
     </Card>
@@ -133,12 +149,6 @@
           <Effect name="targetBurst" />
         </Effects>
       </effectData>
-    </Card>
-    <Card Type="upgrade" Name="Fast Upgrade" Description="small damage increase per shot.  best on fast towers" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
-      <upgradeData RechargeMult="0.9" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="1" WaveBonus="2" />
-    </Card>
-    <Card Type="upgrade" Name="Heavy Upgrade" Description="Best on towers with high damage" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
-      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="2" RechargeMod="0.5" RangeMod="1" DamageMod="0" WaveBonus="2" />
     </Card>
     <Card Type="upgrade" Name="Spitfire Upgrade" Description="Quantity over quality." Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <upgradeData RechargeMult="3" RangeMult="1" DamageMult="0.5" RechargeMod="0" RangeMod="0.5" DamageMod="0" WaveBonus="2" />
@@ -222,18 +232,18 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="spell" Name="Summon Swarm" Description="BEES!" Charges="2" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
-      <effectData>
-        <Effects>
-          <Effect name="changeWaveType" argument="Swarm" />
-          <Effect name="damagePlayer" strength="3" />
-        </Effects>
-      </effectData>
-    </Card>
     <Card Type="spell" Name="Summon Standard" Description="Lets you and I get normal for a change." Charges="2" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
           <Effect name="changeWaveType" argument="Standard" />
+          <Effect name="damagePlayer" strength="3" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="spell" Name="Summon Swarm" Description="BEES!" Charges="2" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+      <effectData>
+        <Effects>
+          <Effect name="changeWaveType" argument="Swarm" />
           <Effect name="damagePlayer" strength="3" />
         </Effects>
       </effectData>

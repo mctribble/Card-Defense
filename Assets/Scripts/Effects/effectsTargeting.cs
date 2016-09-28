@@ -126,7 +126,7 @@ public class EffectTargetClosest : BaseEffectTowerTargeting
 
         //if closest is still null, then we have no valid target.
         if (closest == null)
-            return null;
+            return new List<GameObject>();
 
         //target it
         List<GameObject> result = new List<GameObject>();
