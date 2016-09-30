@@ -16,8 +16,9 @@
 			float Range: distance the tower can fire
 			float Damage: amount of damage dealt
 			byte  Lifespan: number of waves the tower remains on the map.  can be extended with upgrades or spells
+      byte  UpgradeCap: number of times the tower can be upgraded.
 			string Sprite: filename of the image to represent the tower in the world.  Do NOT include the extension.  The image must be a .png and placed in StreamingAssets/Art/Sprites.  A default is used if the image cant be found or this property is missing.-->
-      <towerData Recharge="0.75" Range="3.5" Damage="25" Lifespan="5" Sprite="Tower_Basic.png" />
+      <towerData Recharge="0.75" Range="3.5" Damage="25" Lifespan="5" UpgradeCap="5" Sprite="Tower_Basic.png" />
     </Card>
 	<!-- because this is a new card, it will not appear in game unless listed in a deck (such as in the example level file in this same folder) -->
     <Card Name="Example Upgrade" Type="upgrade" Description="+1 to all properties.  +10% to all properties." Charges="2" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
