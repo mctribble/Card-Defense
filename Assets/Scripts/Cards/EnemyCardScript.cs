@@ -15,6 +15,10 @@ public class WaveData
     private string[] getEnemyNames() { return EnemyTypeManagerScript.instance.getEnemyNames(); }
     [XmlAttribute][Popup("getEnemyNames",CaseSensitive = true, Filter = true, HideUpdate = true, TextField = true)] public string type;
 
+    //DEV: indicates whether or not this wave was randomly generated.  Random waves are not written back to the file when saving level definitions
+    [XmlIgnore][Comment("random waves are not saved to the level file.",helpButton:true)]
+    public bool isRandomWave;
+    
     [XmlAttribute]    public int    budget;
     [XmlAttribute]    public float  time;
     [XmlAttribute]    public string message;
@@ -48,6 +52,7 @@ public class WaveData
         message = null;
         forcedSpawnCount = -1;
         spawnedThisWave = 0;
+        isRandomWave = false;
     }
 
     //specific data
@@ -59,6 +64,7 @@ public class WaveData
         message = null;
         forcedSpawnCount = -1;
         spawnedThisWave = 0;
+        isRandomWave = false;
     }
 
     //survivor wave constructor
@@ -72,6 +78,7 @@ public class WaveData
         spawnedThisWave = 0;
         enemyList = enemies;
         cachedSpawnCount = enemies.Count;
+        isRandomWave = false;
     }
 
     //returns number of enemies to spawn this wave.  Cache the value to make sure we give the original spawn count, unaltered by anything that happens during the wave

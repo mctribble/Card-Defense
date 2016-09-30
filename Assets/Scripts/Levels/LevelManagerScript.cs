@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -59,14 +60,14 @@ public class LevelData
     public int randomWaveCount;
 
     //budget: absolute + (wave * linear) + (wave * squared)^2 + (exponential^wave)
-    public float waveGrowthAbsolute     = 160.0f;
-    public float waveGrowthLinear       = 5.0f;
-    public float waveGrowthSquared      = 2.3f;
-    public float waveGrowthExponential  = 1.2f;
+    [DefaultValue(160.0f)] public float waveGrowthAbsolute     = 160.0f;
+    [DefaultValue(5.0f)]   public float waveGrowthLinear       = 5.0f;
+    [DefaultValue(2.3f)]   public float waveGrowthSquared      = 2.3f;
+    [DefaultValue(1.2f)]   public float waveGrowthExponential  = 1.2f;
 
     //time: min(wave*linear, maxwavetime)
-    public float waveTimeLinear = 1.1f;
-    public float waveTimeMax    = 20.0f;
+    [DefaultValue(1.1f)]  public float waveTimeLinear = 1.1f;
+    [DefaultValue(20.0f)] public float waveTimeMax    = 20.0f;
 
     [XmlArray("Waves")]
     [XmlArrayItem("Wave")]
@@ -94,21 +95,32 @@ public class LevelData
     //It could be defined directly in the level file, or the level could just provide the name of a premade deck in Decks.xml instead.
     public XMLDeck levelDeck;
 
+    //only save the levelDeck to XML if we aren't using a premade deck
+    [XmlIgnore] public bool levelDeckSpecified { get { return premadeDeckName == ""; } set { } }
+
     //provides a popup menu in the inspector
     private string[] getDeckNames() { return DeckManagerScript.instance.premadeDecks.getNames(); }
-    [Popup("getDeckNames",CaseSensitive = true,Filter = true,HideUpdate = true,TextField = true)] public string premadeDeckName; 
+    [Popup("getDeckNames",CaseSensitive = true,Filter = true,HideUpdate = true,TextField = true)]
+    public string premadeDeckName; 
 
     [Show] private void SaveChanges() { Save(fileName); } //DEV: provides a button in the editor to save the level data
 
     //saves the level data to a file of the given name
     public void Save(string path)
     {
+        //temporarily remove random waves from the list
+        List<WaveData> temp = new List<WaveData>(waves);
+        waves.RemoveAll(wd => wd.isRandomWave);
+
         XmlSerializer serializer = new XmlSerializer(typeof(LevelData));
 
         using (StreamWriter stream = new StreamWriter(path, false, Encoding.GetEncoding("UTF-8")))
         {
             serializer.Serialize(stream, this);
         }
+
+        //restore the list to how it was
+        waves = temp;
     }
 
     public static LevelData Load(string path)
@@ -247,6 +259,9 @@ public class LevelManagerScript : BaseBehaviour
 
             //create the wave data
             WaveData waveData = new WaveData(waveEnemy.name, waveBudget, waveTime);
+
+            //mark it as a random wave so it doesnt get saved from the inspector
+            waveData.isRandomWave = true;
 
             //if there are wave effects on the enemy type, apply them now
             if (waveEnemy.effectData != null)
