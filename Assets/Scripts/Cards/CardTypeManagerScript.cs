@@ -14,7 +14,7 @@ public class CardTypeCollection
     //list of different card types
     [XmlArray("Cards")]
     [XmlArrayItem("Card")]
-    [Display(Seq.GuiBox | Seq.PerItemDuplicate | Seq.PerItemRemove)]
+    [Display(Seq.GuiBox | Seq.PerItemDuplicate | Seq.PerItemRemove | Seq.Filter)]
     public List<CardData> cardTypes = new List<CardData>();
 
     public void Save(string path)
@@ -146,5 +146,56 @@ public class CardTypeManagerScript : BaseBehaviour
 
         MessageHandlerScript.Error("Could not find card type " + name + ".");
         return null;
+    }
+
+    //returns the names of all available cards
+    public string[] getCardNames()
+    {
+        List<string> names = new List<string>();
+
+        foreach (CardData cd in types.cardTypes)
+            names.Add(cd.cardName);
+
+        names.Sort();
+        return names.ToArray();
+    }
+
+    //returns the names of all available tower cards
+    public string[] getTowerNames()
+    {
+        List<string> names = new List<string>();
+
+        foreach (CardData cd in types.cardTypes)
+            if (cd.cardType == CardType.tower)
+                names.Add(cd.cardName);
+
+        names.Sort();
+        return names.ToArray();
+    }
+
+    //returns the names of all available upgrade cards
+    public string[] getUpgradeNames()
+    {
+        List<string> names = new List<string>();
+
+        foreach (CardData cd in types.cardTypes)
+            if (cd.cardType == CardType.upgrade)
+                names.Add(cd.cardName);
+
+        names.Sort();
+        return names.ToArray();
+    }
+
+    //returns the names of all available spell cards
+    public string[] getSpellNames()
+    {
+        List<string> names = new List<string>();
+
+        foreach (CardData cd in types.cardTypes)
+            if (cd.cardType == CardType.spell)
+                names.Add(cd.cardName);
+
+        names.Sort();
+        return names.ToArray();
     }
 }

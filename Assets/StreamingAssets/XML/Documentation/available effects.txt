@@ -1,10 +1,8 @@
-﻿these are the available effects and what they do.
-X is the effect strength
-Y is the effect argument
+﻿<<these are the available effects and what they do.  X is the effect strength.  Y is the effect argument>>
 
 <<Enemy Effects (Periodic)>>
 regeneration | enemy recovers X health per second.  
-poison       | enemy takes Y damage per second for Y seconds
+poison       | enemy takes X damage per second for Y seconds
 
 <<Enemy Effects (Reached Goal)>>
 damageHand | deals X damage to the players hand

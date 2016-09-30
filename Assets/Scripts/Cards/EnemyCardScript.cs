@@ -11,7 +11,10 @@ using Vexe.Runtime.Types;
 [System.Serializable]
 public class WaveData
 {
-    [XmlAttribute]    public string type;
+    //enemy type name, annotated to give a popup in the inspector
+    private string[] getEnemyNames() { return EnemyTypeManagerScript.instance.getEnemyNames(); }
+    [XmlAttribute][Popup("getEnemyNames",CaseSensitive = true, Filter = true, HideUpdate = true, TextField = true)] public string type;
+
     [XmlAttribute]    public int    budget;
     [XmlAttribute]    public float  time;
     [XmlAttribute]    public string message;

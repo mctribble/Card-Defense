@@ -10,10 +10,10 @@ using Vexe.Runtime.Types;
 [System.Serializable]
 public class XMLColor
 {
-    [XmlAttribute] public float r;
-    [XmlAttribute] public float g;
-    [XmlAttribute] public float b;
-    [XmlAttribute] public float a;
+    [XmlAttribute][fSlider(0.0f,1.0f)] public float r;
+    [XmlAttribute][fSlider(0.0f,1.0f)] public float g;
+    [XmlAttribute][fSlider(0.0f,1.0f)] public float b;
+    [XmlAttribute][fSlider(0.0f,1.0f)] public float a;
 
     //returns a unity color
     public Color toColor()
@@ -34,7 +34,7 @@ public class XMLColor
 
     public override string ToString()
     {
-        return "{" + r.ToString("2F") + ", " + g.ToString("2F") + ", " + b.ToString("2F") + ", " + a.ToString("2F") + "}";
+        return "{" + r.ToString("F2") + ", " + g.ToString("F2") + ", " + b.ToString("F2") + ", " + a.ToString("F2") + "}";
     }
 };
 

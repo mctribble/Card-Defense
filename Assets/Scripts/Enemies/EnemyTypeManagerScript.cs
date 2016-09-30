@@ -149,4 +149,16 @@ public class EnemyTypeManagerScript : BaseBehaviour
 
         throw new KeyNotFoundException("Enemy type not found: " + nameToFind);
     }
+
+    //provides a list of enemy type names
+    public string[] getEnemyNames()
+    {
+        List<string> names = new List<string>();
+
+        foreach (EnemyData e in types.enemyTypes)
+            names.Add(e.name);
+
+        names.Sort();
+        return names.ToArray();
+    }
 }

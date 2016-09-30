@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using UnityEngine;
@@ -43,7 +44,10 @@ public enum EffectType
 [System.Serializable]
 public class XMLEffect : System.Object
 {
-    [XmlAttribute] public string name;
+    private string[] getXMLNames() { return EffectTypeManagerScript.instance.listEffectXMLNames(); } //used to provide a popup list of effect options in the inspector
+    [XmlAttribute][Popup("getXMLNames",CaseSensitive = true, Filter = true, HideUpdate = true, TextField = true)] public string name;
+
+    //effect params
     [XmlAttribute] public float  strength;
     [XmlAttribute] public string argument;
 
@@ -54,6 +58,65 @@ public class XMLEffect : System.Object
     [XmlElement("Effect")]
     public XMLEffect innerEffect;
 
+    //attempts to retrieve a help string from 'available effects.txt' for display in the inspector
+    private static Dictionary<string, string> cachedHelpStrings = null;
+    [Show] public string usage
+    {
+        get
+        {
+            //if the dictionary is not built yet, build it
+            if (cachedHelpStrings == null)
+            {
+                string helpFile = Path.Combine(Application.dataPath, "StreamingAssets/XML/Documentation/available effects.txt");
+                cachedHelpStrings = new Dictionary<string, string>();
+                try
+                {
+                    // Open the text file using a stream reader.
+                    using (StreamReader sr = new StreamReader(helpFile))
+                    {
+                        //read the contents
+                        while (sr.EndOfStream == false)
+                        {
+                            //read a line from the file...
+                            string line = sr.ReadLine();
+
+                            //skip it if it is empty...
+                            if (line.Length == 0)
+                                continue;
+
+                            //or starts with <...
+                            if (line.StartsWith("<"))
+                                continue;
+
+                            //this line should be in the format effectName | helpString.  retrieve values
+                            string[] parts = line.Split('|');
+
+                            //if we dont have two strings, then the line was formatted wrong.  bail.
+                            if (parts.Length != 2)
+                                return "could not parse line: " + line;
+
+                            //we do have two strings.  Trim leading/trailing spaces from them and use them as keys and values, respectively
+                            cachedHelpStrings.Add(parts[0].Trim(), parts[1].Trim());
+                        }
+                    }
+                }
+                catch (System.Exception e)
+                {
+                    return "Could not open " + helpFile + "(" + e.Message + ")";
+                }
+            }
+
+            //now retrieve the string in question from the dictionary
+            string helpString;
+            bool helpStringFound = cachedHelpStrings.TryGetValue(name, out helpString);
+
+            if (helpStringFound)
+                return helpString;
+            else
+                return "could not find help for " + name;
+        }
+    }
+
     public override string ToString()
     {
         string result = name;
@@ -63,7 +126,7 @@ public class XMLEffect : System.Object
             result += "(";
 
             if (strength != 0.0f)
-                result += "S: " + strength;
+                result += "X: " + strength;
 
             if ((strength != 0.0f) && (argument != null) && (argument != ""))
                 result += ", ";
@@ -77,6 +140,8 @@ public class XMLEffect : System.Object
 
         if (innerEffect != null)
             result += "{" + innerEffect.ToString() + "}";
+
+        //result += " <" + getHelpString() + ">";
 
         return result;
     }
@@ -441,8 +506,8 @@ public abstract class BaseEffect : IEffect
     [Hide] public abstract TargetingType targetingType { get; } //specifies what this card must target when casting, if anything
     [Hide] public abstract EffectType    effectType    { get; } //specifies what kind of effect this is
 
-    [Hide] public abstract string Name    { get; } //user-friendly name of this effect
-    [Show] public abstract string XMLName { get; } //name used to refer to this effect in XML.  See also: EffectTypeManagerScript.parse()
+    [Hide] public  abstract string Name    { get; }                 //user-friendly name of this effect
+    [Show] public  abstract string XMLName { get; }                 //name used to refer to this effect in XML.  See also: EffectTypeManagerScript.parse()
 
     //returns true if this effect is no longer necessary and can be removed
     public virtual bool shouldBeRemoved() { return false; } 

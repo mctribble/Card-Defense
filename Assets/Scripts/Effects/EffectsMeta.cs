@@ -11,6 +11,9 @@ using System.Collections.Generic;
 //provides basic handling of the wrapper shenanigans that should work for most effects
 public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
 {
+    //constructor
+    public BaseEffectMeta() { innerEffect = EffectDoNothing.instance; }
+
     //this is a meta effect, but we mimic our target so that we can trigger and display in the same way they do
     public override EffectType    effectType    { get { return EffectType.meta; } }
     public override TargetingType targetingType { get { return innerEffect.targetingType; } }
@@ -68,6 +71,27 @@ public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
 
     //if the inner effect can be cleaned out, or there is no inner effect, then this can be removed
     public override bool shouldBeRemoved() { return ( (innerEffect == null) || (innerEffect.shouldBeRemoved()) ); }
+}
+
+//placeholder do-nothing effect to use as a default inner effect
+public class EffectDoNothing : BaseEffectInstant
+{
+    private static EffectDoNothing m_instance;
+    public static EffectDoNothing instance
+    {
+        get
+        {
+            if (m_instance == null)
+                m_instance = new EffectDoNothing();
+
+            return m_instance;
+        }
+    }
+
+    public override string Name { get { return "Do Nothing"; } }
+    public override string XMLName { get { return "doNothing"; } }
+
+    public override void trigger() { }
 }
 
 //child effect has an X% chance of triggering

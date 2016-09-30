@@ -8,10 +8,13 @@ using Vexe.Runtime.Types;
 [System.Serializable]
 public class PathSegment : System.Object
 {
-    [XmlAttribute] public float startX;
-    [XmlAttribute] public float startY;
-    [XmlAttribute] public float endX;
-    [XmlAttribute] public float endY;
+    [XmlAttribute][Hide] public float startX;
+    [XmlAttribute][Hide] public float startY;
+    [XmlAttribute][Hide] public float endX;
+    [XmlAttribute][Hide] public float endY;
+
+    [Show][XmlIgnore] public Vector2 startPos { get { return new Vector2(startX, startY); } set { startX = value.x; startY = value.y; } }
+    [Show][XmlIgnore] public Vector2   endPos { get { return new Vector2(  endX,   endY); } set {   endX = value.x;   endY = value.y; } }
 
     public override string ToString() { return "{" + startX.ToString("F1") + ", " + startY.ToString("F1") + "} -> {" + endX.ToString("F1") + ", " + endY.ToString("F1") + "}"; }
 }

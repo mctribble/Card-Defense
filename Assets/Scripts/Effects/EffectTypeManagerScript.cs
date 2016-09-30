@@ -142,6 +142,40 @@ public class EffectTypeManagerScript : BaseBehaviour
                            p.IsClass);
     }
 
+    //returns a list of XML names that correspond to valid effects
+    private String[] cachedEffectXMLNames;
+    public String[] listEffectXMLNames()
+    {
+        if (cachedEffectXMLNames != null)
+            return cachedEffectXMLNames;
+
+        if (Application.isPlaying == false)
+        {
+            Debug.Log("This only works when in game");
+            return null;
+        }
+
+        //create an object for every IEffect in the game
+        List<String> XMLNames = new List<string>();
+        foreach (Type t in IEffectTypes())
+        {
+            //not all effects have public constructors (ex: targetDefault).  These are not meant to be named anyway, so we can safely skip them
+            IEffect ie;
+            try
+            {
+                ie = (IEffect)Activator.CreateInstance(t);
+            }
+            catch (MissingMethodException) { continue; }
+
+            XMLNames.Add(ie.XMLName);
+        }
+
+        XMLNames.Sort();
+        cachedEffectXMLNames = XMLNames.ToArray();
+
+        return cachedEffectXMLNames;
+    }
+
     //provides a button in the unity inspector to print out a list of all effect names sorted by length.  To be used for looking for effect names that are either too long or are unhelpful
     [Show] private void listEffectNames()
     {

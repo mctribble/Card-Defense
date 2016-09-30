@@ -14,7 +14,10 @@ using Vexe.Runtime.Types;
 [System.Serializable]
 public class XMLDeckEntry
 {
-    [XmlAttribute] public string name;
+    //provides inspector popup menu for card name
+    private string[] getCardNames() { return CardTypeManagerScript.instance.getCardNames(); }
+    [Popup("getCardNames",CaseSensitive = true,Filter = true,HideUpdate = true,TextField = true)][XmlAttribute] public string name;  
+
     [XmlAttribute] public int    count;
 
     //default constructor
@@ -161,6 +164,18 @@ public class DeckCollection
 
         //return the result
         return result;
+    }
+
+    //returns a list of valid deck names
+    public string[] getNames()
+    {
+        List<string> names = new List<string>();
+
+        foreach (XMLDeck xd in decks)
+            names.Add(xd.name);
+
+        names.Sort();
+        return names.ToArray();
     }
 }
 

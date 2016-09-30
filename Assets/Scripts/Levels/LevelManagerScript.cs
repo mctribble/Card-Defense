@@ -12,7 +12,8 @@ using Vexe.Runtime.Types;
 [System.Serializable]
 public class PremadeTowerUpgrade
 {
-    [XmlAttribute] public string Name;  //upgrade to apply
+    private string[] getUpgradeNames() { return CardTypeManagerScript.instance.getUpgradeNames(); }
+    [XmlAttribute][Popup("getUpgradeNames",CaseSensitive = true,Filter = true,HideUpdate = true,TextField = true)] public string Name;  //upgrade to apply, with an inspector popup menu
     [XmlAttribute] public int    Count;	//number of applications
 
     public override string ToString() { return Name + "x" + Count; }
@@ -22,7 +23,8 @@ public class PremadeTowerUpgrade
 [System.Serializable]
 public class PremadeTower
 {
-    [XmlAttribute] public string name; //name of the tower to place
+    private string[] getTowerNames() { return CardTypeManagerScript.instance.getTowerNames(); }
+    [XmlAttribute][Popup("getTowerNames",CaseSensitive = true,Filter = true,HideUpdate = true,TextField = true)] public string name; //name of the tower to place, with an inspector popup menu
 
     [XmlArray("Upgrades")]
     [XmlArrayItem("Upgrade")]
@@ -91,7 +93,10 @@ public class LevelData
     //levelDeck is the deck set for use on this level.
     //It could be defined directly in the level file, or the level could just provide the name of a premade deck in Decks.xml instead.
     public XMLDeck levelDeck;
-    public string premadeDeckName;
+
+    //provides a popup menu in the inspector
+    private string[] getDeckNames() { return DeckManagerScript.instance.premadeDecks.getNames(); }
+    [Popup("getDeckNames",CaseSensitive = true,Filter = true,HideUpdate = true,TextField = true)] public string premadeDeckName; 
 
     [Show] private void SaveChanges() { Save(fileName); } //DEV: provides a button in the editor to save the level data
 
