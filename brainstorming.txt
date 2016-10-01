@@ -19,4 +19,3 @@ use scoring to make gemcraft style progression?
 ================================================================
 engine:
 progression system?
-mod file dependencies

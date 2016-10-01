@@ -42,6 +42,10 @@ public class XMLColor
 [System.Serializable]
 public class EnemyData
 {
+    //indicates whether this enemy definition
+    [XmlIgnore][Comment("Modded enemy definitions are not saved from the inspector.")]
+    public bool isModded = false;
+
     [XmlAttribute]             public string name;       //used to identify this enemy type
     [XmlAttribute][iMin(1)]    public int    spawnCost;	 //used for wave generation: more expensive enemies spawn in smaller numbers
     [XmlAttribute][iMin(1)]    public int    attack;     //number of charges knocked off if the enemy reaches the goal

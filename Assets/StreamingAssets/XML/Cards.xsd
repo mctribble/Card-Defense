@@ -56,6 +56,8 @@
           </xsd:complexType>
         </xsd:element>
       </xsd:sequence>
+      <xsd:attribute name="cardFileDependencies" type="xsd:string" use="optional" />
+      <xsd:attribute name="enemyFileDependencies" type="xsd:string" use="optional" />
     </xsd:complexType>
   </xsd:element>
 

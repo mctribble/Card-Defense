@@ -1,6 +1,7 @@
 ﻿//based on tutorial found here: http://wiki.unity3d.com/index.php?title=Saving_and_Loading_Data:_XmlSerializer
 
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
@@ -18,14 +19,28 @@ public class EnemyTypeCollection
     [Display(Seq.GuiBox | Seq.PerItemDuplicate | Seq.PerItemRemove)]
     public List<EnemyData> enemyTypes = new List<EnemyData>();
 
+    //the file name this collection was populated from.  For use in error reporting
+    [XmlIgnore] public string filePath { get; set; }
+    [XmlIgnore] public string fileName { get { return Path.GetFileNameWithoutExtension(filePath); } }
+
+    //comma seperated list of enemy mod files that this enemy file is dependant on
+    [XmlAttribute("enemyFileDependencies")][DefaultValue("")][Hide] public string dependencies;
+
     public void Save(string path)
     {
+        //temporarily remove modded enemies
+        List<EnemyData> temp = new List<EnemyData>(enemyTypes);
+        enemyTypes.RemoveAll(ed => ed.isModded);
+
         XmlSerializer serializer = new XmlSerializer(typeof(EnemyTypeCollection));
 
         using (StreamWriter stream = new StreamWriter(path, false, Encoding.GetEncoding("UTF-8")))
         {
             serializer.Serialize(stream, this);
         }
+
+        //restore the lsit to normal
+        enemyTypes = temp;
     }
 
     public static EnemyTypeCollection Load(string path)
@@ -33,7 +48,9 @@ public class EnemyTypeCollection
         XmlSerializer serializer = new XmlSerializer(typeof(EnemyTypeCollection));
         using (var stream = new FileStream(path, FileMode.Open))
         {
-            return serializer.Deserialize(stream) as EnemyTypeCollection;
+            EnemyTypeCollection result = serializer.Deserialize(stream) as EnemyTypeCollection;
+            result.filePath = path;
+            return result;
         }
     }
 
@@ -56,20 +73,40 @@ public class EnemyTypeManagerScript : BaseBehaviour
     private void Awake()
     {
         instance = this;
+        StartCoroutine(loadEnemyTypes());
+    }
+
+    //loads enemy types.  Coroutine because we may have to wait for the dependency manager
+    private System.Collections.IEnumerator loadEnemyTypes()
+    {
+        //wait for the dependency manager to exist before we do this
+        while (DependencyManagerScript.instance == null)
+            yield return null;
+
         types = EnemyTypeCollection.Load(Path.Combine(Application.dataPath, path));
 
-        //integrate mod files
-        EnemyTypeCollection modTypes;                                                               //temp storage of mod enemy
+        //find the mod files
         DirectoryInfo modDir =  new DirectoryInfo (Path.Combine (Application.dataPath, modPath));   //mod folder
         FileInfo[] modFiles = modDir.GetFiles ("*.xml");                                            //file list
 
+        //load the files
+        List<EnemyTypeCollection> modEnemyCollections = new List<EnemyTypeCollection>();
         foreach (FileInfo f in modFiles)
         {
-            modTypes = EnemyTypeCollection.Load(f.FullName); //load file
+            Debug.Log("found enemy mod file: " + f.Name);
+            modEnemyCollections.Add(EnemyTypeCollection.Load(f.FullName));
+        }
 
-            Debug.Log("Loading enemy file: " + f.Name); //log it
+        //get the dependency manager to sort/cull the list
+        modEnemyCollections = DependencyManagerScript.instance.handleEnemyFileDependencies(modEnemyCollections);
+
+        foreach (EnemyTypeCollection modTypes in modEnemyCollections)
+        {
             foreach (EnemyData moddedEnemy in modTypes.enemyTypes)
             {
+                //mark the definition as modded
+                moddedEnemy.isModded = true;
+
                 //find the existing version of this enemy
                 EnemyData existingEnemy = null;
                 foreach (EnemyData baseEnemy in types.enemyTypes)
@@ -93,6 +130,8 @@ public class EnemyTypeManagerScript : BaseBehaviour
                 }
             }
         }
+
+        yield break;
     }
 
     //called prior to the first frame

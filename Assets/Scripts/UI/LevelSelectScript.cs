@@ -96,7 +96,7 @@ public class LevelSelectScript : BaseBehaviour
         ldButton.SendMessage("setButtonText", "Default Level Deck"); //set the text
         ldButton.SendMessage("setColor", levelDeckColor);            //and the color
         ldButton.transform.SetParent(this.transform, false);         //add it to the menu
-        menuButtons.Add(ldButton);                                    //and add it to the list of buttons
+        menuButtons.Add(ldButton);                                   //and add it to the list of buttons
         
         //buttons for all the player decks
         foreach (XMLDeck pd in DeckManagerScript.instance.playerDecks.decks)

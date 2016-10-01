@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- This is a fully functioning mod file.  Copy it to StreamingAssets/XML/Modded Enemies to see it in action! -->
+<!--	This time, we want to create a file that depends on Example Enemies.Xml AND Example Enemy Dependency.xml.  We will override ExEnemy and ExEnemy2. Note the new enemyFileDepencies attribute on the next line -->
+<EnemyTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Enemies.xsd" enemyFileDependencies="Example Enemies, Example Enemy Dependency">
+  <Enemies>
+    <Enemy name="ExEnemy" spawnCost="1000" attack="1" maxHealth="1" unitSpeed="2" sprite="Enemy_Basic.png">
+      <unitColor r="0.1" g="0.1" b="0.1" a="0.8" />
+    </Enemy>
+    <Enemy name="ExEnemy2" spawnCost="1" attack="50" maxHealth="9999" unitSpeed="1" sprite="Enemy_Basic.png">
+      <unitColor r="1" g="1" b="1" a="1"/>
+    </Enemy>
+  </Enemies>
+</EnemyTypes>

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- This is a fully functioning mod file.  Copy it to StreamingAssets/XML/Modded Cards to see it in action! -->
+<!-- This is an example of a simple mod file that depends on four others: the card files Example Cards.xml and Example Card Dependency.xml and the enemy files Example Enemies.xml and Example Enemies Dependency.xml.-->
+<!-- Note cardFileDependencies and enemyFileDependencies attributes on the next line.-->
+<CardTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Cards.xsd" cardFileDependencies="Example Cards, Example Card Dependency, Dev Cards" enemyFileDependencies="Example Enemies, Example Enemy Dependency">
+  <Cards>
+    <Card Name="Free Mana Tap" Type="spell" Description="Draw five cards.  Does not consume a charge, but still costs points because you're a jerk for using this" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+      <effectData>
+        <Effects>
+		      <Effect name="addCharges" strength="1" />
+          <Effect name="drawCard" strength="5" />
+          <Effect name="score" strength="-500" />
+        </Effects>
+      </effectData>
+    </Card>
+  </Cards>
+</CardTypes>

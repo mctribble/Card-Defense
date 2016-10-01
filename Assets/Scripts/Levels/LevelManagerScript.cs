@@ -52,6 +52,10 @@ public class LevelData
     //where this level was loaded from
     [XmlIgnore] public string fileName;
 
+    //comma seperated lists of mod files that this file is dependant on
+    [XmlAttribute("enemyFileDependencies")][DefaultValue("")][Hide] public string enemyDependencies;
+    [XmlAttribute( "cardFileDependencies")][DefaultValue("")][Hide] public string  cardDependencies;
+
     //level background
     [XmlAttribute("background")]
     public string background = "Default_bg";
@@ -187,6 +191,18 @@ public class LevelManagerScript : BaseBehaviour
         data = LevelData.Load(Path.Combine(Application.dataPath, level)); //load the level
 
         data.fileName = level; //save the file name in case we need to save changes later
+
+        //wait for dependency manager to be ready to test dependencies
+        while (DependencyManagerScript.instance == null || DependencyManagerScript.instance.enemyDepenciesHandled == false || DependencyManagerScript.instance.cardDependenciesHandled == false)
+            yield return null;
+
+        //test for mod dependencies.  If unmet, show message and reload the scene
+        if (DependencyManagerScript.instance.testLevelDependencies(data) == false)
+        {
+            MessageHandlerScript.Error("Could not load level: unmet dependencies");
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
+            yield break;
+        }
 
         //set background
         string filename = Application.dataPath + "/StreamingAssets/Art/Backgrounds/" + data.background;

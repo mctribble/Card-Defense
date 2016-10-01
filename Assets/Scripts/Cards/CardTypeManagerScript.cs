@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,14 @@ public class CardTypeCollection
     [XmlArrayItem("Card")]
     [Display(Seq.GuiBox | Seq.PerItemDuplicate | Seq.PerItemRemove | Seq.Filter)]
     public List<CardData> cardTypes = new List<CardData>();
+
+    //the file name this collection was populated from.  For use in error reporting
+    [XmlIgnore] public string filePath { get; set; }
+    [XmlIgnore] public string fileName { get { return Path.GetFileNameWithoutExtension(filePath); } }
+
+    //comma seperated lists of mod files that this file is dependant on
+    [XmlAttribute("enemyFileDependencies")][DefaultValue("")][Hide] public string enemyDependencies;
+    [XmlAttribute( "cardFileDependencies")][DefaultValue("")][Hide] public string  cardDependencies;
 
     public void Save(string path)
     {
@@ -40,7 +49,9 @@ public class CardTypeCollection
         XmlSerializer serializer = new XmlSerializer(typeof(CardTypeCollection));
         using (var stream = new FileStream(path, FileMode.Open))
         {
-            return serializer.Deserialize(stream) as CardTypeCollection;
+            CardTypeCollection result = serializer.Deserialize(stream) as CardTypeCollection;
+            result.filePath = path;
+            return result;
         }
     }
 
@@ -62,31 +73,53 @@ public class CardTypeManagerScript : BaseBehaviour
 
     //contains all card types.  Only shown if it has data
     [Hide] public bool areTypesLoaded() { return (types != null) && (types.cardTypes != null) && (types.cardTypes.Count > 0); }
-    [VisibleWhen("areTypesLoaded")] public CardTypeCollection types; 
+    [VisibleWhen("areTypesLoaded")] public CardTypeCollection types;
 
     // Use this for initialization
     private void Awake()
     {
         instance = this;
+        StartCoroutine(loadCardTypes());
+    }
+
+    private System.Collections.IEnumerator loadCardTypes()
+    {
+        //wait for the dependency manager to exist before we do this
+        while (DependencyManagerScript.instance == null)
+            yield return null;
+
+        //also wait for enemies to be loaded
+        while (DependencyManagerScript.instance.enemyDepenciesHandled == false)
+            yield return null;
 
         //load base game cards
         types = CardTypeCollection.Load(Path.Combine(Application.dataPath, path));
         foreach (CardData baseCard in types.cardTypes)
             baseCard.isModded = false; //flag base game cards as being from the base game
 
-        //integrate mod files
-        CardTypeCollection modTypes;                                                                //temp storage of mod cards
+        //find mod files
         DirectoryInfo modDir =  new DirectoryInfo (Path.Combine (Application.dataPath, modPath));   //mod folder
         FileInfo[] modFiles = modDir.GetFiles ("*.xml");                                            //file list
 
+        //load the files
+        List<CardTypeCollection> modCardCollections = new List<CardTypeCollection>();
         foreach (FileInfo f in modFiles)
         {
-            modTypes = CardTypeCollection.Load(f.FullName); //load file
+            Debug.Log("found card mod file: " + f.Name);
+            modCardCollections.Add(CardTypeCollection.Load(f.FullName));
+        }
+
+        //get the dependency manager to sort/cull the list
+        modCardCollections = DependencyManagerScript.instance.handleCardFileDependencies(modCardCollections);
+
+        foreach (CardTypeCollection modTypes in modCardCollections)
+        {
             foreach (CardData moddedCard in modTypes.cardTypes)
             {
-                moddedCard.isModded = true; //flag it as from a mod
+                //mark the definition as modded
+                moddedCard.isModded = true;
 
-                //find the existing version of this card
+                //find the existing version of this enemy
                 CardData existingCard = null;
                 foreach (CardData baseCard in types.cardTypes)
                 {
@@ -97,19 +130,20 @@ public class CardTypeManagerScript : BaseBehaviour
                     }
                 }
 
-                //replace the card if it exists already, and add it if it doesnt
+                //replace the enemy if it exists already, and add it if it doesnt
                 if (existingCard != null)
                 {
                     types.cardTypes.Remove(existingCard);
                     types.cardTypes.Add(moddedCard);
                     Debug.Log("Overwriting card: " + existingCard.cardName);
                 }
-                else
-                {
+                else {
                     types.cardTypes.Add(moddedCard);
                 }
             }
         }
+
+        yield break;
     }
 
     //Dev: shows a button in the inspector to save the card types, provided there are some loaded
