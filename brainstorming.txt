@@ -1,4 +1,4 @@
-presentation:
+sys.presentation:
 player/enemy discard piles?
 enemy attack animations
 better range display, especially when upgrading
@@ -19,3 +19,7 @@ use scoring to make gemcraft style progression?
 ================================================================
 engine:
 progression system?
+================================================================
+bugs:
+spawnEnemyOnDeath keeps breaking all manner of things and causing gameplay halts.  carriers commented until this is fixed.
+
