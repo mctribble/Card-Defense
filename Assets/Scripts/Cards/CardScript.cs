@@ -413,6 +413,7 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
                     HandScript.enemyHand.applyWaveEffect((IEffectWave)e);
                     LevelManagerScript.instance.UpdateWaveStats();
                     HandScript.enemyHand.updateEnemyCards();
+                    effectApplied = true;
                 }
 
                 if (e.triggersAs(EffectType.instant))
