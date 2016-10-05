@@ -64,7 +64,7 @@ public class LevelData
     public int randomWaveCount;
 
     //budget: absolute + (wave * linear) + (wave * squared)^2 + (exponential^wave)
-    [DefaultValue(160.0f)] public float waveGrowthAbsolute     = 160.0f;
+    [DefaultValue(160.0f)] public float waveGrowthAbsolute     = 80.0f;
     [DefaultValue(5.0f)]   public float waveGrowthLinear       = 5.0f;
     [DefaultValue(2.3f)]   public float waveGrowthSquared      = 2.3f;
     [DefaultValue(1.2f)]   public float waveGrowthExponential  = 1.2f;

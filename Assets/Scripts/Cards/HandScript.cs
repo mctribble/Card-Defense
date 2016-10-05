@@ -44,10 +44,19 @@ public class HandScript : BaseBehaviour
         while (LevelManagerScript.instance.levelLoaded == false)
             yield return null;
 
+        //set faction and wait for the appropriate manager
         if (handOwner == HandFaction.player)
+        {
             HandScript.playerHand = this;
+            while (DeckManagerScript.instance.cardsLeft == 0)
+                yield return null;
+        }
         else if (handOwner == HandFaction.enemy)
+        {
             HandScript.enemyHand = this;
+            while (LevelManagerScript.instance.wavesInDeck == 0)
+                yield return null;
+        }
 
         cards = new GameObject[maximumHandSize]; //construct array to hold the hand
         currentHandSize = 0; //no cards yet
