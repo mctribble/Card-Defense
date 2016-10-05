@@ -18,8 +18,16 @@ public class DrawOnClickScript : BaseBehaviour, IPointerClickHandler
             case HandFaction.enemy:
                 if (HandScript.enemyHand.isFull == false)
                 {
+                    //if an enemy card is drawn successfully, the player gets a score bonus and two extra cards in hand
+                    int oldCount = HandScript.enemyHand.currentHandSize;
                     HandScript.enemyHand.drawCard();
-                    ScoreManagerScript.instance.enemyCardsDrawn++;
+
+                    if (oldCount < HandScript.enemyHand.currentHandSize)
+                    {
+                        ScoreManagerScript.instance.enemyCardsDrawn++;
+                        HandScript.playerHand.drawCard();
+                        HandScript.playerHand.drawCard();
+                    }
                 }
                 break;
             default:

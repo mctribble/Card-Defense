@@ -400,9 +400,9 @@ public class LevelManagerScript : BaseBehaviour
 
         deadThisWave = 0;
 
-        //draw new cards until seven in hand
+        //draw
         yield return new WaitForSeconds(1.0f);
-        HandScript.playerHand.SendMessage("drawToHandSize", HandScript.playerHand.startingHandSize);
+        HandScript.playerHand.drawCard();
 
         //if there are any survivors, draw a new survivor card to represent them
         if ((EnemyManagerScript.instance.survivors != null) && (EnemyManagerScript.instance.survivors.Count > 0))
