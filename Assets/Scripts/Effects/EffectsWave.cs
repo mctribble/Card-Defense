@@ -62,8 +62,7 @@ public class EffectChangeWaveType : BaseEffectWave
 
     public override WaveData alteredWaveData(WaveData currentWaveData)
     {
-        currentWaveData.type = argument;
-        return currentWaveData;
+        return new WaveData(argument, currentWaveData.budget, currentWaveData.time);
     }
 }
 

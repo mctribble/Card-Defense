@@ -32,7 +32,7 @@ public class EffectDrawEnemyCard : BaseEffectInstant
 //increases lifespan of all towers by x
 public class EffectAllTowersLifespanBonus : BaseEffectInstant
 {
-    [Hide] public override string Name { get { return "All towers last " + strength + " waves longer."; } } //returns name and strength
+    [Hide] public override string Name { get { return "All towers get an upgrade to last " + strength + " waves longer."; } } //returns name and strength
     [Show] public override string XMLName { get { return "allTowersLifespanBonus"; } } //name used to refer to this effect in XML
 
     public override void trigger()

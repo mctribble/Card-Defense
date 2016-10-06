@@ -219,6 +219,10 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
         int numTypesFound = 0;
         string[] typesFound = new string[6];
         SpriteRenderer[] spritesToSet = new SpriteRenderer[6];
+
+        //error catch: purch survivors that are actually dead
+        survivorList.RemoveAll(go => go == null);
+
         foreach (GameObject go in survivorList)
         {
             EnemyScript e = go.GetComponent<EnemyScript>();

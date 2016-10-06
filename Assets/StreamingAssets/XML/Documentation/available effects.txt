@@ -44,6 +44,7 @@ damagePlayer           | player takes X damage
 discardRandomCard      | player discards up to X cards chosen at random
 drawCard               | player draws X cards
 drawEnemyCard          | enemy draws X cards
+replaceRandomCard	   | replaces up to X cards chosen at random
 score                  | player gains X points
 shuffle                | shuffles the deck
 
