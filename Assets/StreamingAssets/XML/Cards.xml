@@ -198,9 +198,8 @@
     <Card Type="spell" Name="Recycle" Description="Does not guarantee your new hand will be better than the one you have." Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
-          <Effect name="discardRandomCard" strength="30" />
+          <Effect name="ReplaceRandomCard" strength="15" />
           <Effect name="shuffle" />
-          <Effect name="drawCard" strength="10" />
         </Effects>
       </effectData>
     </Card>

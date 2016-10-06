@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Vexe.Runtime.Types;
 
 //all effects in this file take place instantly, and target the card which contains them.  This base effect handles behavior common to them all
@@ -32,5 +33,20 @@ public class EffectDiscardRandom : BaseEffectSelf
     {
         HandScript handRef = HandScript.playerHand;
         handRef.StartCoroutine(handRef.discardRandomCards(card_gameObject, Mathf.FloorToInt(strength)));
+    }
+}
+
+//discards up to x random cards from the hand IN ADDITION TO this one, then draws a card for each card discarded EXCEPT FOR this one (therfore, if player has 7 cards and the effect replaces up to 7, their hand will be emptied and they will draw six)
+public class EffectReplaceRandom : BaseEffectSelf
+{
+    [Hide] public override string Name { get { return "Discard up to " + strength + " cards at random, and draw new ones to replace them"; } } //returns name and strength
+    [Show] public override string XMLName { get { return "replaceRandomCard"; } } //name used to refer to this effect in XML
+
+    public override void trigger(ref Card card, GameObject card_gameObject)
+    {
+        int toReplace = Mathf.Min( Mathf.RoundToInt(strength), HandScript.playerHand.currentHandSize);  //how many cards are being replaced
+
+        HandScript.playerHand.discardRandomCards(card_gameObject, toReplace); //discard toReplace random cards that are NOT this one (this card will be discarded regardless, since it was just played)
+        HandScript.playerHand.drawCards(toReplace); //draw new cards to replace them
     }
 }
