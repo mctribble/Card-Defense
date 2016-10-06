@@ -209,21 +209,16 @@ public class EnemyScript : BaseBehaviour
         //pause normal enemy behavior while we handle this
         goalFinalChance = true;
 
-        //if we are expecting damage that hasnt happened yet, give those a moment to land before continuing
+        //if we are expecting damage that hasnt happened yet, give those a couple frames to land before continuing (normal bullets willl "blink" to the enemy instantaneously.  see bulletScript.cs)
         if (expectedHealth < curHealth)
         {
             yield return null; //(force pause to be at least 2 frames no matter how bad the framerate is)
-            yield return new WaitForSeconds(0.5f);
+            yield return null;
         }
 
-        //if we are still expecting damage after that window, cancel it and tell attackers to abort
+        //if we are still expecting damage after that window, cancel it.
         if (expectedHealth < curHealth)
-        {
             expectedHealth = curHealth;
-            GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
-            foreach (GameObject b in bullets)
-                b.SendMessage("AbortAttack", gameObject);
-        }
 
         //trigger effects...
         if (effectData != null)

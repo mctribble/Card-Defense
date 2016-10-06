@@ -57,6 +57,11 @@ public class BulletScript : BaseBehaviour
         //calculate new location
         Vector2 newLocation = Vector2.MoveTowards (curLocation, curDestination, speed * Time.deltaTime);
 
+        //if the enemy is in the brief "final chance" state between reaching the goal and dealing damage, blink instantaneously to the target.  This way, enemies wont escape just because projectile speed is low.
+        //TODO: visual lightning-bolt effect or something for this
+        if (enemyRef.goalFinalChance)
+            newLocation = curDestination;
+
         //if destination is reached, trigger effects and pass data to target and destroy self
         if (newLocation == curDestination)
         {
@@ -69,10 +74,6 @@ public class BulletScript : BaseBehaviour
             enemyRef.onDamage(data);
             Destroy(gameObject);
         }
-
-        //if the enemy is in the brief "final chance" state between reaching the goal and dealing damage, increase speed dramatically
-        if (enemyRef.goalFinalChance)
-            speed = finalChanceSpeed;
 
         //save position
         gameObject.transform.position = new Vector3(newLocation.x, newLocation.y, gameObject.transform.position.z);
