@@ -216,6 +216,10 @@ public class EnemyScript : BaseBehaviour
             yield return null;
         }
 
+        //if we died in that period, bail from this coroutine to let onDeath handle things
+        if (curHealth <= 0)
+            yield break;
+
         //if we are still expecting damage after that window, cancel it.
         if (expectedHealth < curHealth)
             expectedHealth = curHealth;

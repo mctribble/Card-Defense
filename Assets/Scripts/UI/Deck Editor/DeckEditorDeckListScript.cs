@@ -24,8 +24,12 @@ public class DeckEditorDeckListScript : BaseBehaviour
     private List<GameObject> buttons;
 
 	// Use this for initialization
-	void Start ()
+	IEnumerator Start ()
     {
+        //wait for card type manager to be ready
+        while ( (CardTypeManagerScript.instance == null) || (CardTypeManagerScript.instance.areTypesLoaded() == false) ) 
+            yield return null;
+
         //init
         buttons = new List<GameObject>();
 

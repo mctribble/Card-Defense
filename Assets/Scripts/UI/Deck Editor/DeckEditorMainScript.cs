@@ -164,8 +164,12 @@ public class DeckEditorMainScript : BaseBehaviour
     }
 
     //init
-    public void Start()
+    public IEnumerator Start()
     {
+        //wait for card type manager to be ready
+        while ((CardTypeManagerScript.instance == null) || (CardTypeManagerScript.instance.areTypesLoaded() == false))
+            yield return null;
+
         unsavedChanges = false;                 //there are no changes since we just opened the editor
         XMLDeck openDeck = new XMLDeck();       //create a new deck
         newDeck = true;                         //flag the deck as new

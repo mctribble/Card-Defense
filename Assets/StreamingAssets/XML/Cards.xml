@@ -43,10 +43,10 @@
       </effectData>
     </Card>
     <Card Type="tower" Name="Explosive Tower" Description="Deals splash damage.  Good for tightly-packed enemies." Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Fast.png">
-      <towerData Recharge="1.5" Range="2" Damage="10" Lifespan="5" UpgradeCap="3" Sprite="Tower_Standard.png" />
+      <towerData Recharge="1.5" Range="2" Damage="20" Lifespan="5" UpgradeCap="3" Sprite="Tower_Standard.png" />
       <effectData>
         <Effects>
-          <Effect name="splashDamage" strength="5" argument="1.0" />
+          <Effect name="splashDamage" strength="10" argument="1.0" />
           <Effect name="targetClosest" />
         </Effects>
       </effectData>
@@ -58,7 +58,7 @@
       <towerData Recharge="3" Range="2" Damage="100" Lifespan="3" UpgradeCap="3" Sprite="Tower_Heavy.png" />
     </Card>
     <Card Type="tower" Name="Nova Tower" Description="The fury of a single sun tends to be sufficient" Charges="2" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
-      <towerData Recharge="30" Range="10" Damage="200" Lifespan="1" UpgradeCap="3" Sprite="Tower_Fast.png" />
+      <towerData Recharge="30" Range="10" Damage="200" Lifespan="1" UpgradeCap="0" Sprite="Tower_Fast.png" />
       <effectData>
         <Effects>
           <Effect name="targetBurst" />
@@ -103,8 +103,8 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="upgrade" Name="Basic Upgrade" Description="Useful on most towers, but be mindful of the speed penalty" Charges="5" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
-      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1.3" RechargeMod="0" RangeMod="0.5" DamageMod="0" WaveBonus="1" />
+    <Card Type="upgrade" Name="Basic Upgrade" Description="Boring but good" Charges="5" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+      <upgradeData RechargeMult="0.9" RangeMult="1" DamageMult="1.4" RechargeMod="0" RangeMod="0.5" DamageMod="0" WaveBonus="1" />
     </Card>
     <Card Type="upgrade" Name="Chain Hit" Description="Powerful, but easily squandered" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="1" />
@@ -119,7 +119,7 @@
       </effectData>
     </Card>
     <Card Type="upgrade" Name="Fast Upgrade" Description="small damage increase per shot.  best on fast towers" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
-      <upgradeData RechargeMult="0.9" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="1" WaveBonus="2" />
+      <upgradeData RechargeMult="0.8" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="1" WaveBonus="2" />
     </Card>
     <Card Type="upgrade" Name="Heavy Upgrade" Description="Best on towers with high damage" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <upgradeData RechargeMult="1" RangeMult="1" DamageMult="2" RechargeMod="0.5" RangeMod="1" DamageMod="0" WaveBonus="2" />

@@ -152,7 +152,8 @@ public class CardData : System.Object
 
             case CardType.tower:
                 //present tower stats
-                description += "Damage: " + towerData.attackPower + '\n' +
+                description += "Upgrades: " + towerData.upgradeCap + '\n' +
+                               "Damage: " + towerData.attackPower + '\n' +
                                "Range: " + towerData.range + '\n' +
                                "Fires in: " + towerData.rechargeTime + 's';
 
