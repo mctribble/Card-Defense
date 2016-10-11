@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <EnemyTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Enemies>
-    <Enemy name="Assassin" spawnCost="50" attack="0" maxHealth="40" unitSpeed="4" sprite="Enemy_Basic.png">
+    <Enemy name="Assassin" spawnCost="30" attack="0" maxHealth="60" unitSpeed="4" sprite="Enemy_Basic.png">
       <unitColor r="0.75" g="0.75" b="0.75" a="0.75" />
       <effectData>
         <Effects>
@@ -9,7 +9,7 @@
         </Effects>
       </effectData>
     </Enemy>
-    <Enemy name="Standard" spawnCost="20" attack="2" maxHealth="40" unitSpeed="2" sprite="Enemy_Basic.png">
+    <Enemy name="Standard" spawnCost="20" attack="2" maxHealth="50" unitSpeed="2" sprite="Enemy_Basic.png">
       <unitColor r="0" g="1" b="0" a="1" />
     </Enemy>
     <Enemy name="Swarm" spawnCost="10" attack="1" maxHealth="8" unitSpeed="5" sprite="Enemy_Basic.png">
@@ -19,7 +19,7 @@
       <unitColor r="0" g="0" b="1" a="1" />
       <effectData>
         <Effects>
-          <Effect name="armor" strength="20" />
+          <Effect name="armor" strength="15" />
         </Effects>
       </effectData>
     </Enemy>

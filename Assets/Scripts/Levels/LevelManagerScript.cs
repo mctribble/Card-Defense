@@ -64,10 +64,10 @@ public class LevelData
     public int randomWaveCount;
 
     //budget: absolute + (wave * linear) + (wave * squared)^2 + (exponential^wave)
-    [DefaultValue(160.0f)] public float waveGrowthAbsolute     = 80.0f;
-    [DefaultValue(5.0f)]   public float waveGrowthLinear       = 5.0f;
-    [DefaultValue(2.3f)]   public float waveGrowthSquared      = 2.3f;
-    [DefaultValue(1.2f)]   public float waveGrowthExponential  = 1.2f;
+    [DefaultValue(160.0f)] public float waveGrowthAbsolute     = 240.0f;
+    [DefaultValue(5.0f)]   public float waveGrowthLinear       = 7.0f;
+    [DefaultValue(2.3f)]   public float waveGrowthSquared      = 2.8f;
+    [DefaultValue(1.2f)]   public float waveGrowthExponential  = 1.3f;
 
     //time: min(wave*linear, maxwavetime)
     [DefaultValue(1.1f)]  public float waveTimeLinear = 1.1f;
@@ -142,6 +142,10 @@ public class LevelManagerScript : BaseBehaviour
     //other objects can refer to these to be informed when a level is loaded (https://unity3d.com/learn/tutorials/topics/scripting/events)
     public delegate void LevelLoadedHandler();
     public event LevelLoadedHandler LevelLoadedEvent;
+
+    //and this one is for when a round is over
+    public delegate void RoundOverHandler();
+    public event RoundOverHandler RoundOverEvent;
 
     [Hide] public static LevelManagerScript instance;  //singleton pattern
     

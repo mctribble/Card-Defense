@@ -10,7 +10,7 @@
       </effectData>
     </Card>
     <Card Type="tower" Name="Basic Tower" Charges="6" Art="Summon_Tower_Basic.png" Tooltip="Tower_Standard.png">
-      <towerData Recharge="1" Range="3" Damage="20" Lifespan="5" UpgradeCap="5" Sprite="Tower_Standard.png" />
+      <towerData Recharge="0.8" Range="3" Damage="25" Lifespan="5" UpgradeCap="5" Sprite="Tower_Standard.png" />
     </Card>
     <Card Type="tower" Name="Black Plague Tower" Charges="1" Art="Summon_Tower_Basic.png" Tooltip="Tower_Heavy.png">
       <towerData Recharge="10" Range="1" Damage="1" Lifespan="1" UpgradeCap="1" Sprite="Tower_Heavy.png" />
