@@ -27,7 +27,7 @@
       </effectData>
     </Card>
     <Card Type="tower" Name="Challenger Tower" Description="Do you have what it takes?" Charges="1" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
-      <towerData Recharge="1" Range="2" Damage="75" Lifespan="3" UpgradeCap="0" Sprite="Tower_Basic.png" />
+      <towerData Recharge="0.75" Range="2.5" Damage="75" Lifespan="3" UpgradeCap="1" Sprite="Tower_Basic.png" />
       <effectData>
         <Effects>
           <Effect name="everyRound">

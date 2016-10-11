@@ -31,9 +31,9 @@
     </Deck>
     <Deck name="Deck A">
       <Cards>
-        <Card name="Heavy Tower" count="3" />
-        <Card name="Fast Tower" count="3" />
-        <Card name="Basic Tower" count="3" />
+        <Card name="Heavy Tower" count="5" />
+        <Card name="Fast Tower" count="5" />
+        <Card name="Basic Tower" count="5" />
         <Card name="Challenger Tower" count="2" />
         <Card name="Explosive Tower" count="2" />
         <Card name="Fast Upgrade" count="3" />
@@ -41,10 +41,10 @@
         <Card name="Orthogonal Tower" count="2" />
         <Card name="Recycle" count="3" />
         <Card name="Shield" count="2" />
-        <Card name="Sniper Tower" count="3" />
+        <Card name="Sniper Tower" count="2" />
         <Card name="Heavy Upgrade" count="3" />
         <Card name="Nova Tower" count="2" />
-        <Card name="Reinforce" count="3" />
+        <Card name="Reinforce" count="2" />
       </Cards>
     </Deck>
   </Decks>

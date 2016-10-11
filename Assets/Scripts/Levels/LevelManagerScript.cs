@@ -423,6 +423,9 @@ public class LevelManagerScript : BaseBehaviour
         //draw a new enemy card
         HandScript.enemyHand.drawCard();
 
+        //fire event
+        RoundOverEvent();
+
         //update stats for the next wave
         UpdateWaveStats();
     }
