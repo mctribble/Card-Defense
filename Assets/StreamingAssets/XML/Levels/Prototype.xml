@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" background="Grass.png">
-  <randomWaveCount>15</randomWaveCount>
+  <randomWaveCount>30</randomWaveCount>
   <Waves />
   <Spawners>
     <Spawner spawnX="15" spawnY="0" />

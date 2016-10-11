@@ -38,7 +38,7 @@ public class WaveStatusText : BaseBehaviour
         int stillToSpawn = LevelManagerScript.instance.SpawnCount - LevelManagerScript.instance.totalSpawnedThisWave;
         if (stillToSpawn > 0)
         {
-            //wave has not started or is still spawning: "???? total over ???? seconds"
+            //wave has not started or is still spawning: "?????? incoming (???s)"
             enemyStatText.text = stillToSpawn + " incoming (" +
             HandScript.enemyHand.longestTime.ToString("F1") + "s)";
         }
