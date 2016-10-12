@@ -15,7 +15,7 @@
     <Enemy name="Swarm" spawnCost="10" attack="1" maxHealth="8" unitSpeed="5" sprite="Enemy_Basic.png">
       <unitColor r="1" g="0" b="0" a="1" />
     </Enemy>
-    <Enemy name="Tank" spawnCost="100" attack="5" maxHealth="450" unitSpeed="1" sprite="Enemy_Basic.png">
+    <Enemy name="Tank" spawnCost="125" attack="5" maxHealth="400" unitSpeed="1" sprite="Enemy_Basic.png">
       <unitColor r="0" g="0" b="1" a="1" />
       <effectData>
         <Effects>

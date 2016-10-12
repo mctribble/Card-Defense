@@ -26,7 +26,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Challenger Tower" Description="Do you have what it takes?" Charges="1" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Type="tower" Name="Challenger Tower" Description="Even more dangerous than you think it is" Charges="1" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <towerData Recharge="0.75" Range="2.5" Damage="75" Lifespan="3" UpgradeCap="1" Sprite="Tower_Basic.png" />
       <effectData>
         <Effects>
@@ -57,7 +57,7 @@
     <Card Type="tower" Name="Heavy Tower" Description="Suitable for fighting tanks" Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Heavy.png">
       <towerData Recharge="3" Range="2" Damage="100" Lifespan="3" UpgradeCap="3" Sprite="Tower_Heavy.png" />
     </Card>
-    <Card Type="tower" Name="Nova Tower" Description="The fury of a single sun tends to be sufficient" Charges="2" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Type="tower" Name="Nova Tower" Description="The fury of a single sun tends to be sufficient" Charges="1" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <towerData Recharge="30" Range="10" Damage="200" Lifespan="1" UpgradeCap="0" Sprite="Tower_Fast.png" />
       <effectData>
         <Effects>
@@ -164,7 +164,7 @@
     <Card Type="spell" Name="Enrage" Description="Poking the bear." Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
-          <Effect name="drawEnemyCard" strength="1" />
+          <Effect name="drawEnemyCard" strength="2" />
           <Effect name="drawCard" strength="3" />
         </Effects>
       </effectData>
@@ -261,7 +261,8 @@
     <Card Type="spell" Name="Time Crunch" Description="Condensing the onslaught" Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
-          <Effect name="allTowersLifespanBonus" strength="1" />
+          <Effect name="drawEnemyCard" strength="1" />
+          <Effect name="allTowersLifespanBonus" strength="2" />
           <Effect name="timePercentageChange" strength="-50" />
         </Effects>
       </effectData>
