@@ -316,6 +316,10 @@ public class EnemyScript : BaseBehaviour
             //if dead, report the kill to the tower that shot it
             LevelManagerScript.instance.deadThisWave++;
 
+            //(bugfix: works around race condition where an enemy is deactivated and then dies immediately afterward
+            if (enabled == false)
+                enabled = true;
+
             //and start the death coroutine
             StartCoroutine(onDeath());
         }

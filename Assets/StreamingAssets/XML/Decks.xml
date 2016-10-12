@@ -6,7 +6,7 @@
         <Card name="Fast Tower" count="3" />
         <Card name="Heavy Tower" count="3" />
         <Card name="Basic Upgrade" count="4" />
-        <Card name="Enrage" count="4" />
+        <Card name="Enrage" count="3" />
         <Card name="Basic Tower" count="5" />
         <Card name="Heavy Upgrade" count="2" />
         <Card name="Mana Tap" count="1" />
@@ -15,6 +15,7 @@
         <Card name="Recycle" count="2" />
         <Card name="Summon Swarm" count="1" />
         <Card name="Time Crunch" count="1" />
+        <Card name="Nova Tower" count="2" />
       </Cards>
     </Deck>
     <Deck name="Variety">

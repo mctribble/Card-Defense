@@ -31,11 +31,11 @@
     </Deck>
     <Deck name="Deck A">
       <Cards>
-        <Card name="Heavy Tower" count="4" />
-        <Card name="Fast Tower" count="4" />
-        <Card name="Basic Tower" count="4" />
-        <Card name="Challenger Tower" count="1" />
-        <Card name="Fast Upgrade" count="5" />
+        <Card name="Heavy Tower" count="3" />
+        <Card name="Fast Tower" count="3" />
+        <Card name="Basic Tower" count="3" />
+        <Card name="Challenger Tower" count="2" />
+        <Card name="Fast Upgrade" count="3" />
         <Card name="Basic Upgrade" count="3" />
         <Card name="Orthogonal Tower" count="2" />
         <Card name="Recycle" count="3" />
@@ -44,8 +44,13 @@
         <Card name="Heavy Upgrade" count="3" />
         <Card name="Nova Tower" count="3" />
         <Card name="Reinforce" count="2" />
-        <Card name="Summon Standard" count="1" />
-        <Card name="Summon Swarm" count="1" />
+        <Card name="Summon Swarm" count="2" />
+        <Card name="Enrage" count="2" />
+        <Card name="Gambit" count="2" />
+        <Card name="Pulse Upgrade" count="2" />
+        <Card name="Black Plague Tower" count="1" />
+        <Card name="AOE Tower" count="1" />
+        <Card name="Spitfire Upgrade" count="1" />
       </Cards>
     </Deck>
   </Decks>
