@@ -317,8 +317,8 @@ public class EnemyScript : BaseBehaviour
             LevelManagerScript.instance.deadThisWave++;
 
             //(bugfix: works around race condition where an enemy is deactivated and then dies immediately afterward
-            if (enabled == false)
-                enabled = true;
+            if (gameObject.activeSelf == false)
+                gameObject.SetActive(true);
 
             //and start the death coroutine
             StartCoroutine(onDeath());

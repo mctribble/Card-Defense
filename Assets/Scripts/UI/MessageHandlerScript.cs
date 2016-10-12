@@ -45,6 +45,7 @@ public class MessageHandlerScript : BaseBehaviour
         instance.buttonC.SetActive(false);
         instance.buttonD.SetActive(false);
         responseToLastPrompt = null;
+        instance.gameObject.transform.SetAsLastSibling();
 
         //pause the game
         float oldTimeScale = Time.timeScale;
@@ -71,6 +72,7 @@ public class MessageHandlerScript : BaseBehaviour
         instance.buttonC.SetActive(false);
         instance.buttonD.SetActive(false);
         responseToLastPrompt = null;
+        instance.gameObject.transform.SetAsLastSibling();
 
         //pause the game
         float oldTimeScale = Time.timeScale;
