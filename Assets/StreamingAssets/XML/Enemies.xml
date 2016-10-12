@@ -41,7 +41,7 @@
         </Effects>
       </effectData>
     </Enemy>
-<!--    <Enemy name="Carrier" spawnCost="150" attack="4" maxHealth="350" unitSpeed="2" sprite="Enemy_Basic.png">
+    <Enemy name="Carrier" spawnCost="150" attack="4" maxHealth="350" unitSpeed="2" sprite="Enemy_Basic.png">
       <unitColor r="0.2" g="0.2" b="0.2" a="1" />
       <effectData>
         <Effects>
@@ -52,6 +52,6 @@
           </Effect>
         </Effects>
       </effectData>
-    </Enemy>  -->
+    </Enemy> 
   </Enemies>
 </EnemyTypes>
