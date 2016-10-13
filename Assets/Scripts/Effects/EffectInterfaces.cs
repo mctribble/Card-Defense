@@ -188,7 +188,7 @@ public class EffectData : System.Object
     [XmlIgnore] private PropertyEffects?            cachedPropertyEffects;
 
     //list of effect objects
-    [XmlIgnore] private List<IEffect> Effects = new List<IEffect>(); 
+    [XmlIgnore][Show] private List<IEffect> Effects = new List<IEffect>(); 
     [XmlIgnore]
     public ReadOnlyCollection<IEffect> effects
     {

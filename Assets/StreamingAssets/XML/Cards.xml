@@ -19,7 +19,7 @@
           <Effect name="infiniteTowerLifespan" />
           <Effect name="limitedAmmo" strength="3" />
           <Effect name="chainHit" strength="1.5" />
-          <Effect name="poison" strength="3" argument="60" />
+          <Effect name="poison" strength="20" argument="60" />
           <Effect name="attackColor" argument="black" />
           <Effect name="manualFire" />
           <Effect name="targetClosest" />
@@ -87,11 +87,11 @@
       </effectData>
     </Card>
     <Card Type="tower" Name="Plague Tower" Charges="1" Art="Summon_Tower_Basic.png" Tooltip="Tower_Heavy.png">
-      <towerData Recharge="10" Range="1" Damage="1" Lifespan="1" UpgradeCap="1" Sprite="Tower_Heavy.png" />
+      <towerData Recharge="2" Range="1" Damage="1" Lifespan="3" UpgradeCap="2" Sprite="Tower_Heavy.png" />
       <effectData>
         <Effects>
           <Effect name="chainHit" strength="1.0" />
-          <Effect name="poison" strength="1" argument="60" />
+          <Effect name="poison" strength="10" argument="60" />
           <Effect name="targetRandom" />
         </Effects>
       </effectData>

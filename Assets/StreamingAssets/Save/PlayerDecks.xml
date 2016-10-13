@@ -29,15 +29,11 @@
         <Card name="Dev Chain Purge Tower" count="20" />
       </Cards>
     </Deck>
-    <Deck name="Editor Test Deck">
+    <Deck name="Dev Test Deck">
       <Cards>
-        <Card name="Enrage" count="10" />
-        <Card name="Basic Tower" count="20" />
-        <Card name="Fast Upgrade" count="20" />
-        <Card name="Mana Tap" count="20" />
-        <Card name="Basic Upgrade" count="10" />
-        <Card name="AOE Tower" count="1" />
-        <Card name="Dev Purge Tower" count="3" />
+        <Card name="Plague Tower" count="10" />
+        <Card name="Black Plague Tower" count="10" />
+        <Card name="Dev Purge Tower" count="10" />
       </Cards>
     </Deck>
     <Deck name="Deck A">

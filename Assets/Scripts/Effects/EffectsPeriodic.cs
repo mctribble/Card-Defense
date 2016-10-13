@@ -51,7 +51,7 @@ public class EffectRegeneration : BaseEffectPeriodic
 public class EffectPoison : BaseEffectPeriodic
 {
     //effect lifespan (this is a string to match the interface, but actually updates the float maxPoisonTime)
-    [Hide] public override string argument
+    public override string argument
     {
         get
         {
@@ -74,11 +74,12 @@ public class EffectPoison : BaseEffectPeriodic
         }
     }              
 
-    [Hide] public override string Name { get { return "Poison: " + strength + "/s for " + maxPoisonTime + " seconds"; } } //returns name and strength
-    [Show] public override string XMLName { get { return "poison"; } } //name used to refer to this effect in XML
+    public override string Name { get { return "Poison: " + strength + "/s for " + maxPoisonTime + " seconds"; } } //returns name and strength
+    public override string XMLName { get { return "poison"; } } //name used to refer to this effect in XML
 
     [Show, Display(3)] public float curPoisonTime; //how much time has passed
     [Show, Display(4)] public float maxPoisonTime; //stop dealing damage after this window has passed
+    [Show, Display(5)] public float carryOver; //how much damage is carried over from the last frame due to integer health tracking
 
     //effect can be removed once it has expired
     public override bool shouldBeRemoved()
@@ -86,7 +87,7 @@ public class EffectPoison : BaseEffectPeriodic
         return curPoisonTime > maxPoisonTime;
     }
 
-    public EffectPoison() { curPoisonTime = 0; maxPoisonTime = 0; }  //default constructor inits internal variables to 0
+    public EffectPoison() { curPoisonTime = 0; maxPoisonTime = 0; carryOver = 0; }  //default constructor inits internal variables to 0
 
     public override void UpdateEnemy(EnemyScript e, float deltaTime)
     {
@@ -97,11 +98,20 @@ public class EffectPoison : BaseEffectPeriodic
         //update timer
         curPoisonTime += Time.deltaTime;
 
+        //calculate damage
+        float damage = (strength * Time.deltaTime) + carryOver;
+        int roundedDamage = Mathf.FloorToInt(damage);
+        carryOver = damage - roundedDamage;
+
+        //return early if zero damage
+        if (roundedDamage == 0)
+            return;
+
         //construct event
         DamageEventData damageEvent = new DamageEventData();
         damageEvent.source = null;
         damageEvent.dest = e.gameObject;
-        damageEvent.rawDamage = strength * Time.deltaTime;
+        damageEvent.rawDamage = roundedDamage;
         damageEvent.effects = null;
 
         //deal damage
