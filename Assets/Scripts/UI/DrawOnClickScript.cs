@@ -3,11 +3,16 @@ using System.Collections;
 using Vexe.Runtime.Types;
 using UnityEngine.EventSystems;
 using System;
+using UnityEngine.UI;
 
 public class DrawOnClickScript : BaseBehaviour, IPointerClickHandler
 {
     public HandFaction handToDraw; //the hand that should draw when the object with this script is clicked
     public bool oncePerRound; //if true, this can only be done once/round
+
+    public Image fadeImage;   //if not null, this image will be grayed out when drawing is forbidden
+    public Color fadeColor;   //color to use when faded out
+    public Color normalColor; //color to use normally
 
     private bool drawnThisRound; //if true, we have drawn this round
 
@@ -15,6 +20,22 @@ public class DrawOnClickScript : BaseBehaviour, IPointerClickHandler
     public void Start () { LevelManagerScript.instance.RoundOverEvent += roundOverHandler; } //register event
     public void roundOverHandler() { drawnThisRound = false; } //handle event
 
+    //check every few frames to see if we need to fade/unfade the image
+    private void Update()
+    {
+        if ( (fadeImage != null) && (oncePerRound == true) )
+        {
+            if (Time.frameCount % 8 == 0) //every eight frames
+            {
+                if (drawnThisRound)
+                    fadeImage.color = fadeColor;
+                else
+                    fadeImage.color = normalColor;
+            }
+        }
+    }
+
+    //click handler
     public void OnPointerClick(PointerEventData eventData)
     {
         if ((oncePerRound == false) || (drawnThisRound == false))

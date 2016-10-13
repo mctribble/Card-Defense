@@ -69,6 +69,9 @@ public class HandScript : BaseBehaviour
         yield break;
     }
 
+    //[DEV] creates a button in the inspector to draw a card
+    [Show] private void devDraw() { drawCard(); }
+
     //draws a card from the deck.  The card spawns face down at the same position, rotation, and scale as the spawn point image.
     //flipOver: card should flip over AFTER moving
     //turnToIdentity: card should straighten itself while moving
@@ -452,4 +455,6 @@ public class HandScript : BaseBehaviour
     public void updateEnemyCards()             { foreach (GameObject ec in cards) if (ec != null) ec.SendMessage("updateWaveStats"); }    //(enemy hands only) instructs all cards in the hand to refresh themselves
     public void applyWaveEffect(IEffectWave e) { foreach (GameObject ec in cards) if (ec != null) ec.SendMessage("applyWaveEffect", e); } //(enemy hands only) applies the wave effect to all cards in the hand
     public void UpdateWaveStats()              { foreach (GameObject ec in cards) if (ec != null) ec.SendMessage("updateWaveStats"); }    //(enemy hands only) updates wave stats for all cards in the hand
+
+
 }
