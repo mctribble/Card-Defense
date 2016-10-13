@@ -70,16 +70,15 @@ public class BurstShotScript : BaseBehaviour
     {
         if (initialized)
         {
-            //update scale and destroy if dead
+            //update scale
             curScale += speed * Time.deltaTime;
-            transform.localScale = new Vector3(curScale, curScale, 1);
             if (curScale > maxScale)
-            {
-                Destroy(gameObject);
-                return;
-            }
+                curScale = maxScale;
 
-            float lookAheadDist = (Mathf.Max(lookAhead, Time.deltaTime) * speed) + curScale; //expand the box to include where we expect to be in lookAhead seconds, or in Time.deltaTime seconds, whichever is larger
+            transform.localScale = new Vector3(curScale, curScale, 1);
+
+            float lookAheadDist = (Mathf.Max(lookAhead, Time.deltaTime) * speed) + curScale; //expand the ring to include where we expect to be in lookAhead seconds, or in Time.deltaTime seconds, whichever is larger
+            lookAheadDist = Mathf.Min(lookAheadDist, maxScale); //don't look further ahead than we will actually travel
 
             //find any enemies we are about to hit that dont already know its coming, and warn them
             List<GameObject> toWarnThisFrame = new List<GameObject>();
@@ -131,6 +130,10 @@ public class BurstShotScript : BaseBehaviour
                 expectedToHit.Remove(ded);
                 alreadyHit.Add(ded.dest);
             }
+
+            //if we are at max scale, we are done.  destroy self
+            if (curScale == maxScale)
+                Destroy(gameObject);
         }
     }
 }
