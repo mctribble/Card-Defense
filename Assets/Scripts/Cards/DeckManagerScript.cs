@@ -94,6 +94,12 @@ public class XMLDeck
     public int cardCount { get { return contents.Sum(x => x.count); } }
 
     public override string ToString() { return name + "(" + cardCount + " cards"; }
+
+    //[DEV]: provides a button in the inspector to sort the list by card names
+    [Show] public void sort()
+    {
+        contents.Sort(new CardNameComparer());
+    }
 };
 
 //maintains the collection of card types, including saving/loading to XML
