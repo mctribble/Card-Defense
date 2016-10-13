@@ -274,11 +274,23 @@ public class EnemyScript : BaseBehaviour
         if (curHealth <= 0)
             return;
 
+        //DEBUG CHECK: actualDamage() should not alter damage value
+        float checkDamage = e.rawDamage;
+
         //enemyDamaged effects get triggered, others are copied to the enemy
         if (effectData != null)
+        {
             foreach (IEffect i in effectData.effects)
+            {
                 if (i.triggersAs(EffectType.enemyDamaged))
+                {
                     ((IEffectEnemyDamaged)i).actualDamage(ref e);
+                    //DEBUG CHECK: actualDamage() should not alter damage value
+                    if (checkDamage != e.rawDamage)
+                        Debug.LogWarning(i.XMLName + " has altered rawDamage in actualDamage()!");
+                }
+            }
+        }
 
         //copy periodic effects from the attack onto this unit so they can take effect
         if (e.effects != null)
