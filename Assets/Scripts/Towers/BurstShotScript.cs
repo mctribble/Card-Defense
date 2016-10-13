@@ -99,6 +99,13 @@ public class BurstShotScript : BaseBehaviour
                 ded.dest = enemy;
                 ded.rawDamage = baseDamageEvent.rawDamage;
                 ded.effects = baseDamageEvent.effects;
+
+                //trigger effects
+                if (ded.effects != null)
+                    foreach (IEffect i in ded.effects.effects)
+                        if (i.triggersAs(EffectType.enemyDamaged))
+                            ((IEffectEnemyDamaged)i).expectedDamage(ref ded);
+
                 enemy.SendMessage("onExpectedDamage", ded);
                 expectedToHit.Add(ded);
             }
@@ -110,8 +117,16 @@ public class BurstShotScript : BaseBehaviour
                     toHitThisFrame.Add(ded);
 
             //attack them
-            foreach (DamageEventData ded in toHitThisFrame)
+            for (int e = 0; e < toHitThisFrame.Count; e++)
             {
+                DamageEventData ded = toHitThisFrame[e];
+
+                //trigger effects
+                if (ded.effects != null)
+                    foreach (IEffect i in ded.effects.effects)
+                        if (i.triggersAs(EffectType.enemyDamaged))
+                            ((IEffectEnemyDamaged)i).actualDamage(ref ded);
+
                 ded.dest.SendMessage("onDamage", ded);
                 expectedToHit.Remove(ded);
                 alreadyHit.Add(ded.dest);

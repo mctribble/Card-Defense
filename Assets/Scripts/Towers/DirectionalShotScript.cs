@@ -115,6 +115,13 @@ public class DirectionalShotScript : MonoBehaviour
                 ded.dest = enemy;
                 ded.rawDamage = baseDamageEvent.rawDamage;
                 ded.effects = baseDamageEvent.effects;
+
+                //trigger effects
+                if (ded.effects != null)
+                    foreach (IEffect i in ded.effects.effects)
+                        if (i.triggersAs(EffectType.enemyDamaged))
+                            ((IEffectEnemyDamaged)i).expectedDamage(ref ded);
+
                 enemy.SendMessage("onExpectedDamage", ded);
                 expectedToHit.Add(ded);
             }
@@ -126,10 +133,18 @@ public class DirectionalShotScript : MonoBehaviour
                 if (ded.dest != null) //null dest events can happen if the enemy dies at just the wrong time
                     if (plane.GetSide(ded.dest.transform.position) == false)
                         toHitThisFrame.Add(ded);
-             
+
             //attack them
-            foreach(DamageEventData ded in toHitThisFrame)
+            for (int e = 0; e < toHitThisFrame.Count; e++)
             {
+                DamageEventData ded = toHitThisFrame[e];
+
+                //trigger effects
+                if (ded.effects != null)
+                    foreach (IEffect i in ded.effects.effects)
+                        if (i.triggersAs(EffectType.enemyDamaged))
+                            ((IEffectEnemyDamaged)i).actualDamage(ref ded);
+
                 ded.dest.SendMessage("onDamage", ded);
                 
                 expectedToHit.Remove(ded);
