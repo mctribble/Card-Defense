@@ -316,7 +316,6 @@ public class DeckManagerScript : BaseBehaviour
         if (d == 0)
             return;
 
-        Debug.Log("The enemy dealt " + d + " damage!");
         while (d > 0)
         {
             if (currentDeck.Count == 0)
@@ -342,7 +341,7 @@ public class DeckManagerScript : BaseBehaviour
     }
 
     //removes d charges from cards in the hand, starting at the top.  cards that hit zero charges in this way are removed.  If the hand is empty, damage is redirected to the deck
-    public void DamageHand(int d)
+    public void DamageHand(int d, Vector2 sourcePosition)
     {
         //if the player doesnt have a hand, something is seriously wrong
         if (playerHand == null)
@@ -354,12 +353,12 @@ public class DeckManagerScript : BaseBehaviour
         //delegate to the hand object to deal damage
         int damageDealt = playerHand.Damage(d);
 
-        if (damageDealt != 0)
-            Debug.Log("The enemy dealt " + damageDealt + " damage TO THE HAND!");
-
         //if the damage wasnt all dealt, forward the rest to the deck
         if (damageDealt < d)
+        {
             Damage(d - damageDealt);
+            MessageHandlerScript.instance.spawnPlayerDamageText(sourcePosition, (d - damageDealt));
+        }
     }
 
     //handles player death

@@ -232,8 +232,12 @@ public class EnemyScript : BaseBehaviour
                     ((IEffectEnemyReachedGoal)e).trigger(this);
 
         //damage player...
-        DeckManagerScript.instance.SendMessage("Damage", damage);
-        MessageHandlerScript.instance.spawnPlayerDamageText(transform.position, damage);
+        if (damage > 0)
+        {
+            DeckManagerScript.instance.SendMessage("Damage", damage);
+            MessageHandlerScript.instance.spawnPlayerDamageText(transform.localPosition, damage);
+        }
+
         ScoreManagerScript.instance.flawless = false;
 
         //reset the enemy

@@ -44,7 +44,7 @@ public class EffectDamageHand : BaseEffectEnemyReachedGoal
 
     public override void trigger(EnemyScript enemy)
     {
-        DeckManagerScript.instance.DamageHand(Mathf.FloorToInt(strength));
+        DeckManagerScript.instance.DamageHand(Mathf.FloorToInt(strength), enemy.transform.position);
     }
 }
 

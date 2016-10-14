@@ -110,9 +110,9 @@ public class MessageHandlerScript : BaseBehaviour
     }
 
     //spawns floating combat text to represent an enemy having damaged the player
-    public void spawnPlayerDamageText (Vector2 enemyPosition, int damageDealt)
+    public void spawnPlayerDamageText (Vector2 enemyWorldPosition, int damageDealt)
     {
-        GameObject combatText = (GameObject)Instantiate(combatTextPrefab, enemyPosition, Quaternion.identity);
+        GameObject combatText = (GameObject)Instantiate(combatTextPrefab, enemyWorldPosition, Quaternion.identity);
         combatText.transform.SetParent(PathManagerScript.instance.transform.parent, true);
         combatText.SendMessage("damageText", (-damageDealt).ToString());
     }

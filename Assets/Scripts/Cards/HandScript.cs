@@ -384,6 +384,14 @@ public class HandScript : BaseBehaviour
             //deal damage to it
             int toDeal = Mathf.Min (scriptRef.card.charges, (d - alreadyDealt) );
             scriptRef.card.charges -= toDeal;
+            scriptRef.updateChargeText();
+
+            //spawn combat text to show the damage
+            Vector3 pos = scriptRef.combatTextPosition;
+            Debug.Log(pos);
+            MessageHandlerScript.instance.spawnPlayerDamageText(pos, toDeal);
+
+            //track it
             alreadyDealt += toDeal;
 
             if (scriptRef.card.charges == 0)

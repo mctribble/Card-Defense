@@ -266,6 +266,9 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
     private bool       hidden;          //whether or not the card is hiding off screen
     private int        siblingIndex;    //used to put card back where it belongs in the sibling list after it is brought to front for readability
 
+    //returns, in world space, where floating combat text related to this card should spawn
+    public Vector2 combatTextPosition { get { Debug.Log(idleLocation); return Camera.main.ScreenToWorldPoint ( idleLocation + new Vector2( (Screen.width / 2), (Screen.height - (cardFront.rectTransform.rect.height / 4) ) ) ); } }
+    
     //simple FSM
     private enum State
     {
@@ -551,7 +554,9 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
     private IEnumerator Discard()
     {
         state = State.discarding; //set the state so that other behavior on this card gets suspended
-        hand.SendMessage("Discard", gameObject); //remove ourselves from the hand
+        //remove ourselves from the hand, if present
+        if (hand != null)
+            hand.SendMessage("Discard", gameObject); 
 
         //if discardPauseTime is larger than 0, go to discardPauseLocation before doing anything else
         if (discardPauseTime > 0.0f)
