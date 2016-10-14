@@ -364,7 +364,7 @@ public class DeckManagerScript : BaseBehaviour
             }
         }
 
-        //damage has been dealt, and the player isnt dead.  Animate the discards, with a slight delay between them (note: this only forces a delay between cards destroyed by the SAME ATTACK.)
+        //damage has been dealt, and the player isnt dead.  Animate the discards, with a slight delay between them (even across seperate attacks)
         foreach (CardScript deadCard in deadCards)
         {
             //this is a loop, using the waitToDiscard flag, to enforce discardDelay across multiple instances of this coroutine.  If waitToDiscard is true, another instance has already discarded and we have to wait
