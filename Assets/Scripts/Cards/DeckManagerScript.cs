@@ -8,6 +8,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using UnityEngine;
+using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
 //represents a card name and number, used to represent decks in xml
@@ -200,6 +201,12 @@ public class DeckManagerScript : BaseBehaviour
     [VisibleWhen("shouldShowSettings")] public string     playerDeckPath;             //location of player deck file
     [VisibleWhen("shouldShowSettings")] public HandScript playerHand;                 //reference to the player's hand, if present
 
+    //casualty report settings: a new card is spawned, given these properties, then immediately discarded to report a card death to the player
+    [VisibleWhen("shouldShowSettings")] public GameObject playerCardPrefab; //prefab to use when spawning
+    [VisibleWhen("shouldShowSettings")] public Image      deckImage;        //image to line up with as the spawn location
+    [VisibleWhen("shouldShowSettings")] public float      discardDelay;     //minimum time between discards when multiple cards are destroyed at once
+    [Hide] private bool waitToDiscard; //used to enforce discardDelay across multiple instances of DamageCoroutine().  Declared up here because C# wont let me declare a static inside the function itself
+
     //deck lists (only shown if loaded)
     private bool deckListsLoaded() { return (premadeDecks != null) && (playerDecks != null); }
     [VisibleWhen("deckListsLoaded")] public DeckCollection premadeDecks; //stores premade decks
@@ -310,18 +317,21 @@ public class DeckManagerScript : BaseBehaviour
     }
 
     //removes d charges from cards in the deck, starting at the top.  cards that hit zero charges in this way are removed
-    public void Damage(int d)
+    public void Damage(int d) { StartCoroutine(DamageCoroutine(d)); } //hide coroutine-ness since calling code has no reason to care
+    private IEnumerator DamageCoroutine(int d)
     {
         //skip if no damage
         if (d == 0)
-            return;
+            yield break;
+
+        List<CardScript> deadCards = new List<CardScript>();
 
         while (d > 0)
         {
             if (currentDeck.Count == 0)
             {
                 StartCoroutine(playerDead());
-                return;
+                yield break;
             }
 
             Card topCard = currentDeck[0];
@@ -331,11 +341,50 @@ public class DeckManagerScript : BaseBehaviour
             if (topCard.charges == 0)
             {
                 currentDeck.RemoveAt(0);
-                Debug.Log(topCard.data.cardName + " was destroyed by the enemy!");
+
+                //spawn a card and kill it immediately to report te destruction to the player
+                CardScript deadCard = Instantiate(playerCardPrefab).GetComponent<CardScript>(); //create the card
+
+               deadCard.transform.SetParent(HandScript.playerHand.transform.root); //declare the new card a child of the UI Canvas, which can be found at the root of the tree containing the player hand
+
+                //position card to match up with the deck image we are spawning at
+                RectTransform spawnT = deckImage.rectTransform;
+                deadCard.GetComponent<RectTransform>().position = spawnT.position;
+                deadCard.GetComponent<RectTransform>().rotation = spawnT.rotation;
+                deadCard.GetComponent<RectTransform>().localScale = spawnT.localScale;
+
+                deadCard.SendMessage("SetCard", topCard); //set the card
+
+                //add it to a list.  After all the damage has been dealt and we know the player isn't dead, we'll send them off to be discarded
+                deadCards.Add(deadCard);
             }
             else
             {
                 currentDeck[0] = topCard;
+            }
+        }
+
+        //damage has been dealt, and the player isnt dead.  Animate the discards, with a slight delay between them (note: this only forces a delay between cards destroyed by the SAME ATTACK.)
+        foreach (CardScript deadCard in deadCards)
+        {
+            //this is a loop, using the waitToDiscard flag, to enforce discardDelay across multiple instances of this coroutine.  If waitToDiscard is true, another instance has already discarded and we have to wait
+            bool discarded = false;
+            while (discarded == false)
+            {
+                if (waitToDiscard == false)
+                {
+                    waitToDiscard = true;
+                    deadCard.SendMessage("scaleToVector", Vector3.one); //scale it up
+                    deadCard.SendMessage("flipFaceUp"); //flip it over
+                    deadCard.SendMessage("Discard"); //discard it
+                    yield return new WaitForSeconds(discardDelay);
+                    waitToDiscard = false;
+                    discarded = true;
+                }
+                else
+                {
+                    yield return null; //waiting on another instance of this coroutine
+                }
             }
         }
     }
