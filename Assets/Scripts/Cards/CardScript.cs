@@ -610,7 +610,11 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         else
         {
             //fadeout
+            art.CrossFadeAlpha(0.0f, discardFadeTime, false);
+            title.CrossFadeAlpha(0.0f, discardFadeTime, false);
+            description.CrossFadeAlpha(0.0f, discardFadeTime, false);
             cardFront.CrossFadeAlpha(0.0f, discardFadeTime, false);
+            cardBack.CrossFadeAlpha(0.0f, discardFadeTime, false);
 
             //card is out of charges, and must be destroyed
             while (transform.localPosition != discardDestroyLocation) //animate until we get to the destroy location
