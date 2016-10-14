@@ -229,24 +229,34 @@ public class CardData : System.Object
 
 public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
+    //used to hide many variables at runtime
+    private bool shouldShowRefs() { return !Application.isPlaying; }
+
     //prefabs
-    public GameObject tooltipPrefab; //used to create a tooltip
-    public GameObject towerPrefab;   //prefab used to create a tower object
+    [VisibleWhen("shouldShowRefs")] public GameObject tooltipPrefab; //used to create a tooltip
+    [VisibleWhen("shouldShowRefs")] public GameObject towerPrefab;   //prefab used to create a tower object
 
     //component references
-    public Image art;         //reference to card art image
-    public Text  title;       //reference to card name text
-    public Text  description; //reference to card description text
-    public Image cardBack;    //reference to card back image
-
-    //public data
-    public float   mouseOverMod;    //amount the card should move up when moused over, expressed as a multiplier to card height
-    public float   motionSpeed;     //speed in pixels/second this card can move
-    public float   rotationSpeed;   //speed in degrees/second this card can rotate
-    public float   scaleSpeed;      //speed in points/second this card can scale
-    public Vector2 discardLocation; //location to discard self to
+    [VisibleWhen("shouldShowRefs")] public Image art;         //reference to card art image
+    [VisibleWhen("shouldShowRefs")] public Text  title;       //reference to card name text
+    [VisibleWhen("shouldShowRefs")] public Text  description; //reference to card description text
+    [VisibleWhen("shouldShowRefs")] public Image cardFront;   //reference to card front image
+    [VisibleWhen("shouldShowRefs")] public Image cardBack;    //reference to card back image
+                                    
+    //public data                   
+    [VisibleWhen("shouldShowRefs")] public float   mouseOverMod;    //amount the card should move up when moused over, expressed as a multiplier to card height
+    [VisibleWhen("shouldShowRefs")] public float   motionSpeed;     //speed in pixels/second this card can move
+    [VisibleWhen("shouldShowRefs")] public float   rotationSpeed;   //speed in degrees/second this card can rotate
+    [VisibleWhen("shouldShowRefs")] public float   scaleSpeed;      //speed in points/second this card can scale
     public Card    card;            //holds data specific to the card itself
     public bool    faceDown;        //whether or not the card is face down
+
+    //discard data
+    [VisibleWhen("shouldShowRefs")] public Vector3 discardPauseLocation;   //location to pause mid-discard so the player can see what is going away (local space)
+    [VisibleWhen("shouldShowRefs")] public float   discardPauseTime;       //how long to pause there
+    [Hide]                          public Image   deckImage;              //if being returned to the deck, we flip face down and aim to line up with this image
+    [VisibleWhen("shouldShowRefs")] public Vector3 discardDestroyLocation; //where to go before destroying ourself (local space)
+    [VisibleWhen("shouldShowRefs")] public float   discardFadeTime;       //speed to fade out the card when it is being destroyed
 
     //private data
     private GameObject hand;            //reference to the hand object managing this card
@@ -282,17 +292,14 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         tooltipInstance = null;
     }
 
-    //called by the hand to pass a reference to said hand
-    private void SetHand(GameObject go)
-    {
-        hand = go;
-    }
+    public void SetHand(GameObject go) { hand = go; } //called by the hand to pass a reference to said hand
+    public void SetDeckImage(Image di) { deckImage = di; } //saves where the deck is so we can return there if we need to later
 
     // Update is called once per frame
     private void Update()
     {
-        //bail early if idle
-        if (state == State.idle)
+        //if idle, there is nothing to do.  If discarding, then DiscardCoroutine is doing the work
+        if (state == State.idle || state == State.discarding)
             return;
 
         //calculate new position
@@ -302,18 +309,9 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         //move there
         transform.localPosition = newPosition;
 
-        //go idle or die if reached target
+        //go idle or if reached target
         if (newPosition == targetLocation)
-        {
-            if (state == State.discarding)
-            {
-                Destroy(gameObject);
-            }
-            else
-            {
-                state = State.idle;
-            }
-        }
+            state = State.idle;
     }
 
     //helper coroutine that simply waits until this card is idle (initial delay of one frame in case the card starts moving in the same frame as this is called)
@@ -550,20 +548,80 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
     }
 
     //discards this card
-    private void Discard()
+    private IEnumerator Discard()
     {
-        state = State.discarding;
-        targetLocation = discardLocation;
-        hand.SendMessage("Discard", gameObject);
+        state = State.discarding; //set the state so that other behavior on this card gets suspended
+        hand.SendMessage("Discard", gameObject); //remove ourselves from the hand
 
-        //If any charges are left, return this card to the deck
+        //if discardPauseTime is larger than 0, go to discardPauseLocation before doing anything else
+        if (discardPauseTime > 0.0f)
+        {
+            //move there
+            while (transform.localPosition != discardPauseLocation)
+            {
+                transform.localPosition = Vector3.MoveTowards(transform.localPosition, discardPauseLocation, (motionSpeed * Time.deltaTime));
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(discardPauseTime); //pause there a moment
+        }
+
         if (card.charges > 0)
         {
             //send card to top or bottom depending on the presence of "returnsToTopOfDeck" property effect
             if ((card.data.effectData != null) && (card.data.effectData.propertyEffects.returnsToTopOfDeck))
+            {
                 DeckManagerScript.instance.addCardAtTop(card);
+                transform.SetAsLastSibling();
+            }
             else
+            {
                 DeckManagerScript.instance.addCardAtBottom(card);
+                transform.SetAsFirstSibling();
+            }
+
+            //flip over
+            if (faceDown == false)
+                yield return StartCoroutine(flipCoroutine());
+
+            //scale and turn to align with the deck.
+            StartCoroutine(scaleToVector(deckImage.transform.localScale));
+            StartCoroutine(turnToQuaternion(deckImage.transform.rotation));
+
+            //find the destination in local space
+            Vector3 targetPos = transform.InverseTransformPoint(deckImage.transform.position);
+
+            //move there
+            while (transform.localPosition != targetPos)
+            {
+                transform.localPosition = Vector3.MoveTowards(transform.localPosition, targetPos, (motionSpeed * Time.deltaTime));
+                yield return null;
+            }
+
+            //die
+            Destroy(gameObject);
+            yield break;
+        }
+        else
+        {
+            //fadeout
+            cardFront.CrossFadeAlpha(0.0f, discardFadeTime, false);
+
+            //card is out of charges, and must be destroyed
+            while (transform.localPosition != discardDestroyLocation) //animate until we get to the destroy location
+            {
+                //movement
+                transform.localPosition = Vector3.MoveTowards(transform.localPosition, discardDestroyLocation, (motionSpeed * Time.deltaTime)); //movement
+
+                //scale
+                transform.localScale = Vector3.MoveTowards(transform.localScale, Vector3.zero, (scaleSpeed * Time.deltaTime));
+
+                yield return null;
+            }
+
+            //die
+            Destroy(gameObject);
+            yield break;
         }
     }
 
@@ -577,9 +635,10 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
 
         //remove charge.
         card.charges -= 1;
+        updateChargeText();
 
         //discard self
-        Discard();
+        StartCoroutine(Discard());
     }
 
     private void SetIdleLocation(Vector2 newIdle)

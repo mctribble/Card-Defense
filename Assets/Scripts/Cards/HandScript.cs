@@ -69,8 +69,15 @@ public class HandScript : BaseBehaviour
         yield break;
     }
 
-    //[DEV] creates a button in the inspector to draw a card
+    //[DEV] creates buttons in the inspector to manipulate the hand
     [Show] private void devDraw() { drawCard(); }
+    [Show] private void devDiscard() { discardRandomCard(null); }
+    [Show] private void devRecycle()
+    {
+        int cardCount = currentHandSize;
+        StartCoroutine(discardRandomCards(null, cardCount));
+        StartCoroutine(drawCards(cardCount));
+    }
 
     //draws a card from the deck.  The card spawns face down at the same position, rotation, and scale as the spawn point image.
     //flipOver: card should flip over AFTER moving
@@ -119,7 +126,9 @@ public class HandScript : BaseBehaviour
         cards[currentHandSize].GetComponent<RectTransform>().rotation   = spawnT.rotation;
         cards[currentHandSize].GetComponent<RectTransform>().localScale = spawnT.localScale;
 
-        cards[currentHandSize].SendMessage("SetHand", gameObject); //tell the card which hand owns it
+        cards[currentHandSize].SendMessage("SetHand", gameObject);     //tell the card which hand owns it
+        if (handOwner == HandFaction.player)
+            cards[currentHandSize].SendMessage("SetDeckImage", deckImage); //also tell the card where the deck image is so it knows where to go if it returns there
 
         //send the card the data that defines it
         if (handOwner == HandFaction.player)

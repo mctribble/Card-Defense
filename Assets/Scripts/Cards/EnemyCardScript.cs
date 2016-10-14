@@ -162,7 +162,7 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
     public float motionSpeed;
     public float rotationSpeed;
     public float scaleSpeed;
-    public Vector2 discardLocation;
+    public Vector2 discardDisplacement;
 
     //wave stats
     [Hide] public int spawnCount;           //number of enemies that still need spawning in this wave
@@ -408,7 +408,7 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
     private void Discard()
     {
         state = State.discarding;
-        targetLocation = discardLocation;
+        targetLocation = idleLocation + discardDisplacement;
         hand.SendMessage("Discard", gameObject);
     }
 
