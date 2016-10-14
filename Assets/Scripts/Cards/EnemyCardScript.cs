@@ -11,15 +11,28 @@ using Vexe.Runtime.Types;
 [System.Serializable]
 public class WaveData
 {
-    //enemy type name, annotated to give a popup in the inspector
+    //[DEV] called when fields are changed from the inspector to force recalculating the spawn count (VFW passes us the new values, so the params are here to match the expected prototype.  We do not use them)
+    private void resetSpawnCount(string s) { forcedSpawnCount = -1; spawnedThisWave = 0; cachedSpawnCount = null; }
+    private void resetSpawnCount(int i) { forcedSpawnCount = -1; spawnedThisWave = 0; cachedSpawnCount = null; }
+
+    //enemy type name, annotated to give a popup in the inspector and call resetSpawnCount if it is set from there
     private string[] getEnemyNames() { return EnemyTypeManagerScript.instance.getEnemyNames(); }
-    [XmlAttribute][Popup("getEnemyNames",CaseSensitive = true, Filter = true, HideUpdate = true, TextField = true)] public string type;
+
+    [XmlAttribute]
+    [Popup("getEnemyNames",CaseSensitive = true, Filter = true, HideUpdate = true, TextField = true)]
+    [OnChanged("resetSpawnCount")]
+    public string type;
+    
 
     //DEV: indicates whether or not this wave was randomly generated.  Random waves are not written back to the file when saving level definitions
     [XmlIgnore][Comment("random waves are not saved to the level file.",helpButton:true)]
     public bool isRandomWave;
     
-    [XmlAttribute]    public int    budget;
+    //wave budget.  spawn count is reset if this is changed from the inspector.
+    [OnChanged("resetSpawnCount")]
+    [XmlAttribute]
+    public int budget;
+
     [XmlAttribute]    public float  time;
     [XmlAttribute]    public string message;
     [Hide, XmlIgnore] public int    forcedSpawnCount; //if this is negative, no spawn count was forced
@@ -38,7 +51,7 @@ public class WaveData
 
             return data;
         }
-        set { data = value; }
+        set { data = value; cachedSpawnCount = null; }
     }
 
     [XmlIgnore] private List<GameObject> enemyList;
