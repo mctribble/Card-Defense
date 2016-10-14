@@ -76,17 +76,14 @@ public class DirectionalShotScript : MonoBehaviour
         {
             //update lifespan and destroy if dead
             timeToLive -= Time.deltaTime;                                 
-            if (timeToLive <= 0)
-            {
-                Destroy(gameObject);
-                return;
-            }
 
             transform.position += (attackDir * (speed * Time.deltaTime)); //move
 
             //find the region in which we want to search for enemies to warn about incoming damage
             Rect lookAheadRegion = new Rect(transform.position.x - 0.25f, transform.position.y - 0.25f, 0.5f, 0.5f); //start with a small box at the same place as the projectile
             float lookAheadDist = Mathf.Max(lookAhead, Time.deltaTime) * speed; //expand the box to include where we expect to be in lookAhead seconds, or in Time.deltaTime seconds, whichever is larger
+            lookAheadDist = Mathf.Max(lookAheadDist, (timeToLive * speed)); //dont look further ahead than where we will be when we die
+
             if (attackDir.x != 0)
             {
                 if (attackDir.x < 0)
@@ -129,10 +126,20 @@ public class DirectionalShotScript : MonoBehaviour
             //figure out which enemies we need to attack this frame
             Plane plane = new Plane(attackDir, transform.position);
             List<DamageEventData> toHitThisFrame = new List<DamageEventData>();
-            foreach (DamageEventData ded in expectedToHit)
-                if (ded.dest != null) //null dest events can happen if the enemy dies at just the wrong time
-                    if (plane.GetSide(ded.dest.transform.position) == false)
-                        toHitThisFrame.Add(ded);
+
+            if (timeToLive > 0)
+            {
+                //normal check: hit everything behind the plane
+                foreach (DamageEventData ded in expectedToHit)
+                    if (ded.dest != null) //null dest events can happen if the enemy dies at just the wrong time
+                        if (plane.GetSide(ded.dest.transform.position) == false)
+                            toHitThisFrame.Add(ded);
+            }
+            else
+            {
+                //if we are dying this frame, attack everything on our expected list.  Works around a bug where enemies can stop being targeted because they think they're going to die but are not
+                toHitThisFrame = expectedToHit;
+            }
 
             //attack them
             for (int e = 0; e < toHitThisFrame.Count; e++)
@@ -149,6 +156,12 @@ public class DirectionalShotScript : MonoBehaviour
                 
                 expectedToHit.Remove(ded);
                 alreadyHit.Add(ded.dest);
+            }
+
+            if (timeToLive <= 0)
+            {
+                Destroy(gameObject);
+                return;
             }
         }
 	}

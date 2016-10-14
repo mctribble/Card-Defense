@@ -75,7 +75,8 @@ public class EnemyData
 
         if ((effectData != null) && (effectData.effects.Count > 0))
             foreach (IEffect e in effectData.effects)
-                description += "\n" + "<Color=#" + e.effectColorHex + ">" + e.Name + "</Color>";
+                if (e.Name != null)
+                    description += "\n" + "<Color=#" + e.effectColorHex + ">-" + e.Name + "</Color>";
 
         return description;
     }
@@ -232,6 +233,7 @@ public class EnemyScript : BaseBehaviour
 
         //damage player...
         DeckManagerScript.instance.SendMessage("Damage", damage);
+        MessageHandlerScript.instance.spawnPlayerDamageText(transform.position, damage);
         ScoreManagerScript.instance.flawless = false;
 
         //reset the enemy
@@ -347,7 +349,7 @@ public class EnemyScript : BaseBehaviour
     //stores the data specific to this type of enemy
     private System.Collections.IEnumerator SetData(EnemyData d)
     {
-        enemyTypeName           = d.name;
+        enemyTypeName  = d.name;
         damage         = d.attack;
         maxHealth      = d.maxHealth;
         curHealth      = d.maxHealth;

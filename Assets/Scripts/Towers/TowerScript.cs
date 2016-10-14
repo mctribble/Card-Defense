@@ -55,21 +55,7 @@ public class TowerScript : BaseBehaviour
         //hide tooltip until moused over
         tooltipText.enabled = false;
 
-        //update gauge color to reflect tower properties
-        if ( (effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false) )
-        {
-            if ((effects == null) || (effects.propertyEffects.limitedAmmo == null))
-                lifespanText.color = textColorLifespan;
-            else
-                lifespanText.color = textColorBoth;
-        }
-        else
-        {
-            if ((effects == null) || (effects.propertyEffects.limitedAmmo == null))
-                lifespanText.color = textColorNeither;
-            else
-                lifespanText.color = textColorAmmo;
-        }
+        updateLifespanText();
     }
 
     // Update is called once per frame
@@ -387,8 +373,10 @@ public class TowerScript : BaseBehaviour
         //set scale of range image
         rangeImage.gameObject.GetComponent<RectTransform>().localScale = new Vector3(range, range, 1.0f);
 
-        //update tooltip text
+        //update text
         UpdateTooltipText();
+
+        updateLifespanText();
     }
 
     //sets effect data for this tower
@@ -396,21 +384,7 @@ public class TowerScript : BaseBehaviour
     {
         effects = d.clone();
 
-        //update gauge color to reflect tower properties
-        if ((effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false))
-        {
-            if ((effects == null) || (effects.propertyEffects.limitedAmmo == null))
-                lifespanText.color = textColorLifespan;
-            else
-                lifespanText.color = textColorBoth;
-        }
-        else
-        {
-            if ((effects == null) || (effects.propertyEffects.limitedAmmo == null))
-                lifespanText.color = textColorNeither;
-            else
-                lifespanText.color = textColorAmmo;
-        }
+        updateLifespanText();
 
         //max tower charge is 1.0 unless an effect overrides it
         maxCharge = 1.0f;
@@ -440,21 +414,7 @@ public class TowerScript : BaseBehaviour
         //update tooltip text
         UpdateTooltipText();
 
-        //update gauge color to reflect tower properties
-        if ((effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false))
-        {
-            if ((effects == null) || (effects.propertyEffects.limitedAmmo == null))
-                lifespanText.color = textColorLifespan;
-            else
-                lifespanText.color = textColorBoth;
-        }
-        else
-        {
-            if ((effects == null) || (effects.propertyEffects.limitedAmmo == null))
-                lifespanText.color = textColorNeither;
-            else
-                lifespanText.color = textColorAmmo;
-        }
+        updateLifespanText();
 
         //max tower charge is 1.0 unless an effect overrides it
         maxCharge = 1.0f;
@@ -492,8 +452,9 @@ public class TowerScript : BaseBehaviour
         //count the upgrade
         upgradeCount++;
 
-        //update tooltip text
+        //update text
         UpdateTooltipText();
+        updateLifespanText();
     }
 
     //updates the tooltip text to reflect new values
@@ -507,31 +468,18 @@ public class TowerScript : BaseBehaviour
             "Damage Per Second: " + (attackPower / rechargeTime).ToString("F1") + "\n" +
             "range: " + range;
 
-        if ((effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false)) //skip this section entirely if we have infinite lifespan
+        if ((effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false)) //special display on infinite lifespan
             tooltipText.text += "\nwaves remaining: " + wavesRemaining;
+        else
+            tooltipText.text += "\nwaves remaining: <color=green>∞</color>";
 
         if ((effects != null) && (effects.propertyEffects.limitedAmmo != null)) //skip this section entirely if we have infinite ammot
             tooltipText.text += "\nammo remaining: " + effects.propertyEffects.limitedAmmo;
 
         if (effects != null)
             foreach (IEffect e in effects.effects)
-                tooltipText.text += "\n<Color=#" + e.effectColorHex + ">" + e.Name + "</Color>";
-
-        //show any stats that indicate when the tower will die
-        if ((effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false))
-        {
-            if ((effects == null) || (effects.propertyEffects.limitedAmmo == null))
-                lifespanText.text = wavesRemaining.ToString(); //lifespan only
-            else
-                lifespanText.text = wavesRemaining.ToString() + "/" + effects.propertyEffects.limitedAmmo.ToString(); //lifespan and ammo
-        }
-        else
-        {
-            if ((effects == null) || (effects.propertyEffects.limitedAmmo == null))
-                lifespanText.text = "∞"; //tower will not decay
-            else
-                lifespanText.text = effects.propertyEffects.limitedAmmo.ToString(); //ammo only
-        }
+                if (e.Name != null)
+                    tooltipText.text += "\n<Color=#" + e.effectColorHex + ">-" + e.Name + "</Color>";
     }
 
     //updates the tooltip text to show what the given upgrade would change
@@ -616,7 +564,7 @@ public class TowerScript : BaseBehaviour
         tooltipText.text += "range: " + range + " <color=" + colorString + "> " + rangeChange.ToString("+ ####0.##;- ####0.##") + "</color>\n";
 
         //waves remaining
-        if ( (effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false)) //skip this section entirely if we have infinite lifespan
+        if ( (effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false)) //special display on infinite lifespan
         {
             colorString = "magenta";
             if (wavesRemainingChange < 0)
@@ -625,7 +573,11 @@ public class TowerScript : BaseBehaviour
                 colorString = "lime";
             else
                 colorString = "white";
-            tooltipText.text += "waves remaining: " + attackPower + " <color=" + colorString + "> " + wavesRemainingChange.ToString("+ ####0.##;- ####0.##") + "</color>";
+            tooltipText.text += "waves remaining: " + wavesRemaining + " <color=" + colorString + "> " + wavesRemainingChange.ToString("+ ####0.##;- ####0.##") + "</color>";
+        }
+        else
+        {
+            tooltipText.text += "\nwaves remaining: <color=green>∞</color>";
         }
     }
 
@@ -640,7 +592,8 @@ public class TowerScript : BaseBehaviour
             return;
 
         foreach (IEffect e in newEffectData.effects)
-            tooltipText.text += "\n<Color=#" + e.effectColorHex + ">+" + e.Name + "</Color>";
+            if (e.Name != null)
+                tooltipText.text += "\n<Color=#" + e.effectColorHex + ">++" + e.Name + "</Color>";
     }
 
     //called whenever a wave ends.  Updates the lifespan and destroys the tower if it hits zero.
@@ -673,5 +626,57 @@ public class TowerScript : BaseBehaviour
 
         //destroy self
         Destroy(gameObject);
+    }
+
+    //called when an upgrade card is being played. Change the lifespanText to show remaining upgrade slots instead
+    private void showUpgradeInfo()
+    {
+        lifespanText.text = (upgradeCap - upgradeCount).ToString();
+        if (upgradeCount == upgradeCap)
+            lifespanText.color = textColorAmmo;
+        else
+            lifespanText.color = textColorLifespan;
+    }
+
+    //called when the upgrade is done.  Restores text to normal.
+    private void hideUpgradeInfo()
+    {
+        updateLifespanText();
+    }
+
+    //updates the lifespan text
+    private void updateLifespanText()
+    {
+        //show any stats that indicate when the tower will die
+        if ((effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false))
+        {
+            if ((effects == null) || (effects.propertyEffects.limitedAmmo == null))
+                lifespanText.text = wavesRemaining.ToString(); //lifespan only
+            else
+                lifespanText.text = wavesRemaining.ToString() + "/" + effects.propertyEffects.limitedAmmo.ToString(); //lifespan and ammo
+        }
+        else
+        {
+            if ((effects == null) || (effects.propertyEffects.limitedAmmo == null))
+                lifespanText.text = "∞"; //tower will not decay
+            else
+                lifespanText.text = effects.propertyEffects.limitedAmmo.ToString(); //ammo only
+        }
+
+        //update text color to reflect tower properties
+        if ((effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false))
+        {
+            if ((effects == null) || (effects.propertyEffects.limitedAmmo == null))
+                lifespanText.color = textColorLifespan;
+            else
+                lifespanText.color = textColorBoth;
+        }
+        else
+        {
+            if ((effects == null) || (effects.propertyEffects.limitedAmmo == null))
+                lifespanText.color = textColorNeither;
+            else
+                lifespanText.color = textColorAmmo;
+        }
     }
 }

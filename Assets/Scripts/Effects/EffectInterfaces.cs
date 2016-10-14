@@ -31,7 +31,7 @@ public enum EffectType
     enemyReachedGoal = unchecked((int)0x111111FF), //effect triggers when an enemy reaches their goal
     instant          = unchecked((int)0x00FFFFFF), //effect triggers instantly without the need for a target
     overcharge       = unchecked((int)0xFF00FFFF), //effect triggers when a tower attacks with at least one full point of overcharge, before enemyDamaged effects
-    periodic         = unchecked((int)0x777777FF), //effect triggers on every update() call
+    periodic         = unchecked((int)0x333333FF), //effect triggers on every update() call
     self             = unchecked((int)0x0000A0FF), //effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
     towerTargeting   = unchecked((int)0xADD8E6FF), //effect alters the way a tower taragets enemies.  if multiple are present, only the last is actually used
     wave             = unchecked((int)0x0000FFFF), //effect alters the current wave
@@ -370,7 +370,7 @@ public class EffectData : System.Object
             if (cachedPropertyEffects == null)
             {
                 PropertyEffects newPropertyEffects = new PropertyEffects();
-                foreach (IEffect e in Effects)
+                foreach (IEffect e in effects)
                 {
                     if (e.triggersAs(EffectType.property))
                     {

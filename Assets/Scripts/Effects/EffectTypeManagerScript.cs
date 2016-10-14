@@ -198,7 +198,11 @@ public class EffectTypeManagerScript : BaseBehaviour
                 ie = (IEffect) Activator.CreateInstance(t);
             }
             catch (MissingMethodException) { continue; }
-            
+
+            //skip listing effects without a name
+            if (ie.Name == null)
+                continue;
+
             //Debug.Log(ie.XMLName); //use when effect creation is spewing errors
             ie.strength = 99.9f;
             ie.argument = "argument";
@@ -210,9 +214,8 @@ public class EffectTypeManagerScript : BaseBehaviour
 
         //print them
         foreach(IEffect ie in effectObjects)
-        {
-            Debug.Log(ie.Name + "\n(" + ie.XMLName + ')');
-        }
+                Debug.Log(ie.Name + "\n(" + ie.XMLName + ')');
+        
         Debug.Log("Done!");
     }
 }

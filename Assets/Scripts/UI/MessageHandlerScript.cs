@@ -3,7 +3,8 @@ using System.Collections;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
-//provides static utilities to show dialog boxes to the player and return a result
+//provides static utilities to show dialog boxes or floating combat text to the player.  
+//Some dialogs return a result, but because of the nature of coroutines the results must be retrieved "manually" from the responseToLastPrompt field.
 public class MessageHandlerScript : BaseBehaviour
 {
     //object references
@@ -14,6 +15,7 @@ public class MessageHandlerScript : BaseBehaviour
     [VisibleWhen("shouldShowRefs")] public GameObject buttonB;
     [VisibleWhen("shouldShowRefs")] public GameObject buttonC;
     [VisibleWhen("shouldShowRefs")] public GameObject buttonD;
+    [VisibleWhen("shouldShowRefs")] public GameObject combatTextPrefab;
 
     [Show] public static string responseToLastPrompt;
     public static MessageHandlerScript instance;
@@ -105,5 +107,13 @@ public class MessageHandlerScript : BaseBehaviour
             Debug.LogError(message);
 
         MessageHandlerScript.ShowNoYield("ERROR: " + message);
+    }
+
+    //spawns floating combat text to represent an enemy having damaged the player
+    public void spawnPlayerDamageText (Vector2 enemyPosition, int damageDealt)
+    {
+        GameObject combatText = (GameObject)Instantiate(combatTextPrefab, enemyPosition, Quaternion.identity);
+        combatText.transform.SetParent(PathManagerScript.instance.transform.parent, true);
+        combatText.SendMessage("damageText", (-damageDealt).ToString());
     }
 }

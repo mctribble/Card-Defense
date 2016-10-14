@@ -18,21 +18,21 @@ class EffectReturnsToTopOfDeck : BaseEffectProperty
 //tower lifespan does not decrease and is displayed as ∞.
 class EffectInfiniteTowerLifespan : BaseEffectProperty
 {
-    [Hide] public override string Name { get { return "tower does not decay"; } } //returns name and strength
+    [Hide] public override string Name { get { return null; } } //returns name and strength
     [Show] public override string XMLName { get { return "infiniteTowerLifespan"; } } //name used to refer to this effect in XML.
 }
 
 //colorizes attacks associated with this effect
 class EffectAttackColor : BaseEffectProperty
 {
-    [Hide] public override string Name { get { return "Attack uses <color=" + argument + "> this</color> color"; } } //returns name and strength
+    [Hide] public override string Name { get { return null; } } //returns name and strength
     [Show] public override string XMLName { get { return "attackColor"; } } //name used to refer to this effect in XML.
 }
 
 //tower can only fire X times before disappearing
 class EffectLimitedAmmo : BaseEffectProperty
 {
-    [Hide] public override string Name { get { return "Ammo: " + strength; } } //returns name and strength
+    [Hide] public override string Name { get { return null; } } //returns name and strength
     [Show] public override string XMLName { get { return "limitedAmmo"; } } //name used to refer to this effect in XML.
 }
 

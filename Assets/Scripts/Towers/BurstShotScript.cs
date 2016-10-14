@@ -41,20 +41,6 @@ public class BurstShotScript : BaseBehaviour
     {
         maxScale = data.burstRange;
         baseDamageEvent = data.damageEvent;
-
-        //put the initial target list on the expected list and inform those enemies
-        //foreach (GameObject t in data.targetList)
-        //{
-        //    DamageEventData ded = new DamageEventData();
-        //    ded.source = baseDamageEvent.source;
-        //    ded.rawDamage = baseDamageEvent.rawDamage;
-        //    ded.effects = baseDamageEvent.effects;
-        //    ded.dest = t;
-        //
-        //    t.GetComponent<EnemyScript>().onExpectedDamage(ref ded);
-        //    expectedToHit.Add(ded);
-        //}
-
         initialized = true; //flag ready
     }
 
@@ -111,9 +97,19 @@ public class BurstShotScript : BaseBehaviour
 
             //figure out which enemies we need to attack this frame
             List<DamageEventData> toHitThisFrame = new List<DamageEventData>();
-            foreach (DamageEventData ded in expectedToHit)
-                if ( Vector2.Distance(ded.dest.transform.position, transform.position) <= curScale )
-                    toHitThisFrame.Add(ded);
+
+            if (curScale != maxScale)
+            {
+                //normal check: attack everything inside the burst
+                foreach (DamageEventData ded in expectedToHit)
+                    if (Vector2.Distance(ded.dest.transform.position, transform.position) <= curScale)
+                        toHitThisFrame.Add(ded);
+            }
+            else
+            {
+                //if we are dying this frame, attack everything on our expected list.  Works around a bug where enemies can stop being targeted because they think they're going to die but are not
+                toHitThisFrame = expectedToHit;
+            }
 
             //attack them
             for (int e = 0; e < toHitThisFrame.Count; e++)

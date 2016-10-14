@@ -123,9 +123,18 @@ public class CastingTooltipScript : BaseBehaviour
             if (parentCardScript != null)
             {
                 if (parentCardScript.card.data.cardType == CardType.tower)
+                {
                     parentCardScript.SendMessage("SummonTower", transform.position);
+                }
                 else if (parentCardScript.card.data.cardType == CardType.upgrade)
-                    parentCardScript.SendMessage("UpgradeTower", targetTower);
+                {
+                    //tell towers so they can return to the normal view
+                    if (parentCardScript.card.data.cardType == CardType.upgrade)
+                        foreach (GameObject tower in GameObject.FindGameObjectsWithTag("Tower"))
+                            tower.SendMessage("hideUpgradeInfo");
+
+                    parentCardScript.SendMessage("UpgradeTower", targetTower); //and then do the upgrade
+                }
             }
             Destroy(gameObject);
         }

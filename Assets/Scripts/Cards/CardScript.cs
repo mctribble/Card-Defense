@@ -157,17 +157,33 @@ public class CardData : System.Object
                                "Range: " + towerData.range + '\n' +
                                "Fires in: " + towerData.rechargeTime + 's';
 
-                //lifespan/ammo, if applicable
+                //lifespan
                 if ((effectData == null) || (effectData.propertyEffects.infiniteTowerLifespan == false))
                     description += "\nLifespan: " + towerData.lifespan;
+                else
+                    description += "\nLifespan: <color=green>∞</color>";
+
+                //ammo, if applicable
                 if ((effectData != null) && (effectData.propertyEffects.limitedAmmo != null))
                     description += "\nAmmo: " + effectData.propertyEffects.limitedAmmo.Value;
 
                 break;
 
             case CardType.upgrade:
+
                 //present upgrade stats
-                if (upgradeData.waveBonus          > 0) { description += "lifespan: +"  + upgradeData.waveBonus                               + '\n'; }
+                if (effectData == null || effectData.propertyEffects.infiniteTowerLifespan == false)
+                {
+                    if (upgradeData.waveBonus > 0) { description += "lifespan: +" + upgradeData.waveBonus + '\n'; }
+                    if (upgradeData.waveBonus < 0) { description += "lifespan: -" + upgradeData.waveBonus + '\n'; }
+                }
+                else
+                    description += "Lifespan: <color=green>∞</color>\n";
+
+                if (effectData != null)
+                    if (effectData.propertyEffects.limitedAmmo != null)
+                        description += "<color=red>Limited Ammo: " + effectData.propertyEffects.limitedAmmo + "</color>\n";
+
                 if (upgradeData.attackMultiplier   > 1) { description += "damage: +"    + (upgradeData.attackMultiplier - 1).ToString("P1")   + '\n'; }
                 if (upgradeData.rangeMultiplier    > 1) { description += "range: +"     + (upgradeData.rangeMultiplier - 1).ToString("P1")    + '\n'; }
                 if (upgradeData.rechargeMultiplier > 1) { description += "recharge: +"  + (upgradeData.rechargeMultiplier - 1).ToString("P1") + '\n'; }
@@ -175,7 +191,6 @@ public class CardData : System.Object
                 if (upgradeData.rangeModifier      > 0) { description += "range: +"     + upgradeData.rangeModifier.ToString()                + '\n'; }
                 if (upgradeData.rechargeModifier   > 0) { description += "recharge: +"  + upgradeData.rechargeModifier.ToString() + 's'       + '\n'; }
 
-                if (upgradeData.waveBonus          < 0) { description += "lifespan: -"  + upgradeData.waveBonus                               + '\n'; }
                 if (upgradeData.attackMultiplier   < 1) { description += "damage: -"    + (1 - upgradeData.attackMultiplier).ToString("P1")   + '\n'; }
                 if (upgradeData.rangeMultiplier    < 1) { description += "range: -"     + (1 - upgradeData.rangeMultiplier).ToString("P1")    + '\n'; }
                 if (upgradeData.rechargeMultiplier < 1) { description += "recharge: -"  + (1 - upgradeData.rechargeMultiplier).ToString("P1") + '\n'; }
@@ -196,9 +211,8 @@ public class CardData : System.Object
 
             //add a line of text to the description for each
             foreach (IEffect e in effectData.effects)
-            {
-                description += "\n<Color=#" + e.effectColorHex + ">" + e.Name + "</Color>";
-            }
+                if (e.Name != null)
+                    description += "\n<Color=#" + e.effectColorHex + ">-" + e.Name + "</Color>";
         }
 
         //end with the flavor text found in the card file
@@ -378,6 +392,11 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         //if already casting, cancel it
         if (tooltipInstance != null)
         {
+            //if upgrade, tell towers so they can go back to the normal view
+            if (card.data.cardType == CardType.upgrade)
+                foreach (GameObject tower in GameObject.FindGameObjectsWithTag("Tower"))
+                    tower.SendMessage("hideUpgradeInfo");
+
             state = State.idle;  //reset state
                                  //send a message to all cards except this one to tell them to come back out
             foreach (GameObject c in cards)
@@ -400,9 +419,9 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
             if (c != this.gameObject)
                 c.SendMessage("Hide");
 
-        //this card has no target
         if (card.data.cardType == CardType.spell && card.data.effectData.cardTargetingType == TargetingType.none)
         {
+            //this card has no target
             //apply effects
             foreach (IEffect e in card.data.effectData.effects)
             {
@@ -455,6 +474,11 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
             new Vector2(0.5f, 0.5f));
 
         tooltipInstance.SendMessage("SetParent", this); //tell tooltip who spawned it so it can call back later
+
+        //if upgrade, tell towers so they can show the relevant info
+        if (card.data.cardType == CardType.upgrade)
+            foreach (GameObject tower in GameObject.FindGameObjectsWithTag("Tower"))
+                tower.SendMessage("showUpgradeInfo");
 
         //if tower, pass range to the tooltip
         if (card.data.cardType == CardType.tower)
