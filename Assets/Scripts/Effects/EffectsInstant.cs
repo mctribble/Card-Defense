@@ -14,7 +14,7 @@ public abstract class BaseEffectInstant : BaseEffect, IEffectInstant
 //draws x cards
 public class EffectDrawCard : BaseEffectInstant
 {
-    [Hide] public override string Name { get { return "Draw up to " + strength + " cards"; } } //returns name and strength
+    [Hide] public override string Name { get { return "Draw " + strength + " cards"; } } //returns name and strength
     [Show] public override string XMLName { get { return "drawCard"; } } //name used to refer to this effect in XML
 
     public override void trigger() { HandScript.playerHand.StartCoroutine(HandScript.playerHand.drawCards( Mathf.FloorToInt(strength) ) ); }
@@ -23,7 +23,7 @@ public class EffectDrawCard : BaseEffectInstant
 //draws x enemy cards
 public class EffectDrawEnemyCard : BaseEffectInstant
 {
-    [Hide] public override string Name { get { return "Draw up to " + strength + " enemy cards"; } } //returns name and strength
+    [Hide] public override string Name { get { return "Draw " + strength + " enemy cards"; } } //returns name and strength
     [Show] public override string XMLName { get { return "drawEnemyCard"; } } //name used to refer to this effect in XML
 
     public override void trigger() { HandScript.enemyHand.StartCoroutine(HandScript.enemyHand.drawCards( Mathf.FloorToInt(strength) ) ); }

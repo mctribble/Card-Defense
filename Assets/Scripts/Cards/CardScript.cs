@@ -155,7 +155,7 @@ public class CardData : System.Object
                 description += "Upgrades: " + towerData.upgradeCap + '\n' +
                                "Damage: " + towerData.attackPower + '\n' +
                                "Range: " + towerData.range + '\n' +
-                               "Fires in: " + towerData.rechargeTime + 's';
+                               "Fires every: " + towerData.rechargeTime + 's';
 
                 //lifespan
                 if ((effectData == null) || (effectData.propertyEffects.infiniteTowerLifespan == false))
@@ -217,7 +217,7 @@ public class CardData : System.Object
 
         //end with the flavor text found in the card file
         if ( (cardDescription != null) && (cardDescription.Length > 0) )
-            description += "\n\n<i>" + cardDescription + "</i>";
+            description += "\n<i>" + cardDescription + "</i>";
 
         //return it
         return description;
