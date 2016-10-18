@@ -558,19 +558,7 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (hand != null)
             hand.SendMessage("Discard", gameObject); 
 
-        //if discardPauseTime is larger than 0, go to discardPauseLocation before doing anything else
-        if (discardPauseTime > 0.0f)
-        {
-            //move there
-            while (transform.localPosition != discardPauseLocation)
-            {
-                transform.localPosition = Vector3.MoveTowards(transform.localPosition, discardPauseLocation, (motionSpeed * Time.deltaTime));
-                yield return null;
-            }
-
-            yield return new WaitForSeconds(discardPauseTime); //pause there a moment
-        }
-
+        //if the card has charges left, sned it back to the deck immediately without waiting for the animation
         if (card.charges > 0)
         {
             //send card to top or bottom depending on the presence of "returnsToTopOfDeck" property effect
@@ -584,7 +572,24 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
                 DeckManagerScript.instance.addCardAtBottom(card);
                 transform.SetAsFirstSibling();
             }
+        }
 
+        //if discardPauseTime is larger than 0, go to discardPauseLocation before doing anything else
+        if (discardPauseTime > 0.0f)
+        {
+            //move there
+            while (transform.localPosition != discardPauseLocation)
+            {
+                transform.localPosition = Vector3.MoveTowards(transform.localPosition, discardPauseLocation, (motionSpeed * Time.deltaTime));
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(discardPauseTime); //pause there a moment
+        }
+
+        //animate differently depending on where we are going
+        if (card.charges > 0)
+        {
             //flip over
             if (faceDown == false)
                 yield return StartCoroutine(flipCoroutine());

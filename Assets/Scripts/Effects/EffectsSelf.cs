@@ -46,7 +46,12 @@ public class EffectReplaceRandomCard : BaseEffectSelf
     {
         int toReplace = Mathf.Min( Mathf.RoundToInt(strength), HandScript.playerHand.currentHandSize-1);  //how many cards are being replaced
 
-        HandScript.playerHand.StartCoroutine(HandScript.playerHand.discardRandomCards(card_gameObject, toReplace)); //discard toReplace random cards that are NOT this one (this card will be discarded regardless, since it was just played)
-        HandScript.playerHand.StartCoroutine(HandScript.playerHand.drawCards(toReplace)); //draw new cards to replace them
+        //if we are replacing the entire hand, do them all at once with no delay
+        bool applyDelay = true;
+        if (toReplace == HandScript.playerHand.currentHandSize - 1)
+            applyDelay = false;
+
+        HandScript.playerHand.StartCoroutine(HandScript.playerHand.discardRandomCards(card_gameObject, toReplace, applyDelay)); //discard toReplace random cards that are NOT this one (this card will be discarded regardless, since it was just played)
+        HandScript.playerHand.StartCoroutine(HandScript.playerHand.drawCards(toReplace, applyDelay)); //draw new cards to replace them
     }
 }

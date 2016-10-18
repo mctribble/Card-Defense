@@ -28,6 +28,13 @@ public class EnemyManagerScript : BaseBehaviour
         comparer = new EnemyDistanceToGoalComparer();
     }
 
+    //called to reset the manager
+    private void Reset()
+    {
+        activeEnemies = new List<GameObject>();
+        survivors = null;
+    }
+
     //called when an enemy is spawned
     public void EnemySpawned(GameObject e)
     {

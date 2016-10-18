@@ -26,6 +26,14 @@ public class ScoreManagerScript : BaseBehaviour
         enemyCardsDrawn = 0;
         flawless = true;
 	}
+
+    //use to reset the manager
+    void Reset()
+    {
+        wavesCleared = 0;
+        enemyCardsDrawn = 0;
+        flawless = true;
+    }
 	
     //returns a string of the score report.  PlayerWon indicates whether or not hte player won the level
     public string report(bool PlayerWon)

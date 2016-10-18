@@ -49,6 +49,20 @@ public class PathManagerScript : BaseBehaviour
         SpawnPaths();
     }
 
+    //called to reset the manager
+    private IEnumerator Reset()
+    {
+        //wait for the level to load
+        while (LevelManagerScript.instance.levelLoaded == false)
+            yield return null;
+
+        //fetch path segments from the level manager
+        segments = LevelManagerScript.instance.Data.pathSegments;
+
+        //spawn the path objects
+        SpawnPaths();
+    }
+
     //calculates a path from position to the player's "base" //TODO: define an actual base, and maybe implement Djikstra or something here
     public List<Vector2> CalculatePathFromPos(Vector2 startPos)
     {

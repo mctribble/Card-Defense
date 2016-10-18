@@ -69,14 +69,26 @@ public class HandScript : BaseBehaviour
         yield break;
     }
 
+    //use this to reset the hand
+    private IEnumerator Reset()
+    {
+        handHidden = false;
+        yield return StartCoroutine(discardRandomCards(null, currentHandSize));
+
+        while (LevelManagerScript.instance.levelLoaded == false)
+            yield return null;
+
+        yield return drawToHandSize(startingHandSize);
+    }
+
     //[DEV] creates buttons in the inspector to manipulate the hand
     [Show] private void devDraw() { drawCard(); }
     [Show] private void devDiscard() { discardRandomCard(null); }
     [Show] private void devRecycle()
     {
         int cardCount = currentHandSize;
-        StartCoroutine(discardRandomCards(null, cardCount));
-        StartCoroutine(drawCards(cardCount));
+        StartCoroutine(discardRandomCards(null, cardCount, false));
+        StartCoroutine(drawCards(cardCount, false));
     }
 
     //draws a card from the deck.  The card spawns face down at the same position, rotation, and scale as the spawn point image.
@@ -180,10 +192,10 @@ public class HandScript : BaseBehaviour
         yield return drawCards(drawCount);
     }
 
-    //draws multiple cards
-    public IEnumerator drawCards(int drawCount)
+    //draws multiple cards.  If delay is true, there is a slight pause between each one
+    public IEnumerator drawCards(int drawCount, bool delay = true)
     {
-        //wait to make sure we dont attempt to discard and draw at the same time (i. e., cards like Recycle that cause bothd iscarding and drawing simultaneously)
+        //wait to make sure we dont attempt to discard and draw at the same time (i. e., cards like Recycle that cause both discarding and drawing simultaneously)
         do
         {
             yield return null;
@@ -195,7 +207,9 @@ public class HandScript : BaseBehaviour
         {
             drawCount--;
             drawCard(false); //dont flip them over just yet: we want to do them all at once since they were drawn as a group
-            yield return new WaitForSeconds(drawDelay);
+
+            if (delay)
+                yield return new WaitForSeconds(drawDelay);
         }
 
         //if the deck is empty, we may not be able to draw any cards.  bail if the hand is still empty at this point.
@@ -222,8 +236,8 @@ public class HandScript : BaseBehaviour
         yield break;
     }
 
-    //helper: calls the normal version repeatedly
-    public IEnumerator discardRandomCards(GameObject exemption, int count)
+    //helper: calls the normal version repeatedly.  If delay is true, then there is a slight pause between each discard
+    public IEnumerator discardRandomCards(GameObject exemption, int count, bool delay = true)
     {
         discarding = true;
         for (uint i = 0; i < count; i++)
@@ -231,7 +245,9 @@ public class HandScript : BaseBehaviour
             discardRandomCard(exemption);
             if (currentHandSize == 0)
                 break;
-            yield return new WaitForSeconds(discardDelay);
+
+            if (delay) 
+                yield return new WaitForSeconds(discardDelay);
         }
         discarding = false;
     } 

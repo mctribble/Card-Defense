@@ -208,7 +208,7 @@ public class DeckManagerScript : BaseBehaviour
     [Hide] private bool waitToDiscard; //used to enforce discardDelay across multiple instances of DamageCoroutine().  Declared up here because C# wont let me declare a static inside the function itself
 
     //deck lists (only shown if loaded)
-    private bool deckListsLoaded() { return (premadeDecks != null) && (playerDecks != null); }
+    private bool deckListsLoaded() { return (premadeDecks != null) && (premadeDecks.decks.Count > 0) && (playerDecks != null) && (playerDecks.decks.Count > 0); }
     [VisibleWhen("deckListsLoaded")] public DeckCollection premadeDecks; //stores premade decks
     [VisibleWhen("deckListsLoaded")] public DeckCollection playerDecks;  //stores player decks
 
@@ -216,7 +216,8 @@ public class DeckManagerScript : BaseBehaviour
     [Hide] public int curDeckCharges; //remaining
     [Hide] public int maxDeckCharges; //max
 
-    private List<Card> currentDeck; //current deck
+    [Show][VisibleWhen("deckListsLoaded")] public string currentDeckName; //name of the current deck
+    [Show][VisibleWhen("deckListsLoaded")] private List<Card> currentDeck; //actual current deck
 
     private const int SHUFFLE_ITERATIONS = 5; //number of times to shuffle the deck
 
@@ -238,6 +239,35 @@ public class DeckManagerScript : BaseBehaviour
         playerDecks  = DeckCollection.Load(Path.Combine(Application.dataPath, playerDeckPath));
         currentDeck = new List<Card>();
         deckSize = 0;
+        curDeckCharges = 0;
+        maxDeckCharges = 0;
+    }
+
+    //called to reset the manager
+    private void Reset()
+    {
+        //reload definitions
+        premadeDecks = DeckCollection.Load(Path.Combine(Application.dataPath, premadeDeckPath));
+        playerDecks = DeckCollection.Load(Path.Combine(Application.dataPath, playerDeckPath));
+
+        //find one with the same name and use it
+        XMLDeck target = null;
+
+        if (premadeDecks.getNames().Contains(currentDeckName))
+            target = premadeDecks.getDeckByName(currentDeckName);
+        
+        if (playerDecks.getNames().Contains(currentDeckName))
+        {
+            if (target != null)
+                Debug.LogError("both deck lists contain a deck of the same name!  Unsure which to reload.");
+            else
+                target = playerDecks.getDeckByName(currentDeckName);
+        }
+
+        if (target == null)
+            Debug.LogError("could not find the deck to reload it!");
+
+        SetDeck(target);
     }
 
     //saves the player decks back to the file
@@ -251,9 +281,10 @@ public class DeckManagerScript : BaseBehaviour
     private void SetDeck(XMLDeck newDeck)
     {
         //init
+        currentDeckName = newDeck.name;
         maxDeckCharges = 0;
 
-        //for each card ont he list of cards in the deck...
+        //for each card on the list of cards in the deck...
         foreach (XMLDeckEntry xde in newDeck.contents)
         {
             CardData type = CardTypeManagerScript.instance.getCardByName(xde.name);

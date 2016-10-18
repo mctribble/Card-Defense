@@ -225,7 +225,7 @@ public class LevelManagerScript : BaseBehaviour
         if (DeckManagerScript.instance.deckSize == 0)
         {
             XMLDeck levelDeck;
-            if (data.levelDeck != null)
+            if ( (data.levelDeck != null) && (data.levelDeck.cardCount > 0) )
             {
                 levelDeck = data.levelDeck; //the level deck is defined in the level file
             }
@@ -581,16 +581,18 @@ public class LevelManagerScript : BaseBehaviour
         foreach (GameObject e in GameObject.FindGameObjectsWithTag("Tower")) Destroy(e);
         foreach (GameObject e in GameObject.FindGameObjectsWithTag("Path")) Destroy(e);
         HandScript.playerHand.SendMessage("Show");
-        yield return StartCoroutine(HandScript.playerHand.discardRandomCards(null, 999));
-        yield return StartCoroutine(HandScript.enemyHand.discardRandomCards(null, 999));
+        yield return StartCoroutine(HandScript.playerHand.discardRandomCards(null, 999, false));
+        yield return StartCoroutine(HandScript.enemyHand.discardRandomCards(null, 999, false));
 
-        //re-init game objects
-        EnemyManagerScript.instance.SendMessage("Awake");
-        DeckManagerScript.instance.SendMessage("Awake");
-        ScoreManagerScript.instance.SendMessage("Awake");
-        PathManagerScript.instance.SendMessage("Start");
-        HandScript.playerHand.SendMessage("Start");
-        HandScript.enemyHand.SendMessage("Start");
+        Debug.Log("Reloading Level...");
+
+        //reset game objects
+        EnemyManagerScript.instance.SendMessage("Reset");
+        DeckManagerScript.instance.SendMessage("Reset");
+        ScoreManagerScript.instance.SendMessage("Reset");
+        PathManagerScript.instance.SendMessage("Reset");
+        HandScript.playerHand.SendMessage("Reset");
+        HandScript.enemyHand.SendMessage("Reset");
 
         //reload the level
         Awake();
