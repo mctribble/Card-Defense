@@ -159,7 +159,7 @@ public class EnemyScript : BaseBehaviour
         healthbar.fillAmount = normalizedHealth;
     }
 
-    //moves the enemy forward this far in time.  seperate from update function so it can be called elsewhere, such as during enemy spawning to account for low frame rate
+    //moves the enemy forward this far in time.  separate from update function so it can be called elsewhere, such as during enemy spawning to account for low frame rate
     private void moveForwardByTime(float time)
     {
         //bail immediately if time is 0 or negative
@@ -210,7 +210,7 @@ public class EnemyScript : BaseBehaviour
         //pause normal enemy behavior while we handle this
         goalFinalChance = true;
 
-        //if we are expecting damage that hasnt happened yet, give those a couple frames to land before continuing (normal bullets willl "blink" to the enemy instantaneously.  see bulletScript.cs)
+        //if we are expecting damage that hasnt happened yet, give those a couple frames to land before continuing (normal bullets will "blink" to the enemy instantaneously.  see bulletScript.cs)
         if (expectedHealth < curHealth)
         {
             yield return null; //(force pause to be at least 2 frames no matter how bad the framerate is)
@@ -323,7 +323,7 @@ public class EnemyScript : BaseBehaviour
 
         if (curHealth <= 0)
         {
-            //catch a recurring issue where the enemy does not get thee xpected damage event and thus dies without expecting it
+            //catch a recurring issue where the enemy does not get thee expected damage event and thus dies without expecting it
             if (expectedHealth > 0)
             {
                 Debug.LogWarning("Enemy did not expect to die, but did anyway!  This can cause targeting issues as towers attack an enemy that will die anyway.");

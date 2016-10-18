@@ -52,7 +52,7 @@ public class LevelData
     //where this level was loaded from
     [XmlIgnore] public string fileName;
 
-    //comma seperated lists of mod files that this file is dependant on
+    //comma separated lists of mod files that this file is dependent on
     [XmlAttribute("enemyFileDependencies")][DefaultValue("")][Hide] public string enemyDependencies;
     [XmlAttribute( "cardFileDependencies")][DefaultValue("")][Hide] public string  cardDependencies;
 
@@ -353,7 +353,7 @@ public class LevelManagerScript : BaseBehaviour
         }
 
         //attempt to regulate timeScale so the game slows down if the framerate tanks but then speeds back up when things settle down
-        //the time scale will go down if frame rate is below the reduce threshold, and up if frame rate is aove the increase threshold
+        //the time scale will go down if frame rate is below the reduce threshold, and up if frame rate is above the increase threshold
         const float timeScaleReduceThreshold = (1.0f / 10.0f);    //10 FPS
         const float timeScaleIncreaseThreshold = (1.0f / 20.0f);  //20 FPS
         const float timeScaleMin = 0.5f;                //minimum allowed sim speed

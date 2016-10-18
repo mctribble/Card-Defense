@@ -129,14 +129,14 @@ public class LevelSelectScript : BaseBehaviour
         GameObject eButton = Instantiate(buttonPrefab);      //create a new button
         eButton.SendMessage("setButtonText", "Deck Editor"); //set the text
         eButton.SendMessage("setColor", menuButtonColor);    //and the color
-        eButton.transform.SetParent(this.transform, false);  //and add it to the menufor returning to the level select
+        eButton.transform.SetParent(this.transform, false);  //and add it to the menu for returning to the level select
         menuButtons.Add(eButton);                            //and add it to the list of buttons
 
         //and a back button 
         GameObject backButton = Instantiate(buttonPrefab);     //create a new button
         backButton.SendMessage("setButtonText", "Back");       //set the text
         backButton.SendMessage("setColor", menuButtonColor);   //and the color
-        backButton.transform.SetParent(this.transform, false); //and add it to the menufor returning to the level select
+        backButton.transform.SetParent(this.transform, false); //and add it to the menu for returning to the level select
         menuButtons.Add(backButton);                           //and add it to the list of buttons
 
         yield return null; //give the scrollRect a frame to catch up

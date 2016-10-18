@@ -56,7 +56,7 @@ public class WaveData
 
     [XmlIgnore] private List<GameObject> enemyList;
 
-    //default.  these values are meant to be VERY noticable if a wave is left with default data
+    //default.  these values are meant to be VERY noticeable if a wave is left with default data
     public WaveData()
     {
         type = "Swarm";
@@ -187,7 +187,7 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
     private Vector2    idleLocation;   //where the card should be when idle
     private Vector2    targetLocation; //where the card currently wants to be
     private GameObject hand;           //reference to parent hand
-    private bool       hidden;         //whether or not the card should be hidden offscreen
+    private bool       hidden;         //whether or not the card should be hidden off screen
     private bool       faceDown;       //whether or not the card is face down
     private int        siblingIndex;   //temp storage of this cards proper place in the sibling list, used to restore proper draw order after a card is no longer being moused over
     private string     enemyType;      //name of the enemy type currently depicted.  Cached to detect enemy type changes
@@ -233,7 +233,7 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
         string[] typesFound = new string[6];
         SpriteRenderer[] spritesToSet = new SpriteRenderer[6];
 
-        //error catch: purch survivors that are actually dead
+        //error catch: purge survivors that are actually dead
         survivorList.RemoveAll(go => go == null);
 
         foreach (GameObject go in survivorList)

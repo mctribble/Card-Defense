@@ -11,7 +11,7 @@
   <waveGrowthExponential>1.8</waveGrowthExponential>
   <waveTimeLinear>3</waveTimeLinear>
 
-  <!-- 	These waves will be gauranteed to spawn, in order.
+  <!-- 	These waves will be guaranteed to spawn, in order.
 		type: name of the enemy type to spawn
 		budget: how much the wave spawner can "spend" on spawning enemies
 		time: how many seconds the enemies spawn for.  Shorter time spans result in more densely packed groups.

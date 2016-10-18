@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 using UnityEngine;
 using Vexe.Runtime.Types;
 
-//represents everything needed to define a working spawner from xml.  This is seperated for ease of future expansion
+//represents everything needed to define a working spawner from xml.  This is separated for ease of future expansion
 [System.Serializable]
 public class SpawnerData
 {

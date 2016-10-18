@@ -35,7 +35,7 @@ public class ScoreManagerScript : BaseBehaviour
         flawless = true;
     }
 	
-    //returns a string of the score report.  PlayerWon indicates whether or not hte player won the level
+    //returns a string of the score report.  PlayerWon indicates whether or not the player won the level
     public string report(bool PlayerWon)
     {
         string result = "";

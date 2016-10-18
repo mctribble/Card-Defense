@@ -24,9 +24,9 @@ public class TowerData : System.Object
     [XmlAttribute("Sprite")]
     public string towerSpriteName { get; set; }
 
-    [XmlAttribute("Recharge")]   public float rechargeTime; //how long it takes tthe tower to charge
+    [XmlAttribute("Recharge")]   public float rechargeTime; //how long it takes the tower to charge
     [XmlAttribute("Range")]      public float range;        //how far away from itself, in world space, the tower can shoot
-    [XmlAttribute("Damage")]     public float attackPower;  // amount of damage this dower does before any modifiers susch as armor
+    [XmlAttribute("Damage")]     public float attackPower;  // amount of damage this dower does before any modifiers such as armor
     [XmlAttribute("Lifespan")]   public int   lifespan;	  // amount of waves this tower remains on the field
     [XmlAttribute("UpgradeCap")] public int   upgradeCap;   //max number of upgrades this tower can have
 
@@ -330,7 +330,7 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         Quaternion flipQuaternion = Quaternion.AngleAxis(90, Vector3.up); //rotation to move towards to flip the card at
         faceDown = !faceDown; //flag the flip as complete before it technically even starts to make sure it isn't erroneously triggered again
-        yield return StartCoroutine(turnToQuaternion(flipQuaternion)); //turn to the flip position the player doesnt see the back blink in or out of existence
+        yield return StartCoroutine(turnToQuaternion(flipQuaternion)); //turn to the flip position the player doest see the back blink in or out of existence
         cardBack.enabled = faceDown; //flip the card
         yield return StartCoroutine(turnToQuaternion(Quaternion.identity)); //turn back to the baseline
         yield break; //done
@@ -558,7 +558,7 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (hand != null)
             hand.SendMessage("Discard", gameObject); 
 
-        //if the card has charges left, sned it back to the deck immediately without waiting for the animation
+        //if the card has charges left, tined it back to the deck immediately without waiting for the animation
         if (card.charges > 0)
         {
             //send card to top or bottom depending on the presence of "returnsToTopOfDeck" property effect
@@ -667,7 +667,7 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
     }
 
-    //saves card definition data and updates components as necessarry
+    //saves card definition data and updates components as necessary
     private IEnumerator SetCard(Card c)
     {
         //save the data

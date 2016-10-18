@@ -23,7 +23,7 @@ public class EnemyTypeCollection
     [XmlIgnore] public string filePath { get; set; }
     [XmlIgnore] public string fileName { get { return Path.GetFileNameWithoutExtension(filePath); } }
 
-    //comma seperated list of enemy mod files that this enemy file is dependant on
+    //comma separated list of enemy mod files that this enemy file is dependent on
     [XmlAttribute("enemyFileDependencies")][DefaultValue("")][Hide] public string dependencies;
 
     public void Save(string path)
@@ -39,7 +39,7 @@ public class EnemyTypeCollection
             serializer.Serialize(stream, this);
         }
 
-        //restore the lsit to normal
+        //restore the list to normal
         enemyTypes = temp;
     }
 

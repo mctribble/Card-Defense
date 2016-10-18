@@ -3,7 +3,7 @@ using System.Collections;
 using Vexe.Runtime.Types;
 using System;
 
-//effects in this file apply when a tower makes an attack and has ta least 1 full point of overcharge
+//effects in this file apply when a tower makes an attack and has TA least 1 full point of overcharge
 //they alter the given damage event and take effect before enemyDamaged effects
 //This base effect handles behavior common to them all
 abstract class BaseEffectOvercharge : BaseEffect, IEffectOvercharge

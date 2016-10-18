@@ -22,7 +22,7 @@ scaleEffectWithTime       | target enemy effect gets stronger by X/s
 scaleHealthWithBudget     | enemy health scales up with wave budget
 scaleSpeedWithBudget      | enemy speed  scales up with wave budget
 scaleSpeedWithDamage      | enemy gets faster as it takes damage (max speed: base * X)
-scaleSpeedWithTime        | enemey gets faster by X/s
+scaleSpeedWithTime        | enemy gets faster by X/s
 
 <<Enemy Damaged Effects (On tower: trigger when attacking.  On Enemy type: trigger when attacked)>>
 armor                     | enemy receives X less damage from every hit, with a minimum of 1 damage
@@ -55,7 +55,7 @@ targetBurst      | tower targets all enemies in range with a single wave
 targetClosest    | tower targets the enemy closest to the tower itself
 targetHealth     | tower prioritizes targets with the highest health
 targetMultishot  | tower attacks up to X enemies closest to their goals
-targetOrthogonal | tower attacks all enemies in a straight vertical or horizontal line, using special proectiles, if there is at least one enemy in range in that direction
+targetOrthogonal | tower attacks all enemies in a straight vertical or horizontal line, using special projectiles, if there is at least one enemy in range in that direction
 targetRandom     | tower attacks a target at random
 targetSpeed      | tower prioritizes targets with the highest speed
 

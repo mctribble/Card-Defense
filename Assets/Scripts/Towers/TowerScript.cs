@@ -38,7 +38,7 @@ public class TowerScript : BaseBehaviour
     private float deltaTime;            //time since last frame
     private float shotCharge;           //represents how charged the next. 0.0 is empty, maxCharge is full
     private float maxCharge;            //max shot charge (default 1.0)
-    private bool  waitingForManualFire; //whether user is being prompeted to fire manually
+    private bool  waitingForManualFire; //whether user is being prompted to fire manually
 
     // Use this for initialization
     private void Awake()
@@ -114,7 +114,7 @@ public class TowerScript : BaseBehaviour
         }
 
         //increase shot charge if the gauge is not already full
-        //note that this is a "soft cap": a single frame can bring the value over, but it woull stop charging afterwards
+        //note that this is a "soft cap": a single frame can bring the value over, but it would stop charging afterwards
         //this avoids issues when towers should be shooting every frame, or even multiple times per frame
         if (shotCharge < maxCharge)
         {
@@ -129,7 +129,7 @@ public class TowerScript : BaseBehaviour
 
         //while a shot is charged...
         //(this is a loop because it is technically possible to fire multiple times per frame if the frame took a long time for some reason or the tower fires extremely quickly)
-        //(towers with overcharge effects will usse multiple charges on one shot, but those without will simply fire multiple times on account of this loop
+        //(towers with overcharge effects will use multiple charges on one shot, but those without will simply fire multiple times on account of this loop
         while (shotCharge > 1.0f)
         {
             //if the tower has the manualFire property effect, flag that we are waiting for the player instead of firing now
@@ -259,7 +259,7 @@ public class TowerScript : BaseBehaviour
                 switch (effects.lastUsedTargetingEffect)
                 {
                     case "targetOrthogonal":
-                        //split target list into four others, one for each direcion
+                        //split target list into four others, one for each direction
                         List<GameObject> left  = new List<GameObject>();
                         List<GameObject> right = new List<GameObject>();
                         List<GameObject> up    = new List<GameObject>();
@@ -276,7 +276,7 @@ public class TowerScript : BaseBehaviour
                                 down.Add(t);
                         }
 
-                        //and fire each seperately
+                        //and fire each separately
                         if (left.Count > 0)
                             directionalShot(left, ded, Vector2.left);
                         if (right.Count > 0)
@@ -473,7 +473,7 @@ public class TowerScript : BaseBehaviour
         else
             tooltipText.text += "\nwaves remaining: <color=green>∞</color>";
 
-        if ((effects != null) && (effects.propertyEffects.limitedAmmo != null)) //skip this section entirely if we have infinite ammot
+        if ((effects != null) && (effects.propertyEffects.limitedAmmo != null)) //skip this section entirely if we have infinite ammo
             tooltipText.text += "\nammo remaining: " + effects.propertyEffects.limitedAmmo;
 
         if (effects != null)

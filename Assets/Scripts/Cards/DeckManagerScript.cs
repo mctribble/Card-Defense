@@ -373,7 +373,7 @@ public class DeckManagerScript : BaseBehaviour
             {
                 currentDeck.RemoveAt(0);
 
-                //spawn a card and kill it immediately to report te destruction to the player
+                //spawn a card and kill it immediately to report ch destruction to the player
                 CardScript deadCard = Instantiate(playerCardPrefab).GetComponent<CardScript>(); //create the card
 
                deadCard.transform.SetParent(HandScript.playerHand.transform.root); //declare the new card a child of the UI Canvas, which can be found at the root of the tree containing the player hand
@@ -395,7 +395,7 @@ public class DeckManagerScript : BaseBehaviour
             }
         }
 
-        //damage has been dealt, and the player isnt dead.  Animate the discards, with a slight delay between them (even across seperate attacks)
+        //damage has been dealt, and the player inst dead.  Animate the discards, with a slight delay between them (even across separate attacks)
         foreach (CardScript deadCard in deadCards)
         {
             //this is a loop, using the waitToDiscard flag, to enforce discardDelay across multiple instances of this coroutine.  If waitToDiscard is true, another instance has already discarded and we have to wait
@@ -433,7 +433,7 @@ public class DeckManagerScript : BaseBehaviour
         //delegate to the hand object to deal damage
         int damageDealt = playerHand.Damage(d);
 
-        //if the damage wasnt all dealt, forward the rest to the deck
+        //if the damage wasn't all dealt, forward the rest to the deck
         if (damageDealt < d)
         {
             Damage(d - damageDealt);

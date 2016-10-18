@@ -19,7 +19,7 @@ public class CardPreviewScript : MonoBehaviour
         StartCoroutine("PreviewCard", c);
     }
 
-    //saves card definition data and updates components as necessarry
+    //saves card definition data and updates components as necessary
     private IEnumerator PreviewCard(CardData c)
     {
         //save the data

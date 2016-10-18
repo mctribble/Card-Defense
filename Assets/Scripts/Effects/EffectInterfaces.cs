@@ -13,7 +13,7 @@ using Vexe.Runtime.Types;
 //Usually you dont need these, since VFW is good at figuring it out on its own, but I found myself picky on this point for effects so I specify by hand
 
 //All effects in the game must implement one of these interfaces.
-//However, they should not use IEffect directly, but instead a derivitave such as IEffectInstant or IEffectWave
+//However, they should not use IEffect directly, but instead a derivative such as IEffectInstant or IEffectWave
 
 //different targeting types.
 public enum TargetingType
@@ -33,7 +33,7 @@ public enum EffectType
     overcharge       = unchecked((int)0xFF00FFFF), //effect triggers when a tower attacks with at least one full point of overcharge, before enemyDamaged effects
     periodic         = unchecked((int)0x333333FF), //effect triggers on every update() call
     self             = unchecked((int)0x0000A0FF), //effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
-    towerTargeting   = unchecked((int)0xADD8E6FF), //effect alters the way a tower taragets enemies.  if multiple are present, only the last is actually used
+    towerTargeting   = unchecked((int)0xADD8E6FF), //effect alters the way a tower targets enemies.  if multiple are present, only the last is actually used
     wave             = unchecked((int)0x0000FFFF), //effect alters the current wave
     death            = unchecked((int)0xFF0000FF), //effect triggers when the tower/enemy is destroyed
     everyRound       = unchecked((int)0x00FF00FF), //effect triggers once every round (uses IEffectInstant)
@@ -434,7 +434,7 @@ public class EffectData : System.Object
     public EffectData clone()
     {
         //we use the same list of XMLEffects, but the clone parses them again to get its own set of effects
-        //this way, changes in one enemy (e.g. armor reduction) dont propogate to all enemies of this type
+        //this way, changes in one enemy (e.g. armor reduction) dont propagate to all enemies of this type
         EffectData clone = new EffectData();
         clone.XMLEffects = XMLEffects;
         clone.parseEffects();
@@ -555,7 +555,7 @@ public interface IEffectEnemyReachedGoal : IEffect
     void trigger(EnemyScript enemy);
 }
 
-//effect alters the way a tower taragets enemies.  if multiple are present, only the last is actually used
+//effect alters the way a tower targets enemies.  if multiple are present, only the last is actually used
 public interface IEffectTowerTargeting : IEffect
 {
     List<GameObject> findTargets(Vector2 towerPosition, float towerRange);

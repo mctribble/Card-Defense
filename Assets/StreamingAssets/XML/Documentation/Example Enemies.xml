@@ -3,7 +3,7 @@
 <EnemyTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Enemies.xsd">
   <!--	Enemies added here can spawn in random waves, or be specified in a level's wave list.
 		string name: The name of the enemy.  If an enemy of this name already exists, the existing enemy is OVERWRITTEN!
-		byte   spawnCost: the wave spawner must "pay" this much to spawn an enemy of this type.  Player receives this much mana when the enemy is killed, and loses twice this much if the enemy reaches the end.
+		byte   spawnCost: the wave spawner must "pay" this much to spawn an enemy of this type.
 		short  maxHealth: the amount of damage this unit can take before dying.
 		byte   damage: the amount of charges removed from the player's deck when this enemy reaches their goal
 		byte   unitSpeed: how fast this unit moves

@@ -63,7 +63,7 @@ public class PathManagerScript : BaseBehaviour
         SpawnPaths();
     }
 
-    //calculates a path from position to the player's "base" //TODO: define an actual base, and maybe implement Djikstra or something here
+    //calculates a path from position to the player's "base" //TODO: define an actual base, and maybe implement Dijkstra or something here
     public List<Vector2> CalculatePathFromPos(Vector2 startPos)
     {
         List<Vector2> result = new List<Vector2> ();

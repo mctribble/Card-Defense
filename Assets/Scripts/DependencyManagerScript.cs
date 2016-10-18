@@ -8,12 +8,12 @@ public class DependencyManagerScript : BaseBehaviour
     public static DependencyManagerScript instance; //singleton instance
 
     //lists of dependencies that have been met 
-    //technically speaking, files are added to this list BEFORE being loaded, but that shouldnt matter in practice since
+    //technically speaking, files are added to this list BEFORE being loaded, but that shouldn't matter in practice since
     //we return the list of files to load in the order they should be loaded
     public List<string> enemyFilesLoaded;
     public List<string> cardFilesLoaded;
 
-    //status indicators for which depencencies have been figured out
+    //status indicators for which dependencies have been figured out
     public bool enemyDepenciesHandled;
     public bool cardDependenciesHandled;
 
@@ -43,7 +43,7 @@ public class DependencyManagerScript : BaseBehaviour
                 if (handled.Contains(etc))
                     continue;
 
-                //if the depency list is null, set it to an umpty string instead to avoid nullReference
+                //if the dependency list is null, set it to an empty string instead to avoid nullReference
                 if (etc.dependencies == null)
                     etc.dependencies = "";
 
@@ -108,7 +108,7 @@ public class DependencyManagerScript : BaseBehaviour
                 if (handled.Contains(ctc))
                     continue;
 
-                //if either depency list is null, set it to an umpty string instead to avoid nullReference
+                //if either dependency list is null, set it to an empty string instead to avoid nullReference
                 if (ctc.cardDependencies == null)
                     ctc.cardDependencies = "";
                 if (ctc.enemyDependencies == null)

@@ -17,7 +17,7 @@ public class WaveStatusText : BaseBehaviour
     // event handler for LevelManagerScript.instance.LevelLoadedEvent
     private void LevelLoadedHandler()
     {
-        enemyStatText.raycastTarget = true; //alloww this object to capture mouse events only after the level has loaded
+        enemyStatText.raycastTarget = true; //allow this object to capture mouse events only after the level has loaded
     }
 
     // Update is called once per frame

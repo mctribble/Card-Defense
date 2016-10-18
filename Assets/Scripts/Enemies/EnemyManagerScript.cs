@@ -59,7 +59,7 @@ public class EnemyManagerScript : BaseBehaviour
         activeEnemies.Remove(e);
     }
 
-    //called when the enemy path changes, such as when the enemy mkaes it to the end and restarts
+    //called when the enemy path changes, such as when the enemy makes it to the end and restarts
     public void EnemyPathChanged(GameObject e)
     {
         EnemyExpectedDeath(e);

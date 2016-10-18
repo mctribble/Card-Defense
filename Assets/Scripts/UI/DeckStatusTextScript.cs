@@ -22,7 +22,7 @@ public class DeckStatusTextScript : BaseBehaviour
     // event handler for LevelManagerScript.instance.LevelLoadedEvent
     private void LevelLoadedHandler()
     {
-        //alloww this object to capture mouse events only after the level has loaded
+        //allow this object to capture mouse events only after the level has loaded
         text.raycastTarget = true;
         gaugeBG.raycastTarget = true;
         gaugeFG.raycastTarget = true;

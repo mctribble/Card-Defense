@@ -22,7 +22,7 @@ public class CardTypeCollection
     [XmlIgnore] public string filePath { get; set; }
     [XmlIgnore] public string fileName { get { return Path.GetFileNameWithoutExtension(filePath); } }
 
-    //comma seperated lists of mod files that this file is dependant on
+    //comma separated lists of mod files that this file is Dependant on
     [XmlAttribute("enemyFileDependencies")][DefaultValue("")][Hide] public string enemyDependencies;
     [XmlAttribute( "cardFileDependencies")][DefaultValue("")][Hide] public string  cardDependencies;
 

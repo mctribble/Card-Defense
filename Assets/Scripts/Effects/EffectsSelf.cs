@@ -36,7 +36,7 @@ public class EffectDiscardRandom : BaseEffectSelf
     }
 }
 
-//discards up to x random cards from the hand IN ADDITION TO this one, then draws a card for each card discarded EXCEPT FOR this one (therfore, if player has 7 cards and the effect replaces up to 7, their hand will be emptied and they will draw six)
+//discards up to x random cards from the hand IN ADDITION TO this one, then draws a card for each card discarded EXCEPT FOR this one (therefore, if player has 7 cards and the effect replaces up to 7, their hand will be emptied and they will draw six)
 public class EffectReplaceRandomCard : BaseEffectSelf
 {
     [Hide] public override string Name { get { return "Discard up to " + strength + " cards at random, and draw new ones to replace them"; } } //returns name and strength

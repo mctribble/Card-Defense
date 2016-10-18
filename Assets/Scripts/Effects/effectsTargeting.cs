@@ -270,7 +270,7 @@ public class EffectTargetOrthogonal : BaseEffectTowerTargeting
         Rect regionH = new Rect(towerPosition.x - towerRange - 0.25f, towerPosition.y - 0.25f, towerRange + towerRange + 0.5f , 0.5f);
         Rect regionV = new Rect(towerPosition.x - 0.25f, towerPosition.y - towerRange - 0.25f, 0.5f , towerRange + towerRange +  0.5f);
 
-        //attack all enemies that are in either region region
+        //attack all enemies that are in either region
         List<GameObject> targets = new List<GameObject>();
         foreach (GameObject t in EnemyManagerScript.instance.activeEnemies)
             if ( (regionH.Contains(t.transform.position)) || (regionV.Contains(t.transform.position)) )
