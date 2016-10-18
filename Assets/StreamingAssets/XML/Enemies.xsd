@@ -43,7 +43,7 @@
           </xsd:complexType>
         </xsd:element>
       </xsd:sequence>
-      <xsd:attribute name="enemyFileDependencies" type="xsd:string"/>
+      <xsd:attribute name="enemyFileDependencies" type="xsd:string" use="optional"/>
     </xsd:complexType>
   </xsd:element>
 

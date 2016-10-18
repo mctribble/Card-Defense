@@ -102,6 +102,8 @@
         </xsd:choice>
       </xsd:sequence>
       <xsd:attribute name="background" type="xsd:string" />
+      <xsd:attribute name="cardFileDependencies" type="xsd:string" use="optional" />
+      <xsd:attribute name="enemyFileDependencies" type="xsd:string" use="optional" />
     </xsd:complexType>
   </xsd:element>
 </xs:schema>
