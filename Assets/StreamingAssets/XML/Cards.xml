@@ -91,7 +91,7 @@
       <effectData>
         <Effects>
           <Effect name="chainHit" strength="0.5" />
-          <!--<Effect name="poison" strength="2" argument="60" />-->
+          <Effect name="poison" strength="2" argument="60" />
           <Effect name="targetRandom" />
         </Effects>
       </effectData>

@@ -610,6 +610,7 @@ public class TowerScript : BaseBehaviour
                         ((IEffectInstant)ie).trigger();
 
         UpdateTooltipText();
+        updateLifespanText();
 
         if (wavesRemaining == 0)
             onDeath();

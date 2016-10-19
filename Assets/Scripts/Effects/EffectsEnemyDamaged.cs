@@ -161,25 +161,25 @@ public class EffectChainHit : BaseEffectEnemyDamaged
         enemiesAlreadyHit = new List<GameObject>();
     }
 
-    //we can ignore expected damage
+    //use expectedDamage() to prevent the attack from hitting the same enemy twice
     public override void expectedDamage(ref DamageEventData d)
     {
+        //if this enemy has already been hit, nullify the attack
+        if (enemiesAlreadyHit.Contains(d.dest))
+        {
+            d.rawDamage = 0;
+            d.effects = null;
+            return;
+        }
 
+        //otherwise, add it to the list
+        enemiesAlreadyHit.Add(d.dest);
     }
 
     //but actual damage creates an explosion
     public override void actualDamage(ref DamageEventData originalDamageEvent)
     {
-        //if this enemy has already been hit, nullify the attack
-        if (enemiesAlreadyHit.Contains(originalDamageEvent.dest))
-        {
-            originalDamageEvent.rawDamage = 0;
-            originalDamageEvent.effects = null;
-            return;
-        }
-        
-        //otherwise, add it to the list and chain the attack
-        enemiesAlreadyHit.Add(originalDamageEvent.dest);
+        //if we make it here, the enemy has not been attacked yet, and we can chain off of it.
 
         //construct a damage event for the explosion
         DamageEventData explosionDamageEvent = new DamageEventData();

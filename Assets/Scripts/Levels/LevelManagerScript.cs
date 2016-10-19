@@ -573,13 +573,17 @@ public class LevelManagerScript : BaseBehaviour
     {
         yield return null;
 
-        //clean up the level we already have open
+        //delete objects from the level we already have open
         levelLoaded = false;
         foreach (GameObject e in GameObject.FindGameObjectsWithTag("Enemy")) Destroy(e);
         foreach (GameObject e in GameObject.FindGameObjectsWithTag("EnemySpawner")) Destroy(e);
         spawnerObjects.Clear();
         foreach (GameObject e in GameObject.FindGameObjectsWithTag("Tower")) Destroy(e);
+        foreach (GameObject e in GameObject.FindGameObjectsWithTag("Bullet")) Destroy(e);
+        foreach (GameObject e in GameObject.FindGameObjectsWithTag("AreaAttack")) Destroy(e);
         foreach (GameObject e in GameObject.FindGameObjectsWithTag("Path")) Destroy(e);
+
+        //dump the hands
         HandScript.playerHand.SendMessage("Show");
         yield return StartCoroutine(HandScript.playerHand.discardRandomCards(null, 999, false));
         yield return StartCoroutine(HandScript.enemyHand.discardRandomCards(null, 999, false));

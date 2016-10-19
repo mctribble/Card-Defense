@@ -107,8 +107,8 @@ public class BurstShotScript : BaseBehaviour
             }
             else
             {
-                //if we are dying this frame, attack everything on our expected list.  Works around a bug where enemies can stop being targeted because they think they're going to die but are not
-                toHitThisFrame = expectedToHit;
+                //if we are dying this frame, attack everything on our expected list.  This way we still hit things that very narrowly avoided the attack, even if they technically should have "escaped".
+                toHitThisFrame = new List<DamageEventData>( expectedToHit );
             }
 
             //attack them
