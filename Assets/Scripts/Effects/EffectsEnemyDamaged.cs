@@ -162,7 +162,10 @@ public class EffectChainHit : BaseEffectEnemyDamaged
     }
 
     //we can ignore expected damage
-    public override void expectedDamage(ref DamageEventData d) { }
+    public override void expectedDamage(ref DamageEventData d)
+    {
+
+    }
 
     //but actual damage creates an explosion
     public override void actualDamage(ref DamageEventData originalDamageEvent)

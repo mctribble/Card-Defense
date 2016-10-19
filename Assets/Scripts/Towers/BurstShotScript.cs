@@ -118,9 +118,20 @@ public class BurstShotScript : BaseBehaviour
 
                 //trigger effects
                 if (ded.effects != null)
+                {
                     foreach (IEffect i in ded.effects.effects)
+                    {
                         if (i.triggersAs(EffectType.enemyDamaged))
+                        {
+                            float damageBefore = ded.rawDamage;
                             ((IEffectEnemyDamaged)i).actualDamage(ref ded);
+
+                            //warn if damage amount changed in .actualDamage(), as this causes hard-to-find bugs.  anything that changes amount of damage done should happen in expectedDamage()
+                            if (damageBefore != ded.rawDamage)
+                                Debug.LogWarning("damage amount altered in .actualDamage() call of " + i.XMLName + "!");
+                        }
+                    }
+                }
 
                 ded.dest.SendMessage("onDamage", ded);
                 expectedToHit.Remove(ded);

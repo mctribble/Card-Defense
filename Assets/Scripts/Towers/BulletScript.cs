@@ -65,11 +65,22 @@ public class BulletScript : BaseBehaviour
         //if destination is reached, trigger effects and pass data to target and destroy self
         if (newLocation == curDestination)
         {
-            //trigger enemyDamaged effects
+            //trigger effects
             if (data.effects != null)
+            {
                 foreach (IEffect i in data.effects.effects)
+                {
                     if (i.triggersAs(EffectType.enemyDamaged))
+                    {
+                        float damageBefore = data.rawDamage;
                         ((IEffectEnemyDamaged)i).actualDamage(ref data);
+
+                        //warn if damage amount changed in .actualDamage(), as this causes hard-to-find bugs.  anything that changes amount of damage done should happen in expectedDamage()
+                        if (damageBefore != data.rawDamage)
+                            Debug.LogWarning("damage amount altered in .actualDamage() call of " + i.XMLName + "!");
+                    }
+                }
+            }
 
             enemyRef.onDamage(data);
             Destroy(gameObject);

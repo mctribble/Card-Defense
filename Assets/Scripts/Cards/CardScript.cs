@@ -33,7 +33,7 @@ public class TowerData : System.Object
     //provides a short string for the debugger
     public override string ToString()
     {
-        return towerName + 
+        return towerName +
             "{recharge:" + rechargeTime +
             " range:"    + range +
             " damage:"   + attackPower +
@@ -47,11 +47,13 @@ public class UpgradeData : System.Object
 {
     //multiplicative modifiers
     [XmlAttribute("RechargeMult")] public float rechargeMultiplier = 1.0f;
+
     [XmlAttribute("RangeMult")]    public float rangeMultiplier    = 1.0f;
     [XmlAttribute("DamageMult")]   public float attackMultiplier   = 1.0f;
 
     //absolute modifiers
     [XmlAttribute("RechargeMod")]  public float rechargeModifier   = 0.0f;
+
     [XmlAttribute("RangeMod")]     public float rangeModifier      = 0.0f;
     [XmlAttribute("DamageMod")]    public float attackModifier     = 0.0f;
     [XmlAttribute("WaveBonus")]    public int waveBonus = 0;
@@ -68,7 +70,7 @@ public class UpgradeData : System.Object
         if (attackModifier     > 0) { result += "damage+ "    +  attackModifier.ToString()              + ","; }
         if (rangeModifier      > 0) { result += "range+ "     +  rangeModifier.ToString()               + ","; }
         if (rechargeModifier   > 0) { result += "recharge+ "  +  rechargeModifier.ToString() + 's'      + ","; }
-                                                                                                        
+
         if (waveBonus          < 0) { result += "lifespan- "  +      waveBonus                          + ","; }
         if (attackMultiplier   < 1) { result += "damage- "    + (1 - attackMultiplier).ToString("P1")   + ","; }
         if (rangeMultiplier    < 1) { result += "range- "     + (1 - rangeMultiplier).ToString("P1")    + ","; }
@@ -91,6 +93,7 @@ public class CardData : System.Object
 
     //card data
     [XmlAttribute("Type")] public CardType cardType; //determines aspects of how the card should behave and the meaning of other values.  See enum dec for more info
+
     [XmlAttribute("Name")] public string   cardName; //name of the card
 
     [XmlAttribute("Description")]
@@ -134,7 +137,7 @@ public class CardData : System.Object
     [XmlIgnore]
     public bool effectDataSpecified
     {
-        get { return (effectData != null) && (effectData.XMLEffects.Count != 0); } 
+        get { return (effectData != null) && (effectData.XMLEffects.Count != 0); }
         set { }
     }
 
@@ -234,17 +237,20 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     //prefabs
     [VisibleWhen("shouldShowRefs")] public GameObject tooltipPrefab; //used to create a tooltip
+
     [VisibleWhen("shouldShowRefs")] public GameObject towerPrefab;   //prefab used to create a tower object
 
     //component references
     [VisibleWhen("shouldShowRefs")] public Image art;         //reference to card art image
+
     [VisibleWhen("shouldShowRefs")] public Text  title;       //reference to card name text
     [VisibleWhen("shouldShowRefs")] public Text  description; //reference to card description text
     [VisibleWhen("shouldShowRefs")] public Image cardFront;   //reference to card front image
     [VisibleWhen("shouldShowRefs")] public Image cardBack;    //reference to card back image
-                                    
-    //public data                   
+
+    //public data
     [VisibleWhen("shouldShowRefs")] public float   mouseOverMod;    //amount the card should move up when moused over, expressed as a multiplier to card height
+
     [VisibleWhen("shouldShowRefs")] public float   motionSpeed;     //speed in pixels/second this card can move
     [VisibleWhen("shouldShowRefs")] public float   rotationSpeed;   //speed in degrees/second this card can rotate
     [VisibleWhen("shouldShowRefs")] public float   scaleSpeed;      //speed in points/second this card can scale
@@ -253,6 +259,7 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     //discard data
     [VisibleWhen("shouldShowRefs")] public Vector3 discardPauseLocation;   //location to pause mid-discard so the player can see what is going away (local space)
+
     [VisibleWhen("shouldShowRefs")] public float   discardPauseTime;       //how long to pause there
     [Hide]                          public Image   deckImage;              //if being returned to the deck, we flip face down and aim to line up with this image
     [VisibleWhen("shouldShowRefs")] public Vector3 discardDestroyLocation; //where to go before destroying ourself (local space)
@@ -260,6 +267,7 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     //private data
     private GameObject hand;            //reference to the hand object managing this card
+
     private Vector2    idleLocation;    //location this card sits when it is resting
     private Vector2    targetLocation;  //location this card will move towards if it is not already there
     private GameObject tooltipInstance; //instance of the tooltip object, if present
@@ -268,7 +276,7 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     //returns, in world space, where floating combat text related to this card should spawn
     public Vector2 combatTextPosition { get { Debug.Log(idleLocation); return Camera.main.ScreenToWorldPoint ( idleLocation + new Vector2( (Screen.width / 2), (Screen.height - (cardFront.rectTransform.rect.height / 4) ) ) ); } }
-    
+
     //simple FSM
     private enum State
     {
@@ -295,8 +303,15 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         tooltipInstance = null;
     }
 
-    public void SetHand(GameObject go) { hand = go; } //called by the hand to pass a reference to said hand
-    public void SetDeckImage(Image di) { deckImage = di; } //saves where the deck is so we can return there if we need to later
+    public void SetHand(GameObject go)
+    {
+        hand = go;
+    } //called by the hand to pass a reference to said hand
+
+    public void SetDeckImage(Image di)
+    {
+        deckImage = di;
+    } //saves where the deck is so we can return there if we need to later
 
     // Update is called once per frame
     private void Update()
@@ -322,8 +337,16 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     //card flip helpers
     public void flipOver() { StartCoroutine(flipCoroutine()); } //returns immediately
-    public void flipFaceUp() { if (faceDown) flipOver(); } //calls flipOver only if the card is currently face down
-    public IEnumerator flipWhenIdle() { yield return waitForIdle(); yield return flipCoroutine(); }
+
+    public void flipFaceUp()
+    {
+        if (faceDown) flipOver();
+    } //calls flipOver only if the card is currently face down
+
+    public IEnumerator flipWhenIdle()
+    {
+        yield return waitForIdle(); yield return flipCoroutine();
+    }
 
     //main card flip coroutine
     public IEnumerator flipCoroutine()
@@ -386,6 +409,7 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     //this one needs a coroutine, so the event handler just passes the buck
     public void OnPointerClick(PointerEventData eventData) { StartCoroutine(OnClick()); }
+
     private IEnumerator OnClick()
     {
         GameObject[] cards = GameObject.FindGameObjectsWithTag ("Card"); //used for sending messages to all other cards
@@ -451,7 +475,7 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
 
                 //property effects are never applied, so we'll just treat it as if we have to suppress the warning
                 if (e.triggersAs(EffectType.property))
-                    effectApplied = true; 
+                    effectApplied = true;
 
                 if (effectApplied == false)
                     MessageHandlerScript.Warning("I dont know how to apply " + e.XMLName + " on a card.");
@@ -556,7 +580,7 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         state = State.discarding; //set the state so that other behavior on this card gets suspended
         //remove ourselves from the hand, if present
         if (hand != null)
-            hand.SendMessage("Discard", gameObject); 
+            hand.SendMessage("Discard", gameObject);
 
         //if the card has charges left, tined it back to the deck immediately without waiting for the animation
         if (card.charges > 0)
