@@ -146,6 +146,10 @@ public class DirectionalShotScript : MonoBehaviour
             {
                 DamageEventData ded = toHitThisFrame[e];
 
+                //skip attacks on dead enemies
+                if (ded.dest == null)
+                    continue;
+
                 //trigger effects
                 if (ded.effects != null)
                 {

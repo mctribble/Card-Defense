@@ -190,6 +190,8 @@ public struct Card
 {
     public CardData data; //defines the card type
     public int charges; //number of remaining charges
+
+    public override string ToString() { return data.cardName + "(" + charges + "/" + data.cardMaxCharges + ")"; } //overridden for better display in inspector
 }
 
 public class DeckManagerScript : BaseBehaviour

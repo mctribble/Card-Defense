@@ -1,16 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" background="Grass.png">
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" background="Black.png">
   <randomWaveCount>25</randomWaveCount>
   <Waves />
   <Spawners>
     <Spawner spawnX="15" spawnY="0" />
-    <Spawner spawnX="15" spawnY="4" />
-    <Spawner spawnX="15" spawnY="8" />
   </Spawners>
   <PathSegments>
-    <Segment startX="15" startY="0" endX="4" endY="0" />
-    <Segment startX="15" startY="4" endX="4" endY="0" />
-    <Segment startX="15" startY="8" endX="4" endY="0" />
+    <Segment startX="15" startY="0" endX="10" endY="0"/>
+    <Segment startX="10" startY="0" endX ="10" endY ="1"/>
+    <Segment startX="10" startY="0" endX ="10" endY ="-1"/>
+    <Segment startX="10" startY="1" endX="6" endY ="1"/>
+    <Segment startX="6" startY="1" endX="6" endY="0" />
+    <Segment startX="10" startY="-1" endX="6" endY="-1"/>
+    <Segment startX="6" startY="-1" endX="6" endY="0" />
+    <Segment startX="10" startY="0" endX="6" endY="0" />
+    <Segment startX="6" startY ="0" endX="4" endY="0" />
     <Segment startX="4" startY="0" endX="4" endY="4" />
     <Segment startX="4" startY="4" endX="-4" endY="4" />
     <Segment startX="-4" startY="4" endX="-4" endY="-2" />

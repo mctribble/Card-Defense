@@ -433,11 +433,17 @@ public class EffectData : System.Object
     //clones this EffectData to a new object
     public EffectData clone()
     {
-        //we use the same list of XMLEffects, but the clone parses them again to get its own set of effects
-        //this way, changes in one enemy (e.g. armor reduction) dont propagate to all enemies of this type
         EffectData clone = new EffectData();
-        clone.XMLEffects = XMLEffects;
-        clone.parseEffects();
+        clone.XMLEffects = XMLEffects; //copy the list of xml effects over so we dont lose it
+
+        //parse our own effects if needed
+        if (effects.Count > XMLEffects.Count)
+            parseEffects();
+
+        //clone the effects also
+        foreach (IEffect ie in effects)
+            clone.Effects.Add(cloneEffect(ie));
+
         return clone;
     }
 
@@ -455,7 +461,7 @@ public class EffectData : System.Object
 
         //special handling of meta effects: clone the inner effect as well
         if (original.triggersAs(EffectType.meta))
-            ((BaseEffectMeta)result).innerEffect = cloneEffect(((BaseEffectMeta)original).innerEffect);
+            ((BaseEffectMeta)result).innerEffect = ((BaseEffectMeta)original).cloneInnerEffect();
 
         return result;
     }

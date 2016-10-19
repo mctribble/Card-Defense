@@ -178,6 +178,9 @@ public class TowerScript : BaseBehaviour
             if (result == false)
                 return; //bail if we failed to fire for any reason
 
+            //update text
+            updateLifespanText();
+
             //unflag the wait
             manualFireParticles.Stop(true);
             waitingForManualFire = false;

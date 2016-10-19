@@ -57,7 +57,7 @@ public class WaveStatusText : BaseBehaviour
             else if (Time.timeScale < LevelManagerScript.instance.desiredTimeScale)
                 enemyStatText.text += "<color=yellow>";
             else
-                enemyStatText.text += "<color=black>";
+                enemyStatText.text += "<color=green>";
 
             enemyStatText.text += "\n(speed x" + Time.timeScale.ToString("F1") + ")</color>";
         }

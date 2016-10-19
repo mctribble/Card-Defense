@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using System.Collections.Generic;
+using Vexe.Runtime.Types;
 
 //this file contains effects that apply to other effects.
 //they are implemented as wrappers around another effect, so they don't have an interface or type of their own: they use that of whichever the target effect is
@@ -20,7 +21,7 @@ public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
     public override bool triggersAs(EffectType triggerType) { return (base.triggersAs(triggerType) || innerEffect.triggersAs(triggerType)); } //trigger as a meta effect, but also as whatever the target effect is
     public override string effectColorHex { get { if (innerEffect == null) return "000000FF"; else return innerEffect.effectColorHex; } } //if no target, color black.  otherwise, use same color as the target
 
-    public virtual IEffect innerEffect { get; set; } //effect targeted by this effect
+    [Show] public virtual IEffect innerEffect { get; set; } //effect targeted by this effect
 
     public abstract bool shouldApplyInnerEffect(); //determines whether the inner effect should be applied
 
@@ -71,6 +72,12 @@ public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
 
     //if the inner effect can be cleaned out, or there is no inner effect, then this can be removed
     public override bool shouldBeRemoved() { return ( (innerEffect == null) || (innerEffect.shouldBeRemoved()) ); }
+
+    //returns a clone of the inner effect.  should be overridden by meta effects that alter their inner effects.
+    public virtual IEffect cloneInnerEffect()
+    {
+        return EffectData.cloneEffect(innerEffect);
+    }
 }
 
 //placeholder do-nothing effect to use as a default inner effect
@@ -428,7 +435,7 @@ public class EffectInvScaleEffectWithTime : BaseEffectMeta
 //enemy health increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
 public class EffectScaleEffectWithBudget : BaseEffectMeta
 {
-    public override string Name { get { return "enemy " + argument + " increases on tougher waves"; } } //returns name and strength
+    public override string Name { get { return "[scaled]" + innerEffect.Name; } } //returns name and strength
     public override string XMLName { get { return "scaleEffectWithBudget"; } } //name used to refer to this effect in XML
 
     public override bool shouldApplyInnerEffect() { return true; } //always trigger inner effect
@@ -447,5 +454,13 @@ public class EffectScaleEffectWithBudget : BaseEffectMeta
             return base.alteredWaveData(currentWaveData);
         else
             return currentWaveData;
+    }
+
+    //since we altered the inner effect, when it gets cloned we need to copy over the changes
+    public override IEffect cloneInnerEffect()
+    {
+        IEffect clone = base.cloneInnerEffect();
+        clone.strength = innerEffect.strength;
+        return clone;
     }
 }

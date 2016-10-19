@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <EnemyTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Enemies>
-    <Enemy name="Assassin" spawnCost="30" attack="0" maxHealth="60" unitSpeed="4" sprite="Enemy_Basic.png">
-      <unitColor r="0.75" g="0.75" b="0.75" a="0.75" />
+    <Enemy name="Assassin" spawnCost="30" attack="0" maxHealth="60" unitSpeed="4" sprite="Enemy_Strong.png">
+      <unitColor r="0.2" g="0.75" b="0.2" a="0.2" />
       <effectData>
         <Effects>
           <Effect name="damageHand" strength="3" />
@@ -15,7 +15,7 @@
     <Enemy name="Swarm" spawnCost="12" attack="1" maxHealth="8" unitSpeed="5" sprite="Enemy_Basic.png">
       <unitColor r="1" g="0" b="0" a="1" />
     </Enemy>
-    <Enemy name="Tank" spawnCost="125" attack="5" maxHealth="400" unitSpeed="1" sprite="Enemy_Basic.png">
+    <Enemy name="Tank" spawnCost="125" attack="5" maxHealth="400" unitSpeed="1" sprite="Enemy_Strong.png">
       <unitColor r="0" g="0" b="1" a="1" />
       <effectData>
         <Effects>
@@ -23,7 +23,7 @@
         </Effects>
       </effectData>
     </Enemy>
-    <Enemy name="Giant" spawnCost="400" attack="10" maxHealth="600" unitSpeed="1" sprite="Enemy_Basic.png">
+    <Enemy name="Giant" spawnCost="400" attack="10" maxHealth="600" unitSpeed="1" sprite="Enemy_Boss.png">
       <unitColor r="0.75" g="0" b="0.75" a="1" />
       <effectData>
         <Effects>
@@ -33,7 +33,7 @@
         </Effects>
       </effectData>
     </Enemy>
-    <Enemy name="Regenerative Tank" spawnCost="200" attack="4" maxHealth="400" unitSpeed="1" sprite="Enemy_Basic.png">
+    <Enemy name="Regenerative Tank" spawnCost="200" attack="4" maxHealth="400" unitSpeed="1" sprite="Enemy_Strong.png">
       <unitColor r="0.3" g="0.3" b="1" a="1" />
       <effectData>
         <Effects>
@@ -41,12 +41,11 @@
         </Effects>
       </effectData>
     </Enemy>
-    <Enemy name="Carrier" spawnCost="150" attack="4" maxHealth="350" unitSpeed="2" sprite="Enemy_Basic.png">
-      <unitColor r="0.2" g="0.2" b="0.2" a="1" />
+    <Enemy name="Carrier" spawnCost="300" attack="4" maxHealth="500" unitSpeed="2" sprite="Enemy_Elite.png">
+      <unitColor r="0.75" g="0.75" b="0.75" a="1" />
       <effectData>
         <Effects>
           <Effect name="fixedSpawnCount" strength="1" />
-          <Effect name="scaleHealthWithBudget" />
           <Effect name="scaleEffectWithBudget">
             <Effect name="spawnEnemyOnDeath" strength="5" argument="Swarm" />
           </Effect>

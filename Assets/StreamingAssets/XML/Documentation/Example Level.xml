@@ -5,7 +5,7 @@
 <!--background: name of the level background to use
     enemyFileDependencies: comma-seperated list of enemy mod files this level depends on
     cardFileDependencies: comma-seperated list of card mod files this level depends on-->
-<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Grass.png" enemyFileDependencies="Example Enemies" cardFileDependencies="Example Cards" >
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png" enemyFileDependencies="Example Enemies" cardFileDependencies="Example Cards" >
   <!-- 	This many waves will be generated randomly and added to the END of the wave list -->
   <randomWaveCount>12</randomWaveCount>
   <!-- optional wave generation settings.  Values shown are the default settings that will be used if none are provided.-->

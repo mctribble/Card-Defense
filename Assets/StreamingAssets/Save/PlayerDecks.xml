@@ -33,7 +33,7 @@
       <Cards>
         <Card name="Plague Tower" count="10" />
         <Card name="Orthogonal Tower" count="10" />
-        <Card name="Nova Tower" count="10" />
+        <Card name="Overcharge Tower" count="10" />
       </Cards>
     </Deck>
     <Deck name="Deck A">

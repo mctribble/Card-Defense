@@ -57,6 +57,9 @@ public class BulletScript : BaseBehaviour
         //calculate new location
         Vector2 newLocation = Vector2.MoveTowards (curLocation, curDestination, speed * Time.deltaTime);
 
+        //turn in direction of travel ('forward' and 'up' intentionally switched, since we technically want the object to 'look' towards the screen)
+        transform.localRotation = Quaternion.LookRotation(Vector3.forward, curLocation - newLocation); 
+
         //if the enemy is in the brief "final chance" state between reaching the goal and dealing damage, blink instantaneously to the target.  This way, enemies wont escape just because projectile speed is low.
         //TODO: visual lightning-bolt effect or something for this
         if (enemyRef.goalFinalChance)

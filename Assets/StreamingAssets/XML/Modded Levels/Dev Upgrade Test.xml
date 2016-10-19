@@ -1,12 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" background="Grass.png">
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" background="Black.png">
   <randomWaveCount>0</randomWaveCount>
-  <waveGrowthAbsolute>160</waveGrowthAbsolute>
-  <waveGrowthLinear>5</waveGrowthLinear>
-  <waveGrowthSquared>2.3</waveGrowthSquared>
-  <waveGrowthExponential>1.2</waveGrowthExponential>
-  <waveTimeLinear>1.1</waveTimeLinear>
-  <waveTimeMax>20</waveTimeMax>
   <Waves>
     <Wave type="Carrier" budget="150" time="0.9836545" />
     <Wave type="Swarm" budget="600" time="1.98383343" />
@@ -88,4 +82,5 @@
       <Card name="Sniper Tower" count="10" />
     </Cards>
   </levelDeck>
+  <premadeDeckName />
 </Level>

@@ -462,7 +462,7 @@ public class LevelManagerScript : BaseBehaviour
                 }
                 else
                 {
-                    //standard case: we are responsible for spawning
+                    //standard case: spawners are responsible for spawning
                     spawnerObjects[curSpawner].GetComponent<SpawnerScript>().Spawn(-timeToNextSpawn, d.enemyData); //spawn enemy.  spawn timer provided so the enemy can place itself properly when framerate is low
                     curSpawner = (curSpawner + 1) % spawnerCount; //move to next spawner, looping back to the first if we are at the end of the list
                 }
