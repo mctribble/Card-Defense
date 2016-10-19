@@ -82,7 +82,7 @@ public class DirectionalShotScript : MonoBehaviour
             //find the region in which we want to search for enemies to warn about incoming damage
             Rect lookAheadRegion = new Rect(transform.position.x - 0.25f, transform.position.y - 0.25f, 0.5f, 0.5f); //start with a small box at the same place as the projectile
             float lookAheadDist = Mathf.Max(lookAhead, Time.deltaTime) * speed; //expand the box to include where we expect to be in lookAhead seconds, or in Time.deltaTime seconds, whichever is larger
-            lookAheadDist = Mathf.Max(lookAheadDist, (timeToLive * speed)); //dont look further ahead than where we will be when we die
+            lookAheadDist = Mathf.Min(lookAheadDist, (timeToLive * speed)); //dont look further ahead than where we will be when we die
 
             if (attackDir.x != 0)
             {
@@ -138,7 +138,7 @@ public class DirectionalShotScript : MonoBehaviour
             else
             {
                 //if we are dying this frame, attack everything on our expected list.  Works around a bug where enemies can stop being targeted because they think they're going to die but are not
-                toHitThisFrame = expectedToHit;
+                toHitThisFrame = new List<DamageEventData>( expectedToHit );
             }
 
             //attack them
