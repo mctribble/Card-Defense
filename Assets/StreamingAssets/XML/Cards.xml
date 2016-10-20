@@ -184,7 +184,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="spell" Name="Enrage" Description="Poking the bear." Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Type="spell" Name="Enrage" Description="Poking the bear." Charges="4" Art="Draw_Art.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
           <Effect name="drawEnemyCard" strength="2" />
@@ -192,7 +192,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="spell" Name="Gambit" Description="Feeling lucky?" Charges="5" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Type="spell" Name="Gambit" Description="Feeling lucky?" Charges="5" Art="Draw_Art.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
           <Effect name="percentageChance" strength="75">
@@ -210,7 +210,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="spell" Name="Life Tap" Description="Power comes at a cost" Charges="1" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Type="spell" Name="Life Tap" Description="Power comes at a cost" Charges="1" Art="Draw_Art.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
           <Effect name="damagePlayer" strength="5" />
@@ -218,7 +218,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="spell" Name="Recycle" Description="Does not guarantee your new hand will be better than the one you have." Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Type="spell" Name="Recycle" Description="Does not guarantee your new hand will be better than the one you have." Charges="3" Art="Draw_Art.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
           <Effect name="replaceRandomCard" strength="15" />
@@ -233,7 +233,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="spell" Name="Risky Draw" Charges="5" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png" Description="Only a 16.5% chance of disaster!">
+    <Card Type="spell" Name="Risky Draw" Charges="5" Art="Draw_Art.png" Tooltip="Tower_Basic.png" Description="Only a 16.5% chance of disaster!">
       <effectData>
         <Effects>
           <Effect name="dieRoll" strength="6" />
@@ -249,7 +249,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="spell" Name="Shield" Description="Use ths to protect more important cards from harm." Charges="20" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Type="spell" Name="Shield" Description="Use ths to protect more important cards from harm." Charges="20" Art="Shield.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
           <Effect name="addCharges" strength="1" />
@@ -281,7 +281,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="spell" Name="Time Crunch" Description="Condensing the onslaught" Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Type="spell" Name="Time Crunch" Description="Condensing the onslaught" Charges="4" Art="Time_Crunch.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
           <Effect name="drawEnemyCard" strength="1" />
