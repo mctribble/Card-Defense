@@ -257,7 +257,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="spell" Name="Summon Standard" Description="Lets you and I get normal for a change." Charges="2" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Type="spell" Name="Summon Standard" Description="Lets you and I get normal for a change." Charges="2" Art="Summon_Standard.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
           <Effect name="changeWaveType" argument="Standard" />
@@ -265,7 +265,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="spell" Name="Summon Swarm" Description="BEES!" Charges="2" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Type="spell" Name="Summon Swarm" Description="BEES!" Charges="2" Art="Summon_Swarm.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
           <Effect name="changeWaveType" argument="Swarm" />
@@ -273,7 +273,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="spell" Name="Summon Tank" Description="Bring it on!" Charges="2" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Type="spell" Name="Summon Tank" Description="Bring it on!" Charges="2" Art="Summon_Tank.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
           <Effect name="changeWaveType" argument="Tank" />
