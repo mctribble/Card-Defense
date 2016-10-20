@@ -11,6 +11,7 @@ public class CardPreviewScript : MonoBehaviour
     public Image art;         //reference to card art image
     public Text  title;       //reference to card name text
     public Text  description; //reference to card description text
+    public Image cardBack;    //reference to card back image
 
     //register to be informed about type reloads
     private IEnumerator Start()
@@ -46,6 +47,13 @@ public class CardPreviewScript : MonoBehaviour
     //saves card definition data and updates components as necessary
     private IEnumerator PreviewCard(CardData c)
     {
+        //if null, show card back instead
+        if (c == null)
+        {
+            cardBack.enabled = true;
+            yield break;
+        }
+
         //save the data
         data = c;
 
@@ -57,6 +65,9 @@ public class CardPreviewScript : MonoBehaviour
         WWW www = new WWW ("file:///" + Application.dataPath + "/StreamingAssets/Art/Card Art/" + data.cardArtName); //load file
         yield return www; //wait for it to load
         art.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
+
+        //hide the back image
+        cardBack.enabled = false;
     }
 
     //helper function.  updates the card description text.
