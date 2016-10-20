@@ -222,6 +222,8 @@ public class CardData : System.Object
         if ( (cardDescription != null) && (cardDescription.Length > 0) )
             description += "\n<i>" + cardDescription + "</i>";
 
+        description = description.Trim(); //trim excess whitespace
+
         //return it
         return description;
     }

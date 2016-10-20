@@ -25,8 +25,18 @@ public class DeckEditorCardTypeListScript : BaseBehaviour
         foreach (Transform child in transform)
             Destroy(child.gameObject);
 
+        //register to be informed about type reloads
+        CardTypeManagerScript.instance.cardTypesReloadedEvent += cardTypesReloaded;
+
         //load up the contents of the list
         setupTypeEntries(null);
+    }
+
+    //called when card types are reloaded for some reason (probably from the inspector)
+    private void cardTypesReloaded(CardTypeCollection newTypes)
+    {
+        destroyTypeEntries();
+        setupTypeEntries(GetComponentInParent<DeckEditorMainScript>().openDeck);
     }
 
     //adds card entries to the list.  If the card type is in highlightDeck, that button is a different color

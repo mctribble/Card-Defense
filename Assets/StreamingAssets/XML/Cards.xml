@@ -233,17 +233,17 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="spell" Name="Risky Draw" Charges="5" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Type="spell" Name="Risky Draw" Charges="5" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png" Description="Only a 16.5% chance of disaster!">
       <effectData>
         <Effects>
           <Effect name="dieRoll" strength="6" />
-          <Effect name="ifRollRange" strength="1" argument="1">
+          <Effect name="ifRollRange" strength="1" argument="2">
             <Effect name="drawEnemyCard" strength="1" />
           </Effect>
-          <Effect name="ifRollRange" strength="2" argument="4">
+          <Effect name="ifRollRange" strength="2" argument="3">
             <Effect name="drawCard" strength="1" />
           </Effect>
-          <Effect name="ifRollRange" strength="5" argument="6">
+          <Effect name="ifRollRange" strength="4" argument="6">
             <Effect name="drawCard" strength="2" />
           </Effect>
         </Effects>

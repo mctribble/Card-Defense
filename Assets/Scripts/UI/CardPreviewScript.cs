@@ -12,6 +12,30 @@ public class CardPreviewScript : MonoBehaviour
     public Text  title;       //reference to card name text
     public Text  description; //reference to card description text
 
+    //register to be informed about type reloads
+    private IEnumerator Start()
+    {
+        while (CardTypeManagerScript.instance == null)
+            yield return null;
+
+        CardTypeManagerScript.instance.cardTypesReloadedEvent += cardTypesReloaded;
+    }
+
+    //event handler for card types being reloaded
+    private void cardTypesReloaded(CardTypeCollection newTypes)
+    {
+        //bail if we arent showing anything
+        if (data == null)
+            return;
+
+        //if we are, then find it in the list and reload it
+        StartCoroutine(PreviewCard(newTypes.cardTypes.Find(c => c.cardName == data.cardName)));
+
+        //if data is now null, throw a warning
+        if (data == null)
+            MessageHandlerScript.Warning("The card types were reloaded, but the card type being previewed was not found and could not be updated!");
+    }
+
     //fetches data on the deck entry and then previews that card type
     private void PreviewXMLDeckEntry(XMLDeckEntry xC)
     {

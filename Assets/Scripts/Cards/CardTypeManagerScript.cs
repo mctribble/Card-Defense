@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -75,12 +76,20 @@ public class CardTypeManagerScript : BaseBehaviour
     [Hide] public bool areTypesLoaded() { return (types != null) && (types.cardTypes != null) && (types.cardTypes.Count > 0); }
     [VisibleWhen("areTypesLoaded")] public CardTypeCollection types;
 
+    //event for when types get reloaded
+    public delegate void CardTypesReloadedHandler(CardTypeCollection newTypes);
+    public event CardTypesReloadedHandler cardTypesReloadedEvent;
+
     // Use this for initialization
     private void Awake()
     {
         instance = this;
         StartCoroutine(loadCardTypes());
     }
+
+    //reloads card definitions
+    [Show] public void reload() { StartCoroutine(reloadCoroutine()); } //hide coroutine-ness since callers have no reason to care
+    private IEnumerator reloadCoroutine() { yield return StartCoroutine(loadCardTypes()); cardTypesReloadedEvent.Invoke(types); }
 
     private System.Collections.IEnumerator loadCardTypes()
     {
