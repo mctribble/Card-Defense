@@ -32,7 +32,7 @@
 			byte  waveBonus: number of waves added to the tower's remaining lifespan.  Use 0 for no effect-->
       <upgradeData RechargeMult="1.1" RangeMult="1.1" DamageMult="1.1" RechargeMod="1" RangeMod="1" DamageMod="1" WaveBonus="1" />
     </Card>
-    <Card Name="Free Mana Tap" Type="spell" Description="Draw five cards.  Does not consume a charge." Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Name="Free Life Tap" Type="spell" Description="Draw five cards.  Does not consume a charge." Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <!--to add effects, you provide a list of effects applied by the card.  
       You can add them to any type of card, but most only make sense on specific kinds of cards, and some dont make sense on cards at all
       For a complete list, see "available effects.txt"
