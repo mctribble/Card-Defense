@@ -1,9 +1,10 @@
 Christopher Kaleb Hake:
+Dev_Tower
 Enemy_Basic
 Enemy_Boss
 Enemy_Elite
 Enemy_Strong
 Tower_Basic
-Tower_Fast
-Tower_Heavy
-Tower_Standard
+Tower_Diamond
+Tower_Octagon
+Tower_Round
