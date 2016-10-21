@@ -1,5 +1,13 @@
 Christopher Kaleb Hake:
+Draw_Art
+Enrage
+Gambit
+Life Tap
+Recycle
+Risky Draw
+Shield
 Summon_Standard
 Summon_Swarm
 Summon_Tank
 Summon_Tower_Basic
+Time_Crunch
