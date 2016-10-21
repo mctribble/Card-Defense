@@ -1,14 +1,28 @@
 Christopher Kaleb Hake:
+AOE_Tower
+Basic_Tower
+Black_Plague_Tower
+Challenger_Tower
 Draw_Art
 Enrage
+Explosive_Tower
+Fast_Tower
 Gambit
+Heavy_Tower
 Life Tap
+Nova_Tower
 Recycle
+Orthogonal_Tower
+Overcharge_Tower
+Plague_Tower
 Reinforce
 Risky Draw
 Shield
+Shredder_Tower
+Sniper_Tower
 Summon_Standard
 Summon_Swarm
 Summon_Tank
 Summon_Tower_Basic
+Supernova_Tower
 Time_Crunch
