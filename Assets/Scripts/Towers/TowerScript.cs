@@ -7,38 +7,42 @@ using Vexe.Runtime.Types;
 //tower class itself
 public class TowerScript : BaseBehaviour
 {
-    public GameObject bulletPrefab;          //prefab to instantiate as a bullet
-    public GameObject burstShotPrefab;       //prefab to instantiate a burst shot
-    public GameObject directionalShotPrefab; //prefab to instantiate a directional shot
+    //functions used to determine what should be shown when
+    private bool isEditor() { return Application.isPlaying == false; }
+    private bool hasData() { return (towerName != null) && (towerName != ""); }
 
-    public Color textColorLifespan; //color of the tower text when the tower has a limited lifespan
-    public Color textColorAmmo;     //color of the tower text when the tower has limited ammo
-    public Color textColorBoth;     //color of the tower text when the tower has both a limited lifespan and limited ammo
-    public Color textColorNeither;  //color of the tower text when the tower has neither a limited lifespan nor limited ammo
+    [VisibleWhen("isEditor")] public GameObject bulletPrefab;          //prefab to instantiate as a bullet
+    [VisibleWhen("isEditor")] public GameObject burstShotPrefab;       //prefab to instantiate a burst shot
+    [VisibleWhen("isEditor")] public GameObject directionalShotPrefab; //prefab to instantiate a directional shot
 
-    public string      towerName;      //name of the tower
-    public ushort      upgradeCount;   //number of times this tower has been upgraded
-    public ushort      upgradeCap;     //max number of times this tower can be upgraded
-    public float       rechargeTime;   //time, in seconds, between shots.
-    public float       range;          //distance the tower can shoot
-    public float       attackPower;	   //damage done on hit
-    public int         wavesRemaining; //number of waves this tower has left before disappearing
-    public EffectData  effects;        //effects on this tower
+    [VisibleWhen("isEditor")] public Color textColorLifespan; //color of the tower text when the tower has a limited lifespan
+    [VisibleWhen("isEditor")] public Color textColorAmmo;     //color of the tower text when the tower has limited ammo
+    [VisibleWhen("isEditor")] public Color textColorBoth;     //color of the tower text when the tower has both a limited lifespan and limited ammo
+    [VisibleWhen("isEditor")] public Color textColorNeither;  //color of the tower text when the tower has neither a limited lifespan nor limited ammo
 
-    public Image towerImage;                   //reference to image for the tower itself
-    public Image rangeImage;                   //reference to image for the range overlay
-    public Image chargeGaugeImage1x;           //reference to image for the charge gauge
-    public Image chargeGaugeImage2x;           //reference to image for the charge gauge
-    public Image chargeGaugeImage3x;           //reference to image for the charge gauge
-    public Image tooltipPanel;                 //reference to image for the tooltip background
-    public Text  tooltipText;                  //reference to text for the tooltip
-    public Text  lifespanText;                 //reference to text that shows the lifespan
-    public ParticleSystem manualFireParticles; //reference to particle effect to play when a manual fire is ready
+    [VisibleWhen("hasData")] public string      towerName;      //name of the tower
+    [VisibleWhen("hasData")] public ushort      upgradeCount;   //number of times this tower has been upgraded
+    [VisibleWhen("hasData")] public ushort      upgradeCap;     //max number of times this tower can be upgraded
+    [VisibleWhen("hasData")] public float       rechargeTime;   //time, in seconds, between shots.
+    [VisibleWhen("hasData")] public float       range;          //distance the tower can shoot
+    [VisibleWhen("hasData")] public float       attackPower;	   //damage done on hit
+    [VisibleWhen("hasData")] public int         wavesRemaining; //number of waves this tower has left before disappearing
+    [VisibleWhen("hasData")] public EffectData  effects;        //effects on this tower
 
-    private float deltaTime;            //time since last frame
-    private float shotCharge;           //represents how charged the next. 0.0 is empty, maxCharge is full
-    private float maxCharge;            //max shot charge (default 1.0)
-    private bool  waitingForManualFire; //whether user is being prompted to fire manually
+    [VisibleWhen("isEditor")] public Image towerImage;                   //reference to image for the tower itself
+    [VisibleWhen("isEditor")] public Image rangeImage;                   //reference to image for the range overlay
+    [VisibleWhen("isEditor")] public Image chargeGaugeImage1x;           //reference to image for the charge gauge
+    [VisibleWhen("isEditor")] public Image chargeGaugeImage2x;           //reference to image for the charge gauge
+    [VisibleWhen("isEditor")] public Image chargeGaugeImage3x;           //reference to image for the charge gauge
+    [VisibleWhen("isEditor")] public Image tooltipPanel;                 //reference to image for the tooltip background
+    [VisibleWhen("isEditor")] public Text  tooltipText;                  //reference to text for the tooltip
+    [VisibleWhen("isEditor")] public Text  lifespanText;                 //reference to text that shows the lifespan
+    [VisibleWhen("isEditor")] public ParticleSystem manualFireParticles; //reference to particle effect to play when a manual fire is ready
+
+    [VisibleWhen("hasData")] private float deltaTime;            //time since last frame
+    [VisibleWhen("hasData")] private float shotCharge;           //represents how charged the next. 0.0 is empty, maxCharge is full
+    [VisibleWhen("hasData")] private float maxCharge;            //max shot charge (default 1.0)
+    [VisibleWhen("hasData")] private bool  waitingForManualFire; //whether user is being prompted to fire manually
 
     // Use this for initialization
     private void Awake()
@@ -371,7 +375,13 @@ public class TowerScript : BaseBehaviour
         //yes, I know its awkward, but we're setting the sprite with WWW.
         WWW www = new WWW ("file:///" + Application.dataPath + "/StreamingAssets/Art/Sprites/" + d.towerSpriteName);
         yield return www;
-        towerImage.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
+        Sprite result = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
+        if (result != null)
+            towerImage.sprite = result;
+
+        //if a color was provided, use it
+        if (d.towerColor != null)
+            towerImage.color = d.towerColor.toColor();
 
         //set scale of range image
         rangeImage.gameObject.GetComponent<RectTransform>().localScale = new Vector3(range, range, 1.0f);

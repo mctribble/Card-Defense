@@ -24,10 +24,13 @@ public class TowerData : System.Object
     [XmlAttribute("Sprite")]
     public string towerSpriteName { get; set; }
 
+    //optional field that colorizes the sprite
+    public XMLColor towerColor;
+
     [XmlAttribute("Recharge")]   public float rechargeTime; //how long it takes the tower to charge
     [XmlAttribute("Range")]      public float range;        //how far away from itself, in world space, the tower can shoot
     [XmlAttribute("Damage")]     public float attackPower;  // amount of damage this dower does before any modifiers such as armor
-    [XmlAttribute("Lifespan")]   public int   lifespan;	  // amount of waves this tower remains on the field
+    [XmlAttribute("Lifespan")]   public int   lifespan;	    // amount of waves this tower remains on the field
     [XmlAttribute("UpgradeCap")] public int   upgradeCap;   //max number of upgrades this tower can have
 
     //provides a short string for the debugger
@@ -47,13 +50,11 @@ public class UpgradeData : System.Object
 {
     //multiplicative modifiers
     [XmlAttribute("RechargeMult")] public float rechargeMultiplier = 1.0f;
-
     [XmlAttribute("RangeMult")]    public float rangeMultiplier    = 1.0f;
     [XmlAttribute("DamageMult")]   public float attackMultiplier   = 1.0f;
 
     //absolute modifiers
     [XmlAttribute("RechargeMod")]  public float rechargeModifier   = 0.0f;
-
     [XmlAttribute("RangeMod")]     public float rangeModifier      = 0.0f;
     [XmlAttribute("DamageMod")]    public float attackModifier     = 0.0f;
     [XmlAttribute("WaveBonus")]    public int waveBonus = 0;
@@ -93,7 +94,6 @@ public class CardData : System.Object
 
     //card data
     [XmlAttribute("Type")] public CardType cardType; //determines aspects of how the card should behave and the meaning of other values.  See enum dec for more info
-
     [XmlAttribute("Name")] public string   cardName; //name of the card
 
     [XmlAttribute("Description")]

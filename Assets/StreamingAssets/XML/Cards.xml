@@ -1,19 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <CardTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Cards>
-    <Card Type="tower" Name="AOE Tower" Description="slow and low damage, but attacks EVERYTHING in range" Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Fast.png">
-      <towerData Recharge="2" Range="2.5" Damage="10" Lifespan="5" UpgradeCap="3" Sprite="Tower_Fast.png" />
+    <Card Type="tower" Name="AOE Tower" Description="slow and low damage, but attacks EVERYTHING in range" Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Round.png">
+      <towerData Recharge="2" Range="2.5" Damage="10" Lifespan="5" UpgradeCap="3" Sprite="Tower_Round.png">
+        <towerColor r="0" g="1" b="0" a="1"/>
+      </towerData>
       <effectData>
         <Effects>
           <Effect name="targetAll" />
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Basic Tower" Charges="6" Art="Summon_Tower_Basic.png" Tooltip="Tower_Standard.png">
-      <towerData Recharge="0.8" Range="3" Damage="25" Lifespan="5" UpgradeCap="5" Sprite="Tower_Standard.png" />
+    <Card Type="tower" Name="Basic Tower" Charges="6" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+      <towerData Recharge="0.8" Range="3" Damage="25" Lifespan="5" UpgradeCap="5" Sprite="Tower_Basic.png">
+        <towerColor r="0" g="1" b="0" a="1"/>
+      </towerData>
     </Card>
-    <Card Type="tower" Name="Black Plague Tower" Charges="1" Art="Summon_Tower_Basic.png" Tooltip="Tower_Heavy.png">
-      <towerData Recharge="10" Range="1" Damage="1" Lifespan="1" UpgradeCap="1" Sprite="Tower_Heavy.png" />
+    <Card Type="tower" Name="Black Plague Tower" Charges="1" Art="Summon_Tower_Basic.png" Tooltip="Tower_Round.png">
+      <towerData Recharge="10" Range="1" Damage="1" Lifespan="1" UpgradeCap="1" Sprite="Tower_Round.png">
+        <towerColor r="0.25" g="0.25" b="0.25" a="1"/>
+      </towerData>
       <effectData>
         <Effects>
           <Effect name="infiniteTowerLifespan" />
@@ -42,8 +48,10 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Explosive Tower" Description="Deals splash damage.  Good for tightly-packed enemies." Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Fast.png">
-      <towerData Recharge="1.5" Range="2" Damage="20" Lifespan="5" UpgradeCap="3" Sprite="Tower_Standard.png" />
+    <Card Type="tower" Name="Explosive Tower" Description="Deals splash damage.  Good for tightly-packed enemies." Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Round.png">
+      <towerData Recharge="1.5" Range="2" Damage="20" Lifespan="5" UpgradeCap="3" Sprite="Tower_Round.png">
+        <towerColor r="1.0" g="0" b="0" a="1"/>
+      </towerData>
       <effectData>
         <Effects>
           <Effect name="splashDamage" strength="10" argument="1.0" />
@@ -51,14 +59,20 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Fast Tower" Description="Suitable for fighting swarms" Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Fast.png">
-      <towerData Recharge="0.1" Range="2" Damage="3.5" Lifespan="3" UpgradeCap="3" Sprite="Tower_Fast.png" />
+    <Card Type="tower" Name="Fast Tower" Description="Suitable for fighting swarms" Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+      <towerData Recharge="0.1" Range="2" Damage="3.5" Lifespan="3" UpgradeCap="3" Sprite="Tower_Basic.png" >
+        <towerColor r="1" g="0" b="0" a="1"/>
+      </towerData>
     </Card>
-    <Card Type="tower" Name="Heavy Tower" Description="Suitable for fighting tanks" Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Heavy.png">
-      <towerData Recharge="3" Range="2" Damage="100" Lifespan="3" UpgradeCap="3" Sprite="Tower_Heavy.png" />
+    <Card Type="tower" Name="Heavy Tower" Description="Suitable for fighting tanks" Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+      <towerData Recharge="3" Range="2" Damage="100" Lifespan="3" UpgradeCap="3" Sprite="Tower_Basic.png" >
+        <towerColor r="0" g="0" b="1" a="1"/>
+      </towerData>
     </Card>
-    <Card Type="tower" Name="Nova Tower" Description="The fury of a single sun tends to be sufficient" Charges="1" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
-      <towerData Recharge="30" Range="10" Damage="200" Lifespan="1" UpgradeCap="0" Sprite="Tower_Fast.png" />
+    <Card Type="tower" Name="Nova Tower" Description="The fury of a single sun tends to be sufficient" Charges="1" Art="Summon_Tower_Basic.png" Tooltip="Tower_Round.png">
+      <towerData Recharge="30" Range="10" Damage="200" Lifespan="1" UpgradeCap="0" Sprite="Tower_Round.png">
+        <towerColor r="0.5" g="0" b="0.5" a="1"/>
+      </towerData>
       <effectData>
         <Effects>
           <Effect name="targetBurst" />
@@ -69,16 +83,20 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Orthogonal Tower" Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Standard.png">
-      <towerData Recharge="1" Range="3" Damage="5" Lifespan="5" UpgradeCap="3" Sprite="Tower_Standard.png" />
+    <Card Type="tower" Name="Orthogonal Tower" Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Round.png">
+      <towerData Recharge="1" Range="3" Damage="5" Lifespan="5" UpgradeCap="3" Sprite="Tower_Round.png">
+        <towerColor r="0.75" g="0.25" b="0" a="1"/>
+      </towerData>
       <effectData>
         <Effects>
           <Effect name="targetOrthogonal" />
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Overcharge Tower" Charges="2" Art="Summon_Tower_Basic.png" Tooltip="Tower_Standard.png">
-      <towerData Recharge="3" Range="2" Damage="100" Lifespan="3" UpgradeCap="3" Sprite="Tower_Heavy.png" />
+    <Card Type="tower" Name="Overcharge Tower" Charges="2" Art="Summon_Tower_Basic.png" Tooltip="Tower_Octagon.png">
+      <towerData Recharge="3" Range="2" Damage="100" Lifespan="3" UpgradeCap="3" Sprite="Tower_Octagon.png" >
+        <towerColor r="0" g="1" b="1" a="1"/>
+      </towerData>
       <effectData>
         <Effects>
           <Effect name="maxOvercharge" strength="2" />
@@ -86,8 +104,10 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Plague Tower" Charges="1" Art="Summon_Tower_Basic.png" Tooltip="Tower_Heavy.png">
-      <towerData Recharge="2" Range="1" Damage="1" Lifespan="3" UpgradeCap="2" Sprite="Tower_Heavy.png" />
+    <Card Type="tower" Name="Plague Tower" Charges="1" Art="Summon_Tower_Basic.png" Tooltip="Tower_Round.png">
+      <towerData Recharge="2" Range="1" Damage="1" Lifespan="3" UpgradeCap="2" Sprite="Tower_Round.png">
+        <towerColor r="0" g="0.376" b="0.125" a="1"/>
+      </towerData>
       <effectData>
         <Effects>
           <Effect name="chainHit" strength="0.5" />
@@ -96,8 +116,10 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Shredder Tower" Description="Does very little damage, but strips away armor" Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Fast.png">
-      <towerData Recharge="0.75" Range="2" Damage="0" Lifespan="5" UpgradeCap="3" Sprite="Tower_Fast.png" />
+    <Card Type="tower" Name="Shredder Tower" Description="Does very little damage, but strips away armor" Charges="4" Art="Summon_Tower_Basic.png" Tooltip="Tower_Diamond.png">
+      <towerData Recharge="0.75" Range="2" Damage="0" Lifespan="5" UpgradeCap="3" Sprite="Tower_Diamond.png" >
+        <towerColor r="0" g="0.33" b="1" a="1"/>
+      </towerData>
       <effectData>
         <Effects>
           <Effect name="reduceEnemyEffectOnDamage" strength="20" argument="armor" />
@@ -105,16 +127,20 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Sniper Tower" Description="Specializes in slaying Giants" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Heavy.png">
-      <towerData Recharge="10" Range="999" Damage="300" Lifespan="5" UpgradeCap="0" Sprite="Tower_Heavy.png" />
+    <Card Type="tower" Name="Sniper Tower" Description="Specializes in slaying Giants" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Octagon.png">
+      <towerData Recharge="10" Range="999" Damage="300" Lifespan="5" UpgradeCap="0" Sprite="Tower_Octagon.png" >
+        <towerColor r="0" g="0" b="1" a="1"/>
+      </towerData>
       <effectData>
         <Effects>
           <Effect name="damagePercent" strength="10" />
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Supernova Tower" Description="The fury of a thousand suns" Charges="1" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
-      <towerData Recharge="60" Range="999" Damage="200000" Lifespan="1" UpgradeCap="0" Sprite="Tower_Fast.png" />
+    <Card Type="tower" Name="Supernova Tower" Description="The fury of a thousand suns" Charges="1" Art="Summon_Tower_Basic.png" Tooltip="Tower_Round.png">
+      <towerData Recharge="60" Range="999" Damage="200000" Lifespan="1" UpgradeCap="0" Sprite="Tower_Round.png">
+        <towerColor r="1" g="0" b="1" a="1"/>
+      </towerData>
       <effectData>
         <Effects>
           <Effect name="targetBurst" />
@@ -155,7 +181,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="upgrade" Name="Pulse Upgrade" Description="Adds a secondary area attack" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Standard.png">
+    <Card Type="upgrade" Name="Pulse Upgrade" Description="Adds a secondary area attack" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
       <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="1" />
       <effectData>
         <Effects>

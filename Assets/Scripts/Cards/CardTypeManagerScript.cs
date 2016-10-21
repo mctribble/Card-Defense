@@ -89,7 +89,13 @@ public class CardTypeManagerScript : BaseBehaviour
 
     //reloads card definitions
     [Show] public void reload() { StartCoroutine(reloadCoroutine()); } //hide coroutine-ness since callers have no reason to care
-    private IEnumerator reloadCoroutine() { yield return StartCoroutine(loadCardTypes()); cardTypesReloadedEvent.Invoke(types); }
+    private IEnumerator reloadCoroutine()
+    {
+        yield return StartCoroutine(loadCardTypes());
+
+        if (cardTypesReloadedEvent != null)
+            cardTypesReloadedEvent.Invoke(types);
+    }
 
     private System.Collections.IEnumerator loadCardTypes()
     {

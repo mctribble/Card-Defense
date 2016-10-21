@@ -223,24 +223,7 @@ public class LevelManagerScript : BaseBehaviour
 
         //if no deck has been loaded yet, then use the level deck
         if (DeckManagerScript.instance.deckSize == 0)
-        {
-            XMLDeck levelDeck;
-            if ( (data.levelDeck != null) && (data.levelDeck.cardCount > 0) )
-            {
-                levelDeck = data.levelDeck; //the level deck is defined in the level file
-            }
-            else
-            {
-                //the level uses one of the premade decks in Decks.XML
-                levelDeck = DeckManagerScript.instance.premadeDecks.getDeckByName(data.premadeDeckName);
-            }
-
-            DeckManagerScript.instance.SendMessage("SetDeck", levelDeck);
-
-            //shuffle it, if the level file says to
-            if (data.shuffleDeck)
-                DeckManagerScript.instance.SendMessage("Shuffle");
-        }
+            loadLevelDeck();
 
         //wait a few frames to give other managers a chance to catch up
         yield return null;
@@ -332,6 +315,28 @@ public class LevelManagerScript : BaseBehaviour
 
         //fire the level loaded event so interested objects can act on it
         LevelLoadedEvent();
+    }
+
+    //sends the deck defined as the level deck to the deck manager, and shuffles if needed
+    //this is public so that deck manager can call it to reload the level deck without needing to worry about the logistics of how that is done.
+    public void loadLevelDeck()
+    {
+        XMLDeck levelDeck;
+        if ((data.levelDeck != null) && (data.levelDeck.cardCount > 0))
+        {
+            levelDeck = data.levelDeck; //the level deck is defined in the level file
+        }
+        else
+        {
+            //the level uses one of the premade decks in Decks.XML
+            levelDeck = DeckManagerScript.instance.premadeDecks.getDeckByName(data.premadeDeckName);
+        }
+
+        DeckManagerScript.instance.SendMessage("SetDeck", levelDeck);
+
+        //shuffle it, if the level file says to
+        if (data.shuffleDeck)
+            DeckManagerScript.instance.SendMessage("Shuffle");
     }
 
     // Update is called once per frame

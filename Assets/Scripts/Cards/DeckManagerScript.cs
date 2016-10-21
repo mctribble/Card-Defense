@@ -252,24 +252,34 @@ public class DeckManagerScript : BaseBehaviour
         premadeDecks = DeckCollection.Load(Path.Combine(Application.dataPath, premadeDeckPath));
         playerDecks = DeckCollection.Load(Path.Combine(Application.dataPath, playerDeckPath));
 
-        //find one with the same name and use it
-        XMLDeck target = null;
 
-        if (premadeDecks.getNames().Contains(currentDeckName))
-            target = premadeDecks.getDeckByName(currentDeckName);
-        
-        if (playerDecks.getNames().Contains(currentDeckName))
+        if (currentDeckName == "Level Deck")
         {
-            if (target != null)
-                Debug.LogError("both deck lists contain a deck of the same name!  Unsure which to reload.");
-            else
-                target = playerDecks.getDeckByName(currentDeckName);
+            //if we were using the level deck, reload that
+            LevelManagerScript.instance.loadLevelDeck(); //this delegates to level manager so that it can retain control over the level data
         }
+        else
+        {
+            //otherwise, the player picked a deck.  Search the deck lists for a deck of the same name as what we're using and load that.
 
-        if (target == null)
-            Debug.LogError("could not find the deck to reload it!");
+            XMLDeck target = null; //deck to reload
 
-        SetDeck(target);
+            if (premadeDecks.getNames().Contains(currentDeckName))
+                target = premadeDecks.getDeckByName(currentDeckName);
+
+            if (playerDecks.getNames().Contains(currentDeckName))
+            {
+                if (target != null)
+                    Debug.LogError("both deck lists contain a deck of the same name!  Unsure which to reload.");
+                else
+                    target = playerDecks.getDeckByName(currentDeckName);
+            }
+
+            if (target == null)
+                Debug.LogError("could not find the deck to reload it!");
+
+            SetDeck(target);
+        }
     }
 
     //saves the player decks back to the file

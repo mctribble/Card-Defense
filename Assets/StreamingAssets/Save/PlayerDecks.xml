@@ -29,13 +29,6 @@
         <Card name="Dev Chain Purge Tower" count="20" />
       </Cards>
     </Deck>
-    <Deck name="Dev Test Deck">
-      <Cards>
-        <Card name="Plague Tower" count="10" />
-        <Card name="Orthogonal Tower" count="10" />
-        <Card name="Overcharge Tower" count="10" />
-      </Cards>
-    </Deck>
     <Deck name="Deck A">
       <Cards>
         <Card name="Heavy Tower" count="3" />

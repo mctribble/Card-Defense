@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" background="Black.png">
+  <randomWaveCount>10</randomWaveCount>
+  <Waves>
+  </Waves>
+  <Spawners>
+    <Spawner spawnX="-5" spawnY="5" />
+    <Spawner spawnX="0" spawnY="5" />
+    <Spawner spawnX="5" spawnY="5" />
+  </Spawners>
+  <PathSegments>
+    <Segment startX="-5" startY="5" endX="-5" endY="-4" />
+    <Segment startX="0" startY="5" endX="0" endY="-4" />
+    <Segment startX="5" startY="5" endX="5" endY="-4" />
+    <Segment startX="-5" startY="-4" endX="8" endY="-4" />
+    <Segment startX="0" startY="-4" endX="8" endY="-4" />
+    <Segment startX="5" startY="-4" endX="8" endY="-4" />
+    <Segment startX="8" startY="-4" endX="8" endY="3" />
+  </PathSegments>
+  <Towers>
+    <Tower name="AOE Tower"             x="5.0" y="-6.0" />
+    <Tower name="Basic Tower"           x="5.5" y="-6.0" />
+    <Tower name="Black Plague Tower"    x="6.0" y="-6.0" />
+    <Tower name="Challenger Tower"      x="6.5" y="-6.0" />
+    <Tower name="Dev Chain Purge Tower" x="7.0" y="-6.0" />
+    <Tower name="Dev Purge Tower"       x="7.5" y="-6.0" />
+    <Tower name="Explosive Tower"       x="8.0" y="-6.0" />
+    <Tower name="Fast Tower"            x="8.5" y="-6.0" />
+    <Tower name="Heavy Tower"           x="5.0" y="-8.0" />
+    <Tower name="Nova Tower"            x="5.5" y="-8.0" />
+    <Tower name="Orthogonal Tower"      x="6.0" y="-8.0" />
+    <Tower name="Overcharge Tower"      x="6.5" y="-8.0" />
+    <Tower name="Plague Tower"          x="7.0" y="-8.0" />
+    <Tower name="Shredder Tower"        x="7.5" y="-8.0" />
+    <Tower name="Sniper Tower"          x="8.0" y="-8.0" />
+    <Tower name="Supernova Tower"       x="8.5" y="-8.0" />
+    <Tower name="Dev Purge Tower" x="8.5" y="2.5" />
+  </Towers>
+  <shuffleDeck>true</shuffleDeck>
+  <levelDeck name="Level Deck">
+    <Cards>
+      <Card name="Plague Tower" count="2" />
+      <Card name="Overcharge Tower" count="2" />
+      <Card name="AOE Tower" count="2" />
+      <Card name="Basic Tower" count="2" />
+      <Card name="Black Plague Tower" count="2" />
+      <Card name="Challenger Tower" count="2" />
+      <Card name="Dev Chain Purge Tower" count="2" />
+      <Card name="Dev Purge Tower" count="2" />
+      <Card name="Explosive Tower" count="2" />
+      <Card name="Fast Tower" count="2" />
+      <Card name="Heavy Tower" count="2" />
+      <Card name="Nova Tower" count="2" />
+      <Card name="Orthogonal Tower" count="2" />
+      <Card name="Supernova Tower" count="2" />
+      <Card name="Sniper Tower" count="2" />
+      <Card name="Shredder Tower" count="2" />
+    </Cards>
+  </levelDeck>
+</Level>

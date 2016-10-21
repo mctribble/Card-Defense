@@ -22,6 +22,16 @@
                     </xsd:element>
                     <xsd:element minOccurs="0" name="towerData">
                       <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="towerColor" minOccurs="0">
+                            <xsd:complexType>
+                              <xsd:attribute name="r" type="xsd:string" use="required" />
+                              <xsd:attribute name="g" type="xsd:string" use="required" />
+                              <xsd:attribute name="b" type="xsd:string" use="required" />
+                              <xsd:attribute name="a" type="xsd:string" use="required" />
+                            </xsd:complexType>
+                          </xsd:element>
+                        </xsd:sequence>
                         <xsd:attribute name="Recharge" type="xsd:decimal" use="required" />
                         <xsd:attribute name="Range" type="xsd:decimal" use="required" />
                         <xsd:attribute name="Damage" type="xsd:decimal" use="required" />
