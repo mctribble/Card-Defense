@@ -4,6 +4,7 @@ Enrage
 Gambit
 Life Tap
 Recycle
+Reinforce
 Risky Draw
 Shield
 Summon_Standard

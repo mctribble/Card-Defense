@@ -3,8 +3,12 @@ player/enemy discard piles?
 enemy attack animations
 better range display, especially when upgrading
 animated enemy sprites
-more art
-sound!
+sound
+================================================================
+art:
+Spells: 11/11
+Towers: 0/14
+Upgrades: 0/8
 ================================================================
 content goals:
 enemies: 07/15

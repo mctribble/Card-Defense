@@ -226,7 +226,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="spell" Name="Reinforce" Charges="1" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Type="spell" Name="Reinforce" Charges="1" Art="Reinforce.png" Tooltip="Tower_Basic.png">
       <effectData>
         <Effects>
           <Effect name="allTowersLifespanBonus" strength="3" />
