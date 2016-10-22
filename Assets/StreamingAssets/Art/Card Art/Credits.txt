@@ -1,25 +1,33 @@
 Christopher Kaleb Hake:
 AOE_Tower
 Basic_Tower
+Basic_Upgrade
 Black_Plague_Tower
 Challenger_Tower
+Chain_Hit
 Draw_Art
 Enrage
 Explosive_Tower
 Fast_Tower
+Fast_Upgrade
 Gambit
 Heavy_Tower
+Heavy_Upgrade
 Life Tap
 Nova_Tower
 Recycle
 Orthogonal_Tower
 Overcharge_Tower
 Plague_Tower
+Preservation_Upgrade
+Pulse_Upgrade
 Reinforce
 Risky Draw
+Self_Destruct_Upgrade
 Shield
 Shredder_Tower
 Sniper_Tower
+Spitfire_Upgrade
 Summon_Standard
 Summon_Swarm
 Summon_Tank

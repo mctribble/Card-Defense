@@ -152,10 +152,10 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="upgrade" Name="Basic Upgrade" Description="Boring but good" Charges="5" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Type="upgrade" Name="Basic Upgrade" Description="Boring but good" Charges="5" Art="Basic_Upgrade.png" Tooltip="Tower_Basic.png">
       <upgradeData RechargeMult="0.9" RangeMult="1" DamageMult="1.4" RechargeMod="0" RangeMod="0.5" DamageMod="0" WaveBonus="1" />
     </Card>
-    <Card Type="upgrade" Name="Chain Hit" Description="Powerful, but easily squandered" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Type="upgrade" Name="Chain Hit" Description="Powerful, but easily squandered" Charges="3" Art="Chain_Hit.png" Tooltip="Tower_Basic.png">
       <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="1" />
       <effectData>
         <Effects>
@@ -167,13 +167,13 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="upgrade" Name="Fast Upgrade" Description="small damage increase per shot.  best on fast towers" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Type="upgrade" Name="Fast Upgrade" Description="small damage increase per shot.  best on fast towers" Charges="3" Art="Fast_Upgrade.png" Tooltip="Tower_Basic.png">
       <upgradeData RechargeMult="0.8" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="1" WaveBonus="2" />
     </Card>
-    <Card Type="upgrade" Name="Heavy Upgrade" Description="Best on towers with high damage" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Type="upgrade" Name="Heavy Upgrade" Description="Best on towers with high damage" Charges="3" Art="Heavy_Upgrade.png" Tooltip="Tower_Basic.png">
       <upgradeData RechargeMult="1" RangeMult="1" DamageMult="2" RechargeMod="0.5" RangeMod="1" DamageMod="0" WaveBonus="2" />
     </Card>
-    <Card Type="upgrade" Name="Preservation Upgrade" Description="Don't leave me!" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Type="upgrade" Name="Preservation Upgrade" Description="Don't leave me!" Charges="3" Art="Preservation_Upgrade.png" Tooltip="Tower_Basic.png">
       <upgradeData RechargeMult="1.1" RangeMult="0.9" DamageMult="0.9" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="5" />
       <effectData>
         <Effects>
@@ -181,7 +181,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="upgrade" Name="Pulse Upgrade" Description="Adds a secondary area attack" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Type="upgrade" Name="Pulse Upgrade" Description="Adds a secondary area attack" Charges="3" Art="Pulse_Upgrade.png" Tooltip="Tower_Basic.png">
       <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="1" />
       <effectData>
         <Effects>
@@ -191,7 +191,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="upgrade" Name="Self-Destruct Upgrade" Description="Tower becomes very powerful, but will only get one shot." Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_basic.png">
+    <Card Type="upgrade" Name="Self-Destruct Upgrade" Description="Tower becomes very powerful, but will only get one shot." Charges="3" Art="Self_Destruct_Upgrade.png" Tooltip="Tower_basic.png">
       <upgradeData RechargeMult="1" RangeMult="5" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="1000" WaveBonus="0" />
       <effectData>
         <Effects>
@@ -202,7 +202,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="upgrade" Name="Spitfire Upgrade" Description="Quantity over quality." Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Type="upgrade" Name="Spitfire Upgrade" Description="Quantity over quality." Charges="3" Art="Spitfire_Upgrade.png" Tooltip="Tower_Basic.png">
       <upgradeData RechargeMult="3" RangeMult="1" DamageMult="0.5" RechargeMod="0" RangeMod="0.5" DamageMod="0" WaveBonus="2" />
       <effectData>
         <Effects>
