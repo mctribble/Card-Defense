@@ -252,6 +252,8 @@ public class DeckManagerScript : BaseBehaviour
         premadeDecks = DeckCollection.Load(Path.Combine(Application.dataPath, premadeDeckPath));
         playerDecks = DeckCollection.Load(Path.Combine(Application.dataPath, playerDeckPath));
 
+        //clear out the current deck
+        currentDeck.Clear();
 
         if (currentDeckName == "Level Deck")
         {
