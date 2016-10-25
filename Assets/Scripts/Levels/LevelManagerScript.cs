@@ -49,6 +49,11 @@ public class PremadeTower
 [System.Serializable]
 public class LevelData
 {
+    //used to specify the proper .xsd file in the serialized xml
+    [Hide]
+    [XmlAttribute("noNamespaceSchemaLocation", Namespace = System.Xml.Schema.XmlSchema.InstanceNamespace)]
+    public string schema = "../Level.xsd";
+
     //where this level was loaded from
     [XmlIgnore] public string fileName;
 
@@ -64,10 +69,10 @@ public class LevelData
     public int randomWaveCount;
 
     //budget: absolute + (wave * linear) + (wave * squared)^2 + (exponential^wave)
-    [DefaultValue(160.0f)] public float waveGrowthAbsolute     = 100.0f;
-    [DefaultValue(5.0f)]   public float waveGrowthLinear       = 7.0f;
-    [DefaultValue(2.3f)]   public float waveGrowthSquared      = 2.8f;
-    [DefaultValue(1.2f)]   public float waveGrowthExponential  = 1.3f;
+    [DefaultValue(100.0f)] public float waveGrowthAbsolute     = 100.0f;
+    [DefaultValue(7.0f)]   public float waveGrowthLinear       = 7.0f;
+    [DefaultValue(2.8f)]   public float waveGrowthSquared      = 2.8f;
+    [DefaultValue(1.3f)]   public float waveGrowthExponential  = 1.3f;
 
     //time: min(wave*linear, maxwavetime)
     [DefaultValue(1.1f)]  public float waveTimeLinear = 1.1f;
@@ -106,6 +111,14 @@ public class LevelData
     private string[] getDeckNames() { return DeckManagerScript.instance.premadeDecks.getNames(); }
     [Popup("getDeckNames",CaseSensitive = true,Filter = true,HideUpdate = true,TextField = true)]
     public string premadeDeckName; 
+
+    //only shows the premadeDeckName if there is a name to show
+    [XmlIgnore]
+    public bool premadeDeckNameSpecified
+    {
+        get { return (premadeDeckName != null) && (premadeDeckName != ""); }
+        set { }
+    }
 
     [Show] private void SaveChanges() { Save(fileName); } //DEV: provides a button in the editor to save the level data
 

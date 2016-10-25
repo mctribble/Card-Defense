@@ -17,7 +17,7 @@
                 <xsd:complexType>
                   <xsd:attribute name="type" type="xsd:string" use="required" />
                   <xsd:attribute name="budget" type="xsd:int" use="required" />
-                  <xsd:attribute name="time" type="xsd:unsignedByte" use="required" />
+                  <xsd:attribute name="time" type="xsd:float" use="required" />
                   <xsd:attribute name="message" type="xsd:string" use="optional" />
                 </xsd:complexType>
               </xsd:element>

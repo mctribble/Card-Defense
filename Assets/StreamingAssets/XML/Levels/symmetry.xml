@@ -1,12 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" background="Black.png">
-  <randomWaveCount>20</randomWaveCount>
-  <waveGrowthAbsolute>200</waveGrowthAbsolute>
-  <waveGrowthLinear>100</waveGrowthLinear>
-  <waveGrowthSquared>5</waveGrowthSquared>
-  <waveGrowthExponential>1.8</waveGrowthExponential>
-  <waveTimeLinear>3</waveTimeLinear>
-  <Waves />
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
+  <randomWaveCount>14</randomWaveCount>
+  <Waves>
+    <Wave type="Standard" budget="116" time="1.1" />
+  </Waves>
   <Spawners>
     <Spawner spawnX="0" spawnY="0" />
     <Spawner spawnX="0" spawnY="1" />
@@ -67,5 +64,4 @@
       <Card name="Shield" count="3" />
     </Cards>
   </levelDeck>
-  <premadeDeckName />
 </Level>
