@@ -277,7 +277,7 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
     private int        siblingIndex;    //used to put card back where it belongs in the sibling list after it is brought to front for readability
 
     //returns, in world space, where floating combat text related to this card should spawn
-    public Vector2 combatTextPosition { get { Debug.Log(idleLocation); return Camera.main.ScreenToWorldPoint ( idleLocation + new Vector2( (Screen.width / 2), (Screen.height - (cardFront.rectTransform.rect.height / 4) ) ) ); } }
+    public Vector2 combatTextPosition { get { return Camera.main.ScreenToWorldPoint ( idleLocation + new Vector2( (Screen.width / 2), (Screen.height - (cardFront.rectTransform.rect.height / 4) ) ) ); } }
 
     //simple FSM
     private enum State
