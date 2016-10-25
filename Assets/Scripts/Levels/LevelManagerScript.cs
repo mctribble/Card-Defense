@@ -189,6 +189,7 @@ public class LevelManagerScript : BaseBehaviour
     public LevelData Data { get { return data; } set { data = value; } }
     public int SpawnCount { get { return totalSpawnCount; } }
     public int totalRemainingHealth { get { return waveTotalRemainingHealth; } set { waveTotalRemainingHealth = value; } }
+    public float currentWaveTime { get { return Mathf.Max( ((data.waves.Count - wavesInDeck) * data.waveTimeLinear), data.waveTimeMax); } } //returns the time that the current wave should take to spawn.  used for survivors.
 
     // Use this for initialization
     private void Awake()

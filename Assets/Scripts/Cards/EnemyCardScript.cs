@@ -171,7 +171,6 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
     public Image      cardBack;
 
     //object settings
-    public float survivorWaveTime; //time assigned to survivor waves
     public float motionSpeed;
     public float rotationSpeed;
     public float scaleSpeed;
@@ -261,7 +260,7 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
         }
 
         //setup the WaveData object
-        wave = new WaveData(survivorList, spawnCount, totalRemainingHealth, survivorWaveTime);
+        wave = new WaveData(survivorList, spawnCount, totalRemainingHealth, LevelManagerScript.instance.currentWaveTime);
     }
 
     //simple FSM
