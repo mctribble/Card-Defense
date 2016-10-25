@@ -350,6 +350,14 @@ public class EffectScaleEffectWithDamage : BaseEffectMeta
 
         if (innerEffect.triggersAs(EffectType.enemyDamaged)) base.expectedDamage(ref d); //pass to child if it is also an enemyDamaged effect
     }
+
+    //since we altered the inner effect, when it gets cloned we need to copy over the changes
+    public override IEffect cloneInnerEffect()
+    {
+        IEffect clone = base.cloneInnerEffect();
+        clone.strength = innerEffect.strength;
+        return clone;
+    }
 }
 
 //enemy effect scales down as it takes damage (range: base to 1)
@@ -385,6 +393,14 @@ public class EffectInvScaleEffectWithDamage : BaseEffectMeta
 
         if (innerEffect.triggersAs(EffectType.enemyDamaged)) base.expectedDamage(ref d); //pass to child if it is also an enemyDamaged effect
     }
+
+    //since we altered the inner effect, when it gets cloned we need to copy over the changes
+    public override IEffect cloneInnerEffect()
+    {
+        IEffect clone = base.cloneInnerEffect();
+        clone.strength = innerEffect.strength;
+        return clone;
+    }
 }
 
 //enemy effect Y gets stronger by X/second
@@ -406,6 +422,14 @@ public class EffectScaleEffectWithTime : BaseEffectMeta
         innerEffect.strength += (strength * deltaTime);
 
         if (innerEffect.triggersAs(EffectType.periodic)) base.UpdateEnemy(e, deltaTime); //pass to child if it is also a periodic effect
+    }
+
+    //since we altered the inner effect, when it gets cloned we need to copy over the changes
+    public override IEffect cloneInnerEffect()
+    {
+        IEffect clone = base.cloneInnerEffect();
+        clone.strength = innerEffect.strength;
+        return clone;
     }
 }
 
@@ -429,6 +453,14 @@ public class EffectInvScaleEffectWithTime : BaseEffectMeta
         innerEffect.strength = Mathf.Max(innerEffect.strength, 0.0f);
 
         if (innerEffect.triggersAs(EffectType.periodic)) base.UpdateEnemy(e, deltaTime); //pass to child if it is also a periodic effect
+    }
+
+    //since we altered the inner effect, when it gets cloned we need to copy over the changes
+    public override IEffect cloneInnerEffect()
+    {
+        IEffect clone = base.cloneInnerEffect();
+        clone.strength = innerEffect.strength;
+        return clone;
     }
 }
 

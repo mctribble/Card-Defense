@@ -254,7 +254,7 @@ public class LevelManagerScript : BaseBehaviour
             //dont spawn enemies that are more expensive than the entire wave budget
             while (waveEnemy.spawnCost > waveBudget)
             {
-                waveEnemy = EnemyTypeManagerScript.instance.getRandomEnemyType(waveBudget);
+                waveEnemy = EnemyTypeManagerScript.instance.getRandomEnemyType(waveBudget).clone();
             }
 
             //time: min(wave*linear, maxwavetime)
