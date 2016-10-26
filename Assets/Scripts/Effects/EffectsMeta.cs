@@ -478,9 +478,17 @@ public class EffectScaleEffectWithBudget : BaseEffectMeta
         return triggerType == EffectType.wave || base.triggersAs(triggerType);
     }
 
+    bool alreadyScaled = false;
+
     public override WaveData alteredWaveData(WaveData currentWaveData)
     {
+        if (alreadyScaled)
+        {
+            Debug.LogWarning("ScaleEffectWithBudget triggered repeatedly!");
+        }
+
         innerEffect.strength = Mathf.RoundToInt((((float)currentWaveData.budget) / ((float)currentWaveData.enemyData.spawnCost)) * innerEffect.strength);
+        alreadyScaled = true;
 
         if (innerEffect.triggersAs(EffectType.wave))
             return base.alteredWaveData(currentWaveData);

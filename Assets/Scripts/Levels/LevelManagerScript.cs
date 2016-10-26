@@ -263,13 +263,15 @@ public class LevelManagerScript : BaseBehaviour
 			                                  (Mathf.Pow( (wave * data.waveGrowthSquared), 2.0f)) +	//squared growth
 			                                  (Mathf.Pow( data.waveGrowthExponential, wave)));      //exponential growth (WARNING: this gets HUGE!)
 
+            if (waveBudget < 0)
+            {
+                waveBudget = 0;
+                Debug.LogWarning("negative wave budget!  reset to 0.");
+            }
+
             //enemy type: random (TODO: maybe make harder enemy types more common in later waves?  How would we define this?)
             EnemyData waveEnemy = EnemyTypeManagerScript.instance.getRandomEnemyType(waveBudget);
-            //dont spawn enemies that are more expensive than the entire wave budget
-            while (waveEnemy.spawnCost > waveBudget)
-            {
-                waveEnemy = EnemyTypeManagerScript.instance.getRandomEnemyType(waveBudget).clone();
-            }
+            waveEnemy = EnemyTypeManagerScript.instance.getRandomEnemyType(waveBudget).clone(); //tries to find an enemy type that the current budget can afford
 
             //time: min(wave*linear, maxwavetime)
             float waveTime = Mathf.Min(wave*data.waveTimeLinear, data.waveTimeMax);
