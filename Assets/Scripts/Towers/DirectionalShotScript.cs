@@ -167,8 +167,9 @@ public class DirectionalShotScript : MonoBehaviour
                     }
                 }
 
-                ded.dest.SendMessage("onDamage", ded);
-                
+                //deal the damage.  We dont mind if there is no receiver, since that just means the enemy is no longer a valid target for whatever reason
+                ded.dest.SendMessage("onDamage", ded, SendMessageOptions.DontRequireReceiver);
+
                 expectedToHit.Remove(ded);
                 alreadyHit.Add(ded.dest);
             }

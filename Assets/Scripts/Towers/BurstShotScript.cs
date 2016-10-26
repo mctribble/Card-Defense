@@ -115,11 +115,6 @@ public class BurstShotScript : BaseBehaviour
             for (int e = 0; e < toHitThisFrame.Count; e++)
             {
                 DamageEventData ded = toHitThisFrame[e];
-                expectedToHit.Remove(ded);
-
-                //skip attacks on enemies that are already dead
-                if (ded.dest == null)
-                    continue;
 
                 //trigger effects
                 if (ded.effects != null)
@@ -138,7 +133,10 @@ public class BurstShotScript : BaseBehaviour
                     }
                 }
 
-                ded.dest.SendMessage("onDamage", ded);
+                //deal the damage.  We dont mind if there is no receiver, since that just means the enemy is no longer a valid target for whatever reason
+                ded.dest.SendMessage("onDamage", ded, SendMessageOptions.DontRequireReceiver);
+
+                expectedToHit.Remove(ded);
                 alreadyHit.Add(ded.dest);
             }
 

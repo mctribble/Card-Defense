@@ -41,7 +41,7 @@
         </Effects>
       </effectData>
     </Enemy>
-    <Enemy name="Carrier" spawnCost="300" attack="4" maxHealth="500" unitSpeed="2" sprite="Enemy_Elite.png">
+    <Enemy name="Carrier" spawnCost="300" attack="4" maxHealth="300" unitSpeed="2" sprite="Enemy_Elite.png">
       <unitColor r="0.75" g="0.75" b="0.75" a="1" />
       <effectData>
         <Effects>

@@ -3,24 +3,19 @@
   <Decks>
     <Deck name="Spitfire">
       <Cards>
-        <Card name="Spitfire Upgrade" count="2" />
-        <Card name="Fast Upgrade" count="6" />
-        <Card name="Shield" count="3" />
-        <Card name="Basic Tower" count="5" />
-        <Card name="Reinforce" count="2" />
-        <Card name="Time Crunch" count="2" />
-        <Card name="AOE Tower" count="3" />
-        <Card name="Black Plague Tower" count="2" />
+        <Card name="Fast Upgrade" count="5" />
+        <Card name="Shield" count="2" />
+        <Card name="AOE Tower" count="4" />
         <Card name="Challenger Tower" count="2" />
-        <Card name="Explosive Tower" count="2" />
-        <Card name="Fast Tower" count="2" />
+        <Card name="Fast Tower" count="5" />
         <Card name="Nova Tower" count="2" />
-        <Card name="Pulse Upgrade" count="2" />
-        <Card name="Sniper Tower" count="2" />
         <Card name="Summon Swarm" count="5" />
         <Card name="Recycle" count="2" />
         <Card name="Enrage" count="2" />
-        <Card name="Range Upgrade" count="4" />
+        <Card name="Range Upgrade" count="5" />
+        <Card name="Risky Draw" count="3" />
+        <Card name="Basic Tower" count="5" />
+        <Card name="Shredder Tower" count="3" />
       </Cards>
     </Deck>
     <Deck name="OP Dev Deck">
