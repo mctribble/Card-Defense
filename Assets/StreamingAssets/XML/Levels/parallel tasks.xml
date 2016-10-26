@@ -26,5 +26,5 @@
     <Tower name="Basic Tower" x="4" y="0" />
   </Towers>
   <shuffleDeck>true</shuffleDeck>
-  <premadeDeckName>Variety</premadeDeckName>
+  <premadeDeckName>Spitfire</premadeDeckName>
 </Level>

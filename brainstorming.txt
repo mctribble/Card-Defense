@@ -7,9 +7,9 @@ sound
 ================================================================
 content goals:
 enemies: 07/15
-levels:  04/30
+levels:  05/30
 cards:   34/100
-decks:   02/10
+decks:   04/10
 ================================================================
 balance:
 find a way to record statistics to aid in balancing content?
