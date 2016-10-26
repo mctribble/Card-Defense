@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<PlayerDecks xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<PlayerDecks xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="Decks.xsd">
   <Decks>
     <Deck name="Prototype Deck">
       <Cards>
@@ -40,6 +40,7 @@
         <Card name="Plague Tower" count="1" />
         <Card name="Preservation Upgrade" count="1" />
         <Card name="Pulse Upgrade" count="1" />
+        <Card name="Range Upgrade" count="1" />
         <Card name="Recycle" count="1" />
         <Card name="Reinforce" count="1" />
         <Card name="Risky Draw" count="1" />

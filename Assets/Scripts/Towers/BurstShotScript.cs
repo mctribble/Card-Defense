@@ -115,6 +115,11 @@ public class BurstShotScript : BaseBehaviour
             for (int e = 0; e < toHitThisFrame.Count; e++)
             {
                 DamageEventData ded = toHitThisFrame[e];
+                expectedToHit.Remove(ded);
+
+                //skip attacks on enemies that are already dead
+                if (ded.dest == null)
+                    continue;
 
                 //trigger effects
                 if (ded.effects != null)
@@ -134,7 +139,6 @@ public class BurstShotScript : BaseBehaviour
                 }
 
                 ded.dest.SendMessage("onDamage", ded);
-                expectedToHit.Remove(ded);
                 alreadyHit.Add(ded.dest);
             }
 

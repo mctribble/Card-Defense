@@ -281,6 +281,7 @@ public class DeckManagerScript : BaseBehaviour
                 Debug.LogError("could not find the deck to reload it!");
 
             SetDeck(target);
+            Shuffle();
         }
     }
 

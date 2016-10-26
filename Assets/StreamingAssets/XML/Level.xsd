@@ -29,8 +29,8 @@
             <xsd:sequence>
               <xsd:element maxOccurs="unbounded" name="Spawner">
                 <xsd:complexType>
-                  <xsd:attribute name="spawnX" type="xsd:byte" use="required" />
-                  <xsd:attribute name="spawnY" type="xsd:byte" use="required" />
+                  <xsd:attribute name="spawnX" type="xsd:float" use="required" />
+                  <xsd:attribute name="spawnY" type="xsd:float" use="required" />
                 </xsd:complexType>
               </xsd:element>
             </xsd:sequence>
@@ -41,10 +41,10 @@
             <xsd:sequence>
               <xsd:element maxOccurs="unbounded" name="Segment">
                 <xsd:complexType>
-                  <xsd:attribute name="startX" type="xsd:byte" use="required" />
-                  <xsd:attribute name="startY" type="xsd:byte" use="required" />
-                  <xsd:attribute name="endX" type="xsd:byte" use="required" />
-                  <xsd:attribute name="endY" type="xsd:byte" use="required" />
+                  <xsd:attribute name="startX" type="xsd:float" use="required" />
+                  <xsd:attribute name="startY" type="xsd:float" use="required" />
+                  <xsd:attribute name="endX"   type="xsd:float" use="required" />
+                  <xsd:attribute name="endY"   type="xsd:float" use="required" />
                 </xsd:complexType>
               </xsd:element>
             </xsd:sequence>

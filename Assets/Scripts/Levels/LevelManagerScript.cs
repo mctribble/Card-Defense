@@ -151,6 +151,10 @@ public class LevelData
     }
 }
 
+
+/// <summary>
+/// workhorse class that is used to load a level.  Also does all the bookkeeping to keep it running, such as generating/tracking/spawning enemy waves
+/// </summary>
 public class LevelManagerScript : BaseBehaviour
 {
     //other objects can refer to these to be informed when a level is loaded (https://unity3d.com/learn/tutorials/topics/scripting/events)
@@ -187,7 +191,7 @@ public class LevelManagerScript : BaseBehaviour
     private int waveTotalRemainingHealth; //health remaining across all enemies in this wave
 
     //properties
-    public LevelData Data { get { return data; } set { data = value; } }
+    public LevelData Data { get { return data; } set { data = value; } } 
     public int SpawnCount { get { return totalSpawnCount; } }
     public int totalRemainingHealth { get { return waveTotalRemainingHealth; } set { waveTotalRemainingHealth = value; } }
     public float currentWaveTime { get { return Mathf.Max( ((data.waves.Count - wavesInDeck) * data.waveTimeLinear), data.waveTimeMax); } } //returns the time that the current wave should take to spawn.  used for survivors.
