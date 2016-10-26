@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
+  <randomWaveCount>15</randomWaveCount>
+  <Waves />
+  <Spawners>
+    <Spawner spawnX="-5" spawnY="1" />
+    <Spawner spawnX="-5" spawnY="1.5" />
+    <Spawner spawnX="-5" spawnY="2" />
+    <Spawner spawnX="5" spawnY="-1" />
+    <Spawner spawnX="5" spawnY="-1.5" />
+    <Spawner spawnX="5" spawnY="-2" />
+  </Spawners>
+  <PathSegments>
+    <Segment startX="-5" startY="1" endX="5" endY="1" />
+    <Segment startX="-5" startY="1.5" endX="5" endY="1.5" />
+    <Segment startX="-5" startY="2" endX="5" endY="2" />
+    <Segment startX="5" startY="-1" endX="-5" endY="-1" />
+    <Segment startX="5" startY="-1.5" endX="-5" endY="-1.5" />
+    <Segment startX="5" startY="-2" endX="-5" endY="-2" />
+  </PathSegments>
+  <Towers>
+    <Tower name="Basic Tower" x="-4" y="0" />
+    <Tower name="Basic Tower" x="-2" y="0" />
+    <Tower name="Basic Tower" x="0" y="0" />
+    <Tower name="Basic Tower" x="2" y="0" />
+    <Tower name="Basic Tower" x="4" y="0" />
+  </Towers>
+  <shuffleDeck>true</shuffleDeck>
+  <premadeDeckName>Variety</premadeDeckName>
+</Level>
