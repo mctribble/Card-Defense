@@ -191,6 +191,9 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="upgrade" Name="Range Upgrade" Description="Long arm of the law." Charges="3" Art="Range_Upgrade.png" Tooltip="Tower_Round.png">
+      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="1.0" DamageMod="0" WaveBonus="1" />
+    </Card>
     <Card Type="upgrade" Name="Self-Destruct Upgrade" Description="Tower becomes very powerful, but will only get one shot." Charges="3" Art="Self_Destruct_Upgrade.png" Tooltip="Tower_basic.png">
       <upgradeData RechargeMult="1" RangeMult="5" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="1000" WaveBonus="0" />
       <effectData>

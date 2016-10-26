@@ -216,16 +216,24 @@ public class HandScript : BaseBehaviour
         if (currentHandSize == 0)
             yield break;
 
-        //wait for the last card to be idle, since it will be the last one to finish moving around
+        //wait for all cards to be idle
         if (handOwner == HandFaction.player)
         {
-            CardScript waitCard = cards[currentHandSize - 1].GetComponent<CardScript>();
-            yield return StartCoroutine(waitCard.waitForIdle());
+            foreach (GameObject go in cards)
+            {
+                if (go == null) continue;
+                CardScript waitCard = go.GetComponent<CardScript>();
+                yield return StartCoroutine(waitCard.waitForIdle());
+            }
         }
         else
         {
-            EnemyCardScript waitCard = cards[currentHandSize - 1].GetComponent<EnemyCardScript>();
-            yield return StartCoroutine(waitCard.waitForIdle());
+            foreach (GameObject go in cards)
+            {
+                if (go == null) continue;
+                EnemyCardScript waitCard = go.GetComponent<EnemyCardScript>();
+                yield return StartCoroutine(waitCard.waitForIdle());
+            }
         }
 
         //flip the entire hand face up at once
@@ -404,7 +412,6 @@ public class HandScript : BaseBehaviour
 
             //spawn combat text to show the damage
             Vector3 pos = scriptRef.combatTextPosition;
-            Debug.Log(pos);
             MessageHandlerScript.instance.spawnPlayerDamageText(pos, toDeal);
 
             //track it

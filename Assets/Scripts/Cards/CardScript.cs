@@ -239,12 +239,10 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     //prefabs
     [VisibleWhen("shouldShowRefs")] public GameObject tooltipPrefab; //used to create a tooltip
-
     [VisibleWhen("shouldShowRefs")] public GameObject towerPrefab;   //prefab used to create a tower object
 
     //component references
     [VisibleWhen("shouldShowRefs")] public Image art;         //reference to card art image
-
     [VisibleWhen("shouldShowRefs")] public Text  title;       //reference to card name text
     [VisibleWhen("shouldShowRefs")] public Text  description; //reference to card description text
     [VisibleWhen("shouldShowRefs")] public Image cardFront;   //reference to card front image
@@ -252,7 +250,6 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     //public data
     [VisibleWhen("shouldShowRefs")] public float   mouseOverMod;    //amount the card should move up when moused over, expressed as a multiplier to card height
-
     [VisibleWhen("shouldShowRefs")] public float   motionSpeed;     //speed in pixels/second this card can move
     [VisibleWhen("shouldShowRefs")] public float   rotationSpeed;   //speed in degrees/second this card can rotate
     [VisibleWhen("shouldShowRefs")] public float   scaleSpeed;      //speed in points/second this card can scale
@@ -261,7 +258,6 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     //discard data
     [VisibleWhen("shouldShowRefs")] public Vector3 discardPauseLocation;   //location to pause mid-discard so the player can see what is going away (local space)
-
     [VisibleWhen("shouldShowRefs")] public float   discardPauseTime;       //how long to pause there
     [Hide]                          public Image   deckImage;              //if being returned to the deck, we flip face down and aim to line up with this image
     [VisibleWhen("shouldShowRefs")] public Vector3 discardDestroyLocation; //where to go before destroying ourself (local space)
@@ -269,7 +265,6 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     //private data
     private GameObject hand;            //reference to the hand object managing this card
-
     private Vector2    idleLocation;    //location this card sits when it is resting
     private Vector2    targetLocation;  //location this card will move towards if it is not already there
     private GameObject tooltipInstance; //instance of the tooltip object, if present
@@ -288,7 +283,7 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         discarding
     }
 
-    private State state;
+    [Show] private State state;
 
     // Use this for initialization
     private void Awake()
@@ -335,19 +330,30 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
     }
 
     //helper coroutine that simply waits until this card is idle (initial delay of one frame in case the card starts moving in the same frame as this is called)
-    public IEnumerator waitForIdle() { yield return null; while (state != State.idle) yield return null; }
+    public IEnumerator waitForIdle()
+    {
+        yield return null;
+        while (state != State.idle)
+            yield return null;
+    }
 
     //card flip helpers
-    public void flipOver() { StartCoroutine(flipCoroutine()); } //returns immediately
-
-    public void flipFaceUp()
+    public void flipOver()
     {
-        if (faceDown) flipOver();
-    } //calls flipOver only if the card is currently face down
+        StartCoroutine(flipCoroutine());
+    } 
+
+    //calls flipOver only if the card is currently face down
+    public void flipFaceUp() 
+    {
+        if (faceDown)
+            flipOver();
+    } 
 
     public IEnumerator flipWhenIdle()
     {
-        yield return waitForIdle(); yield return flipCoroutine();
+        yield return waitForIdle();
+        yield return StartCoroutine(flipCoroutine());
     }
 
     //main card flip coroutine
@@ -364,9 +370,9 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
     //turns the card to the given quaternion at rotationSpeed degrees/second
     public IEnumerator turnToQuaternion(Quaternion target)
     {
-        while (transform.rotation != target)
+        while (transform.localRotation != target)
         {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, target, rotationSpeed * Time.deltaTime);
+            transform.localRotation = Quaternion.RotateTowards(transform.localRotation, target, rotationSpeed * Time.deltaTime);
             yield return null;
         }
     }
@@ -619,6 +625,8 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
             //flip over
             if (faceDown == false)
                 yield return StartCoroutine(flipCoroutine());
+
+            yield return null; //wait a frame to make sure the flip routine is done and we dont get stuck turning in two directions at once.
 
             //scale and turn to align with the deck.
             StartCoroutine(scaleToVector(deckImage.transform.localScale));
