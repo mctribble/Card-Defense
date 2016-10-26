@@ -15,6 +15,7 @@ Heavy_Tower
 Heavy_Upgrade
 Life Tap
 Nova_Tower
+Range_Upgrade
 Recycle
 Orthogonal_Tower
 Overcharge_Tower
