@@ -363,7 +363,20 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
     }
 
     //helper coroutine that simply waits until this card is idle (initial delay of one frame in case the card starts moving in the same frame as this is called)
-    public IEnumerator waitForIdle() { yield return null; while (state != State.idle) yield return null; }
+    public IEnumerator waitForIdle()
+    {
+        yield return null;
+        while (state != State.idle)
+            yield return null;
+    }
+
+    //helper coroutine that simply waits until this card is idle or being discarded (initial delay of one frame in case the card starts moving in the same frame as this is called)
+    public IEnumerator waitForIdleOrDiscarding()
+    {
+        yield return null;
+        while ((state != State.idle) && (state != State.discarding))
+            yield return null;
+    }
 
     //turns the card to the given quaternion at rotationSpeed degrees/second
     public IEnumerator turnToQuaternion(Quaternion target)

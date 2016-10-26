@@ -223,7 +223,7 @@ public class HandScript : BaseBehaviour
             {
                 if (go == null) continue;
                 CardScript waitCard = go.GetComponent<CardScript>();
-                yield return StartCoroutine(waitCard.waitForIdle());
+                yield return StartCoroutine(waitCard.waitForIdleOrDiscarding());
             }
         }
         else
@@ -232,7 +232,7 @@ public class HandScript : BaseBehaviour
             {
                 if (go == null) continue;
                 EnemyCardScript waitCard = go.GetComponent<EnemyCardScript>();
-                yield return StartCoroutine(waitCard.waitForIdle());
+                yield return StartCoroutine(waitCard.waitForIdleOrDiscarding());
             }
         }
 

@@ -337,6 +337,14 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
             yield return null;
     }
 
+    //helper coroutine that simply waits until this card is idle or being discarded (initial delay of one frame in case the card starts moving in the same frame as this is called)
+    public IEnumerator waitForIdleOrDiscarding()
+    {
+        yield return null;
+        while ((state != State.idle) && (state != State.discarding))
+            yield return null;
+    }
+
     //card flip helpers
     public void flipOver()
     {
@@ -368,13 +376,21 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
     }
 
     //turns the card to the given quaternion at rotationSpeed degrees/second
+    private bool isTurning; //flag used to prevent simultaneous rotations
     public IEnumerator turnToQuaternion(Quaternion target)
     {
+        while (isTurning)
+            yield return null;
+
+        isTurning = true;
+
         while (transform.localRotation != target)
         {
             transform.localRotation = Quaternion.RotateTowards(transform.localRotation, target, rotationSpeed * Time.deltaTime);
             yield return null;
         }
+
+        isTurning = false;
     }
 
     //scales the card to the given size over time
