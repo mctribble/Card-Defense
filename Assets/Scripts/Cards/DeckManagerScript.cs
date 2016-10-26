@@ -108,6 +108,11 @@ public class XMLDeck
 [System.Serializable]
 public class DeckCollection
 {
+    //used to specify the proper .xsd file in the serialized xml
+    [Hide]
+    [XmlAttribute("noNamespaceSchemaLocation", Namespace = System.Xml.Schema.XmlSchema.InstanceNamespace)]
+    public string schema = "../XML/Decks.xsd";
+
     //list of decks
     [XmlArray("Decks")]
     [XmlArrayItem("Deck")]
