@@ -255,7 +255,7 @@ public class DeckManagerScript : BaseBehaviour
         //clear out the current deck
         currentDeck.Clear();
 
-        if (currentDeckName == "Level Deck")
+        if (LevelManagerScript.instance.data.usingLevelDeck)
         {
             //if we were using the level deck, reload that
             LevelManagerScript.instance.loadLevelDeck(); //this delegates to level manager so that it can retain control over the level data

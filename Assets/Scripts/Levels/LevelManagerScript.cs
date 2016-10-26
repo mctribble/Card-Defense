@@ -102,15 +102,16 @@ public class LevelData
 
     //levelDeck is the deck set for use on this level.
     //It could be defined directly in the level file, or the level could just provide the name of a premade deck in Decks.xml instead.
-    public XMLDeck levelDeck;
+    [XmlIgnore] public bool usingLevelDeck; //set by other objects so theyc an track whether this deck is actually in use
+    [VisibleWhen("usingLevelDeck")] public XMLDeck levelDeck; //the deck itself, only shown if it is in use
 
     //only save the levelDeck to XML if we aren't using a premade deck
     [XmlIgnore] public bool levelDeckSpecified { get { return premadeDeckName == ""; } set { } }
 
-    //provides a popup menu in the inspector
+    //provides a popup menu in the inspector to pick a premade deck
     private string[] getDeckNames() { return DeckManagerScript.instance.premadeDecks.getNames(); }
     [Popup("getDeckNames",CaseSensitive = true,Filter = true,HideUpdate = true,TextField = true)]
-    public string premadeDeckName; 
+    [VisibleWhen("usingLevelDeck")] public string premadeDeckName; 
 
     //only shows the premadeDeckName if there is a name to show
     [XmlIgnore]
@@ -337,6 +338,7 @@ public class LevelManagerScript : BaseBehaviour
     //this is public so that deck manager can call it to reload the level deck without needing to worry about the logistics of how that is done.
     public void loadLevelDeck()
     {
+        data.usingLevelDeck = true;
         XMLDeck levelDeck;
         if ((data.levelDeck != null) && (data.levelDeck.cardCount > 0))
         {
@@ -594,6 +596,8 @@ public class LevelManagerScript : BaseBehaviour
     {
         yield return null;
 
+        bool usingLevelDeck = data.usingLevelDeck; //backup this flag since the reload will force it to false
+
         //delete objects from the level we already have open
         levelLoaded = false;
         foreach (GameObject e in GameObject.FindGameObjectsWithTag("Enemy")) Destroy(e);
@@ -622,5 +626,7 @@ public class LevelManagerScript : BaseBehaviour
         //reload the level
         Awake();
         yield return StartCoroutine(loadLevel(data.fileName));
+
+        data.usingLevelDeck = usingLevelDeck; //restore the level deck flag to its original value
     }
 }
