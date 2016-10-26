@@ -364,11 +364,18 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         yield return StartCoroutine(flipCoroutine());
     }
 
+    public IEnumerator flipFaceUpWhenIdle()
+    {
+        yield return waitForIdle();
+        if (faceDown)
+            StartCoroutine(flipCoroutine());
+    }
+
     //main card flip coroutine
     public IEnumerator flipCoroutine()
     {
-        Quaternion flipQuaternion = Quaternion.AngleAxis(90, Vector3.up); //rotation to move towards to flip the card at
         faceDown = !faceDown; //flag the flip as complete before it technically even starts to make sure it isn't erroneously triggered again
+        Quaternion flipQuaternion = Quaternion.AngleAxis(90, Vector3.up); //rotation to move towards to flip the card at
         yield return StartCoroutine(turnToQuaternion(flipQuaternion)); //turn to the flip position the player doest see the back blink in or out of existence
         cardBack.enabled = faceDown; //flip the card
         yield return StartCoroutine(turnToQuaternion(Quaternion.identity)); //turn back to the baseline

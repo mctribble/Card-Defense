@@ -29,7 +29,7 @@
         <Card name="Dev Chain Purge Tower" count="20" />
       </Cards>
     </Deck>
-    <Deck name="Deck A">
+    <Deck name="Challenger">
       <Cards>
         <Card name="Heavy Tower" count="3" />
         <Card name="Fast Tower" count="3" />

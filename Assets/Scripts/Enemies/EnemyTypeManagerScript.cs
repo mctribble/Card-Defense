@@ -157,7 +157,7 @@ public class EnemyTypeManagerScript : BaseBehaviour
     //returns a random enemy type from the database, trying to provide one that does not have a spawnCost higher than maxSpawnCost
     public EnemyData getRandomEnemyType(int maxSpawnCost)
     {
-        int maxAttempts = types.enemyTypes.Count * 3; //maximum number of times to select another random enemy type looking for one that is not above the max
+        int maxAttempts = types.enemyTypes.Count * 5; //maximum number of times to select another random enemy type looking for one that is not above the max
         int chosenIndex = -1; //index of chosen enemy
 
         //repeatedly attempt to find an enemy that is within the budget

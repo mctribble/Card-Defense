@@ -114,7 +114,7 @@ public class WaveData
                 if (result < 1)
                 {
                     result = 1; //always spawn at least one enemy
-                    Debug.LogWarning("Wave spawn count was zero.  forced to spawn 1 monster.");
+                    Debug.LogWarning("Wave spawn count was zero.  forced to spawn 1 monster. (" + data.name + ")");
                 }
 
                 cachedSpawnCount = result;
@@ -441,6 +441,7 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
     public void flipOver() { StartCoroutine(flipCoroutine()); } //returns immediately
     public void flipFaceUp() { if (faceDown) flipOver(); } //calls flipOver only if the card is currently face down
     public IEnumerator flipWhenIdle() { yield return waitForIdle(); yield return flipCoroutine(); }
+    public IEnumerator flipFaceUpWhenIdle() { yield return waitForIdle(); if (faceDown) StartCoroutine(flipCoroutine()); }
 
     //main card flip coroutine
     public IEnumerator flipCoroutine()

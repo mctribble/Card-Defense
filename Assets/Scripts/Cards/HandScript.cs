@@ -169,7 +169,7 @@ public class HandScript : BaseBehaviour
 
         //if set, tell it to flip face up after its done moving
         if (flipOver)
-            cards[currentHandSize].SendMessage("flipWhenIdle");
+            cards[currentHandSize].SendMessage("flipFaceUpWhenIdle");
 
         //if the hand is currently hidden, tell the new card to hide itself
         if (handHidden)
