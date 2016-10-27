@@ -466,6 +466,10 @@ public class TowerScript : BaseBehaviour
                 maxCharge += effects.propertyEffects.maxOvercharge.Value;
     }
 
+    //helper functions to allow calling Upgrade through sendMessage (Unity message handling doesn't understand default parameters)
+    private void Upgrade(UpgradeData d) { Upgrade(d, false); } 
+    private void UpgradeIgnoreCap(UpgradeData d) { Upgrade(d, true); }
+
     /// <summary>
     /// receives upgrade data and uses it to modify the tower.  If ignoreCap is true, then it can exceed the upgrade cap to do so
     /// </summary>
@@ -499,10 +503,6 @@ public class TowerScript : BaseBehaviour
         UpdateTooltipText();
         updateLifespanText();
     }
-
-    //helper functions to allow callung Upgrade through sendMessage (Unity message handling doesn't understand default parameters)
-    private void Upgrade(UpgradeData d) { Upgrade(d, false); } 
-    private void UpgradeIgnoreCap(UpgradeData d) { Upgrade(d, true); }
 
     /// <summary>
     /// updates the tooltip text to show what the given upgrade would change

@@ -217,6 +217,7 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
     {
         wave = w;
         description.text = w.enemyData.getDescription();
+
         foreach (Image i in art.GetComponentsInChildren<Image>())
             i.color = w.enemyData.unitColor.toColor();
         enemyType = w.enemyData.name;

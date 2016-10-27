@@ -15,7 +15,23 @@ public abstract class BaseEffectSelf : BaseEffect, IEffectSelf
 //adds x charges to the card
 public class EffectAddCharges : BaseEffectSelf
 {
-    [Hide] public override string Name { get { return "Card gains " + strength + " charges when cast."; } } //returns name and strength
+    [Hide] public override string Name
+    {
+        get
+        {
+            if (strength < 0)
+                return "Costs " + (strength - 1) * -1 + " charges to cast";
+
+            if (strength == 0)
+                return null;
+
+            if (strength == 1.0f)
+                return "Does not cost a charge to cast";
+
+            return "Card gains " + (strength - 1) + " charges when cast.";
+        }
+    } 
+
     [Show] public override string XMLName { get { return "addCharges"; } } //name used to refer to this effect in XML
 
     public override void trigger(ref Card card, GameObject card_gameObject)

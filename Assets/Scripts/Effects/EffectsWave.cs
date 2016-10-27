@@ -59,7 +59,7 @@ public class EffectChangeWaveType : BaseEffectWave
         }
     }
 
-    [Hide] public override string Name { get { return "change monster type of incoming waves to " + argument + "."; } }   //returns name and strength
+    [Hide] public override string Name { get { return "change type of incoming waves to " + argument + "."; } }   //returns name and strength
     [Show] public override string XMLName { get { return "changeWaveType"; } } //name used to refer to this effect in XML
 
     public override WaveData alteredWaveData(WaveData currentWaveData)
@@ -76,9 +76,9 @@ public class EffectTimePercentageChange : BaseEffectWave
         get
         {
             if (strength >= 0)
-                return "wave spawns " + strength + " percent slower.";
+                return "wave spawns " + strength + "% slower.";
             else
-                return "wave spawns " + -strength + " percent faster.";
+                return "wave spawns " + -strength + "% faster.";
         }
     }
 
@@ -99,9 +99,9 @@ public class EffectFixedSpawnCount : BaseEffectWave
         get
         {
             if (strength == 1)
-                return "Wave always spawns exactly 1 enemy";
+                return "Unique";
             else
-                return "Wave always spawns exactly " + strength + " enemies";
+                return "Spawns in groups of " + strength;
         }
     }
 
@@ -118,7 +118,7 @@ public class EffectFixedSpawnCount : BaseEffectWave
 //enemy Attack increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
 public class EffectScaleAttackWithBudget : BaseEffectWave
 {
-    [Hide] public override string Name { get { return "enemy attack increases on tougher waves"; } } //returns name and strength
+    [Hide] public override string Name { get { return "attack increases on tougher waves"; } } //returns name and strength
     [Show] public override string XMLName { get { return "scaleAttackWithBudget"; } } //name used to refer to this effect in XML
 
     public override WaveData alteredWaveData(WaveData currentWaveData)
@@ -132,7 +132,7 @@ public class EffectScaleAttackWithBudget : BaseEffectWave
 //enemy health increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
 public class EffectScaleHealthWithBudget : BaseEffectWave
 {
-    [Hide] public override string Name { get { return "enemy health increases on tougher waves"; } } 
+    [Hide] public override string Name { get { return "health increases on tougher waves"; } } 
     [Show] public override string XMLName { get { return "scaleHealthWithBudget"; } } //name used to refer to this effect in XML
 
     public override WaveData alteredWaveData(WaveData currentWaveData)
@@ -146,7 +146,7 @@ public class EffectScaleHealthWithBudget : BaseEffectWave
 //enemy health increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
 public class EffectScaleSpeedWithBudget : BaseEffectWave
 {
-    [Hide] public override string Name { get { return "enemy speed increases on tougher waves"; } }
+    [Hide] public override string Name { get { return "speed increases on tougher waves"; } }
     [Show] public override string XMLName { get { return "scaleSpeedWithBudget"; } } //name used to refer to this effect in XML
 
     public override WaveData alteredWaveData(WaveData currentWaveData)

@@ -16,7 +16,7 @@ abstract class BaseEffectDeath : BaseEffect, IEffectDeath
 //spawns X enemies of type Y.  On enemies, it spawns where the enemy died.  On towers, this is unsupported
 class EffectSpawnEnemyOnDeath : BaseEffectDeath
 {
-    [Hide] public override string Name     { get { return "On Death: Spawn " + strength + " " + argument; } } //returns name and strength
+    [Hide] public override string Name     { get { return "[On Death] Spawn " + strength + " " + argument; } } //returns name and strength
     [Show] public override string XMLName  { get { return "spawnEnemyOnDeath"; } } //name used to refer to this effect in XML
 
     public override void onEnemyDeath(EnemyScript e)

@@ -70,7 +70,7 @@ public class EffectReduceEnemyEffectOnDamage : BaseEffectEnemyDamaged
 //enemy slows down as it takes damage (range: base -> 1)
 public class EffectInvScaleSpeedWithDamage : BaseEffectEnemyDamaged
 {
-    [Hide] public override string Name { get { return "Enemy slows down as it takes damage"; } } //returns name and strength
+    [Hide] public override string Name { get { return "slows down as it takes damage"; } } //returns name and strength
     [Show] public override string XMLName { get { return "invScaleSpeedWithDamage"; } } //name used to refer to this effect in XML
 
     //we dont need to do anything on expected damage
@@ -88,7 +88,7 @@ public class EffectInvScaleSpeedWithDamage : BaseEffectEnemyDamaged
 //enemy speeds up as it takes damage (range: base -> base*strength)
 public class EffectScaleSpeedWithDamage : BaseEffectEnemyDamaged
 {
-    [Hide] public override string Name { get { return "Enemy gets up to " + argument + " times faster as it takes damage"; } } //returns name and strength
+    [Hide] public override string Name { get { return "gets up to " + argument + " times faster as it takes damage"; } } //returns name and strength
     [Show] public override string XMLName { get { return "scaleSpeedWithDamage"; } } //name used to refer to this effect in XML
 
     //we dont need to do anything on expected damage
@@ -206,7 +206,7 @@ public class EffectChainHit : BaseEffectEnemyDamaged
 //damages the enemy by X% of their maximum health
 public class EffectDamagePercent : BaseEffectEnemyDamaged
 {
-    [Hide] public override string Name { get { return "enemy loses " + strength + "% of health" ; } } //returns name and strength
+    [Hide] public override string Name { get { return "enemy loses " + strength + "% of their max health" ; } } //returns name and strength
     [Show] public override string XMLName { get { return "damagePercent"; } } //name used to refer to this effect in XML
 
     public override void expectedDamage(ref DamageEventData d)
@@ -238,7 +238,7 @@ public class EffectSecondaryBurst : BaseEffectEnemyDamaged
         }
     }
 
-    public override string Name { get { return "[secondary attack]" + strength + "damage to enemies within " + explosionRadius; } }
+    public override string Name { get { return "[on attack] tower deals " + strength + " damage to enemies within " + explosionRadius; } }
     public override string XMLName { get { return "secondaryBurst"; } }
 
     public override void expectedDamage(ref DamageEventData d)

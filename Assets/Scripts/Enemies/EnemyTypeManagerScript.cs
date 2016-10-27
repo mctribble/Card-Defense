@@ -171,22 +171,18 @@ public class EnemyTypeManagerScript : BaseBehaviour
     /// </summary>
     public EnemyData getRandomEnemyType(int maxSpawnCost)
     {
-        int maxAttempts = types.enemyTypes.Count * 5; //maximum number of times to select another random enemy type looking for one that is not above the max
-        int chosenIndex = -1; //index of chosen enemy
+        //choose only enemies we can afford
+        List<EnemyData> typesToChooseFrom = types.enemyTypes.FindAll(ed => ed.spawnCost < maxSpawnCost);
 
-        //repeatedly attempt to find an enemy that is within the budget
-        for (int i = 0; (chosenIndex == -1) && (i < maxAttempts); i++)
-        {
-            int candidateIndex = Mathf.RoundToInt(Random.Range(0.0f, types.enemyTypes.Count-1));
-            if (types.enemyTypes[candidateIndex].spawnCost <= maxSpawnCost)
-                chosenIndex = candidateIndex;
-        }
+        //if that list is empty, then search all of them so we can at least return something meaningful
+        if (typesToChooseFrom.Count == 0)
+            typesToChooseFrom = types.enemyTypes;
 
-        //we could not find an enemy we could afford, so just pick one at random
-        chosenIndex = Mathf.RoundToInt(Random.Range(0.0f, types.enemyTypes.Count-1));
+        //pick a random item on the list
+        int index = Mathf.RoundToInt(Random.Range(0.0f, typesToChooseFrom.Count-1));
 
-        //return enemy at that index
-        return types.enemyTypes[chosenIndex];
+        //return that enemy type
+        return typesToChooseFrom[index];
     }
 
     //returns the enemy type with the given name

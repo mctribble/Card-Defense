@@ -16,7 +16,7 @@ abstract class BaseEffectOvercharge : BaseEffect, IEffectOvercharge
 //tower deals (1+X) times as much damage when overcharged
 class EffectOverchargeDamage : BaseEffectOvercharge
 {
-    [Hide] public override string Name { get { return "deals an extra " + (strength * 100) + "% more damage per point of overcharge"; } } //returns name and strength
+    [Hide] public override string Name { get { return "deals " + (strength * 100) + "% more damage per point of overcharge"; } } //returns name and strength
     [Show] public override string XMLName { get { return "overchargeDamage"; } } //name used to refer to this effect in XML.
 
     public override void trigger(ref DamageEventData d, int pointsOfOvercharge)

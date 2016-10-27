@@ -9,6 +9,17 @@
         </Effects>
       </effectData>
     </Enemy>
+    <Enemy name="Carrier" spawnCost="300" attack="4" maxHealth="300" unitSpeed="2" sprite="Enemy_Elite.png">
+      <unitColor r="0.75" g="0.75" b="0.75" a="1" />
+      <effectData>
+        <Effects>
+          <Effect name="fixedSpawnCount" strength="1" />
+          <Effect name="scaleEffectWithBudget">
+            <Effect name="spawnEnemyOnDeath" strength="5" argument="Swarm" />
+          </Effect>
+        </Effects>
+      </effectData>
+    </Enemy>
     <Enemy name="Standard" spawnCost="20" attack="2" maxHealth="50" unitSpeed="2" sprite="Enemy_Basic.png">
       <unitColor r="0" g="1" b="0" a="1" />
     </Enemy>
@@ -38,17 +49,6 @@
       <effectData>
         <Effects>
           <Effect name="regeneration" strength="40" />
-        </Effects>
-      </effectData>
-    </Enemy>
-    <Enemy name="Carrier" spawnCost="300" attack="4" maxHealth="300" unitSpeed="2" sprite="Enemy_Elite.png">
-      <unitColor r="0.75" g="0.75" b="0.75" a="1" />
-      <effectData>
-        <Effects>
-          <Effect name="fixedSpawnCount" strength="1" />
-          <Effect name="scaleEffectWithBudget">
-            <Effect name="spawnEnemyOnDeath" strength="5" argument="Swarm" />
-          </Effect>
         </Effects>
       </effectData>
     </Enemy>

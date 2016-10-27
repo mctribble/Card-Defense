@@ -76,10 +76,12 @@ public class EnemyData
     /// </summary>
     public string getDescription()
     {
+        //enemy stats
         string description = "Health: " + maxHealth + '\n' +
                              "Attack: " + attack    + '\n' +
                              "Speed: "  + unitSpeed;
 
+        //effects
         if ((effectData != null) && (effectData.effects.Count > 0))
             foreach (IEffect e in effectData.effects)
                 if (e.Name != null)

@@ -46,7 +46,7 @@ public enum EffectType
     enemyReachedGoal = unchecked((int)0x111111FF), 
     instant          = unchecked((int)0x00FFFFFF), 
     overcharge       = unchecked((int)0xFF00FFFF), 
-    periodic         = unchecked((int)0x333333FF), 
+    periodic         = unchecked((int)0xCCCCCCFF), 
     self             = unchecked((int)0x0000A0FF), 
     towerTargeting   = unchecked((int)0xADD8E6FF), 
     wave             = unchecked((int)0x0000FFFF), 

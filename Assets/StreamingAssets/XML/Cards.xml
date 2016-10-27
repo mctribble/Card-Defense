@@ -128,7 +128,7 @@
       </effectData>
     </Card>
     <Card Type="tower" Name="Sniper Tower" Description="Specializes in slaying Giants" Charges="3" Art="Sniper_Tower.png" Tooltip="Tower_Octagon.png">
-      <towerData Recharge="10" Range="999" Damage="300" Lifespan="5" UpgradeCap="0" Sprite="Tower_Octagon.png" >
+      <towerData Recharge="10" Range="999" Damage="300" Lifespan="5" UpgradeCap="1" Sprite="Tower_Octagon.png" >
         <towerColor r="0" g="0" b="1" a="1"/>
       </towerData>
       <effectData>
@@ -155,7 +155,7 @@
     <Card Type="upgrade" Name="Basic Upgrade" Description="Boring but good" Charges="5" Art="Basic_Upgrade.png" Tooltip="Tower_Basic.png">
       <upgradeData RechargeMult="0.9" RangeMult="1" DamageMult="1.4" RechargeMod="0" RangeMod="0.5" DamageMod="0" WaveBonus="1" />
     </Card>
-    <Card Type="upgrade" Name="Chain Hit" Description="Powerful, but easily squandered" Charges="3" Art="Chain_Hit.png" Tooltip="Tower_Basic.png">
+    <Card Type="upgrade" Name="Chain Hit" Description="Powerful, but easily squandered" Charges="5" Art="Chain_Hit.png" Tooltip="Tower_Basic.png">
       <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="1" />
       <effectData>
         <Effects>

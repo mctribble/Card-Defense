@@ -107,16 +107,7 @@ public class EffectDoNothing : BaseEffectInstant
 public class EffectPercentageChance : BaseEffectMeta
 {
     public override string XMLName { get { return "percentageChance"; } }
-    public override string Name
-    {
-        get
-        {
-            if (innerEffect == null)
-                return strength + "[% chance]do nothing";
-            else
-                return strength + "[% chance]" + innerEffect.Name;
-        }
-    }
+    public override string Name { get { return "[ " + strength + "% chance]" + innerEffect.Name; } }
 
     private bool? cachedApplyInner;
     public override bool shouldApplyInnerEffect()
@@ -229,7 +220,7 @@ public class EffectEffectCharges : BaseEffectMeta
         set { base.strength = Mathf.RoundToInt(value); }
     }
 
-    public override string Name { get { return "[x" + strength + "]" + innerEffect.Name; } }
+    public override string Name { get { return "[" + strength + " times]" + innerEffect.Name; } }
     public override string XMLName { get { return "effectCharges"; } }
 
     public override bool shouldApplyInnerEffect()
@@ -322,7 +313,7 @@ public class EffectEveryRound : BaseEffectMeta
 //enemy effect scales up as it takes damage (range: base to base*strength)
 public class EffectScaleEffectWithDamage : BaseEffectMeta
 {
-    public override string Name { get { return "Enemy " + argument + " increases up to " + strength + " times as it takes damage"; } } //returns name and strength
+    public override string Name { get { return "[scales up as it takes damage]" + innerEffect.Name; } } //returns name and strength
     public override string XMLName { get { return "scaleEffectWithDamage"; } } //name used to refer to this effect in XML
 
     private float? effectBaseStrength; //original strength of the inner effect
@@ -365,7 +356,7 @@ public class EffectScaleEffectWithDamage : BaseEffectMeta
 //enemy effect scales down as it takes damage (range: base to 1)
 public class EffectInvScaleEffectWithDamage : BaseEffectMeta
 {
-    public override string Name { get { return "Enemy " + argument + " drops to 1 as it takes damage"; } } //returns name and strength
+    public override string Name { get { return "[scales down as it takes damage]" + innerEffect.Name; } } //returns name and strength
     public override string XMLName { get { return "invScaleEffectWithDamage"; } } //name used to refer to this effect in XML
 
     private float? effectBaseStrength; //original strength of the inner effect
@@ -405,10 +396,10 @@ public class EffectInvScaleEffectWithDamage : BaseEffectMeta
     }
 }
 
-//enemy effect Y gets stronger by X/second
+//enemy effect gets stronger by X/second
 public class EffectScaleEffectWithTime : BaseEffectMeta
 {
-    public override string Name { get { return argument + " increases by " + strength + "/s"; } } //returns name and strength
+    public override string Name { get { return "[increases by " + strength + "/s]"; } } //returns name and strength
     public override string XMLName { get { return "scaleEffectWithTime"; } } //name used to refer to this effect in XML
 
     public override bool shouldApplyInnerEffect() { return true; } //always trigger inner effect
@@ -435,10 +426,10 @@ public class EffectScaleEffectWithTime : BaseEffectMeta
     }
 }
 
-//enemy effect Y gets weaker by X/second (min 0)
+//enemy effecY gets weaker by X/second (min 0)
 public class EffectInvScaleEffectWithTime : BaseEffectMeta
 {
-    public override string Name { get { return argument + " decreases by " + strength + "/s"; } } //returns name and strength
+    public override string Name { get { return "[decreases by " + strength + "/s]"; } } //returns name and strength
     public override string XMLName { get { return "InvScaleEffectWithTime"; } } //name used to refer to this effect in XML
 
     public override bool shouldApplyInnerEffect() { return true; } //always trigger inner effect
