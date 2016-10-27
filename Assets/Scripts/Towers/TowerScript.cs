@@ -4,43 +4,48 @@ using UnityEngine;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
-//tower class itself
+/// <summary>
+/// represents a tower that has been built into the world.
+/// </summary>
 public class TowerScript : BaseBehaviour
 {
-    //functions used to determine what should be shown when
+    //functions used to determine what should be shown when in the inspector
     private bool isEditor() { return Application.isPlaying == false; }
-    private bool hasData() { return (towerName != null) && (towerName != ""); }
+    private bool hasData()  { return ((towerName != null) && (towerName != "")); }
 
-    [VisibleWhen("isEditor")] public GameObject bulletPrefab;          //prefab to instantiate as a bullet
-    [VisibleWhen("isEditor")] public GameObject burstShotPrefab;       //prefab to instantiate a burst shot
-    [VisibleWhen("isEditor")] public GameObject directionalShotPrefab; //prefab to instantiate a directional shot
+    //object prefabs
+    [VisibleWhen("isEditor")] public GameObject bulletPrefab;          
+    [VisibleWhen("isEditor")] public GameObject burstShotPrefab;       
+    [VisibleWhen("isEditor")] public GameObject directionalShotPrefab;   
 
-    [VisibleWhen("isEditor")] public Color textColorLifespan; //color of the tower text when the tower has a limited lifespan
-    [VisibleWhen("isEditor")] public Color textColorAmmo;     //color of the tower text when the tower has limited ammo
-    [VisibleWhen("isEditor")] public Color textColorBoth;     //color of the tower text when the tower has both a limited lifespan and limited ammo
-    [VisibleWhen("isEditor")] public Color textColorNeither;  //color of the tower text when the tower has neither a limited lifespan nor limited ammo
+    //text colors to switch between based on how the tower decays
+    [VisibleWhen("isEditor")] public Color textColorLifespan;
+    [VisibleWhen("isEditor")] public Color textColorAmmo;    
+    [VisibleWhen("isEditor")] public Color textColorBoth;    
+    [VisibleWhen("isEditor")] public Color textColorNeither; 
 
     [VisibleWhen("hasData")] public string      towerName;      //name of the tower
     [VisibleWhen("hasData")] public ushort      upgradeCount;   //number of times this tower has been upgraded
     [VisibleWhen("hasData")] public ushort      upgradeCap;     //max number of times this tower can be upgraded
     [VisibleWhen("hasData")] public float       rechargeTime;   //time, in seconds, between shots.
     [VisibleWhen("hasData")] public float       range;          //distance the tower can shoot
-    [VisibleWhen("hasData")] public float       attackPower;	   //damage done on hit
+    [VisibleWhen("hasData")] public float       attackPower;	//damage done on hit
     [VisibleWhen("hasData")] public int         wavesRemaining; //number of waves this tower has left before disappearing
     [VisibleWhen("hasData")] public EffectData  effects;        //effects on this tower
 
-    [VisibleWhen("isEditor")] public Image towerImage;                   //reference to image for the tower itself
-    [VisibleWhen("isEditor")] public Image rangeImage;                   //reference to image for the range overlay
-    [VisibleWhen("isEditor")] public Image chargeGaugeImage1x;           //reference to image for the charge gauge
-    [VisibleWhen("isEditor")] public Image chargeGaugeImage2x;           //reference to image for the charge gauge
-    [VisibleWhen("isEditor")] public Image chargeGaugeImage3x;           //reference to image for the charge gauge
-    [VisibleWhen("isEditor")] public Image tooltipPanel;                 //reference to image for the tooltip background
-    [VisibleWhen("isEditor")] public Text  tooltipText;                  //reference to text for the tooltip
-    [VisibleWhen("isEditor")] public Text  lifespanText;                 //reference to text that shows the lifespan
-    [VisibleWhen("isEditor")] public ParticleSystem manualFireParticles; //reference to particle effect to play when a manual fire is ready
+    //component references for all the display objects
+    [VisibleWhen("isEditor")] public Image towerImage;                  
+    [VisibleWhen("isEditor")] public Image rangeImage;                  
+    [VisibleWhen("isEditor")] public Image chargeGaugeImage1x;          
+    [VisibleWhen("isEditor")] public Image chargeGaugeImage2x;          
+    [VisibleWhen("isEditor")] public Image chargeGaugeImage3x;          
+    [VisibleWhen("isEditor")] public Image tooltipPanel;                
+    [VisibleWhen("isEditor")] public Text  tooltipText;                 
+    [VisibleWhen("isEditor")] public Text  lifespanText;                
+    [VisibleWhen("isEditor")] public ParticleSystem manualFireParticles;
 
     [VisibleWhen("hasData")] private float deltaTime;            //time since last frame
-    [VisibleWhen("hasData")] private float shotCharge;           //represents how charged the next. 0.0 is empty, maxCharge is full
+    [VisibleWhen("hasData")] private float shotCharge;           //represents how charged the next shot is. 0.0 is empty, maxCharge is full
     [VisibleWhen("hasData")] private float maxCharge;            //max shot charge (default 1.0)
     [VisibleWhen("hasData")] private bool  waitingForManualFire; //whether user is being prompted to fire manually
 
@@ -155,7 +160,7 @@ public class TowerScript : BaseBehaviour
         }
     }
 
-    //called when the mouse is over the tower
+    /// <summary> called when the mouse is over the tower to activate the tooltip </summary>
     private void TowerMouseEnter()
     {
         rangeImage.enabled = true;
@@ -163,7 +168,7 @@ public class TowerScript : BaseBehaviour
         tooltipText.enabled = true;
     }
 
-    //called when the mouse is no longer over the tower
+    /// <summary> called when the mouse is over the tower to deactivate the tooltip </summary>
     private void TowerMouseExit()
     {
         rangeImage.enabled = false;
@@ -171,7 +176,7 @@ public class TowerScript : BaseBehaviour
         tooltipText.enabled = false;
     }
 
-    //called when the tower is clicked on
+    /// <summary> called when the tower is clicked on.  responsible for triggering a manual fire on towers that have it</summary>
     private void TowerMouseClick()
     {
         if (waitingForManualFire)
@@ -195,7 +200,10 @@ public class TowerScript : BaseBehaviour
         }
     }
 
-    //returns a list of all the enemies to fire on
+    /// <summary>
+    /// finds all the enemies that this tower should hit if it makes an attack now.  Said list might be empty, but it will not be null.
+    /// </summary>
+    /// <returns>the resulting list</returns>
     private List<GameObject> target()
     {
         //bail if there are no enemies on the map
@@ -220,7 +228,11 @@ public class TowerScript : BaseBehaviour
         return targets;
     }
 
-    //fires on each enemy in the given list, if possible
+    /// <summary>
+    /// fires on each enemy in the given list, if possible
+    /// </summary>
+    /// <param name="targets">the enemies to attack</param>
+    /// <returns>whether or not the attack was successful</returns>
     private bool fire(List<GameObject> targets)
     {
         //only fire if we have valid targets
@@ -294,9 +306,11 @@ public class TowerScript : BaseBehaviour
                             directionalShot(down, ded, Vector2.down);
 
                         break;
+
                     case "targetBurst":
                         burstFire(targets, ded);
                         break;
+
                     default:
                         foreach (GameObject t in targets)
                             spawnBullet(t, ded);
@@ -317,7 +331,11 @@ public class TowerScript : BaseBehaviour
         }
     }
 
-    //spawns a bullet to attack an enemy unit
+    /// <summary>
+    /// spawns a bullet to attack an enemy unit
+    /// </summary>
+    /// <param name="enemy">the enemy to attack</param>
+    /// <param name="damageEvent">details of the attack the new bullet is meant to perform</param>
     private void spawnBullet(GameObject enemy, DamageEventData damageEvent)
     {
         //tell the event who our target is
@@ -332,7 +350,11 @@ public class TowerScript : BaseBehaviour
                 bullet.SendMessage("SetColor", effects.propertyEffects.attackColor);
     }
 
-    //fires on all enemy units in range
+    /// <summary>
+    /// spawns a burstShot to attack all enemies in range
+    /// </summary>
+    /// <param name="targets">list of enemies in range.  The burstShot itself will catch enemies that enter the region during the attack</param>
+    /// <param name="damageEvent">details of the attack.  damageEvent.dest is ignored.</param>
     private void burstFire(List<GameObject> targets, DamageEventData damageEvent)
     {    
         //construct burst shot event
@@ -347,7 +369,12 @@ public class TowerScript : BaseBehaviour
         shot.SendMessage("SetData", data);              //initialize it
     }
 
-    //fires on all enemy units in a straight line
+    /// <summary>
+    /// spawns a directionalShot to attack all enemies in a straight line
+    /// </summary>
+    /// <param name="targets">list of enemies in range.  The DirectionalShot itself will find other enemies on its own as it goes by</param>
+    /// <param name="damageEvent">details of the attack.  damageEvent.dest is ignored.</param>
+    /// <param name="attackDir">direction the attack should travel</param>
     private void directionalShot(List<GameObject> targets, DamageEventData damageEvent, Vector2 attackDir)
     {
         //construct event
@@ -362,7 +389,9 @@ public class TowerScript : BaseBehaviour
         shot.SendMessage("SetData", data);              //initialize it
     }
 
-    //saves new tower definition data and updates components
+    /// <summary>
+    /// NOTE: this is a coroutine.
+    /// </summary>
     private IEnumerator SetData(TowerData d)
     {
         towerName = d.towerName;
@@ -392,7 +421,6 @@ public class TowerScript : BaseBehaviour
         updateLifespanText();
     }
 
-    //sets effect data for this tower
     private void SetEffectData(EffectData d)
     {
         effects = d.clone();
@@ -413,7 +441,9 @@ public class TowerScript : BaseBehaviour
                     ((IEffectInstant)ie).trigger();
     }
 
-    //adds the new effects to the tower
+    /// <summary>
+    /// copies effects from newEffectData and adds them to the ones already present
+    /// </summary>
     public void AddEffects(EffectData newEffectData)
     {
         //make sure we have an effectData object to add to
@@ -436,9 +466,9 @@ public class TowerScript : BaseBehaviour
                 maxCharge += effects.propertyEffects.maxOvercharge.Value;
     }
 
-    //receives upgrade data and uses it to modify the tower.  If ignoreCap is true, then it can exceed the upgrade cap to do so
-    private void UpgradeIgnoreCap(UpgradeData d) { Upgrade(d, true); } //helper function to allow calling through sendMessage (sendMessage doesn't seem to understand default parameters)
-    private void Upgrade(UpgradeData d) { Upgrade(d, false); } //helper function to allow calling through sendMessage (sendMessage doesn't seem to understand default parameters)
+    /// <summary>
+    /// receives upgrade data and uses it to modify the tower.  If ignoreCap is true, then it can exceed the upgrade cap to do so
+    /// </summary>
     private void Upgrade(UpgradeData d, bool ignoreCap)
     {
         //ignore if upgrades are forbidden
@@ -470,32 +500,13 @@ public class TowerScript : BaseBehaviour
         updateLifespanText();
     }
 
-    //updates the tooltip text to reflect new values
-    private void UpdateTooltipText()
-    {
-        tooltipText.text =
-            towerName + "\n" +
-            upgradeCount + "/" + upgradeCap + " upgrades\n" +
-            "attack: " + attackPower + "\n" +
-            "charge time: " + rechargeTime + "\n" +
-            "Damage Per Second: " + (attackPower / rechargeTime).ToString("F1") + "\n" +
-            "range: " + range;
+    //helper functions to allow callung Upgrade through sendMessage (Unity message handling doesn't understand default parameters)
+    private void Upgrade(UpgradeData d) { Upgrade(d, false); } 
+    private void UpgradeIgnoreCap(UpgradeData d) { Upgrade(d, true); }
 
-        if ((effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false)) //special display on infinite lifespan
-            tooltipText.text += "\nwaves remaining: " + wavesRemaining;
-        else
-            tooltipText.text += "\nwaves remaining: <color=green>∞</color>";
-
-        if ((effects != null) && (effects.propertyEffects.limitedAmmo != null)) //skip this section entirely if we have infinite ammo
-            tooltipText.text += "\nammo remaining: " + effects.propertyEffects.limitedAmmo;
-
-        if (effects != null)
-            foreach (IEffect e in effects.effects)
-                if (e.Name != null)
-                    tooltipText.text += "\n<Color=#" + e.effectColorHex + ">-" + e.Name + "</Color>";
-    }
-
-    //updates the tooltip text to show what the given upgrade would change
+    /// <summary>
+    /// updates the tooltip text to show what the given upgrade would change
+    /// </summary>
     private void UpgradeTooltip(UpgradeData u)
     {
         //show special message if the target has upgradesForbidden
@@ -594,7 +605,9 @@ public class TowerScript : BaseBehaviour
         }
     }
 
-    //shows new effects on the tooltip
+    /// <summary>
+    /// shows new effects on the tooltip
+    /// </summary>
     private void NewEffectTooltip (EffectData newEffectData)
     {
         //ignore if the tower cannot be upgraded
@@ -609,7 +622,9 @@ public class TowerScript : BaseBehaviour
                 tooltipText.text += "\n<Color=#" + e.effectColorHex + ">++" + e.Name + "</Color>";
     }
 
-    //called whenever a wave ends.  Updates the lifespan and destroys the tower if it hits zero.
+    /// <summary>
+    /// called whenever a wave ends.  Updates the lifespan and destroys the tower if it hits zero.
+    /// </summary>
     private void WaveOver()
     {
         if ( (effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false)) //dont reduce lifespan if we have infinite lifespan
@@ -629,7 +644,9 @@ public class TowerScript : BaseBehaviour
             onDeath();
     }
 
-    //called when the tower is destroyed
+    /// <summary>
+    /// called when the tower is destroyed.  responsible for death effects
+    /// </summary>
     private void onDeath()
     {
         //trigger effects
@@ -642,7 +659,9 @@ public class TowerScript : BaseBehaviour
         Destroy(gameObject);
     }
 
-    //called when an upgrade card is being played. Change the lifespanText to show remaining upgrade slots instead
+    /// <summary>
+    /// called when an upgrade card is being played. Change the lifespanText to show remaining upgrade slots instead
+    /// </summary>
     private void showUpgradeInfo()
     {
         lifespanText.text = (upgradeCap - upgradeCount).ToString();
@@ -652,13 +671,38 @@ public class TowerScript : BaseBehaviour
             lifespanText.color = textColorLifespan;
     }
 
-    //called when the upgrade is done.  Restores text to normal.
+    /// <summary>
+    /// called when the upgrade is done.  Restores text to normal after a previous call to showUpgradeInfo
+    /// </summary>
     private void hideUpgradeInfo()
     {
         updateLifespanText();
     }
 
-    //updates the lifespan text
+    //these update text associated with the tower when things change
+    private void UpdateTooltipText()
+    {
+        tooltipText.text =
+            towerName + "\n" +
+            upgradeCount + "/" + upgradeCap + " upgrades\n" +
+            "attack: " + attackPower + "\n" +
+            "charge time: " + rechargeTime + "\n" +
+            "Damage Per Second: " + (attackPower / rechargeTime).ToString("F1") + "\n" +
+            "range: " + range;
+
+        if ((effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false)) //special display on infinite lifespan
+            tooltipText.text += "\nwaves remaining: " + wavesRemaining;
+        else
+            tooltipText.text += "\nwaves remaining: <color=green>∞</color>";
+
+        if ((effects != null) && (effects.propertyEffects.limitedAmmo != null)) //skip this section entirely if we have infinite ammo
+            tooltipText.text += "\nammo remaining: " + effects.propertyEffects.limitedAmmo;
+
+        if (effects != null)
+            foreach (IEffect e in effects.effects)
+                if (e.Name != null)
+                    tooltipText.text += "\n<Color=#" + e.effectColorHex + ">-" + e.Name + "</Color>";
+    }
     private void updateLifespanText()
     {
         //show any stats that indicate when the tower will die

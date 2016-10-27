@@ -1,18 +1,22 @@
 ﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.UI;
 using System.Collections.Generic;
-using System.Linq;
 
-//data required to initialize one of these projectiles
+/// <summary>
+/// data required to initialize a directionalShot. The fields are:
+/// damageEvent: details of the attack.  dest is ignored.
+/// targetList: initial target list (the attack will still find enemies that should be hit but are not on the list.  This is merely a performance save)
+/// attackDir: direction the attack travels.  Currently only supports orthogonal travel
+/// </summary>
 public struct DirectionalShotData
 {
-    public DamageEventData  damageEvent; //damage event provided by the tower.  dest is ignored.
-    public List<GameObject> targetList;  //enemies to be hit
-    public Vector2          attackDir;   //max size of the burst animation
+    public DamageEventData  damageEvent;
+    public List<GameObject> targetList; 
+    public Vector2          attackDir;  
 }
 
-//projectile intended to hit everything along a straight line
+/// <summary>
+/// projectile attack intended to hit everything along a straight line.
+/// </summary>
 public class DirectionalShotScript : MonoBehaviour
 {
     public SpriteRenderer sprite;       //reference to the sprite
@@ -30,7 +34,7 @@ public class DirectionalShotScript : MonoBehaviour
     private DamageEventData       baseDamageEvent; //damage event to base all the others on
 
 	// Use this for initialization
-	void Awake ()
+	private void Awake ()
     {
         trail.startColor = defaultColor;
         sprite.color = defaultColor;
@@ -38,39 +42,9 @@ public class DirectionalShotScript : MonoBehaviour
         expectedToHit = new List<DamageEventData>();
         alreadyHit = new List<GameObject>();
 	}
-	
-    //initializes the attack
-    void SetData (DirectionalShotData data)
-    {
-        attackDir = data.attackDir;
-        transform.rotation = Quaternion.FromToRotation(Vector2.up, attackDir);
-        baseDamageEvent = data.damageEvent;
-
-        //put the initial target list on the expected list and inform those enemies
-        foreach (GameObject t in data.targetList)
-        {
-            DamageEventData ded = new DamageEventData();
-            ded.source = baseDamageEvent.source;
-            ded.rawDamage = baseDamageEvent.rawDamage;
-            ded.effects = baseDamageEvent.effects;
-            ded.dest = t;
-
-            t.GetComponent<EnemyScript>().onExpectedDamage(ref ded);
-            expectedToHit.Add(ded);
-        }
-
-        initialized = true; //flag ready
-    }
-
-    //changes the color
-    void SetColor (Color c)
-    {
-        trail.startColor = c;
-        sprite.color = c;
-    }
 
 	// Update is called once per frame
-	void Update ()
+	private void Update ()
     {
 	    if (initialized)
         {
@@ -181,6 +155,35 @@ public class DirectionalShotScript : MonoBehaviour
             }
         }
 	}
+	
+    //initializes the attack
+    public void SetData (DirectionalShotData data)
+    {
+        attackDir = data.attackDir;
+        transform.rotation = Quaternion.FromToRotation(Vector2.up, attackDir);
+        baseDamageEvent = data.damageEvent;
 
+        //put the initial target list on the expected list and inform those enemies
+        foreach (GameObject t in data.targetList)
+        {
+            DamageEventData ded = new DamageEventData();
+            ded.source = baseDamageEvent.source;
+            ded.rawDamage = baseDamageEvent.rawDamage;
+            ded.effects = baseDamageEvent.effects;
+            ded.dest = t;
+
+            t.GetComponent<EnemyScript>().onExpectedDamage(ref ded);
+            expectedToHit.Add(ded);
+        }
+
+        initialized = true; //flag ready
+    }
+
+    //changes the color
+    public void SetColor (Color c)
+    {
+        trail.startColor = c;
+        sprite.color = c;
+    }
 }
 

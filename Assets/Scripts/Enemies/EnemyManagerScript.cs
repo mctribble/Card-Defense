@@ -2,7 +2,9 @@
 using UnityEngine;
 using Vexe.Runtime.Types;
 
-//compares two enemies by their distance to their goals.  Used for sorting the enemy list
+/// <summary>
+/// compares two enemies by their distance to their goals.  Used for sorting the enemy list
+/// </summary>
 public class EnemyDistanceToGoalComparer : Comparer<GameObject>
 {
     public override int Compare(GameObject x, GameObject y)
@@ -11,7 +13,9 @@ public class EnemyDistanceToGoalComparer : Comparer<GameObject>
     }
 }
 
-//responsible for tracking active enemies and performing group operations on them
+/// <summary>
+/// responsible for tracking active enemies and performing group operations on them
+/// </summary>
 public class EnemyManagerScript : BaseBehaviour
 {
     public static EnemyManagerScript instance; //this class is a singleton
@@ -35,7 +39,9 @@ public class EnemyManagerScript : BaseBehaviour
         survivors = null;
     }
 
-    //called when an enemy is spawned
+    /// <summary>
+    /// call when an enemy is spawned to add it to the active enemies list
+    /// </summary>
     public void EnemySpawned(GameObject e)
     {
         //perform a sorted insert.  We expect this enemy to be near the end of the list, so start at the back
@@ -53,20 +59,26 @@ public class EnemyManagerScript : BaseBehaviour
         activeEnemies.Insert(0, e);
     }
 
-    //called when an enemy expects to die
+    /// <summary>
+    /// call when an enemy EXPECTS to die, not when it actually dies, to remove it from the active list and stop towers from targeting it
+    /// </summary>
     public void EnemyExpectedDeath(GameObject e)
     {
         activeEnemies.Remove(e);
     }
 
-    //called when the enemy path changes, such as when the enemy makes it to the end and restarts
+    /// <summary>
+    /// called when the enemy path changes, such as when the enemy is moved back to the start after surviving a wave
+    /// </summary>
     public void EnemyPathChanged(GameObject e)
     {
         EnemyExpectedDeath(e);
         EnemySpawned(e);
     }
 
-    //called when the enemy has reached the goal and is to be respawned into the next wave
+    /// <summary>
+    /// call when an enemy makes it to the goal.  removes it from the active list and puts it on the survivors list to so it can come back in the next wave
+    /// </summary>
     public void EnemySurvived(GameObject e)
     { 
         activeEnemies.Remove(e);
@@ -77,7 +89,14 @@ public class EnemyManagerScript : BaseBehaviour
         survivors.Add(e);
     }
 
-    //returns a list of all enemies that are within the given range of the given position, limiting it to at most max items
+    /// <summary>
+    /// returns a list of all enemies that are within the given range of the given position, limiting it to at most max items
+    /// if more than max enemies are found, the ones closest to their goals are returned
+    /// </summary>
+    /// <param name="targetPosition">center of the circle</param>
+    /// <param name="range">radius of the circle</param>
+    /// <param name="max">max number of enemies to return</param>
+    /// <returns>up to max enemies within the circle</returns>
     public List<GameObject> enemiesInRange(Vector2 targetPosition, float range, int max = int.MaxValue)
     {
         List<GameObject> targetList = new List<GameObject>();
@@ -97,14 +116,11 @@ public class EnemyManagerScript : BaseBehaviour
         return targetList;
     }
 
-    //sorts the enemy list by how close they are to their goal
+    /// <summary>
+    /// sorts the enemy list by how close they are to their goal
+    /// </summary>
     private void sortEnemyList()
     {
         activeEnemies.Sort(comparer);
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
     }
 }

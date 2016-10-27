@@ -9,7 +9,9 @@ using Vexe.Runtime.Types;
 //this means they must implement ALL effect interfaces, since we dont know what type the underlying effect has
 //This base effect handles behavior common to them all
 
-//provides basic handling of the wrapper shenanigans that should work for most effects
+/// <summary>
+/// all meta effects should inherit from this.  
+/// </summary>
 public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
 {
     //constructor

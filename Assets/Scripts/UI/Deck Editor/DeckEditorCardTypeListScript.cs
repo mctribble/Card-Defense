@@ -2,6 +2,9 @@
 using UnityEngine;
 using Vexe.Runtime.Types;
 
+/// <summary>
+/// list of card types in the deck editor
+/// </summary>
 public class DeckEditorCardTypeListScript : BaseBehaviour
 {
     public GameObject entryPrefab; //used to instantiate deck buttons

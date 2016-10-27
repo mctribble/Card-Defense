@@ -1,8 +1,9 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using Vexe.Runtime.Types;
 
-//all effects in this file take place instantly with no particular target.  This base effect handles behavior common to them all
+/// <summary>
+/// instant effects take place instantly with no particular target.  This base effect handles behavior common to them all
+/// </summary>
 public abstract class BaseEffectInstant : BaseEffect, IEffectInstant
 {
     [Hide] public override TargetingType targetingType { get { return TargetingType.none; } } //this effect doesnt need a target

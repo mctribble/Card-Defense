@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using UnityEngine;
 using Vexe.Runtime.Types;
 
-//maintains the collection of card types, including saving/loading to XML
+/// <summary>
+/// maintains the collection of card types, including saving/loading to XML and some inspector-only controls
+/// </summary>
 [XmlRoot("CardTypes")]
 [System.Serializable]
 public class CardTypeCollection
@@ -19,14 +20,18 @@ public class CardTypeCollection
     [Display(Seq.GuiBox | Seq.PerItemDuplicate | Seq.PerItemRemove | Seq.Filter)]
     public List<CardData> cardTypes = new List<CardData>();
 
-    //the file name this collection was populated from.  For use in error reporting
+    //the file this collection was populated from.  For use in error reporting
     [XmlIgnore] public string filePath { get; set; }
     [XmlIgnore] public string fileName { get { return Path.GetFileNameWithoutExtension(filePath); } }
 
-    //comma separated lists of mod files that this file is Dependant on
+    //comma separated lists of mod files that this file is Dependant on, if any
     [XmlAttribute("enemyFileDependencies")][DefaultValue("")][Hide] public string enemyDependencies;
     [XmlAttribute( "cardFileDependencies")][DefaultValue("")][Hide] public string  cardDependencies;
 
+    /// <summary>
+    /// saves the collection to XML.  Cards marked as modded are not saved, since they are likely not part of the original collection
+    /// </summary>
+    /// <param name="path">where to save the collection</param>
     public void Save(string path)
     {
         //temporarily remove all modded cards
@@ -45,6 +50,9 @@ public class CardTypeCollection
         cardTypes = temp;
     }
 
+    /// <summary>
+    /// returns a new CardTypeCollection loaded from the provided file
+    /// </summary>
     public static CardTypeCollection Load(string path)
     {
         XmlSerializer serializer = new XmlSerializer(typeof(CardTypeCollection));
@@ -56,14 +64,24 @@ public class CardTypeCollection
         }
     }
 
-    //DEV: gives a button in the editor to sort the type list
+    /// <summary>
+    /// returns true if the collection has cards in it
+    /// </summary>
     [Hide] public bool cardTypesLoaded() { return (cardTypes != null) && (cardTypes.Count > 0); }
+
+    /// <summary>
+    /// sorts the list of card types using the same comparer as the deck editor default.
+    /// This sorts by type, then name.
+    /// </summary>
     [Show][VisibleWhen("cardTypesLoaded")] private void sortCardTypes ()
     {
         cardTypes.Sort(new CardTypeComparer());
     }
 }
 
+/// <summary>
+/// responsible for saving/loading card types to/from XML and provides several utility functions for locating card types.
+/// </summary>
 public class CardTypeManagerScript : BaseBehaviour
 {
     //manager settings: only shown outside of gameplay

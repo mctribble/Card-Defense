@@ -1,6 +1,4 @@
-﻿//based on tutorial found here: http://wiki.unity3d.com/index.php?title=Saving_and_Loading_Data:_XmlSerializer
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,7 +9,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
-//represents a card name and number, used to represent decks in xml
+/// <summary>
+/// used to represent card(s) in XMLDeck.
+/// name: card name
+/// count: number to put in the deck
+/// </summary>
+/// <seealso cref="XMLDeck"/>
 [System.Serializable]
 public class XMLDeckEntry
 {
@@ -38,7 +41,10 @@ public class XMLDeckEntry
     public override string ToString() { return name + "x" + count; }
 };
 
-//represents a deck of cards in XMLM
+/// <summary>
+/// represents a deck of cards in XML
+/// </summary>
+/// <seealso cref="XMLDeckEntry"/>
 [System.Serializable]
 public class XMLDeck
 {
@@ -57,7 +63,10 @@ public class XMLDeck
         contents = new List<XMLDeckEntry>();
     }
 
-    //returns whether or not this deck conforms to the rules set in DeckRules
+    /// <summary>
+    /// returns whether or not this deck conforms to the rules set in DeckRules
+    /// </summary>
+    /// <seealso cref="DeckRules"/>
     public bool isValid()
     {
         //tracking variables
@@ -81,7 +90,9 @@ public class XMLDeck
         return true;
     }
 
-    //returns whether or not this deck contains modded cards
+    /// <summary>
+    /// returns whether or not this deck contains modded cards
+    /// </summary>
     public bool isModded()
     {
         foreach (XMLDeckEntry entry in contents)
@@ -96,22 +107,28 @@ public class XMLDeck
 
     public override string ToString() { return name + "(" + cardCount + " cards"; }
 
-    //[DEV]: provides a button in the inspector to sort the list by card names
+    /// <summary>
+    /// Sorts the contents of this XMLDeck by name
+    /// </summary>
     [Show] public void sort()
     {
         contents.Sort(new CardNameComparer());
     }
 };
 
-//maintains the collection of card types, including saving/loading to XML
+/// <summary>
+/// maintains a collection of decks, including saving/loading to XML
+/// </summary>
 [XmlRoot("PlayerDecks")]
 [System.Serializable]
 public class DeckCollection
 {
-    //used to specify the proper .xsd file in the serialized xml
+    /// <summary>
+    /// used to specify the proper .xsd file in the serialized xml
+    /// </summary>
     [Hide]
     [XmlAttribute("noNamespaceSchemaLocation", Namespace = System.Xml.Schema.XmlSchema.InstanceNamespace)]
-    public string schema = "../XML/Decks.xsd";
+    public readonly string schema = "../XML/Decks.xsd";
 
     //list of decks
     [XmlArray("Decks")]
@@ -131,6 +148,9 @@ public class DeckCollection
         }
     }
 
+    /// <summary>
+    /// saves this collection to the given file
+    /// </summary>
     public void Save(string path)
     {
         XmlSerializer serializer = new XmlSerializer(typeof(DeckCollection));
@@ -141,6 +161,10 @@ public class DeckCollection
         }
     }
 
+    /// <summary>
+    /// returns a new DeckCollection loaded from the given file
+    /// </summary>
+    /// <returns></returns>
     public static DeckCollection Load(string path)
     {
         XmlSerializer serializer = new XmlSerializer(typeof(DeckCollection));
@@ -152,6 +176,11 @@ public class DeckCollection
         }
     }
 
+    /// <summary>
+    /// returns the deck of the given name, if it exists
+    /// if it does not exist, a default is returned and produces a warning
+    /// </summary>
+    /// <param name="targetDeck"></param>
     public XMLDeck getDeckByName(string targetDeck)
     {
         //find the deck
@@ -178,7 +207,9 @@ public class DeckCollection
         return result;
     }
 
-    //returns a list of valid deck names
+    /// <summary>
+    /// returns an array of deck names present in this collection
+    /// </summary>
     public string[] getNames()
     {
         List<string> names = new List<string>();
@@ -191,6 +222,11 @@ public class DeckCollection
     }
 }
 
+/// <summary>
+/// represents a card that is in the deck but not on screen
+/// data: the card type
+/// charges: how many charges are remaining
+/// </summary>
 public struct Card
 {
     public CardData data; //defines the card type
@@ -199,6 +235,9 @@ public struct Card
     public override string ToString() { return data.cardName + "(" + charges + "/" + data.cardMaxCharges + ")"; } //overridden for better display in inspector
 }
 
+/// <summary>
+/// handles loading, saving, and tracking the contents of the player's current deck.  
+/// </summary>
 public class DeckManagerScript : BaseBehaviour
 {
     //manager settings (only shown in editor)
@@ -250,7 +289,9 @@ public class DeckManagerScript : BaseBehaviour
         maxDeckCharges = 0;
     }
 
-    //called to reset the manager
+    /// <summary>
+    /// reloads the deck lists, empties out the deck, and then reloads it
+    /// </summary>
     private void Reset()
     {
         //reload definitions
@@ -290,14 +331,19 @@ public class DeckManagerScript : BaseBehaviour
         }
     }
 
-    //saves the player decks back to the file
+    /// <summary>
+    /// saves the player decks back to the file
+    /// </summary>
     public void savePlayerDecks()
     {
         playerDecks.Save(Path.Combine(Application.dataPath, playerDeckPath));
     }
 
-    // Sets the currentDeck based on the XMLDeck
-    // note that this does NOT shuffle the deck, since there are (rare) instances where this should not happen
+    /// <summary>
+    /// Sets the currentDeck based on the XMLDeck
+    /// note that this does NOT shuffle the deck, since there are (rare) instances where this should not happen
+    /// </summary>
+    /// <seealso cref="Shuffle"/>
     private void SetDeck(XMLDeck newDeck)
     {
         //init
@@ -329,9 +375,12 @@ public class DeckManagerScript : BaseBehaviour
         deckSize = cardsLeft;
     }
 
-    // Shuffles the current deck by swapping every item with another random item.  This is performed multiple times
+    /// <summary>
+    /// Shuffles the current deck
+    /// </summary>
     public void Shuffle()
     {
+        //shuffles by swapping every item with another random item. This is performed multiple times
         for (int iteration = 0; iteration < SHUFFLE_ITERATIONS; iteration++)
         {
             for (int i = 0; i < currentDeck.Count; i++)
@@ -344,7 +393,9 @@ public class DeckManagerScript : BaseBehaviour
         }
     }
 
-    // Returns the top card in the deck and removes it
+    /// <summary>
+    /// Returns the top Card in the deck and removes it
+    /// </summary>
     public Card Draw()
     {
         Card drawnCard = currentDeck [0];   //retrieve card
@@ -353,21 +404,27 @@ public class DeckManagerScript : BaseBehaviour
         return drawnCard;                   //return it
     }
 
-    // adds card c to the bottom of the deck
+    /// <summary>
+    /// adds card c to the bottom of the deck
+    /// </summary>
     public void addCardAtBottom(Card c)
     {
         curDeckCharges += c.charges; //track charges
         currentDeck.Add(c);          //and add the card
     }
 
-    // adds card c to the top of the deck
+    /// <summary>
+    /// adds card c to the top of the deck
+    /// </summary>
     public void addCardAtTop(Card c)
     {
         curDeckCharges += c.charges; //track charges
         currentDeck.Insert(0, c);    //and add the card
     }
 
-    //removes d charges from cards in the deck, starting at the top.  cards that hit zero charges in this way are removed
+    /// <summary>
+    /// removes d charges from cards in the deck, starting at the top.  cards that hit zero charges in this way are removed
+    /// </summary>
     public void Damage(int d) { StartCoroutine(DamageCoroutine(d)); } //hide coroutine-ness since calling code has no reason to care
     private IEnumerator DamageCoroutine(int d)
     {
@@ -440,7 +497,13 @@ public class DeckManagerScript : BaseBehaviour
         }
     }
 
-    //removes d charges from cards in the hand, starting at the top.  cards that hit zero charges in this way are removed.  If the hand is empty, damage is redirected to the deck
+    /// <summary>
+    /// removes d charges from cards in the hand, starting at the top.  
+    /// cards that hit zero charges in this way are discarded.  
+    /// If the hand is empty, damage is redirected to the deck
+    /// </summary>
+    /// <param name="d">how much damage to deal</param>
+    /// <param name="sourcePosition">where to spawn the damage text</param>
     public void DamageHand(int d, Vector2 sourcePosition)
     {
         //if the player doesnt have a hand, something is seriously wrong
@@ -461,7 +524,9 @@ public class DeckManagerScript : BaseBehaviour
         }
     }
 
-    //handles player death
+    /// <summary>
+    /// [COROUTINE] handles player death
+    /// </summary>
     public IEnumerator playerDead()
     {
         yield return MessageHandlerScript.ShowAndYield("GAME OVER!\n" + ScoreManagerScript.instance.report(false));

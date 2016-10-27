@@ -5,6 +5,9 @@ using System.Xml.Serialization;
 using UnityEngine;
 using Vexe.Runtime.Types;
 
+/// <summary>
+/// XML representation of a path segment
+/// </summary>
 [System.Serializable]
 public class PathSegment : System.Object
 {
@@ -16,14 +19,18 @@ public class PathSegment : System.Object
     [Show][XmlIgnore] public Vector2 startPos { get { return new Vector2(startX, startY); } set { startX = value.x; startY = value.y; } }
     [Show][XmlIgnore] public Vector2   endPos { get { return new Vector2(  endX,   endY); } set {   endX = value.x;   endY = value.y; } }
 
+    //provides a human-friendly string for the inspector
     public override string ToString() { return "{" + startX.ToString("F1") + ", " + startY.ToString("F1") + "} -> {" + endX.ToString("F1") + ", " + endY.ToString("F1") + "}"; }
 }
 
+/// <summary>
+/// spawns all the path segments for the level and handles pathfinding
+/// </summary>
 public class PathManagerScript : BaseBehaviour
 {
     [Hide] public static PathManagerScript instance;
     public GameObject segmentPrefab;
-    public GameObject enemyGoalMakerPrefab;
+    public GameObject enemyGoalMarkerPrefab;
 
     private List<PathSegment> segments;
 
@@ -49,7 +56,9 @@ public class PathManagerScript : BaseBehaviour
         SpawnPaths();
     }
 
-    //called to reset the manager
+    /// <summary>
+    /// [COROUTINE] called to reset the manager
+    /// </summary>
     private IEnumerator Reset()
     {
         //wait for the level to load
@@ -63,7 +72,11 @@ public class PathManagerScript : BaseBehaviour
         SpawnPaths();
     }
 
-    //calculates a path from position to the player's "base" //TODO: define an actual base, and maybe implement Dijkstra or something here
+    /// <summary>
+    /// calculates a path from startPos to a goal
+    /// </summary>
+    /// <param name="startPos">position to start from</param>
+    /// <returns>a list of vectors leading to the destination</returns>
     public List<Vector2> CalculatePathFromPos(Vector2 startPos)
     {
         List<Vector2> result = new List<Vector2> ();
@@ -101,7 +114,9 @@ public class PathManagerScript : BaseBehaviour
         return result;
     }
 
-    //spawn the paths
+    /// <summary>
+    /// spawns the path objects
+    /// </summary>
     private void SpawnPaths()
     {
         foreach (PathSegment v in segments)
@@ -114,7 +129,7 @@ public class PathManagerScript : BaseBehaviour
             //if there is no segment that begins at the same place this segment ends, spawn a marker
             if (segments.Any(x => (x.startX == v.endX) && (x.startY == v.endY)) == false)
             {
-                GameObject m = (GameObject) Instantiate(enemyGoalMakerPrefab);
+                GameObject m = (GameObject) Instantiate(enemyGoalMarkerPrefab);
                 m.transform.SetParent(this.transform);
                 m.transform.position = new Vector2(v.endX, v.endY);
             }

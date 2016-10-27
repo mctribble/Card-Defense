@@ -1,9 +1,13 @@
-﻿using System.Collections;
-using UnityEngine;
-//using UnityEngine.UI;
+﻿using UnityEngine;
 using Vexe.Runtime.Types;
 
-//container passed to enemy to tell them they were damaged
+/// <summary>
+/// contains details about an attack:
+/// rawDamage: damage to deal
+/// effects: any effects applied to this attack.
+/// source: reference to the attacking tower
+/// dest: reference to the target enemy
+/// </summary>
 public struct DamageEventData
 {
     public float      rawDamage;
@@ -118,6 +122,4 @@ public class BulletScript : BaseBehaviour
         if (data.dest == e)
             Destroy(gameObject);
     }
-
-    //overrides the default color with the new one
 }

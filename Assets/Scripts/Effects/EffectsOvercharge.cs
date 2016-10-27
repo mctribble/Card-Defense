@@ -1,11 +1,10 @@
-﻿using UnityEngine;
-using System.Collections;
-using Vexe.Runtime.Types;
-using System;
+﻿using Vexe.Runtime.Types;
 
-//effects in this file apply when a tower makes an attack and has TA least 1 full point of overcharge
-//they alter the given damage event and take effect before enemyDamaged effects
-//This base effect handles behavior common to them all
+/// <summary>
+/// effects in this file apply when a tower makes an attack and has at least 1 full point of overcharge
+/// they alter the given damage event and take effect before enemyDamaged effects
+/// This base effect handles behavior common to them all
+/// </summary>
 abstract class BaseEffectOvercharge : BaseEffect, IEffectOvercharge
 {
     [Hide] public override TargetingType targetingType { get { return TargetingType.none; } }    //overcharge effects are not targeted

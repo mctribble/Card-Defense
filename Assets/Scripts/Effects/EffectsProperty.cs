@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Vexe.Runtime.Types;
 
-//contains "Property" effects that are never really triggered in the usual sense.  This base effect handles behavior common to them all
+/// <summary>
+/// "Property" effects are never really triggered in the usual sense.  This base effect handles behavior common to them all
+/// </summary>
 abstract class BaseEffectProperty : BaseEffect, IEffectProperty
 {
     [Hide] public override TargetingType targetingType { get { return TargetingType.none; } }  //property effects are not targeted

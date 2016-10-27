@@ -5,9 +5,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
-//used to indicate hand ownership
+/// <summary>
+/// used to indicate hand ownership
+/// </summary>
 public enum HandFaction { player, enemy, neutral };
 
+/// <summary>
+/// represents a group of cards being shown on the screens
+/// </summary>
 public class HandScript : BaseBehaviour
 {
     //static references to the player hand and the enemy hand so other objects can easily access them
@@ -69,7 +74,9 @@ public class HandScript : BaseBehaviour
         yield break;
     }
 
-    //use this to reset the hand
+    /// <summary>
+    /// [COROUTINE] empties out the hand, waits for the level to be loaded if it isn't already, then draws a new hand
+    /// </summary>
     private IEnumerator Reset()
     {
         handHidden = false;
@@ -91,11 +98,14 @@ public class HandScript : BaseBehaviour
         StartCoroutine(drawCards(cardCount, false));
     }
 
-    //draws a card from the deck.  The card spawns face down at the same position, rotation, and scale as the spawn point image.
-    //flipOver: card should flip over AFTER moving
-    //turnToIdentity: card should straighten itself while moving
-    //scaleToIdentity: card should scale itself to (1,1,1) while moving
-    //drawSurvivorWave: (enemy hands only) sets up the new card with a survivor wave instead of a wave from the deck
+    /// <summary>
+    /// draws a card from the deck.  The card spawns face down at the same position, rotation, and scale as the spawn point image.
+    /// all parameters are optional.
+    /// </summary>
+    /// <param name="flipOver">flipOver: card should flip over AFTER moving</param>
+    /// <param name="turnToIdentity">turnToIdentity: card should straighten itself while moving</param>
+    /// <param name="scaleToIdentity">scaleToIdentity: card should scale itself to (1,1,1) while moving</param>
+    /// <param name="drawSurvivorWave">drawSurvivorWave: (enemy hands only) sets up the new card with a survivor wave instead of a wave from the deck</param>
     public void drawCard(bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true, bool drawSurvivorWave = false)
     {
         //unsupported for neutral hands
@@ -185,14 +195,18 @@ public class HandScript : BaseBehaviour
             LevelManagerScript.instance.UpdateWaveStats();
     }
 
-    //draws until the target card count
+    /// <summary>
+    /// [COROUTINE] draws until the given number of cards are in the hand or unable to draw more
+    /// </summary>
     public IEnumerator drawToHandSize(int target)
     {
         int drawCount = target - currentHandSize;
         yield return drawCards(drawCount);
     }
 
-    //draws multiple cards.  If delay is true, there is a slight pause between each one
+    /// <summary>
+    /// draws multiple cards.  If delay is true, there is a slight pause between each one
+    /// </summary>
     public IEnumerator drawCards(int drawCount, bool delay = true)
     {
         //wait to make sure we dont attempt to discard and draw at the same time (i. e., cards like Recycle that cause both discarding and drawing simultaneously)
@@ -244,7 +258,12 @@ public class HandScript : BaseBehaviour
         yield break;
     }
 
-    //helper: calls the normal version repeatedly.  If delay is true, then there is a slight pause between each discard
+    /// <summary>
+    /// [COROUTINE] discards multiple random cards.
+    /// </summary>
+    /// <param name="exemption">if not null, this card cannot be discarded</param>
+    /// <param name="count">number to discard</param>
+    /// <param name="delay">whether or not to pause between discards</param>
     public IEnumerator discardRandomCards(GameObject exemption, int count, bool delay = true)
     {
         discarding = true;
@@ -258,9 +277,11 @@ public class HandScript : BaseBehaviour
                 yield return new WaitForSeconds(discardDelay);
         }
         discarding = false;
-    } 
-    
-    //discard a random card from the hand.  exemption card is safe
+    }
+
+    /// <summary>
+    /// discard a random card from the hand.  exemption card is safe
+    /// </summary>
     public void discardRandomCard(GameObject exemption)
     {
         //special case: no cards
@@ -297,7 +318,9 @@ public class HandScript : BaseBehaviour
         }
     }
 
-    //to be called whenever the number of cards changes: updates all the cards to tell them where they should be
+    /// <summary>
+    /// to be called whenever the number of cards changes: updates all the cards to tell them where they should be
+    /// </summary>
     private void updateCardIdleLocations()
     {
         //bail if no cards
@@ -342,7 +365,9 @@ public class HandScript : BaseBehaviour
         }
     }
 
-    //removes a card from the hand (the card is NOT destroyed; the card does that part)
+    /// <summary>
+    /// removes a card from the hand (the card is NOT destroyed; the card does that part)
+    /// </summary>
     private void Discard(GameObject card)
     {
         //locate the card to remove
@@ -372,7 +397,9 @@ public class HandScript : BaseBehaviour
         updateCardIdleLocations(); //rearrange the hand
     }
 
-    //hides the hand
+    /// <summary>
+    /// hides the hand
+    /// </summary>
     private void Hide()
     {
         handHidden = true;
@@ -381,7 +408,9 @@ public class HandScript : BaseBehaviour
                 c.SendMessage("Hide");
     }
 
-    //shows the hand
+    /// <summary>
+    /// shows the hand
+    /// </summary>
     private void Show()
     {
         handHidden = false;
@@ -390,7 +419,10 @@ public class HandScript : BaseBehaviour
                 c.SendMessage("Show");
     }
 
-    //(player hands only) attempts to remove d charges from random cards in the hand, discarding any that hit 0 charges.  returns how much damage was actually dealt
+    /// <summary>
+    /// (player hands only) attempts to remove d charges from random cards in the hand, discarding any that hit 0 charges.  
+    /// returns how much damage was actually dealt
+    /// </summary>
     public int Damage(int d)
     {
         //currently only compatible with player hands
@@ -426,7 +458,9 @@ public class HandScript : BaseBehaviour
         return alreadyDealt;
     }
 
-    //(enemy hands only) returns a list of all WaveData objects associated with cards in the hand
+    /// <summary>
+    /// (enemy hands only) returns a list of all WaveData objects associated with cards in the hand
+    /// </summary>
     public List<WaveData> IncomingWaves
     {
         get
@@ -439,7 +473,9 @@ public class HandScript : BaseBehaviour
         }
     }
 
-    //(enemy hands only) returns total spawn count of all waves in the hand
+    /// <summary>
+    /// (enemy hands only) returns total spawn count of all waves in the hand
+    /// </summary>
     public int spawnCount
     {
         get
@@ -451,7 +487,9 @@ public class HandScript : BaseBehaviour
         }
     }
 
-    //(enemy hands only) returns total remaining health of all waves in the hand
+    /// <summary>
+    /// (enemy hands only) returns total remaining health of all waves in the hand
+    /// </summary>
     public int totalRemainingHealth
     {
         get
@@ -460,7 +498,9 @@ public class HandScript : BaseBehaviour
         }
     }
 
-    //(enemy hands only) returns longest spawn time among all cards in the hand
+    /// <summary>
+    /// (enemy hands only) returns longest spawn time among all cards in the hand
+    /// </summary>
     public float longestTime
     {
         get
@@ -472,9 +512,14 @@ public class HandScript : BaseBehaviour
         }
     }
 
-    public bool isFull { get { return currentHandSize >= maximumHandSize; } } //helper: returns whether or not this hand is full
+    /// <summary>
+    /// returns whether or not this hand is full
+    /// </summary>
+    public bool isFull { get { return currentHandSize >= maximumHandSize; } }
 
-    //(enemy hands only) discards the card associated with the given wave
+    /// <summary>
+    /// (enemy hands only) discards the card associated with the given wave
+    /// </summary>
     public void discardWave(WaveData toDiscard)
     {
         //only valid on enemy hands
@@ -495,6 +540,4 @@ public class HandScript : BaseBehaviour
     public void updateEnemyCards()             { foreach (GameObject ec in cards) if (ec != null) ec.SendMessage("updateWaveStats"); }    //(enemy hands only) instructs all cards in the hand to refresh themselves
     public void applyWaveEffect(IEffectWave e) { foreach (GameObject ec in cards) if (ec != null) ec.SendMessage("applyWaveEffect", e); } //(enemy hands only) applies the wave effect to all cards in the hand
     public void UpdateWaveStats()              { foreach (GameObject ec in cards) if (ec != null) ec.SendMessage("updateWaveStats"); }    //(enemy hands only) updates wave stats for all cards in the hand
-
-
 }

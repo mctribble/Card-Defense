@@ -3,7 +3,10 @@ using System.Xml.Serialization;
 using UnityEngine;
 using Vexe.Runtime.Types;
 
-//represents everything needed to define a working spawner from xml.  This is separated for ease of future expansion
+/// <summary>
+/// represents everything needed to define a working spawner from xml.  This is separated for ease of future expansion
+/// spawnX, spawnY: where this spawner should place new enemies
+/// </summary>
 [System.Serializable]
 public class SpawnerData
 {
@@ -15,6 +18,9 @@ public class SpawnerData
     public override string ToString() { return spawnVec.ToString(); } //for better display in the debugger
 }
 
+/// <summary>
+/// responsible for enemy spawning
+/// </summary>
 public class SpawnerScript : BaseBehaviour
 {
     public SpawnerData      data;           //xml definition of this spawner
@@ -24,7 +30,9 @@ public class SpawnerScript : BaseBehaviour
 
     public void Awake() { forcedFirstDestination = null; } //init
 
-    //accessor to allow treating spawn position as a vector
+    /// <summary>
+    /// where enemies should be spawned
+    /// </summary>
     public Vector2 spawnPos
     {
         get
@@ -44,14 +52,20 @@ public class SpawnerScript : BaseBehaviour
         data = newData;
     }
 
-    //allows setting a spawn position that isnt at the end of a path segment by starting the path with spawnLocation->firstDestination and doing a normal pathfind from there
+    /// <summary>
+    /// allows setting a spawn position that isnt at the end of a path segment by starting the path with spawnLocation->firstDestination and doing a normal pathfind from there
+    /// </summary>
     public void forceFirstPath(Vector2 spawnLocation, Vector2 firstDestination)
     {
         spawnPos = spawnLocation;
         forcedFirstDestination = firstDestination;
     }
 
-    //spawns an enemy
+    /// <summary>
+    /// spawns an enemy
+    /// </summary>
+    /// <param name="timePassedSinceSpawn">time that has passed since the unit was supposed to spawn.  Used to move it along the path and keep things smooth in low framerates</param>
+    /// <param name="type">the type of enemy to spawn</param>
     public void Spawn(float timePassedSinceSpawn, EnemyData type)
     {
         GameObject enemy = (GameObject)Object.Instantiate(enemyPrefab, spawnPos, Quaternion.identity);  //spawn the enemy

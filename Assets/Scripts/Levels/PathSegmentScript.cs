@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using Vexe.Runtime.Types;
 
+/// <summary>
+/// data used to create a path segment
+/// </summary>
 public struct PathSegmentData
 {
     public Vector2 pathStart;
@@ -15,6 +18,9 @@ public struct PathSegmentData
     }
 }
 
+/// <summary>
+/// represents a path segment that has been spawned into the world
+/// </summary>
 public class PathSegmentScript : BaseBehaviour
 {
     public Vector2 pathStart;
@@ -27,12 +33,9 @@ public class PathSegmentScript : BaseBehaviour
         //this does nothing because the path manager must first set the values
     }
 
-    // Update is called once per frame
-    private void Update()
-    {
-    }
-
-    //sets the variables for this object and re-initializes
+    /// <summary>
+    /// sets the variables for this object and re-initializes
+    /// </summary>
     private void Reposition(PathSegmentData d)
     {
         pathStart = d.pathStart;
@@ -42,7 +45,9 @@ public class PathSegmentScript : BaseBehaviour
         Init();
     }
 
-    //positions, rotates, and scales the path to render it from point A to point B
+    /// <summary>
+    /// positions, rotates, and scales the path to render it from point A to point B
+    /// </summary>
     private void Init()
     {
         //calculate middle, length, and angle

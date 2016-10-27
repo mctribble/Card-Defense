@@ -4,7 +4,9 @@ using System.Linq;
 using UnityEngine;
 using Vexe.Runtime.Types;
 
-//this class is responsible for taking XMLEffects and returning an IEffect to match
+/// <summary>
+/// factory class responsible for taking XMLEffects and turning them into the appropriate IEffect
+/// </summary>
 public class EffectTypeManagerScript : BaseBehaviour
 {
     //singleton instance
@@ -16,12 +18,18 @@ public class EffectTypeManagerScript : BaseBehaviour
         instance = this;
     }
 
-    //instantiates and initializes an effect object from the xmlEffect.  returns null if that effect doesnt exist
-    //the card name is simply passed unaltered to the new effect
-    //TODO: find a cleaner way to implement this?  Code reflection is an option but may be insecure
+    /// <summary>
+    /// instantiates and initializes an IEffect object from an XMLEffect.  returns null if that effect doesnt exist
+    /// the card name is simply passed unaltered to the new effect
+    /// </summary>
+    /// <param name="xe">XML representation of the desired effect</param>
+    /// <param name="cardName">name of the card to associate with this effect in game logs</param>
+    /// <returns>a new IEffect object</returns>
     public IEffect parse(XMLEffect xe, string cardName)
     {
         IEffect ie;
+
+        //this list is intentionally hard coded instead of using code reflection for security because the original XMLEffect may have been made by a player
         switch (xe.name)
         {
             //<<Enemy Effects (Periodic)>>
@@ -134,7 +142,9 @@ public class EffectTypeManagerScript : BaseBehaviour
         return ie;
     }
 
-    //returns a list of all classes that implement IEffect
+    /// <summary>
+    /// returns a list of all classes that implement IEffect
+    /// </summary>
     public IEnumerable<Type> IEffectTypes()
     {
         return AppDomain.CurrentDomain.GetAssemblies()
@@ -143,7 +153,9 @@ public class EffectTypeManagerScript : BaseBehaviour
                            p.IsClass);
     }
 
-    //returns a list of XML names that correspond to valid effects
+    /// <summary>
+    /// returns a list of XML names that correspond to valid effects
+    /// </summary>
     private String[] cachedEffectXMLNames;
     public String[] listEffectXMLNames()
     {
@@ -177,7 +189,10 @@ public class EffectTypeManagerScript : BaseBehaviour
         return cachedEffectXMLNames;
     }
 
-    //provides a button in the unity inspector to print out a list of all effect names sorted by length.  To be used for looking for effect names that are either too long or are unhelpful
+    /// <summary>
+    /// provides a button in the unity inspector to print out a list of all effect names sorted by length.  
+    /// To be used for looking for effect names that are either too long or are unhelpful
+    /// </summary>
     [Show] private void listEffectNames()
     {
         if ( (LevelManagerScript.instance == null) || (LevelManagerScript.instance.levelLoaded == false) )

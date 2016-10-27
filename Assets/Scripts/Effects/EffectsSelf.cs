@@ -1,8 +1,9 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using Vexe.Runtime.Types;
 
-//all effects in this file take place instantly, and target the card which contains them.  This base effect handles behavior common to them all
+/// <summary>
+/// all self effects take place instantly, and target the card which contains them.  This base effect handles behavior common to them all
+/// </summary>
 public abstract class BaseEffectSelf : BaseEffect, IEffectSelf
 {
     [Hide] public override TargetingType targetingType { get { return TargetingType.none; } } //this effect doesnt need a target

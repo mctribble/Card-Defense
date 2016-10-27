@@ -3,6 +3,9 @@ using System.Collections;
 using Vexe.Runtime.Types;
 using System.Collections.Generic;
 
+/// <summary>
+/// handles mod dependencies
+/// </summary>
 public class DependencyManagerScript : BaseBehaviour
 {
     public static DependencyManagerScript instance; //singleton instance
@@ -25,7 +28,12 @@ public class DependencyManagerScript : BaseBehaviour
         cardDependenciesHandled = false;
 	}
 
-    //sorts enemy collections in the order they should be loaded, removing any with unmet dependencies
+    /// <summary>
+    /// sorts enemy collections in the order they should be loaded, removing any with unmet dependencies
+    /// to use, provide this function with a list of all the enemy files you want to load, and store the result
+    /// iterate through the result and load the files in order, and all dependencies will be met
+    /// if this is not possible, offending files are removed from the list entirely, producing warnings
+    /// </summary>
     public List<EnemyTypeCollection> handleEnemyFileDependencies(List<EnemyTypeCollection> files)
     {
         //create a new list that is large enough to hold everything we have been given
@@ -86,7 +94,13 @@ public class DependencyManagerScript : BaseBehaviour
         return handled;
     }
 
-    //sorts card collections in the order they should be loaded, removing any with unmet dependencies
+    /// <summary>
+    /// use handleEnemyFileDependencies first, since card files may depend on those
+    /// sorts card type collections in the order they should be loaded, removing any with unmet dependencies
+    /// to use, provide this function with a list of all the enemy files you want to load, and store the result
+    /// iterate through the result and load the files in order, and all dependencies will be met
+    /// if this is not possible, offending files are removed from the list entirely, producing warnings
+    /// </summary>
     public List<CardTypeCollection> handleCardFileDependencies(List<CardTypeCollection> files)
     {
         //error if enemies are not done first since cards might rely on enemies but not the other way around
@@ -167,7 +181,9 @@ public class DependencyManagerScript : BaseBehaviour
         return handled;
     }
 
-    //tests if dependencies for this level have been met
+    /// <summary>
+    /// tests if dependencies for this level have been met
+    /// </summary>
     public bool testLevelDependencies(LevelData level)
     {
         string[] dependencies;

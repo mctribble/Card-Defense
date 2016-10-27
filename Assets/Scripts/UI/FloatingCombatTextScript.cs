@@ -3,6 +3,9 @@ using System.Collections;
 using Vexe.Runtime.Types;
 using UnityEngine.UI;
 
+/// <summary>
+/// text that floats briefly and disappears for use as a damage indicator
+/// </summary>
 public class FloatingCombatTextScript : BaseBehaviour
 {
     //component reference
@@ -35,7 +38,9 @@ public class FloatingCombatTextScript : BaseBehaviour
         timeToLive = defaultTimeToLive;
     }
 
-    // Preset: damage 
+    /// <summary>
+    /// sets up the text as a damage indicator with the given message
+    /// </summary>
     public void damageText(string message)
     {
         text.text  = message;

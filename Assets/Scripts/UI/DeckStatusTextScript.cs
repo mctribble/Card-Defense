@@ -2,6 +2,9 @@
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
+/// <summary>
+/// shows status of the deck in the status bar
+/// </summary>
 public class DeckStatusTextScript : BaseBehaviour
 {
     //references

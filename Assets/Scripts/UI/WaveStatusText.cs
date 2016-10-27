@@ -3,6 +3,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
+/// <summary>
+/// updates information about incoming enemies on the status bar
+/// </summary>
 public class WaveStatusText : BaseBehaviour
 {
     public Text enemyStatText;

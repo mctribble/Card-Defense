@@ -3,6 +3,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
+/// <summary>
+/// individual entry of the list of card types in the deck editor
+/// </summary>
 public class DeckEditorCardTypeEntryScript : BaseBehaviour, IPointerEnterHandler
 {
     public Text cardNameText; //label reference

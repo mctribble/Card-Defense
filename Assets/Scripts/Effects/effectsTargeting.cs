@@ -1,9 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Vexe.Runtime.Types;
 
-//all effects in this file trigger when an enemy is damaged.  The effect itself could be attached either to the attacking tower or the defending enemy.  This base effect handles behavior common to them all
+/// <summary>
+/// all TowerTargeting effects trigger when an enemy is damaged.  
+/// The effect itself could be attached either to the attacking tower or the defending enemy.  
+/// This base effect handles behavior common to them all
+/// </summary>
 public abstract class BaseEffectTowerTargeting : BaseEffect, IEffectTowerTargeting
 {
     [Hide] public override TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
@@ -12,7 +15,9 @@ public abstract class BaseEffectTowerTargeting : BaseEffect, IEffectTowerTargeti
     public abstract List<GameObject> findTargets(Vector2 towerPosition, float towerRange);
 }
 
-//default targeting effect used when no other is found
+/// <summary>
+/// default targeting effect to be used when no other is found
+/// </summary>
 public class EffectTargetDefault : BaseEffectTowerTargeting
 {
     [Hide] public override string Name { get { return "Target: default"; } } //returns name and strength

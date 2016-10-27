@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Vexe.Runtime.Types;
 
-//do-nothing struct containing static rules for deck building
+/// <summary>
+/// do-nothing struct containing static rules for deck building
+/// </summary>
 public class DeckRules
 {
     public const ushort MAX_CARDS_OF_SAME_TYPE = 10;
@@ -13,6 +15,9 @@ public class DeckRules
     private DeckRules() { } //hide constructor because this is just a container for constants
 }
 
+/// <summary>
+/// used to show the available decks in the deck editor
+/// </summary>
 public class DeckEditorDeckListScript : BaseBehaviour
 {
     public GameObject buttonPrefab; //used to instantiate deck buttons

@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Vexe.Runtime.Types;
 
+/// <summary>
+/// shows contents of the current deck in the deck editor
+/// </summary>
 public class DeckEditorCurrentDeckScript : BaseBehaviour
 {
     //color settings

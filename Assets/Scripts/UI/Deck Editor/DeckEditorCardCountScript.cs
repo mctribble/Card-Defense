@@ -3,6 +3,9 @@ using System.Collections;
 using Vexe.Runtime.Types;
 using UnityEngine.UI;
 
+/// <summary>
+/// displays card count statistics in the deck editor
+/// </summary>
 public class DeckEditorCardCountScript : BaseBehaviour
 {
     private Text text;

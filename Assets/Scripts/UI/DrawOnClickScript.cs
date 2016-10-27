@@ -5,6 +5,10 @@ using UnityEngine.EventSystems;
 using System;
 using UnityEngine.UI;
 
+/// <summary>
+/// draws from handToDraw whenever the player clicks on this object.  
+/// If oncePerRound is true, they can only do this once per round and the object fades out if drawing is unavailable
+/// </summary>
 public class DrawOnClickScript : BaseBehaviour, IPointerClickHandler
 {
     public HandFaction handToDraw; //the hand that should draw when the object with this script is clicked

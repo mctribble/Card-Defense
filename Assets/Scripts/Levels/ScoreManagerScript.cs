@@ -1,7 +1,8 @@
-﻿using UnityEngine;
-using System.Collections;
-using Vexe.Runtime.Types;
+﻿using Vexe.Runtime.Types;
 
+/// <summary>
+/// handles all the score tracking and provides a report at the end of a level
+/// </summary>
 public class ScoreManagerScript : BaseBehaviour
 {
     [Hide] public static ScoreManagerScript instance;
@@ -34,8 +35,10 @@ public class ScoreManagerScript : BaseBehaviour
         enemyCardsDrawn = 0;
         flawless = true;
     }
-	
-    //returns a string of the score report.  PlayerWon indicates whether or not the player won the level
+
+    /// <summary>
+    /// returns a string of the score report.  PlayerWon indicates whether or not the player won the level
+    /// </summary>
     public string report(bool PlayerWon)
     {
         string result = "";

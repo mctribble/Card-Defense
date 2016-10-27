@@ -1,14 +1,18 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Vexe.Runtime.Types;
 using System.Collections.Generic;
 
-//contains all the data this object needs to receive from the firing tower
+/// <summary>
+/// contains all the data needed to initialize a burst shot:
+/// damageEvent: details of the attack.  dest is ignored
+/// targetList: initial list of enemies to be hit (the attack will still find enemies not on this list.  it is just a performance save)
+/// burstRange; max size of the burst
+/// </summary>
 public struct BurstShotData
 {
-    public DamageEventData  damageEvent; //damage event provided by the tower.  dest is ignored.
-    public List<GameObject> targetList;  //enemies to be hit
-    public float            burstRange;  //max size of the burst animation
+    public DamageEventData  damageEvent; 
+    public List<GameObject> targetList;  
+    public float            burstRange;  
 }
 
 //round burst attack used by towers with TargetAll.  expands to the towers range and attacks enemies as it reaches them.
@@ -36,23 +40,8 @@ public class BurstShotScript : BaseBehaviour
         alreadyHit = new List<GameObject>();
     }
 
-    //init attack
-    void SetData (BurstShotData data)
-    {
-        maxScale = data.burstRange;
-        baseDamageEvent = data.damageEvent;
-        initialized = true; //flag ready
-    }
-
-    //overrides the default color
-    public void SetColor(Color newColor)
-    {
-        color = newColor;
-        spriteRenderer.color = newColor;
-    }
-	
-	// Update is called once per frame
-	void Update ()
+    // Update is called once per frame
+    private void Update()
     {
         if (initialized)
         {
@@ -71,7 +60,7 @@ public class BurstShotScript : BaseBehaviour
             foreach (GameObject enemy in EnemyManagerScript.instance.activeEnemies)
             {
                 float enemyDist = Vector2.Distance (enemy.transform.position, transform.position);
-                if (enemyDist <= lookAheadDist) 
+                if (enemyDist <= lookAheadDist)
                     if (expectedToHit.Exists(ded => ded.dest == enemy) == false)  //(if there is not already a damage event with enemy as the destination) (https://msdn.microsoft.com/en-us/library/bb397687.aspx)
                         if (alreadyHit.Contains(enemy) == false)
                             toWarnThisFrame.Add(enemy);
@@ -108,7 +97,7 @@ public class BurstShotScript : BaseBehaviour
             else
             {
                 //if we are dying this frame, attack everything on our expected list.  This way we still hit things that very narrowly avoided the attack, even if they technically should have "escaped".
-                toHitThisFrame = new List<DamageEventData>( expectedToHit );
+                toHitThisFrame = new List<DamageEventData>(expectedToHit);
             }
 
             //attack them
@@ -144,5 +133,20 @@ public class BurstShotScript : BaseBehaviour
             if (curScale == maxScale)
                 Destroy(gameObject);
         }
+    }
+
+    //init attack
+    public void SetData (BurstShotData data)
+    {
+        maxScale = data.burstRange;
+        baseDamageEvent = data.damageEvent;
+        initialized = true; //flag ready
+    }
+
+    //overrides the default color
+    public void SetColor(Color newColor)
+    {
+        color = newColor;
+        spriteRenderer.color = newColor;
     }
 }

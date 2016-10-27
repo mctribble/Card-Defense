@@ -6,6 +6,9 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// handles the level select menu
+/// </summary>
 public class LevelSelectScript : BaseBehaviour
 {
     public string       levelDir;         //directory levels are stored in
@@ -47,7 +50,9 @@ public class LevelSelectScript : BaseBehaviour
         StartCoroutine(setupLevelButtons());
     }
 
-    //creates buttons to be used as a level select
+    /// <summary>
+    /// [COROUTINE] creates buttons to be used as a level select
+    /// </summary>
     private IEnumerator setupLevelButtons()
     {
         //base game levels
@@ -88,7 +93,9 @@ public class LevelSelectScript : BaseBehaviour
         gameObject.transform.parent.parent.GetComponent<ScrollRect>().verticalNormalizedPosition = 1; //scroll the menu to the top after adding all these buttons
     }
 
-    //creates buttons to be used as a deck select
+    /// <summary>
+    /// [COROUTINE] creates buttons to be used as a deck select
+    /// </summary>
     private IEnumerator setupDeckButtons()
     {
         //create a button for using the default level deck
@@ -143,7 +150,9 @@ public class LevelSelectScript : BaseBehaviour
         gameObject.transform.parent.parent.GetComponent<ScrollRect>().verticalNormalizedPosition = 1; //scroll the menu to the top after adding all these buttons
     }
 
-    //destroys all the menu buttons so a different menu can be shown
+    /// <summary>
+    /// destroys all the menu buttons so a different menu can be shown
+    /// </summary>
     private void destroyButtons()
     {
         foreach (GameObject button in menuButtons)
@@ -151,7 +160,9 @@ public class LevelSelectScript : BaseBehaviour
         menuButtons.Clear();
     }
 
-    //callback from level buttons
+    /// <summary>
+    /// callback from level buttons
+    /// </summary>
     private void LevelSelected(FileInfo levelFile)
     {
         chosenLevelFile = levelFile;        //save the chosen level
@@ -159,7 +170,9 @@ public class LevelSelectScript : BaseBehaviour
         StartCoroutine(setupDeckButtons()); //present the deck menu
     }
 
-    //callback from deck buttons
+    /// <summary>
+    /// callback from deck buttons
+    /// </summary>
     private void DeckSelected(XMLDeck deck)
     {
         DeckManagerScript.instance.SendMessage("SetDeck", deck); //send deck manager the chosen deck
@@ -168,7 +181,9 @@ public class LevelSelectScript : BaseBehaviour
         Destroy(menuRoot); //we are done with this menu.  Destroy it.
     }
 
-    //callback from text buttons
+    /// <summary>
+    /// callback from text buttons
+    /// </summary>
     private void TextButtonSelected(string buttonText)
     {
         switch(buttonText)

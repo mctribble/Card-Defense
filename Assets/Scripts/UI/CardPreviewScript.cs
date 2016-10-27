@@ -2,6 +2,9 @@
 using System.Collections;
 using UnityEngine.UI;
 
+/// <summary>
+/// displays a given card but does nothing else.  For use in deck editor.
+/// </summary>
 public class CardPreviewScript : MonoBehaviour
 {
     //data
@@ -22,7 +25,9 @@ public class CardPreviewScript : MonoBehaviour
         CardTypeManagerScript.instance.cardTypesReloadedEvent += cardTypesReloaded;
     }
 
-    //event handler for card types being reloaded
+    /// <summary>
+    /// event handler for card types being reloaded
+    /// </summary>
     private void cardTypesReloaded(CardTypeCollection newTypes)
     {
         //bail if we arent showing anything
@@ -37,14 +42,18 @@ public class CardPreviewScript : MonoBehaviour
             MessageHandlerScript.Warning("The card types were reloaded, but the card type being previewed was not found and could not be updated!");
     }
 
-    //fetches data on the deck entry and then previews that card type
+    /// <summary>
+    /// fetches data on the given deck entry and then previews that card type
+    /// </summary>
     private void PreviewXMLDeckEntry(XMLDeckEntry xC)
     {
         CardData c = CardTypeManagerScript.instance.getCardByName(xC.name);
         StartCoroutine("PreviewCard", c);
     }
 
-    //saves card definition data and updates components as necessary
+    /// <summary>
+    /// [COROUTINE] saves card definition data and updates components to display it
+    /// </summary>
     private IEnumerator PreviewCard(CardData c)
     {
         //if null, show card back instead

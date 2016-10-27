@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Vexe.Runtime.Types;
-using System;
 
-//effects in this file take effect when the enemy reaches its goal.  This base effect handles behavior common to them all
+/// <summary>
+/// EnemyReachedGoal effects take effect when the enemy reaches its goal.  This base effect handles behavior common to them all
+/// </summary>
 public abstract class BaseEffectEnemyReachedGoal : BaseEffect, IEffectEnemyReachedGoal
 {
     [Hide] public override TargetingType targetingType { get { return TargetingType.none; } }    //this effect doesnt need a target

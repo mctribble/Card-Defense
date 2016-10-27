@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using Vexe.Runtime.Types;
 
-//all effects in this file effect the current wave.  This base effect handles behavior common to them all
+/// <summary>
+/// all wave effects should derive from this
+/// </summary>
 public abstract class BaseEffectWave : BaseEffect, IEffectWave
 {
     [Hide] public override TargetingType targetingType { get { return TargetingType.none; } } //wave effects dont need a target

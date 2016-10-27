@@ -7,7 +7,11 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
-//represents what type of card this is
+/// <summary>
+/// how this card is classified in game
+/// not to be confused with CardData, which is a complete card definition
+/// </summary>
+/// <seealso cref="CardData"/>
 public enum CardType
 {
     tower,      //summons a tower with the given stats
@@ -15,7 +19,9 @@ public enum CardType
     spell		//other effects
 }
 
-//represents everything needed to summon a tower
+/// <summary>
+/// represents an XML tower definition
+/// </summary>
 [System.Serializable]
 public class TowerData : System.Object
 {
@@ -44,7 +50,9 @@ public class TowerData : System.Object
     }
 }
 
-//represents everything needed to upgrade a tower
+/// <summary>
+/// represents an XML upgrade definition
+/// </summary>
 [System.Serializable]
 public class UpgradeData : System.Object
 {
@@ -86,6 +94,11 @@ public class UpgradeData : System.Object
     }
 }
 
+/// <summary>
+/// complete definition for a card type as seen in XML
+/// not to be confused with CardType, which is just how the card is classified in game
+/// </summary>
+/// <seealso cref="CardType"/>
 [System.Serializable]
 public class CardData : System.Object
 {
@@ -141,7 +154,9 @@ public class CardData : System.Object
         set { }
     }
 
-    //returns description text for this card type
+    /// <summary>
+    /// slow function that returns a complete description of this card
+    /// </summary>
     public string getDescription()
     {
         //init
@@ -232,6 +247,9 @@ public class CardData : System.Object
     public override string ToString() { return cardName; }
 }
 
+/// <summary>
+/// represents a card being shown on teh screen
+/// </summary>
 public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     //used to hide many variables at runtime
@@ -271,7 +289,9 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
     private bool       hidden;          //whether or not the card is hiding off screen
     private int        siblingIndex;    //used to put card back where it belongs in the sibling list after it is brought to front for readability
 
-    //returns, in world space, where floating combat text related to this card should spawn
+    /// <summary>
+    /// returns, in world space, where floating combat text related to this card should spawn
+    /// </summary>
     public Vector2 combatTextPosition { get { return Camera.main.ScreenToWorldPoint ( idleLocation + new Vector2( (Screen.width / 2), (Screen.height - (cardFront.rectTransform.rect.height / 4) ) ) ); } }
 
     //simple FSM
@@ -305,10 +325,14 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         hand = go;
     } //called by the hand to pass a reference to said hand
 
+    /// <summary>
+    /// saves a reference to the image of the deck so we can return there if we need to later
+    /// if this card returns to the deck when it is discarded, it will line itself up with this image before destroying itself
+    /// </summary>
     public void SetDeckImage(Image di)
     {
         deckImage = di;
-    } //saves where the deck is so we can return there if we need to later
+    } 
 
     // Update is called once per frame
     private void Update()
@@ -329,7 +353,10 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
             state = State.idle;
     }
 
-    //helper coroutine that simply waits until this card is idle (initial delay of one frame in case the card starts moving in the same frame as this is called)
+    /// <summary>
+    /// [COROUTINE] waits until this card is idle (initial delay of one frame in case the card starts moving in the same frame as this is called)
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator waitForIdle()
     {
         yield return null;
@@ -337,7 +364,9 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
             yield return null;
     }
 
-    //helper coroutine that simply waits until this card is idle or being discarded (initial delay of one frame in case the card starts moving in the same frame as this is called)
+    /// <summary>
+    /// [COROUTINE] waits until this card is idle or being discarded (initial delay of one frame in case the card starts moving in the same frame as this is called)
+    /// </summary>
     public IEnumerator waitForIdleOrDiscarding()
     {
         yield return null;
@@ -350,20 +379,16 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         StartCoroutine(flipCoroutine());
     } 
-
-    //calls flipOver only if the card is currently face down
     public void flipFaceUp() 
     {
         if (faceDown)
             flipOver();
     } 
-
     public IEnumerator flipWhenIdle()
     {
         yield return waitForIdle();
         yield return StartCoroutine(flipCoroutine());
     }
-
     public IEnumerator flipFaceUpWhenIdle()
     {
         yield return waitForIdle();
@@ -371,7 +396,9 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
             StartCoroutine(flipCoroutine());
     }
 
-    //main card flip coroutine
+    /// <summary>
+    /// [COROUTINE] flips the card over
+    /// </summary>
     public IEnumerator flipCoroutine()
     {
         faceDown = !faceDown; //flag the flip as complete before it technically even starts to make sure it isn't erroneously triggered again
@@ -382,8 +409,11 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         yield break; //done
     }
 
-    //turns the card to the given quaternion at rotationSpeed degrees/second
     private bool isTurning; //flag used to prevent simultaneous rotations
+
+    /// <summary>
+    /// [COROUTINE] turns the card to the given quaternion at rotationSpeed degrees/second
+    /// </summary>
     public IEnumerator turnToQuaternion(Quaternion target)
     {
         while (isTurning)
@@ -400,7 +430,9 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         isTurning = false;
     }
 
-    //scales the card to the given size over time
+    /// <summary>
+    /// [COROUTINE] scales the card to the given size over time
+    /// </summary>
     public IEnumerator scaleToVector(Vector3 targetSize)
     {
         while (transform.localScale != targetSize)
@@ -410,6 +442,9 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
     }
 
+    /// <summary>
+    /// handles the mouse moving onto the card
+    /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
         //ignore this event if hidden or discarding
@@ -425,6 +460,9 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         state = State.moving;
     }
 
+    /// <summary>
+    /// handles the mouse moving off of the card
+    /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
         //ignore this event if hidden or discarding
@@ -441,6 +479,9 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
     //this one needs a coroutine, so the event handler just passes the buck
     public void OnPointerClick(PointerEventData eventData) { StartCoroutine(OnClick()); }
 
+    /// <summary>
+    /// [COROUTINE] handles the card being clicked on
+    /// </summary>
     private IEnumerator OnClick()
     {
         GameObject[] cards = GameObject.FindGameObjectsWithTag ("Card"); //used for sending messages to all other cards
@@ -579,6 +620,9 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         hidden = false;//clear hidden flag
     }
 
+    /// <summary>
+    /// (tower cards only) summons the tower at the given location
+    /// </summary>
     private void SummonTower(Vector3 location)
     {
         //summon tower
@@ -592,6 +636,9 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         Cast();
     }
 
+    /// <summary>
+    /// (upgrade cards only) upgrades the given tower
+    /// </summary>
     private void UpgradeTower(GameObject target)
     {
         //send upgrade data to the target tower
@@ -605,7 +652,10 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         Cast();
     }
 
-    //discards this card
+    /// <summary>
+    /// [COROUTINE] discards this card
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator Discard()
     {
         state = State.discarding; //set the state so that other behavior on this card gets suspended
@@ -696,7 +746,9 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
     }
 
-    //performs steps that must be done whenever a card of any type is cast
+    /// <summary>
+    /// performs steps that must be done whenever a card of any type is cast
+    /// </summary>
     private void Cast()
     {
         //send a message to all cards to tell them to show themselves
@@ -712,6 +764,9 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         StartCoroutine(Discard());
     }
 
+    /// <summary>
+    /// updates where this card should be if it isnt doing anything.  If the card is idle when the idle location changes, it moves to the new location
+    /// </summary>
     private void SetIdleLocation(Vector2 newIdle)
     {
         idleLocation = newIdle; //update location
@@ -724,7 +779,9 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
     }
 
-    //saves card definition data and updates components as necessary
+    /// <summary>
+    /// [COROUTINE] saves card definition data and updates components as necessary
+    /// </summary>
     private IEnumerator SetCard(Card c)
     {
         //save the data
@@ -740,13 +797,17 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         art.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
     }
 
-    //helper function.  updates the card description text.
+    /// <summary>
+    /// updates the card description text.
+    /// </summary>
     private void updateDescriptionText()
     {
         description.text = card.data.getDescription();
     }
 
-    //updates card charge counts
+    /// <summary>
+    /// updates card charge counts
+    /// </summary>
     public void updateChargeText()
     {
         title.text = card.data.cardName + "\n" + card.charges + "/" + card.data.cardMaxCharges;

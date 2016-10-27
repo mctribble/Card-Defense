@@ -5,7 +5,9 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
-//filters/sorts card lists to be used by the various editor elements.
+/// <summary>
+/// filters/sorts card lists to be used by the various editor elements.
+/// </summary>
 public class DeckEditorFilter
 {
     public string    searchString; //null if no active search.  otherwise contains the text to be found
@@ -102,14 +104,18 @@ public class DeckEditorFilter
     }
 }
 
-//comparer used to sort card lists by name
+/// <summary>
+/// comparer used to sort card lists by name
+/// </summary>
 class CardNameComparer : IComparer<CardData>, IComparer<XMLDeckEntry>
 {
     public int Compare(CardData a, CardData b) { return string.Compare(a.cardName, b.cardName); }
     public int Compare(XMLDeckEntry a, XMLDeckEntry b) { return string.Compare(a.name, b.name); }
 }
 
-//comparer used to sort card lists by type
+/// <summary>
+/// comparer used to sort card lists by type
+/// </summary>
 class CardTypeComparer : IComparer<CardData>, IComparer<XMLDeckEntry>
 {
     public int Compare(CardData a, CardData b)
@@ -122,14 +128,18 @@ class CardTypeComparer : IComparer<CardData>, IComparer<XMLDeckEntry>
     public int Compare(XMLDeckEntry a, XMLDeckEntry b) { return Compare(CardTypeManagerScript.instance.getCardByName(a.name), CardTypeManagerScript.instance.getCardByName(b.name)); }
 }
 
-//comparer used to sort card lists by charges
+/// <summary>
+/// comparer used to sort card lists by charges
+/// </summary>
 class CardChargesComparer : IComparer<CardData>, IComparer<XMLDeckEntry>
 {
     public int Compare(CardData a, CardData b) { return b.cardMaxCharges - a.cardMaxCharges; }
     public int Compare(XMLDeckEntry a, XMLDeckEntry b) { return Compare(CardTypeManagerScript.instance.getCardByName(a.name), CardTypeManagerScript.instance.getCardByName(b.name)); }
 }
 
-//this is the powerhouse of the deck editor.  it handles messages to/from all of the interface elements and also performs all of the actual deck editing.
+/// <summary>
+/// this is the powerhouse of the deck editor.  it handles messages to/from all of the interface elements and also performs all of the actual deck editing.
+/// </summary>
 public class DeckEditorMainScript : BaseBehaviour
 {
     public GameObject cardPreview;          //reference to the object responsible for previewing cards
@@ -139,7 +149,9 @@ public class DeckEditorMainScript : BaseBehaviour
     private bool unsavedChanges; //whether or not there are changes that have not been written to disk
     private bool newDeck;        //if true, this deck is not currently in the deck collection and must be added to it in order to save changes
 
-    //creates a clickable button in the UNITY inspector that test previews all card types and warns about any that dont fit on the card
+    /// <summary>
+    /// [COROUTINE] dev-only function creates a clickable button in the UNITY inspector that test previews all card types and warns about any that dont fit on the card
+    /// </summary>
     [Show] public void testCardSizes() { StartCoroutine(testCardSizesCoroutine()); }
     private IEnumerator testCardSizesCoroutine()
     {

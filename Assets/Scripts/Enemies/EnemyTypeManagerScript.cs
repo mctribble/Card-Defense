@@ -1,6 +1,4 @@
-﻿//based on tutorial found here: http://wiki.unity3d.com/index.php?title=Saving_and_Loading_Data:_XmlSerializer
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
@@ -8,7 +6,9 @@ using System.Xml.Serialization;
 using UnityEngine;
 using Vexe.Runtime.Types;
 
-//maintains the collection of enemy types, including saving/loading to XML
+/// <summary>
+/// maintains the collection of enemy types, including saving/loading to XML
+/// </summary>
 [XmlRoot("EnemyTypes")]
 [System.Serializable]
 public class EnemyTypeCollection
@@ -26,6 +26,9 @@ public class EnemyTypeCollection
     //comma separated list of enemy mod files that this enemy file is dependent on
     [XmlAttribute("enemyFileDependencies")][DefaultValue("")][Hide] public string dependencies;
 
+    /// <summary>
+    /// saves this collection to the given location.  Modded enemies are not included, since they are likely defined elsewhere
+    /// </summary>
     public void Save(string path)
     {
         //temporarily remove modded enemies
@@ -43,6 +46,9 @@ public class EnemyTypeCollection
         enemyTypes = temp;
     }
 
+    /// <summary>
+    /// returns a new EnemyTypeCollection created from the given XML file
+    /// </summary>
     public static EnemyTypeCollection Load(string path)
     {
         XmlSerializer serializer = new XmlSerializer(typeof(EnemyTypeCollection));
@@ -57,6 +63,9 @@ public class EnemyTypeCollection
     public override string ToString() { return "Enemy Types: (" + enemyTypes.Count + " types)"; }
 }
 
+/// <summary>
+/// handles saving/loading of enemy types and provides several utility functions for finding enemy types
+/// </summary>
 public class EnemyTypeManagerScript : BaseBehaviour
 {
     //Manager settings.  only shown in the editor since they dont need editing at runtime
@@ -76,7 +85,9 @@ public class EnemyTypeManagerScript : BaseBehaviour
         StartCoroutine(loadEnemyTypes());
     }
 
-    //loads enemy types.  Coroutine because we may have to wait for the dependency manager
+    /// <summary>
+    /// [COROUTINE] loads enemy types.  Coroutine because we may have to wait for the dependency manager
+    /// </summary>
     private System.Collections.IEnumerator loadEnemyTypes()
     {
         //wait for the dependency manager to exist before we do this
@@ -154,7 +165,10 @@ public class EnemyTypeManagerScript : BaseBehaviour
         }  
     }
 
-    //returns a random enemy type from the database, trying to provide one that does not have a spawnCost higher than maxSpawnCost
+    /// <summary>
+    /// returns a random enemy type from the database, trying to provide one that does not have a spawnCost higher than maxSpawnCost
+    /// if no enemy type that is cheap enough is found after many attempts, returns any random enemy type
+    /// </summary>
     public EnemyData getRandomEnemyType(int maxSpawnCost)
     {
         int maxAttempts = types.enemyTypes.Count * 5; //maximum number of times to select another random enemy type looking for one that is not above the max
@@ -189,7 +203,9 @@ public class EnemyTypeManagerScript : BaseBehaviour
         throw new KeyNotFoundException("Enemy type not found: " + nameToFind);
     }
 
-    //provides a list of enemy type names
+    /// <summary>
+    /// provides a sorted array of all valid enemy type names
+    /// </summary>
     public string[] getEnemyNames()
     {
         List<string> names = new List<string>();

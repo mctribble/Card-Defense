@@ -7,7 +7,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
-//contains all the data required to spawn a wave
+/// <summary>
+/// represents a group of enemies
+/// </summary>
 [System.Serializable]
 public class WaveData
 {
@@ -17,14 +19,12 @@ public class WaveData
 
     //enemy type name, annotated to give a popup in the inspector and call resetSpawnCount if it is set from there
     private string[] getEnemyNames() { return EnemyTypeManagerScript.instance.getEnemyNames(); }
-
     [XmlAttribute]
     [Popup("getEnemyNames",CaseSensitive = true, Filter = true, HideUpdate = true, TextField = true)]
     [OnChanged("resetSpawnCount")]
     public string type;
-    
 
-    //DEV: indicates whether or not this wave was randomly generated.  Random waves are not written back to the file when saving level definitions
+    //indicates whether or not this wave was randomly generated.  Random waves are not written back to the file when saving level definitions
     [XmlIgnore][Comment("random waves are not saved to the level file.",helpButton:true)]
     public bool isRandomWave;
     
@@ -139,7 +139,9 @@ public class WaveData
     //returns whether or not this is a survivor wave
     public bool isSurvivorWave { get { return enemyList != null; } }
 
-    //used for survivor waves.  reactivates the first survivor on the list and removes it from said list
+    /// <summary>
+    /// used for survivor waves.  reactivates the first survivor on the list and removes it from said list
+    /// </summary>
     public void spawn()
     {
         //error if the enemy list is empty
@@ -162,6 +164,9 @@ public class WaveData
     }
 }
 
+/// <summary>
+/// represents an enemy wave being shown on the screen as a card
+/// </summary>
 public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     //references
@@ -205,7 +210,9 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
         survivorList = null;
     }
   
-    //sets the wave
+    /// <summary>
+    /// sets up the wave using the given data
+    /// </summary>
     public void SetWave(WaveData w)
     {
         wave = w;
@@ -215,7 +222,9 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
         enemyType = w.enemyData.name;
     }
 
-    //sets this up as a survivor wave
+    /// <summary>
+    /// sets up this card to represent survivors from the previous round
+    /// </summary>
     public void SurvivorWave()
     {
         description.text = "These are survivors from the previous round, come to attack again.  Other cards cannot alter this wave.";
@@ -269,10 +278,12 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
         idle,
         moving,
         attacking,
-        discarding
+        discarding,
     }
 
-    //tells the card where it should be idling
+    /// <summary>
+    /// tells the card where it should be idling
+    /// </summary>
     private void SetIdleLocation(Vector2 newIdle)
     {
         idleLocation = newIdle; //update location
@@ -328,6 +339,9 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
         }
     }
 
+    /// <summary>
+    /// handles the mouse moving onto this card
+    /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
         //ignore this event if hidden or discarding
@@ -343,6 +357,9 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
         state = State.moving;
     }
 
+    /// <summary>
+    /// handles the mouse moving off of this card
+    /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
         //ignore this event if hidden or discarding
@@ -356,13 +373,17 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
         state = State.moving;
     }
 
-    //called by the hand to pass a reference to said hand
+    /// <summary>
+    /// sets which hand this card belongs in
+    /// </summary>
     private void SetHand(GameObject go)
     {
         hand = go;
     }
 
-    //helper coroutine that simply waits until this card is idle (initial delay of one frame in case the card starts moving in the same frame as this is called)
+    /// <summary>
+    /// [COROUTINE] waits until this card is idle (initial delay of one frame in case the card starts moving in the same frame as this is called)
+    /// </summary>
     public IEnumerator waitForIdle()
     {
         yield return null;
@@ -370,7 +391,9 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
             yield return null;
     }
 
-    //helper coroutine that simply waits until this card is idle or being discarded (initial delay of one frame in case the card starts moving in the same frame as this is called)
+    /// <summary>
+    /// [COROUTINE] waits until this card is idle or being discarded (initial delay of one frame in case the card starts moving in the same frame as this is called)
+    /// </summary>
     public IEnumerator waitForIdleOrDiscarding()
     {
         yield return null;
@@ -378,7 +401,9 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
             yield return null;
     }
 
-    //turns the card to the given quaternion at rotationSpeed degrees/second
+    /// <summary>
+    /// [COROUTINE] turns the card to the given quaternion at rotationSpeed degrees/second
+    /// </summary>
     public IEnumerator turnToQuaternion(Quaternion target)
     {
         while (transform.rotation != target)
@@ -388,7 +413,9 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
         }
     }
 
-    //scales the card to the given size over time
+    /// <summary>
+    /// [COROUTINE] scales the card to the given size over time
+    /// </summary>
     public IEnumerator scaleToVector(Vector3 targetSize)
     {
         while (transform.localScale != targetSize)
@@ -443,7 +470,10 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
     public IEnumerator flipWhenIdle() { yield return waitForIdle(); yield return flipCoroutine(); }
     public IEnumerator flipFaceUpWhenIdle() { yield return waitForIdle(); if (faceDown) StartCoroutine(flipCoroutine()); }
 
-    //main card flip coroutine
+    /// <summary>
+    /// [COROUTINE] flips the card over 
+    /// </summary>
+    /// <seealso cref="flipOver"/>
     public IEnumerator flipCoroutine()
     {
         Quaternion flipQuaternion = Quaternion.AngleAxis(90, Vector3.up); //rotation to move towards to flip the card at
@@ -469,6 +499,8 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
         totalRemainingHealth = wave.totalRemainingHealth;
     }
 
-    //applies the given effect to the wave, provided it is not a survivor wave
+    /// <summary>
+    /// applies the given effect to the wave, provided it is not a survivor wave
+    /// </summary>
     public void applyWaveEffect(IEffectWave e) { if(wave.isSurvivorWave == false) wave = e.alteredWaveData(wave); } 
 }

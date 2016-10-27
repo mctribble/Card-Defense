@@ -2,6 +2,9 @@
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
+/// <summary>
+/// shows information about charges in the current deck in the status bar
+/// </summary>
 public class ChargeStatusScript : BaseBehaviour
 {
     //references

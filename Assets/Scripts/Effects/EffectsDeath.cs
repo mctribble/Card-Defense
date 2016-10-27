@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Vexe.Runtime.Types;
-using System;
 
-//effects in this file take place when the tower/enemy is killed.  This base effect handles behavior common to them all
+/// <summary>
+/// death effects take place when the tower/enemy is killed.  This base effect handles behavior common to them all
+/// </summary>
 abstract class BaseEffectDeath : BaseEffect, IEffectDeath
 {
     [Hide] public override TargetingType targetingType { get { return TargetingType.none; } } //this effect is not targeted (since it effects the enemy/tower it is attached to)

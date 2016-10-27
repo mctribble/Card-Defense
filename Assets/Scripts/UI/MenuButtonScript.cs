@@ -4,14 +4,20 @@ using UnityEngine;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
+/// <summary>
+/// what kind of information is associated with the button
+/// </summary>
 public enum MenuButtonType
 {
-    level, //button is associated with a level
+    level, 
     deck,
     card,
     text
 }
 
+/// <summary>
+/// a versatile menu button that sends a message back to its parent when clicked
+/// </summary>
 public class MenuButtonScript : BaseBehaviour
 {
     public Text           buttonText; //text of this button
@@ -22,7 +28,9 @@ public class MenuButtonScript : BaseBehaviour
     public XMLDeck  xDeck;      //deck attached to this button, if any
     public CardData card;       //card type attached to this button, if any
 
-    //sets the level file associated with this button
+    /// <summary>
+    /// the button is set up to correspond to the given level
+    /// </summary>
     private void setLevel(FileInfo file)
     {
         levelFile = file;   //set file name
@@ -31,7 +39,9 @@ public class MenuButtonScript : BaseBehaviour
         buttonType = MenuButtonType.level;
     }
 
-    //sets the deck associated with this button
+    /// <summary>
+    /// the button is set up to correspond to the given XMLDeck
+    /// </summary>
     private void setDeck(XMLDeck newXDeck)
     {
         xDeck = newXDeck; //set deck
@@ -39,7 +49,9 @@ public class MenuButtonScript : BaseBehaviour
         buttonType = MenuButtonType.deck;
     }
 
-    //sets the card type associated with this button
+    /// <summary>
+    /// the button is set up to correspond to the given CardData
+    /// </summary>
     private void setCard(CardData newCard)
     {
         card = newCard;
@@ -47,20 +59,26 @@ public class MenuButtonScript : BaseBehaviour
         buttonType = MenuButtonType.card;
     }
 
-    //sets the text of the button (note: only use on text buttons, as the other types set the text automatically)
+    /// <summary>
+    /// sets up the button by setting the text directly (note: only use on text buttons, as the other types set the text automatically)
+    /// </summary>
     private void setButtonText(string text)
     {
         buttonText.text = text;
         buttonType = MenuButtonType.text;
     }
 
-    //sets the color for this button
+    /// <summary>
+    /// sets the color for this button
+    /// </summary>
     private void setColor(Color c)
     {
         GetComponent<Image>().color = c;
     }
 
-    //reports back to the parent object in a slightly different way for each button type
+    /// <summary>
+    /// reports back to the parent object in a slightly different way for each button type
+    /// </summary>
     private void buttonClicked()
     {
         switch (buttonType)

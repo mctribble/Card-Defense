@@ -2,6 +2,9 @@
 using System.Collections;
 using Vexe.Runtime.Types;
 
+/// <summary>
+/// handles user input to control the camera
+/// </summary>
 public class CameraControlScript : BaseBehaviour
 {
     public float cameraSpeed;  //speed of the camera

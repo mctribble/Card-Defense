@@ -6,41 +6,58 @@ using System.Xml.Serialization;
 using UnityEngine;
 using Vexe.Runtime.Types;
 
-//quick note on VFW attributes, since effects use them fairly heavily: 
-//[Hide]: prevents field from appearing in unity inspector
-//[Show]: forces field to show in unity inspector
-//[Display(x)]: alters display order in the inspector
-//Usually you dont need these, since VFW is good at figuring it out on its own, but I found myself picky on this point for effects so I specify by hand
-
 //All effects in the game must implement one of these interfaces.
 //However, they should not use IEffect directly, but instead a derivative such as IEffectInstant or IEffectWave
 
-//different targeting types.
+/// <summary>
+/// The targeting type determines how an effect must be targeted when placed on a card
+/// none:   does not require the player to select a target
+/// tower:  requires the player to target a tower
+/// noCast: does not support being cast (used for effects that are not meant to be applied to a spell)
+/// </summary>
 public enum TargetingType
 {
-    none,   //this effect does not require the player to select a target
-    tower, 	//this effect requires the player to target a tower
-    noCast  //this effect does not support being cast (used for effects that are not meant to be applied to a spell)
+    none, 
+    tower,
+    noCast,
 };
 
-//different effect types.  The values are hex colors to be used for text mentioning these effects (format RRGGBBAA).  unchecked syntax is to force stuffing the values into the signed int used by enums
+/// <summary>
+/// different effect types.  Each type is triggered under different circumstances  
+/// property        : is never triggered.  instead, other code tests whether or not it exists on a given object and behave accordingly
+/// enemyDamaged    : triggers when an enemy is damaged.  Could be attached to the attacking tower or the defending enemy
+/// enemyReachedGoal: triggers when an enemy reaches their goal
+/// instant         : triggers instantly without the need for a target
+/// overcharge      : triggers when a tower attacks with at least one full point of overcharge, before enemyDamaged effects
+/// periodic        : triggers on every update() call
+/// self            : affects the card it is attached to (i.e.: to gain/lose charges when cast)
+/// towerTargeting  : alters the way a tower targets enemies.  if multiple are present, only the last is actually used
+/// wave            : alters the current wave
+/// death           : triggers when the tower/enemy is destroyed
+/// everyRound      : triggers once every round (uses IEffectInstant)
+/// meta            : targets another effect.  These usually trigger in the same manner as their target
+/// </summary>
 public enum EffectType
 {
-    property         = unchecked((int)0xA52A2AFF), //effect is never triggered.  instead, other code tests whether or not it exists on a given object and behave accordingly
-    enemyDamaged     = unchecked((int)0x008000FF), //effect triggers when an enemy is damaged.  Could be attached to the attacking tower or the defending enemy
-    enemyReachedGoal = unchecked((int)0x111111FF), //effect triggers when an enemy reaches their goal
-    instant          = unchecked((int)0x00FFFFFF), //effect triggers instantly without the need for a target
-    overcharge       = unchecked((int)0xFF00FFFF), //effect triggers when a tower attacks with at least one full point of overcharge, before enemyDamaged effects
-    periodic         = unchecked((int)0x333333FF), //effect triggers on every update() call
-    self             = unchecked((int)0x0000A0FF), //effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
-    towerTargeting   = unchecked((int)0xADD8E6FF), //effect alters the way a tower targets enemies.  if multiple are present, only the last is actually used
-    wave             = unchecked((int)0x0000FFFF), //effect alters the current wave
-    death            = unchecked((int)0xFF0000FF), //effect triggers when the tower/enemy is destroyed
-    everyRound       = unchecked((int)0x00FF00FF), //effect triggers once every round (uses IEffectInstant)
-    meta             = unchecked((int)0x000000FF)  //effect targets another effect.  These usually trigger in the same manner as their target
+    //The values are hex colors to be used for text mentioning these effects (format RRGGBBAA).  
+    //unchecked syntax is to force stuffing the values into the signed int used by enums
+    property         = unchecked((int)0xA52A2AFF), 
+    enemyDamaged     = unchecked((int)0x008000FF), 
+    enemyReachedGoal = unchecked((int)0x111111FF), 
+    instant          = unchecked((int)0x00FFFFFF), 
+    overcharge       = unchecked((int)0xFF00FFFF), 
+    periodic         = unchecked((int)0x333333FF), 
+    self             = unchecked((int)0x0000A0FF), 
+    towerTargeting   = unchecked((int)0xADD8E6FF), 
+    wave             = unchecked((int)0x0000FFFF), 
+    death            = unchecked((int)0xFF0000FF), 
+    everyRound       = unchecked((int)0x00FF00FF), 
+    meta             = unchecked((int)0x000000FF), 
 };
 
-//represents an effect in XML
+/// <summary>
+/// represents an effect in XML
+/// </summary>
 [System.Serializable]
 public class XMLEffect : System.Object
 {
@@ -58,7 +75,10 @@ public class XMLEffect : System.Object
     [XmlElement("Effect")]
     public XMLEffect innerEffect;
 
-    //attempts to retrieve a help string from 'available effects.txt' for display in the inspector
+    /// <summary>
+    /// attempts to retrieve a help string from 'available effects.txt' for display in the inspector
+    /// if one could not be found, returns an error message instead
+    /// </summary>
     private static Dictionary<string, string> cachedHelpStrings = null;
     [Show] public string usage
     {
@@ -147,7 +167,9 @@ public class XMLEffect : System.Object
     }
 }
 
-//convenience struct that indicates which property effects are contained in this effectData
+/// <summary>
+/// convenience struct that indicates which property effects are contained in an effectData
+/// </summary>
 public struct PropertyEffects
 {
     public bool   armorPierce;
@@ -160,7 +182,9 @@ public struct PropertyEffects
     public int?   maxOvercharge;
 }
 
-//represents everything needed to apply effects to an object
+/// <summary>
+/// provides a list of all effects on an object, and several utility functions to search it
+/// </summary>
 [System.Serializable]
 public class EffectData : System.Object
 {
@@ -187,7 +211,9 @@ public class EffectData : System.Object
     [XmlIgnore] private List<IEffectPeriodic>       cachedPeriodicEffectList;
     [XmlIgnore] private PropertyEffects?            cachedPropertyEffects;
 
-    //list of effect objects
+    /// <summary>
+    /// read only list of effect objects
+    /// </summary>
     [XmlIgnore][Show] private List<IEffect> Effects = new List<IEffect>(); 
     [XmlIgnore]
     public ReadOnlyCollection<IEffect> effects
@@ -201,7 +227,9 @@ public class EffectData : System.Object
         }
     }
 
-    //adds the given effect to the list, clearing cached values so that future calls return correctly
+    /// <summary>
+    /// adds the given effect to the list
+    /// </summary>
     public void Add(IEffect e)
     {
         if (testForEffectRequirements(e))
@@ -250,7 +278,9 @@ public class EffectData : System.Object
         lastUsedTargetingEffect  = null;
     }
 
-    //helper function that returns how the card containing these effects must be used.
+    /// <summary>
+    /// helper function that returns how the card containing these effects must be used.
+    /// </summary>
     //the result is cached since it is needed regularly but changes rarely
     [XmlIgnore]
     public TargetingType cardTargetingType
@@ -277,10 +307,11 @@ public class EffectData : System.Object
         }
     }
 
-    //helper function that returns the targeting effect currently in use by the tower
+    /// <summary>
+    /// helper function that returns the targeting effect currently in use by the tower
+    /// the XMLName of the actual effect used is also cached in lastUsedTargetingEffect for use by anything that wants to know how the targeting happened
+    /// </summary>
     //the result is cached since it is needed regularly but changes rarely
-    //the XMLName of the actual effect used is cached for use by anything that wants to know how the targeting happened
-    public string lastUsedTargetingEffect { get; set; }
     public List<GameObject> doTowerTargeting(Vector2 towerPosition, float towerRange)
     {
         //cache a list of targeting effects on this object.  each one is tested in turn, and the first that returns a non-null response has its result returned to the tower
@@ -329,7 +360,14 @@ public class EffectData : System.Object
         }
     }
 
-    //helper that returns a struct containing information on all property effects in this set
+    /// <summary>
+    /// contains the XMLName of the targeting effect used by the last call to doTowerTargeting()
+    /// </summary>
+    public string lastUsedTargetingEffect { get; set; }
+
+    /// <summary>
+    /// helper that returns a struct containing information on all property effects in this set
+    /// </summary>
     //results are cached to save performance
     [XmlIgnore]
     public PropertyEffects propertyEffects
@@ -403,7 +441,11 @@ public class EffectData : System.Object
         }
     }
 
-    //helper function that updates all periodic effects on an enemy
+    /// <summary>
+    /// helper function that updates all periodic effects on an enemy
+    /// </summary>
+    /// <param name="enemy">enemy to update</param>
+    /// <param name="deltaTime">time passed since last update</param>
     //the list of periodic effects is cached since it is used every frame but changes very rarely
     public void triggerAllPeriodicEnemy (EnemyScript enemy, float deltaTime)
     {
@@ -419,7 +461,10 @@ public class EffectData : System.Object
             e.UpdateEnemy(enemy, deltaTime);
     }
 
-    //translates the XMLeffects into code references
+    /// <summary>
+    /// translates the XMLeffects into code references, if they aren't already
+    /// </summary>
+    /// <param name="cardName">optional name to provide the new effects for logging purposes</param>
     public void parseEffects(string cardName = "<UNKNOWN_CARD>")
     {
         foreach (XMLEffect xe in XMLEffects)
@@ -430,7 +475,9 @@ public class EffectData : System.Object
         }
     }
 
-    //clones this EffectData to a new object
+    /// <summary>
+    /// clones this EffectData to a new object
+    /// </summary>
     public EffectData clone()
     {
         EffectData clone = new EffectData();
@@ -447,7 +494,9 @@ public class EffectData : System.Object
         return clone;
     }
 
-    //clones an individual IEffect without needing to know its type
+    /// <summary>
+    /// clones an individual IEffect without needing to know its type
+    /// </summary>
     public static IEffect cloneEffect(IEffect original)
     {
         //make a new XMLEffect from the original effect, parse it to get an effect object of the proper type, then return that
@@ -466,7 +515,9 @@ public class EffectData : System.Object
         return result;
     }
 
-    //cleans anything unnecessary out of the effect list 
+    /// <summary>
+    /// removes any effects that have no chance of triggering again and can be destroyed safely
+    /// </summary>
     public void cleanEffects()
     {
         Effects.RemoveAll(ie => ie.shouldBeRemoved());

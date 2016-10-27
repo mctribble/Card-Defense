@@ -9,23 +9,39 @@ using UnityEngine;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
-//contains an upgrade and a number to indicate how many times it should be applied.  used by PremadeTower
+/// <summary>
+/// XML representation of an upgrade to be applied to a premade tower
+/// Name: name of the upgrade card to use
+/// Count: number of times to apply it
+/// </summary>
 [System.Serializable]
 public class PremadeTowerUpgrade
 {
+    //upgrade to apply, with an inspector popup menu of valid upgrades
     private string[] getUpgradeNames() { return CardTypeManagerScript.instance.getUpgradeNames(); }
-    [XmlAttribute][Popup("getUpgradeNames",CaseSensitive = true,Filter = true,HideUpdate = true,TextField = true)] public string Name;  //upgrade to apply, with an inspector popup menu
-    [XmlAttribute] public int    Count;	//number of applications
+    [XmlAttribute]
+    [Popup("getUpgradeNames",CaseSensitive = true,Filter = true,HideUpdate = true,TextField = true)]
+    public string Name;  
+
+    [XmlAttribute]
+    public int Count;	//number of applications.  This is allowed to exceed the tower's upgrade cap
 
     public override string ToString() { return Name + "x" + Count; }
 }
 
-//container that holds everything needed to create a tower at level start
+/// <summary>
+/// XML representation of a tower that should be present at the start of a level
+/// name: tower card to use
+/// upgrades: a list of upgrades to apply to it
+/// </summary>
 [System.Serializable]
 public class PremadeTower
 {
+    //name of the tower to place, with an inspector popup menu of valid towers
     private string[] getTowerNames() { return CardTypeManagerScript.instance.getTowerNames(); }
-    [XmlAttribute][Popup("getTowerNames",CaseSensitive = true,Filter = true,HideUpdate = true,TextField = true)] public string name; //name of the tower to place, with an inspector popup menu
+    [XmlAttribute]
+    [Popup("getTowerNames",CaseSensitive = true,Filter = true,HideUpdate = true,TextField = true)]
+    public string name; 
 
     [XmlArray("Upgrades")]
     [XmlArrayItem("Upgrade")]
@@ -45,6 +61,9 @@ public class PremadeTower
     public override string ToString() { return name + "(" + upgrades.Count + " upgrades)"; }
 };
 
+/// <summary>
+/// container for the level definition as defined through XML.
+/// </summary>
 [XmlRoot("Level")]
 [System.Serializable]
 public class LevelData
@@ -52,12 +71,12 @@ public class LevelData
     //used to specify the proper .xsd file in the serialized xml
     [Hide]
     [XmlAttribute("noNamespaceSchemaLocation", Namespace = System.Xml.Schema.XmlSchema.InstanceNamespace)]
-    public string schema = "../Level.xsd";
+    public readonly string schema = "../Level.xsd";
 
     //where this level was loaded from
     [XmlIgnore] public string fileName;
 
-    //comma separated lists of mod files that this file is dependent on
+    //comma separated lists of mod files that this level is dependent on, if any
     [XmlAttribute("enemyFileDependencies")][DefaultValue("")][Hide] public string enemyDependencies;
     [XmlAttribute( "cardFileDependencies")][DefaultValue("")][Hide] public string  cardDependencies;
 
@@ -111,9 +130,10 @@ public class LevelData
     //provides a popup menu in the inspector to pick a premade deck
     private string[] getDeckNames() { return DeckManagerScript.instance.premadeDecks.getNames(); }
     [Popup("getDeckNames",CaseSensitive = true,Filter = true,HideUpdate = true,TextField = true)]
-    [VisibleWhen("usingLevelDeck")] public string premadeDeckName; 
+    [VisibleWhen("usingLevelDeck")]
+    public string premadeDeckName; 
 
-    //only shows the premadeDeckName if there is a name to show
+    //only serialize the premadeDeckName if there is one
     [XmlIgnore]
     public bool premadeDeckNameSpecified
     {
@@ -123,7 +143,9 @@ public class LevelData
 
     [Show] private void SaveChanges() { Save(fileName); } //DEV: provides a button in the editor to save the level data
 
-    //saves the level data to a file of the given name
+    /// <summary>
+    /// saves the level data to a file of the given name
+    /// </summary>
     public void Save(string path)
     {
         //temporarily remove random waves from the list
@@ -141,6 +163,9 @@ public class LevelData
         waves = temp;
     }
 
+    /// <summary>
+    /// returns a new LevelData created from the provided XML file
+    /// </summary>
     public static LevelData Load(string path)
     {
         XmlSerializer serializer = new XmlSerializer(typeof(LevelData));
@@ -208,7 +233,9 @@ public class LevelManagerScript : BaseBehaviour
         desiredTimeScale = 1.0f;
     }
 
-    //loads the given level
+    /// <summary>
+    /// [COROUTINE] loads the given level and sets up the scene to get it going
+    /// </summary>
     private IEnumerator loadLevel(string level)
     {
         data = LevelData.Load(Path.Combine(Application.dataPath, level)); //load the level
@@ -338,8 +365,10 @@ public class LevelManagerScript : BaseBehaviour
         LevelLoadedEvent();
     }
 
-    //sends the deck defined as the level deck to the deck manager, and shuffles if needed
-    //this is public so that deck manager can call it to reload the level deck without needing to worry about the logistics of how that is done.
+    /// <summary>
+    /// sends the deck defined as the level deck to the deck manager, and shuffles if needed
+    /// this is public so that deck manager can call it to reload the level deck without needing to worry about the logistics of how that is done.
+    /// </summary>
     public void loadLevelDeck()
     {
         data.usingLevelDeck = true;
@@ -400,7 +429,9 @@ public class LevelManagerScript : BaseBehaviour
                 Time.timeScale = Mathf.Min(desiredTimeScale, Time.timeScale + timeScaleInterval); //increase it by the interval without allowing it to go above the desired setting
     }
 
-    //spawns all of the incoming waves
+    /// <summary>
+    /// [COROUTINE] spawns all of the incoming waves
+    /// </summary>
     private IEnumerator spawnWaves()
     {
         //start the waves
@@ -457,7 +488,9 @@ public class LevelManagerScript : BaseBehaviour
         UpdateWaveStats();
     }
 
-    // Handles spawning of a single wave
+    /// <summary>
+    ///  [COROUTINE] Handles spawning of a single wave
+    /// </summary>
     private IEnumerator spawnWave(WaveData d)
     {
         //flag the wave as started
@@ -517,7 +550,12 @@ public class LevelManagerScript : BaseBehaviour
             ScoreManagerScript.instance.wavesCleared++;
     }
 
-    //called when effects want to spawn enemies mid-wave
+    /// <summary>
+    /// [COROUTINE] called by effects to spawn enemies mid-wave
+    /// </summary>
+    /// <param name="wave">the wave to spawn</param>
+    /// <param name="spawnLocation">where to spawn it</param>
+    /// <param name="firstDestination">the first location for them to travel to before pathfinding.  This should be the start or end of a path segment.</param>
     public IEnumerator spawnWaveAt(WaveData wave, Vector2 spawnLocation, Vector2 firstDestination)
     {
         //flag the wave as started
@@ -561,7 +599,9 @@ public class LevelManagerScript : BaseBehaviour
         yield break;
     }
 
-    //called when the wave changes to update the enemy spawn counter and health tracker
+    /// <summary>
+    /// called when the wave changes to update the enemy spawn counter and health tracker
+    /// </summary>
     public void UpdateWaveStats()
     {
         HandScript.enemyHand.UpdateWaveStats();
@@ -570,7 +610,11 @@ public class LevelManagerScript : BaseBehaviour
         totalSpawnedThisWave = 0;
     }
 
-    //spawns an explosion
+    /// <summary>
+    /// spawns an explosion
+    /// </summary>
+    /// <param name="data">attack data for the explosion</param>
+    /// <param name="position">where to put it</param>
     public void createExplosion(BurstShotData data, Vector2 position)
     {
         GameObject instance = Instantiate(explosionPrefab);
@@ -583,7 +627,9 @@ public class LevelManagerScript : BaseBehaviour
                 instance.SendMessage("SetColor", data.damageEvent.effects.propertyEffects.attackColor);
     }
 
-    //called by the enemy hand when it wants to draw a new enemy card.  Updates the counter and returns the wave on top of the deck
+    /// <summary>
+    /// called by the enemy hand when it wants to draw a new enemy card.  Updates the wave counter and returns the wave on top of the deck
+    /// </summary>
     public WaveData DrawEnemy()
     {
         if (wavesInDeck > 0)
@@ -594,8 +640,14 @@ public class LevelManagerScript : BaseBehaviour
             return null;
     }
 
-    //DEV: creates a button in the unity debugger to reload the level from scratch
+    /// <summary>
+    /// DEV: creates a button in the unity debugger to reload the level from scratch
+    /// </summary>
     [Show][VisibleWhen("levelLoaded")] private void reloadLevel() { StopAllCoroutines(); StartCoroutine(reloadLevelCoroutine()); }
+
+    /// <summary>
+    /// [COROUTINE] destroys everything being used by the current level, resets all the managers, and then loads the level again
+    /// </summary>
     public IEnumerator reloadLevelCoroutine()
     {
         yield return null;

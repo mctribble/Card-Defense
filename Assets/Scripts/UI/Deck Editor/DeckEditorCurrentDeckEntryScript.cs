@@ -3,6 +3,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
+/// <summary>
+/// list item for entries in the current deck list of the deck editor
+/// </summary>
 public class DeckEditorCurrentDeckEntryScript : BaseBehaviour, IPointerEnterHandler
 {
     //child object references

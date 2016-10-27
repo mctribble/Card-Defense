@@ -6,7 +6,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
-//a Color class that is nicely formatted in xml
+/// <summary>
+/// XML representation of a color.  components are floats from 0 to 1.
+/// </summary>
 [System.Serializable]
 public class XMLColor
 {
@@ -38,7 +40,9 @@ public class XMLColor
     }
 };
 
-//contains everything needed to define an enemy type
+/// <summary>
+/// contains everything needed to define an enemy type
+/// </summary>
 [System.Serializable]
 public class EnemyData
 {
@@ -67,6 +71,9 @@ public class EnemyData
     [XmlAttribute("sprite")]
     public string spriteName { get; set; }
 
+    /// <summary>
+    /// slow function that returns a description of this enemy type
+    /// </summary>
     public string getDescription()
     {
         string description = "Health: " + maxHealth + '\n' +
@@ -81,7 +88,9 @@ public class EnemyData
         return description;
     }
 
-    //makes a copy of this enemyData
+    /// <summary>
+    /// makes a copy of this enemyData
+    /// </summary>
     public EnemyData clone()
     {
         EnemyData clone = (EnemyData)this.MemberwiseClone();
@@ -93,6 +102,9 @@ public class EnemyData
     public override string ToString() { return name; } //for friendlier display in debugger
 };
 
+/// <summary>
+/// represents an active enemy in the world
+/// </summary>
 public class EnemyScript : BaseBehaviour
 {
     public string         enemyTypeName;      //name of this type of enemy
@@ -159,8 +171,11 @@ public class EnemyScript : BaseBehaviour
         healthbar.fillAmount = normalizedHealth;
     }
 
-    //moves the enemy forward this far in time.  separate from update function so it can be called elsewhere, such as during enemy spawning to account for low frame rate
-    private void moveForwardByTime(float time)
+    /// <summary>
+    /// moves the enemy forward this far in time.  
+    /// separate from update function so it can be called elsewhere, such as during enemy spawning
+    /// </summary>
+    public void moveForwardByTime(float time)
     {
         //bail immediately if time is 0 or negative
         if (time <= 0)
@@ -204,7 +219,9 @@ public class EnemyScript : BaseBehaviour
         }
     }
 
-    //handles the enemy reaching the goal
+    /// <summary>
+    /// [COROUTINE] handles the enemy reaching the goal
+    /// </summary>
     private IEnumerator reachedGoal()
     {
         //pause normal enemy behavior while we handle this
@@ -256,7 +273,9 @@ public class EnemyScript : BaseBehaviour
         yield break; //done
     }
 
-    //tracks damage that WILL arrive so that towers dont keep shooting something that is about to be dead
+    /// <summary>
+    /// tracks damage that WILL arrive so that towers dont keep shooting something that is about to be dead
+    /// </summary>
     public void onExpectedDamage(ref DamageEventData e)
     {
         //deal with effects that need to happen when we expect damage
@@ -273,7 +292,9 @@ public class EnemyScript : BaseBehaviour
             EnemyManagerScript.instance.SendMessage("EnemyExpectedDeath", gameObject);
     }
 
-    //receives damage
+    /// <summary>
+    /// deals damage to the enemy.  (make sure to call onExpectedDamage() first to avoid targeting bugs)
+    /// </summary>
     public void onDamage(DamageEventData e)
     {
         //dont bother if we are already dead
@@ -375,7 +396,9 @@ public class EnemyScript : BaseBehaviour
         enemyImage.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
     }
 
-    //returns the distance from this enemy's current position to the goal, following its current path
+    /// <summary>
+    /// returns the distance from this enemy's current position to the goal, following its current path
+    /// </summary>
     public float distanceToGoal()
     {
         //distance is 0 if we are at the goal
@@ -391,7 +414,9 @@ public class EnemyScript : BaseBehaviour
         return result;
     }
 
-    //handles enemy death
+    /// <summary>
+    /// [COROUTINE] handles enemy death
+    /// </summary>
     private IEnumerator onDeath()
     {
         //disable normal images and turn on the death burst instead

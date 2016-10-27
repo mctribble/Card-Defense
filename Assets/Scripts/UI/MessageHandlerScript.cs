@@ -3,8 +3,10 @@ using System.Collections;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
-//provides static utilities to show dialog boxes or floating combat text to the player.  
-//Some dialogs return a result, but because of the nature of coroutines the results must be retrieved "manually" from the responseToLastPrompt field.
+/// <summary>
+/// provides static utilities to show dialog boxes or floating combat text to the player.  
+/// Some dialogs return a result, but because of the nature of coroutines the results must be retrieved "manually" from the responseToLastPrompt field.
+/// </summary>
 public class MessageHandlerScript : BaseBehaviour
 {
     //object references
@@ -17,6 +19,9 @@ public class MessageHandlerScript : BaseBehaviour
     [VisibleWhen("shouldShowRefs")] public GameObject buttonD;
     [VisibleWhen("shouldShowRefs")] public GameObject combatTextPrefab;
 
+    /// <summary>
+    /// text of the button selected on the last prompt.  null if there was no previous prompt
+    /// </summary>
     [Show] public static string responseToLastPrompt;
     public static MessageHandlerScript instance;
 
@@ -35,7 +40,12 @@ public class MessageHandlerScript : BaseBehaviour
     //result handler
 	private void TextButtonSelected(string response) { responseToLastPrompt = response; messageBox.SetActive(false); }
 
-    //handles messages whose only valid response is "OK".  does not return until the box is answered
+    /// <summary>
+    /// [COROUTINE] handles messages whose only valid response is "OK".  
+    /// pauses the game and does not return until the box is answered.
+    /// the response can be retrieved from MessageHandlerScript.responseToLastPrompt
+    /// </summary>
+    /// <param name="message">the message to show</param>
     public static IEnumerator ShowAndYield(string message)
     {
         //set up the box
@@ -61,7 +71,12 @@ public class MessageHandlerScript : BaseBehaviour
         Time.timeScale = oldTimeScale;
     }
 
-    //handles messages that can be responded to with "Yes" and "No".  Yields until the prompt is answered.
+    /// <summary>
+    /// [COROUTINE] handles messages that can be responded to with "Yes" and "No".  
+    /// Pauses and yields until the prompt is answered.
+    /// the response can be retrieved from MessageHandlerScript.responseToLastPrompt
+    /// </summary>
+    /// <param name="prompt">the prompt to show</param>
     public static IEnumerator PromptYesNo(string prompt)
     {
         //set up the box
@@ -88,10 +103,15 @@ public class MessageHandlerScript : BaseBehaviour
         Time.timeScale = oldTimeScale;
     }
 
-    //helper: calls ShowAndYield but returns without waiting for a response.  Useful for places (like Update()) where the engine does not allow you to yield
+    /// <summary>
+    /// calls ShowAndYield but returns without waiting for a response.  Useful for places (like Update()) where the engine does not allow you to yield
+    /// </summary>
+    /// <param name="message"></param>
     public static void ShowNoYield(string message) { instance.StartCoroutine(ShowAndYield(message)); }
 
-    //helper: like ShowNoYield, but reroutes the message to the log if we are running a debug build
+    /// <summary>
+    /// like ShowNoYield, but reroutes the message to the log if we are running a debug build
+    /// </summary>
     public static void Warning(string message)
     {
         if (Debug.isDebugBuild)
@@ -100,7 +120,9 @@ public class MessageHandlerScript : BaseBehaviour
             MessageHandlerScript.ShowNoYield("WARNING: " + message);
     }
 
-    //helper: like ShowNoYield, but duplicates to the log if we are running a debug build
+    /// <summary>
+    /// like ShowNoYield, but duplicates to the log if we are running a debug build
+    /// </summary>
     public static void Error(string message)
     {
         if (Debug.isDebugBuild)
@@ -109,7 +131,11 @@ public class MessageHandlerScript : BaseBehaviour
         MessageHandlerScript.ShowNoYield("ERROR: " + message);
     }
 
-    //spawns floating combat text to represent an enemy having damaged the player
+    /// <summary>
+    /// spawns floating combat text to represent an enemy having damaged the player
+    /// </summary>
+    /// <param name="enemyWorldPosition">world position to spawn the text at</param>
+    /// <param name="damageDealt">amount of damage to show</param>
     public void spawnPlayerDamageText (Vector2 enemyWorldPosition, int damageDealt)
     {
         GameObject combatText = (GameObject)Instantiate(combatTextPrefab, enemyWorldPosition, Quaternion.identity);

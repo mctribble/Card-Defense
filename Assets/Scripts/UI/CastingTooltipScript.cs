@@ -2,6 +2,9 @@
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
+/// <summary>
+/// tooltip object used for casting
+/// </summary>
 public class CastingTooltipScript : BaseBehaviour
 {
     public Color CastableColor;             //color of tooltip when cast is OK
@@ -114,7 +117,9 @@ public class CastingTooltipScript : BaseBehaviour
         }
     }
 
-    //called when a cast is attempted
+    /// <summary>
+    /// called when a cast is attempted
+    /// </summary>
     private void Cast()
     {
         if (castable)
@@ -140,13 +145,17 @@ public class CastingTooltipScript : BaseBehaviour
         }
     }
 
-    //stores a reference to the card that created this tooltip
+    /// <summary>
+    /// stores a reference to the card that created this tooltip
+    /// </summary>
     private void SetParent(CardScript parent)
     {
         parentCardScript = parent;
     }
 
-    //sets the size of the range overlay
+    /// <summary>
+    /// sets the size of the range overlay
+    /// </summary>
     private void SetRange(float r)
     {
         rangeImage.gameObject.GetComponent<RectTransform>().localScale = new Vector3(r, r, 1.0f);

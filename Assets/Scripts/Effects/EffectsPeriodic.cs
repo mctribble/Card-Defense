@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Vexe.Runtime.Types;
 using System;
 
-//all effects in this file trigger when the object they are attached to is updated.  They can be applied to multiple types of entities.  This base effect handles behavior common to them all
+/// <summary>
+/// periodic effects trigger when the object they are attached to is updated.  
+/// They can be applied to multiple types of entities.  
+/// This base effect handles behavior common to them all
+/// </summary>
 public abstract class BaseEffectPeriodic : BaseEffect, IEffectPeriodic
 {
     [Hide] public override TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
