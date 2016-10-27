@@ -49,7 +49,7 @@
       </effectData>
     </Card>
     <Card Type="tower" Name="Explosive Tower" Description="Deals splash damage.  Good for tightly-packed enemies." Charges="3" Art="Explosive_Tower.png" Tooltip="Tower_Round.png">
-      <towerData Recharge="1.5" Range="2" Damage="20" Lifespan="5" UpgradeCap="3" Sprite="Tower_Round.png">
+      <towerData Recharge="1" Range="2" Damage="20" Lifespan="5" UpgradeCap="3" Sprite="Tower_Round.png">
         <towerColor r="1.0" g="0" b="0" a="1"/>
       </towerData>
       <effectData>
