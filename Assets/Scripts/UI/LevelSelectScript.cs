@@ -205,6 +205,16 @@ public class LevelSelectScript : BaseBehaviour
     }
 
     /// <summary>
+    /// callback from deck buttons.  Shows info on the given deck
+    /// </summary>
+   private void DeckHovered(XMLDeck deck)
+   {
+        infoText.text = deck.name + ":\n";
+        foreach (XMLDeckEntry entry in deck.contents)
+            infoText.text += entry.ToString() + '\n';
+   }
+
+    /// <summary>
     /// callback from text buttons.  
     /// </summary>
     private void TextButtonSelected(string buttonText)
@@ -232,6 +242,29 @@ public class LevelSelectScript : BaseBehaviour
                 break;
             default:
                 MessageHandlerScript.Error("LevelSelectScript doesnt know how to handle this button!");
+                break;
+        }
+    }
+
+    /// <summary>
+    /// callback from text buttons. 
+    /// </summary>
+    private void TextButtonHovered(string buttonText)
+    {
+        switch(buttonText)
+        {
+            case "Default Level Deck":
+                //treat the default level deck button as ifit were a reference to the level deck
+                LevelData data = LevelData.Load(Path.Combine(Application.dataPath, chosenLevelFile.FullName));
+                if ((data.premadeDeckName == null) || (data.premadeDeckName == ""))
+                    DeckHovered(data.levelDeck);
+                else
+                    DeckHovered(DeckManagerScript.instance.premadeDecks.getDeckByName(data.premadeDeckName));
+                break;
+
+            default:
+                //in all other cases, just blank out the text
+                infoText.text = "";
                 break;
         }
     }
