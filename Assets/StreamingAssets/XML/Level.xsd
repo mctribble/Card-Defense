@@ -3,6 +3,7 @@
   <xsd:element name="Level">
     <xsd:complexType>
       <xsd:sequence>
+        <xsd:element name="description" type="xsd:string" />
         <xsd:element name="randomWaveCount" type="xsd:unsignedByte" />
         <xsd:element name="waveGrowthAbsolute" type="xsd:float" minOccurs="0" maxOccurs="1"/>
         <xsd:element name="waveGrowthLinear" type="xsd:float" minOccurs="0" maxOccurs="1"/>

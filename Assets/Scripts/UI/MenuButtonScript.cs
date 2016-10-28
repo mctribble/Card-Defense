@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.IO;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
@@ -16,9 +18,9 @@ public enum MenuButtonType
 }
 
 /// <summary>
-/// a versatile menu button that sends a message back to its parent when clicked
+/// a versatile menu button that sends a message back to its parent when clicked or hovered over
 /// </summary>
-public class MenuButtonScript : BaseBehaviour
+public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnterHandler
 {
     public Text           buttonText; //text of this button
     public MenuButtonType buttonType; //enum that represents how this menu button is being used
@@ -79,21 +81,47 @@ public class MenuButtonScript : BaseBehaviour
     /// <summary>
     /// reports back to the parent object in a slightly different way for each button type
     /// </summary>
-    private void buttonClicked()
+    public void OnPointerClick(PointerEventData eventData)
     {
         switch (buttonType)
         {
             case MenuButtonType.level:
-                SendMessageUpwards("LevelSelected", levelFile);
+                SendMessageUpwards("LevelSelected", levelFile, SendMessageOptions.DontRequireReceiver);
                 break;
             case MenuButtonType.deck:
-                SendMessageUpwards("DeckSelected", xDeck);
+                SendMessageUpwards("DeckSelected", xDeck, SendMessageOptions.DontRequireReceiver);
                 break;
             case MenuButtonType.card:
-                SendMessageUpwards("CardSelected", card);
+                SendMessageUpwards("CardSelected", card, SendMessageOptions.DontRequireReceiver);
                 break;
             case MenuButtonType.text:
-                SendMessageUpwards("TextButtonSelected", buttonText.text);
+                SendMessageUpwards("TextButtonSelected", buttonText.text, SendMessageOptions.DontRequireReceiver);
+                break;
+            default:
+                MessageHandlerScript.Error("MenuButtonScript cant handle this button type!");
+                break;
+        }
+    }
+
+    /// <summary>
+    /// reports back to the parent object in a slightly different way for each button type
+    /// </summary>
+    /// <param name="eventData"></param>
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        switch (buttonType)
+        {
+            case MenuButtonType.level:
+                SendMessageUpwards("LevelHovered", levelFile, SendMessageOptions.DontRequireReceiver);
+                break;
+            case MenuButtonType.deck:
+                SendMessageUpwards("DeckHovered", xDeck, SendMessageOptions.DontRequireReceiver);
+                break;
+            case MenuButtonType.card:
+                SendMessageUpwards("CardHovered", card, SendMessageOptions.DontRequireReceiver);
+                break;
+            case MenuButtonType.text:
+                SendMessageUpwards("TextButtonHovered", buttonText.text, SendMessageOptions.DontRequireReceiver);
                 break;
             default:
                 MessageHandlerScript.Error("MenuButtonScript cant handle this button type!");

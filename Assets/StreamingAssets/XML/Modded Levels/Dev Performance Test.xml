@@ -1,10 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" background="Black.png">
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
+  <description>Developer map with many enemies for testing performance issues</description>
   <randomWaveCount>0</randomWaveCount>
-  <waveGrowthAbsolute>100</waveGrowthAbsolute>
-  <waveGrowthLinear>7</waveGrowthLinear>
-  <waveGrowthSquared>2.8</waveGrowthSquared>
-  <waveGrowthExponential>1.3</waveGrowthExponential>
   <Waves>
     <Wave type="Swarm" budget="10000" time="30" />
     <Wave type="Standard" budget="10000" time="30" />
@@ -94,5 +91,4 @@
       <Card name="Shield" count="200" />
     </Cards>
   </levelDeck>
-  <premadeDeckName />
 </Level>

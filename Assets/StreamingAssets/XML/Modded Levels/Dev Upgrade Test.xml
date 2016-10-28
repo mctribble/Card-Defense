@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" background="Black.png">
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
+  <description>Developer map for testing upgrades</description>
   <randomWaveCount>0</randomWaveCount>
   <Waves>
     <Wave type="Carrier" budget="150" time="0.9836545" />
@@ -82,5 +83,4 @@
       <Card name="Sniper Tower" count="10" />
     </Cards>
   </levelDeck>
-  <premadeDeckName />
 </Level>

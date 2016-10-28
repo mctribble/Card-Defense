@@ -15,6 +15,7 @@ public class LevelSelectScript : BaseBehaviour
     public string       modLevelDir;      //directory mod levels are stored in
     public GameObject   buttonPrefab;     //prefab used to create buttons
     public GameObject   menuRoot;         //object to be destroyed when the menu is no longer needed
+    public Text         infoText;         //text object to use for showing level information
 
     //colors to be used on various types of buttons
     public Color        menuButtonColor;  //misc. menu buttons such as back, quit, etc.
@@ -34,14 +35,11 @@ public class LevelSelectScript : BaseBehaviour
     // Use this for initialization
     private void Start()
     {
-        //the menu image is disabled to hide it in the editor, but we want it to be visible in game
-        //so we turn it on again at runtime
-        gameObject.GetComponent<UnityEngine.UI.Image>().enabled = true;
-
-        //force menu image to be at least as tall as the UI canvas
+        //force menu to be at least as tall as the UI canvas
         //we can't just use Screen.height because that is the height of the window itself and doesnt account for scaling
         //this is especially true of playing in the editor
-        gameObject.GetComponent<UnityEngine.UI.LayoutElement>().minHeight = Screen.height / transform.root.gameObject.GetComponent<Canvas>().transform.localScale.y;
+        float canvasHeight = Screen.height / transform.root.gameObject.GetComponent<Canvas>().transform.localScale.y;
+        gameObject.GetComponentInParent<UnityEngine.UI.LayoutElement>().minHeight = canvasHeight;
 
         //create an empty list to hold the buttons in
         menuButtons = new List<GameObject>();
@@ -161,7 +159,7 @@ public class LevelSelectScript : BaseBehaviour
     }
 
     /// <summary>
-    /// callback from level buttons
+    /// callback from level buttons.  Selects the given level and prompts for a deck
     /// </summary>
     private void LevelSelected(FileInfo levelFile)
     {
@@ -171,7 +169,32 @@ public class LevelSelectScript : BaseBehaviour
     }
 
     /// <summary>
-    /// callback from deck buttons
+    /// called when a level is hovered over.  Shows information about it in the text box
+    /// </summary>
+    /// <param name="levelFile"></param>
+    private void LevelHovered(FileInfo levelFile)
+    {
+        LevelData data = LevelData.Load(Path.Combine(Application.dataPath, levelFile.FullName));
+
+        //start with the level file name, but replace the file extension with a newline
+        infoText.text = levelFile.Name.Replace(levelFile.Extension, ":\n"); ;
+
+        //these values we can simply use directly
+        infoText.text +=
+            data.description + '\n' + 
+            '\n' +
+            data.waves.Count + " predetermined waves\n" +
+            data.randomWaveCount + " random waves\n" +
+            "Start with " + data.towers.Count + " towers on the map\n" +
+            data.spawners.Count + " spawn locations\n";
+
+        //this intimidating-looking function call simply counts how many path segments there are that end at a spot that no segment begins
+        //such segments are at the "end of the line", and as such are the points the player must defend
+        infoText.text += data.pathSegments.FindAll(s => (data.pathSegments.Exists(ss => ss.startPos == s.endPos) == false)).Count + " points to defend"; 
+    }
+
+    /// <summary>
+    /// callback from deck buttons.  Selects the given deck and loads the level
     /// </summary>
     private void DeckSelected(XMLDeck deck)
     {
@@ -182,17 +205,18 @@ public class LevelSelectScript : BaseBehaviour
     }
 
     /// <summary>
-    /// callback from text buttons
+    /// callback from text buttons.  
     /// </summary>
     private void TextButtonSelected(string buttonText)
     {
         switch(buttonText)
         {
             case "Deck Editor":
+                //player wants to load the deck editor
                 SceneManager.LoadScene("Deck Editor");
                 break;
             case "Default Level Deck":
-                //player wants to use the predefined deck for this level.  Load the level immediately and then let the level manager load the deck for us
+                //player wants to use the predefined deck for this level.  Load the level immediately and then let the level manager load the deck for us when it sees we haven't.
                 LevelManagerScript.instance.SendMessage("loadLevel", chosenLevelFile.FullName);
                 Destroy(menuRoot); //we are done with this menu.  Destroy it.
                 break;

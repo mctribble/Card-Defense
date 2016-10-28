@@ -76,6 +76,9 @@ public class LevelData
     //where this level was loaded from
     [XmlIgnore] public string fileName;
 
+    //a brief description that appears in the level select screen
+    public string description;
+
     //comma separated lists of mod files that this level is dependent on, if any
     [XmlAttribute("enemyFileDependencies")][DefaultValue("")][Hide] public string enemyDependencies;
     [XmlAttribute( "cardFileDependencies")][DefaultValue("")][Hide] public string  cardDependencies;
