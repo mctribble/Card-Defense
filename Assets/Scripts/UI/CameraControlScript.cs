@@ -20,6 +20,7 @@ public class CameraControlScript : BaseBehaviour
     private void Start()
     {
         cameraRef = this.GetComponent<Camera>();
+        LevelManagerScript.instance.LevelLoadedEvent += showEntireLevel; //register the level loaded event so that we can move the camera as needed to see everything when it loads
     }
 
     //allows player to move the camera
@@ -42,4 +43,27 @@ public class CameraControlScript : BaseBehaviour
         cameraRef.orthographicSize  = Mathf.Clamp(cameraRef.orthographicSize, minSize, maxSize);
     }
 	
+    ///<summary>
+    ///moves/zooms the camera to show the entire level
+    ///this is called automatically when a level is loaded.
+    ///</summary>
+    [Show] public void showEntireLevel()
+    {
+        if ( (PathManagerScript.instance != null) &&
+             (PathManagerScript.instance.pathsLoaded) )
+        {
+            //get the bounds of the level
+            Rect levelBounds = PathManagerScript.instance.levelBounds;
+
+            //center on it
+            transform.position = new Vector3(levelBounds.center.x, levelBounds.center.y, transform.position.z);
+
+            //the camera size is set as orthographicSize, which is half the height of the viewing area.  We have to do some math to figure out what size we need
+
+            float WidthAspect = levelBounds.width / cameraRef.aspect;     //this is how high the screen would have to be to contain the entire width of the level
+            float minHeight = Mathf.Max(levelBounds.height, WidthAspect); //so the screen has to be at least this big
+            float desiredScreenHeight = minHeight + 3.0f;                 //but we'll also give it a little padding so it doesnt look cramped
+            cameraRef.orthographicSize = desiredScreenHeight / 2.0f;      //and the orthographic size we set is half of that
+        }
+    }
 }

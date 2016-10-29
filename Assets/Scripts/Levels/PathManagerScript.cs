@@ -136,4 +136,28 @@ public class PathManagerScript : BaseBehaviour
 
         }
     }
+
+    /// <summary>
+    /// returns whether or not the paths are loaded
+    /// </summary>
+    public bool pathsLoaded { get { return ( (segments != null) && (segments.Count > 0) ); } }
+
+    /// <summary>
+    /// provides a rect in world space that contains all of the paths in the level
+    /// </summary>
+    public Rect levelBounds
+    {
+        get
+        {
+            Rect bounds = new Rect(0.0f, 0.0f, 0.0f, 0.0f);
+
+            foreach(PathSegment s in segments)
+            {
+                bounds.min = Vector2.Min(bounds.min, Vector2.Min(s.startPos, s.endPos));
+                bounds.max = Vector2.Max(bounds.max, Vector2.Max(s.startPos, s.endPos));
+            }
+
+            return bounds;
+        }
+    }
 }
