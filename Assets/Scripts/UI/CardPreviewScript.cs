@@ -73,7 +73,11 @@ public class CardPreviewScript : MonoBehaviour
         //load art with WWW (yes, really!  I couldn't find an easier way to do this and still let the user access the image files)
         WWW www = new WWW ("file:///" + Application.dataPath + "/StreamingAssets/Art/Card Art/" + data.cardArtName); //load file
         yield return www; //wait for it to load
-        art.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
+
+        if (www.error == null)
+            art.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
+        else
+            art.sprite = Resources.Load<Sprite>("Sprites/Error");
 
         //hide the back image
         cardBack.enabled = false;

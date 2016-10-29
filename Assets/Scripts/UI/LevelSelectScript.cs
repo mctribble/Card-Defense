@@ -11,11 +11,13 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class LevelSelectScript : BaseBehaviour
 {
-    public string       levelDir;         //directory levels are stored in
-    public string       modLevelDir;      //directory mod levels are stored in
-    public GameObject   buttonPrefab;     //prefab used to create buttons
-    public GameObject   menuRoot;         //object to be destroyed when the menu is no longer needed
-    public Text         infoText;         //text object to use for showing level information
+    public string       levelDir;     //directory levels are stored in
+    public string       modLevelDir;  //directory mod levels are stored in
+    public string       thumbnailDir; // where the level thumbnails are stored
+    public GameObject   buttonPrefab; //prefab used to create buttons
+    public GameObject   menuRoot;     //object to be destroyed when the menu is no longer needed
+    public Image        infoImage;    //image object to use for showing level information
+    public Text         infoText;     //text object to use for showing level information
 
     //colors to be used on various types of buttons
     public Color        menuButtonColor;  //misc. menu buttons such as back, quit, etc.
@@ -163,16 +165,17 @@ public class LevelSelectScript : BaseBehaviour
     /// </summary>
     private void LevelSelected(FileInfo levelFile)
     {
-        chosenLevelFile = levelFile;        //save the chosen level
-        destroyButtons();                   //get rid of the level menu
-        StartCoroutine(setupDeckButtons()); //present the deck menu
+        chosenLevelFile = levelFile;           //save the chosen level
+        destroyButtons();                      //get rid of the level menu
+        StartCoroutine(setupDeckButtons());    //present the deck menu
+        infoImage.gameObject.SetActive(false); //hide the info image since the deck menu doesnt need it
     }
 
     /// <summary>
-    /// called when a level is hovered over.  Shows information about it in the text box
+    /// [COROUTINE] called when a level is hovered over.  Shows information about it in the text box
     /// </summary>
     /// <param name="levelFile"></param>
-    private void LevelHovered(FileInfo levelFile)
+    private IEnumerator LevelHovered(FileInfo levelFile)
     {
         LevelData data = LevelData.Load(Path.Combine(Application.dataPath, levelFile.FullName));
 
@@ -190,7 +193,19 @@ public class LevelSelectScript : BaseBehaviour
 
         //this intimidating-looking function call simply counts how many path segments there are that end at a spot that no segment begins
         //such segments are at the "end of the line", and as such are the points the player must defend
-        infoText.text += data.pathSegments.FindAll(s => (data.pathSegments.Exists(ss => ss.startPos == s.endPos) == false)).Count + " points to defend"; 
+        infoText.text += data.pathSegments.FindAll(s => (data.pathSegments.Exists(ss => ss.startPos == s.endPos) == false)).Count + " points to defend";
+
+        //yes, I know its awkward, but we're loading the level thumbnail with WWW.
+        string thumbnailPath = "file:///" + Path.Combine(Application.dataPath, thumbnailDir);
+        WWW www = new WWW( Path.Combine( thumbnailPath, levelFile.Name.Replace(levelFile.Extension, ".png") ) );
+        yield return www;
+
+        if (www.error == null)
+            infoImage.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
+        else
+            infoImage.sprite = Resources.Load<Sprite>("Sprites/Error");
+
+        infoImage.type = Image.Type.Sliced;
     }
 
     /// <summary>
@@ -239,6 +254,7 @@ public class LevelSelectScript : BaseBehaviour
                 chosenLevelFile = null;
                 destroyButtons();
                 StartCoroutine(setupLevelButtons());
+                infoImage.gameObject.SetActive(true);
                 break;
             default:
                 MessageHandlerScript.Error("LevelSelectScript doesnt know how to handle this button!");

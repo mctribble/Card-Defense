@@ -56,7 +56,7 @@ public class CameraControlScript : BaseBehaviour
     private void levelLoadedHandler()
     {
         showEntireLevel();
-        saveLevelThumbnail();
+        StartCoroutine(saveLevelThumbnail());
     }
 
     ///<summary>
@@ -91,7 +91,7 @@ public class CameraControlScript : BaseBehaviour
     /// takes a screenshot of the level and saves it as a .png with the same name as the level to StreamingAssets\Level Thumbnails
     /// if there is no level loaded, logs a warning instead
     /// </summary>
-    [Show] public void saveLevelThumbnail()
+    [Show] public IEnumerator saveLevelThumbnail()
     {
         if ( LevelManagerScript.instance.levelLoaded )
         {
@@ -101,7 +101,11 @@ public class CameraControlScript : BaseBehaviour
 
             //take the screenshot
             UICanvas.enabled = false;
+            yield return null;
+            yield return null;
+            yield return new WaitForEndOfFrame();
             Application.CaptureScreenshot(screenshotName);
+            yield return null;
             UICanvas.enabled = true;
         }
         else
@@ -110,3 +114,4 @@ public class CameraControlScript : BaseBehaviour
         }
     }
 }
+

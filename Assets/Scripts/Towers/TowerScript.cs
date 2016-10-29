@@ -404,9 +404,11 @@ public class TowerScript : BaseBehaviour
         //yes, I know its awkward, but we're setting the sprite with WWW.
         WWW www = new WWW ("file:///" + Application.dataPath + "/StreamingAssets/Art/Sprites/" + d.towerSpriteName);
         yield return www;
-        Sprite result = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
-        if (result != null)
-            towerImage.sprite = result;
+
+        if (www.error == null)
+            towerImage.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
+        else
+            towerImage.sprite = Resources.Load<Sprite>("Sprites/Error");
 
         //if a color was provided, use it
         if (d.towerColor != null)

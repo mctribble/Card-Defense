@@ -395,7 +395,11 @@ public class EnemyScript : BaseBehaviour
         //yes, I know its awkward, but we're setting the sprite with WWW.
         WWW www = new WWW ("file:///" + Application.dataPath + "/StreamingAssets/Art/Sprites/" + d.spriteName);
         yield return www;
-        enemyImage.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
+
+        if (www.error == null)
+            enemyImage.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
+        else
+            enemyImage.sprite = Resources.Load<Sprite>("Sprites/Error");
     }
 
     /// <summary>
