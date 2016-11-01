@@ -196,11 +196,12 @@ public class LevelManagerScript : BaseBehaviour
     [Hide] public static LevelManagerScript instance;  //singleton pattern
     
     //object references (not visible during play, since there is no reason to modify them in-game)
-    private bool shouldShowRef() { return !Application.isPlaying; }   //function used to hide these when in game
-    [VisibleWhen("shouldShowRef")] public GameObject spawnerPrefab;   //prefab used to create spawners
-    [VisibleWhen("shouldShowRef")] public GameObject towerPrefab;     //prefab used to create towers
-    [VisibleWhen("shouldShowRef")] public GameObject explosionPrefab; //prefab used to create explosions
-    [VisibleWhen("shouldShowRef")] public RawImage   background;      //reference to the background texture
+    private bool shouldShowRef() { return !Application.isPlaying; }     //function used to hide these when in game
+    [VisibleWhen("shouldShowRef")] public GameObject spawnerPrefab;     //prefab used to create spawners
+    [VisibleWhen("shouldShowRef")] public GameObject towerPrefab;       //prefab used to create towers
+    [VisibleWhen("shouldShowRef")] public GameObject explosionPrefab;   //prefab used to create explosions
+    [VisibleWhen("shouldShowRef")] public GameObject pathTooltipPrefab; //prefab used to create the path laying tooltip
+    [VisibleWhen("shouldShowRef")] public RawImage   background;        //reference to the background texture
 
     //data for the level itself
     [Hide] public bool levelLoaded;                     //indicates whether a level has been loaded or not
@@ -215,8 +216,9 @@ public class LevelManagerScript : BaseBehaviour
     [VisibleWhen("levelLoaded")] public float desiredTimeScale;          //the game speed the player wants to play at
 
     //private vars
-    private int totalSpawnCount;          //how many enemies still need spawning this wave
-    private int waveTotalRemainingHealth; //health remaining across all enemies in this wave
+    private int        totalSpawnCount;          //how many enemies still need spawning this wave
+    private int        waveTotalRemainingHealth; //health remaining across all enemies in this wave
+    private GameObject pathTooltip;              //tooltip used for laying paths
 
     //properties
     public LevelData Data { get { return data; } set { data = value; } } 
@@ -687,5 +689,79 @@ public class LevelManagerScript : BaseBehaviour
         yield return StartCoroutine(loadLevel(data.fileName));
 
         data.usingLevelDeck = usingLevelDeck; //restore the level deck flag to its original value
+    }
+
+    /// <summary>
+    /// [DEV] spawns a pathTooltip into the world, if there is not one already, to use for laying new paths
+    /// if the tooltip already exists, destroy it
+    /// </summary>
+    [Show][VisibleWhen("levelLoaded")] private void addPaths()
+    {
+        if (pathTooltip == null)
+        {
+            pathTooltip = GameObject.Instantiate(pathTooltipPrefab);
+            pathTooltip.transform.SetParent(HandScript.playerHand.transform.root); //put it in the UI Canvas, found through the player hand since it must also be in the UI Canvas.
+        }
+        else
+        {
+            Destroy(pathTooltip);
+        }
+    }
+
+    /// <summary>
+    /// [DEV] removes all spawners from the level then adds new ones at every path that begins where no other path ends
+    /// </summary>
+    [Show][VisibleWhen("levelLoaded")] private void autoPlaceSpawners()
+    {
+        //destroy the existing spawners
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("EnemySpawner"))
+            Destroy(go);
+        spawnerObjects.Clear();
+
+        //clear the spawner list
+        data.spawners.Clear();
+
+        //for every path that starts where no other path ends...
+        foreach(PathSegment path in data.pathSegments.FindAll(s => !data.pathSegments.Exists(ss => s.startPos == ss.endPos)))
+        {
+            //... add a spawner to the list
+            SpawnerData newData = new SpawnerData();
+            newData.spawnVec = path.startPos;
+            data.spawners.Add(newData);
+        }
+
+        //create the spawner objects
+        foreach (SpawnerData sd in data.spawners)
+        {
+            GameObject s = (GameObject) GameObject.Instantiate(spawnerPrefab); //create spawner
+            s.SendMessage("SetData", sd); //provide its data
+            spawnerObjects.Add(s);
+        }
+    }
+
+    /// <summary>
+    /// adds the a path segment from startPos to endPos into the world, updating the levelData accordingly
+    /// </summary>
+    /// <param name="startPos"></param>
+    /// <param name="endPos"></param>
+    public void addPathSegment(Vector2 startPos, Vector2 endPos)
+    {
+        //skip if start and end are the same
+        if (startPos == endPos)
+            return;
+
+        //construct the new segment
+        PathSegment newSegment = new PathSegment();
+        newSegment.startPos = startPos;
+        newSegment.endPos = endPos;
+
+        //report and add it
+        Debug.Log("new path: " + newSegment.ToString());
+        data.pathSegments.Add(newSegment);
+
+        //destroy the paths and create them again to reflect the new addition
+        foreach (GameObject e in GameObject.FindGameObjectsWithTag("Path"))
+            Destroy(e);
+        PathManagerScript.instance.SendMessage("Reset");
     }
 }

@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
+  <description>A level with many branching paths</description>
+  <randomWaveCount>15</randomWaveCount>
+  <Waves />
+  <Spawners>
+    <Spawner spawnX="5" spawnY="0" />
+  </Spawners>
+  <PathSegments>
+    <Segment startX="5" startY="0" endX="5" endY="2" />
+    <Segment startX="5" startY="2" endX="7" endY="2" />
+    <Segment startX="7" startY="2" endX="7" endY="4" />
+    <Segment startX="7" startY="4" endX="9" endY="4" />
+    <Segment startX="9" startY="4" endX="9" endY="6" />
+    <Segment startX="9" startY="6" endX="11" endY="6" />
+    <Segment startX="11" startY="6" endX="11" endY="8" />
+    <Segment startX="13" startY="8" endX="13" endY="10" />
+    <Segment startX="11" startY="8" endX="11" endY="10" />
+    <Segment startX="9" startY="6" endX="9" endY="10" />
+    <Segment startX="7" startY="4" endX="7" endY="10" />
+    <Segment startX="5" startY="2" endX="3" endY="2" />
+    <Segment startX="3" startY="2" endX="3" endY="2" />
+    <Segment startX="3" startY="2" endX="3" endY="4" />
+    <Segment startX="3" startY="4" endX="1" endY="4" />
+    <Segment startX="1" startY="4" endX="1" endY="6" />
+    <Segment startX="1" startY="6" endX="-1" endY="6" />
+    <Segment startX="-1" startY="6" endX="-1" endY="8" />
+    <Segment startX="-1" startY="8" endX="-3" endY="8" />
+    <Segment startX="-3" startY="8" endX="-3" endY="10" />
+    <Segment startX="-1" startY="8" endX="-1" endY="10" />
+    <Segment startX="1" startY="6" endX="1" endY="10" />
+    <Segment startX="3" startY="4" endX="3" endY="10" />
+    <Segment startX="11" startY="8" endX="13" endY="8" />
+  </PathSegments>
+  <Towers />
+  <shuffleDeck>true</shuffleDeck>
+  <levelDeck name="Level Deck">
+    <Cards>
+      <Card name="Basic Tower" count="7" />
+      <Card name="Basic Upgrade" count="10" />
+      <Card name="Enrage" count="5" />
+      <Card name="Fast Tower" count="7" />
+      <Card name="Heavy Tower" count="7" />
+      <Card name="Life Tap" count="2" />
+      <Card name="Reinforce" count="1" />
+      <Card name="Shield" count="1" />
+    </Cards>
+  </levelDeck>
+</Level>
