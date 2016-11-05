@@ -77,6 +77,7 @@ overchargeDamage | tower deals (1+X) times as much damage when overcharged
 effectCharges    | child effect can only occur up to X times
 effectCooldown   | child effect triggers under normal conditions, but only if it has been at least X seconds since the last trigger
 everyRound       | target instant effect triggers once every round
+onEnemySpawned   | target instant effect triggers when the enemy spawns.  Does not trigger twice if the unit survives and spawns again in the next wave.
 percentageChance | child effect has an X% chance of triggering
 ifRollRange      | child effect triggers if the die rolled anything from X to Y.  Requires dieRoll effect to work
 

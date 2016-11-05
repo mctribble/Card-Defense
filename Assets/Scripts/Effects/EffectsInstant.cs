@@ -73,12 +73,17 @@ public class EffectDamagePlayer : BaseEffectInstant
     }
 }
 
-//rolls an x-sided die.  the result can be fetched from a static variable and used by other effects.
+//rolls an x-sided die.  the result can be fetched from argument and used by other effects.
 class EffectDieRoll : BaseEffectInstant
 {
     [Hide] public override string Name { get { return "roll a " + strength + "-sided die:"; } } //returns name and strength
     [Show] public override string XMLName { get { return "dieRoll"; } } //name used to refer to this effect in XML.
-    [Show] public static int roll = -1;
+
+    //this effect also triggers as a property effect, since its result is used as a property
+    public override bool triggersAs(EffectType triggerType)
+    {
+        return base.triggersAs(triggerType) || (triggerType == EffectType.property);
+    }
 
     public override void trigger()
     {
@@ -86,11 +91,24 @@ class EffectDieRoll : BaseEffectInstant
         if (rollMax < 2)
         {
             MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + " could not roll the die because it has less than 2 sides.");
-            roll = -1;
+            argument = null;
         }
         else
         {
-            roll = UnityEngine.Random.Range(0, rollMax) + 1;
+            int roll = (UnityEngine.Random.Range(0, rollMax) + 1); //die roll
+            argument = roll.ToString(); //store in argument
+
+            //update the parent's propertyEffects, since they may have been cached before the roll was made
+            PropertyEffects? curProps = parentData.propertyEffects;
+            PropertyEffects newProps;
+
+            if (curProps == null)
+                newProps = new PropertyEffects();
+            else
+                newProps = curProps.Value;
+
+            newProps.dieRoll = roll;
+            parentData.propertyEffects = newProps;
         }
     }
 }

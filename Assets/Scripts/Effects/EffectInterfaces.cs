@@ -46,6 +46,7 @@ public enum EffectType
     enemyReachedGoal = unchecked((int)0x111111FF), 
     instant          = unchecked((int)0x00FFFFFF), 
     overcharge       = unchecked((int)0xFF00FFFF), 
+    enemySpawned     = unchecked((int)0xAA0000FF),
     periodic         = unchecked((int)0xCCCCCCFF), 
     self             = unchecked((int)0x0000A0FF), 
     towerTargeting   = unchecked((int)0xADD8E6FF), 
@@ -180,6 +181,7 @@ public struct PropertyEffects
     public Color? attackColor;
     public int?   limitedAmmo;
     public int?   maxOvercharge;
+    public int?   dieRoll;
 }
 
 /// <summary>
@@ -234,7 +236,17 @@ public class EffectData : System.Object
     {
         if (testForEffectRequirements(e))
         {
-            Effects.Add(e);
+            Effects.Add(e); //add it
+
+            //save reference to this container in the effect and all its children
+            e.parentData = this;
+            while (e.triggersAs(EffectType.meta))
+            {
+                e = ((IEffectMeta)e).innerEffect;
+                e.parentData = this;
+            }
+
+            //reset the caches
             resetCachedValues();
         }
     }
@@ -249,7 +261,7 @@ public class EffectData : System.Object
             case "scaleEffectWithBudget":
             case "scaleHealthWithBudget":
             case "scaleSpeedWithBudget":
-                if (effects.Any(x => x.XMLName == "fixedSpawnCount") == false)
+                if (containsEffect("fixedSpawnCount") == false)
                 {
                     MessageHandlerScript.Warning("<" + e.cardName + ">: units must have fixedSpawnCount in order to use budget scaling effects.  Skipping " + e.XMLName);
                     return false;
@@ -258,7 +270,7 @@ public class EffectData : System.Object
 
             //die rolling effects should have a die roll
             case "ifRollRange":
-                if (effects.Any(x => x.XMLName == "dieRoll") == false)
+                if (containsEffect("dieRoll") == false)
                 {
                     MessageHandlerScript.Warning("<" + e.cardName + ">: units must have dieRoll in order to use roll effects.  Skipping " + e.XMLName);
                     return false;
@@ -279,6 +291,33 @@ public class EffectData : System.Object
     }
 
     /// <summary>
+    /// searches the effect data, by XMLName, and returns whether or not it exists anywhere inside the effectData
+    /// note that this will find it regardless of how many levels of meta effects it may be nested in
+    /// </summary>
+    /// <param name="XMLName">XMLName of the effect to locate</param>
+    /// <returns></returns>
+    public bool containsEffect (string XMLName)
+    {
+        foreach (IEffect ie in effects)
+        {
+            //while the effect we are looking at is a meta effect, check its child as well.  This is a loop because the amount of nesting is arbitrary
+            IEffect examining = ie;
+            while (examining.triggersAs(EffectType.meta))
+            {
+                if (examining.XMLName == XMLName)
+                    return true;
+                else
+                    examining = ((IEffectMeta)examining).innerEffect;
+            }
+
+            if (examining.XMLName == XMLName) return true;
+        }
+
+        //we got through the whole list without finding it, so it is not present
+        return false;
+    }
+
+    /// <summary>
     /// helper function that returns how the card containing these effects must be used.
     /// </summary>
     //the result is cached since it is needed regularly but changes rarely
@@ -290,10 +329,10 @@ public class EffectData : System.Object
             if (cachedCardTargetingType != null)
                 return cachedCardTargetingType.Value;
 
-            if (Effects.Count == 0) parseEffects(); //make sure we have actual code references to the effects
+            if (effects.Count == 0) parseEffects(); //make sure we have actual code references to the effects
 
             //return the target type of the first effect that requires a target.  no card can have effects that target two different types of things
-            foreach (IEffect e in Effects)
+            foreach (IEffect e in effects)
             {
                 if (e.targetingType != TargetingType.none)
                 {
@@ -320,7 +359,7 @@ public class EffectData : System.Object
             cachedTowerTargetingList = new List<IEffectTowerTargeting>();
             cachedTowerTargetingList.Add(EffectTargetDefault.instance);
 
-            foreach (IEffect e in Effects)
+            foreach (IEffect e in effects)
                 if (e.triggersAs(EffectType.towerTargeting))
                     cachedTowerTargetingList.Add( (IEffectTowerTargeting)e );
 
@@ -375,12 +414,18 @@ public class EffectData : System.Object
         set
         {
             //change effect list to account for any properties that have been altered.  Most properties have no reason to actually change, so changing them is not currently supported
-            foreach (IEffect e in Effects)
+            foreach (IEffect e in effects)
             {
                 if (e.triggersAs(EffectType.property))
                 {
-                    switch (e.XMLName)
+                    //if this is a meta effect, find the child at the end of the chain and check that instead
+                    IEffect examining = e;
+                    while (examining.triggersAs(EffectType.meta))
+                        examining = ((IEffectMeta)examining).innerEffect;
+
+                    switch (examining.XMLName)
                     {
+                        //properties that shouldnt change
                         case "armorPierce": if (value.armorPierce != propertyEffects.armorPierce) Debug.LogWarning("updating that property is not supported"); break;
                         case "attackColor": if (value.attackColor != propertyEffects.attackColor) Debug.LogWarning("updating that property is not supported"); break;
                         case "infiniteTowerLifespan": if (value.infiniteTowerLifespan != propertyEffects.infiniteTowerLifespan) Debug.LogWarning("updating that property is not supported"); break;
@@ -389,11 +434,18 @@ public class EffectData : System.Object
                         case "maximumOvercharge": if (value.maxOvercharge != propertyEffects.maxOvercharge) Debug.LogWarning("updating that property is not supported"); break;
                         case "upgradesForbidden": if (value.upgradesForbidden != propertyEffects.upgradesForbidden) Debug.LogWarning("updating that property is not supported"); break;
 
+                        //if the dieRoll changed, we can just reset the cache.  EffectDieRoll updates itself when the roll happens
+                        case "dieRoll":
+                            if (value.dieRoll != propertyEffects.dieRoll)
+                                resetCachedValues();
+                            break; 
+
+                        //Ammo can be updated by towers.  In that case, we must store the new value in the effect
                         case "limitedAmmo":
                             if (value.limitedAmmo != propertyEffects.limitedAmmo)
                             {
                                 e.strength = value.limitedAmmo.Value; //update effect
-                                cachedPropertyEffects = null; //and force recalculating the property effects on the next get call
+                                resetCachedValues(); ; //and clear the caches since things changed
                             }
                             break;
 
@@ -412,24 +464,44 @@ public class EffectData : System.Object
                 {
                     if (e.triggersAs(EffectType.property))
                     {
-                        switch (e.XMLName)
+                        //the property effect may be behind meta effects, so if e is a meta effect then check its child
+                        //do not check children if that meta effect says it should not trigger the child
+                        IEffect examining = e;
+                        while (examining.triggersAs(EffectType.meta))
+                        {
+                            if (((IEffectMeta)examining).shouldApplyInnerEffect())
+                            {
+                                examining = ((IEffectMeta)examining).innerEffect;
+                            }
+                            else
+                            {
+                                //since the child should not trigger, we know we don't want to modify the effects from it, but we're in a nested loop, so we cant skip over with continue
+                                //instead, we set examining to EffectDoNothing, since that won't do anything anyway
+                                examining = EffectDoNothing.instance; 
+                            }
+                        }
+
+                        switch (examining.XMLName)
                         {
                             case "attackColor":
                                 Color temp;
-                                bool successful = ColorUtility.TryParseHtmlString(e.argument, out temp);
+                                bool successful = ColorUtility.TryParseHtmlString(examining.argument, out temp);
                                 if (successful)
                                     newPropertyEffects.attackColor = temp;
                                 else
-                                    Debug.LogWarning("Could not convert " + e.argument + " to a color");
+                                    Debug.LogWarning("Could not convert " + examining.argument + " to a color");
                                 break;
 
                             case "armorPierce": newPropertyEffects.armorPierce = true; break;
                             case "infiniteTowerLifespan": newPropertyEffects.infiniteTowerLifespan = true; break;
-                            case "limitedAmmo": newPropertyEffects.limitedAmmo = Mathf.RoundToInt(e.strength); break;
+                            case "limitedAmmo": newPropertyEffects.limitedAmmo = Mathf.RoundToInt(examining.strength); break;
                             case "manualFire": newPropertyEffects.manualFire = true; break;
-                            case "maxOvercharge": newPropertyEffects.maxOvercharge = Mathf.FloorToInt(e.strength); break;
+                            case "maxOvercharge": newPropertyEffects.maxOvercharge = Mathf.FloorToInt(examining.strength); break;
                             case "returnsToTopOfDeck": newPropertyEffects.returnsToTopOfDeck = true; break;
                             case "upgradesForbidden": newPropertyEffects.upgradesForbidden = true; break;
+
+                            case "dieRoll": newPropertyEffects.dieRoll = System.Convert.ToInt32(examining.argument); break;
+
                             default: Debug.LogWarning("Unknown property effect."); break;
                         }
                     }
@@ -452,7 +524,7 @@ public class EffectData : System.Object
         if (cachedPeriodicEffectList == null)
         {
             cachedPeriodicEffectList = new List<IEffectPeriodic>();
-            foreach (IEffect e in Effects)
+            foreach (IEffect e in effects)
                 if (e.triggersAs(EffectType.periodic))
                     cachedPeriodicEffectList.Add((IEffectPeriodic)e);
         }
@@ -471,7 +543,7 @@ public class EffectData : System.Object
         {
             IEffect ie = EffectTypeManagerScript.instance.parse(xe, cardName);
             if (ie != null)
-                Effects.Add(ie);
+                Add(ie);
         }
     }
 
@@ -489,7 +561,7 @@ public class EffectData : System.Object
 
         //clone the effects also
         foreach (IEffect ie in effects)
-            clone.Effects.Add(cloneEffect(ie));
+            clone.Add(cloneEffect(ie));
 
         return clone;
     }
@@ -547,6 +619,8 @@ public interface IEffect
     TargetingType targetingType   { get; } //specifies what this card must target when casting, if anything
     string        effectColorHex  { get; } //hex string that gives the color that should be used for this effect
 
+    EffectData parentData { get; set; } //contains a reference to the parent effectData
+
     bool shouldBeRemoved(); //returns true if this effect is no longer necessary and can be removed
     bool triggersAs(EffectType triggerType); //returns true if this effect triggers as an effect of this type (usually only true if it IS an effect of that type, but there are exceptions)
 }
@@ -556,15 +630,18 @@ public abstract class BaseEffect : IEffect
 {
     [Hide] public string cardName { get; set; } //name of the card containing this effect
 
-    [Show] public virtual float  strength { get; set; } //specifies how strong the effect is.  not used in every effect.
+    [Show] public virtual float strength { get; set; } //specifies how strong the effect is.  not used in every effect.
     [Show] public virtual string argument { get; set; } //specifies any other information the effect requires.  not used in every effect.
     [Hide] public virtual string effectColorHex { get { return effectType.ToString("X"); } } //returns the hex color of this effect by extracting it from the enum value
 
     [Hide] public abstract TargetingType targetingType { get; } //specifies what this card must target when casting, if anything
-    [Hide] public abstract EffectType    effectType    { get; } //specifies what kind of effect this is
+    [Hide] public abstract EffectType effectType { get; } //specifies what kind of effect this is
 
-    [Hide] public  abstract string Name    { get; }                 //user-friendly name of this effect
-    [Show] public  abstract string XMLName { get; }                 //name used to refer to this effect in XML.  See also: EffectTypeManagerScript.parse()
+    [Hide] public abstract string Name { get; } //user-friendly name of this effect
+    [Show] public abstract string XMLName { get; } //name used to refer to this effect in XML.  See also: EffectTypeManagerScript.parse()
+
+    //contains a reference to the parent effectData
+    [Hide] public EffectData parentData {get; set;}
 
     //returns true if this effect is no longer necessary and can be removed
     public virtual bool shouldBeRemoved() { return false; } 
@@ -592,6 +669,12 @@ public interface IEffectWave : IEffect
 public interface IEffectProperty : IEffect
 {
 
+}
+
+//effect triggers when an enemy is spawned.  applies to the enemy in question, and triggered individually for each unit.  If the enemy survives, the effect IS NOT triggered again.
+public interface IEffectOnEnemySpawned
+{
+    void onEnemySpawned(EnemyScript enemy);
 }
 
 //effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
@@ -631,10 +714,12 @@ public interface IEffectOvercharge : IEffect
     void trigger(ref DamageEventData d, int pointsOfOvercharge);
 }
 
-//effect targets another effect
-public interface IEffectMeta : IEffect, IEffectEnemyDamaged, IEffectEnemyReachedGoal, IEffectInstant, IEffectOvercharge, IEffectPeriodic, IEffectProperty, IEffectSelf, IEffectTowerTargeting, IEffectWave, IEffectDeath
+//effect targets another effect.  As such, it must implement interfaces for ALL other effect types, since we dont know what kind the child may be.
+//we also provide a way to check what the inner effect is, and whether it would be applied if this one is triggered
+public interface IEffectMeta : IEffect, IEffectEnemyDamaged, IEffectEnemyReachedGoal, IEffectInstant, IEffectOvercharge, IEffectPeriodic, IEffectProperty, IEffectSelf, IEffectTowerTargeting, IEffectWave, IEffectDeath, IEffectOnEnemySpawned
 {
     IEffect innerEffect { get; set; } //effect targeted by this metaEffect
+    bool shouldApplyInnerEffect(); //returns whether or not the innerIeffect would trigger if this effect is
 }
 
 //effect is triggered when a tower or enemy dies

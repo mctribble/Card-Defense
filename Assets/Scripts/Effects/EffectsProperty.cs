@@ -8,6 +8,11 @@ abstract class BaseEffectProperty : BaseEffect, IEffectProperty
 {
     [Hide] public override TargetingType targetingType { get { return TargetingType.none; } }  //property effects are not targeted
     [Hide] public override EffectType effectType       { get { return EffectType.property; } } //effect type
+
+    public override bool triggersAs(EffectType triggerType)
+    {
+        return base.triggersAs(triggerType) || (triggerType == EffectType.property);
+    }
 }
 
 class EffectReturnsToTopOfDeck : BaseEffectProperty

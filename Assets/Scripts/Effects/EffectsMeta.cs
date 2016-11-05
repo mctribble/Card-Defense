@@ -37,6 +37,7 @@ public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
     public virtual void trigger(EnemyScript enemy) { if (shouldApplyInnerEffect()) { ((IEffectEnemyReachedGoal)innerEffect).trigger(enemy); } }
     public virtual void onEnemyDeath(EnemyScript enemy) { if (shouldApplyInnerEffect()) { ((IEffectDeath)innerEffect).onEnemyDeath(enemy); } }
     public virtual void onTowerDeath(TowerScript tower) { if (shouldApplyInnerEffect()) { ((IEffectDeath)innerEffect).onTowerDeath(tower); } }
+    public virtual void onEnemySpawned(EnemyScript enemy) {  if (shouldApplyInnerEffect()) { ((IEffectOnEnemySpawned)innerEffect).onEnemySpawned(enemy); } }
 
     //enemyDamage effects need special care since they are handled twice but should only be tested once
     ushort enemyDamageEFfectTriggers;
@@ -182,25 +183,25 @@ public class EffectIfRollRange : BaseEffectMeta
         set
         {
             base.innerEffect = value;
-
-            //because the die roll is an instant effect, a die roll can only happen when a card is played.
-            //Therefore, applying this to an effect marked noCast, such as any kind of targeting effect, will try to access a roll without having made one.
-            //such behavior would cause all kinds of strange problems, so we refuse to support such usage
-            if (innerEffect.targetingType == TargetingType.noCast)
-            {
-                MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + " is not compatible with this target effect. ");
-                base.innerEffect = null;
-            }
         }
     }
 
+    //whether we should trigger is cached, since the roll should only happen once and we dont want later rolls to mess with it
     public override bool shouldApplyInnerEffect()
     {
+        //throw warning if no die has been rolled
+        if (parentData.propertyEffects.dieRoll == null)
+        {
+            MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + ":no die has been rolled!");
+            return false;
+        }
+
         if (rangeMin <= rangeMax)
         {
-            if (EffectDieRoll.roll < rangeMin) return false;
-            if (EffectDieRoll.roll > rangeMax) return false;
+            if (parentData.propertyEffects.dieRoll < rangeMin) return false;
+            if (parentData.propertyEffects.dieRoll > rangeMax) return false;
 
+            Debug.Log(innerEffect.XMLName); //testing only
             return true;
         }
         else
@@ -307,6 +308,39 @@ public class EffectEveryRound : BaseEffectMeta
             else
                 MessageHandlerScript.Error(cardName + ": EffectEveryRound can only target instant or everyRound effects");
         }
+    }
+}
+
+//target instant effect triggers when the enemy is spawned (using IEffectInstant)
+public class EffectOnEnemySpawned : BaseEffectMeta
+{
+    public override string Name { get { return "[on spawn]" + innerEffect.Name; } }
+    public override string XMLName { get { return "onEnemySpawned"; } }
+    public override bool shouldApplyInnerEffect() { return true; }
+
+    //regardless of how the inner effect normally triggers, we want it to fire once every round.  We need to keep the triggertype == EffectType.meta so we dont break EffectData.cloneEffect()
+    public override bool triggersAs(EffectType triggerType)
+    {
+        return (triggerType == EffectType.enemySpawned) || (triggerType == EffectType.meta) || base.triggersAs(triggerType);
+    }
+
+    //because we use IEffectInstant, we can only target instant or everyRound effects
+    public override IEffect innerEffect
+    {
+        get { return base.innerEffect; }
+        set
+        {
+            if (value.triggersAs(EffectType.instant))
+                base.innerEffect = value;
+            else
+                MessageHandlerScript.Error(cardName + ": Effect OnEnemySpawned can only target instant");
+        }
+    }
+
+    //on enemy spawned, trigger the child
+    public override void onEnemySpawned(EnemyScript e)
+    {
+        ((IEffectInstant)innerEffect).trigger();
     }
 }
 

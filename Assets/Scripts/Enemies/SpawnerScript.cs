@@ -91,9 +91,9 @@ public class SpawnerScript : BaseBehaviour
             
             path.Insert(0, forcedFirstDestination.Value);
         }
-        enemy.SendMessage("SetPath", path);        
-
-        enemy.SendMessage("moveForwardByTime", timePassedSinceSpawn);                                   //move the enemy forward to account for how much time has passed between when this enemy should have spawned and when the spawner got told about it
-        EnemyManagerScript.instance.EnemySpawned(enemy);                                                //report it to the enemy manager
+        enemy.SendMessage("SetPath", path);                           //tell the enemy the path it should follow
+        enemy.SendMessage("triggerOnEnemySpawned");                   //tell the enemy to trigger spawn effects
+        enemy.SendMessage("moveForwardByTime", timePassedSinceSpawn); //move the enemy forward to account for how much time has passed between when this enemy should have spawned and when the spawner got told about it
+        EnemyManagerScript.instance.EnemySpawned(enemy);              //report it to the enemy manager
     }
 }

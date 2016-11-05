@@ -367,6 +367,17 @@ public class EnemyScript : BaseBehaviour
         }
     }
 
+    /// <summary>
+    /// triggers any effects on this enemy that are meant to run when the enemy spawns.
+    /// </summary>
+    public void triggerOnEnemySpawned()
+    {
+        if (effectData != null)
+            foreach (IEffect ie in effectData.effects)
+                if (ie.triggersAs(EffectType.enemySpawned))
+                    ((IEffectOnEnemySpawned)ie).onEnemySpawned(this);
+    }
+
     //stores a new path for this unit to follow
     private void SetPath(List<Vector2> p)
     {
