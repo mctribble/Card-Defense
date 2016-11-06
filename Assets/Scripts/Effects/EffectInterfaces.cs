@@ -41,19 +41,20 @@ public enum EffectType
 {
     //The values are hex colors to be used for text mentioning these effects (format RRGGBBAA).  
     //unchecked syntax is to force stuffing the values into the signed int used by enums
-    property         = unchecked((int)0xA52A2AFF), 
-    enemyDamaged     = unchecked((int)0x008000FF), 
-    enemyReachedGoal = unchecked((int)0x111111FF), 
-    instant          = unchecked((int)0x00FFFFFF), 
-    overcharge       = unchecked((int)0xFF00FFFF), 
+    cardDrawn        = unchecked((int)0x00AA00FF),
+    death            = unchecked((int)0xFF0000FF),
+    enemyDamaged     = unchecked((int)0x008000FF),
+    enemyReachedGoal = unchecked((int)0x111111FF),
     enemySpawned     = unchecked((int)0xAA0000FF),
-    periodic         = unchecked((int)0xCCCCCCFF), 
-    self             = unchecked((int)0x0000A0FF), 
-    towerTargeting   = unchecked((int)0xADD8E6FF), 
-    wave             = unchecked((int)0x0000FFFF), 
-    death            = unchecked((int)0xFF0000FF), 
-    everyRound       = unchecked((int)0x00FF00FF), 
-    meta             = unchecked((int)0x000000FF), 
+    everyRound       = unchecked((int)0x00FF00FF),
+    instant          = unchecked((int)0x00FFFFFF),
+    meta             = unchecked((int)0x000000FF),
+    overcharge       = unchecked((int)0xFF00FFFF),
+    periodic         = unchecked((int)0xCCCCCCFF),
+    property         = unchecked((int)0xA52A2AFF),
+    self             = unchecked((int)0x0000A0FF),
+    towerTargeting   = unchecked((int)0xADD8E6FF),
+    wave             = unchecked((int)0x0000FFFF),
 };
 
 /// <summary>
@@ -650,6 +651,13 @@ public abstract class BaseEffect : IEffect
     public virtual bool triggersAs(EffectType triggerType) { return triggerType == effectType; } 
 }
 
+//effect triggers when a card is drawn
+public interface IEffectCardDrawn : IEffect
+{
+    void playerCardDrawn(CardScript playerCard);
+    void enemyCardDrawn(EnemyScript enemyCard);
+};
+
 //effect triggers instantly without the need for a target
 public interface IEffectInstant : IEffect
 {
@@ -716,7 +724,7 @@ public interface IEffectOvercharge : IEffect
 
 //effect targets another effect.  As such, it must implement interfaces for ALL other effect types, since we dont know what kind the child may be.
 //we also provide a way to check what the inner effect is, and whether it would be applied if this one is triggered
-public interface IEffectMeta : IEffect, IEffectEnemyDamaged, IEffectEnemyReachedGoal, IEffectInstant, IEffectOvercharge, IEffectPeriodic, IEffectProperty, IEffectSelf, IEffectTowerTargeting, IEffectWave, IEffectDeath, IEffectOnEnemySpawned
+public interface IEffectMeta : IEffect, IEffectEnemyDamaged, IEffectEnemyReachedGoal, IEffectInstant, IEffectOvercharge, IEffectPeriodic, IEffectProperty, IEffectSelf, IEffectTowerTargeting, IEffectWave, IEffectDeath, IEffectOnEnemySpawned, IEffectCardDrawn
 {
     IEffect innerEffect { get; set; } //effect targeted by this metaEffect
     bool shouldApplyInnerEffect(); //returns whether or not the innerIeffect would trigger if this effect is

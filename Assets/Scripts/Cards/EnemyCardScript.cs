@@ -503,5 +503,16 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
     /// <summary>
     /// applies the given effect to the wave, provided it is not a survivor wave
     /// </summary>
-    public void applyWaveEffect(IEffectWave e) { if(wave.isSurvivorWave == false) wave = e.alteredWaveData(wave); } 
+    public void applyWaveEffect(IEffectWave e) { if(wave.isSurvivorWave == false) wave = e.alteredWaveData(wave); }
+
+    /// <summary>
+    /// triggers all effects on this card that are meant to fire when the card is drawn
+    /// </summary>
+    public void triggerOnDrawnEffects()
+    {
+        if (wave.enemyData.effectData != null)
+            foreach (IEffect ie in wave.enemyData.effectData.effects)
+                if (ie.triggersAs(EffectType.cardDrawn))
+                    ((IEffectInstant)ie).trigger();
+    }
 }

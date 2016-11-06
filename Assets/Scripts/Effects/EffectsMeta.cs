@@ -38,6 +38,8 @@ public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
     public virtual void onEnemyDeath(EnemyScript enemy) { if (shouldApplyInnerEffect()) { ((IEffectDeath)innerEffect).onEnemyDeath(enemy); } }
     public virtual void onTowerDeath(TowerScript tower) { if (shouldApplyInnerEffect()) { ((IEffectDeath)innerEffect).onTowerDeath(tower); } }
     public virtual void onEnemySpawned(EnemyScript enemy) {  if (shouldApplyInnerEffect()) { ((IEffectOnEnemySpawned)innerEffect).onEnemySpawned(enemy); } }
+    public virtual void playerCardDrawn(CardScript playerCard) { if (shouldApplyInnerEffect()) { ((IEffectCardDrawn)innerEffect).playerCardDrawn(playerCard); } }
+    public virtual void enemyCardDrawn(EnemyScript enemyCard) { if (shouldApplyInnerEffect()) { ((IEffectCardDrawn)innerEffect).enemyCardDrawn(enemyCard); } }
 
     //enemyDamage effects need special care since they are handled twice but should only be tested once
     ushort enemyDamageEFfectTriggers;
@@ -530,4 +532,19 @@ public class EffectScaleEffectWithBudget : BaseEffectMeta
         clone.strength = innerEffect.strength;
         return clone;
     }
+}
+
+//target instant triggers when the card is drawn
+public class EffectOnCardDrawn : BaseEffectMeta
+{
+    public override string Name { get { return "[when drawn]" + innerEffect.Name; } }
+    public override string XMLName { get { return "onCardDrawn"; } }
+
+    public override bool shouldApplyInnerEffect() { return true; } 
+
+    public override bool triggersAs(EffectType triggerType) { return base.triggersAs(triggerType) || triggerType==EffectType.cardDrawn; }
+
+    //behave the same regardless of what type of card is drawn
+    public override void playerCardDrawn(CardScript playerCard) { ((IEffectInstant)innerEffect).trigger(); }
+    public override void enemyCardDrawn(EnemyScript enemyCard) { ((IEffectInstant)innerEffect).trigger(); }
 }

@@ -816,4 +816,15 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         title.text = card.data.cardName + "\n" + card.charges + "/" + card.data.cardMaxCharges;
     }
+
+    /// <summary>
+    /// triggers all effects on this card that are meant to fire when the card is drawn
+    /// </summary>
+    public void triggerOnDrawnEffects()
+    {
+        if (card.data.effectData != null)
+            foreach (IEffect ie in card.data.effectData.effects)
+                if (ie.triggersAs(EffectType.cardDrawn))
+                    ((IEffectInstant)ie).trigger();
+    }
 }

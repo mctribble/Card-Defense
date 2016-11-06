@@ -52,7 +52,7 @@
         </Effects>
       </effectData>
     </Enemy>
-    <Enemy name="Scrambled" spawnCost="30" attack="2" maxHealth="50" unitSpeed="2">
+    <Enemy name="Scrambled" spawnCost="30" attack="2" maxHealth="50" unitSpeed="2" sprite="Enemy_Strong.png">
       <unitColor r="1" g="1" b="0.2" a="1" />
       <effectData>
         <Effects>
@@ -70,6 +70,16 @@
           </Effect>
           <Effect name="ifRollRange" strength="4" argument="4">
             <Effect name="armor" strength="10" />
+          </Effect>
+        </Effects>
+      </effectData>
+    </Enemy>
+    <Enemy name="Ping" spawnCost="15" attack="1" maxHealth="20" unitSpeed="2" sprite="Enemy_Basic.png">
+      <unitColor r="0.35" g="0.35" b="0.35" a="1" />
+      <effectData>
+        <Effects>
+          <Effect name="onCardDrawn">
+            <Effect name="drawEnemyCard" strength="1" />
           </Effect>
         </Effects>
       </effectData>

@@ -108,6 +108,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "effectCharges":             ie = new EffectEffectCharges(); break;
             case "effectCooldown":            ie = new EffectEffectCooldown(); break;
             case "everyRound":                ie = new EffectEveryRound(); break;
+            case "onCardDrawn":               ie = new EffectOnCardDrawn(); break;
             case "onEnemySpawned":            ie = new EffectOnEnemySpawned(); break;
             case "percentageChance":          ie = new EffectPercentageChance(); break;
             case "ifRollRange":               ie = new EffectIfRollRange(); break;

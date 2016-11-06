@@ -185,6 +185,8 @@ public class HandScript : BaseBehaviour
         if (handHidden)
             cards[currentHandSize].SendMessage("Hide");
 
+        cards[currentHandSize].SendMessage("triggerOnDrawnEffects"); //trigger effects
+
         currentHandSize++;  //increment card count
 
         //rearrange cards
