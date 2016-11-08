@@ -5,6 +5,7 @@ using Vexe.Runtime.Types;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 /// <summary>
 /// handles the level select menu
@@ -79,6 +80,13 @@ public class LevelSelectScript : BaseBehaviour
             menuButtons.Add(fButton);                           //and add it to the list of buttons
         }
 
+        //also have a button to choose a random level with
+        GameObject rButton = Instantiate(buttonPrefab);       //create a new button
+        rButton.SendMessage("setButtonText", "Random Level"); //set the text
+        rButton.SendMessage("setColor", menuButtonColor);     //and the color
+        rButton.transform.SetParent(this.transform, false);   //and it to the menu
+        menuButtons.Add(rButton);                             //and add it to the list of buttons
+
         //throw in a "quit" button also to exit the game with, if we are not in the editor or a web build (both of which ignore Application.Quit() anyway)
         if ((Application.isEditor == false) && (Application.isWebPlayer == false))
         {
@@ -131,6 +139,13 @@ public class LevelSelectScript : BaseBehaviour
             pdButton.transform.SetParent(this.transform, false); //and add it to the menu
             menuButtons.Add(pdButton);                           //and add it to the list of buttons
         }
+
+        //a random deck button...
+        GameObject rButton = Instantiate(buttonPrefab);      //create a new button
+        rButton.SendMessage("setButtonText", "Random Deck"); //set the text
+        rButton.SendMessage("setColor", menuButtonColor);    //and the color
+        rButton.transform.SetParent(this.transform, false);  //and add it to the menu for returning to the level select
+        menuButtons.Add(rButton);                            //and add it to the list of buttons
 
         //a button to open the editor...
         GameObject eButton = Instantiate(buttonPrefab);      //create a new button
@@ -236,19 +251,41 @@ public class LevelSelectScript : BaseBehaviour
     {
         switch(buttonText)
         {
+            case "Random Level":
+                //chooses a level at random from the base game list
+
+                DirectoryInfo dir = new DirectoryInfo (Path.Combine (Application.dataPath, levelDir));  //find level folder
+                FileInfo[] files = dir.GetFiles ("*.xml");                                              //get list of .xml files from it
+
+                //choose one of them at random and treat it as if that button was clicked on
+                int fileIndex = Random.Range(0,files.Length);
+                LevelSelected(files[fileIndex]);
+
+                break;
+
+            case "Random Deck":
+                //chooses a deck at random from the player and behave as if that button was clicked on
+                IEnumerable<XMLDeck> deckOptions = DeckManagerScript.instance.playerDecks.decks.Concat( DeckManagerScript.instance.premadeDecks.decks );
+                int deckIndex = Random.Range(0, deckOptions.Count());
+                DeckSelected(deckOptions.ElementAt(deckIndex));
+                break;
+
             case "Deck Editor":
                 //player wants to load the deck editor
                 SceneManager.LoadScene("Deck Editor");
                 break;
+
             case "Default Level Deck":
                 //player wants to use the predefined deck for this level.  Load the level immediately and then let the level manager load the deck for us when it sees we haven't.
                 LevelManagerScript.instance.SendMessage("loadLevel", chosenLevelFile.FullName);
                 Destroy(menuRoot); //we are done with this menu.  Destroy it.
                 break;
+
             case "Quit":
                 //player wants to quit.
                 Application.Quit();
                 break;
+
             case "Back":
                 //player wants to go back to beginning
                 chosenLevelFile = null;
@@ -256,6 +293,7 @@ public class LevelSelectScript : BaseBehaviour
                 StartCoroutine(setupLevelButtons());
                 infoImage.gameObject.SetActive(true);
                 break;
+
             default:
                 MessageHandlerScript.Error("LevelSelectScript doesnt know how to handle this button!");
                 break;
@@ -265,12 +303,25 @@ public class LevelSelectScript : BaseBehaviour
     /// <summary>
     /// callback from text buttons. 
     /// </summary>
-    private void TextButtonHovered(string buttonText)
+    private IEnumerator TextButtonHovered(string buttonText)
     {
         switch(buttonText)
         {
+            case "Random Level":
+                //shows a special image and description to explain what this button does
+                
+                //yes, I know its awkward, but we're loading the random level thumbnail with WWW, since this is the Unity method for runtime asset loading
+                string thumbnailPath = "file:///" + Path.Combine(Application.dataPath, thumbnailDir); //path where the file is
+                WWW www = new WWW( Path.Combine(thumbnailPath, "Random_Level.png") ); //file name
+                yield return www; //wait for it to load
+                infoImage.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f)); //create a sprite with it and set it on the image
+
+                infoText.text = "Chooses a level at random!";
+
+                break;
+
             case "Default Level Deck":
-                //treat the default level deck button as ifit were a reference to the level deck
+                //treat the default level deck button as if it were a reference to the level deck
                 LevelData data = LevelData.Load(Path.Combine(Application.dataPath, chosenLevelFile.FullName));
                 if ((data.premadeDeckName == null) || (data.premadeDeckName == ""))
                     DeckHovered(data.levelDeck);
@@ -283,5 +334,7 @@ public class LevelSelectScript : BaseBehaviour
                 infoText.text = "";
                 break;
         }
+
+        yield break;
     }
 }
