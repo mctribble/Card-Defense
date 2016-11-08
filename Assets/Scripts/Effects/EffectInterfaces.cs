@@ -446,7 +446,10 @@ public class EffectData : System.Object
                             if (value.limitedAmmo != propertyEffects.limitedAmmo)
                             {
                                 e.strength = value.limitedAmmo.Value; //update effect
-                                resetCachedValues(); ; //and clear the caches since things changed
+
+                                //and clear the caches since things changed
+                                cachedPropertyEffects = null;
+                                cachedPeriodicEffectList = null;
                             }
                             break;
 
