@@ -1,14 +1,12 @@
 presentation:
-player/enemy discard piles?
-enemy attack animations
-better range display, especially when upgrading
-animated enemy sprites
+better range display, especially when upgrading and for special targeting types
+animated enemy sprites?
 sound
 ================================================================
 content goals:
 enemies: 10/10  <<DONE!!>>
-levels:  06/30
-cards:   34/100
+levels:  07/30
+cards:   35/100
 decks:   04/10
 ================================================================
 balance:
