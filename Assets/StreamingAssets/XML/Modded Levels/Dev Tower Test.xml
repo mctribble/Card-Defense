@@ -35,12 +35,11 @@
     <Tower name="Sniper Tower" x="8" y="-8" />
     <Tower name="Supernova Tower" x="8.5" y="-8" />
     <Tower name="Dev Purge Tower" x="8.5" y="2.5" />
+    <Tower name="Mouse Tower" x="9" y="-6" />
   </Towers>
   <shuffleDeck>true</shuffleDeck>
   <levelDeck name="Level Deck">
     <Cards>
-      <Card name="Plague Tower" count="2" />
-      <Card name="Overcharge Tower" count="2" />
       <Card name="AOE Tower" count="2" />
       <Card name="Basic Tower" count="2" />
       <Card name="Black Plague Tower" count="2" />
@@ -50,11 +49,14 @@
       <Card name="Explosive Tower" count="2" />
       <Card name="Fast Tower" count="2" />
       <Card name="Heavy Tower" count="2" />
+      <Card name="Mouse Tower" count="2" />
       <Card name="Nova Tower" count="2" />
       <Card name="Orthogonal Tower" count="2" />
-      <Card name="Supernova Tower" count="2" />
-      <Card name="Sniper Tower" count="2" />
+      <Card name="Overcharge Tower" count="2" />
+      <Card name="Plague Tower" count="2" />
       <Card name="Shredder Tower" count="2" />
+      <Card name="Sniper Tower" count="2" />
+      <Card name="Supernova Tower" count="2" />
     </Cards>
   </levelDeck>
 </Level>

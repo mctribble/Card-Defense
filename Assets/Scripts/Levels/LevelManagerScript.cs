@@ -58,7 +58,17 @@ public class PremadeTower
     [XmlAttribute] public float x; //x to spawn at
     [XmlAttribute] public float y; //y to spawn at
 
-    public override string ToString() { return name + "(" + upgrades.Count + " upgrades)"; }
+    public override string ToString()
+    {
+        if ( (name == null) || (upgrades == null) )
+        {
+            return "null";
+        }
+        else
+        {
+            return name + "(" + upgrades.Count + " upgrades)";
+        }
+    }
 };
 
 /// <summary>

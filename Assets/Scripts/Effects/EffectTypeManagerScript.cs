@@ -86,6 +86,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "targetBurst":               ie = new EffectTargetBurst(); break;
             case "targetClosest":             ie = new EffectTargetClosest(); break;
             case "targetHealth":              ie = new EffectTargetHealth(); break;
+            case "targetMouse":               ie = new EffectTargetMouse(); break;
             case "targetMultishot":           ie = new EffectTargetMultishot(); break;
             case "targetOrthogonal":          ie = new EffectTargetOrthogonal(); break;
             case "targetRandom":              ie = new EffectTargetRandom(); break;

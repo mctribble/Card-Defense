@@ -221,6 +221,19 @@ public class EffectTargetHealth : BaseEffectTowerTargeting
     }
 }
 
+//tower targets enemies near the mouse.  Range is how far away FROM THE MOUSE to search for targets.
+public class EffectTargetMouse : BaseEffectTowerTargeting
+{
+    [Hide] public override string Name { get { return "Target: near mouse"; } } //returns name and strength
+    [Show] public override string XMLName { get { return "targetMouse"; } } //name used to refer to this effect in XML
+
+    public override List<GameObject> findTargets(Vector2 towerPosition, float towerRange)
+    {
+        Vector2 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        return EnemyManagerScript.instance.enemiesInRange(mouseWorldPosition, towerRange, 1);
+    }
+}
+
 //targets highest Speed
 public class EffectTargetSpeed : BaseEffectTowerTargeting
 {

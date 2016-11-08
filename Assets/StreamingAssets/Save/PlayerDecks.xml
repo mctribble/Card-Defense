@@ -7,5 +7,12 @@
         <Card name="Dev Chain Purge Tower" count="20" />
       </Cards>
     </Deck>
+    <Deck name="Dev Test Deck">
+      <Cards>
+        <Card name="Dev Purge Tower" count="10" />
+        <Card name="Challenger Tower" count="10" />
+        <Card name="Mouse Tower" count="10" />
+      </Cards>
+    </Deck>
   </Decks>
 </PlayerDecks>
