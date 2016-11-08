@@ -6,7 +6,7 @@ animated enemy sprites
 sound
 ================================================================
 content goals:
-enemies: 09/15
+enemies: 10/10  <<DONE!!>>
 levels:  06/30
 cards:   34/100
 decks:   04/10
