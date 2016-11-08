@@ -128,7 +128,7 @@
       </effectData>
     </Card>
     <Card Type="tower" Name="Sniper Tower" Description="Specializes in slaying Giants" Charges="3" Art="Sniper_Tower.png" Tooltip="Tower_Octagon.png">
-      <towerData Recharge="10" Range="999" Damage="300" Lifespan="5" UpgradeCap="1" Sprite="Tower_Octagon.png" >
+      <towerData Recharge="7.5" Range="999" Damage="300" Lifespan="5" UpgradeCap="1" Sprite="Tower_Octagon.png" >
         <towerColor r="0" g="0" b="1" a="1"/>
       </towerData>
       <effectData>
