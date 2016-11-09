@@ -140,12 +140,18 @@ public class LevelSelectScript : BaseBehaviour
             menuButtons.Add(pdButton);                           //and add it to the list of buttons
         }
 
-        //a random deck button...
-        GameObject rButton = Instantiate(buttonPrefab);      //create a new button
-        rButton.SendMessage("setButtonText", "Random Deck"); //set the text
-        rButton.SendMessage("setColor", menuButtonColor);    //and the color
-        rButton.transform.SetParent(this.transform, false);  //and add it to the menu for returning to the level select
-        menuButtons.Add(rButton);                            //and add it to the list of buttons
+        //random deck buttons...
+        GameObject rButton = Instantiate(buttonPrefab);                  //create a new button
+        rButton.SendMessage("setButtonText", "Random Deck (from list)"); //set the text
+        rButton.SendMessage("setColor", menuButtonColor);                //and the color
+        rButton.transform.SetParent(this.transform, false);              //and add it to the menu for returning to the level select
+        menuButtons.Add(rButton);                                        //and add it to the list of buttons
+
+        GameObject vrButton = Instantiate(buttonPrefab);                  //create a new button
+        vrButton.SendMessage("setButtonText", "Random Deck (generate)");  //set the text
+        vrButton.SendMessage("setColor", menuButtonColor);                //and the color
+        vrButton.transform.SetParent(this.transform, false);              //and add it to the menu for returning to the level select
+        menuButtons.Add(vrButton);                                        //and add it to the list of buttons
 
         //a button to open the editor...
         GameObject eButton = Instantiate(buttonPrefab);      //create a new button
@@ -263,11 +269,16 @@ public class LevelSelectScript : BaseBehaviour
 
                 break;
 
-            case "Random Deck":
+            case "Random Deck (from list)":
                 //chooses a deck at random from the player and behave as if that button was clicked on
                 IEnumerable<XMLDeck> deckOptions = DeckManagerScript.instance.playerDecks.decks.Concat( DeckManagerScript.instance.premadeDecks.decks );
                 int deckIndex = Random.Range(0, deckOptions.Count());
                 DeckSelected(deckOptions.ElementAt(deckIndex));
+                break;
+
+            case "Random Deck (generate)":
+                //randomly generates a deck for the player to use
+                DeckSelected(DeckManagerScript.instance.generateRandomDeck());
                 break;
 
             case "Deck Editor":
@@ -318,6 +329,16 @@ public class LevelSelectScript : BaseBehaviour
 
                 infoText.text = "Chooses a level at random!";
 
+                break;
+
+            case "Random Deck(from list)":
+                //show text to explain the button
+                infoText.text = "Chooses randomly from premade decks and those you have designed.";
+                break;
+
+            case "Random Deck (generate)":
+                //show text to explain the button
+                infoText.text = "randomly chooses cards to create a brand new deck.  Warning: deck quality will vary wildly!";
                 break;
 
             case "Default Level Deck":

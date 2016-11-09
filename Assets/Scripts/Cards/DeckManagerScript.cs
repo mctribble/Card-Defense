@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -495,6 +496,44 @@ public class DeckManagerScript : BaseBehaviour
                 }
             }
         }
+    }
+    
+    /// <summary>
+    /// returns a new XMLDeck from randomly chosen cards
+    /// the deck will contain from 30-60 cards, and each card type can appear 1-5 times.
+    /// will not include modded cards.
+    /// </summary>
+    /// <returns>the new deck</returns>
+    public XMLDeck generateRandomDeck()
+    {
+        int targetCardCount = UnityEngine.Random.Range(30,61); //.Range() excludes upper bound, so this is actually 30-60 inclusive.
+        XMLDeck randomDeck = new XMLDeck();
+
+        //while there is still room in the deck, add more cards.
+        while (randomDeck.cardCount < targetCardCount)
+        {
+            //start by picking a card type at random
+            CardData card = CardTypeManagerScript.instance.getRandomCardType();
+
+            //skip modded cards
+            if (card.isModded)
+                continue;
+
+            //skip it if it is already in the deck
+            if (randomDeck.contents.Any(xde => xde.name == card.cardName))
+                continue;
+
+            //it is not in the deck, so add 1-5 of it
+            int amount = UnityEngine.Random.Range(1, 6); //.Range() excludes upper bound, so this is actually 1-5 inclusive
+            amount = Math.Min(amount, (targetCardCount - randomDeck.cardCount) ); //do not exceed target card count
+            randomDeck.contents.Add(new XMLDeckEntry(card.cardName, amount)); 
+        }
+
+        //throw error if the deck is invalid or the wrong size
+        Debug.Assert(randomDeck.isValid(), "Generated deck invalid");
+        Debug.Assert(randomDeck.cardCount == targetCardCount, "Generated deck wrong size" ); 
+
+        return randomDeck; //done
     }
 
     /// <summary>
