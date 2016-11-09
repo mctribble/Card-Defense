@@ -114,6 +114,16 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="tower" Name="Ping Tower" Description="Rapid waves of damage that excel at wiping out Ping waves" Charges="4" Art="Ping_Tower.png" Tooltip="Tower_Round.png">
+      <towerData Recharge="0.2" Range="1.5" Damage="1" Lifespan="3" UpgradeCap="3" Sprite="Tower_Round.png" >
+        <towerColor r="0.2" g="1" b="1" a="1"/>
+      </towerData>
+      <effectData>
+        <Effects>
+          <Effect name="targetBurst" />
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="tower" Name="Plague Tower" Charges="1" Art="Plague_Tower.png" Tooltip="Tower_Round.png">
       <towerData Recharge="2" Range="1" Damage="1" Lifespan="3" UpgradeCap="2" Sprite="Tower_Round.png">
         <towerColor r="0" g="0.376" b="0.125" a="1"/>
