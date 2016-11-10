@@ -4,7 +4,7 @@
 <!-- Note cardFileDependencies and enemyFileDependencies attributes on the next line.-->
 <CardTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Cards.xsd" cardFileDependencies="Example Cards, Example Card Dependency, Dev Cards" enemyFileDependencies="Example Enemies, Example Enemy Dependency">
   <Cards>
-    <Card Name="Free Life Tap" Type="spell" Description="Draw five cards.  Does not consume a charge, but still costs points because you're a jerk for using this" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png">
+    <Card Name="Free Life Tap" Type="spell" Description="Draw five cards.  Does not consume a charge, but still costs points because you're a jerk for using this" Charges="3" Art="Summon_Tower_Basic.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>
 		      <Effect name="addCharges" strength="1" />

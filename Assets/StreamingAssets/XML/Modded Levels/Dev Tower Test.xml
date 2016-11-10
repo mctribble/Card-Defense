@@ -37,6 +37,7 @@
     <Tower name="Dev Purge Tower" x="8.5" y="2.5" />
     <Tower name="Mouse Tower" x="9" y="-6" />
     <Tower name="Ping Tower" x="9" y="-8" />
+    <Tower name="Improvised Tower" x="5.5" y="-5.5" />
   </Towers>
   <shuffleDeck>true</shuffleDeck>
   <levelDeck name="Level Deck">
@@ -50,6 +51,7 @@
       <Card name="Explosive Tower" count="2" />
       <Card name="Fast Tower" count="2" />
       <Card name="Heavy Tower" count="2" />
+      <Card name="Improvised Tower" count="2" />
       <Card name="Mouse Tower" count="2" />
       <Card name="Nova Tower" count="2" />
       <Card name="Orthogonal Tower" count="2" />

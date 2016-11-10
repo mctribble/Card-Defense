@@ -60,6 +60,7 @@
                   <xsd:attribute name="Charges" type="xsd:unsignedByte" use="required" />
                   <xsd:attribute name="Art" type="xsd:string" use="required" />
                   <xsd:attribute name="Tooltip" type="xsd:string" use="required" />
+                  <xsd:attribute name="Token" type="xsd:boolean" use="required" />
                 </xsd:complexType>
               </xsd:element>
             </xsd:sequence>

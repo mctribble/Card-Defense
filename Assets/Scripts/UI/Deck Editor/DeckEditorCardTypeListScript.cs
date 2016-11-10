@@ -53,6 +53,10 @@ public class DeckEditorCardTypeListScript : BaseBehaviour
         //one entry for each card type
         foreach (CardData type in listToShow)
         {
+            //skip tokens
+            if (type.isToken)
+                continue;
+
             //create the button and add it to the list
             GameObject xButton = Instantiate(entryPrefab);
             xButton.SendMessage("setCard", type);

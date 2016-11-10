@@ -77,9 +77,14 @@ public class XMLDeck
         //deck scan
         foreach (XMLDeckEntry entry in contents)
         {
+            //counting
             cardCount += entry.count;
             if (entry.count > maxCardsOfOneType)
                 maxCardsOfOneType = entry.count;
+
+            //no tokens
+            if (CardTypeManagerScript.instance.getCardByName(entry.name).isToken)
+                return false;
         }
 
         //compare stats to the deck rules
@@ -233,7 +238,14 @@ public struct Card
     public CardData data; //defines the card type
     public int charges; //number of remaining charges
 
-    public override string ToString() { return data.cardName + "(" + charges + "/" + data.cardMaxCharges + ")"; } //overridden for better display in inspector
+    //overridden for better display in inspector
+    public override string ToString()
+    {
+        if (data == null)
+            return "null";
+        else
+            return data.cardName + "(" + charges + "/" + data.cardMaxCharges + ")";
+    } 
 }
 
 /// <summary>
@@ -514,6 +526,10 @@ public class DeckManagerScript : BaseBehaviour
         {
             //start by picking a card type at random
             CardData card = CardTypeManagerScript.instance.getRandomCardType();
+
+            //skip tokens
+            if (card.isToken)
+                continue;
 
             //skip modded cards
             if (card.isModded)
