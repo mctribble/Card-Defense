@@ -200,6 +200,9 @@
     <Card Type="upgrade" Name="Heavy Upgrade" Description="Best on towers with high damage" Charges="3" Art="Heavy_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
       <upgradeData RechargeMult="1" RangeMult="1" DamageMult="2" RechargeMod="0.5" RangeMod="1" DamageMod="0" WaveBonus="2" />
     </Card>
+    <Card Type="upgrade" Name="Improvised Upgrade" Description="There were no upgrades in your deck, but you managed to improvise something regardless." Charges="3" Art="Improvised_Upgrade.png" Tooltip="Tower_Basic.png" Token="true">
+      <upgradeData RechargeMult="0.95" RangeMult="1" DamageMult="1.2" RechargeMod="0" RangeMod="0.25" DamageMod="0" WaveBonus="1" />
+    </Card>
     <Card Type="upgrade" Name="Preservation Upgrade" Description="Don't leave me!" Charges="3" Art="Preservation_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
       <upgradeData RechargeMult="1.1" RangeMult="0.9" DamageMult="0.9" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="5" />
       <effectData>
@@ -273,11 +276,32 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="spell" Name="Improvised Spell" Description="There were no upgrades in your deck, but you managed to improvise something regardless." Charges="3" Art="Improvised_Spell.png" Tooltip="Tower_Basic.png" Token="true">
+      <effectData>
+        <Effects>
+          <Effect name="budgetPercentageChange" strength="-10" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="spell" Name="Infrastructure Funding" Description="for those times you REALLY need more upgrades." Charges="3" Art="Infrastructure_Funding.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="drawUpgradeCard" strength="2" />
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="spell" Name="Life Tap" Description="Power comes at a cost" Charges="1" Art="Life Tap.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>
           <Effect name="damagePlayer" strength="5" />
           <Effect name="drawCard" strength="3" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="spell" Name="Program Funding" Description="for those times you REALLY need more upgrades." Charges="3" Art="Program_Funding.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="drawSpellCard" strength="2" />
         </Effects>
       </effectData>
     </Card>

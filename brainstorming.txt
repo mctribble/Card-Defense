@@ -6,7 +6,7 @@ sound
 content goals:
 enemies: 10/10  <<DONE!!>>
 levels:  07/30
-cards:   37/100 (+1 token)
+cards:   39/100 (+3 token)
 decks:   04/10
 ================================================================
 balance:

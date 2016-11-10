@@ -30,6 +30,45 @@ public class EffectDrawEnemyCard : BaseEffectInstant
     public override void trigger() { HandScript.enemyHand.StartCoroutine(HandScript.enemyHand.drawCards( Mathf.FloorToInt(strength) ) ); }
 }
 
+//player draws X spells from their deck.  if there are not enough, "Improvised Spell" tokens are created instead.
+public class EffectDrawSpellCard : BaseEffectInstant
+{
+    [Hide] public override string Name { get { return "Draw " + strength + " spell cards"; } } //returns name and strength
+    [Show] public override string XMLName { get { return "drawSpellCard"; } } //name used to refer to this effect in XML
+
+    public override void trigger()
+    {
+        //setup
+        int numToDraw = Mathf.FloorToInt(strength);
+        Card[] cards = new Card[numToDraw];
+
+        //fill the array with the Cards we want to draw
+        for (int i = 0; i < numToDraw; i++)
+        {
+            //attempt to draw from the deck
+            Card? drawn = DeckManagerScript.instance.DrawCardType(CardType.spell);
+
+            if (drawn != null)
+            {
+                //the draw succeeded, so we can use it directly
+                cards[i] = drawn.Value;
+            }
+            else
+            {
+                //the draw failed, so make a new card from thin air using the "Improvised Spell" token.
+                Card newCard = new Card();
+                newCard.data = CardTypeManagerScript.instance.getCardByName("Improvised Spell");
+                newCard.charges = newCard.data.cardMaxCharges;
+                cards[i] = newCard;
+            }
+
+        }
+
+        //tell the hand to draw these specific Cards.
+        HandScript.playerHand.StartCoroutine(HandScript.playerHand.drawCards( cards ) );
+    }
+}
+
 //player draws X towers from their deck.  if there are not enough, "Improvised Tower" tokens are created instead.
 public class EffectDrawTowerCard : BaseEffectInstant
 {
@@ -69,6 +108,45 @@ public class EffectDrawTowerCard : BaseEffectInstant
     }
 }
 
+//player draws X Upgrades from their deck.  if there are not enough, "Improvised Upgrade" tokens are created instead.
+public class EffectDrawUpgradeCard : BaseEffectInstant
+{
+    [Hide] public override string Name { get { return "Draw " + strength + " upgrade cards"; } } //returns name and strength
+    [Show] public override string XMLName { get { return "drawUpgradeCard"; } } //name used to refer to this effect in XML
+
+    public override void trigger()
+    {
+        //setup
+        int numToDraw = Mathf.FloorToInt(strength);
+        Card[] cards = new Card[numToDraw];
+
+        //fill the array with the Cards we want to draw
+        for (int i = 0; i < numToDraw; i++)
+        {
+            //attempt to draw from the deck
+            Card? drawn = DeckManagerScript.instance.DrawCardType(CardType.upgrade);
+
+            if (drawn != null)
+            {
+                //the draw succeeded, so we can use it directly
+                cards[i] = drawn.Value;
+            }
+            else
+            {
+                //the draw failed, so make a new card from thin air using the "Improvised Upgrade" token.
+                Card newCard = new Card();
+                newCard.data = CardTypeManagerScript.instance.getCardByName("Improvised Upgrade");
+                newCard.charges = newCard.data.cardMaxCharges;
+                cards[i] = newCard;
+            }
+
+        }
+
+        //tell the hand to draw these specific Cards.
+        HandScript.playerHand.StartCoroutine(HandScript.playerHand.drawCards(cards));
+    }
+}
+
 //increases lifespan of all towers by x
 public class EffectAllTowersLifespanBonus : BaseEffectInstant
 {
@@ -91,7 +169,7 @@ public class EffectAllTowersLifespanBonus : BaseEffectInstant
 //shuffles the deck
 public class EffectShuffle : BaseEffectInstant
 {
-    [Hide] public override string Name { get { return "Shuffle the deck."; } }        //returns name and strength
+    [Hide] public override string Name { get { return "Shuffle the deck."; } } //returns name and strength
     [Show] public override string XMLName { get { return "shuffle"; } } //name used to refer to this effect in XML
 
     public override void trigger()
