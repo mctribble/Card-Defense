@@ -13,23 +13,17 @@ using Vexe.Runtime.Types;
 [System.Serializable]
 public class WaveData
 {
-    //[DEV] called when fields are changed from the inspector to force recalculating the spawn count (VFW passes us the new values, so the params are here to match the expected prototype.  We do not use them)
-    private void resetSpawnCount(string s) { forcedSpawnCount = -1; spawnedThisWave = 0; cachedSpawnCount = null; }
-    private void resetSpawnCount(int i) { forcedSpawnCount = -1; spawnedThisWave = 0; cachedSpawnCount = null; }
-
-    //enemy type name, annotated to give a popup in the inspector and call resetSpawnCount if it is set from there
+    //enemy type name, annotated to give a popup in the inspector
     private string[] getEnemyNames() { return EnemyTypeManagerScript.instance.getEnemyNames(); }
     [XmlAttribute]
     [Popup("getEnemyNames",CaseSensitive = true, Filter = true, HideUpdate = true, TextField = true)]
-    [OnChanged("resetSpawnCount")]
     public string type;
 
     //indicates whether or not this wave was randomly generated.  Random waves are not written back to the file when saving level definitions
     [XmlIgnore][Comment("random waves are not saved to the level file.",helpButton:true)]
     public bool isRandomWave;
     
-    //wave budget.  spawn count is reset if this is changed from the inspector.
-    [OnChanged("resetSpawnCount")]
+    //wave budget.  
     [XmlAttribute]
     public int budget;
 
@@ -51,7 +45,10 @@ public class WaveData
 
             return data;
         }
-        set { data = value; cachedSpawnCount = null; }
+        set
+        {
+            data = value;
+        }
     }
 
     [XmlIgnore] private List<GameObject> enemyList;
@@ -90,37 +87,29 @@ public class WaveData
         forcedSpawnCount = -1;
         spawnedThisWave = 0;
         enemyList = enemies;
-        cachedSpawnCount = enemies.Count;
+        forcedSpawnCount = enemies.Count;
         isRandomWave = false;
     }
 
     //returns number of enemies to spawn this wave.  Cache the value to make sure we give the original spawn count, unaltered by anything that happens during the wave
-    private int? cachedSpawnCount;
     public int spawnCount
     {
         get
         {
-            if (cachedSpawnCount == null)
-            {
-                int result = 0;
+            int result = 0;
 
-                if (forcedSpawnCount > 0)
-                    result = forcedSpawnCount;
-                else if (enemyData == null)
-                    result = enemyList.Count;
-                else
-                    result = Mathf.FloorToInt(budget / enemyData.spawnCost);
+            if (forcedSpawnCount > 0)
+                result = forcedSpawnCount;
+            else if (enemyData == null)
+                result = enemyList.Count;
+            else
+                result = Mathf.FloorToInt(budget / enemyData.spawnCost);
 
-                if (result < 1)
-                {
-                    result = 1; //always spawn at least one enemy
-                    Debug.LogWarning("Wave spawn count was zero.  forced to spawn 1 monster. (" + data.name + ")");
-                }
+            //always spawn at least one enemy
+            if (result < 1)
+                result = 1;
 
-                cachedSpawnCount = result;
-            }
-
-            return cachedSpawnCount.Value;
+            return result;
         }
     }
 
@@ -503,7 +492,14 @@ public class EnemyCardScript : BaseBehaviour, IPointerEnterHandler, IPointerExit
     /// <summary>
     /// applies the given effect to the wave, provided it is not a survivor wave
     /// </summary>
-    public void applyWaveEffect(IEffectWave e) { if(wave.isSurvivorWave == false) wave = e.alteredWaveData(wave); }
+    public void applyWaveEffect(IEffectWave e)
+    {
+        if (wave.isSurvivorWave == false)
+        {
+            wave = e.alteredWaveData(wave);
+            updateWaveStats();
+        }
+    }
 
     /// <summary>
     /// triggers all effects on this card that are meant to fire when the card is drawn.  THey do not fire on survivor waves.

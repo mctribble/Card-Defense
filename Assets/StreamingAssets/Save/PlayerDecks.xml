@@ -9,11 +9,26 @@
     </Deck>
     <Deck name="Dev Test Deck">
       <Cards>
-        <Card name="Dev Chain Purge Tower" count="1" />
-        <Card name="Construction Funding" count="10" />
-        <Card name="Infrastructure Funding" count="10" />
         <Card name="Program Funding" count="10" />
-        <Card name="Spitfire Upgrade" count="1" />
+        <Card name="Dev Purge Tower" count="10" />
+        <Card name="Dev Chain Purge Tower" count="10" />
+      </Cards>
+    </Deck>
+    <Deck name="Temp">
+      <Cards>
+        <Card name="Construction Funding" count="4" />
+        <Card name="Enrage" count="4" />
+        <Card name="Gambit" count="4" />
+        <Card name="Infrastructure Funding" count="4" />
+        <Card name="Life Tap" count="4" />
+        <Card name="Recycle" count="4" />
+        <Card name="Reinforce" count="4" />
+        <Card name="Risky Draw" count="4" />
+        <Card name="Shield" count="4" />
+        <Card name="Summon Standard" count="4" />
+        <Card name="Summon Swarm" count="4" />
+        <Card name="Summon Tank" count="4" />
+        <Card name="Time Crunch" count="4" />
       </Cards>
     </Deck>
   </Decks>
