@@ -9,9 +9,10 @@
     </Deck>
     <Deck name="Dev Test Deck">
       <Cards>
-        <Card name="Dev Purge Tower" count="10" />
-        <Card name="Mouse Tower" count="10" />
-        <Card name="Ping Tower" count="10" />
+        <Card name="Shield" count="10" />
+        <Card name="Recycle" count="10" />
+        <Card name="Dev Chain Purge Tower" count="1" />
+        <Card name="Construction Funding" count="10" />
       </Cards>
     </Deck>
   </Decks>

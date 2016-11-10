@@ -75,6 +75,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "discardRandomCard":         ie = new EffectDiscardRandom(); break;
             case "drawCard":                  ie = new EffectDrawCard(); break;
             case "drawEnemyCard":             ie = new EffectDrawEnemyCard(); break;
+            case "drawTowerCard":             ie = new EffectDrawTowerCard(); break;
             case "replaceRandomCard":         ie = new EffectReplaceRandomCard(); break;
             case "score":                     ie = new EffectScore(); break;
             case "shuffle":                   ie = new EffectShuffle(); break;

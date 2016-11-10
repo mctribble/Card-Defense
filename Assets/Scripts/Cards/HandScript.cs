@@ -106,7 +106,8 @@ public class HandScript : BaseBehaviour
     /// <param name="turnToIdentity">turnToIdentity: card should straighten itself while moving</param>
     /// <param name="scaleToIdentity">scaleToIdentity: card should scale itself to (1,1,1) while moving</param>
     /// <param name="drawSurvivorWave">drawSurvivorWave: (enemy hands only) sets up the new card with a survivor wave instead of a wave from the deck</param>
-    public void drawCard(bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true, bool drawSurvivorWave = false)
+    /// <param name="cardToDraw">if this is not null, then the given Card is drawn instead of fetching one from the deck.  This parameter is ignored in enemy hands since they draw WaveData's instead.</param>
+    public void drawCard(bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true, bool drawSurvivorWave = false, Card? cardToDraw = null)
     {
         //unsupported for neutral hands
         if (handOwner == HandFaction.neutral)
@@ -155,7 +156,10 @@ public class HandScript : BaseBehaviour
         //send the card the data that defines it
         if (handOwner == HandFaction.player)
         {
-            cards[currentHandSize].SendMessage("SetCard", DeckManagerScript.instance.Draw());
+            if (cardToDraw == null)
+                cards[currentHandSize].SendMessage("SetCard", DeckManagerScript.instance.Draw()); //fetch the card from the deck
+            else
+                cards[currentHandSize].SendMessage("SetCard", cardToDraw.Value); //we were given the Card already, so just pass that
         }
         else if (handOwner == HandFaction.enemy)
         {
@@ -231,6 +235,57 @@ public class HandScript : BaseBehaviour
         //if the deck is empty, we may not be able to draw any cards.  bail if the hand is still empty at this point.
         if (currentHandSize == 0)
             yield break;
+
+        //wait for all cards to be idle
+        if (handOwner == HandFaction.player)
+        {
+            foreach (GameObject go in cards)
+            {
+                if (go == null) continue;
+                CardScript waitCard = go.GetComponent<CardScript>();
+                yield return StartCoroutine(waitCard.waitForIdleOrDiscarding());
+            }
+        }
+        else
+        {
+            foreach (GameObject go in cards)
+            {
+                if (go == null) continue;
+                EnemyCardScript waitCard = go.GetComponent<EnemyCardScript>();
+                yield return StartCoroutine(waitCard.waitForIdleOrDiscarding());
+            }
+        }
+
+        //flip the entire hand face up at once
+        foreach (GameObject c in cards)
+            if (c != null)
+                c.SendMessage("flipFaceUp");
+
+        yield break;
+    }
+
+    /// <summary>
+    /// draws multiple specific Card objects that already exist instead of taking them from the deck.  
+    /// If delay is true, there is a slight pause between each one.
+    /// </summary>
+    public IEnumerator drawCards(Card[] cardsToDraw, bool delay = true)
+    {
+        //wait to make sure we dont attempt to discard and draw at the same time (i. e., cards like Recycle that cause both discarding and drawing simultaneously)
+        do
+        {
+            yield return null;
+        }
+        while (discarding);
+
+        //draw the cards
+        foreach(Card c in cardsToDraw)
+        {
+            //draw the new card, being sure not to flip it over yet since we want to flip all of them as a group later
+            drawCard(false, true, true, false, c); 
+
+            if (delay)
+                yield return new WaitForSeconds(drawDelay);
+        }
 
         //wait for all cards to be idle
         if (handOwner == HandFaction.player)

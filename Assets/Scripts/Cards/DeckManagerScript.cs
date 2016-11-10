@@ -588,4 +588,27 @@ public class DeckManagerScript : BaseBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
         yield break;
     }
+
+    /// <summary>
+    /// attempts to draw a card of the given type.  If this is possible, then that card is removed from the deck and returned as though it were drawn normally
+    /// if such a card does not exist, does nothing and returns null
+    /// </summary>
+    /// <param name="cardType">the type of Card to draw</param>
+    /// <returns>the Card drawn, if found, or null if not</returns>
+    public Card? DrawCardType(CardType cardType)
+    {
+        //finds the first card of the correct type
+        foreach (Card c in currentDeck)
+        {
+            if (c.data.cardType != cardType)
+                continue;
+
+            //card found.  remove it from the list and return it
+            currentDeck.Remove(c);
+            return c;
+        }
+
+        //card was not found.
+        return null;
+    }
 }
