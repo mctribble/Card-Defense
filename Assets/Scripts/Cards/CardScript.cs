@@ -555,9 +555,12 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
                     effectApplied = true;
                 }
 
-                //property effects are never applied, so we'll just treat it as if we have to suppress the warning
-                if (e.triggersAs(EffectType.property))
+                //these effects are never applied, or already applied elsewhere, so we'll just treat it as if we have to suppress the warning
+                if (e.triggersAs(EffectType.property) ||
+                    e.triggersAs(EffectType.cardDrawn))
+                {
                     effectApplied = true;
+                }
 
                 if (effectApplied == false)
                     MessageHandlerScript.Warning("I dont know how to apply " + e.XMLName + " on a card.");

@@ -542,7 +542,7 @@ public class EffectOnCardDrawn : BaseEffectMeta
 
     public override bool shouldApplyInnerEffect() { return true; } 
 
-    public override bool triggersAs(EffectType triggerType) { return base.triggersAs(triggerType) || triggerType==EffectType.cardDrawn; }
+    public override bool triggersAs(EffectType triggerType) { return triggerType == EffectType.meta || triggerType==EffectType.cardDrawn; }
 
     //behave the same regardless of what type of card is drawn
     public override void playerCardDrawn(CardScript playerCard) { ((IEffectInstant)innerEffect).trigger(); }

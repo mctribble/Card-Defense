@@ -298,6 +298,17 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="spell" Name="Light Shield" Description="Use ths to protect more important cards from harm.  Best used every round." Charges="15" Art="Light_Shield.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="addCharges" strength="1" />
+          <Effect name="returnsToTopOfDeck" />
+          <Effect name="onCardDrawn">
+            <Effect name="drawCard" strength="1" />
+          </Effect>
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="spell" Name="Program Funding" Description="for those times you REALLY need more upgrades." Charges="3" Art="Program_Funding.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>
@@ -336,7 +347,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="spell" Name="Shield" Description="Use ths to protect more important cards from harm." Charges="20" Art="Shield.png" Tooltip="Tower_Basic.png" Token="false">
+    <Card Type="spell" Name="Shield" Description="Use ths to protect more important cards from harm.  Best used when you expect to take damage." Charges="30" Art="Shield.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>
           <Effect name="addCharges" strength="1" />
