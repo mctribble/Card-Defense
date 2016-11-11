@@ -97,5 +97,23 @@
         <Card name="Time Crunch" count="1" />
       </Cards>
     </Deck>
+    <Deck name="Endurance">
+      <Cards>
+        <Card name="Basic Tower" count="5" />
+        <Card name="Basic Upgrade" count="5" />
+        <Card name="Challenger Tower" count="2" />
+        <Card name="Enrage" count="3" />
+        <Card name="Fast Tower" count="8" />
+        <Card name="Fast Upgrade" count="5" />
+        <Card name="Light Shield" count="5" />
+        <Card name="Mouse Tower" count="4" />
+        <Card name="Nova Tower" count="5" />
+        <Card name="Ping Tower" count="5" />
+        <Card name="Recycle" count="4" />
+        <Card name="Reinforce" count="2" />
+        <Card name="Sniper Tower" count="5" />
+        <Card name="Spitfire Upgrade" count="2" />
+      </Cards>
+    </Deck>
   </Decks>
 </PlayerDecks>
