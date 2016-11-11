@@ -204,7 +204,7 @@
       <upgradeData RechargeMult="0.95" RangeMult="1" DamageMult="1.2" RechargeMod="0" RangeMod="0.25" DamageMod="0" WaveBonus="1" />
     </Card>
     <Card Type="upgrade" Name="Preservation Upgrade" Description="Don't leave me!" Charges="3" Art="Preservation_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
-      <upgradeData RechargeMult="1.1" RangeMult="0.9" DamageMult="0.9" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="5" />
+      <upgradeData RechargeMult="1.1" RangeMult="0.9" DamageMult="0.9" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="15" />
       <effectData>
         <Effects>
           <Effect name="upgradesForbidden" />
