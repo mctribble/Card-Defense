@@ -34,7 +34,7 @@
     </Card>
     <Card Type="tower" Name="Challenger Tower" Description="Even more dangerous than you think it is" Charges="1" Art="Challenger_Tower.png" Tooltip="Tower_Basic.png" Token="false">
       <towerData Recharge="0.75" Range="2.5" Damage="75" Lifespan="3" UpgradeCap="1" Sprite="Tower_Basic.png">
-        <towerColor r="0" g="0" b="0" a="0" />
+        <towerColor r="1" g="1" b="1" a="1" />
       </towerData>
       <effectData>
         <Effects>

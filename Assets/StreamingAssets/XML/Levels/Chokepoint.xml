@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
+  <description>Coming together and then dividing again</description>
+  <randomWaveCount>30</randomWaveCount>
+  <Waves />
+  <Spawners>
+    <Spawner spawnX="-13" spawnY="-2" />
+    <Spawner spawnX="-13" spawnY="0" />
+    <Spawner spawnX="-13" spawnY="2" />
+    <Spawner spawnX="-13" spawnY="5" />
+    <Spawner spawnX="-13" spawnY="7" />
+    <Spawner spawnX="-13" spawnY="9" />
+  </Spawners>
+  <PathSegments>
+    <Segment startX="-13" startY="-2" endX="-9" endY="-2" />
+    <Segment startX="-9" startY="-2" endX="-9" endY="0" />
+    <Segment startX="-9" startY="0" endX="-5" endY="0" />
+    <Segment startX="-5" startY="0" endX="-5" endY="2" />
+    <Segment startX="-5" startY="2" endX="-2" endY="2" />
+    <Segment startX="-2" startY="2" endX="-2" endY="4" />
+    <Segment startX="-2" startY="4" endX="12" endY="4" />
+    <Segment startX="12" startY="4" endX="12" endY="2" />
+    <Segment startX="12" startY="2" endX="15" endY="2" />
+    <Segment startX="15" startY="2" endX="15" endY="0" />
+    <Segment startX="15" startY="0" endX="18" endY="0" />
+    <Segment startX="18" startY="0" endX="18" endY="-2" />
+    <Segment startX="18" startY="-2" endX="22" endY="-2" />
+    <Segment startX="-13" startY="0" endX="-9" endY="0" />
+    <Segment startX="-13" startY="2" endX="-9" endY="2" />
+    <Segment startX="-9" startY="2" endX="-9" endY="0" />
+    <Segment startX="-13" startY="5" endX="-9" endY="5" />
+    <Segment startX="-9" startY="5" endX="-9" endY="7" />
+    <Segment startX="-9" startY="7" endX="-7" endY="7" />
+    <Segment startX="-7" startY="7" endX="-7" endY="2" />
+    <Segment startX="-7" startY="2" endX="-5" endY="2" />
+    <Segment startX="-13" startY="7" endX="-9" endY="7" />
+    <Segment startX="-13" startY="9" endX="-9" endY="9" />
+    <Segment startX="-9" startY="9" endX="-9" endY="7" />
+    <Segment startX="18" startY="0" endX="22" endY="0" />
+    <Segment startX="18" startY="0" endX="18" endY="2" />
+    <Segment startX="18" startY="2" endX="22" endY="2" />
+    <Segment startX="15" startY="2" endX="15" endY="4" />
+    <Segment startX="15" startY="4" endX="22" endY="4" />
+    <Segment startX="18" startY="6" endX="22" endY="6" />
+    <Segment startX="18" startY="6" endX="18" endY="8" />
+    <Segment startX="18" startY="8" endX="22" endY="8" />
+    <Segment startX="12" startY="4" endX="12" endY="6" />
+    <Segment startX="12" startY="6" endX="18" endY="6" />
+  </PathSegments>
+  <Towers>
+    <Tower name="Ping Tower" x="-6" y="1">
+      <Upgrades>
+        <Upgrade Name="Preservation Upgrade" Count="5" />
+        <Upgrade Name="Range Upgrade" Count="1" />
+        <Upgrade Name="Fast Upgrade" Count="2" />
+      </Upgrades>
+    </Tower>
+  </Towers>
+  <shuffleDeck>true</shuffleDeck>
+  <levelDeck name="Level Deck">
+    <Cards>
+      <Card name="Basic Tower" count="5" />
+      <Card name="Basic Upgrade" count="5" />
+      <Card name="Challenger Tower" count="2" />
+      <Card name="Enrage" count="3" />
+      <Card name="Fast Tower" count="8" />
+      <Card name="Fast Upgrade" count="5" />
+      <Card name="Light Shield" count="5" />
+      <Card name="Mouse Tower" count="4" />
+      <Card name="Nova Tower" count="5" />
+      <Card name="Ping Tower" count="5" />
+      <Card name="Recycle" count="4" />
+      <Card name="Reinforce" count="2" />
+      <Card name="Sniper Tower" count="5" />
+      <Card name="Spitfire Upgrade" count="2" />
+    </Cards>
+  </levelDeck>
+</Level>

@@ -203,7 +203,6 @@ public class EffectIfRollRange : BaseEffectMeta
             if (parentData.propertyEffects.dieRoll < rangeMin) return false;
             if (parentData.propertyEffects.dieRoll > rangeMax) return false;
 
-            Debug.Log(innerEffect.XMLName); //testing only
             return true;
         }
         else
