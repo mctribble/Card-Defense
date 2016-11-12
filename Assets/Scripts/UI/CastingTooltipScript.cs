@@ -68,7 +68,14 @@ public class CastingTooltipScript : BaseBehaviour
                             targetTower.SendMessage("UpdateTooltipText");
 
                         targetTower = newTargetTower.gameObject; //change target
-                        targetTower.SendMessage("UpgradeTooltip", parentCardScript.card.data.upgradeData); //tell new target to use the upgrade tooltip
+
+                        //tell new target to use the upgrade tooltip, using a slightly different message depending on if the upgrade is free or not
+                        bool hasUpgradeCost = (parentCardScript.card.data.effectData == null) || (parentCardScript.card.data.effectData.propertyEffects.noUpgradeCost == false);
+                        if (hasUpgradeCost)
+                            targetTower.SendMessage("UpgradeTooltip", parentCardScript.card.data.upgradeData);
+                        else
+                            targetTower.SendMessage("FreeUpgradeTooltip", parentCardScript.card.data.upgradeData);
+
                         if ( (parentCardScript.card.data.effectData != null) && (parentCardScript.card.data.effectData.effects.Count > 0) )
                             targetTower.SendMessage("NewEffectTooltip", parentCardScript.card.data.effectData); //if there are new effects, show those
 
@@ -80,7 +87,7 @@ public class CastingTooltipScript : BaseBehaviour
                                 castable = false;
 
                         //not castable if the upgrade is not free and the target is at the upgrade cap
-                        if ( (parentCardScript.card.data.effectData == null) || (parentCardScript.card.data.effectData.propertyEffects.noUpgradeCost == false) )
+                        if ( hasUpgradeCost )
                             if (newTargetTower.upgradeCount >= newTargetTower.upgradeCap)
                                 castable = false;
                     }
