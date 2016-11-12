@@ -70,6 +70,7 @@ dieRoll               | rolls a die with X sides.  The result can be used by oth
 infiniteTowerLifespan | stop a tower's lifespan from decreasing or being displayed
 limitedAmmo           | tower can only fire X times before being destroyed
 manualFire            | this tower only fires when clicked on by the player 
+noUpgradeCost         | this upgrade does not cost an upgrade slot
 returnsToTopOfDeck    | this card returns to the top of the deck when played
 upgradesForbidden     | tower cannot receive upgrades
 

@@ -79,9 +79,10 @@ public class CastingTooltipScript : BaseBehaviour
                             if (newTargetTower.effects.propertyEffects.upgradesForbidden)
                                 castable = false;
 
-                        //not castable if the target is at the upgrade cap
-                        if (newTargetTower.upgradeCount >= newTargetTower.upgradeCap)
-                            castable = false;
+                        //not castable if the upgrade is not free and the target is at the upgrade cap
+                        if ( (parentCardScript.card.data.effectData == null) || (parentCardScript.card.data.effectData.propertyEffects.noUpgradeCost == false) )
+                            if (newTargetTower.upgradeCount >= newTargetTower.upgradeCap)
+                                castable = false;
                     }
                 }
                 else

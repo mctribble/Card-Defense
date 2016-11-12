@@ -364,7 +364,19 @@ public class LevelManagerScript : BaseBehaviour
             {
                 for (int i = 0; i < ptu.Count; i++)
                 {
-                    t.SendMessage("UpgradeIgnoreCap", CardTypeManagerScript.instance.getCardByName(ptu.Name).upgradeData);
+                    //we need a different message depending on whether or not the upgrade costs a slot
+                    CardData upgradeCardData = CardTypeManagerScript.instance.getCardByName(ptu.Name);
+
+                    if ( (upgradeCardData.effectData != null) && (upgradeCardData.effectData.propertyEffects.noUpgradeCost) )
+                        t.SendMessage("FreeUpgrade", upgradeCardData.upgradeData);
+                    else
+                        t.SendMessage("UpgradeIgnoreCap", upgradeCardData.upgradeData);
+
+                    //also give it the effects
+                    if (upgradeCardData.effectData != null)
+                    {
+                        t.SendMessage("AddEffects", upgradeCardData.effectData);
+                    }
                 }
             }
         }

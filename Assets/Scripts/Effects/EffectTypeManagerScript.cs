@@ -101,6 +101,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "infiniteTowerLifespan":     ie = new EffectInfiniteTowerLifespan(); break;
             case "limitedAmmo":               ie = new EffectLimitedAmmo(); break;
             case "manualFire":                ie = new EffectManualFire(); break;
+            case "noUpgradeCost":             ie = new EffectNoUpgradeCost(); break;
             case "returnsToTopOfDeck":        ie = new EffectReturnsToTopOfDeck(); break;
             case "upgradesForbidden":         ie = new EffectUpgradesForbidden(); break;
 

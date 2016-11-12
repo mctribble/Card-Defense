@@ -654,8 +654,11 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
     /// </summary>
     private void UpgradeTower(GameObject target)
     {
-        //send upgrade data to the target tower
-        target.SendMessage("Upgrade", card.data.upgradeData);
+        //send upgrade data to the target tower using a different message depending on whether or not it is free
+        if ((card.data.effectData != null) && (card.data.effectData.propertyEffects.noUpgradeCost))
+            target.SendMessage("FreeUpgrade", card.data.upgradeData);
+        else
+            target.SendMessage("Upgrade", card.data.upgradeData);
 
         //if there are effects on the card, send them over too
         if ( (card.data.effectData != null) && (card.data.effectData.effects.Count > 0) )

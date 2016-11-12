@@ -49,6 +49,13 @@ class EffectManualFire : BaseEffectProperty
     [Show] public override string XMLName { get { return "manualFire"; } } //name used to refer to this effect in XML.
 }
 
+//upgrade does not cost an upgrade slot
+class EffectNoUpgradeCost : BaseEffectProperty
+{
+    [Hide] public override string Name { get { return "Does not cost an upgrade slot."; } } //returns name and strength
+    [Show] public override string XMLName { get { return "noUpgradeCost"; } } //name used to refer to this effect in XML.
+}
+
 //tower can have up to X points of overcharge
 class EffectMaxOvercharge : BaseEffectProperty
 {

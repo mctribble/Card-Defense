@@ -122,7 +122,7 @@
       </effectData>
     </Card>
     <Card Type="tower" Name="Ping Tower" Description="Rapid waves of damage that excel at wiping out Ping waves" Charges="4" Art="Ping_Tower.png" Tooltip="Tower_Round.png" Token="false">
-      <towerData Recharge="0.2" Range="1.5" Damage="1" Lifespan="3" UpgradeCap="3" Sprite="Tower_Round.png">
+      <towerData Recharge="0.2" Range="1.5" Damage="1" Lifespan="2" UpgradeCap="3" Sprite="Tower_Round.png">
         <towerColor r="0.2" g="1" b="1" a="1" />
       </towerData>
       <effectData>
@@ -202,6 +202,16 @@
     </Card>
     <Card Type="upgrade" Name="Improvised Upgrade" Description="There were no upgrades in your deck, but you managed to improvise something regardless." Charges="3" Art="Improvised_Upgrade.png" Tooltip="Tower_Basic.png" Token="true">
       <upgradeData RechargeMult="0.95" RangeMult="1" DamageMult="1.2" RechargeMod="0" RangeMod="0.25" DamageMod="0" WaveBonus="1" />
+    </Card>
+    <Card Type="upgrade" Name="Manual Control" Description="If you want a job done right, then do it yourself." Charges="3" Art="Manual_Control.png" Tooltip="Tower_Basic.png" Token="false">
+      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="0" />
+      <effectData>
+        <Effects>
+          <Effect name="manualFire" />
+          <Effect name="noUpgradeCost" />
+          <Effect name="drawCard" strength="1"/>
+        </Effects>
+      </effectData>
     </Card>
     <Card Type="upgrade" Name="Preservation Upgrade" Description="Don't leave me!" Charges="3" Art="Preservation_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
       <upgradeData RechargeMult="1.1" RangeMult="0.9" DamageMult="0.9" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="15" />

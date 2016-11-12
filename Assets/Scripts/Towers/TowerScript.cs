@@ -11,18 +11,18 @@ public class TowerScript : BaseBehaviour
 {
     //functions used to determine what should be shown when in the inspector
     private bool isEditor() { return Application.isPlaying == false; }
-    private bool hasData()  { return ((towerName != null) && (towerName != "")); }
+    private bool hasData() { return ((towerName != null) && (towerName != "")); }
 
     //object prefabs
-    [VisibleWhen("isEditor")] public GameObject bulletPrefab;          
-    [VisibleWhen("isEditor")] public GameObject burstShotPrefab;       
-    [VisibleWhen("isEditor")] public GameObject directionalShotPrefab;   
+    [VisibleWhen("isEditor")] public GameObject bulletPrefab;
+    [VisibleWhen("isEditor")] public GameObject burstShotPrefab;
+    [VisibleWhen("isEditor")] public GameObject directionalShotPrefab;
 
     //text colors to switch between based on how the tower decays
     [VisibleWhen("isEditor")] public Color textColorLifespan;
-    [VisibleWhen("isEditor")] public Color textColorAmmo;    
-    [VisibleWhen("isEditor")] public Color textColorBoth;    
-    [VisibleWhen("isEditor")] public Color textColorNeither; 
+    [VisibleWhen("isEditor")] public Color textColorAmmo;
+    [VisibleWhen("isEditor")] public Color textColorBoth;
+    [VisibleWhen("isEditor")] public Color textColorNeither;
 
     [VisibleWhen("hasData")] public string      towerName;      //name of the tower
     [VisibleWhen("hasData")] public ushort      upgradeCount;   //number of times this tower has been upgraded
@@ -34,14 +34,14 @@ public class TowerScript : BaseBehaviour
     [VisibleWhen("hasData")] public EffectData  effects;        //effects on this tower
 
     //component references for all the display objects
-    [VisibleWhen("isEditor")] public Image towerImage;                  
-    [VisibleWhen("isEditor")] public Image rangeImage;                  
-    [VisibleWhen("isEditor")] public Image chargeGaugeImage1x;          
-    [VisibleWhen("isEditor")] public Image chargeGaugeImage2x;          
-    [VisibleWhen("isEditor")] public Image chargeGaugeImage3x;          
-    [VisibleWhen("isEditor")] public Image tooltipPanel;                
-    [VisibleWhen("isEditor")] public Text  tooltipText;                 
-    [VisibleWhen("isEditor")] public Text  lifespanText;                
+    [VisibleWhen("isEditor")] public Image towerImage;
+    [VisibleWhen("isEditor")] public Image rangeImage;
+    [VisibleWhen("isEditor")] public Image chargeGaugeImage1x;
+    [VisibleWhen("isEditor")] public Image chargeGaugeImage2x;
+    [VisibleWhen("isEditor")] public Image chargeGaugeImage3x;
+    [VisibleWhen("isEditor")] public Image tooltipPanel;
+    [VisibleWhen("isEditor")] public Text  tooltipText;
+    [VisibleWhen("isEditor")] public Text  lifespanText;
     [VisibleWhen("isEditor")] public ParticleSystem manualFireParticles;
 
     [VisibleWhen("hasData")] private float deltaTime;            //time since last frame
@@ -131,9 +131,9 @@ public class TowerScript : BaseBehaviour
 
             //update charge gauges
             float fillAmount = Mathf.Min(shotCharge, maxCharge); //we fill the gauges based on max charge instead of current charge if we are over, so the wonkiness of a soft cap is hidden from the player
-            chargeGaugeImage1x.fillAmount = fillAmount; 
-            chargeGaugeImage2x.fillAmount = fillAmount - 1.0f; 
-            chargeGaugeImage3x.fillAmount = fillAmount - 2.0f; 
+            chargeGaugeImage1x.fillAmount = fillAmount;
+            chargeGaugeImage2x.fillAmount = fillAmount - 1.0f;
+            chargeGaugeImage3x.fillAmount = fillAmount - 2.0f;
         }
 
         //while a shot is charged...
@@ -236,7 +236,7 @@ public class TowerScript : BaseBehaviour
     private bool fire(List<GameObject> targets)
     {
         //only fire if we have valid targets
-        if ( (targets != null) && (targets.Count != 0) )
+        if ((targets != null) && (targets.Count != 0))
         {
             //reduce charge meter (if the gauge was overcharged, retain the excess)
             shotCharge -= 1.0f;
@@ -260,7 +260,7 @@ public class TowerScript : BaseBehaviour
             ded.effects = effects;
 
             //if overcharged and there are overcharge effects, try to apply them
-            if ( (shotCharge >= 1.0f) && (effects != null) && (effects.propertyEffects.maxOvercharge != null) )
+            if ((shotCharge >= 1.0f) && (effects != null) && (effects.propertyEffects.maxOvercharge != null))
             {
                 int availableOvercharge = Mathf.FloorToInt(shotCharge); //calculate available points of overcharge
                 int usedOvercharge = Mathf.Min(availableOvercharge, effects.propertyEffects.maxOvercharge.Value); //if there are more available than our max, still only use the max
@@ -273,7 +273,7 @@ public class TowerScript : BaseBehaviour
             }
 
             //determine projectile spawning by targeting effect
-            if ( effects != null )
+            if (effects != null)
             {
                 switch (effects.lastUsedTargetingEffect)
                 {
@@ -285,7 +285,7 @@ public class TowerScript : BaseBehaviour
                         List<GameObject> down  = new List<GameObject>();
                         foreach (GameObject t in targets)
                         {
-                            if      (t.transform.position.x < this.transform.position.x)
+                            if (t.transform.position.x < this.transform.position.x)
                                 left.Add(t);
                             else if (t.transform.position.x > this.transform.position.x)
                                 right.Add(t);
@@ -316,7 +316,7 @@ public class TowerScript : BaseBehaviour
                             spawnBullet(t, ded);
                         break;
                 }
-            }        
+            }
             else //no targeting effects present: use bullets
             {
                 foreach (GameObject t in targets)
@@ -356,7 +356,7 @@ public class TowerScript : BaseBehaviour
     /// <param name="targets">list of enemies in range.  The burstShot itself will catch enemies that enter the region during the attack</param>
     /// <param name="damageEvent">details of the attack.  damageEvent.dest is ignored.</param>
     private void burstFire(List<GameObject> targets, DamageEventData damageEvent)
-    {    
+    {
         //construct burst shot event
         BurstShotData data = new BurstShotData();
         data.targetList = targets;
@@ -469,13 +469,14 @@ public class TowerScript : BaseBehaviour
     }
 
     //helper functions to allow calling Upgrade through sendMessage (Unity message handling doesn't understand default parameters)
-    private void Upgrade(UpgradeData d) { Upgrade(d, false); } 
-    private void UpgradeIgnoreCap(UpgradeData d) { Upgrade(d, true); }
+    private void FreeUpgrade(UpgradeData d) { Upgrade(d, true, true); }
+    private void Upgrade(UpgradeData d) { Upgrade(d, false, false); }
+    private void UpgradeIgnoreCap(UpgradeData d) { Upgrade(d, true, false); }
 
     /// <summary>
     /// receives upgrade data and uses it to modify the tower.  If ignoreCap is true, then it can exceed the upgrade cap to do so
     /// </summary>
-    private void Upgrade(UpgradeData d, bool ignoreCap)
+    private void Upgrade(UpgradeData d, bool ignoreCap, bool noUpgradeCost)
     {
         //ignore if upgrades are forbidden
         if (effects != null)
@@ -488,9 +489,9 @@ public class TowerScript : BaseBehaviour
                 return;
 
         //each stat = oldStat * statMult + statMod.
-        rechargeTime    = rechargeTime  * d.rechargeMultiplier  + d.rechargeModifier;
-        attackPower     = attackPower   * d.attackMultiplier    + d.attackModifier;
-        range           = range         * d.rangeMultiplier     + d.rangeModifier;
+        rechargeTime = rechargeTime * d.rechargeMultiplier + d.rechargeModifier;
+        attackPower = attackPower * d.attackMultiplier + d.attackModifier;
+        range = range * d.rangeMultiplier + d.rangeModifier;
 
         //also increase waves
         wavesRemaining += d.waveBonus;
@@ -498,18 +499,23 @@ public class TowerScript : BaseBehaviour
         //set scale of range image
         rangeImage.gameObject.GetComponent<RectTransform>().localScale = new Vector3(range, range, 1.0f);
 
-        //count the upgrade
-        upgradeCount++;
+        //if the upgrade consumes a slot, then count it
+        if (noUpgradeCost == false)
+            upgradeCount++;
 
         //update text
         UpdateTooltipText();
         updateLifespanText();
     }
 
+    //helpers to call ShowUpgradeTooltip since unity SendMessage() doesn't understand default parameters
+    private void UpgradeTooltip(UpgradeData u) { ShowUpgradeTooltip(u, false); }
+    private void FreeUpgradeTooltip(UpgradeData u) { ShowUpgradeTooltip(u, true); }
+
     /// <summary>
     /// updates the tooltip text to show what the given upgrade would change
     /// </summary>
-    private void UpgradeTooltip(UpgradeData u)
+    private void ShowUpgradeTooltip(UpgradeData u, bool noUpgradeCost)
     {
         //show special message if the target has upgradesForbidden
         if (effects != null)
@@ -521,17 +527,24 @@ public class TowerScript : BaseBehaviour
             }
         }
 
-        //show special message if the target is at the upgrade cap
-        if (upgradeCount >= upgradeCap)
+        //show special message if the target is at the upgrade cap and the upgrade is not free
+        if (noUpgradeCost == false)
         {
-            tooltipText.text = "<color=red>This tower cannot hold any more upgrades!</color>";
-            return;
+            if (upgradeCount >= upgradeCap)
+            {
+                tooltipText.text = "<color=red>This tower cannot hold any more upgrades!</color>";
+                return;
+            }
         }
 
-        //we already know how these lines change
-        tooltipText.text =
-            towerName + "\n" +
-            upgradeCount + " upgrades <color=lime>+ 1</color>/" + upgradeCap + "\n";
+        //tower name does not change
+        tooltipText.text = towerName + "\n";
+
+        //we may or may not use an upgrade slot
+        if (noUpgradeCost)
+            tooltipText.text += upgradeCount + " upgrades <color=lime>+ 0</color>/" + upgradeCap + "\n";
+        else
+            tooltipText.text += upgradeCount + " upgrades <color=lime>+ 1</color>/" + upgradeCap + "\n";
 
         //for the others, we need to do some calculations:
         float newAttackPower     = attackPower     * u.attackMultiplier   + u.attackModifier;
