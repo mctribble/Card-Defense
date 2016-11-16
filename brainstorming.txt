@@ -6,7 +6,6 @@ sound:
 hit?
 draw
 music
-bursts/explosions
 orthogonal attacks?
 UI sounds
 ================================================================

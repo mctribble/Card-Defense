@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Vexe.Runtime.Types;
 using System.Collections.Generic;
+using System.Collections;
 
 /// <summary>
 /// contains all the data needed to initialize a burst shot:
@@ -22,7 +23,10 @@ public class BurstShotScript : BaseBehaviour
     public Color color;     //default color to use for the burst
     public float lookAhead; //seconds to look ahead when warning enemies about oncoming damage
 
-    public SpriteRenderer spriteRenderer; //component reference
+    //component references
+    public SpriteRenderer spriteRenderer;
+    public AudioClip[]    burstSounds;
+    public AudioSource    audioSource;
 
     private bool                  initialized;     //whether or not this shot has been initialized
     private List<DamageEventData> expectedToHit;   //list of enemies that we told to expect damage and the events associated with those hits
@@ -129,10 +133,23 @@ public class BurstShotScript : BaseBehaviour
                 alreadyHit.Add(ded.dest);
             }
 
-            //if we are at max scale, we are done.  destroy self
+            //if we are at max scale, we are done.  
             if (curScale == maxScale)
-                Destroy(gameObject);
+                StartCoroutine(onDone());
         }
+    }
+
+    //hides visuals, waits for sound to finish, then destroys self
+    private IEnumerator onDone()
+    {
+        initialized = false; //stop updating the burst so we dont attack things
+
+        spriteRenderer.enabled = false;
+
+        while (audioSource.isPlaying)
+            yield return null;
+
+        Destroy(gameObject);
     }
 
     //init attack
@@ -141,6 +158,11 @@ public class BurstShotScript : BaseBehaviour
         maxScale = data.burstRange;
         baseDamageEvent = data.damageEvent;
         initialized = true; //flag ready
+
+        //play one of the sounds at random
+        int soundToPlay = Random.Range(0, burstSounds.Length);
+        audioSource.clip = burstSounds[soundToPlay];
+        audioSource.Play();
     }
 
     //overrides the default color
