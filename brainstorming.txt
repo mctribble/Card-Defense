@@ -3,9 +3,13 @@ better range display, especially when upgrading and for special targeting types
 animated enemy sprites?
 ================================================================
 sound:
-hit?
-draw
-music
+enemy hit?
+tower fire??
+drawing
+discarding
+player hit
+menu music
+deck editor music
 orthogonal attacks?
 UI sounds
 ================================================================

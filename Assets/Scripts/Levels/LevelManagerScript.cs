@@ -206,12 +206,13 @@ public class LevelManagerScript : BaseBehaviour
     [Hide] public static LevelManagerScript instance;  //singleton pattern
     
     //object references (not visible during play, since there is no reason to modify them in-game)
-    private bool shouldShowRef() { return !Application.isPlaying; }     //function used to hide these when in game
-    [VisibleWhen("shouldShowRef")] public GameObject spawnerPrefab;     //prefab used to create spawners
-    [VisibleWhen("shouldShowRef")] public GameObject towerPrefab;       //prefab used to create towers
-    [VisibleWhen("shouldShowRef")] public GameObject explosionPrefab;   //prefab used to create explosions
-    [VisibleWhen("shouldShowRef")] public GameObject pathTooltipPrefab; //prefab used to create the path laying tooltip
-    [VisibleWhen("shouldShowRef")] public RawImage   background;        //reference to the background texture
+    private bool shouldShowRefs() { return !Application.isPlaying; }     //function used to hide these when in game
+    [VisibleWhen("shouldShowRefs")] public GameObject  spawnerPrefab;     //prefab used to create spawners
+    [VisibleWhen("shouldShowRefs")] public GameObject  towerPrefab;       //prefab used to create towers
+    [VisibleWhen("shouldShowRefs")] public GameObject  explosionPrefab;   //prefab used to create explosions
+    [VisibleWhen("shouldShowRefs")] public GameObject  pathTooltipPrefab; //prefab used to create the path laying tooltip
+    [VisibleWhen("shouldShowRefs")] public RawImage    background;        //reference to the background texture
+    [VisibleWhen("shouldShowRefs")] public AudioSource musicSource;       //audio source to use for playing background music
 
     //data for the level itself
     [Hide] public bool levelLoaded;                     //indicates whether a level has been loaded or not
@@ -387,6 +388,9 @@ public class LevelManagerScript : BaseBehaviour
 
         //init wave stats
         UpdateWaveStats();
+
+        //start the music
+        musicSource.Play();
 
         //fire the level loaded event so interested objects can act on it
         LevelLoadedEvent();

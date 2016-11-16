@@ -584,7 +584,13 @@ public class DeckManagerScript : BaseBehaviour
     /// </summary>
     public IEnumerator playerDead()
     {
+        //stop music
+        LevelManagerScript.instance.musicSource.Stop();
+
+        //score report
         yield return MessageHandlerScript.ShowAndYield("GAME OVER!\n" + ScoreManagerScript.instance.report(false));
+
+        //reload
         UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
         yield break;
     }
