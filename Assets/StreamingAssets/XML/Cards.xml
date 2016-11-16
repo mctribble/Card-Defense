@@ -195,7 +195,7 @@
       </effectData>
     </Card>
     <Card Type="upgrade" Name="Fast Upgrade" Description="small damage increase per shot.  best on fast towers" Charges="3" Art="Fast_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
-      <upgradeData RechargeMult="0.8" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="1" WaveBonus="2" />
+      <upgradeData RechargeMult="0.8" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0.25" DamageMod="1" WaveBonus="2" />
     </Card>
     <Card Type="upgrade" Name="Heavy Upgrade" Description="Best on towers with high damage" Charges="3" Art="Heavy_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
       <upgradeData RechargeMult="1" RangeMult="1" DamageMult="2" RechargeMod="0.5" RangeMod="1" DamageMod="0" WaveBonus="2" />
