@@ -1,7 +1,14 @@
 presentation:
 better range display, especially when upgrading and for special targeting types
 animated enemy sprites?
-sound
+================================================================
+sound:
+hit?
+draw
+music
+bursts/explosions
+orthogonal attacks?
+UI sounds
 ================================================================
 content goals:
 enemies: 10/10  <<DONE!!>>

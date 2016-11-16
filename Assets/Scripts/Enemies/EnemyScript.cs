@@ -121,6 +121,9 @@ public class EnemyScript : BaseBehaviour
     public float          deathBurstSize;     //max scale of the death burst
     public float          deathBurstTime;     //time taken to animate death burst
 
+    public AudioSource audioSource; //source to use to play sounds from
+    public AudioClip[] deathSounds; //sounds to play when dead.  one of these is chosen at random.
+
     //enemy data
     public int        damage;        
     public int        maxHealth;
@@ -436,6 +439,11 @@ public class EnemyScript : BaseBehaviour
     /// </summary>
     private IEnumerator onDeath()
     {
+        //sound
+        int soundToPlay = Random.Range(0, deathSounds.Length);
+        audioSource.clip = deathSounds[soundToPlay];
+        audioSource.Play();
+
         //disable normal images and turn on the death burst instead
         enemyImage.enabled = false;
         healthbar.enabled = false;
@@ -458,6 +466,13 @@ public class EnemyScript : BaseBehaviour
             foreach (IEffect ie in effectData.effects)
                 if (ie.triggersAs(EffectType.death))
                     ((IEffectDeath)ie).onEnemyDeath(this);
+
+        //hide the burst so there is no visual indication we are still here
+        deathBurst.enabled = false;
+
+        //wait for sound to finish before destroying the object
+        while (audioSource.isPlaying)
+            yield return null;
 
         Destroy(gameObject);
         yield break;
