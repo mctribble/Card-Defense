@@ -180,7 +180,7 @@
       </effectData>
     </Card>
     <Card Type="upgrade" Name="Basic Upgrade" Description="Boring but good" Charges="5" Art="Basic_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
-      <upgradeData RechargeMult="0.9" RangeMult="1" DamageMult="1.4" RechargeMod="0" RangeMod="0.5" DamageMod="0" WaveBonus="1" />
+      <upgradeData RechargeMult="0.9" RangeMult="1" DamageMult="1.4" RechargeMod="0" RangeMod="0.5" DamageMod="0" WaveBonus="2" />
     </Card>
     <Card Type="upgrade" Name="Chain Hit" Description="Powerful, but easily squandered" Charges="5" Art="Chain_Hit.png" Tooltip="Tower_Basic.png" Token="false">
       <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="1" />

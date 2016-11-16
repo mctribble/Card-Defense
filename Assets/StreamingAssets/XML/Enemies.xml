@@ -84,11 +84,11 @@
         </Effects>
       </effectData>
     </Enemy>
-    <Enemy name="Refurb" spawnCost="100" attack="5" maxHealth="50" unitSpeed="1" sprite="Enemy_Elite.png">
+    <Enemy name="Refurb" spawnCost="100" attack="5" maxHealth="25" unitSpeed="1" sprite="Enemy_Elite.png">
       <unitColor r="0.2" g="1" b="1" a="1" />
       <effectData>
         <Effects>
-          <Effect name="armor" strength="150" />
+          <Effect name="armor" strength="500" />
         </Effects>
       </effectData>
     </Enemy>
