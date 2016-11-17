@@ -1,3 +1,7 @@
+known bugs:
+ability to draw enemy cards not reset on level reload
+some lingering cause of enemies not knowing to expect damage
+================================================================
 presentation:
 better range display, especially when upgrading and for special targeting types
 animated enemy sprites?
