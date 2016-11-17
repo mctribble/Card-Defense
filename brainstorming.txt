@@ -8,7 +8,7 @@ animated enemy sprites?
 ================================================================
 sound: (recorded, but not used)
 enemy hit?
-tower fire??
+*tower fire??
 =======
 *card draw
 card discard
@@ -18,7 +18,7 @@ card destroyed
 player hit
 menu music
 deck editor music
-orthogonal attacks?
+*orthogonal attacks?
 button hover
 *button click
 ================================================================
