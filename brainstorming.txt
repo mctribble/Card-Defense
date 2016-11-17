@@ -9,13 +9,17 @@ animated enemy sprites?
 sound:
 enemy hit?
 tower fire??
-drawing
-discarding
+card draw
+card discard
+card flip
+card played
+card destroyed
 player hit
 menu music
 deck editor music
 orthogonal attacks?
-UI sounds
+button hover
+button click
 ================================================================
 content goals:
 enemies: 10/10  <<DONE!!>>
