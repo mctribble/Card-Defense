@@ -7,19 +7,15 @@ better range display, especially when upgrading and for special targeting types
 animated enemy sprites?
 ================================================================
 sound: (recorded, but not used)
-enemy hit?
+*enemy hit?
 *tower fire??
 =======
 *card draw
-card discard
-card flip
-card played
-card destroyed
-player hit
+*card destroyed
+*player hit
 menu music
 deck editor music
 *orthogonal attacks?
-button hover
 *button click
 ================================================================
 content goals:
