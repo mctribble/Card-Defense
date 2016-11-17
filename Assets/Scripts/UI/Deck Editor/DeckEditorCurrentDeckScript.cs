@@ -81,9 +81,9 @@ public class DeckEditorCurrentDeckScript : BaseBehaviour
             Color buttonColor;
             switch (CardTypeManagerScript.instance.getCardByName(xEntry.name).cardType)
             {
-                case CardType.tower: buttonColor = towerColor; break;
-                case CardType.upgrade: buttonColor = upgradeColor; break;
-                case CardType.spell: buttonColor = spellColor; break;
+                case PlayerCardType.tower: buttonColor = towerColor; break;
+                case PlayerCardType.upgrade: buttonColor = upgradeColor; break;
+                case PlayerCardType.spell: buttonColor = spellColor; break;
                 default: Debug.LogWarning("card type list doesnt know what color to use for this card."); buttonColor = Color.black; break;
             }
 

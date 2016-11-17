@@ -11,7 +11,7 @@ using Vexe.Runtime.Types;
 public class DeckEditorFilter
 {
     public string    searchString; //null if no active search.  otherwise contains the text to be found
-    public CardType? type;         //only show cards of this type.  show all card types if null.
+    public PlayerCardType? type;         //only show cards of this type.  show all card types if null.
 
     public enum SortingRule { name, charges, type };
     public SortingRule sortBy; //how to sort the lists
@@ -20,7 +20,7 @@ public class DeckEditorFilter
     public bool moddedCards;
 
     //returns true if the card matches the filter
-    public bool match(CardData c)
+    public bool match(PlayerCardData c)
     {
         //search in the card description uses indexOf because contains() does not support case-insensitive searching 
         //(extended discussion of this topic can be found at http://stackoverflow.com/questions/444798/case-insensitive-containsstring/444818#444818)
@@ -46,23 +46,23 @@ public class DeckEditorFilter
     //match() overload that takes XMLDeckEntry instead
     public bool match(XMLDeckEntry xEntry) { return match(CardTypeManagerScript.instance.getCardByName(xEntry.name)); }
 
-    //filters the CardData list according to the current filter rules and returns it as a new list
-    public List<CardData> filterCardData(List<CardData> unfiltered)
+    //filters the PlayerCardData list according to the current filter rules and returns it as a new list
+    public List<PlayerCardData> filterCardData(List<PlayerCardData> unfiltered)
     {
-        List<CardData> filtered = new List<CardData>(unfiltered.Count); //create a new list of the same size as the unfiltered list to guarantee we can fit the results without resizing
+        List<PlayerCardData> filtered = new List<PlayerCardData>(unfiltered.Count); //create a new list of the same size as the unfiltered list to guarantee we can fit the results without resizing
 
         //fill the filtered list with everything in the unfiltered list that matches the filter
-        foreach (CardData data in unfiltered)
+        foreach (PlayerCardData data in unfiltered)
             if (match(data))
                 filtered.Add(data);
 
         return filtered; //return the result
     }
 
-    //sorts the CardData list according to the current sorting rules and returns it as a new list
-    public List<CardData> sortCardData(List<CardData> unsorted)
+    //sorts the PlayerCardData list according to the current sorting rules and returns it as a new list
+    public List<PlayerCardData> sortCardData(List<PlayerCardData> unsorted)
     {
-        List<CardData> sorted = new List<CardData>(unsorted); //clone the unsorted list
+        List<PlayerCardData> sorted = new List<PlayerCardData>(unsorted); //clone the unsorted list
 
         //sort using an IComparer chosen from the sort type
         switch(sortBy)
@@ -97,8 +97,8 @@ public class DeckEditorFilter
         return sorted; //return the sorted list
     }
 
-    //sorts and filters the CardData list according to the current filter and sorting rules and returns it as a new list
-    public List<CardData> filterAndSortCardData(List<CardData> raw)
+    //sorts and filters the PlayerCardData list according to the current filter and sorting rules and returns it as a new list
+    public List<PlayerCardData> filterAndSortCardData(List<PlayerCardData> raw)
     {
         return sortCardData(filterCardData(raw)); //filters and then sorts the list and returns it
     }
@@ -107,18 +107,18 @@ public class DeckEditorFilter
 /// <summary>
 /// comparer used to sort card lists by name
 /// </summary>
-class CardNameComparer : IComparer<CardData>, IComparer<XMLDeckEntry>
+class CardNameComparer : IComparer<PlayerCardData>, IComparer<XMLDeckEntry>
 {
-    public int Compare(CardData a, CardData b) { return string.Compare(a.cardName, b.cardName); }
+    public int Compare(PlayerCardData a, PlayerCardData b) { return string.Compare(a.cardName, b.cardName); }
     public int Compare(XMLDeckEntry a, XMLDeckEntry b) { return string.Compare(a.name, b.name); }
 }
 
 /// <summary>
 /// comparer used to sort card lists by type
 /// </summary>
-class CardTypeComparer : IComparer<CardData>, IComparer<XMLDeckEntry>
+class CardTypeComparer : IComparer<PlayerCardData>, IComparer<XMLDeckEntry>
 {
-    public int Compare(CardData a, CardData b)
+    public int Compare(PlayerCardData a, PlayerCardData b)
     {
         if (a.cardType != b.cardType)
             return a.cardType - b.cardType;
@@ -131,9 +131,9 @@ class CardTypeComparer : IComparer<CardData>, IComparer<XMLDeckEntry>
 /// <summary>
 /// comparer used to sort card lists by charges
 /// </summary>
-class CardChargesComparer : IComparer<CardData>, IComparer<XMLDeckEntry>
+class CardChargesComparer : IComparer<PlayerCardData>, IComparer<XMLDeckEntry>
 {
-    public int Compare(CardData a, CardData b) { return b.cardMaxCharges - a.cardMaxCharges; }
+    public int Compare(PlayerCardData a, PlayerCardData b) { return b.cardMaxCharges - a.cardMaxCharges; }
     public int Compare(XMLDeckEntry a, XMLDeckEntry b) { return Compare(CardTypeManagerScript.instance.getCardByName(a.name), CardTypeManagerScript.instance.getCardByName(b.name)); }
 }
 
@@ -156,7 +156,7 @@ public class DeckEditorMainScript : BaseBehaviour
     private IEnumerator testCardSizesCoroutine()
     {
         Debug.Log("Testing...");
-        foreach (CardData c in CardTypeManagerScript.instance.types.cardTypes)
+        foreach (PlayerCardData c in CardTypeManagerScript.instance.types.cardTypes)
         {
             cardPreview.SendMessage("PreviewCard", c);
             yield return new WaitForSeconds(0.1f);
@@ -201,7 +201,7 @@ public class DeckEditorMainScript : BaseBehaviour
     //something in the editor wants to preview the given card, but doesnt know how to reach the card preview, so it sent it here instead.
     //this just passes the message along to the intended destination
     public void PreviewXMLDeckEntry(XMLDeckEntry xC) { cardPreview.SendMessage("PreviewXMLDeckEntry", xC); }
-    public void PreviewCard(CardData c) { cardPreview.SendMessage("PreviewCard", c); }
+    public void PreviewCard(PlayerCardData c) { cardPreview.SendMessage("PreviewCard", c); }
 
     //handles buttons in the deck list
     public void DeckSelected(XMLDeck selectedDeck)
@@ -247,7 +247,7 @@ public class DeckEditorMainScript : BaseBehaviour
     }
 
     //handles button clicks from the card type list
-    public void CardSelected(CardData c)
+    public void CardSelected(PlayerCardData c)
     {
         //check the open deck and ignore the message if that card is already in the deck
         foreach (XMLDeckEntry entry in openDeck.contents)
@@ -311,9 +311,9 @@ public class DeckEditorMainScript : BaseBehaviour
         switch (newSetting)
         {
             case 0: filter.type = null; break;
-            case 1: filter.type = CardType.tower; break;
-            case 2: filter.type = CardType.spell; break;
-            case 3: filter.type = CardType.upgrade; break;
+            case 1: filter.type = PlayerCardType.tower; break;
+            case 2: filter.type = PlayerCardType.spell; break;
+            case 3: filter.type = PlayerCardType.upgrade; break;
             default: MessageHandlerScript.Error("unknown filter type"); break;
         }
         BroadcastMessage("filterChanged", filter); //report the new filter settings to children

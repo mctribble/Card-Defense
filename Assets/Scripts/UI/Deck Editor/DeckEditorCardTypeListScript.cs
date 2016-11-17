@@ -46,12 +46,12 @@ public class DeckEditorCardTypeListScript : BaseBehaviour
     private void setupTypeEntries(XMLDeck highlightDeck)
     {
         //if a filter is set, operate on a list sorted and filtered according to the current settings instead of the full list
-        List<CardData> listToShow = CardTypeManagerScript.instance.types.cardTypes;
+        List<PlayerCardData> listToShow = CardTypeManagerScript.instance.types.cardTypes;
         if (filter != null)
             listToShow = filter.filterAndSortCardData(listToShow);
 
         //one entry for each card type
-        foreach (CardData type in listToShow)
+        foreach (PlayerCardData type in listToShow)
         {
             //skip tokens
             if (type.isToken)
@@ -67,9 +67,9 @@ public class DeckEditorCardTypeListScript : BaseBehaviour
             Color buttonColor;
             switch (type.cardType)
             {
-                case CardType.tower:   buttonColor = towerColor;   break;
-                case CardType.upgrade: buttonColor = upgradeColor; break;
-                case CardType.spell:   buttonColor = spellColor;   break;
+                case PlayerCardType.tower:   buttonColor = towerColor;   break;
+                case PlayerCardType.upgrade: buttonColor = upgradeColor; break;
+                case PlayerCardType.spell:   buttonColor = spellColor;   break;
                 default:               Debug.LogWarning("card type list doesnt know what color to use for this card."); buttonColor = Color.black; break;
             }
 

@@ -354,7 +354,7 @@ public class LevelManagerScript : BaseBehaviour
         foreach (PremadeTower pt in data.towers)
         {
             GameObject t = (GameObject) GameObject.Instantiate(towerPrefab, new Vector3(pt.x, pt.y, -3), Quaternion.identity);  //summon tower
-            CardData c = CardTypeManagerScript.instance.getCardByName(pt.name);
+            PlayerCardData c = CardTypeManagerScript.instance.getCardByName(pt.name);
             c.towerData.towerName = pt.name;
             t.SendMessage("SetData", c.towerData); //pass it the definition
             if ((c.effectData != null) && (c.effectData.effects.Count > 0))
@@ -366,7 +366,7 @@ public class LevelManagerScript : BaseBehaviour
                 for (int i = 0; i < ptu.Count; i++)
                 {
                     //we need a different message depending on whether or not the upgrade costs a slot
-                    CardData upgradeCardData = CardTypeManagerScript.instance.getCardByName(ptu.Name);
+                    PlayerCardData upgradeCardData = CardTypeManagerScript.instance.getCardByName(ptu.Name);
 
                     if ( (upgradeCardData.effectData != null) && (upgradeCardData.effectData.propertyEffects.noUpgradeCost) )
                         t.SendMessage("FreeUpgrade", upgradeCardData.upgradeData);

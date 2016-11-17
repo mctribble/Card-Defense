@@ -40,13 +40,13 @@ public class EffectDrawSpellCard : BaseEffectInstant
     {
         //setup
         int numToDraw = Mathf.FloorToInt(strength);
-        Card[] cards = new Card[numToDraw];
+        PlayerCard[] cards = new PlayerCard[numToDraw];
 
         //fill the array with the Cards we want to draw
         for (int i = 0; i < numToDraw; i++)
         {
             //attempt to draw from the deck
-            Card? drawn = DeckManagerScript.instance.DrawCardType(CardType.spell);
+            PlayerCard? drawn = DeckManagerScript.instance.DrawCardType(PlayerCardType.spell);
 
             if (drawn != null)
             {
@@ -56,7 +56,7 @@ public class EffectDrawSpellCard : BaseEffectInstant
             else
             {
                 //the draw failed, so make a new card from thin air using the "Improvised Spell" token.
-                Card newCard = new Card();
+                PlayerCard newCard = new PlayerCard();
                 newCard.data = CardTypeManagerScript.instance.getCardByName("Improvised Spell");
                 newCard.charges = newCard.data.cardMaxCharges;
                 cards[i] = newCard;
@@ -79,13 +79,13 @@ public class EffectDrawTowerCard : BaseEffectInstant
     {
         //setup
         int numToDraw = Mathf.FloorToInt(strength);
-        Card[] cards = new Card[numToDraw];
+        PlayerCard[] cards = new PlayerCard[numToDraw];
 
         //fill the array with the Cards we want to draw
         for (int i = 0; i < numToDraw; i++)
         {
             //attempt to draw from the deck
-            Card? drawn = DeckManagerScript.instance.DrawCardType(CardType.tower);
+            PlayerCard? drawn = DeckManagerScript.instance.DrawCardType(PlayerCardType.tower);
 
             if (drawn != null)
             {
@@ -95,7 +95,7 @@ public class EffectDrawTowerCard : BaseEffectInstant
             else
             {
                 //the draw failed, so make a new card from thin air using the "Improvised Tower" token.
-                Card newCard = new Card();
+                PlayerCard newCard = new PlayerCard();
                 newCard.data = CardTypeManagerScript.instance.getCardByName("Improvised Tower");
                 newCard.charges = newCard.data.cardMaxCharges;
                 cards[i] = newCard;
@@ -118,13 +118,13 @@ public class EffectDrawUpgradeCard : BaseEffectInstant
     {
         //setup
         int numToDraw = Mathf.FloorToInt(strength);
-        Card[] cards = new Card[numToDraw];
+        PlayerCard[] cards = new PlayerCard[numToDraw];
 
         //fill the array with the Cards we want to draw
         for (int i = 0; i < numToDraw; i++)
         {
             //attempt to draw from the deck
-            Card? drawn = DeckManagerScript.instance.DrawCardType(CardType.upgrade);
+            PlayerCard? drawn = DeckManagerScript.instance.DrawCardType(PlayerCardType.upgrade);
 
             if (drawn != null)
             {
@@ -134,7 +134,7 @@ public class EffectDrawUpgradeCard : BaseEffectInstant
             else
             {
                 //the draw failed, so make a new card from thin air using the "Improvised Upgrade" token.
-                Card newCard = new Card();
+                PlayerCard newCard = new PlayerCard();
                 newCard.data = CardTypeManagerScript.instance.getCardByName("Improvised Upgrade");
                 newCard.charges = newCard.data.cardMaxCharges;
                 cards[i] = newCard;

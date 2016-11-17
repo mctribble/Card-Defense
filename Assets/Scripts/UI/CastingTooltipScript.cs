@@ -12,7 +12,7 @@ public class CastingTooltipScript : BaseBehaviour
     public Image rangeImage;                //reference to image for the range overlay
 
     private const float GRID_SCALE = 0.5f;  //size of grid to snap to.
-    private CardScript parentCardScript;    //card that produced this tooltip
+    private PlayerCardScript parentCardScript;    //card that produced this tooltip
     private bool castable;                  //whether or not the spell can be cast here
     private GameObject targetTower;         //the tower this card is targeting.  Applies only to upgrades
 
@@ -42,7 +42,7 @@ public class CastingTooltipScript : BaseBehaviour
         Collider2D collision = Physics2D.OverlapPoint (transform.position, LayerMask.GetMask("Obstacle"));
 
         //determine if the card can be cast
-        if (parentCardScript.card.data.cardType == CardType.tower)
+        if (parentCardScript.card.data.cardType == PlayerCardType.tower)
         {
             //towers only castable if unobstructed
             if (collision)
@@ -50,7 +50,7 @@ public class CastingTooltipScript : BaseBehaviour
             else
                 castable = true;
         }
-        else if (parentCardScript.card.data.cardType == CardType.upgrade)
+        else if (parentCardScript.card.data.cardType == PlayerCardType.upgrade)
         {
             //only castable if there is a tower here
             if (collision)
@@ -135,14 +135,14 @@ public class CastingTooltipScript : BaseBehaviour
             //error prevention: cancel cast if card no longer exists
             if (parentCardScript != null)
             {
-                if (parentCardScript.card.data.cardType == CardType.tower)
+                if (parentCardScript.card.data.cardType == PlayerCardType.tower)
                 {
                     parentCardScript.SendMessage("SummonTower", transform.position);
                 }
-                else if (parentCardScript.card.data.cardType == CardType.upgrade)
+                else if (parentCardScript.card.data.cardType == PlayerCardType.upgrade)
                 {
                     //tell towers so they can return to the normal view
-                    if (parentCardScript.card.data.cardType == CardType.upgrade)
+                    if (parentCardScript.card.data.cardType == PlayerCardType.upgrade)
                         foreach (GameObject tower in GameObject.FindGameObjectsWithTag("Tower"))
                             tower.SendMessage("hideUpgradeInfo");
 
@@ -156,7 +156,7 @@ public class CastingTooltipScript : BaseBehaviour
     /// <summary>
     /// stores a reference to the card that created this tooltip
     /// </summary>
-    private void SetParent(CardScript parent)
+    private void SetParent(PlayerCardScript parent)
     {
         parentCardScript = parent;
     }

@@ -18,7 +18,7 @@ public class CardTypeCollection
     [XmlArray("Cards")]
     [XmlArrayItem("Card")]
     [Display(Seq.GuiBox | Seq.PerItemDuplicate | Seq.PerItemRemove | Seq.Filter)]
-    public List<CardData> cardTypes = new List<CardData>();
+    public List<PlayerCardData> cardTypes = new List<PlayerCardData>();
 
     //the file this collection was populated from.  For use in error reporting
     [XmlIgnore] public string filePath { get; set; }
@@ -35,7 +35,7 @@ public class CardTypeCollection
     public void Save(string path)
     {
         //temporarily remove all modded cards
-        List<CardData> temp = new List<CardData>(cardTypes);
+        List<PlayerCardData> temp = new List<PlayerCardData>(cardTypes);
         cardTypes.RemoveAll(ct => ct.isModded);
 
         //save normally
@@ -127,7 +127,7 @@ public class CardTypeManagerScript : BaseBehaviour
 
         //load base game cards
         types = CardTypeCollection.Load(Path.Combine(Application.dataPath, path));
-        foreach (CardData baseCard in types.cardTypes)
+        foreach (PlayerCardData baseCard in types.cardTypes)
             baseCard.isModded = false; //flag base game cards as being from the base game
 
         //find mod files
@@ -147,14 +147,14 @@ public class CardTypeManagerScript : BaseBehaviour
 
         foreach (CardTypeCollection modTypes in modCardCollections)
         {
-            foreach (CardData moddedCard in modTypes.cardTypes)
+            foreach (PlayerCardData moddedCard in modTypes.cardTypes)
             {
                 //mark the definition as modded
                 moddedCard.isModded = true;
 
                 //find the existing version of this enemy
-                CardData existingCard = null;
-                foreach (CardData baseCard in types.cardTypes)
+                PlayerCardData existingCard = null;
+                foreach (PlayerCardData baseCard in types.cardTypes)
                 {
                     if (baseCard.cardName == moddedCard.cardName)
                     {
@@ -191,7 +191,7 @@ public class CardTypeManagerScript : BaseBehaviour
     }
 
     //returns a random card type from the database
-    public CardData getRandomCardType()
+    public PlayerCardData getRandomCardType()
     {
         //get random index
         int index = Mathf.RoundToInt (Random.Range (0.0f, types.cardTypes.Count-1));
@@ -201,9 +201,9 @@ public class CardTypeManagerScript : BaseBehaviour
     }
 
     //returns the card from the database with the given name
-    public CardData getCardByName(string name)
+    public PlayerCardData getCardByName(string name)
     {
-        foreach (CardData cd in types.cardTypes)
+        foreach (PlayerCardData cd in types.cardTypes)
         {
             if (cd.cardName.Equals(name))
             {
@@ -220,7 +220,7 @@ public class CardTypeManagerScript : BaseBehaviour
     {
         List<string> names = new List<string>();
 
-        foreach (CardData cd in types.cardTypes)
+        foreach (PlayerCardData cd in types.cardTypes)
             names.Add(cd.cardName);
 
         names.Sort();
@@ -232,8 +232,8 @@ public class CardTypeManagerScript : BaseBehaviour
     {
         List<string> names = new List<string>();
 
-        foreach (CardData cd in types.cardTypes)
-            if (cd.cardType == CardType.tower)
+        foreach (PlayerCardData cd in types.cardTypes)
+            if (cd.cardType == PlayerCardType.tower)
                 names.Add(cd.cardName);
 
         names.Sort();
@@ -245,8 +245,8 @@ public class CardTypeManagerScript : BaseBehaviour
     {
         List<string> names = new List<string>();
 
-        foreach (CardData cd in types.cardTypes)
-            if (cd.cardType == CardType.upgrade)
+        foreach (PlayerCardData cd in types.cardTypes)
+            if (cd.cardType == PlayerCardType.upgrade)
                 names.Add(cd.cardName);
 
         names.Sort();
@@ -258,8 +258,8 @@ public class CardTypeManagerScript : BaseBehaviour
     {
         List<string> names = new List<string>();
 
-        foreach (CardData cd in types.cardTypes)
-            if (cd.cardType == CardType.spell)
+        foreach (PlayerCardData cd in types.cardTypes)
+            if (cd.cardType == PlayerCardType.spell)
                 names.Add(cd.cardName);
 
         names.Sort();

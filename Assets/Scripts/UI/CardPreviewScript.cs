@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class CardPreviewScript : MonoBehaviour
 {
     //data
-    public CardData data; //card type being previewed
+    public PlayerCardData data; //card type being previewed
 
     //object references
     public Image art;         //reference to card art image
@@ -47,14 +47,14 @@ public class CardPreviewScript : MonoBehaviour
     /// </summary>
     private void PreviewXMLDeckEntry(XMLDeckEntry xC)
     {
-        CardData c = CardTypeManagerScript.instance.getCardByName(xC.name);
+        PlayerCardData c = CardTypeManagerScript.instance.getCardByName(xC.name);
         StartCoroutine("PreviewCard", c);
     }
 
     /// <summary>
     /// [COROUTINE] saves card definition data and updates components to display it
     /// </summary>
-    private IEnumerator PreviewCard(CardData c)
+    private IEnumerator PreviewCard(PlayerCardData c)
     {
         //if null, show card back instead
         if (c == null)

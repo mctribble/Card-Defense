@@ -11,10 +11,10 @@ public class DeckEditorCardTypeEntryScript : BaseBehaviour, IPointerEnterHandler
     public Text cardNameText; //label reference
     public Image background;  //background reference
 
-    private CardData data; //card type
+    private PlayerCardData data; //card type
 
     //sets the card associated with this entry
-    public void setCard(CardData newData)
+    public void setCard(PlayerCardData newData)
     {
         data = newData;
         cardNameText.text = data.cardName;

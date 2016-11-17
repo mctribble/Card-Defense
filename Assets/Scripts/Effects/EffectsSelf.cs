@@ -9,7 +9,7 @@ public abstract class BaseEffectSelf : BaseEffect, IEffectSelf
     [Hide] public override TargetingType targetingType { get { return TargetingType.none; } } //this effect doesnt need a target
     [Hide] public override EffectType effectType       { get { return EffectType.self; } }    //this is a discard effect
 
-    public abstract void trigger(ref Card card, GameObject card_gameObject);
+    public abstract void trigger(ref PlayerCard card, GameObject card_gameObject);
 }
 
 //adds x charges to the card
@@ -34,7 +34,7 @@ public class EffectAddCharges : BaseEffectSelf
 
     [Show] public override string XMLName { get { return "addCharges"; } } //name used to refer to this effect in XML
 
-    public override void trigger(ref Card card, GameObject card_gameObject)
+    public override void trigger(ref PlayerCard card, GameObject card_gameObject)
     {
         card.charges += Mathf.RoundToInt(strength);
     }
@@ -46,7 +46,7 @@ public class EffectDiscardRandom : BaseEffectSelf
     [Hide] public override string Name { get { return "Discard " + strength + " random cards"; } } //returns name and strength
     [Show] public override string XMLName { get { return "discardRandomCard"; } } //name used to refer to this effect in XML
 
-    public override void trigger(ref Card card, GameObject card_gameObject)
+    public override void trigger(ref PlayerCard card, GameObject card_gameObject)
     {
         HandScript handRef = HandScript.playerHand;
         handRef.StartCoroutine(handRef.discardRandomCards(card_gameObject, Mathf.FloorToInt(strength)));
@@ -59,7 +59,7 @@ public class EffectReplaceRandomCard : BaseEffectSelf
     [Hide] public override string Name { get { return "Discard up to " + strength + " cards at random, and draw new ones to replace them"; } } //returns name and strength
     [Show] public override string XMLName { get { return "replaceRandomCard"; } } //name used to refer to this effect in XML
 
-    public override void trigger(ref Card card, GameObject card_gameObject)
+    public override void trigger(ref PlayerCard card, GameObject card_gameObject)
     {
         int toReplace = Mathf.Min( Mathf.RoundToInt(strength), HandScript.playerHand.currentHandSize-1);  //how many cards are being replaced
 

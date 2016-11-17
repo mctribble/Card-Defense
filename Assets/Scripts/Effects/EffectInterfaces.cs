@@ -695,7 +695,7 @@ public interface IEffectOnEnemySpawned
 //effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
 public interface IEffectSelf : IEffect
 {
-    void trigger(ref Card card, GameObject card_gameObject); //called when this effect triggers.
+    void trigger(ref PlayerCard card, GameObject card_gameObject); //called when this effect triggers.
 }
 
 //effect triggers when an enemy is damaged.  Could be attached to the attacking tower or the defending enemy

@@ -229,13 +229,13 @@ public class DeckCollection
 }
 
 /// <summary>
-/// represents a card that is in the deck but not on screen
+/// represents a player card that is in the deck but not on screen
 /// data: the card type
 /// charges: how many charges are remaining
 /// </summary>
-public struct Card
+public struct PlayerCard
 {
-    public CardData data; //defines the card type
+    public PlayerCardData data; //defines the card type
     public int charges; //number of remaining charges
 
     //overridden for better display in inspector
@@ -276,7 +276,7 @@ public class DeckManagerScript : BaseBehaviour
     [Hide] public int maxDeckCharges; //max
 
     [Show][VisibleWhen("deckListsLoaded")] public string currentDeckName; //name of the current deck
-    [Show][VisibleWhen("deckListsLoaded")] private List<Card> currentDeck; //actual current deck
+    [Show][VisibleWhen("deckListsLoaded")] private List<PlayerCard> currentDeck; //actual current deck
 
     private const int SHUFFLE_ITERATIONS = 5; //number of times to shuffle the deck
 
@@ -296,7 +296,7 @@ public class DeckManagerScript : BaseBehaviour
         instance = this;
         premadeDecks = DeckCollection.Load(Path.Combine(Application.dataPath, premadeDeckPath));
         playerDecks  = DeckCollection.Load(Path.Combine(Application.dataPath, playerDeckPath));
-        currentDeck = new List<Card>();
+        currentDeck = new List<PlayerCard>();
         deckSize = 0;
         curDeckCharges = 0;
         maxDeckCharges = 0;
@@ -366,12 +366,12 @@ public class DeckManagerScript : BaseBehaviour
         //for each card on the list of cards in the deck...
         foreach (XMLDeckEntry xde in newDeck.contents)
         {
-            CardData type = CardTypeManagerScript.instance.getCardByName(xde.name);
+            PlayerCardData type = CardTypeManagerScript.instance.getCardByName(xde.name);
             //for each individual card to be added...
             for (int i = 0; i < xde.count; i++)
             {
                 //setup the data
-                Card c;
+                PlayerCard c;
                 c.data = type;
                 c.charges = type.cardMaxCharges;
 
@@ -399,7 +399,7 @@ public class DeckManagerScript : BaseBehaviour
             for (int i = 0; i < currentDeck.Count; i++)
             {
                 int swapTarget = UnityEngine.Random.Range(0, currentDeck.Count);
-                Card temp = currentDeck[i];
+                PlayerCard temp = currentDeck[i];
                 currentDeck[i] = currentDeck[swapTarget];
                 currentDeck[swapTarget] = temp;
             }
@@ -407,11 +407,11 @@ public class DeckManagerScript : BaseBehaviour
     }
 
     /// <summary>
-    /// Returns the top Card in the deck and removes it
+    /// Returns the top PlayerCard in the deck and removes it
     /// </summary>
-    public Card Draw()
+    public PlayerCard Draw()
     {
-        Card drawnCard = currentDeck [0];   //retrieve card
+        PlayerCard drawnCard = currentDeck [0];   //retrieve card
         currentDeck.RemoveAt(0);           //remove card
         curDeckCharges -= drawnCard.charges;//track charges
         return drawnCard;                   //return it
@@ -420,7 +420,7 @@ public class DeckManagerScript : BaseBehaviour
     /// <summary>
     /// adds card c to the bottom of the deck
     /// </summary>
-    public void addCardAtBottom(Card c)
+    public void addCardAtBottom(PlayerCard c)
     {
         curDeckCharges += c.charges; //track charges
         currentDeck.Add(c);          //and add the card
@@ -429,7 +429,7 @@ public class DeckManagerScript : BaseBehaviour
     /// <summary>
     /// adds card c to the top of the deck
     /// </summary>
-    public void addCardAtTop(Card c)
+    public void addCardAtTop(PlayerCard c)
     {
         curDeckCharges += c.charges; //track charges
         currentDeck.Insert(0, c);    //and add the card
@@ -455,7 +455,7 @@ public class DeckManagerScript : BaseBehaviour
                 yield break;
             }
 
-            Card topCard = currentDeck[0];
+            PlayerCard topCard = currentDeck[0];
             topCard.charges--;
             curDeckCharges--;
             d--;
@@ -525,7 +525,7 @@ public class DeckManagerScript : BaseBehaviour
         while (randomDeck.cardCount < targetCardCount)
         {
             //start by picking a card type at random
-            CardData card = CardTypeManagerScript.instance.getRandomCardType();
+            PlayerCardData card = CardTypeManagerScript.instance.getRandomCardType();
 
             //skip tokens
             if (card.isToken)
@@ -599,12 +599,12 @@ public class DeckManagerScript : BaseBehaviour
     /// attempts to draw a card of the given type.  If this is possible, then that card is removed from the deck and returned as though it were drawn normally
     /// if such a card does not exist, does nothing and returns null
     /// </summary>
-    /// <param name="cardType">the type of Card to draw</param>
-    /// <returns>the Card drawn, if found, or null if not</returns>
-    public Card? DrawCardType(CardType cardType)
+    /// <param name="cardType">the type of PlayerCard to draw</param>
+    /// <returns>the PlayerCard drawn, if found, or null if not</returns>
+    public PlayerCard? DrawCardType(PlayerCardType cardType)
     {
         //finds the first card of the correct type
-        foreach (Card c in currentDeck)
+        foreach (PlayerCard c in currentDeck)
         {
             if (c.data.cardType != cardType)
                 continue;

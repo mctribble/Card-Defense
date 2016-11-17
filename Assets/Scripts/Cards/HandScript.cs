@@ -106,8 +106,8 @@ public class HandScript : BaseBehaviour
     /// <param name="turnToIdentity">turnToIdentity: card should straighten itself while moving</param>
     /// <param name="scaleToIdentity">scaleToIdentity: card should scale itself to (1,1,1) while moving</param>
     /// <param name="drawSurvivorWave">drawSurvivorWave: (enemy hands only) sets up the new card with a survivor wave instead of a wave from the deck</param>
-    /// <param name="cardToDraw">if this is not null, then the given Card is drawn instead of fetching one from the deck.  This parameter is ignored in enemy hands since they draw WaveData's instead.</param>
-    public void drawCard(bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true, bool drawSurvivorWave = false, Card? cardToDraw = null)
+    /// <param name="cardToDraw">if this is not null, then the given PlayerCard is drawn instead of fetching one from the deck.  This parameter is ignored in enemy hands since they draw WaveData's instead.</param>
+    public void drawCard(bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true, bool drawSurvivorWave = false, PlayerCard? cardToDraw = null)
     {
         //unsupported for neutral hands
         if (handOwner == HandFaction.neutral)
@@ -159,7 +159,7 @@ public class HandScript : BaseBehaviour
             if (cardToDraw == null)
                 cards[currentHandSize].SendMessage("SetCard", DeckManagerScript.instance.Draw()); //fetch the card from the deck
             else
-                cards[currentHandSize].SendMessage("SetCard", cardToDraw.Value); //we were given the Card already, so just pass that
+                cards[currentHandSize].SendMessage("SetCard", cardToDraw.Value); //we were given the PlayerCard already, so just pass that
         }
         else if (handOwner == HandFaction.enemy)
         {
@@ -265,10 +265,10 @@ public class HandScript : BaseBehaviour
     }
 
     /// <summary>
-    /// draws multiple specific Card objects that already exist instead of taking them from the deck.  
+    /// draws multiple specific PlayerCard objects that already exist instead of taking them from the deck.  
     /// If delay is true, there is a slight pause between each one.
     /// </summary>
-    public IEnumerator drawCards(Card[] cardsToDraw, bool delay = true)
+    public IEnumerator drawCards(PlayerCard[] cardsToDraw, bool delay = true)
     {
         //wait to make sure we dont attempt to discard and draw at the same time (i. e., cards like Recycle that cause both discarding and drawing simultaneously)
         do
@@ -278,7 +278,7 @@ public class HandScript : BaseBehaviour
         while (discarding);
 
         //draw the cards
-        foreach(Card c in cardsToDraw)
+        foreach(PlayerCard c in cardsToDraw)
         {
             //draw the new card, being sure not to flip it over yet since we want to flip all of them as a group later
             drawCard(false, true, true, false, c); 
@@ -492,7 +492,7 @@ public class HandScript : BaseBehaviour
         {
             //pick a random card in the hand
             GameObject toDamage = cards[ Random.Range(0, currentHandSize) ];
-            CardScript scriptRef = toDamage.GetComponent<CardScript>();
+            PlayerCardScript scriptRef = toDamage.GetComponent<PlayerCardScript>();
 
             //deal damage to it
             int toDeal = Mathf.Min (scriptRef.card.charges, (d - alreadyDealt) );

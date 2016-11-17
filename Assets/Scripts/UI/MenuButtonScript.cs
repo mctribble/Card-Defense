@@ -28,7 +28,7 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
     //each of these may be null based on button type
     public FileInfo levelFile;  //level file attached to this button, if any
     public XMLDeck  xDeck;      //deck attached to this button, if any
-    public CardData card;       //card type attached to this button, if any
+    public PlayerCardData card;       //card type attached to this button, if any
 
     /// <summary>
     /// the button is set up to correspond to the given level
@@ -52,9 +52,9 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
     }
 
     /// <summary>
-    /// the button is set up to correspond to the given CardData
+    /// the button is set up to correspond to the given PlayerCardData
     /// </summary>
-    private void setCard(CardData newCard)
+    private void setCard(PlayerCardData newCard)
     {
         card = newCard;
         buttonText.text = newCard.cardName;
