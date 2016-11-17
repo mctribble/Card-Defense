@@ -289,7 +289,11 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
     [VisibleWhen("shouldShowRefs")] public float   discardPauseTime;       //how long to pause there
     [Hide]                          public Image   deckImage;              //if being returned to the deck, we flip face down and aim to line up with this image
     [VisibleWhen("shouldShowRefs")] public Vector3 discardDestroyLocation; //where to go before destroying ourself (local space)
-    [VisibleWhen("shouldShowRefs")] public float   discardFadeTime;       //speed to fade out the card when it is being destroyed
+    [VisibleWhen("shouldShowRefs")] public float   discardFadeTime;        //speed to fade out the card when it is being destroyed
+
+    //sound data
+    [VisibleWhen("shouldShowRefs")] public AudioClip[] drawSounds;  //sounds to use when drawn
+    [VisibleWhen("shouldShowRefs")] public AudioSource audioSource; //source to play said sounds from
 
     //private data
     private GameObject hand;            //reference to the hand object managing this card
@@ -326,6 +330,11 @@ public class CardScript : BaseBehaviour, IPointerEnterHandler, IPointerExitHandl
         state = State.idle;
         faceDown = true;
         cardBack.enabled = true;
+
+        //play the sound (not using the playOnAwake setting since we are choosing a sound at random)
+        int soundToPlay = Random.Range(0, drawSounds.Length);
+        audioSource.clip = drawSounds[soundToPlay];
+        audioSource.Play();
 
         tooltipInstance = null;
     }

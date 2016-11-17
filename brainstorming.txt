@@ -9,8 +9,6 @@ animated enemy sprites?
 sound: (recorded, but not used)
 *enemy hit?
 *tower fire??
-=======
-*card draw
 *card destroyed
 *player hit
 menu music
