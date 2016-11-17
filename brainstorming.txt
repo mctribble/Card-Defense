@@ -6,10 +6,10 @@ presentation:
 better range display, especially when upgrading and for special targeting types
 animated enemy sprites?
 ================================================================
-sound:
+sound: (recorded, but not used)
 enemy hit?
 tower fire??
-drawing
+*drawing
 discarding
 player hit
 menu music
