@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -24,6 +23,8 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
 {
     public Text           buttonText; //text of this button
     public MenuButtonType buttonType; //enum that represents how this menu button is being used
+
+    public AudioClip[] clickSounds; //one of these is played at random when the button is clicked
 
     //each of these may be null based on button type
     public FileInfo levelFile;  //level file attached to this button, if any
@@ -83,6 +84,11 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
     /// </summary>
     public void OnPointerClick(PointerEventData eventData)
     {
+        //play the random sound with thea udio source attached to the main camera since we dont want UI sounds to overlap and this button may cease to exist before the sound is done
+        int soundToPlay = Random.Range(0, clickSounds.Length);
+        Camera.main.GetComponent<AudioSource>().clip = clickSounds[soundToPlay];
+        Camera.main.GetComponent<AudioSource>().Play();
+
         switch (buttonType)
         {
             case MenuButtonType.level:

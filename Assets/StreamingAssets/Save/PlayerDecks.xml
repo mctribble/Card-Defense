@@ -13,6 +13,7 @@
         <Card name="Dev Chain Purge Tower" count="1" />
         <Card name="Sniper Tower" count="10" />
         <Card name="Spitfire Upgrade" count="10" />
+        <Card name="Chain Hit" count="1" />
       </Cards>
     </Deck>
     <Deck name="Temp">

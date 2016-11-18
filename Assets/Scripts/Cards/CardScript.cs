@@ -1,7 +1,4 @@
 ﻿using System.Collections;
-using System.ComponentModel;
-using System.Xml;
-using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
