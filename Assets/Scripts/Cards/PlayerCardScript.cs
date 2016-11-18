@@ -228,6 +228,8 @@ public class PlayerCardScript : CardScript, IPointerClickHandler
     [VisibleWhen("shouldShowRefs")] public float   discardFadeTime;        //speed to fade out the card when it is being destroyed
     [Hide]                          public Image   deckImage;              //if being returned to the deck, we flip face down and aim to line up with this image.  Value set when the card is drawn
 
+    [VisibleWhen("shouldShowRefs")] public AudioClip[] cardDestroyedSounds; //sounds to play if this card is destroyed
+
     public PlayerCard card;             //holds data specific to the card itself.  namely, the definition and number of charges remaining.
 
     private GameObject tooltipInstance; //instance of the tooltip object, if present
@@ -307,6 +309,13 @@ public class PlayerCardScript : CardScript, IPointerClickHandler
         }
         else
         {
+            //card is out of charges, and must be destroyed
+
+            //sound
+            int soundToPlay = UnityEngine.Random.Range(0, cardDestroyedSounds.Length);
+            audioSource.clip = cardDestroyedSounds[soundToPlay];
+            audioSource.Play();
+
             //fadeout
             art.CrossFadeAlpha(0.0f, discardFadeTime, false);
             title.CrossFadeAlpha(0.0f, discardFadeTime, false);
@@ -314,8 +323,8 @@ public class PlayerCardScript : CardScript, IPointerClickHandler
             cardFront.CrossFadeAlpha(0.0f, discardFadeTime, false);
             cardBack.CrossFadeAlpha(0.0f, discardFadeTime, false);
 
-            //card is out of charges, and must be destroyed
-            while (transform.localPosition != discardDestroyLocation) //animate until we get to the destroy location
+            //animate until we get to the destroy location
+            while (transform.localPosition != discardDestroyLocation) 
             {
                 //movement
                 transform.localPosition = Vector3.MoveTowards(transform.localPosition, discardDestroyLocation, (motionSpeed * Time.deltaTime)); //movement

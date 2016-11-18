@@ -266,6 +266,10 @@ public class DeckManagerScript : BaseBehaviour
     [VisibleWhen("shouldShowSettings")] public float      discardDelay;     //minimum time between discards when multiple cards are destroyed at once
     [Hide] private bool waitToDiscard; //used to enforce discardDelay across multiple instances of DamageCoroutine().  Declared up here because C# wont let me declare a static inside the function itself
 
+    //sound settings
+    [VisibleWhen("shouldShowSettings")] public AudioClip[] playerDamageSounds; //sounds to use when player is hit
+    [VisibleWhen("shouldShowSettings")] public AudioSource audioSource; //source to play them from
+
     //deck lists (only shown if loaded)
     private bool deckListsLoaded() { return (premadeDecks != null) && (premadeDecks.decks.Count > 0) && (playerDecks != null) && (playerDecks.decks.Count > 0); }
     [VisibleWhen("deckListsLoaded")] public DeckCollection premadeDecks; //stores premade decks
@@ -445,6 +449,11 @@ public class DeckManagerScript : BaseBehaviour
         if (d == 0)
             yield break;
 
+        //sound
+        int soundToPlay = UnityEngine.Random.Range(0, playerDamageSounds.Length);
+        audioSource.clip = playerDamageSounds[soundToPlay];
+        audioSource.Play();
+
         List<CardScript> deadCards = new List<CardScript>();
 
         while (d > 0)
@@ -571,11 +580,18 @@ public class DeckManagerScript : BaseBehaviour
         //delegate to the hand object to deal damage
         int damageDealt = playerHand.Damage(d);
 
-        //if the damage wasn't all dealt, forward the rest to the deck
         if (damageDealt < d)
         {
+            //if the damage wasn't all dealt, forward the rest to the deck
             Damage(d - damageDealt);
             MessageHandlerScript.instance.spawnPlayerDamageText(sourcePosition, (d - damageDealt));
+        }
+        else
+        {
+            //if it was all dealt, then we'll play the sound here
+            int soundToPlay = UnityEngine.Random.Range(0, playerDamageSounds.Length);
+            audioSource.clip = playerDamageSounds[soundToPlay];
+            audioSource.Play();
         }
     }
 

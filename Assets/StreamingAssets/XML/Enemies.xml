@@ -74,7 +74,7 @@
         </Effects>
       </effectData>
     </Enemy>
-    <Enemy name="Ping" spawnCost="10" attack="1" maxHealth="5" unitSpeed="2" sprite="Enemy_Basic.png">
+    <Enemy name="Ping" spawnCost="10" attack="0" maxHealth="5" unitSpeed="2" sprite="Enemy_Basic.png">
       <unitColor r="0.35" g="0.35" b="0.35" a="1" />
       <effectData>
         <Effects>

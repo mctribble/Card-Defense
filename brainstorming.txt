@@ -7,14 +7,10 @@ better range display, especially when upgrading and for special targeting types
 animated enemy sprites?
 ================================================================
 sound: (recorded, but not used)
-*enemy hit?
 *tower fire??
-*card destroyed
-*player hit
 menu music
 deck editor music
 *orthogonal attacks?
-*button click
 ================================================================
 content goals:
 enemies: 10/10  <<DONE!!>>

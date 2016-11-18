@@ -121,8 +121,10 @@ public class EnemyScript : BaseBehaviour
     public float          deathBurstSize;     //max scale of the death burst
     public float          deathBurstTime;     //time taken to animate death burst
 
-    public AudioSource audioSource; //source to use to play sounds from
-    public AudioClip[] deathSounds; //sounds to play when dead.  one of these is chosen at random.
+    //sound settings
+    public AudioSource audioSource;     //source to use to play sounds from
+    public AudioClip[] enemyHitSounds;  //sounds to play when the player is hurt.  one of these is chosen at random.
+    public AudioClip[] deathSounds;     //sounds to play when this enemy is dead.  one of these is chosen at random.
 
     //enemy data
     public int        damage;        
@@ -348,9 +350,17 @@ public class EnemyScript : BaseBehaviour
         curHealth -= damage;
         LevelManagerScript.instance.totalRemainingHealth -= damage;
 
+        //sound
+        if (damage > 0)
+        {
+            int soundToPlay = Random.Range(0, enemyHitSounds.Length);
+            audioSource.clip = enemyHitSounds[soundToPlay];
+            audioSource.Play();
+        }
+
         if (curHealth <= 0)
         {
-            //catch a recurring issue where the enemy does not get thee expected damage event and thus dies without expecting it
+            //catch a recurring issue where the enemy does not get the expected damage event and thus dies without expecting it
             if (expectedHealth > 0)
             {
                 Debug.LogWarning("Enemy did not expect to die, but did anyway!  This can cause targeting issues as towers attack an enemy that will die anyway.");
