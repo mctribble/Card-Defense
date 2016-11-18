@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Vexe.Runtime.Types;
 
 /// <summary>
 /// data required to initialize a directionalShot. The fields are:
@@ -17,11 +18,15 @@ public struct DirectionalShotData
 /// <summary>
 /// projectile attack intended to hit everything along a straight line.
 /// </summary>
-public class DirectionalShotScript : MonoBehaviour
+public class DirectionalShotScript : BaseBehaviour
 {
     public SpriteRenderer sprite;       //reference to the sprite
     public ParticleSystem trail;        //reference to the particle trail
     public Color          defaultColor; //default color
+
+    //sound settings
+    public AudioClip[] attackSounds;
+    public AudioSource audioSource;
 
     public float speed;      //projectile speed
     public float timeToLive; //max lifetime of this projectile
@@ -175,6 +180,11 @@ public class DirectionalShotScript : MonoBehaviour
             t.GetComponent<EnemyScript>().onExpectedDamage(ref ded);
             expectedToHit.Add(ded);
         }
+
+        //play sound
+        int soundToPlay = Random.Range(0, attackSounds.Length);
+        audioSource.clip = attackSounds[soundToPlay];
+        audioSource.Play();
 
         initialized = true; //flag ready
     }

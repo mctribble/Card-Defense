@@ -9,7 +9,6 @@ animated enemy sprites?
 sound:
 menu music
 deck editor music
-*orthogonal attacks?
 ================================================================
 content goals:
 enemies: 10/10  <<DONE!!>>
