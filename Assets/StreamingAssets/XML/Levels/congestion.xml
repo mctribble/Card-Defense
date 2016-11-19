@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
   <description>A crowded map with 12 paths converging on one point</description>
-  <randomWaveCount>17</randomWaveCount>
+  <randomWaveCount>20</randomWaveCount>
   <waveGrowthLinear>5</waveGrowthLinear>
   <waveGrowthSquared>2.4</waveGrowthSquared>
   <waveGrowthExponential>1.1</waveGrowthExponential>
@@ -69,38 +69,38 @@
         <Upgrade Name="Basic Upgrade" Count="2" />
       </Upgrades>
     </Tower>
-    <Tower name="Fast Tower" x="-1.5" y="1.5">
+    <Tower name="Ping Tower" x="-1.5" y="1.5">
       <Upgrades>
         <Upgrade Name="Fast Upgrade" Count="1" />
       </Upgrades>
     </Tower>
-    <Tower name="Heavy Tower" x="1.5" y="1.5">
-      <Upgrades>
-        <Upgrade Name="Heavy Upgrade" Count="1" />
-      </Upgrades>
-    </Tower>
-    <Tower name="Fast Tower" x="1.5" y="-1.5">
+    <Tower name="Ping Tower" x="1.5" y="1.5">
       <Upgrades>
         <Upgrade Name="Fast Upgrade" Count="1" />
       </Upgrades>
     </Tower>
-    <Tower name="Heavy Tower" x="-1.5" y="-1.5">
+    <Tower name="Ping Tower" x="1.5" y="-1.5">
       <Upgrades>
-        <Upgrade Name="Heavy Upgrade" Count="1" />
+        <Upgrade Name="Fast Upgrade" Count="1" />
+      </Upgrades>
+    </Tower>
+    <Tower name="Ping Tower" x="-1.5" y="-1.5">
+      <Upgrades>
+        <Upgrade Name="Fast Upgrade" Count="1" />
       </Upgrades>
     </Tower>
   </Towers>
   <shuffleDeck>true</shuffleDeck>
   <levelDeck name="Level Deck">
     <Cards>
-      <Card name="Basic Tower" count="4" />
-      <Card name="Basic Upgrade" count="6" />
-      <Card name="Fast Tower" count="4" />
+      <Card name="Enrage" count="3" />
+      <Card name="Fast Tower" count="5" />
       <Card name="Fast Upgrade" count="6" />
-      <Card name="Heavy Tower" count="4" />
-      <Card name="Heavy Upgrade" count="6" />
-      <Card name="Shield" count="3" />
-      <Card name="Reinforce" count="2" />
+      <Card name="Light Shield" count="5" />
+      <Card name="Range Upgrade" count="5" />
+      <Card name="Recycle" count="2" />
+      <Card name="Shredder Tower" count="4" />
+      <Card name="Sniper Tower" count="5" />
     </Cards>
   </levelDeck>
 </Level>
