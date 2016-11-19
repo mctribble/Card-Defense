@@ -16,22 +16,5 @@
         <Card name="Chain Hit" count="1" />
       </Cards>
     </Deck>
-    <Deck name="Temp">
-      <Cards>
-        <Card name="Construction Funding" count="4" />
-        <Card name="Enrage" count="4" />
-        <Card name="Gambit" count="4" />
-        <Card name="Infrastructure Funding" count="4" />
-        <Card name="Life Tap" count="4" />
-        <Card name="Recycle" count="4" />
-        <Card name="Reinforce" count="4" />
-        <Card name="Risky Draw" count="4" />
-        <Card name="Shield" count="4" />
-        <Card name="Summon Standard" count="4" />
-        <Card name="Summon Swarm" count="4" />
-        <Card name="Summon Tank" count="4" />
-        <Card name="Time Crunch" count="4" />
-      </Cards>
-    </Deck>
   </Decks>
 </PlayerDecks>

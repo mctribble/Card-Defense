@@ -271,7 +271,8 @@ public class LevelSelectScript : BaseBehaviour
 
             case "random existing deck":
                 //chooses a deck at random from the player and behave as if that button was clicked on
-                IEnumerable<XMLDeck> deckOptions = DeckManagerScript.instance.playerDecks.decks.Concat( DeckManagerScript.instance.premadeDecks.decks );
+                IEnumerable<XMLDeck> deckOptions = DeckManagerScript.instance.playerDecks.decks.Where(xd => xd.isModded() == false); //choose from un-modded player decks...
+                deckOptions.Concat( DeckManagerScript.instance.premadeDecks.decks ); //and all premade decks
                 int deckIndex = Random.Range(0, deckOptions.Count());
                 DeckSelected(deckOptions.ElementAt(deckIndex));
                 break;

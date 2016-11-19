@@ -6,10 +6,6 @@ presentation:
 better range display, especially when upgrading and for special targeting types
 animated enemy sprites?
 ================================================================
-sound:
-menu music
-deck editor music
-================================================================
 content goals:
 enemies: 10/10  <<DONE!!>>
 levels:  08/30
