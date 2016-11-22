@@ -280,9 +280,16 @@ public class DeckEditorMainScript : BaseBehaviour
                 BroadcastMessage("refresh", openDeck);  //inform the lists
                 break;
 
-            case "Close Editor":                //user wants to close the editor
+            case "Save and return to menu":     //user wants to close the editor
                 saveChanges();                  //save any unsaved changes
                 SceneManager.LoadScene("Game"); //go back to the game scene
+                break;
+
+            case "Generate Random Deck":                                    //user wants to get a randomly created deck
+                unsavedChanges = true;                                      //there are no unsaved changes
+                openDeck = DeckManagerScript.instance.generateRandomDeck(); //make a new deck
+                newDeck = true;                                             //flag it as new so that any changes to it get saved as a new deck
+                BroadcastMessage("refresh", openDeck);                      //show the new deck
                 break;
 
             default: //button has not been implemented.  Print warning.
