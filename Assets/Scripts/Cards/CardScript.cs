@@ -79,9 +79,12 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
         cardBack.enabled = true;
 
         //play the sound (not using the playOnAwake setting since we are choosing a sound at random)
-        int soundToPlay = Random.Range(0, drawSounds.Length);
-        audioSource.clip = drawSounds[soundToPlay];
-        audioSource.Play();
+        if (drawSounds.Length > 0)
+        {
+            int soundToPlay = Random.Range(0, drawSounds.Length);
+            audioSource.clip = drawSounds[soundToPlay];
+            audioSource.Play();
+        }
     }
 
     public void SetHand(GameObject go)
@@ -200,7 +203,7 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
     /// <summary>
     /// handles the mouse moving onto the card
     /// </summary>
-    public void OnPointerEnter(PointerEventData eventData)
+    public virtual void OnPointerEnter(PointerEventData eventData)
     {
         //ignore this event if hidden or discarding
         if (hidden || (state == State.discarding))
@@ -218,7 +221,7 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
     /// <summary>
     /// handles the mouse moving off of the card
     /// </summary>
-    public void OnPointerExit(PointerEventData eventData)
+    public virtual void OnPointerExit(PointerEventData eventData)
     {
         //ignore this event if hidden or discarding
         if (hidden || (state == State.discarding))

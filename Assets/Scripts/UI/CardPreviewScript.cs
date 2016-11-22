@@ -1,20 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System;
+using UnityEngine.EventSystems;
 
 /// <summary>
-/// displays a given card but does nothing else.  For use in deck editor.
+/// displays a given card but does nothing else.  For use in UI.
 /// </summary>
-public class CardPreviewScript : MonoBehaviour
+public class CardPreviewScript : CardScript
 {
-    //data
     public PlayerCardData data; //card type being previewed
-
-    //object references
-    public Image art;         //reference to card art image
-    public Text  title;       //reference to card name text
-    public Text  description; //reference to card description text
-    public Image cardBack;    //reference to card back image
+    public Image art;           //reference to card art image
 
     //register to be informed about type reloads
     private IEnumerator Start()
@@ -26,7 +22,7 @@ public class CardPreviewScript : MonoBehaviour
     }
 
     /// <summary>
-    /// event handler for card types being reloaded
+    /// event handler for card types being reloaded.  Updates display
     /// </summary>
     private void cardTypesReloaded(CardTypeCollection newTypes)
     {
@@ -84,7 +80,7 @@ public class CardPreviewScript : MonoBehaviour
     }
 
     //helper function.  updates the card description text.
-    private void updateDescriptionText()
+    public override void updateDescriptionText()
     {
         description.text = data.getDescription();
     }
@@ -94,4 +90,24 @@ public class CardPreviewScript : MonoBehaviour
     {
         title.text = data.cardName + "\n" + data.cardMaxCharges + "/" + data.cardMaxCharges;
     }
+
+    public override void Hide()
+    {
+        Debug.LogWarning("CardPreviewScript: Hide() could make sense, but is not yet implemented.");
+    }
+
+    public override IEnumerator Discard()
+    {
+        Debug.LogWarning("CardPreviewScript: Discard() could make sense, but is not yet implemented.");
+        yield break;
+    }
+
+    public override void triggerOnDrawnEffects()
+    {
+        Debug.LogWarning("CardPreviewScript: triggerOnDrawnEffects() does not apply.");
+    }
+
+    //ignore mouseovers
+    public override void OnPointerEnter(PointerEventData eventData) { }
+    public override void OnPointerExit(PointerEventData eventData) { }
 }
