@@ -11,9 +11,9 @@
       <Cards>
         <Card name="Manual Control" count="10" />
         <Card name="Dev Chain Purge Tower" count="1" />
-        <Card name="Sniper Tower" count="10" />
         <Card name="Spitfire Upgrade" count="10" />
         <Card name="Chain Hit" count="1" />
+        <Card name="Salvage" count="10" />
       </Cards>
     </Deck>
   </Decks>

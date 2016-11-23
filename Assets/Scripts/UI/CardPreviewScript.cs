@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 /// <summary>
 /// displays a given card but does nothing else.  For use in UI.
 /// </summary>
-public class CardPreviewScript : CardScript
+public class CardPreviewScript : CardScript, IPointerClickHandler
 {
     public PlayerCardData data; //card type being previewed
     public Image art;           //reference to card art image
@@ -98,8 +98,11 @@ public class CardPreviewScript : CardScript
 
     public override IEnumerator Discard()
     {
-        Debug.LogWarning("CardPreviewScript: Discard() could make sense, but is not yet implemented.");
-        yield break;
+        //shrink to nothing and destroy self
+        state = State.discarding;
+        hand.SendMessage("Discard", gameObject);
+        yield return StartCoroutine(scaleToVector(Vector3.zero));
+        Destroy(gameObject);
     }
 
     public override void triggerOnDrawnEffects()
@@ -110,4 +113,10 @@ public class CardPreviewScript : CardScript
     //ignore mouseovers
     public override void OnPointerEnter(PointerEventData eventData) { }
     public override void OnPointerExit(PointerEventData eventData) { }
+
+    //send a message upwards when we get clicked on, in case anything cares
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        SendMessageUpwards("cardPreviewClicked", this, SendMessageOptions.DontRequireReceiver);
+    }
 }

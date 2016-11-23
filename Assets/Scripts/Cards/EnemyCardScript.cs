@@ -284,7 +284,7 @@ public class EnemyCardScript : CardScript
     public void updateWaveStats()
     {
         //show the wave message, if there is one, and then blank it out so it only shows once
-        if (wave.message != null)
+        if (wave.message != null && wave.message != "")
         {
             MessageHandlerScript.ShowNoYield(wave.message);
             wave.message = null;

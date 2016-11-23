@@ -357,6 +357,14 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="spell" Name="Salvage" Charges="3" Art="Recycle.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="discardChosenCard" strength="1" />
+          <Effect name="drawCard" strength="2" />
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="spell" Name="Shield" Description="Use ths to protect more important cards from harm.  Best used when you expect to take damage." Charges="30" Art="Shield.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>

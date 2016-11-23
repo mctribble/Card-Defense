@@ -6,23 +6,25 @@ using UnityEngine.UI;
 using Vexe.Runtime.Types;
 
 /// <summary>
-/// used to indicate hand ownership
+/// used to indicate hand ownership 
 /// </summary>
-public enum HandFaction { player, enemy, neutral };
+public enum HandFaction { player, enemy, selection };
 
 /// <summary>
 /// represents a group of cards being shown on the screens
 /// </summary>
 public class HandScript : BaseBehaviour
 {
-    //static references to the player hand and the enemy hand so other objects can easily access them
+    //static references to hands of various types so other objects can easily access them
     [Hide] public static HandScript playerHand;
     [Hide] public static HandScript enemyHand;
+    [Hide] public static HandScript selectionHand;
 
     //references
     public Image       deckImage;        //image that serves as the spawn point for new cards
-    public GameObject  playerCardPrefab; //prefab used to spawn a new  playercard
+    public GameObject  playerCardPrefab; //prefab used to spawn a new player card
     public GameObject  enemyCardPrefab;  //prefab used to spawn a new enemy card
+    public GameObject  previewCardPrefab;//prefab used to spawn a new card preview
 
     //hand status
     public HandFaction handOwner;        //indicates ownership of the hand
@@ -30,6 +32,7 @@ public class HandScript : BaseBehaviour
     public int         maximumHandSize;  //max number of cards the player can have
     public int         currentHandSize;  //number of cards currently in hand
     public bool        handHidden;       //whether or not the hand is hidden
+    public CardScript  selectedCard;     //holds return value for selectCard() coroutine
 
     //positioning and timing
     public int   idealGap;      //ideal gap between cards
@@ -45,6 +48,11 @@ public class HandScript : BaseBehaviour
     // it is a coroutine for animation purposes
     private IEnumerator Start()
     {
+        cards = new GameObject[maximumHandSize]; //construct array to hold the hand
+        currentHandSize = 0; //no cards yet
+        discarding = false; //we are not discarding cards
+        selectedCard = null; //no selection yet
+
         //wait for the level to load
         while (LevelManagerScript.instance.levelLoaded == false)
             yield return null;
@@ -62,10 +70,10 @@ public class HandScript : BaseBehaviour
             while (LevelManagerScript.instance.wavesInDeck == 0)
                 yield return null;
         }
-
-        cards = new GameObject[maximumHandSize]; //construct array to hold the hand
-        currentHandSize = 0; //no cards yet
-        discarding = false; //we are not discarding cards
+        else if (handOwner == HandFaction.selection)
+        {
+            HandScript.selectionHand = this;
+        }
 
         //draw starting hand
         handHidden = false;
@@ -109,8 +117,8 @@ public class HandScript : BaseBehaviour
     /// <param name="cardToDraw">if this is not null, then the given PlayerCard is drawn instead of fetching one from the deck.  This parameter is ignored in enemy hands since they draw WaveData's instead.</param>
     public void drawCard(bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true, bool drawSurvivorWave = false, PlayerCard? cardToDraw = null)
     {
-        //unsupported for neutral hands
-        if (handOwner == HandFaction.neutral)
+        //unsupported for selection hands, since those are used as a sort of menu
+        if (handOwner == HandFaction.selection)
             throw new System.NotImplementedException();
 
         //bail if reached max
@@ -136,42 +144,72 @@ public class HandScript : BaseBehaviour
         }
 
         //instantiate card prefab
+        GameObject newCard;
         if (handOwner == HandFaction.player)
-            cards[currentHandSize] = Instantiate(playerCardPrefab);
+            newCard = Instantiate(playerCardPrefab);
         else if (handOwner == HandFaction.enemy)
-            cards[currentHandSize] = Instantiate(enemyCardPrefab);
+            newCard = Instantiate(enemyCardPrefab);
+        else
+        {
+            newCard = null;
+            Debug.LogWarning("tried to draw from the selection hand!");
+            return;
+        }
 
-        cards[currentHandSize].transform.SetParent(transform.root); //declare the new card a child of the UI object at the root of this tree
+        newCard.transform.SetParent(transform.root); //declare the new card a child of the UI object at the root of this tree
 
         //position card to match up with the deck image we are spawning at
         RectTransform spawnT = deckImage.rectTransform;
-        cards[currentHandSize].GetComponent<RectTransform>().position   = spawnT.position;
-        cards[currentHandSize].GetComponent<RectTransform>().rotation   = spawnT.rotation;
-        cards[currentHandSize].GetComponent<RectTransform>().localScale = spawnT.localScale;
+        newCard.GetComponent<RectTransform>().position = spawnT.position;
+        newCard.GetComponent<RectTransform>().rotation = spawnT.rotation;
+        newCard.GetComponent<RectTransform>().localScale = spawnT.localScale;
 
-        cards[currentHandSize].SendMessage("SetHand", gameObject);     //tell the card which hand owns it
+        //add the card to the hand
+        addCard(newCard.GetComponent<CardScript>(), flipOver, turnToIdentity, scaleToIdentity);
+
         if (handOwner == HandFaction.player)
-            cards[currentHandSize].SendMessage("SetDeckImage", deckImage); //also tell the card where the deck image is so it knows where to go if it returns there
+            newCard.SendMessage("SetDeckImage", deckImage); //also tell the card where the deck image is so it knows where to go if it returns there
 
         //send the card the data that defines it
         if (handOwner == HandFaction.player)
         {
             if (cardToDraw == null)
-                cards[currentHandSize].SendMessage("SetCard", DeckManagerScript.instance.Draw()); //fetch the card from the deck
+                newCard.SendMessage("SetCard", DeckManagerScript.instance.Draw()); //fetch the card from the deck
             else
-                cards[currentHandSize].SendMessage("SetCard", cardToDraw.Value); //we were given the PlayerCard already, so just pass that
+                newCard.SendMessage("SetCard", cardToDraw.Value); //we were given the PlayerCard already, so just pass that
         }
         else if (handOwner == HandFaction.enemy)
         {
             if (drawSurvivorWave == false)
-                cards[currentHandSize].SendMessage("SetWave", LevelManagerScript.instance.DrawEnemy());
+                newCard.SendMessage("SetWave", LevelManagerScript.instance.DrawEnemy());
             else
-                cards[currentHandSize].SendMessage("SurvivorWave");
+                newCard.SendMessage("SurvivorWave");
+
+            LevelManagerScript.instance.UpdateWaveStats();
         }
         else
         {
             MessageHandlerScript.Error("don't know how to draw for a hand with this owner");
         }
+
+        newCard.SendMessage("triggerOnDrawnEffects"); //trigger effects
+        
+    }
+
+    /// <summary>
+    /// adds a card that already exists the hand.
+    /// all parameters are optional.
+    /// </summary>
+    /// <param name="cardToAdd">the card to add</param>
+    /// <param name="flipOver">flipOver: card should flip over AFTER moving</param>
+    /// <param name="turnToIdentity">turnToIdentity: card should straighten itself while moving</param>
+    /// <param name="scaleToIdentity">scaleToIdentity: card should scale itself to (1,1,1) while moving</param>
+    /// <param name="drawSurvivorWave">drawSurvivorWave: (enemy hands only) sets up the new card with a survivor wave instead of a wave from the deck</param>
+    public void addCard(CardScript cardToAdd, bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true)
+    {
+        cards[currentHandSize] = cardToAdd.gameObject; //add the card to the hand
+
+        cards[currentHandSize].SendMessage("SetHand", gameObject);     //tell the card which hand owns it
 
         //if set, tell it to turn upright
         if (turnToIdentity)
@@ -188,8 +226,6 @@ public class HandScript : BaseBehaviour
         //if the hand is currently hidden, tell the new card to hide itself
         if (handHidden)
             cards[currentHandSize].SendMessage("Hide");
-
-        cards[currentHandSize].SendMessage("triggerOnDrawnEffects"); //trigger effects
 
         currentHandSize++;  //increment card count
 
@@ -288,23 +324,50 @@ public class HandScript : BaseBehaviour
         }
 
         //wait for all cards to be idle
-        if (handOwner == HandFaction.player)
+        foreach (GameObject go in cards)
         {
-            foreach (GameObject go in cards)
-            {
-                if (go == null) continue;
-                CardScript waitCard = go.GetComponent<CardScript>();
-                yield return StartCoroutine(waitCard.waitForIdleOrDiscarding());
-            }
+            if (go == null) continue;
+            CardScript waitCard = go.GetComponent<CardScript>();
+            yield return StartCoroutine(waitCard.waitForIdleOrDiscarding());
         }
-        else
+
+        //flip the entire hand face up at once
+        foreach (GameObject c in cards)
+            if (c != null)
+                c.SendMessage("flipFaceUp");
+
+        yield break;
+    }
+
+    /// <summary>
+    /// adds multiple CardScript GameObjects that already exist instead of drawing them
+    /// If delay is true, there is a slight pause between each one.
+    /// </summary>
+    public IEnumerator addCards(CardScript[] cardsToAdd, bool delay = true)
+    {
+        //wait to make sure we dont attempt to discard and draw at the same time (i. e., cards like Recycle that cause both discarding and drawing simultaneously)
+        do
         {
-            foreach (GameObject go in cards)
-            {
-                if (go == null) continue;
-                EnemyCardScript waitCard = go.GetComponent<EnemyCardScript>();
-                yield return StartCoroutine(waitCard.waitForIdleOrDiscarding());
-            }
+            yield return null;
+        }
+        while (discarding);
+
+        //draw the cards
+        foreach (CardScript c in cardsToAdd)
+        {
+            //draw the new card, being sure not to flip it over yet since we want to flip all of them as a group later
+            addCard(c, false);
+
+            if (delay)
+                yield return new WaitForSeconds(drawDelay);
+        }
+
+        //wait for all cards to be idle
+        foreach (GameObject go in cards)
+        {
+            if (go == null) continue;
+            CardScript waitCard = go.GetComponent<CardScript>();
+            yield return StartCoroutine(waitCard.waitForIdleOrDiscarding());
         }
 
         //flip the entire hand face up at once
@@ -425,7 +488,7 @@ public class HandScript : BaseBehaviour
     /// <summary>
     /// removes a card from the hand (the card is NOT destroyed; the card does that part)
     /// </summary>
-    private void Discard(GameObject card)
+    public void Discard(GameObject card)
     {
         //locate the card to remove
         int index = -1;
@@ -593,6 +656,86 @@ public class HandScript : BaseBehaviour
         //and discard it
         card.SendMessage("Discard");
     }
+
+    /// <summary>
+    /// prompts the user to choose a card in this hand with the given message.  
+    /// if this is the selection hand, then options are the contents of the hand.
+    /// if this is not the selection hand, then all cards except for exception are copied to the selection hand to serve as options
+    /// </summary>
+    /// <param name="exception">GameObject to exclude from the list of valid choices</param>
+    /// <param name="prompt">message to show the player during the selection</param>
+    /// <returns></returns>
+    public IEnumerator selectCard(GameObject exception, string prompt)
+    {
+        selectedCard = null;
+
+        switch (handOwner)
+        {
+            case HandFaction.player:
+                //hide this hand
+                Hide();
+
+                //make CardPreviewScript objects for each card in hand except for exception
+                Dictionary<CardScript, GameObject> previewCards = new Dictionary<CardScript, GameObject>();
+                foreach (GameObject go in cards)
+                {
+                    //skip exception card and null cards
+                    if ( (go == exception) || (go == null) )
+                        continue;
+
+                    //make previews
+                    GameObject previewCard = (GameObject)Instantiate(previewCardPrefab,selectionHand.transform);
+                    previewCard.SendMessage("PreviewCard", go.GetComponent<PlayerCardScript>().card.data);
+                    previewCards.Add(previewCard.GetComponent<CardPreviewScript>(), go);
+                }
+
+                //send the new previewCards to the selectionHand and return the result
+                yield return StartCoroutine(selectionHand.addCards(previewCards.Keys.ToArray(), false));
+                yield return StartCoroutine(selectionHand.selectCard(null, prompt));
+
+                //get a script reference back to the card in this hand that corresponds to the chosen previewCard
+                GameObject selectedGameObject = null;
+                if (previewCards.TryGetValue(selectionHand.selectedCard, out selectedGameObject))
+                    selectedCard = selectedGameObject.GetComponent<CardScript>();
+                else
+                    Debug.LogError("invalid card selected!");
+
+                //cleanup and exit
+                yield return StartCoroutine(selectionHand.discardRandomCards(null, 999, false));
+                Show();
+                yield break;
+            
+            case HandFaction.enemy:
+                //send selectionHand previews and delegate
+                Debug.LogWarning("HandScript.selectCard() does not work on enemy hands yet because enemy cards cannot be previewed");
+                yield break;
+
+            case HandFaction.selection:
+                //if the hand is empty, bail now
+                if (currentHandSize == 0)
+                    yield break;
+
+                //if the hand has only one card, just act as if that was the selection and return immediately
+                if (currentHandSize == 1)
+                {
+                    selectedCard = cards[0].GetComponent<CardScript>();
+                    yield break;
+                }
+
+                //wait for a selection to be made and return it
+                while (selectedCard == null)
+                    yield return null;
+                yield break;
+
+        }
+
+        //if we made it here, the above code didnt actually select a card and something is probably wrong
+        Debug.LogWarning("HandScript.selectCard() seems to have a problem");
+        yield break; 
+    }
+
+    //if a cardPreviewScript in this hand gets clicked on, store it as the selected card for the selectCard() coroutine
+    private void cardPreviewClicked(CardScript card) { selectedCard = card; }
 
     public void updateEnemyCards()             { foreach (GameObject ec in cards) if (ec != null) ec.SendMessage("updateWaveStats"); }    //(enemy hands only) instructs all cards in the hand to refresh themselves
     public void applyWaveEffect(IEffectWave e) { foreach (GameObject ec in cards) if (ec != null) ec.SendMessage("applyWaveEffect", e); } //(enemy hands only) applies the wave effect to all cards in the hand

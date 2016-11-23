@@ -193,6 +193,10 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
     /// </summary>
     public IEnumerator scaleToVector(Vector3 targetSize)
     {
+        //error catch: this function causes an infinite loop with targetSize of 0,0,0 so use a very small value instead
+        if (targetSize == Vector3.zero)
+            targetSize.Set(0.001f, 0.001f, 0.001f);
+
         while (transform.localScale != targetSize)
         {
             transform.localScale = Vector3.MoveTowards(transform.localScale, targetSize, scaleSpeed * Time.deltaTime);

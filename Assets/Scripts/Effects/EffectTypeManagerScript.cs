@@ -72,6 +72,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "addCharges":                ie = new EffectAddCharges(); break;
             case "allTowersLifespanBonus":    ie = new EffectAllTowersLifespanBonus(); break;
             case "damagePlayer":              ie = new EffectDamagePlayer(); break;
+            case "discardChosenCard":         ie = new EffectDiscardChosen(); break;
             case "discardRandomCard":         ie = new EffectDiscardRandom(); break;
             case "drawCard":                  ie = new EffectDrawCard(); break;
             case "drawEnemyCard":             ie = new EffectDrawEnemyCard(); break;

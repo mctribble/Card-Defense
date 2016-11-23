@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using UnityEngine;
 using Vexe.Runtime.Types;
 
 /// <summary>
@@ -37,6 +39,38 @@ public class EffectAddCharges : BaseEffectSelf
     public override void trigger(ref PlayerCard card, GameObject card_gameObject)
     {
         card.charges += Mathf.RoundToInt(strength);
+    }
+}
+
+//discards x chosen cards from the hand in addition to this one.  They return to the bottom of the deck without damage
+public class EffectDiscardChosen : BaseEffectSelf
+{
+    [Hide] public override string Name { get { return "Discard " + strength + " cards"; } } 
+    [Show] public override string XMLName { get { return "discardChosenCard"; } }
+
+    //this effect relies on user input, so it starts a coroutine
+    public override void trigger(ref PlayerCard card, GameObject card_gameObject)
+    {
+        HandScript.selectionHand.StartCoroutine(effectCoroutine(card_gameObject));
+    }
+
+    //asks player which cards to discard, then discards them
+    private IEnumerator effectCoroutine(GameObject exception)
+    {
+        int count = Mathf.Min( (Mathf.RoundToInt(strength)), (HandScript.playerHand.currentHandSize-1) ); //number of cards to actually discard
+
+        for (int i = 0; i < count; i++)
+        {
+            //have player select any card in the player hand except this one
+            yield return HandScript.playerHand.StartCoroutine(HandScript.playerHand.selectCard(exception, "Discard what? (" + (count - i) + " to go)"));
+            CardScript selected = HandScript.playerHand.selectedCard;
+
+            //discard the chosen card
+            if (selected == null)
+                Debug.LogWarning("HandScript failed to prompt user to pick a card!");
+            else
+                HandScript.playerHand.Discard(selected.gameObject);
+        }
     }
 }
 
