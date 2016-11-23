@@ -675,6 +675,8 @@ public class HandScript : BaseBehaviour
                 //hide this hand
                 Hide();
 
+                yield return StartCoroutine(waitForReady()); //wait until everything is finished moving around
+
                 //make CardPreviewScript objects for each card in hand except for exception
                 Dictionary<CardScript, GameObject> previewCards = new Dictionary<CardScript, GameObject>();
                 foreach (GameObject go in cards)
@@ -732,6 +734,21 @@ public class HandScript : BaseBehaviour
         //if we made it here, the above code didnt actually select a card and something is probably wrong
         Debug.LogWarning("HandScript.selectCard() seems to have a problem");
         yield break; 
+    }
+
+    //wait for all cards in the hand to be ready
+    public IEnumerator waitForReady()
+    {
+        yield return null;
+        foreach (GameObject go in cards)
+        {
+            if (go == null)
+                continue;
+
+            //waiting twice because sometimes it can slip through in the one-frame gap between the card being drawn and being flipped face up
+            yield return StartCoroutine(go.GetComponent<CardScript>().waitForReady());
+            yield return StartCoroutine(go.GetComponent<CardScript>().waitForReady());
+        }
     }
 
     //if a cardPreviewScript in this hand gets clicked on, store it as the selected card for the selectCard() coroutine

@@ -61,6 +61,9 @@ public class EffectDiscardChosen : BaseEffectSelf
 
         for (int i = 0; i < count; i++)
         {
+            //wait for everything in the hand to stop moving around, in case other effects on the same card do something, like drawing/discarding cards, to affect how this should behave
+            yield return HandScript.playerHand.StartCoroutine(HandScript.playerHand.waitForReady());
+
             //have player select any card in the player hand except this one
             yield return HandScript.playerHand.StartCoroutine(HandScript.playerHand.selectCard(exception, "Discard what? (" + (count - i) + " to go)"));
             CardScript selected = HandScript.playerHand.selectedCard;
@@ -69,7 +72,7 @@ public class EffectDiscardChosen : BaseEffectSelf
             if (selected == null)
                 Debug.LogWarning("HandScript failed to prompt user to pick a card!");
             else
-                HandScript.playerHand.Discard(selected.gameObject);
+                selected.StartCoroutine(selected.Discard());
         }
     }
 }

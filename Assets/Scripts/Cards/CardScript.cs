@@ -132,6 +132,27 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
             yield return null;
     }
 
+    /// <summary>
+    /// [COROUTINE] waits until this card is either being discarded or is ready for further movement
+    /// A card is deemed ready for movement if it is idle and not already undergoing some form of rotation/scaling.
+    /// </summary>
+    public IEnumerator waitForReady()
+    {
+        bool isReady = false;
+        while (isReady == false)
+        {
+            yield return null;
+
+            if (state == State.discarding)
+                isReady = true;
+
+            if (state == State.idle)
+                if (isTurning == false)
+                    if (isScaling == false)
+                        isReady = true;
+        }
+    }
+
     //card flip helpers
     public void flipOver()
     {
@@ -188,11 +209,18 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
         isTurning = false;
     }
 
+    private bool isScaling; //flag used to prevent simultaneous scales
+
     /// <summary>
     /// [COROUTINE] scales the card to the given size over time
     /// </summary>
     public IEnumerator scaleToVector(Vector3 targetSize)
     {
+        while (isScaling)
+            yield return null;
+
+        isScaling = true;
+
         //error catch: this function causes an infinite loop with targetSize of 0,0,0 so use a very small value instead
         if (targetSize == Vector3.zero)
             targetSize.Set(0.001f, 0.001f, 0.001f);
@@ -202,6 +230,8 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
             transform.localScale = Vector3.MoveTowards(transform.localScale, targetSize, scaleSpeed * Time.deltaTime);
             yield return null;
         }
+
+        isScaling = false;
     }
 
     /// <summary>
