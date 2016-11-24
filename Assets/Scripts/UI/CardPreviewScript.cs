@@ -21,6 +21,13 @@ public class CardPreviewScript : CardScript, IPointerClickHandler
         CardTypeManagerScript.instance.cardTypesReloadedEvent += cardTypesReloaded;
     }
 
+    //override awake() to start face up
+    protected override void Awake()
+    {
+        base.Awake();
+        faceDown = false;
+    }
+
     /// <summary>
     /// event handler for card types being reloaded.  Updates display
     /// </summary>
@@ -98,11 +105,11 @@ public class CardPreviewScript : CardScript, IPointerClickHandler
 
     public override IEnumerator Discard()
     {
-        //shrink to nothing and destroy self
+        //just destroy self with no animation
         state = State.discarding;
         hand.SendMessage("Discard", gameObject);
-        yield return StartCoroutine(scaleToVector(Vector3.zero));
         Destroy(gameObject);
+        yield break;
     }
 
     public override void triggerOnDrawnEffects()

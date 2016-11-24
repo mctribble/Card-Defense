@@ -672,11 +672,6 @@ public class HandScript : BaseBehaviour
         switch (handOwner)
         {
             case HandFaction.player:
-                //hide this hand
-                Hide();
-
-                yield return StartCoroutine(waitForReady()); //wait until everything is finished moving around
-
                 //make CardPreviewScript objects for each card in hand except for exception
                 Dictionary<CardScript, GameObject> previewCards = new Dictionary<CardScript, GameObject>();
                 foreach (GameObject go in cards)
@@ -686,12 +681,17 @@ public class HandScript : BaseBehaviour
                         continue;
 
                     //make previews
-                    GameObject previewCard = (GameObject)Instantiate(previewCardPrefab,selectionHand.transform);
-                    previewCard.SendMessage("PreviewCard", go.GetComponent<PlayerCardScript>().card.data);
-                    previewCards.Add(previewCard.GetComponent<CardPreviewScript>(), go);
+                    GameObject previewCard = (GameObject)Instantiate(previewCardPrefab,selectionHand.transform); //spawn object
+                    previewCard.SendMessage("PreviewCard", go.GetComponent<PlayerCardScript>().card.data);       //send it the info
+                    previewCard.transform.localPosition = (go.transform.localPosition);                          //spawn previews over their corresponding PlayerCardScripts
+                    previewCards.Add(previewCard.GetComponent<CardPreviewScript>(), go);                         //add it to the selection hand
+                    go.transform.localPosition -= new Vector3(0.0f, 1000.0f, 0.0f);                             //blink the actual card off screen
                 }
 
-                //send the new previewCards to the selectionHand and return the result
+                //set the hand as hidden, even though it was just teleported off-screen, just to make sure the cards dont come back on screen
+                Hide();
+
+                //send the new previewCards to the selectionHand and wait for a result
                 yield return StartCoroutine(selectionHand.addCards(previewCards.Keys.ToArray(), false));
                 yield return StartCoroutine(selectionHand.selectCard(null, prompt));
 
@@ -702,9 +702,16 @@ public class HandScript : BaseBehaviour
                 else
                     Debug.LogError("invalid card selected!");
 
-                //cleanup and exit
-                yield return StartCoroutine(selectionHand.discardRandomCards(null, 999, false));
+                //put the playerCardScripts back to where the previews are
+                foreach (KeyValuePair<CardScript, GameObject> entry in previewCards)
+                    entry.Value.transform.localPosition = entry.Key.transform.localPosition;
+
+                //get rid of the preview cards
+                yield return StartCoroutine(selectionHand.discardRandomCards(null, 999, false)); 
+
+                //send the player cards back to their normal positions
                 Show();
+
                 yield break;
             
             case HandFaction.enemy:
