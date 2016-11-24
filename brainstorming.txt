@@ -1,7 +1,5 @@
 known bugs:
-ability to draw enemy cards not reset on level reload
 some lingering cause of enemies not knowing to expect damage
-HandScript.selectCard() not properly hiding hands
 ================================================================
 presentation:
 card art needed for: manual control, salvage

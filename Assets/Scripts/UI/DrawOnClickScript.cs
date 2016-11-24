@@ -21,8 +21,9 @@ public class DrawOnClickScript : BaseBehaviour, IPointerClickHandler
     private bool drawnThisRound; //if true, we have drawn this round
 
     //event handling for updating drawnThisRound
-    public void Start () { LevelManagerScript.instance.RoundOverEvent += roundOverHandler; } //register event
+    public void Start () { LevelManagerScript.instance.RoundOverEvent += roundOverHandler;  LevelManagerScript.instance.LevelLoadedEvent += levelLoadedHandler; } //register events
     public void roundOverHandler() { drawnThisRound = false; } //handle event
+    public void levelLoadedHandler() { drawnThisRound = false; } //handle event
 
     //check every few frames to see if we need to fade/unfade the image
     private void Update()

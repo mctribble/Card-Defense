@@ -45,7 +45,16 @@ public class EffectAddCharges : BaseEffectSelf
 //discards x chosen cards from the hand in addition to this one.  They return to the bottom of the deck without damage
 public class EffectDiscardChosen : BaseEffectSelf
 {
-    [Hide] public override string Name { get { return "Discard " + strength + " cards"; } } 
+    [Hide] public override string Name
+    {
+        get
+        {
+            if (strength == 1)
+                return "Choose a card to discard";
+            else
+                return "Choose up to " + strength + " cards to discard";
+        }
+    } 
     [Show] public override string XMLName { get { return "discardChosenCard"; } }
 
     //this effect relies on user input, so it starts a coroutine
