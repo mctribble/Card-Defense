@@ -89,7 +89,7 @@ public class XMLEffect : System.Object
             //if the dictionary is not built yet, build it
             if (cachedHelpStrings == null)
             {
-                string helpFile = Path.Combine(Application.dataPath, "StreamingAssets/XML/Documentation/available effects.txt");
+                string helpFile = Path.Combine(Application.streamingAssetsPath, "XML/Documentation/available effects.txt");
                 cachedHelpStrings = new Dictionary<string, string>();
                 try
                 {

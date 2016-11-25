@@ -298,8 +298,8 @@ public class DeckManagerScript : BaseBehaviour
     private void Awake()
     {
         instance = this;
-        premadeDecks = DeckCollection.Load(Path.Combine(Application.dataPath, premadeDeckPath));
-        playerDecks  = DeckCollection.Load(Path.Combine(Application.dataPath, playerDeckPath));
+        premadeDecks = DeckCollection.Load(Path.Combine(Application.streamingAssetsPath, premadeDeckPath));
+        playerDecks  = DeckCollection.Load(Path.Combine(Application.streamingAssetsPath, playerDeckPath));
         currentDeck = new List<PlayerCard>();
         deckSize = 0;
         curDeckCharges = 0;
@@ -312,8 +312,8 @@ public class DeckManagerScript : BaseBehaviour
     private void Reset()
     {
         //reload definitions
-        premadeDecks = DeckCollection.Load(Path.Combine(Application.dataPath, premadeDeckPath));
-        playerDecks = DeckCollection.Load(Path.Combine(Application.dataPath, playerDeckPath));
+        premadeDecks = DeckCollection.Load(Path.Combine(Application.streamingAssetsPath, premadeDeckPath));
+        playerDecks = DeckCollection.Load(Path.Combine(Application.streamingAssetsPath, playerDeckPath));
 
         //clear out the current deck
         currentDeck.Clear();
@@ -353,7 +353,7 @@ public class DeckManagerScript : BaseBehaviour
     /// </summary>
     public void savePlayerDecks()
     {
-        playerDecks.Save(Path.Combine(Application.dataPath, playerDeckPath));
+        playerDecks.Save(Path.Combine(Application.streamingAssetsPath, playerDeckPath));
     }
 
     /// <summary>

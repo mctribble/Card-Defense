@@ -74,7 +74,7 @@ public class CardPreviewScript : CardScript, IPointerClickHandler
         updateDescriptionText();
 
         //load art with WWW (yes, really!  I couldn't find an easier way to do this and still let the user access the image files)
-        WWW www = new WWW ("file:///" + Application.dataPath + "/StreamingAssets/Art/Card Art/" + data.cardArtName); //load file
+        WWW www = new WWW ("file:///" + Application.streamingAssetsPath + "/Art/Card Art/" + data.cardArtName); //load file
         yield return www; //wait for it to load
 
         if (www.error == null)

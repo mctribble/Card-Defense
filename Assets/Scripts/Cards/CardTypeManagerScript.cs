@@ -126,12 +126,12 @@ public class CardTypeManagerScript : BaseBehaviour
             yield return null;
 
         //load base game cards
-        types = CardTypeCollection.Load(Path.Combine(Application.dataPath, path));
+        types = CardTypeCollection.Load(Path.Combine(Application.streamingAssetsPath, path));
         foreach (PlayerCardData baseCard in types.cardTypes)
             baseCard.isModded = false; //flag base game cards as being from the base game
 
         //find mod files
-        DirectoryInfo modDir =  new DirectoryInfo (Path.Combine (Application.dataPath, modPath));   //mod folder
+        DirectoryInfo modDir =  new DirectoryInfo (Path.Combine (Application.streamingAssetsPath, modPath));   //mod folder
         FileInfo[] modFiles = modDir.GetFiles ("*.xml");                                            //file list
 
         //load the files
@@ -185,7 +185,7 @@ public class CardTypeManagerScript : BaseBehaviour
         yield return StartCoroutine(MessageHandlerScript.PromptYesNo("Are you sure you want to overwrite the card definitions?"));
         if (MessageHandlerScript.responseToLastPrompt == "Yes")
         {
-            types.Save(Path.Combine(Application.dataPath, path));
+            types.Save(Path.Combine(Application.streamingAssetsPath, path));
             Debug.Log("Card changes saved. <UNMODDED CARDS ONLY!>");
         }
     }

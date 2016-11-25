@@ -434,7 +434,7 @@ public class TowerScript : BaseBehaviour
         upgradeCap = (ushort)d.upgradeCap;
 
         //yes, I know its awkward, but we're setting the sprite with WWW.
-        WWW www = new WWW ("file:///" + Application.dataPath + "/StreamingAssets/Art/Sprites/" + d.towerSpriteName);
+        WWW www = new WWW ("file:///" + Application.streamingAssetsPath + "/Art/Sprites/" + d.towerSpriteName);
         yield return www;
 
         if (www.error == null)

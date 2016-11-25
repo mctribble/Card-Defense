@@ -57,7 +57,7 @@ public class LevelSelectScript : BaseBehaviour
     private IEnumerator setupLevelButtons()
     {
         //base game levels
-        DirectoryInfo dir = new DirectoryInfo (Path.Combine (Application.dataPath, levelDir));  //find level folder
+        DirectoryInfo dir = new DirectoryInfo (Path.Combine (Application.streamingAssetsPath, levelDir));  //find level folder
         FileInfo[] files = dir.GetFiles ("*.xml");                                              //get list of .xml files from it
         foreach (FileInfo f in files)                           //for each level file...
         {
@@ -69,7 +69,7 @@ public class LevelSelectScript : BaseBehaviour
         }
 
         //modded levels
-        dir = new DirectoryInfo(Path.Combine(Application.dataPath, modLevelDir));   //find level folder
+        dir = new DirectoryInfo(Path.Combine(Application.streamingAssetsPath, modLevelDir));   //find level folder
         files = dir.GetFiles("*.xml");                                              //get list of .xml files from it
         foreach (FileInfo f in files)                           //for each level file
         {
@@ -198,7 +198,7 @@ public class LevelSelectScript : BaseBehaviour
     /// <param name="levelFile"></param>
     private IEnumerator LevelHovered(FileInfo levelFile)
     {
-        LevelData data = LevelData.Load(Path.Combine(Application.dataPath, levelFile.FullName));
+        LevelData data = LevelData.Load(Path.Combine(Application.streamingAssetsPath, levelFile.FullName));
 
         //start with the level file name, but replace the file extension with a newline
         infoText.text = levelFile.Name.Replace(levelFile.Extension, ":\n"); ;
@@ -217,7 +217,7 @@ public class LevelSelectScript : BaseBehaviour
         infoText.text += data.pathSegments.FindAll(s => (data.pathSegments.Exists(ss => ss.startPos == s.endPos) == false)).Count + " points to defend";
 
         //yes, I know its awkward, but we're loading the level thumbnail with WWW.
-        string thumbnailPath = "file:///" + Path.Combine(Application.dataPath, thumbnailDir);
+        string thumbnailPath = "file:///" + Path.Combine(Application.streamingAssetsPath, thumbnailDir);
         WWW www = new WWW( Path.Combine( thumbnailPath, levelFile.Name.Replace(levelFile.Extension, ".png") ) );
         yield return www;
 
@@ -260,7 +260,7 @@ public class LevelSelectScript : BaseBehaviour
             case "Random Level":
                 //chooses a level at random from the base game list
 
-                DirectoryInfo dir = new DirectoryInfo (Path.Combine (Application.dataPath, levelDir));  //find level folder
+                DirectoryInfo dir = new DirectoryInfo (Path.Combine (Application.streamingAssetsPath, levelDir));  //find level folder
                 FileInfo[] files = dir.GetFiles ("*.xml");                                              //get list of .xml files from it
 
                 //choose one of them at random and treat it as if that button was clicked on
@@ -323,7 +323,7 @@ public class LevelSelectScript : BaseBehaviour
                 //shows a special image and description to explain what this button does
                 
                 //yes, I know its awkward, but we're loading the random level thumbnail with WWW, since this is the Unity method for runtime asset loading
-                string thumbnailPath = "file:///" + Path.Combine(Application.dataPath, thumbnailDir); //path where the file is
+                string thumbnailPath = "file:///" + Path.Combine(Application.streamingAssetsPath, thumbnailDir); //path where the file is
                 WWW www = new WWW( Path.Combine(thumbnailPath, "Random_Level.png") ); //file name
                 yield return www; //wait for it to load
                 infoImage.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f)); //create a sprite with it and set it on the image
@@ -344,7 +344,7 @@ public class LevelSelectScript : BaseBehaviour
 
             case "Default Level Deck":
                 //treat the default level deck button as if it were a reference to the level deck
-                LevelData data = LevelData.Load(Path.Combine(Application.dataPath, chosenLevelFile.FullName));
+                LevelData data = LevelData.Load(Path.Combine(Application.streamingAssetsPath, chosenLevelFile.FullName));
                 if ((data.premadeDeckName == null) || (data.premadeDeckName == ""))
                     DeckHovered(data.levelDeck);
                 else

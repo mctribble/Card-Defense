@@ -254,7 +254,7 @@ public class LevelManagerScript : BaseBehaviour
     /// </summary>
     private IEnumerator loadLevel(string level)
     {
-        data = LevelData.Load(Path.Combine(Application.dataPath, level)); //load the level
+        data = LevelData.Load(Path.Combine(Application.streamingAssetsPath, level)); //load the level
 
         data.fileName = level; //save the file name in case we need to save changes later
 
@@ -271,7 +271,7 @@ public class LevelManagerScript : BaseBehaviour
         }
 
         //set background
-        string filename = Application.dataPath + "/StreamingAssets/Art/Backgrounds/" + data.background;
+        string filename = Application.streamingAssetsPath + "/Art/Backgrounds/" + data.background;
         if (File.Exists(filename))
         {
             WWW www = new WWW ("file:///" + filename);

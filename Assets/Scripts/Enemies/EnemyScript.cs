@@ -417,7 +417,7 @@ public class EnemyScript : BaseBehaviour
         this.GetComponent<SpriteRenderer>().color = d.unitColor.toColor();
 
         //yes, I know its awkward, but we're setting the sprite with WWW.
-        WWW www = new WWW ("file:///" + Application.dataPath + "/StreamingAssets/Art/Sprites/" + d.spriteName);
+        WWW www = new WWW ("file:///" + Application.streamingAssetsPath + "/Art/Sprites/" + d.spriteName);
         yield return www;
 
         if (www.error == null)

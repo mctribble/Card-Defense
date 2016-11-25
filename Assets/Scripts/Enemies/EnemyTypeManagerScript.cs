@@ -94,10 +94,10 @@ public class EnemyTypeManagerScript : BaseBehaviour
         while (DependencyManagerScript.instance == null)
             yield return null;
 
-        types = EnemyTypeCollection.Load(Path.Combine(Application.dataPath, path));
+        types = EnemyTypeCollection.Load(Path.Combine(Application.streamingAssetsPath, path));
 
         //find the mod files
-        DirectoryInfo modDir =  new DirectoryInfo (Path.Combine (Application.dataPath, modPath));   //mod folder
+        DirectoryInfo modDir =  new DirectoryInfo (Path.Combine (Application.streamingAssetsPath, modPath));   //mod folder
         FileInfo[] modFiles = modDir.GetFiles ("*.xml");                                            //file list
 
         //load the files
@@ -160,7 +160,7 @@ public class EnemyTypeManagerScript : BaseBehaviour
         yield return StartCoroutine(MessageHandlerScript.PromptYesNo("Are you sure you want to overwrite the enemy definitions?"));
         if (MessageHandlerScript.responseToLastPrompt == "Yes")
         {
-            types.Save(Path.Combine(Application.dataPath, path));
+            types.Save(Path.Combine(Application.streamingAssetsPath, path));
             Debug.Log("Enemy types saved.");
         }  
     }

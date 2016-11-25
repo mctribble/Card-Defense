@@ -95,7 +95,7 @@ public class CameraControlScript : BaseBehaviour
     {
         if ( LevelManagerScript.instance.levelLoaded )
         {
-            string screenshotName = Path.Combine(Application.dataPath, thumbnailPath); //find the folder we're saving to
+            string screenshotName = Path.Combine(Application.streamingAssetsPath, thumbnailPath); //find the folder we're saving to
             screenshotName = Path.Combine(screenshotName, Path.GetFileNameWithoutExtension(LevelManagerScript.instance.data.fileName)); //add the file name of the level
             screenshotName += ".png"; //add the extension
 
