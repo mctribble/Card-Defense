@@ -339,6 +339,7 @@
       <effectData>
         <Effects>
           <Effect name="allTowersLifespanBonus" strength="3" />
+          <Effect name="noUpgradeCost" />
         </Effects>
       </effectData>
     </Card>

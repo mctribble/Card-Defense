@@ -162,7 +162,12 @@ public class EffectAllTowersLifespanBonus : BaseEffectInstant
         //apply it to all towers
         GameObject[] towers = GameObject.FindGameObjectsWithTag("Tower");
         foreach (GameObject t in towers)
-            t.SendMessage("Upgrade", lifespanUpgrade);
+        {
+            if (parentData.propertyEffects.noUpgradeCost)
+                t.SendMessage("FreeUpgrade", lifespanUpgrade);
+            else
+                t.SendMessage("Upgrade", lifespanUpgrade);
+        }
     }
 }
 
