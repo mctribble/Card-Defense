@@ -180,28 +180,29 @@
       </effectData>
     </Card>
     <Card Type="upgrade" Name="Basic Upgrade" Description="Boring but good" Charges="5" Art="Basic_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
-      <upgradeData RechargeMult="0.9" RangeMult="1" DamageMult="1.4" RechargeMod="0" RangeMod="0.5" DamageMod="0" WaveBonus="2" />
+      <upgradeData RechargeMult="0.9" RangeMult="1" DamageMult="1.4" RechargeMod="0" RangeMod="0.5" DamageMod="0" WaveBonus="3" />
     </Card>
     <Card Type="upgrade" Name="Chain Hit" Description="Powerful, but easily squandered" Charges="5" Art="Chain_Hit.png" Tooltip="Tower_Basic.png" Token="false">
-      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="1" />
+      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="0" />
       <effectData>
         <Effects>
           <Effect name="effectCooldown" strength="5">
-            <Effect name="effectCharges" strength="3">
+            <Effect name="effectCharges" strength="4">
               <Effect name="chainHit" strength="2" />
             </Effect>
           </Effect>
-        </Effects>
+          <Effect name="noUpgradeCost" />
+      </Effects>
       </effectData>
     </Card>
     <Card Type="upgrade" Name="Fast Upgrade" Description="small damage increase per shot.  best on fast towers" Charges="3" Art="Fast_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
-      <upgradeData RechargeMult="0.8" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0.25" DamageMod="1" WaveBonus="2" />
+      <upgradeData RechargeMult="0.8" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0.25" DamageMod="1" WaveBonus="3" />
     </Card>
     <Card Type="upgrade" Name="Heavy Upgrade" Description="Best on towers with high damage" Charges="3" Art="Heavy_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
-      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="2" RechargeMod="0.5" RangeMod="1" DamageMod="0" WaveBonus="2" />
+      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="2" RechargeMod="0.5" RangeMod="1" DamageMod="0" WaveBonus="3" />
     </Card>
     <Card Type="upgrade" Name="Improvised Upgrade" Description="There were no upgrades in your deck, but you managed to improvise something regardless." Charges="3" Art="Improvised_Upgrade.png" Tooltip="Tower_Basic.png" Token="true">
-      <upgradeData RechargeMult="0.95" RangeMult="1" DamageMult="1.2" RechargeMod="0" RangeMod="0.25" DamageMod="0" WaveBonus="1" />
+      <upgradeData RechargeMult="0.95" RangeMult="1" DamageMult="1.2" RechargeMod="0" RangeMod="0.25" DamageMod="0" WaveBonus="2" />
     </Card>
     <Card Type="upgrade" Name="Manual Control" Description="If you want a job done right, then do it yourself." Charges="3" Art="Manual_Control.png" Tooltip="Tower_Basic.png" Token="false">
       <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="0" />
@@ -222,7 +223,7 @@
       </effectData>
     </Card>
     <Card Type="upgrade" Name="Pulse Upgrade" Description="Adds a secondary area attack" Charges="3" Art="Pulse_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
-      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="1" />
+      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="2" />
       <effectData>
         <Effects>
           <Effect name="effectCooldown" strength="3">
@@ -232,7 +233,7 @@
       </effectData>
     </Card>
     <Card Type="upgrade" Name="Range Upgrade" Description="Long arm of the law." Charges="3" Art="Range_Upgrade.png" Tooltip="Tower_Round.png" Token="false">
-      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="1" DamageMod="0" WaveBonus="1" />
+      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="1" DamageMod="0" WaveBonus="2" />
     </Card>
     <Card Type="upgrade" Name="Self-Destruct Upgrade" Description="Tower becomes very powerful, but will only get one shot." Charges="3" Art="Self_Destruct_Upgrade.png" Tooltip="Tower_basic.png" Token="false">
       <upgradeData RechargeMult="1" RangeMult="5" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="1000" WaveBonus="0" />
@@ -246,7 +247,7 @@
       </effectData>
     </Card>
     <Card Type="upgrade" Name="Spitfire Upgrade" Description="Quantity over quality." Charges="3" Art="Spitfire_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
-      <upgradeData RechargeMult="3" RangeMult="1" DamageMult="0.5" RechargeMod="0" RangeMod="0.5" DamageMod="0" WaveBonus="2" />
+      <upgradeData RechargeMult="3" RangeMult="1" DamageMult="0.5" RechargeMod="0" RangeMod="0.5" DamageMod="0" WaveBonus="3" />
       <effectData>
         <Effects>
           <Effect name="targetAll" />
@@ -334,7 +335,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="spell" Name="Reinforce" Charges="1" Art="Reinforce.png" Tooltip="Tower_Basic.png" Token="false">
+    <Card Type="spell" Name="Reinforce" Charges="1" Art="Strong_Reinforce.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>
           <Effect name="allTowersLifespanBonus" strength="3" />
@@ -357,7 +358,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="spell" Name="Salvage" Charges="3" Art="Recycle.png" Tooltip="Tower_Basic.png" Token="false">
+    <Card Type="spell" Name="Scavenge" Charges="3" Art="Scavange.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>
           <Effect name="drawCard" strength="2" />
@@ -370,6 +371,13 @@
         <Effects>
           <Effect name="addCharges" strength="1" />
           <Effect name="returnsToTopOfDeck" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="spell" Name="Strong Reinforce" Charges="1" Art="Reinforce.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="allTowersLifespanBonus" strength="6" />
         </Effects>
       </effectData>
     </Card>

@@ -1,15 +1,15 @@
 known bugs:
 some lingering cause of enemies not knowing to expect damage
+deck editor search box is case sensitive, at least for card names
 ================================================================
 presentation:
-card art needed for: manual control, salvage
 better range display, especially when upgrading and for special targeting types
 animated enemy sprites?
 ================================================================
 content goals:
 enemies: 10/10  <<DONE!!>>
 levels:  08/30
-cards:   42/100 (+3 token)
+cards:   43/100 (+3 token)
 decks:   05/10
 ================================================================
 balance:
