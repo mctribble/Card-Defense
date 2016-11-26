@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 using Vexe.Runtime.Types;
 
 /// <summary>
@@ -10,6 +12,99 @@ public abstract class BaseEffectInstant : BaseEffect, IEffectInstant
     [Hide] public override EffectType    effectType    { get { return EffectType.instant; } } //this is an instant effect
 
     public abstract void trigger();
+}
+
+//player conjures X spells, which are chosen randomly from all available un-modded spells and added directly to the hand as tokens
+public class EffectConjureSpellCard : BaseEffectInstant
+{
+    [Hide] public override string Name { get { return "Conjure " + strength + " spell cards"; } } 
+    [Show] public override string XMLName { get { return "conjureSpellCard"; } }
+
+    public override void trigger()
+    {
+        int conjureCount = Mathf.RoundToInt(strength);
+        List<PlayerCard> conjuredCards = new List<PlayerCard>();
+
+        for (int i = 0; i < conjureCount; i++)
+        {
+            //get the card data and make a copy that is flagged as a token
+            PlayerCardData conjuredType = CardTypeManagerScript.instance.getRandomCardType(PlayerCardType.spell).clone();
+            conjuredType.isToken = true;
+
+            //make a PlayerCard from it
+            PlayerCard newCard = new PlayerCard();
+            newCard.data = conjuredType;
+            newCard.charges = conjuredType.cardMaxCharges;
+
+            //store it
+            conjuredCards.Add(newCard);
+        }
+
+        //"draw" them
+        HandScript.playerHand.StartCoroutine(HandScript.playerHand.drawCards(conjuredCards.ToArray(), true));
+    }
+}
+
+//player conjures X towers, which are chosen randomly from all available un-modded towers and added directly to the hand as tokens
+public class EffectConjureTowerCard : BaseEffectInstant
+{
+    [Hide] public override string Name { get { return "Conjure " + strength + " tower cards"; } } 
+    [Show] public override string XMLName { get { return "conjureTowerCard"; } }
+
+    public override void trigger()
+    {
+        int conjureCount = Mathf.RoundToInt(strength);
+        List<PlayerCard> conjuredCards = new List<PlayerCard>();
+
+        for (int i = 0; i < conjureCount; i++)
+        {
+            //get the card data and make a copy that is flagged as a token
+            PlayerCardData conjuredType = CardTypeManagerScript.instance.getRandomCardType(PlayerCardType.tower).clone();
+            conjuredType.isToken = true;
+
+            //make a PlayerCard from it
+            PlayerCard newCard = new PlayerCard();
+            newCard.data = conjuredType;
+            newCard.charges = conjuredType.cardMaxCharges;
+
+            //store it
+            conjuredCards.Add(newCard);
+        }
+
+        //"draw" them
+        HandScript.playerHand.StartCoroutine(HandScript.playerHand.drawCards(conjuredCards.ToArray(), true));
+    }
+}
+
+//player conjures X upgradess, which are chosen randomly from all available un-modded upgrades and added directly to the hand as tokens
+public class EffectConjureUpgradeCard : BaseEffectInstant
+{
+    [Hide] public override string Name { get { return "Conjure " + strength + " spell cards"; } }
+    [Show] public override string XMLName { get { return "conjureUpgradeCard"; } }
+
+    public override void trigger()
+    {
+        int conjureCount = Mathf.RoundToInt(strength);
+        List<PlayerCard> conjuredCards = new List<PlayerCard>();
+
+        for (int i = 0; i < conjureCount; i++)
+        {
+            //get the card data and make a copy that is flagged as a token
+            PlayerCardData conjuredType = CardTypeManagerScript.instance.getRandomCardType(PlayerCardType.upgrade).clone();
+            conjuredType.isToken = true;
+
+            //make a PlayerCard from it
+            PlayerCard newCard = new PlayerCard();
+            newCard.data = conjuredType;
+            newCard.charges = conjuredType.cardMaxCharges;
+
+            //store it
+            conjuredCards.Add(newCard);
+        }
+
+        //"draw" them
+        HandScript.playerHand.StartCoroutine(HandScript.playerHand.drawCards(conjuredCards.ToArray(), true));
+    }
 }
 
 //draws x cards

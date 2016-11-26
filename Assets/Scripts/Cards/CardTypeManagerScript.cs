@@ -6,6 +6,7 @@ using System.Text;
 using System.Xml.Serialization;
 using UnityEngine;
 using Vexe.Runtime.Types;
+using System.Linq;
 
 /// <summary>
 /// maintains the collection of card types, including saving/loading to XML and some inspector-only controls
@@ -198,6 +199,23 @@ public class CardTypeManagerScript : BaseBehaviour
 
         //return card at that index
         return types.cardTypes[index];
+    }
+
+    /// <summary>
+    /// returns a random card type from the database, with the given PlayerCardType, that is neither modded nor a token
+    /// </summary>
+    /// <param name="type">card type (tower, spell, etc.) to return</param>
+    /// <returns>the located type</returns>
+    public PlayerCardData getRandomCardType(PlayerCardType type)
+    {
+        //get a subset of the type list
+        IEnumerable<PlayerCardData> typeOptions = types.cardTypes.Where(pcd => (pcd.cardType == type) && (pcd.isModded == false) && (pcd.isToken == false));
+
+        //get random index
+        int index = Random.Range(0, typeOptions.Count());
+
+        //return card at that index
+        return typeOptions.ElementAt(index);
     }
 
     //returns the card from the database with the given name

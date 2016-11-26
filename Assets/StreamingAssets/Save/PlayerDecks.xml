@@ -7,13 +7,19 @@
         <Card name="Dev Chain Purge Tower" count="20" />
       </Cards>
     </Deck>
+    <Deck name="Conjuration">
+      <Cards>
+        <Card name="Conjure Spell" count="10" />
+        <Card name="Conjure Tower" count="10" />
+        <Card name="Conjure Upgrade" count="10" />
+      </Cards>
+    </Deck>
     <Deck name="Dev Test Deck">
       <Cards>
         <Card name="Dev Chain Purge Tower" count="1" />
-        <Card name="Chain Hit" count="1" />
-        <Card name="Scavenge" count="10" />
-        <Card name="Strong Reinforce" count="10" />
-        <Card name="Reinforce" count="10" />
+        <Card name="Conjure Spell" count="10" />
+        <Card name="Conjure Tower" count="10" />
+        <Card name="Conjure Upgrade" count="10" />
       </Cards>
     </Deck>
   </Decks>

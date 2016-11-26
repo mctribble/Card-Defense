@@ -3,6 +3,7 @@ some lingering cause of enemies not knowing to expect damage
 deck editor search box is case sensitive, at least for card names
 ================================================================
 presentation:
+need art for conjure tower/upgrade/spell
 better range display, especially when upgrading and for special targeting types
 animated enemy sprites?
 ================================================================

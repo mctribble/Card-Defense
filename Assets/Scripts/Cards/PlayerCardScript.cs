@@ -165,6 +165,30 @@ public class PlayerCardData : System.Object
         return description;
     }
 
+    /// <summary>
+    /// creates and returns copy of this PlayerCardData
+    /// </summary>
+    public PlayerCardData clone()
+    {
+        PlayerCardData clone = new PlayerCardData();
+
+        clone.cardArtName = cardArtName;
+        clone.cardDescription = cardDescription;
+        clone.cardMaxCharges = cardMaxCharges;
+        clone.cardName = cardName;
+        clone.cardType = cardType;
+        clone.isModded = isModded;
+        clone.isToken = isToken;
+        clone.tooltipSpriteName = tooltipSpriteName;
+        clone.towerData = towerData;
+        clone.upgradeData = upgradeData;
+        
+        if (effectData != null)
+            clone.effectData = effectData.clone();
+
+        return clone;
+    }
+
     //returns a short string for the debugger
     public override string ToString() { return cardName; }
 }

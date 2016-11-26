@@ -71,6 +71,9 @@ public class EffectTypeManagerScript : BaseBehaviour
             //<<instant effects (trigger immediately when card is played)>>
             case "addCharges":                ie = new EffectAddCharges(); break;
             case "allTowersLifespanBonus":    ie = new EffectAllTowersLifespanBonus(); break;
+            case "conjureSpellCard":          ie = new EffectConjureSpellCard(); break;
+            case "conjureTowerCard":          ie = new EffectConjureTowerCard(); break;
+            case "conjureUpgradeCard":        ie = new EffectConjureUpgradeCard(); break;
             case "damagePlayer":              ie = new EffectDamagePlayer(); break;
             case "discardChosenCard":         ie = new EffectDiscardChosen(); break;
             case "discardRandomCard":         ie = new EffectDiscardRandom(); break;
