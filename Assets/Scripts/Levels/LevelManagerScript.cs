@@ -179,13 +179,12 @@ public class LevelData
     /// <summary>
     /// returns a new LevelData created from the provided XML file
     /// </summary>
-    public static LevelData Load(string path)
+    public static LevelData Load(Stream levelStream, string fileName)
     {
         XmlSerializer serializer = new XmlSerializer(typeof(LevelData));
-        using (var stream = new FileStream(path, FileMode.Open))
-        {
-            return serializer.Deserialize(stream) as LevelData;
-        }
+        LevelData result = serializer.Deserialize(levelStream) as LevelData;
+        result.fileName = fileName;
+        return result;
     }
 }
 
@@ -252,11 +251,9 @@ public class LevelManagerScript : BaseBehaviour
     /// <summary>
     /// [COROUTINE] loads the given level and sets up the scene to get it going
     /// </summary>
-    private IEnumerator loadLevel(string level)
+    private IEnumerator loadLevel(LevelData levelToLoad)
     {
-        data = LevelData.Load(Path.Combine(Application.streamingAssetsPath, level)); //load the level
-
-        data.fileName = level; //save the file name in case we need to save changes later
+        data = levelToLoad;
 
         //wait for dependency manager to be ready to test dependencies
         while (DependencyManagerScript.instance == null || DependencyManagerScript.instance.enemyDepenciesHandled == false || DependencyManagerScript.instance.cardDependenciesHandled == false)
@@ -712,7 +709,7 @@ public class LevelManagerScript : BaseBehaviour
 
         //reload the level
         Awake();
-        yield return StartCoroutine(loadLevel(data.fileName));
+        yield return StartCoroutine(loadLevel(data));
 
         data.usingLevelDeck = usingLevelDeck; //restore the level deck flag to its original value
     }

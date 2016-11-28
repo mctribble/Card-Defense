@@ -30,10 +30,10 @@ public class LevelSelectScript : BaseBehaviour
     public Color        playerDeckColor;  //player decks
 
     //list of created menu buttons
-    private List<GameObject> menuButtons;
+    private List<MenuButtonScript> menuButtons;
 
     //temp storage for player menu selections
-    private FileInfo chosenLevelFile;
+    private LevelData chosenLevel;
 
     // Use this for initialization
     private void Start()
@@ -45,23 +45,44 @@ public class LevelSelectScript : BaseBehaviour
         gameObject.GetComponentInParent<UnityEngine.UI.LayoutElement>().minHeight = canvasHeight;
 
         //create an empty list to hold the buttons in
-        menuButtons = new List<GameObject>();
+        menuButtons = new List<MenuButtonScript>();
 
         //start on a level select prompt
         StartCoroutine(setupLevelButtons());
     }
 
     /// <summary>
-    /// [COROUTINE] creates buttons to be used as a level select
+    /// [COROUTINE] creates buttons to be used as a level select by calling one of the other forms of this function.  
+    /// This version works regardless of platform.
     /// </summary>
     private IEnumerator setupLevelButtons()
+    {
+        if (Application.isWebPlayer)
+        {
+          //this is a web build.  Run that version
+          yield return StartCoroutine(setupLevelButtonsWeb());
+        }
+        else
+        {
+            //this is a PC build.  Run the appropriate coroutine...
+            yield return StartCoroutine(setupLevelButtonsPC());
+        
+            //and also create/update the manifest for web builds
+            updateLevelManifest();
+        }
+    }
+
+    /// <summary>
+    /// [COROUTINE] creates buttons to be used as a level select.  This version is for PC builds
+    /// </summary>
+    private IEnumerator setupLevelButtonsPC()
     {
         //base game levels
         DirectoryInfo dir = new DirectoryInfo (Path.Combine (Application.streamingAssetsPath, levelDir));  //find level folder
         FileInfo[] files = dir.GetFiles ("*.xml");                                              //get list of .xml files from it
         foreach (FileInfo f in files)                           //for each level file...
         {
-            GameObject fButton = Instantiate(buttonPrefab);     //create a new button
+            MenuButtonScript fButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();     //create a new button
             fButton.SendMessage("setLevel", f);                 //tell it what level it belongs to
             fButton.SendMessage("setColor", baseLevelColor);    //set the button color
             fButton.transform.SetParent(this.transform, false); //add it to the menu without altering scaling settings
@@ -73,7 +94,7 @@ public class LevelSelectScript : BaseBehaviour
         files = dir.GetFiles("*.xml");                                              //get list of .xml files from it
         foreach (FileInfo f in files)                           //for each level file
         {
-            GameObject fButton = Instantiate(buttonPrefab);     //create a new button
+            MenuButtonScript fButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();     //create a new button
             fButton.SendMessage("setLevel", f);                 //tell it what level it belongs to
             fButton.SendMessage("setColor", modLevelColor);     //set the button color
             fButton.transform.SetParent(this.transform, false); //add it to the menu without altering scaling settings
@@ -81,7 +102,7 @@ public class LevelSelectScript : BaseBehaviour
         }
 
         //also have a button to choose a random level with
-        GameObject rButton = Instantiate(buttonPrefab);       //create a new button
+        MenuButtonScript rButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();       //create a new button
         rButton.SendMessage("setButtonText", "Random Level"); //set the text
         rButton.SendMessage("setColor", menuButtonColor);     //and the color
         rButton.transform.SetParent(this.transform, false);   //and it to the menu
@@ -90,7 +111,7 @@ public class LevelSelectScript : BaseBehaviour
         //throw in a "quit" button also to exit the game with, if we are not in the editor or a web build (both of which ignore Application.Quit() anyway)
         if ((Application.isEditor == false) && (Application.isWebPlayer == false))
         {
-            GameObject qButton = Instantiate(buttonPrefab);     //create a new button
+            MenuButtonScript qButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();     //create a new button
             qButton.SendMessage("setButtonText", "Quit");       //set the text
             qButton.SendMessage("setColor", menuButtonColor);   //and the color
             qButton.transform.SetParent(this.transform, false); //and it to the menu
@@ -102,12 +123,85 @@ public class LevelSelectScript : BaseBehaviour
     }
 
     /// <summary>
+    /// [COROUTINE] creates buttons to be used as a level select.  This version is for web builds
+    /// </summary>
+    private IEnumerator setupLevelButtonsWeb()
+    {
+        //fetch the manifest
+        WWW request = new WWW(Path.Combine(Application.streamingAssetsPath, "levelManifest.txt"));
+        yield return request;
+
+        //read the manifest and create a button for each level
+        using (StreamReader manifest = new StreamReader(request.text))
+        {
+            foreach(string line in manifest.ReadToEnd().Split('\n'))
+            {
+                //skip empty lines
+                if (line == "")
+                    continue;
+
+                MenuButtonScript lButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();          //create a new button
+                lButton.SendMessage("setLevel", new WWW(Path.Combine(Application.streamingAssetsPath, line)));  //set the level by sending the button a WWW pointing at the level file
+                lButton.SendMessage("setColor", baseLevelColor);                                                //set the button color
+                lButton.transform.SetParent(this.transform, false);                                             //add it to the menu
+                menuButtons.Add(lButton);                                                                       //add it to the list of buttons
+            }
+        }
+
+        //also have a button to choose a random level with
+        MenuButtonScript rButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
+        rButton.SendMessage("setButtonText", "Random Level"); //set the text
+        rButton.SendMessage("setColor", menuButtonColor);     //and the color
+        rButton.transform.SetParent(this.transform, false);   //and it to the menu
+        menuButtons.Add(rButton);                             //and add it to the list of buttons
+
+        //throw in a "quit" button also to exit the game with, if we are not in the editor or a web build (both of which ignore Application.Quit() anyway)
+        if ((Application.isEditor == false) && (Application.isWebPlayer == false))
+        {
+            MenuButtonScript qButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
+            qButton.SendMessage("setButtonText", "Quit");       //set the text
+            qButton.SendMessage("setColor", menuButtonColor);   //and the color
+            qButton.transform.SetParent(this.transform, false); //and it to the menu
+            menuButtons.Add(qButton);                           //and add it to the list of buttons
+        }
+
+        yield return null; //give the scrollRect a frame to catch up
+        gameObject.transform.parent.parent.GetComponent<ScrollRect>().verticalNormalizedPosition = 1; //scroll the menu to the top after adding all these buttons
+    }
+
+    /// <summary>
+    /// updates (or creates) the file levelManifest.txt in the level directory that contains a listing of all available level files there
+    /// this is necessarry for web builds, which have no equivalent to .getFiles().
+    /// </summary>
+    [Show] private void updateLevelManifest()
+    {
+        //find levels
+        DirectoryInfo dir = new DirectoryInfo (Path.Combine (Application.streamingAssetsPath, levelDir));  //find level folder
+        FileInfo[] files = dir.GetFiles ("*.xml");                                              //get list of .xml files from it
+
+        //where the manifest file should be
+        string manifestPath = Path.Combine(dir.FullName, "levelManifest.txt");
+
+        //delete manifest if it already exists
+        if (File.Exists(manifestPath))
+            File.Delete(manifestPath);
+
+        //create a file for the manifest
+        using (StreamWriter manifest = new StreamWriter(manifestPath))
+        {
+            //for each level file, create a line in the manifest
+            foreach (FileInfo file in files)
+                manifest.WriteLine(file.Name);
+        }   
+    }
+
+    /// <summary>
     /// [COROUTINE] creates buttons to be used as a deck select
     /// </summary>
     private IEnumerator setupDeckButtons()
     {
         //create a button for using the default level deck
-        GameObject ldButton = Instantiate(buttonPrefab);             //create a new button
+        MenuButtonScript ldButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
         ldButton.SendMessage("setButtonText", "Default Level Deck"); //set the text
         ldButton.SendMessage("setColor", levelDeckColor);            //and the color
         ldButton.transform.SetParent(this.transform, false);         //add it to the menu
@@ -116,7 +210,7 @@ public class LevelSelectScript : BaseBehaviour
         //buttons for all the player decks
         foreach (XMLDeck pd in DeckManagerScript.instance.playerDecks.decks)
         {
-            GameObject pdButton = Instantiate(buttonPrefab);     //create a new button
+            MenuButtonScript pdButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
             pdButton.SendMessage("setDeck", pd);                 //set the deck
 
             //and the color (varies based on modded/not modded
@@ -133,7 +227,7 @@ public class LevelSelectScript : BaseBehaviour
         //buttons for all the premade decks
         foreach (XMLDeck pd in DeckManagerScript.instance.premadeDecks.decks)
         {
-            GameObject pdButton = Instantiate(buttonPrefab);     //create a new button
+            MenuButtonScript pdButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
             pdButton.SendMessage("setDeck", pd);                 //set the deck
             pdButton.SendMessage("setColor", premadeDeckColor);  //and the color
             pdButton.transform.SetParent(this.transform, false); //and add it to the menu
@@ -141,27 +235,27 @@ public class LevelSelectScript : BaseBehaviour
         }
 
         //random deck buttons...
-        GameObject rButton = Instantiate(buttonPrefab);                  //create a new button
+        MenuButtonScript rButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
         rButton.SendMessage("setButtonText", "random existing deck"); //set the text
-        rButton.SendMessage("setColor", menuButtonColor);                //and the color
-        rButton.transform.SetParent(this.transform, false);              //and add it to the menu for returning to the level select
-        menuButtons.Add(rButton);                                        //and add it to the list of buttons
+        rButton.SendMessage("setColor", menuButtonColor);             //and the color
+        rButton.transform.SetParent(this.transform, false);           //and add it to the menu for returning to the level select
+        menuButtons.Add(rButton);                                     //and add it to the list of buttons
 
-        GameObject vrButton = Instantiate(buttonPrefab);                  //create a new button
+        MenuButtonScript vrButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
         vrButton.SendMessage("setButtonText", "create random deck");  //set the text
-        vrButton.SendMessage("setColor", menuButtonColor);                //and the color
-        vrButton.transform.SetParent(this.transform, false);              //and add it to the menu for returning to the level select
-        menuButtons.Add(vrButton);                                        //and add it to the list of buttons
+        vrButton.SendMessage("setColor", menuButtonColor);            //and the color
+        vrButton.transform.SetParent(this.transform, false);          //and add it to the menu for returning to the level select
+        menuButtons.Add(vrButton);                                    //and add it to the list of buttons
 
         //a button to open the editor...
-        GameObject eButton = Instantiate(buttonPrefab);      //create a new button
+        MenuButtonScript eButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
         eButton.SendMessage("setButtonText", "Deck Editor"); //set the text
         eButton.SendMessage("setColor", menuButtonColor);    //and the color
         eButton.transform.SetParent(this.transform, false);  //and add it to the menu for returning to the level select
         menuButtons.Add(eButton);                            //and add it to the list of buttons
 
         //and a back button 
-        GameObject backButton = Instantiate(buttonPrefab);     //create a new button
+        MenuButtonScript backButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
         backButton.SendMessage("setButtonText", "Back");       //set the text
         backButton.SendMessage("setColor", menuButtonColor);   //and the color
         backButton.transform.SetParent(this.transform, false); //and add it to the menu for returning to the level select
@@ -176,17 +270,17 @@ public class LevelSelectScript : BaseBehaviour
     /// </summary>
     private void destroyButtons()
     {
-        foreach (GameObject button in menuButtons)
-            Destroy(button);
+        foreach (MenuButtonScript button in menuButtons)
+            Destroy(button.gameObject);
         menuButtons.Clear();
     }
 
     /// <summary>
     /// callback from level buttons.  Selects the given level and prompts for a deck
     /// </summary>
-    private void LevelSelected(FileInfo levelFile)
+    private void LevelSelected(LevelData data)
     {
-        chosenLevelFile = levelFile;           //save the chosen level
+        chosenLevel = data;                    //save the chosen level
         destroyButtons();                      //get rid of the level menu
         StartCoroutine(setupDeckButtons());    //present the deck menu
         infoImage.gameObject.SetActive(false); //hide the info image since the deck menu doesnt need it
@@ -196,12 +290,10 @@ public class LevelSelectScript : BaseBehaviour
     /// [COROUTINE] called when a level is hovered over.  Shows information about it in the text box
     /// </summary>
     /// <param name="levelFile"></param>
-    private IEnumerator LevelHovered(FileInfo levelFile)
+    private IEnumerator LevelHovered(LevelData data)
     {
-        LevelData data = LevelData.Load(Path.Combine(Application.streamingAssetsPath, levelFile.FullName));
-
         //start with the level file name, but replace the file extension with a newline
-        infoText.text = levelFile.Name.Replace(levelFile.Extension, ":\n"); ;
+        infoText.text = data.fileName.Replace(".xml", ":\n");
 
         //these values we can simply use directly
         infoText.text +=
@@ -218,7 +310,7 @@ public class LevelSelectScript : BaseBehaviour
 
         //yes, I know its awkward, but we're loading the level thumbnail with WWW.
         string thumbnailPath = "file:///" + Path.Combine(Application.streamingAssetsPath, thumbnailDir);
-        WWW www = new WWW( Path.Combine( thumbnailPath, levelFile.Name.Replace(levelFile.Extension, ".png") ) );
+        WWW www = new WWW( Path.Combine( thumbnailPath, data.fileName.Replace(".xml", ".png") ) ); //thumbnail has the same name as the level, but is a .png
         yield return www;
 
         if (www.error == null)
@@ -236,7 +328,7 @@ public class LevelSelectScript : BaseBehaviour
     {
         DeckManagerScript.instance.SendMessage("SetDeck", deck); //send deck manager the chosen deck
         DeckManagerScript.instance.Shuffle(); //always shuffle the deck, regardless of what the level file says, if the deck did not come from the level file
-        LevelManagerScript.instance.SendMessage("loadLevel", chosenLevelFile.FullName); //load the previously chosen level
+        LevelManagerScript.instance.SendMessage("loadLevel", chosenLevel); //load the previously chosen level
         Destroy(menuRoot); //we are done with this menu.  Destroy it.
     }
 
@@ -258,14 +350,12 @@ public class LevelSelectScript : BaseBehaviour
         switch(buttonText)
         {
             case "Random Level":
-                //chooses a level at random from the base game list
-
-                DirectoryInfo dir = new DirectoryInfo (Path.Combine (Application.streamingAssetsPath, levelDir));  //find level folder
-                FileInfo[] files = dir.GetFiles ("*.xml");                                              //get list of .xml files from it
+                //find all level buttons currently available
+                MenuButtonScript[] levelButtons = menuButtons.Where(mb => mb.buttonType == MenuButtonType.level).ToArray();
 
                 //choose one of them at random and treat it as if that button was clicked on
-                int fileIndex = Random.Range(0,files.Length);
-                LevelSelected(files[fileIndex]);
+                int buttonIndex = Random.Range(0,levelButtons.Length);
+                LevelSelected(levelButtons[buttonIndex].level);
 
                 break;
 
@@ -289,7 +379,7 @@ public class LevelSelectScript : BaseBehaviour
 
             case "Default Level Deck":
                 //player wants to use the predefined deck for this level.  Load the level immediately and then let the level manager load the deck for us when it sees we haven't.
-                LevelManagerScript.instance.SendMessage("loadLevel", chosenLevelFile.FullName);
+                LevelManagerScript.instance.SendMessage("loadLevel", chosenLevel);
                 Destroy(menuRoot); //we are done with this menu.  Destroy it.
                 break;
 
@@ -300,7 +390,7 @@ public class LevelSelectScript : BaseBehaviour
 
             case "Back":
                 //player wants to go back to beginning
-                chosenLevelFile = null;
+                chosenLevel = null;
                 destroyButtons();
                 StartCoroutine(setupLevelButtons());
                 infoImage.gameObject.SetActive(true);
@@ -344,11 +434,10 @@ public class LevelSelectScript : BaseBehaviour
 
             case "Default Level Deck":
                 //treat the default level deck button as if it were a reference to the level deck
-                LevelData data = LevelData.Load(Path.Combine(Application.streamingAssetsPath, chosenLevelFile.FullName));
-                if ((data.premadeDeckName == null) || (data.premadeDeckName == ""))
-                    DeckHovered(data.levelDeck);
+                if ((chosenLevel.premadeDeckName == null) || (chosenLevel.premadeDeckName == ""))
+                    DeckHovered(chosenLevel.levelDeck);
                 else
-                    DeckHovered(DeckManagerScript.instance.premadeDecks.getDeckByName(data.premadeDeckName));
+                    DeckHovered(DeckManagerScript.instance.premadeDecks.getDeckByName(chosenLevel.premadeDeckName));
                 break;
 
             case "Deck Editor":
