@@ -364,7 +364,7 @@ public class DeckManagerScript : BaseBehaviour
             writer.Flush();                                           //make sure it gets processed
             premadeDecksStream.Position = 0;                            //send the stream back to the start
 
-            //now we can finally load the enemy types
+            //now we can finally load the decks
             premadeDecks = DeckCollection.Load(premadeDecksStream, filePath);
         }
     }

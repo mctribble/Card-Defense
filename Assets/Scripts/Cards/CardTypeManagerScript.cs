@@ -52,17 +52,14 @@ public class CardTypeCollection
     }
 
     /// <summary>
-    /// returns a new CardTypeCollection loaded from the provided file
+    /// returns a new CardTypeCollection loaded from the provided stream, and stores the given path into it
     /// </summary>
-    public static CardTypeCollection Load(string path)
+    public static CardTypeCollection Load(Stream stream, string filePath)
     {
         XmlSerializer serializer = new XmlSerializer(typeof(CardTypeCollection));
-        using (var stream = new FileStream(path, FileMode.Open))
-        {
-            CardTypeCollection result = serializer.Deserialize(stream) as CardTypeCollection;
-            result.filePath = path;
-            return result;
-        }
+        CardTypeCollection result = serializer.Deserialize(stream) as CardTypeCollection;
+        result.filePath = filePath;
+        return result;
     }
 
     /// <summary>
@@ -116,7 +113,53 @@ public class CardTypeManagerScript : BaseBehaviour
             cardTypesReloadedEvent.Invoke(types);
     }
 
-    private System.Collections.IEnumerator loadCardTypes()
+    /// <summary>
+    /// [COROUTINE] loads the card types.  This version is works for any supported build
+    /// </summary>
+    private IEnumerator loadCardTypes()
+    {
+        if (Application.isWebPlayer)
+            yield return StartCoroutine(loadCardTypesWeb());
+        else
+            yield return StartCoroutine(loadCardTypesPC());
+    }
+
+    /// <summary>
+    /// [COROUTINE] loads card typeson web builds.  
+    /// </summary>
+    private IEnumerator loadCardTypesWeb()
+    {
+        //form the web request
+        string filePath = Path.Combine(Application.streamingAssetsPath, path);
+        WWW request = new WWW(filePath);
+
+        //wait for the request to load
+        yield return request;
+
+        //show error if there was one
+        if (request.error != null)
+        {
+            MessageHandlerScript.Error("Error loading card types:\n" + request.error);
+            yield break;
+        }
+
+        //or, if we were successful, create a new stream and fill it with the contents of the web request:
+        using (MemoryStream cardTypesStream = new MemoryStream())    //create the stream
+        {
+            StreamWriter writer = new StreamWriter(cardTypesStream); //used to write to it
+            writer.Write(request.text);                               //write contents of the request
+            writer.Flush();                                           //make sure it gets processed
+            cardTypesStream.Position = 0;                            //send the stream back to the start
+
+            //now we can finally load the decks
+            types = CardTypeCollection.Load(cardTypesStream, filePath);
+        }
+    }
+
+    /// <summary>
+    /// [COROUTINE] loads the card types.  This version is for PC builds
+    /// </summary>
+    private IEnumerator loadCardTypesPC()
     {
         //wait for the dependency manager to exist before we do this
         while (DependencyManagerScript.instance == null)
@@ -127,7 +170,10 @@ public class CardTypeManagerScript : BaseBehaviour
             yield return null;
 
         //load base game cards
-        types = CardTypeCollection.Load(Path.Combine(Application.streamingAssetsPath, path));
+        string filePath = Path.Combine(Application.streamingAssetsPath, path);
+        using (FileStream stream = new FileStream(filePath, FileMode.Open))
+            types = CardTypeCollection.Load(stream, filePath);
+
         foreach (PlayerCardData baseCard in types.cardTypes)
             baseCard.isModded = false; //flag base game cards as being from the base game
 
@@ -140,7 +186,8 @@ public class CardTypeManagerScript : BaseBehaviour
         foreach (FileInfo f in modFiles)
         {
             Debug.Log("found card mod file: " + f.Name);
-            modCardCollections.Add(CardTypeCollection.Load(f.FullName));
+            using (FileStream stream = new FileStream(f.FullName, FileMode.Open))
+                modCardCollections.Add(CardTypeCollection.Load(stream, f.FullName));
         }
 
         //get the dependency manager to sort/cull the list
