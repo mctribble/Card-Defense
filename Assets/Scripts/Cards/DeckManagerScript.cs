@@ -257,7 +257,6 @@ public class DeckManagerScript : BaseBehaviour
     private bool shouldShowSettings() { return !Application.isPlaying; }
     [VisibleWhen("shouldShowSettings")] public static     DeckManagerScript instance; //singleton instance
     [VisibleWhen("shouldShowSettings")] public string     premadeDeckPath;            //location of premade deck file
-    [VisibleWhen("shouldShowSettings")] public string     playerDeckPath;             //location of player deck file
     [VisibleWhen("shouldShowSettings")] public HandScript playerHand;                 //reference to the player's hand, if present
 
     //casualty report settings: a new card is spawned, given these properties, then immediately discarded to report a card death to the player
@@ -299,7 +298,7 @@ public class DeckManagerScript : BaseBehaviour
     {
         instance = this;
         premadeDecks = DeckCollection.Load(Path.Combine(Application.streamingAssetsPath, premadeDeckPath));
-        playerDecks  = DeckCollection.Load(Path.Combine(Application.streamingAssetsPath, playerDeckPath));
+        playerDecks  = DeckCollection.Load(Path.Combine(Application.persistentDataPath, "playerDecks.xml"));
         currentDeck = new List<PlayerCard>();
         deckSize = 0;
         curDeckCharges = 0;
@@ -313,7 +312,7 @@ public class DeckManagerScript : BaseBehaviour
     {
         //reload definitions
         premadeDecks = DeckCollection.Load(Path.Combine(Application.streamingAssetsPath, premadeDeckPath));
-        playerDecks = DeckCollection.Load(Path.Combine(Application.streamingAssetsPath, playerDeckPath));
+        playerDecks = DeckCollection.Load(Path.Combine(Application.persistentDataPath, "playerDecks.xml"));
 
         //clear out the current deck
         currentDeck.Clear();
@@ -353,7 +352,7 @@ public class DeckManagerScript : BaseBehaviour
     /// </summary>
     public void savePlayerDecks()
     {
-        playerDecks.Save(Path.Combine(Application.streamingAssetsPath, playerDeckPath));
+        playerDecks.Save(Path.Combine(Application.persistentDataPath, "playerDecks.xml")); //TODO: make save file per-user if/when user accounts exist
     }
 
     /// <summary>
