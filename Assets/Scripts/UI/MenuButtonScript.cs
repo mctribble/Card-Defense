@@ -67,23 +67,22 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
         }
 
         //or, if we were successful, create a new stream and fill it with the contents of the web request:
-        MemoryStream levelStream = new MemoryStream();       //create the stream
-        StreamWriter writer = new StreamWriter(levelStream); //used to write to it
-        writer.Write(request.text);                          //write contents of the request
-        writer.Flush();                                      //make sure it gets processed
-        levelStream.Position = 0;                            //send the stream back to the start
+        using (MemoryStream levelStream = new MemoryStream())     //create the stream
+        {
+            StreamWriter writer = new StreamWriter(levelStream); //used to write to it
+            writer.Write(request.text);                          //write contents of the request
+            writer.Flush();                                      //make sure it gets processed
+            levelStream.Position = 0;                            //send the stream back to the start
 
-        //figure out the file name
-        System.Uri address = new System.Uri(request.url);      //fetch address from the web request
-        string fileName = Path.GetFileName(address.LocalPath); //set button text to the file name (we know it's a file already, or we would have errored earlier)
+            //figure out the file name
+            System.Uri address = new System.Uri(request.url);      //fetch address from the web request
+            string fileName = Path.GetFileName(address.LocalPath); //set button text to the file name (we know it's a file already, or we would have errored earlier)
 
-        //now we can finally setup the level button
-        level = LevelData.Load(levelStream, fileName);                 //load the levelData
-        buttonText.text = fileName.Remove(buttonText.text.Length - 4); //remove the '.xml' from the file name to get the button text
-        buttonType = MenuButtonType.level;                             //this is now a usable level button
-
-        //dispose of the stream since we dont need it anymore
-        levelStream.Dispose();
+            //now we can finally setup the level button
+            level = LevelData.Load(levelStream, fileName);                 //load the levelData
+            buttonText.text = fileName.Remove(buttonText.text.Length - 4); //remove the '.xml' from the file name to get the button text
+            buttonType = MenuButtonType.level;                             //this is now a usable level button
+        }
     }
 
     /// <summary>

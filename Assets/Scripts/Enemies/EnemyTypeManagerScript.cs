@@ -161,13 +161,35 @@ public class EnemyTypeManagerScript : BaseBehaviour
     }
 
     /// <summary>
-    /// loads enemy types.  This version is for Web builds, and does not support mods.
+    /// [COROUTINE] loads enemy types.  This version is for Web builds, and does not support mods.
     /// </summary>
-    private void loadEnemyTypesWeb()
+    private IEnumerator loadEnemyTypesWeb()
     {
+        //form the web request
         string filePath = Path.Combine(Application.streamingAssetsPath, path);
-        using (FileStream stream = new FileStream(filePath, FileMode.Open))
-            types = EnemyTypeCollection.Load(stream, filePath);
+        WWW request = new WWW(filePath);
+
+        //wait for the request to load
+        yield return request;
+
+        //show error if there was one
+        if (request.error != null)
+        {
+            MessageHandlerScript.Error("Error loading enemy types:\n" + request.error);
+            yield break;
+        }
+
+        //or, if we were successful, create a new stream and fill it with the contents of the web request:
+        using (MemoryStream enemyTypesStream = new MemoryStream())    //create the stream
+        {
+            StreamWriter writer = new StreamWriter(enemyTypesStream); //used to write to it
+            writer.Write(request.text);                               //write contents of the request
+            writer.Flush();                                           //make sure it gets processed
+            enemyTypesStream.Position = 0;                            //send the stream back to the start
+
+            //now we can finally load the enemy types
+            types = EnemyTypeCollection.Load(enemyTypesStream, filePath);
+        }
     }
 
     //called prior to the first frame

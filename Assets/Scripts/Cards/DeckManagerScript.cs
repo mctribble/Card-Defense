@@ -179,15 +179,12 @@ public class DeckCollection
     /// returns a new DeckCollection loaded from the given file
     /// </summary>
     /// <returns></returns>
-    public static DeckCollection Load(string path)
+    public static DeckCollection Load(Stream stream, string filePath)
     {
         XmlSerializer serializer = new XmlSerializer(typeof(DeckCollection));
-        using (var stream = new FileStream(path, FileMode.Open))
-        {
-            DeckCollection result = serializer.Deserialize(stream) as DeckCollection;
-            result.curPath = path;
-            return result;
-        }
+        DeckCollection result = serializer.Deserialize(stream) as DeckCollection;
+        result.curPath = filePath;
+        return result;
     }
 
     /// <summary>
@@ -305,12 +302,27 @@ public class DeckManagerScript : BaseBehaviour
     private void Awake()
     {
         instance = this;
-        premadeDecks = DeckCollection.Load(Path.Combine(Application.streamingAssetsPath, premadeDeckPath));
 
-        //load player decks if the file exists, or create an empty collection if not
+        //premade decks
+        if (Application.isWebPlayer)
+        {
+            StartCoroutine(loadPremadeDecksWeb()); //web player has to use a coroutine for this because it waits for a web request
+        }
+        else
+        {
+            //PC build, however, can load them right here
+            string filePath = Path.Combine(Application.streamingAssetsPath, premadeDeckPath);
+            using (FileStream stream = new FileStream(filePath, FileMode.Open))
+                premadeDecks = DeckCollection.Load(stream, filePath);
+        }
+
+        //load player decks if the file exists, or create an empty collection if not.  
+        //This file is local even on web builds, so it doesn't need special handling
         try
         {
-            playerDecks  = DeckCollection.Load(Path.Combine(Application.persistentDataPath, "playerDecks.xml"));
+            string filePath = Path.Combine(Application.persistentDataPath, "playerDecks.xml");
+            using (FileStream stream = new FileStream(filePath, FileMode.Open)) 
+                playerDecks  = DeckCollection.Load(stream, filePath);
         }
         catch (FileNotFoundException e)
         {
@@ -325,16 +337,52 @@ public class DeckManagerScript : BaseBehaviour
     }
 
     /// <summary>
+    /// [COROUTINE] loads premade decks on web builds.  PC builds do it in Awake().
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator loadPremadeDecksWeb()
+    {
+        //form the web request
+        string filePath = Path.Combine(Application.streamingAssetsPath, premadeDeckPath);
+        WWW request = new WWW(filePath);
+
+        //wait for the request to load
+        yield return request;
+
+        //show error if there was one
+        if (request.error != null)
+        {
+            MessageHandlerScript.Error("Error loading premade decks:\n" + request.error);
+            yield break;
+        }
+
+        //or, if we were successful, create a new stream and fill it with the contents of the web request:
+        using (MemoryStream premadeDecksStream = new MemoryStream())    //create the stream
+        {
+            StreamWriter writer = new StreamWriter(premadeDecksStream); //used to write to it
+            writer.Write(request.text);                               //write contents of the request
+            writer.Flush();                                           //make sure it gets processed
+            premadeDecksStream.Position = 0;                            //send the stream back to the start
+
+            //now we can finally load the enemy types
+            premadeDecks = DeckCollection.Load(premadeDecksStream, filePath);
+        }
+    }
+
+    /// <summary>
     /// reloads the deck lists, empties out the deck, and then reloads it
     /// </summary>
     private void Reset()
     {
-        //reload definitions
-        premadeDecks = DeckCollection.Load(Path.Combine(Application.streamingAssetsPath, premadeDeckPath));
+        //reload the premades
+        StartCoroutine(loadPremadeDecksWeb());
+
         //load player decks if the file exists, or create an empty collection if not
         try
         {
-            playerDecks  = DeckCollection.Load(Path.Combine(Application.persistentDataPath, "playerDecks.xml"));
+            string filePath = Path.Combine(Application.persistentDataPath, "playerDecks.xml");
+            using (FileStream stream = new FileStream(filePath, FileMode.Open)) 
+                playerDecks  = DeckCollection.Load(stream, filePath);
         }
         catch (FileNotFoundException e)
         {
