@@ -142,6 +142,14 @@ public class DeckCollection
     [Display(Seq.GuiBox | Seq.PerItemDuplicate | Seq.PerItemRemove)]
     public List<XMLDeck> decks;
 
+    /// <summary>
+    /// default constructor.  creates an empty collection.
+    /// </summary>
+    public DeckCollection()
+    {
+        decks = new List<XMLDeck>();
+    }
+
     //DEV: saves changes to this deck collection, with a confirmation box
     private string curPath;
     [Show] private IEnumerator saveDecks()
@@ -298,7 +306,18 @@ public class DeckManagerScript : BaseBehaviour
     {
         instance = this;
         premadeDecks = DeckCollection.Load(Path.Combine(Application.streamingAssetsPath, premadeDeckPath));
-        playerDecks  = DeckCollection.Load(Path.Combine(Application.persistentDataPath, "playerDecks.xml"));
+
+        //load player decks if the file exists, or create an empty collection if not
+        try
+        {
+            playerDecks  = DeckCollection.Load(Path.Combine(Application.persistentDataPath, "playerDecks.xml"));
+        }
+        catch (FileNotFoundException e)
+        {
+            Debug.Log("no deck save file found. (" + e.FileName + ")");
+            playerDecks = new DeckCollection();
+        }
+
         currentDeck = new List<PlayerCard>();
         deckSize = 0;
         curDeckCharges = 0;
@@ -312,7 +331,16 @@ public class DeckManagerScript : BaseBehaviour
     {
         //reload definitions
         premadeDecks = DeckCollection.Load(Path.Combine(Application.streamingAssetsPath, premadeDeckPath));
-        playerDecks = DeckCollection.Load(Path.Combine(Application.persistentDataPath, "playerDecks.xml"));
+        //load player decks if the file exists, or create an empty collection if not
+        try
+        {
+            playerDecks  = DeckCollection.Load(Path.Combine(Application.persistentDataPath, "playerDecks.xml"));
+        }
+        catch (FileNotFoundException e)
+        {
+            Debug.Log("no deck save file found. (" + e.FileName + ")");
+            playerDecks = new DeckCollection();
+        }
 
         //clear out the current deck
         currentDeck.Clear();
