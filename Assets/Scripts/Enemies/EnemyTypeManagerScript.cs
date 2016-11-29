@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
@@ -47,17 +48,16 @@ public class EnemyTypeCollection
     }
 
     /// <summary>
-    /// returns a new EnemyTypeCollection created from the given XML file
+    /// returns a new EnemyTypeCollection created from the given XML file.
+    /// note that the stream is NOT disposed!
+    /// filePath is stored in the resulting object
     /// </summary>
-    public static EnemyTypeCollection Load(string path)
+    public static EnemyTypeCollection Load(Stream stream, string filePath)
     {
         XmlSerializer serializer = new XmlSerializer(typeof(EnemyTypeCollection));
-        using (var stream = new FileStream(path, FileMode.Open))
-        {
-            EnemyTypeCollection result = serializer.Deserialize(stream) as EnemyTypeCollection;
-            result.filePath = path;
-            return result;
-        }
+        EnemyTypeCollection result = serializer.Deserialize(stream) as EnemyTypeCollection;
+        result.filePath = filePath;
+        return result;
     }
 
     public override string ToString() { return "Enemy Types: (" + enemyTypes.Count + " types)"; }
@@ -86,15 +86,29 @@ public class EnemyTypeManagerScript : BaseBehaviour
     }
 
     /// <summary>
-    /// [COROUTINE] loads enemy types.  Coroutine because we may have to wait for the dependency manager
+    /// [COROUTINE] loads enemy types.  Coroutine because we may have to wait for the dependency manager.  Works for any supported platform.
     /// </summary>
-    private System.Collections.IEnumerator loadEnemyTypes()
+    /// <returns></returns>
+    private IEnumerator loadEnemyTypes()
+    {
+        if (Application.isWebPlayer)
+            loadEnemyTypesWeb();
+        else
+            yield return StartCoroutine(loadEnemyTypesPC());
+    }
+
+    /// <summary>
+    /// [COROUTINE] loads enemy types.  Coroutine because we may have to wait for the dependency manager.  This version is for PC builds.
+    /// </summary>
+    private IEnumerator loadEnemyTypesPC()
     {
         //wait for the dependency manager to exist before we do this
         while (DependencyManagerScript.instance == null)
             yield return null;
 
-        types = EnemyTypeCollection.Load(Path.Combine(Application.streamingAssetsPath, path));
+        string filePath = Path.Combine(Application.streamingAssetsPath, path);
+        using (FileStream stream = new FileStream(filePath, FileMode.Open))
+            types = EnemyTypeCollection.Load(stream, filePath);
 
         //find the mod files
         DirectoryInfo modDir =  new DirectoryInfo (Path.Combine (Application.streamingAssetsPath, modPath));   //mod folder
@@ -105,7 +119,8 @@ public class EnemyTypeManagerScript : BaseBehaviour
         foreach (FileInfo f in modFiles)
         {
             Debug.Log("found enemy mod file: " + f.Name);
-            modEnemyCollections.Add(EnemyTypeCollection.Load(f.FullName));
+            using (FileStream stream = new FileStream(f.FullName, FileMode.Open))
+                modEnemyCollections.Add(EnemyTypeCollection.Load(stream, f.FullName));
         }
 
         //get the dependency manager to sort/cull the list
@@ -143,6 +158,16 @@ public class EnemyTypeManagerScript : BaseBehaviour
         }
 
         yield break;
+    }
+
+    /// <summary>
+    /// loads enemy types.  This version is for Web builds, and does not support mods.
+    /// </summary>
+    private void loadEnemyTypesWeb()
+    {
+        string filePath = Path.Combine(Application.streamingAssetsPath, path);
+        using (FileStream stream = new FileStream(filePath, FileMode.Open))
+            types = EnemyTypeCollection.Load(stream, filePath);
     }
 
     //called prior to the first frame
