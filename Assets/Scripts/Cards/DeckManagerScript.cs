@@ -374,8 +374,18 @@ public class DeckManagerScript : BaseBehaviour
     /// </summary>
     private void Reset()
     {
-        //reload the premades
-        StartCoroutine(loadPremadeDecksWeb());
+        //premade decks
+        if (Application.isWebPlayer)
+        {
+            StartCoroutine(loadPremadeDecksWeb()); //web player has to use a coroutine for this because it waits for a web request
+        }
+        else
+        {
+            //PC build, however, can load them right here
+            string filePath = Path.Combine(Application.streamingAssetsPath, premadeDeckPath);
+            using (FileStream stream = new FileStream(filePath, FileMode.Open))
+                premadeDecks = DeckCollection.Load(stream, filePath);
+        }
 
         //load player decks if the file exists, or create an empty collection if not
         try
