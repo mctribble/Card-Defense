@@ -36,7 +36,10 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
     /// </summary>
     private void setLevel(FileInfo file)
     {
-        level = LevelData.Load(new FileStream(file.FullName, FileMode.Open), file.Name); //load the levelData
+        //load the levelData
+        using (FileStream stream = new FileStream(file.FullName, FileMode.Open))
+            level = LevelData.Load(stream, file.Name); 
+
         buttonText.text = file.Name;                                                     //set button text
         buttonText.text = buttonText.text.Remove(buttonText.text.Length - 4);            //remove the '.xml' from the button text
         buttonType = MenuButtonType.level;                                               //this is now a level button
