@@ -125,6 +125,8 @@ public class EnemyScript : BaseBehaviour
     public AudioSource audioSource;     //source to use to play sounds from
     public AudioClip[] enemyHitSounds;  //sounds to play when the player is hurt.  one of these is chosen at random.
     public AudioClip[] deathSounds;     //sounds to play when this enemy is dead.  one of these is chosen at random.
+    public static int  maxSoundsAtOnce; //limit to how many sounds can be played at once, shared across ALL enemies
+    private static int curSoundsAtOnce; //number of sounds currently playing, shared across ALL enemies
 
     //enemy data
     public int        damage;        
@@ -355,7 +357,8 @@ public class EnemyScript : BaseBehaviour
         {
             int soundToPlay = Random.Range(0, enemyHitSounds.Length);
             audioSource.clip = enemyHitSounds[soundToPlay];
-            audioSource.Play();
+            //audioSource.Play();
+            StartCoroutine(playRespectLimit(audioSource)); //plays the sound, if we are not at the sound cap
         }
 
         if (curHealth <= 0)
@@ -456,7 +459,8 @@ public class EnemyScript : BaseBehaviour
         //sound
         int soundToPlay = Random.Range(0, deathSounds.Length);
         audioSource.clip = deathSounds[soundToPlay];
-        audioSource.Play();
+        //audioSource.Play();
+        StartCoroutine(playRespectLimit(audioSource)); //plays the sound, if we are not at the sound cap
 
         //disable normal images and turn on the death burst instead
         enemyImage.enabled = false;
@@ -490,5 +494,23 @@ public class EnemyScript : BaseBehaviour
 
         Destroy(gameObject);
         yield break;
+    }
+
+    /// <summary>
+    /// plays a sound from the given source if the limit of simultaneous sounds has not been reached.
+    /// Also tracks number of sounds playing
+    /// </summary>
+    private IEnumerator playRespectLimit(AudioSource source)
+    {
+        //skip if at the cap
+        if (curSoundsAtOnce == maxSoundsAtOnce)
+            yield break;
+
+        //otherwise, play the sound and track it
+        curSoundsAtOnce++;
+        source.Play();
+        while (source.isPlaying)
+            yield return null;
+        curSoundsAtOnce--;
     }
 }
