@@ -34,7 +34,7 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
     /// <summary>
     /// the button is set up to correspond to the given LOCAL level file
     /// </summary>
-    private void setLevel(FileInfo file)
+    public void setLevel(FileInfo file)
     {
         //load the levelData
         using (FileStream stream = new FileStream(file.FullName, FileMode.Open))
@@ -48,7 +48,7 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
     /// <summary>
     /// the button is set up to correspond to the given REMOTE level file.  The web request does not need to be complete before calling
     /// </summary>
-    private IEnumerator setLevel(WWW request)
+    public IEnumerator setLevel(WWW request)
     {
         //set up placeholder info during loading
         buttonText.text = "Loading...";
@@ -75,13 +75,24 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
             levelStream.Position = 0;                            //send the stream back to the start
 
             //figure out the file name
-            System.Uri address = new System.Uri(request.url);      //fetch address from the web request
-            string fileName = Path.GetFileName(address.LocalPath); //set button text to the file name (we know it's a file already, or we would have errored earlier)
+            string fileName = "";
+            if (request.url.Contains("file://"))
+            {
+                //special, simplified handling for access of web player through file:///
+                fileName = Path.GetFileName(request.url);
+            }
+            else
+            {
+                //usual handling for access of web player through the web or a connection to localhost
+                System.Uri address = new System.Uri(request.url); //fetch address from the web request
+                fileName = Path.GetFileName(address.LocalPath);   //set button text to the file name (we know it's a file already, or we would have errored earlier)
+                fileName = fileName.Replace("%20", " ");          //replace URL special sequence "%20" with the ' ' it is meant to represent.
+            }
 
             //now we can finally setup the level button
-            level = LevelData.Load(levelStream, fileName);                 //load the levelData
-            buttonText.text = fileName.Remove(buttonText.text.Length - 4); //remove the '.xml' from the file name to get the button text
-            buttonType = MenuButtonType.level;                             //this is now a usable level button
+            level = LevelData.Load(levelStream, fileName); //load the levelData
+            buttonText.text = fileName.Replace(".xml",""); //button text is the file name without extension
+            buttonType = MenuButtonType.level;             //this is now a usable level button
         }
     }
 
@@ -117,7 +128,7 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
     /// <summary>
     /// sets the color for this button
     /// </summary>
-    private void setColor(Color c)
+    public void setColor(Color c)
     {
         GetComponent<Image>().color = c;
     }

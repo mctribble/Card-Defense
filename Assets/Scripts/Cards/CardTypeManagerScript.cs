@@ -118,7 +118,7 @@ public class CardTypeManagerScript : BaseBehaviour
     /// </summary>
     private IEnumerator loadCardTypes()
     {
-        if (Application.isWebPlayer)
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
             yield return StartCoroutine(loadCardTypesWeb());
         else
             yield return StartCoroutine(loadCardTypesPC());
@@ -130,7 +130,8 @@ public class CardTypeManagerScript : BaseBehaviour
     private IEnumerator loadCardTypesWeb()
     {
         //form the web request
-        string filePath = Path.Combine(Application.streamingAssetsPath, path);
+        string filePath = Application.streamingAssetsPath + '/' + path;
+        //while (filePath.StartsWith("/")) filePath = filePath.Substring(1); //remove any leading /'s
         WWW request = new WWW(filePath);
 
         //wait for the request to load
@@ -154,6 +155,8 @@ public class CardTypeManagerScript : BaseBehaviour
             //now we can finally load the decks
             types = CardTypeCollection.Load(cardTypesStream, filePath);
         }
+
+        Debug.Log(types.cardTypes.Count + " card types loaded.");
     }
 
     /// <summary>

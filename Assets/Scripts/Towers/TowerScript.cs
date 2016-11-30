@@ -433,8 +433,12 @@ public class TowerScript : BaseBehaviour
         wavesRemaining = d.lifespan;
         upgradeCap = (ushort)d.upgradeCap;
 
-        //yes, I know its awkward, but we're setting the sprite with WWW.
-        WWW www = new WWW ("file:///" + Application.streamingAssetsPath + "/Art/Sprites/" + d.towerSpriteName);
+        //yes, I know its awkward, but we're setting the sprite with WWW, even on pc
+        string spritePath = "";
+        if (Application.platform != RuntimePlatform.WebGLPlayer)
+            spritePath = "file:///";
+        spritePath += Application.streamingAssetsPath + "/Art/Sprites/" + d.towerSpriteName;
+        WWW www = new WWW (spritePath);
         yield return www;
 
         if (www.error == null)

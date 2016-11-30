@@ -463,8 +463,12 @@ public class PlayerCardScript : CardScript, IPointerClickHandler
         //this card has a target.  create a tooltip object to handle casting.
         tooltipInstance = (GameObject)Instantiate(tooltipPrefab, Vector3.zero, Quaternion.identity);    //instantiate prefab
 
-        //set sprite with *twitch* WWW *twitch*
-        WWW www = new WWW ("file:///" + Application.streamingAssetsPath + "/Art/Sprites/" + card.data.tooltipSpriteName);
+        //set sprite with WWW, even on PC *twitch*
+        string spritePath = "";
+        if (Application.platform != RuntimePlatform.WebGLPlayer)
+            spritePath = "file:///";
+        spritePath += Application.streamingAssetsPath + "/Art/Sprites/" + card.data.tooltipSpriteName;
+        WWW www = new WWW (spritePath);
         yield return www;
         tooltipInstance.GetComponentInChildren<Image>().sprite = Sprite.Create(
             www.texture,
@@ -572,8 +576,12 @@ public class PlayerCardScript : CardScript, IPointerClickHandler
         updateChargeText();
         updateDescriptionText();
 
-        //load art with WWW (yes, really!  I couldn't find an easier way to do this and still let the user access the image files)
-        WWW www = new WWW ("file:///" + Application.streamingAssetsPath + "/Art/Card Art/" + card.data.cardArtName); //load file
+        //load art with WWW, even on PC (yes, really!  I couldn't find an easier way to do this and still let the user access the image files)
+        string artPath = "";
+        if (Application.platform != RuntimePlatform.WebGLPlayer)
+            artPath = "file:///";
+        artPath += Application.streamingAssetsPath + "/Art/Card Art/" + card.data.cardArtName;
+        WWW www = new WWW (artPath); //load file
         yield return www; //wait for it to load
 
         if (www.error == null)

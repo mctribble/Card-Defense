@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
@@ -129,6 +130,10 @@ public class XMLDeck
 [System.Serializable]
 public class DeckCollection
 {
+    //import the (teeny tiny) javascript lib being used to make sure saving persists on webGL builds
+    [DllImport("__Internal")]
+    private static extern void SyncFiles();
+
     /// <summary>
     /// used to specify the proper .xsd file in the serialized xml
     /// </summary>
@@ -173,6 +178,10 @@ public class DeckCollection
         {
             serializer.Serialize(stream, this);
         }
+
+        //on web builds, javascript call to try and make sure the changes persist (see http://answers.unity3d.com/questions/1095407/saving-webgl.html and HandleIO.jslib)
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+            SyncFiles();
     }
 
     /// <summary>
@@ -304,7 +313,7 @@ public class DeckManagerScript : BaseBehaviour
         instance = this;
 
         //premade decks
-        if (Application.isWebPlayer)
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
         {
             StartCoroutine(loadPremadeDecksWeb()); //web player has to use a coroutine for this because it waits for a web request
         }
@@ -324,9 +333,9 @@ public class DeckManagerScript : BaseBehaviour
             using (FileStream stream = new FileStream(filePath, FileMode.Open)) 
                 playerDecks  = DeckCollection.Load(stream, filePath);
         }
-        catch (FileNotFoundException e)
+        catch (Exception e)
         {
-            Debug.Log("no deck save file found. (" + e.FileName + ")");
+            Debug.Log("no deck save file found. (" + e.Message + ")");
             playerDecks = new DeckCollection();
         }
 
@@ -343,7 +352,8 @@ public class DeckManagerScript : BaseBehaviour
     private IEnumerator loadPremadeDecksWeb()
     {
         //form the web request
-        string filePath = Path.Combine(Application.streamingAssetsPath, premadeDeckPath);
+        string filePath = Application.streamingAssetsPath + '/' + premadeDeckPath;
+        //while (filePath.StartsWith("/")) filePath = filePath.Substring(1); //remove any leading /'s
         WWW request = new WWW(filePath);
 
         //wait for the request to load
@@ -375,7 +385,7 @@ public class DeckManagerScript : BaseBehaviour
     private void Reset()
     {
         //premade decks
-        if (Application.isWebPlayer)
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
         {
             StartCoroutine(loadPremadeDecksWeb()); //web player has to use a coroutine for this because it waits for a web request
         }
@@ -394,9 +404,9 @@ public class DeckManagerScript : BaseBehaviour
             using (FileStream stream = new FileStream(filePath, FileMode.Open)) 
                 playerDecks  = DeckCollection.Load(stream, filePath);
         }
-        catch (FileNotFoundException e)
+        catch (Exception e)
         {
-            Debug.Log("no deck save file found. (" + e.FileName + ")");
+            Debug.Log("no deck save file found. (" + e.Message + ")");
             playerDecks = new DeckCollection();
         }
 

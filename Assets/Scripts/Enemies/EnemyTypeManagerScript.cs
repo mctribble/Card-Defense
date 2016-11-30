@@ -91,8 +91,8 @@ public class EnemyTypeManagerScript : BaseBehaviour
     /// <returns></returns>
     private IEnumerator loadEnemyTypes()
     {
-        if (Application.isWebPlayer)
-            loadEnemyTypesWeb();
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+            yield return StartCoroutine(loadEnemyTypesWeb());
         else
             yield return StartCoroutine(loadEnemyTypesPC());
     }
@@ -166,7 +166,7 @@ public class EnemyTypeManagerScript : BaseBehaviour
     private IEnumerator loadEnemyTypesWeb()
     {
         //form the web request
-        string filePath = Path.Combine(Application.streamingAssetsPath, path);
+        string filePath = Application.streamingAssetsPath + '/' + path;
         WWW request = new WWW(filePath);
 
         //wait for the request to load
@@ -190,6 +190,8 @@ public class EnemyTypeManagerScript : BaseBehaviour
             //now we can finally load the enemy types
             types = EnemyTypeCollection.Load(enemyTypesStream, filePath);
         }
+
+        Debug.Log(types.enemyTypes.Count + "enemy types loaded.");
     }
 
     //called prior to the first frame

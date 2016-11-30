@@ -253,50 +253,64 @@ public class LevelManagerScript : BaseBehaviour
     /// </summary>
     private IEnumerator loadLevel(LevelData levelToLoad)
     {
+        Debug.Log("loading level: " + levelToLoad.fileName);
         data = levelToLoad;
 
-        //wait for dependency manager to be ready to test dependencies
-        while (DependencyManagerScript.instance == null || DependencyManagerScript.instance.enemyDepenciesHandled == false || DependencyManagerScript.instance.cardDependenciesHandled == false)
-            yield return null;
-
-        //test for mod dependencies.  If unmet, show message and reload the scene
-        if (DependencyManagerScript.instance.testLevelDependencies(data) == false)
+        //test dependencies, if we are on a platform that does that
+        if (Application.platform != RuntimePlatform.WebGLPlayer)
         {
-            MessageHandlerScript.Error("Could not load level: unmet dependencies");
-            UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
-            yield break;
+            //wait for dependency manager to be ready to test dependencies
+            while (DependencyManagerScript.instance == null || DependencyManagerScript.instance.enemyDepenciesHandled == false || DependencyManagerScript.instance.cardDependenciesHandled == false)
+                yield return null;
+
+            //test for mod dependencies.  If unmet, show message and reload the scene
+            if (DependencyManagerScript.instance.testLevelDependencies(data) == false)
+            {
+                MessageHandlerScript.Error("Could not load level: unmet dependencies");
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
+                yield break;
+            }
         }
 
-        //set background
+        //set background using WWW, even if we are not on a web build, since this is the "right" way to load images at runtime
+        Debug.Log("background: " + data.background);
         string filename = Application.streamingAssetsPath + "/Art/Backgrounds/" + data.background;
-        if (File.Exists(filename))
-        {
-            WWW www = new WWW ("file:///" + filename);
-            yield return www;
+        if (Application.platform != RuntimePlatform.WebGLPlayer)
+            filename = "file:///" + filename;
+
+        WWW www = new WWW (filename);
+        yield return www;
+
+        if (www.error == null)
             background.texture = www.texture;
-        }
         else
-        {
-            Debug.LogWarning("Could not find background: " + filename);
-        }
+            Debug.LogWarning("Could not load background: " + filename + " (" + www.error + ")");
 
         //if no deck has been loaded yet, then use the level deck
         if (DeckManagerScript.instance.deckSize == 0)
             loadLevelDeck();
+
+        Debug.Log("deck: " + DeckManagerScript.instance.currentDeckName);
 
         //wait a few frames to give other managers a chance to catch up
         yield return null;
         yield return null;
         yield return null;
 
+        Debug.Log("predefined waves: " + data.waves.Count);
         //apply wave effects on predefined waves
-        for( int i = 0; i < data.waves.Count; i++)
+        for (int i = 0; i < data.waves.Count; i++)
+        {
             if (data.waves[i].enemyData.effectData != null)
                 foreach (IEffect e in data.waves[i].enemyData.effectData.effects)
                     if (e.triggersAs(EffectType.wave))
                         data.waves[i] = ((IEffectWave)e).alteredWaveData(data.waves[i]);
 
+            Debug.Log("wave " + (i+1) + ": " + data.waves[i].ToString());
+        }
+
         //generate the random waves
+        Debug.Log("random waves: " + data.randomWaveCount);
         for (uint i = 0; i < data.randomWaveCount; i++)
         {
             //figure out which wave we are making
@@ -333,6 +347,7 @@ public class LevelManagerScript : BaseBehaviour
                     if (e.triggersAs(EffectType.wave))
                         waveData = ((IEffectWave)e).alteredWaveData(waveData);
 
+            Debug.Log("wave " + wave + ": " + waveData.ToString());
             data.waves.Add(waveData);
         }
 
@@ -340,6 +355,7 @@ public class LevelManagerScript : BaseBehaviour
         wavesInDeck = data.waves.Count;
 
         //create the spawners
+        Debug.Log("spawn points: " + data.spawners.Count);
         foreach (SpawnerData sd in data.spawners)
         {
             GameObject s = (GameObject) GameObject.Instantiate(spawnerPrefab); //create spawner
@@ -348,6 +364,7 @@ public class LevelManagerScript : BaseBehaviour
         }
 
         //create the towers
+        Debug.Log("premade towers: " + data.towers.Count);
         foreach (PremadeTower pt in data.towers)
         {
             GameObject t = (GameObject) GameObject.Instantiate(towerPrefab, new Vector3(pt.x, pt.y, -3), Quaternion.identity);  //summon tower
@@ -391,6 +408,7 @@ public class LevelManagerScript : BaseBehaviour
 
         //fire the level loaded event so interested objects can act on it
         LevelLoadedEvent();
+        Debug.Log("Level loaded.");
     }
 
     /// <summary>

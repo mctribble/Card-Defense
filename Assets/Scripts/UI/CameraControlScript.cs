@@ -93,6 +93,10 @@ public class CameraControlScript : BaseBehaviour
     /// </summary>
     [Show] public IEnumerator saveLevelThumbnail()
     {
+        //skip if the platform does not support it
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+            yield break;
+
         if ( LevelManagerScript.instance.levelLoaded )
         {
             string screenshotName = Path.Combine(Application.streamingAssetsPath, thumbnailPath); //find the folder we're saving to

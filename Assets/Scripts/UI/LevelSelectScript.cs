@@ -57,10 +57,10 @@ public class LevelSelectScript : BaseBehaviour
     /// </summary>
     private IEnumerator setupLevelButtons()
     {
-        if (Application.isWebPlayer)
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
         {
-          //this is a web build.  Run that version
-          yield return StartCoroutine(setupLevelButtonsWeb());
+            //this is a web build.  Run that version
+            yield return StartCoroutine(setupLevelButtonsWeb());
         }
         else
         {
@@ -109,7 +109,7 @@ public class LevelSelectScript : BaseBehaviour
         menuButtons.Add(rButton);                             //and add it to the list of buttons
 
         //throw in a "quit" button also to exit the game with, if we are not in the editor or a web build (both of which ignore Application.Quit() anyway)
-        if ((Application.isEditor == false) && (Application.isWebPlayer == false))
+        if ((Application.isEditor == false) && (Application.platform == RuntimePlatform.WebGLPlayer == false))
         {
             MenuButtonScript qButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();     //create a new button
             qButton.SendMessage("setButtonText", "Quit");       //set the text
@@ -128,24 +128,33 @@ public class LevelSelectScript : BaseBehaviour
     private IEnumerator setupLevelButtonsWeb()
     {
         //fetch the manifest
-        WWW request = new WWW(Path.Combine(Application.streamingAssetsPath, "levelManifest.txt"));
+        string manifestPath = Application.streamingAssetsPath + '/' + levelDir + "levelManifest.txt";
+        //while (manifestPath.StartsWith("/")) manifestPath = manifestPath.Substring(1); //remove any leading /'s
+        Debug.Log("Looking for level manifest at " + manifestPath);
+        WWW request = new WWW(manifestPath);
         yield return request;
 
-        //read the manifest and create a button for each level
-        using (StreamReader manifest = new StreamReader(request.text))
-        {
-            foreach(string line in manifest.ReadToEnd().Split('\n'))
-            {
-                //skip empty lines
-                if (line == "")
-                    continue;
+        //error check
+        if (request.error != null)
+            Debug.LogError("error loading manifest: " + request.error);
 
-                MenuButtonScript lButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();          //create a new button
-                lButton.SendMessage("setLevel", new WWW(Path.Combine(Application.streamingAssetsPath, line)));  //set the level by sending the button a WWW pointing at the level file
-                lButton.SendMessage("setColor", baseLevelColor);                                                //set the button color
-                lButton.transform.SetParent(this.transform, false);                                             //add it to the menu
-                menuButtons.Add(lButton);                                                                       //add it to the list of buttons
-            }
+        //read the manifest and create a button for each level
+        string[] manifestLines = request.text.Split('\n');
+        foreach(string line in manifestLines)
+        {
+            string levelName = line.Trim(); //read the next line on the manifest and trim off the whitespace
+
+            //skip if the name we are left with is blank
+            if (levelName == "")
+                continue;
+
+            MenuButtonScript lButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
+            string levelPath = Application.streamingAssetsPath + '/' + levelDir + levelName;       //path of the level file
+            Debug.Log("requesting level " + levelPath);                                            //log the request
+            StartCoroutine(lButton.setLevel(new WWW(levelPath)));                                  //set the level by sending the button request for the level file
+            lButton.setColor(baseLevelColor);                                                      //set the button color
+            lButton.transform.SetParent(this.transform, false);                                    //add it to the menu
+            menuButtons.Add(lButton);                                                              //add it to the list of buttons
         }
 
         //also have a button to choose a random level with
@@ -156,7 +165,7 @@ public class LevelSelectScript : BaseBehaviour
         menuButtons.Add(rButton);                             //and add it to the list of buttons
 
         //throw in a "quit" button also to exit the game with, if we are not in the editor or a web build (both of which ignore Application.Quit() anyway)
-        if ((Application.isEditor == false) && (Application.isWebPlayer == false))
+        if ((Application.isEditor == false) && (Application.platform == RuntimePlatform.WebGLPlayer == false))
         {
             MenuButtonScript qButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
             qButton.SendMessage("setButtonText", "Quit");       //set the text
@@ -308,15 +317,24 @@ public class LevelSelectScript : BaseBehaviour
         //such segments are at the "end of the line", and as such are the points the player must defend
         infoText.text += data.pathSegments.FindAll(s => (data.pathSegments.Exists(ss => ss.startPos == s.endPos) == false)).Count + " points to defend";
 
-        //yes, I know its awkward, but we're loading the level thumbnail with WWW.
-        string thumbnailPath = "file:///" + Path.Combine(Application.streamingAssetsPath, thumbnailDir);
+        //yes, I know its awkward, but we're loading the level thumbnail with WWW, even on a PC build
+        string thumbnailPath = "";
+        if (Application.platform != RuntimePlatform.WebGLPlayer)
+            thumbnailPath = "file:///";
+
+        thumbnailPath += Path.Combine(Application.streamingAssetsPath, thumbnailDir);
         WWW www = new WWW( Path.Combine( thumbnailPath, data.fileName.Replace(".xml", ".png") ) ); //thumbnail has the same name as the level, but is a .png
         yield return www;
 
         if (www.error == null)
+        {
             infoImage.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
+        }
         else
+        {
             infoImage.sprite = Resources.Load<Sprite>("Sprites/Error");
+            Debug.LogError("could not load level thumbnail (" + www.error + ")");
+        }
 
         infoImage.type = Image.Type.Sliced;
     }
