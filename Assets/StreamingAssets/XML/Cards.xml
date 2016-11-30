@@ -87,7 +87,7 @@
       </effectData>
     </Card>
     <Card Type="tower" Name="Nova Tower" Description="The fury of a single sun tends to be sufficient" Charges="1" Art="Nova_Tower.png" Tooltip="Tower_Round.png" Token="false">
-      <towerData Recharge="30" Range="10" Damage="200" Lifespan="1" UpgradeCap="0" Sprite="Tower_Round.png">
+      <towerData Recharge="30" Range="8" Damage="175" Lifespan="1" UpgradeCap="0" Sprite="Tower_Round.png">
         <towerColor r="0.5" g="0" b="0.5" a="1" />
       </towerData>
       <effectData>
