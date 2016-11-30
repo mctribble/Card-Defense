@@ -321,9 +321,9 @@ public class TowerScript : BaseBehaviour
                                 left.Add(t);
                             else if (t.transform.position.x > this.transform.position.x)
                                 right.Add(t);
-                            else if (t.transform.position.y < this.transform.position.y)
-                                up.Add(t);
                             else if (t.transform.position.y > this.transform.position.y)
+                                up.Add(t);
+                            else if (t.transform.position.y < this.transform.position.y)
                                 down.Add(t);
                         }
 
