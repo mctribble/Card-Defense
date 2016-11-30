@@ -59,6 +59,8 @@ public class CardPreviewScript : CardScript, IPointerClickHandler
     /// </summary>
     private IEnumerator PreviewCard(PlayerCardData c)
     {
+        //Debug.Log("previewing " + c.cardName); //DEBUG ONLY
+
         //if null, show card back instead
         if (c == null)
         {
@@ -77,14 +79,19 @@ public class CardPreviewScript : CardScript, IPointerClickHandler
         string artPath = "";
         if (Application.platform != RuntimePlatform.WebGLPlayer)
             artPath = "file:///";
-        artPath = Application.streamingAssetsPath + "/Art/Card Art/" + data.cardArtName;
+        artPath += Application.streamingAssetsPath + "/Art/Card Art/" + data.cardArtName;
         WWW www = new WWW (artPath); //load file
         yield return www; //wait for it to load
 
         if (www.error == null)
+        {
             art.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
+        }
         else
+        {
             art.sprite = Resources.Load<Sprite>("Sprites/Error");
+            Debug.LogWarning("Could not preview card art: (" + www.error + ")");
+        }
 
         //hide the back image
         cardBack.enabled = false;
