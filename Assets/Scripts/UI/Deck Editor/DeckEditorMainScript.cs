@@ -22,24 +22,30 @@ public class DeckEditorFilter
     //returns true if the card matches the filter
     public bool match(PlayerCardData c)
     {
-        //search in the card description uses indexOf because contains() does not support case-insensitive searching 
-        //(extended discussion of this topic can be found at http://stackoverflow.com/questions/444798/case-insensitive-containsstring/444818#444818)
-        if (searchString != null)
-            if (c.getDescription().IndexOf(searchString, System.StringComparison.OrdinalIgnoreCase) < 0) //TODO: optimize this?  currently causes TONS of string operations
-                return false;
-
+        //type filter
         if (type != null)
             if (c.cardType != type)
                 return false;
 
+        //base game cards checkbox
         if (baseCards == false)
             if (c.isModded == false)
                 return false;
 
+        //modded cards checkbox
         if (moddedCards == false)
             if (c.isModded == true)
                 return false;
 
+        //search in the card name/description uses indexOf because contains() does not support case-insensitive searching 
+        //(extended discussion of this topic can be found at http://stackoverflow.com/questions/444798/case-insensitive-containsstring/444818#444818)
+        //TODO: optimize these?  currently causes TONS of string operations
+        if (searchString != null) //if there is something in the search box
+            if (c.getDescription().IndexOf(searchString, System.StringComparison.OrdinalIgnoreCase) < 0) //and it is not in the card name
+                if (c.getDescription().IndexOf(searchString, System.StringComparison.OrdinalIgnoreCase) < 0)  //or description
+                    return false; //then it is not a match
+
+        //we haven't found a reason to exclude it, so it matches
         return true;
     }
 
@@ -216,6 +222,8 @@ public class DeckEditorMainScript : BaseBehaviour
     //called when an existing deck entry changes
     public void deckEntryUpdated (XMLDeckEntry updatedEntry)
     {
+        //Debug.Log("deckEntryUpdated"); //DEBUG ONLY
+
         //first, we have to find the entry that changed
         XMLDeckEntry oldEntry = null;
         foreach (XMLDeckEntry curEntry in openDeck.contents)
@@ -249,6 +257,8 @@ public class DeckEditorMainScript : BaseBehaviour
     //handles button clicks from the card type list
     public void CardSelected(PlayerCardData c)
     {
+        //Debug.Log("CardSelected"); //DEBUG ONLY
+
         //check the open deck and ignore the message if that card is already in the deck
         foreach (XMLDeckEntry entry in openDeck.contents)
             if (entry.name == c.cardName)
@@ -264,6 +274,8 @@ public class DeckEditorMainScript : BaseBehaviour
     //handles all buttons in the editor that only have text attached.
     public void TextButtonSelected(string text)
     {
+        //Debug.Log("TextButtonSelected"); //DEBUG ONLY
+
         //text contains the text of the button that was clicked, so we use a case statement to differentiate between buttons
         switch (text)
         {
@@ -301,6 +313,8 @@ public class DeckEditorMainScript : BaseBehaviour
     //called when the deck name changes
     public void DeckRenamed(string newDeckName)
     {
+        //Debug.Log("deckRenamed"); //DEBUG ONLY
+
         //change the name
         openDeck.name = newDeckName;
 
@@ -315,6 +329,8 @@ public class DeckEditorMainScript : BaseBehaviour
     //called when filter type changes
     public void filterTypeChanged(int newSetting)
     {
+        //Debug.Log("filterTypeChanged"); //DEBUG ONLY
+
         switch (newSetting)
         {
             case 0: filter.type = null; break;
@@ -330,7 +346,9 @@ public class DeckEditorMainScript : BaseBehaviour
     //called when filter sort changes
     public void filterSortChanged(int newSetting)
     {
-        switch(newSetting)
+        //Debug.Log("filterSortChanged"); //DEBUG ONLY
+
+        switch (newSetting)
         {
             case 0: filter.sortBy = DeckEditorFilter.SortingRule.name; break;
             case 1: filter.sortBy = DeckEditorFilter.SortingRule.charges; break;
@@ -344,6 +362,8 @@ public class DeckEditorMainScript : BaseBehaviour
     //called when filter search changes
     public void filterSearchChanged(string newSetting)
     {
+        //Debug.Log("filterSearchChanged"); //DEBUG ONLY
+
         if (newSetting == "")
             filter.searchString = null;
         else
@@ -360,6 +380,8 @@ public class DeckEditorMainScript : BaseBehaviour
     //saves the deck collection, if there are unsaved changes
     private void saveChanges()
     {
+        //Debug.Log("saveChanges"); //DEBUG ONLY
+
         //bail early if there are no changes to save
         if (unsavedChanges == false)
             return;

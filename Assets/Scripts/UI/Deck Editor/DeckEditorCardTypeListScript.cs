@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Vexe.Runtime.Types;
 
@@ -15,14 +16,14 @@ public class DeckEditorCardTypeListScript : BaseBehaviour
     public Color spellColor;     //spell cards
     public Color highlightColor; //overlaid if this card is in the open deck
 
-    private List<GameObject> buttons;
+    private List<DeckEditorCardTypeEntryScript> buttons;
     private DeckEditorFilter filter;
 
     // Use this for initialization
     private void Start()
     {
         //init
-        buttons = new List<GameObject>();
+        buttons = new List<DeckEditorCardTypeEntryScript>();
 
         //purge dev placeholders
         foreach (Transform child in transform)
@@ -58,8 +59,8 @@ public class DeckEditorCardTypeListScript : BaseBehaviour
                 continue;
 
             //create the button and add it to the list
-            GameObject xButton = Instantiate(entryPrefab);
-            xButton.SendMessage("setCard", type);
+            DeckEditorCardTypeEntryScript xButton = Instantiate(entryPrefab).GetComponent<DeckEditorCardTypeEntryScript>();
+            xButton.setCard(type);
             xButton.transform.SetParent(this.transform, false);
             buttons.Add(xButton);
 
@@ -70,7 +71,7 @@ public class DeckEditorCardTypeListScript : BaseBehaviour
                 case PlayerCardType.tower:   buttonColor = towerColor;   break;
                 case PlayerCardType.upgrade: buttonColor = upgradeColor; break;
                 case PlayerCardType.spell:   buttonColor = spellColor;   break;
-                default:               Debug.LogWarning("card type list doesnt know what color to use for this card."); buttonColor = Color.black; break;
+                default: Debug.LogWarning("card type list doesnt know what color to use for this card."); buttonColor = Color.black; break;
             }
 
             //highlight if it is in the deck
@@ -85,23 +86,67 @@ public class DeckEditorCardTypeListScript : BaseBehaviour
                     }
                 }
             }
-            xButton.SendMessage("setColor", buttonColor);
+            xButton.setColor(buttonColor);
         }
     }
 
     //purges the buttons from the list
     private void destroyTypeEntries()
     {
-        foreach (GameObject button in buttons)
-            Destroy(button);
+        foreach (DeckEditorCardTypeEntryScript button in buttons)
+            Destroy(button.gameObject);
         buttons.Clear();
     }
 
     //refreshes the list, highlighting the current deck
     public void refresh(XMLDeck currentDeck)
     {
-        destroyTypeEntries();
-        setupTypeEntries(currentDeck);
+        //if a filter is set, operate on a list sorted and filtered according to the current settings instead of the full list
+        List<PlayerCardData> listToShow = CardTypeManagerScript.instance.types.cardTypes;
+        if (filter != null)
+            listToShow = filter.filterAndSortCardData(listToShow);
+
+        //dont include tokens
+        listToShow.RemoveAll(pcd => pcd.isToken);
+
+        //create/remove entries as needed so that we have as many as we need to show.  data will be set in a second pass.
+        while (buttons.Count < listToShow.Count)
+        {
+            DeckEditorCardTypeEntryScript newButton = Instantiate(entryPrefab).GetComponent<DeckEditorCardTypeEntryScript>();
+            newButton.transform.SetParent(this.transform, false);
+            buttons.Add(newButton);
+        }
+        while (buttons.Count > listToShow.Count)
+        {
+            DeckEditorCardTypeEntryScript toRemove = buttons[0];
+            buttons.Remove(toRemove);
+            Destroy(toRemove.gameObject);
+        }
+
+        //update entries
+        for (int i = 0; i < buttons.Count; i++)
+        {
+            //ensure it has the right data
+            if (buttons[i].type != listToShow[i])
+                buttons[i].setCard(listToShow[i]);
+
+            //set its color based on its type
+            Color buttonColor;
+            switch (buttons[i].type.cardType)
+            {
+                case PlayerCardType.tower: buttonColor = towerColor; break;
+                case PlayerCardType.upgrade: buttonColor = upgradeColor; break;
+                case PlayerCardType.spell: buttonColor = spellColor; break;
+                default: Debug.LogWarning("card type list doesnt know what color to use for this card."); buttonColor = Color.black; break;
+            }
+
+            //highlight if it is in the deck
+            if (currentDeck != null)
+                if (currentDeck.contents.Any(xde => xde.name == buttons[i].type.cardName))
+                    buttonColor = Color.Lerp(buttonColor, highlightColor, 0.5f);
+
+            buttons[i].setColor(buttonColor);
+        }
     }
 
     //saves new filter settings

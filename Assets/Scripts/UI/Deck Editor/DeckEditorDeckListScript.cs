@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Vexe.Runtime.Types;
+using System.Linq;
 
 /// <summary>
 /// do-nothing struct containing static rules for deck building
@@ -26,7 +27,7 @@ public class DeckEditorDeckListScript : BaseBehaviour
     public Color highlightColor; //color of highlighted button
     public Color menuColor;      //color of menu buttons
 
-    private List<GameObject> buttons;
+    private List<MenuButtonScript> buttons;
 
 	// Use this for initialization
 	IEnumerator Start ()
@@ -36,7 +37,7 @@ public class DeckEditorDeckListScript : BaseBehaviour
             yield return null;
 
         //init
-        buttons = new List<GameObject>();
+        buttons = new List<MenuButtonScript>();
 
         //purge dev placeholders
         foreach (Transform child in transform)
@@ -52,8 +53,8 @@ public class DeckEditorDeckListScript : BaseBehaviour
         //one button for each player deck
         foreach (XMLDeck xDeck in DeckManagerScript.instance.playerDecks.decks)
         {
-            GameObject xButton = Instantiate(buttonPrefab);
-            xButton.SendMessage("setDeck", xDeck);
+            MenuButtonScript xButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();
+            xButton.setDeck(xDeck);
 
             //set button color
             Color targetColor;
@@ -65,15 +66,15 @@ public class DeckEditorDeckListScript : BaseBehaviour
             if (xDeck == highlightDeck)
                 targetColor = Color.Lerp(targetColor, highlightColor, 0.5f);
 
-            xButton.SendMessage("setColor", targetColor);
+            xButton.setColor(targetColor);
             xButton.transform.SetParent(this.transform, false);
             buttons.Add(xButton);
         }
 
         //another button for making a new deck
-        GameObject ndButton = Instantiate(buttonPrefab);
-        ndButton.SendMessage("setButtonText", "New Deck");
-        ndButton.SendMessage("setColor", menuColor);
+        MenuButtonScript ndButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();
+        ndButton.setButtonText("New Deck");
+        ndButton.setColor(menuColor);
         ndButton.transform.SetParent(this.transform, false);
         buttons.Add(ndButton);
     }
@@ -81,15 +82,44 @@ public class DeckEditorDeckListScript : BaseBehaviour
     //purges the buttons from the list
     void destroyDeckButtons()
     {
-        foreach (GameObject button in buttons)
-            Destroy(button);
+        foreach (MenuButtonScript button in buttons)
+            Destroy(button.gameObject);
         buttons.Clear();
     }
 
     //refreshes the list, highlighting the current deck
     void refresh(XMLDeck currentDeck)
     {
-        destroyDeckButtons();
-        setupDeckButtons(currentDeck);
+        //remove all deck buttons that no longer have a corresponding deck
+        foreach (MenuButtonScript toRemove in buttons.FindAll(mb => (mb.xDeck.name != "") && (DeckManagerScript.instance.playerDecks.decks.Contains(mb.xDeck) == false)))
+        {
+            buttons.Remove(toRemove);
+            Destroy(toRemove.gameObject);
+        }
+
+        //create buttons for decks that do not have a corresponding button
+        foreach (XMLDeck newDeck in DeckManagerScript.instance.playerDecks.decks)
+        {
+            if (buttons.Any(mb => mb.xDeck == newDeck) == false)
+            {
+                MenuButtonScript xButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();
+                xButton.SendMessage("setDeck", newDeck);
+
+                //set button color
+                Color targetColor;
+
+                if (newDeck.isModded())
+                    targetColor = moddedColor;
+                else
+                    targetColor = defaultColor;
+
+                if (newDeck == currentDeck)
+                    targetColor = Color.Lerp(targetColor, highlightColor, 0.5f);
+
+                xButton.setColor(targetColor);
+                xButton.transform.SetParent(this.transform, false);
+                buttons.Add(xButton);
+            }
+        }
     }
 }

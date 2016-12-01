@@ -19,6 +19,38 @@ public class DeckEditorCurrentDeckEntryScript : BaseBehaviour, IPointerEnterHand
     //XMLDeckEntry reference
     private XMLDeckEntry data;
 
+    //accessors
+    public string cardName
+    {
+        get
+        {
+            return data.name;
+        }
+        set
+        {
+            data.name = value;
+            cardNameText.text = value;
+        }
+    }
+    public int cardCount
+    {
+        get
+        {
+            return data.count;
+        }
+        set
+        {
+            data.count = value;
+            cardCountText.text = value.ToString();
+
+            //set color based on card count
+            if (value <= DeckRules.MAX_CARDS_OF_SAME_TYPE)
+                cardCountText.color = normalColor;
+            else
+                cardCountText.color = overColor;
+        }
+    }
+
     //sets values of the card
     public void setData (XMLDeckEntry newData)
     {
@@ -42,6 +74,8 @@ public class DeckEditorCurrentDeckEntryScript : BaseBehaviour, IPointerEnterHand
     //called by buttons when + or - gets clicked
     public void TextButtonSelected (string text)
     {
+        //Debug.Log("currentDeckEntryTextButtonSelected"); //DEBUG ONLY
+
         if (text == "+")
         {
             //player wants to add a copy of this card.

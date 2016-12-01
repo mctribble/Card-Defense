@@ -23,6 +23,7 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
 {
     public Text           buttonText; //text of this button
     public MenuButtonType buttonType; //enum that represents how this menu button is being used
+    public Image          buttonImage;//image of this button
 
     public AudioClip[] clickSounds; //one of these is played at random when the button is clicked
 
@@ -99,7 +100,7 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
     /// <summary>
     /// the button is set up to correspond to the given XMLDeck
     /// </summary>
-    private void setDeck(XMLDeck newXDeck)
+    public void setDeck(XMLDeck newXDeck)
     {
         xDeck = newXDeck; //set deck
         buttonText.text = xDeck.name;
@@ -119,7 +120,7 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
     /// <summary>
     /// sets up the button by setting the text directly (note: only use on text buttons, as the other types set the text automatically)
     /// </summary>
-    private void setButtonText(string text)
+    public void setButtonText(string text)
     {
         buttonText.text = text;
         buttonType = MenuButtonType.text;
@@ -130,7 +131,8 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
     /// </summary>
     public void setColor(Color c)
     {
-        GetComponent<Image>().color = c;
+        if (buttonImage.color != c)
+            buttonImage.color = c;
     }
 
     /// <summary>

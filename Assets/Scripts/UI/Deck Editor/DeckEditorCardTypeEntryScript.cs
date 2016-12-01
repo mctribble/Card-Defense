@@ -13,6 +13,8 @@ public class DeckEditorCardTypeEntryScript : BaseBehaviour, IPointerEnterHandler
 
     private PlayerCardData data; //card type
 
+    public PlayerCardData type { get { return data; } }
+
     //sets the card associated with this entry
     public void setCard(PlayerCardData newData)
     {

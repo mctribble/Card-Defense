@@ -191,7 +191,7 @@ public class EnemyTypeManagerScript : BaseBehaviour
             types = EnemyTypeCollection.Load(enemyTypesStream, filePath);
         }
 
-        Debug.Log(types.enemyTypes.Count + "enemy types loaded.");
+        Debug.Log(types.enemyTypes.Count + " enemy types loaded.");
     }
 
     //called prior to the first frame
