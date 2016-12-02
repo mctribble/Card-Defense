@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
@@ -52,7 +53,7 @@ public class DeckEditorCurrentDeckEntryScript : BaseBehaviour, IPointerEnterHand
     }
 
     //sets values of the card
-    public void setData (XMLDeckEntry newData)
+    public void setData(XMLDeckEntry newData)
     {
         data = newData;
         cardNameText.text = data.name;
@@ -72,7 +73,7 @@ public class DeckEditorCurrentDeckEntryScript : BaseBehaviour, IPointerEnterHand
     }
 
     //called by buttons when + or - gets clicked
-    public void TextButtonSelected (string text)
+    public void TextButtonSelected(string text)
     {
         //Debug.Log("currentDeckEntryTextButtonSelected"); //DEBUG ONLY
 
@@ -101,13 +102,6 @@ public class DeckEditorCurrentDeckEntryScript : BaseBehaviour, IPointerEnterHand
                 cardCountText.color = normalColor;
             else
                 cardCountText.color = overColor;
-
-            //and if that was the last copy, remove this entry from the list entirely
-            if (data.count == 0)
-            {
-                Destroy(gameObject);
-
-            }
         }
         else
         {
@@ -120,4 +114,16 @@ public class DeckEditorCurrentDeckEntryScript : BaseBehaviour, IPointerEnterHand
     {
         SendMessageUpwards("PreviewXMLDeckEntry", data);
     }
+
+    //disables the layout group after a few frames for performance reasons
+    private IEnumerator Start()
+    {
+        //give things a few frames to stabilize
+        yield return null;
+        yield return null;
+        yield return null;
+
+        //GetComponent<HorizontalLayoutGroup>().enabled = false;
+    }
+
 }

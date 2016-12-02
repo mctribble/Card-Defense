@@ -10,6 +10,7 @@ public class DeckEditorCardTypeEntryScript : BaseBehaviour, IPointerEnterHandler
 {
     public Text cardNameText; //label reference
     public Image background;  //background reference
+    public Color highlightColor; //color used to highlight entries
 
     private PlayerCardData data; //card type
 
@@ -32,7 +33,9 @@ public class DeckEditorCardTypeEntryScript : BaseBehaviour, IPointerEnterHandler
     public void TextButtonSelected(string text)
     {
         if (text == "+")
+        {
             SendMessageUpwards("CardSelected", data); //report what card was picked
+        }
         else
             Debug.LogWarning("DeckEditorCardTypeEntryScript doesnt know how to handle this button");
     }

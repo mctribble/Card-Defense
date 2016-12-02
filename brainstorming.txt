@@ -1,7 +1,5 @@
 known issues:
 some lingering cause of enemies not knowing to expect damage
-deck editor search box is case sensitive, at least for card names
-[WebGL] deck editor very slow
 [WebGL] need a placeholder image while level thumbnails are loading.
 ================================================================
 presentation:

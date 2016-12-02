@@ -148,9 +148,14 @@ class CardChargesComparer : IComparer<PlayerCardData>, IComparer<XMLDeckEntry>
 /// </summary>
 public class DeckEditorMainScript : BaseBehaviour
 {
-    public GameObject cardPreview;          //reference to the object responsible for previewing cards
-    public XMLDeck    openDeck;             //the XMLDeck currently being edited
-    public DeckEditorFilter filter; //settings used to filter interface elements
+    public GameObject       cardPreview; //reference to the object responsible for previewing cards
+    public XMLDeck          openDeck;    //the XMLDeck currently being edited
+    public DeckEditorFilter filter;      //settings used to filter interface elements
+
+    public GameObject DeckList;
+    public GameObject CurrentDeckList;
+    public GameObject CardTypeList;
+    public GameObject CardCount;
 
     private bool unsavedChanges; //whether or not there are changes that have not been written to disk
     private bool newDeck;        //if true, this deck is not currently in the deck collection and must be added to it in order to save changes
@@ -202,6 +207,13 @@ public class DeckEditorMainScript : BaseBehaviour
 
         BroadcastMessage("filterChanged", filter); //report the new filter settings to children
         BroadcastMessage("refresh", openDeck);     //update interfaces
+
+        //give things a few frames to stabilize
+        yield return null;
+        yield return null;
+        yield return null;
+
+        GetComponent<VerticalLayoutGroup>().enabled = false; //disable the layout group on this since it doesnt need to change anymore and its recalculations are slow
     }
 
     //something in the editor wants to preview the given card, but doesnt know how to reach the card preview, so it sent it here instead.
@@ -243,15 +255,22 @@ public class DeckEditorMainScript : BaseBehaviour
         }
 
         //if the count is now zero, we remove it from the list.  Otherwise, we update it.  
-        //We dont have to refresh the children this time because the current deck list is the only one that needs to change 
-        //and it is the one that told us about said change to begin with
         if (updatedEntry.count == 0)
+        {
             openDeck.contents.Remove(oldEntry);
+            //since an entry was removed, we need to update these lists as well
+            CardTypeList.SendMessage("refresh", openDeck);
+            CurrentDeckList.SendMessage("refresh", openDeck);
+        }
         else
+        {
             oldEntry.count = updatedEntry.count;
+        }
 
         unsavedChanges = true; //mark the deck as having changed
-        BroadcastMessage("refresh", openDeck); //update the menus to reflect it
+
+        //update the counter to reflect it
+        CardCount.SendMessage("refresh", openDeck); 
     }
 
     //handles button clicks from the card type list
@@ -268,7 +287,9 @@ public class DeckEditorMainScript : BaseBehaviour
         XMLDeckEntry newEntry = new XMLDeckEntry(c.cardName, 1);
         openDeck.contents.Add(newEntry);
         unsavedChanges = true;
-        BroadcastMessage("refresh", openDeck);
+        CardCount.SendMessage("refresh", openDeck);
+        CurrentDeckList.SendMessage("refresh", openDeck);
+        CardTypeList.SendMessage("refresh", openDeck);
     }
 
     //handles all buttons in the editor that only have text attached.
@@ -323,7 +344,7 @@ public class DeckEditorMainScript : BaseBehaviour
         saveChanges();
 
         //and refresh the interface
-        BroadcastMessage("refresh", openDeck);
+        DeckList.SendMessage("refresh", openDeck);
     }
 
     //called when filter type changes
@@ -340,7 +361,11 @@ public class DeckEditorMainScript : BaseBehaviour
             default: MessageHandlerScript.Error("unknown filter type"); break;
         }
         BroadcastMessage("filterChanged", filter); //report the new filter settings to children
-        BroadcastMessage("refresh", openDeck);     //update interfaces
+
+        //update interfaces
+        CurrentDeckList.SendMessage("refresh", openDeck);
+        CardTypeList.SendMessage("refresh", openDeck);
+
     }
 
     //called when filter sort changes
@@ -356,7 +381,10 @@ public class DeckEditorMainScript : BaseBehaviour
             default: MessageHandlerScript.Error("unknown sort type"); break;
         }
         BroadcastMessage("filterChanged", filter); //report the new filter settings to children
-        BroadcastMessage("refresh", openDeck);     //update interfaces
+
+        //update interfaces
+        CurrentDeckList.SendMessage("refresh", openDeck);
+        CardTypeList.SendMessage("refresh", openDeck);
     }
 
     //called when filter search changes
@@ -370,12 +398,15 @@ public class DeckEditorMainScript : BaseBehaviour
             filter.searchString = newSetting;
 
         BroadcastMessage("filterChanged", filter); //report the new filter settings to children
-        BroadcastMessage("refresh", openDeck);     //update interfaces
+
+        //update interfaces
+        CurrentDeckList.SendMessage("refresh", openDeck);
+        CardTypeList.SendMessage("refresh", openDeck);
     }
 
     //called when filter check boxes change
-    public void filterToggleBaseChanged(bool newSetting) { filter.baseCards   = newSetting; BroadcastMessage("filterChanged", filter); BroadcastMessage("refresh", openDeck); }
-    public void filterToggleModChanged (bool newSetting) { filter.moddedCards = newSetting; BroadcastMessage("filterChanged", filter); BroadcastMessage("refresh", openDeck); }
+    public void filterToggleModChanged (bool newSetting) { filter.moddedCards = newSetting; BroadcastMessage("filterChanged", filter); CurrentDeckList.SendMessage("refresh", openDeck); CardTypeList.SendMessage("refresh", openDeck); }
+    public void filterToggleBaseChanged(bool newSetting) { filter.baseCards   = newSetting; BroadcastMessage("filterChanged", filter); CurrentDeckList.SendMessage("refresh", openDeck); CardTypeList.SendMessage("refresh", openDeck); }
 
     //saves the deck collection, if there are unsaved changes
     private void saveChanges()

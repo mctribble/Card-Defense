@@ -91,7 +91,8 @@ public class DeckEditorDeckListScript : BaseBehaviour
     void refresh(XMLDeck currentDeck)
     {
         //remove all deck buttons that no longer have a corresponding deck
-        foreach (MenuButtonScript toRemove in buttons.FindAll(mb => (mb.xDeck.name != "") && (DeckManagerScript.instance.playerDecks.decks.Contains(mb.xDeck) == false)))
+        foreach (MenuButtonScript toRemove in buttons.FindAll(mb => (mb.buttonType == MenuButtonType.deck) && 
+                                                                    (DeckManagerScript.instance.playerDecks.decks.Contains(mb.xDeck) == false)))
         {
             buttons.Remove(toRemove);
             Destroy(toRemove.gameObject);
