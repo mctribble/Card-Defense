@@ -86,6 +86,9 @@ public class LevelData
     //where this level was loaded from
     [XmlIgnore] public string fileName;
 
+    //difficulty of the level.  Appears on level select screen.
+    public string difficulty;
+
     //a brief description that appears in the level select screen
     public string description;
 

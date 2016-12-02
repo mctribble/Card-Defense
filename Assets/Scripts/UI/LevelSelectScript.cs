@@ -19,6 +19,7 @@ public class LevelSelectScript : BaseBehaviour
     public GameObject   menuRoot;     //object to be destroyed when the menu is no longer needed
     public Image        infoImage;    //image object to use for showing level information
     public Text         infoText;     //text object to use for showing level information
+    public Text         menuText;     //text object to use for showing menu information
 
     //colors to be used on various types of buttons
     public Color        menuButtonColor;  //misc. menu buttons such as back, quit, etc.
@@ -42,10 +43,32 @@ public class LevelSelectScript : BaseBehaviour
         //we can't just use Screen.height because that is the height of the window itself and doesnt account for scaling
         //this is especially true of playing in the editor
         float canvasHeight = Screen.height / transform.root.gameObject.GetComponent<Canvas>().transform.localScale.y;
-        gameObject.GetComponentInParent<UnityEngine.UI.LayoutElement>().minHeight = canvasHeight;
+        gameObject.GetComponentInParent<UnityEngine.UI.LayoutElement>().minHeight = canvasHeight - 50; //-50 is to make room for the menu label
 
         //create an empty list to hold the buttons in
         menuButtons = new List<MenuButtonScript>();
+
+        //test if data persistence is working in webGL builds
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            try
+            {
+                if (PlayerPrefs.HasKey("saveTest"))
+                    PlayerPrefs.DeleteKey("saveTest");
+
+                int test = Random.Range(0,500);
+                PlayerPrefs.SetInt("saveTest", test);
+                if (PlayerPrefs.HasKey("saveTest") == false)
+                    MessageHandlerScript.Error("Data saving doesn't seem to be working.  If you make a deck it may disappear when you reload the page.");
+                else
+                    if (PlayerPrefs.GetInt("saveTest") != test)
+                        MessageHandlerScript.Error("Data saving doesn't seem to be working.  If you make a deck it may disappear when you reload the page.");
+            }
+            catch (System.Exception e)
+            {
+                MessageHandlerScript.Error("Data saving doesn't seem to be working.  If you make a deck it may disappear when you reload the page. \n(" + e.Message + ")");
+            }
+        }
 
         //start on a level select prompt
         StartCoroutine(setupLevelButtons());
@@ -70,6 +93,8 @@ public class LevelSelectScript : BaseBehaviour
             //and also create/update the manifest for web builds
             updateLevelManifest();
         }
+
+        menuText.text = "Select a level. (hover for info)";
     }
 
     /// <summary>
@@ -209,7 +234,9 @@ public class LevelSelectScript : BaseBehaviour
     /// </summary>
     private IEnumerator setupDeckButtons()
     {
-        //create a button for using the default level deck
+        menuText.text = "Choose a deck. (hover for info)";
+
+        //create a button for using the Suggested Deck
         MenuButtonScript ldButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
         ldButton.SendMessage("setButtonText", "Default Level Deck"); //set the text
         ldButton.SendMessage("setColor", levelDeckColor);            //and the color
@@ -306,6 +333,7 @@ public class LevelSelectScript : BaseBehaviour
 
         //these values we can simply use directly
         infoText.text +=
+            "difficulty: " + data.difficulty + '\n' +
             data.description + '\n' + 
             '\n' +
             data.waves.Count + " predetermined waves\n" +

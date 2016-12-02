@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
+  <difficulty>hard</difficulty>
   <description>A challenging map with two wide but short paths to defend</description>
   <randomWaveCount>15</randomWaveCount>
   <Waves />
