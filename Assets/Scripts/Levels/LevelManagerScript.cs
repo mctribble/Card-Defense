@@ -157,7 +157,11 @@ public class LevelData
         set { }
     }
 
-    [Show] private void SaveChanges() { Save(fileName); } //DEV: provides a button in the editor to save the level data
+    //DEV: provides a button in the editor to save the level data
+    [Show] private void SaveChanges()
+    {
+        Save(Path.Combine(Path.Combine(Application.streamingAssetsPath, "XML/Levels/"), fileName));
+    } 
 
     /// <summary>
     /// saves the level data to a file of the given name
@@ -309,7 +313,7 @@ public class LevelManagerScript : BaseBehaviour
                     if (e.triggersAs(EffectType.wave))
                         data.waves[i] = ((IEffectWave)e).alteredWaveData(data.waves[i]);
 
-            Debug.Log("wave " + (i+1) + ": " + data.waves[i].ToString());
+            //Debug.Log("wave " + (i+1) + ": " + data.waves[i].ToString());
         }
 
         //generate the random waves
@@ -350,7 +354,7 @@ public class LevelManagerScript : BaseBehaviour
                     if (e.triggersAs(EffectType.wave))
                         waveData = ((IEffectWave)e).alteredWaveData(waveData);
 
-            Debug.Log("wave " + wave + ": " + waveData.ToString());
+            //Debug.Log("wave " + wave + ": " + waveData.ToString());
             data.waves.Add(waveData);
         }
 

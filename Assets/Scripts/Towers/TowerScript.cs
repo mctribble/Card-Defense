@@ -606,7 +606,7 @@ public class TowerScript : BaseBehaviour
             colorString = "lime";
         else
             colorString = "white";
-        tooltipText.text += "attack: " + attackPower + " <color=" + colorString + "> " + attackChange.ToString("+ ####0.##;- ####0.##") + "</color>\n";
+        tooltipText.text += attackPower + " <color=" + colorString + "> " + attackChange.ToString("+ ####0.#;- ####0.#") + "</color> damage ";
 
         //charge time
         colorString = "magenta";
@@ -616,7 +616,7 @@ public class TowerScript : BaseBehaviour
             colorString = "red";
         else
             colorString = "white";
-        tooltipText.text += "charge time: " + rechargeTime + " <color=" + colorString + "> " + rechargeChange.ToString("+ ####0.##;- ####0.##") + "</color>\n";
+        tooltipText.text += "every " + rechargeTime + " <color=" + colorString + "> " + rechargeChange.ToString("+ ####0.#;- ####0.#") + "</color> seconds\n";
 
         //DPS
         colorString = "magenta";
@@ -626,7 +626,7 @@ public class TowerScript : BaseBehaviour
             colorString = "lime";
         else
             colorString = "white";
-        tooltipText.text += "Damage Per Second: " + curDPS + " <color=" + colorString + "> " + DPSChange.ToString("+ ####0.##;- ####0.##") + "</color>\n";
+        tooltipText.text += "(Damage Per Second: " + curDPS + " <color=" + colorString + "> " + DPSChange.ToString("+ ####0.#;- ####0.#") + "</color>)\n";
 
         //range
         colorString = "magenta";
@@ -654,6 +654,11 @@ public class TowerScript : BaseBehaviour
         {
             tooltipText.text += "\nwaves remaining: <color=green>∞</color>";
         }
+
+        if (effects != null)
+            foreach (IEffect e in effects.effects)
+                if (e.Name != null)
+                    tooltipText.text += "\n" + "-" + e.Name;
     }
 
     /// <summary>
@@ -668,9 +673,11 @@ public class TowerScript : BaseBehaviour
         if (upgradeCount >= upgradeCap)
             return;
 
+        tooltipText.text += "<color=lime>";
         foreach (IEffect e in newEffectData.effects)
             if (e.Name != null)
-                tooltipText.text += "\n<Color=#" + e.effectColorHex + ">++" + e.Name + "</Color>";
+                tooltipText.text += "\n" + "++" + e.Name;
+        tooltipText.text += "</color>";
     }
 
     /// <summary>
@@ -736,9 +743,8 @@ public class TowerScript : BaseBehaviour
         tooltipText.text =
             towerName + "\n" +
             upgradeCount + "/" + upgradeCap + " upgrades\n" +
-            "attack: " + attackPower + "\n" +
-            "charge time: " + rechargeTime + "\n" +
-            "Damage Per Second: " + (attackPower / rechargeTime).ToString("F1") + "\n" +
+            attackPower + " damage every " + rechargeTime.ToString("F1") + " seconds\n" +
+            "(" + (attackPower / rechargeTime).ToString("F1") + " per second)\n" +
             "range: " + range;
 
         if ((effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false)) //special display on infinite lifespan
@@ -752,7 +758,7 @@ public class TowerScript : BaseBehaviour
         if (effects != null)
             foreach (IEffect e in effects.effects)
                 if (e.Name != null)
-                    tooltipText.text += "\n<Color=#" + e.effectColorHex + ">-" + e.Name + "</Color>";
+                    tooltipText.text += "\n" + "-" + e.Name;
     }
     private void updateLifespanText()
     {

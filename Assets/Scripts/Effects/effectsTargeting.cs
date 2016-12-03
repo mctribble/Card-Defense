@@ -84,7 +84,7 @@ public class EffectTargetArmor : BaseEffectTowerTargeting
 //targets all enemies in range
 public class EffectTargetAll : BaseEffectTowerTargeting
 {
-    [Hide] public override string Name { get { return "Target: all in range (projectiles)"; } } //returns name and strength
+    [Hide] public override string Name { get { return "Target: all in range"; } } //returns name and strength
     [Show] public override string XMLName { get { return "targetAll"; } } //name used to refer to this effect in XML
 
     public override List<GameObject> findTargets(Vector2 towerPosition, float towerRange)
@@ -96,7 +96,7 @@ public class EffectTargetAll : BaseEffectTowerTargeting
 //like targetAll, but uses a burst shot instead of individual projectiles
 public class EffectTargetBurst : BaseEffectTowerTargeting
 {
-    [Hide] public override string Name { get { return "Target: all in range (burst)"; } } //returns name and strength
+    [Hide] public override string Name { get { return "Target: all in range"; } } //returns name and strength
     [Show] public override string XMLName { get { return "targetBurst"; } } //name used to refer to this effect in XML
 
     public override List<GameObject> findTargets(Vector2 towerPosition, float towerRange)

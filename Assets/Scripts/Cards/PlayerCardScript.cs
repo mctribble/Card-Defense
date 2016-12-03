@@ -92,10 +92,10 @@ public class PlayerCardData : System.Object
 
             case PlayerCardType.tower:
                 //present tower stats
-                description += "Upgrades: " + towerData.upgradeCap + '\n' +
-                               "Damage: " + towerData.attackPower + '\n' +
-                               "Range: " + towerData.range + '\n' +
-                               "Fires every: " + towerData.rechargeTime + 's';
+                description += "Max Upgrades: " + towerData.upgradeCap + '\n' +
+                               towerData.attackPower + " damage every " + towerData.rechargeTime + " seconds\n" +
+                               '(' + (towerData.attackPower/towerData.rechargeTime) + "/second)\n" +
+                               "Range: " + towerData.range;
 
                 //lifespan
                 if ((effectData == null) || (effectData.propertyEffects.infiniteTowerLifespan == false))
@@ -152,7 +152,7 @@ public class PlayerCardData : System.Object
             //add a line of text to the description for each
             foreach (IEffect e in effectData.effects)
                 if (e.Name != null)
-                    description += "\n<Color=#" + e.effectColorHex + ">-" + e.Name + "</Color>";
+                    description += "\n-" + e.Name;
         }
 
         //end with the flavor text found in the card file
@@ -387,10 +387,10 @@ public class PlayerCardScript : CardScript, IPointerClickHandler
         //if already casting, cancel it
         if (tooltipInstance != null)
         {
-            //if upgrade, tell towers so they can go back to the normal view
-            if (card.data.cardType == PlayerCardType.upgrade)
-                foreach (GameObject tower in GameObject.FindGameObjectsWithTag("Tower"))
-                    tower.SendMessage("hideUpgradeInfo");
+            ////if upgrade, tell towers so they can go back to the normal view
+            //if (card.data.cardType == PlayerCardType.upgrade)
+            //    foreach (GameObject tower in GameObject.FindGameObjectsWithTag("Tower"))
+            //        tower.SendMessage("hideUpgradeInfo");
 
             state = State.idle;  //reset state
                                  //send a message to all cards except this one to tell them to come back out
@@ -477,10 +477,10 @@ public class PlayerCardScript : CardScript, IPointerClickHandler
 
         tooltipInstance.SendMessage("SetParent", this); //tell tooltip who spawned it so it can call back later
 
-        //if upgrade, tell towers so they can show the relevant info
-        if (card.data.cardType == PlayerCardType.upgrade)
-            foreach (GameObject tower in GameObject.FindGameObjectsWithTag("Tower"))
-                tower.SendMessage("showUpgradeInfo");
+        ////if upgrade, tell towers so they can show the relevant info
+        //if (card.data.cardType == PlayerCardType.upgrade)
+        //    foreach (GameObject tower in GameObject.FindGameObjectsWithTag("Tower"))
+        //        tower.SendMessage("showUpgradeInfo");
 
         //if tower, pass range to the tooltip
         if (card.data.cardType == PlayerCardType.tower)

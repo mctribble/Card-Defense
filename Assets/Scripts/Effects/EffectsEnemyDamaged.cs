@@ -124,7 +124,7 @@ public class EffectSplashDamage : BaseEffectEnemyDamaged
         }
     }
 
-    [Hide] public override string Name { get { return "secondary explosion deals " + strength + " damage to enemies within " + argument; } } //returns name and strength
+    [Hide] public override string Name { get { return "deals " + strength + " damage to enemies within " + argument; } } //returns name and strength
     [Show] public override string XMLName { get { return "splashDamage"; } } //name used to refer to this effect in XML
 
     //we can ignore expected damage
@@ -154,7 +154,7 @@ public class EffectSplashDamage : BaseEffectEnemyDamaged
 //attack damages and spreads effects to all enemies within X of each other through a series of consecutive explosions.  No enemy will be hit twice.  
 public class EffectChainHit : BaseEffectEnemyDamaged
 {
-    [Hide] public override string Name { get { return "attack chains to all enemies within " + strength; } } //returns name and strength
+    [Hide] public override string Name { get { return "chains to all within " + strength; } } //returns name and strength
     [Show] public override string XMLName { get { return "chainHit"; } } //name used to refer to this effect in XML
 
     private List<GameObject> enemiesAlreadyHit;
@@ -206,7 +206,7 @@ public class EffectChainHit : BaseEffectEnemyDamaged
 //damages the enemy by X% of their maximum health
 public class EffectDamagePercent : BaseEffectEnemyDamaged
 {
-    [Hide] public override string Name { get { return "enemy loses " + strength + "% of their max health" ; } } //returns name and strength
+    [Hide] public override string Name { get { return "enemy loses " + strength + "% health" ; } } //returns name and strength
     [Show] public override string XMLName { get { return "damagePercent"; } } //name used to refer to this effect in XML
 
     public override void expectedDamage(ref DamageEventData d)

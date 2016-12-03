@@ -21,7 +21,6 @@ public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
     public override EffectType    effectType    { get { return EffectType.meta; } }
     public override TargetingType targetingType { get { return innerEffect.targetingType; } }
     public override bool triggersAs(EffectType triggerType) { return (base.triggersAs(triggerType) || innerEffect.triggersAs(triggerType)); } //trigger as a meta effect, but also as whatever the target effect is
-    public override string effectColorHex { get { if (innerEffect == null) return "000000FF"; else return innerEffect.effectColorHex; } } //if no target, color black.  otherwise, use same color as the target
 
     [Show] public virtual IEffect innerEffect { get; set; } //effect targeted by this effect
 
@@ -288,7 +287,7 @@ public class EffectEffectCooldown : BaseEffectMeta
 //target instant effect triggers once every round (using IEffectInstant)
 public class EffectEveryRound : BaseEffectMeta
 {
-    public override string Name    { get { return "[every round]" + innerEffect.Name; } }
+    public override string Name    { get { return "[per round]" + innerEffect.Name; } }
     public override string XMLName { get { return "everyRound"; } }
     public override bool   shouldApplyInnerEffect() { return true; }
 

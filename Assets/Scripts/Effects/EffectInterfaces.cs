@@ -39,22 +39,20 @@ public enum TargetingType
 /// </summary>
 public enum EffectType
 {
-    //The values are hex colors to be used for text mentioning these effects (format RRGGBBAA).  
-    //unchecked syntax is to force stuffing the values into the signed int used by enums
-    cardDrawn        = unchecked((int)0x00AA00FF),
-    death            = unchecked((int)0xFF0000FF),
-    enemyDamaged     = unchecked((int)0x008000FF),
-    enemyReachedGoal = unchecked((int)0x111111FF),
-    enemySpawned     = unchecked((int)0xAA0000FF),
-    everyRound       = unchecked((int)0x00FF00FF),
-    instant          = unchecked((int)0x00FFFFFF),
-    meta             = unchecked((int)0x000000FF),
-    overcharge       = unchecked((int)0xFF00FFFF),
-    periodic         = unchecked((int)0xCCCCCCFF),
-    property         = unchecked((int)0xA52A2AFF),
-    self             = unchecked((int)0x0000A0FF),
-    towerTargeting   = unchecked((int)0xADD8E6FF),
-    wave             = unchecked((int)0x0000FFFF),
+    cardDrawn,
+    death,
+    enemyDamaged,
+    enemyReachedGoal,
+    enemySpawned,
+    everyRound,
+    instant,
+    meta,
+    overcharge,
+    periodic,
+    property,
+    self,
+    towerTargeting,
+    wave,
 };
 
 /// <summary>
@@ -625,7 +623,6 @@ public interface IEffect
     string        Name            { get; } //user-friendly name of this effect
     string        XMLName         { get; } //name used to refer to this effect in XML.  See also: EffectTypeManagerScript.parse()
     TargetingType targetingType   { get; } //specifies what this card must target when casting, if anything
-    string        effectColorHex  { get; } //hex string that gives the color that should be used for this effect
 
     EffectData parentData { get; set; } //contains a reference to the parent effectData
 

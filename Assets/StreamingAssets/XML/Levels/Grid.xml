@@ -19,7 +19,7 @@
     <Segment startX="-2" startY="5" endX="-3" endY="5" />
     <Segment startX="-3" startY="5" endX="-4" endY="5" />
     <Segment startX="-4" startY="5" endX="-5" endY="5" />
-    <Segment startX="5" startY="4" endX="4" endY="4" />
+    <!--<Segment startX="5" startY="4" endX="4" endY="4" />
     <Segment startX="4" startY="4" endX="3" endY="4" />
     <Segment startX="3" startY="4" endX="2" endY="4" />
     <Segment startX="2" startY="4" endX="1" endY="4" />
@@ -28,7 +28,7 @@
     <Segment startX="-1" startY="4" endX="-2" endY="4" />
     <Segment startX="-2" startY="4" endX="-3" endY="4" />
     <Segment startX="-3" startY="4" endX="-4" endY="4" />
-    <Segment startX="-4" startY="4" endX="-5" endY="4" />
+    <Segment startX="-4" startY="4" endX="-5" endY="4" />-->
     <Segment startX="5" startY="3" endX="4" endY="3" />
     <Segment startX="4" startY="3" endX="3" endY="3" />
     <Segment startX="3" startY="3" endX="2" endY="3" />
@@ -39,7 +39,7 @@
     <Segment startX="-2" startY="3" endX="-3" endY="3" />
     <Segment startX="-3" startY="3" endX="-4" endY="3" />
     <Segment startX="-4" startY="3" endX="-5" endY="3" />
-    <Segment startX="5" startY="2" endX="4" endY="2" />
+    <!--<Segment startX="5" startY="2" endX="4" endY="2" />
     <Segment startX="4" startY="2" endX="3" endY="2" />
     <Segment startX="3" startY="2" endX="2" endY="2" />
     <Segment startX="2" startY="2" endX="1" endY="2" />
@@ -48,7 +48,7 @@
     <Segment startX="-1" startY="2" endX="-2" endY="2" />
     <Segment startX="-2" startY="2" endX="-3" endY="2" />
     <Segment startX="-3" startY="2" endX="-4" endY="2" />
-    <Segment startX="-4" startY="2" endX="-5" endY="2" />
+    <Segment startX="-4" startY="2" endX="-5" endY="2" />-->
     <Segment startX="5" startY="1" endX="4" endY="1" />
     <Segment startX="4" startY="1" endX="3" endY="1" />
     <Segment startX="3" startY="1" endX="2" endY="1" />
@@ -59,7 +59,7 @@
     <Segment startX="-2" startY="1" endX="-3" endY="1" />
     <Segment startX="-3" startY="1" endX="-4" endY="1" />
     <Segment startX="-4" startY="1" endX="-5" endY="1" />
-    <Segment startX="5" startY="0" endX="4" endY="0" />
+    <!--<Segment startX="5" startY="0" endX="4" endY="0" />
     <Segment startX="4" startY="0" endX="3" endY="0" />
     <Segment startX="3" startY="0" endX="2" endY="0" />
     <Segment startX="2" startY="0" endX="1" endY="0" />
@@ -68,7 +68,7 @@
     <Segment startX="-1" startY="0" endX="-2" endY="0" />
     <Segment startX="-2" startY="0" endX="-3" endY="0" />
     <Segment startX="-3" startY="0" endX="-4" endY="0" />
-    <Segment startX="-4" startY="0" endX="-5" endY="0" />
+    <Segment startX="-4" startY="0" endX="-5" endY="0" />-->
     <Segment startX="5" startY="-1" endX="4" endY="-1" />
     <Segment startX="4" startY="-1" endX="3" endY="-1" />
     <Segment startX="3" startY="-1" endX="2" endY="-1" />
@@ -79,7 +79,7 @@
     <Segment startX="-2" startY="-1" endX="-3" endY="-1" />
     <Segment startX="-3" startY="-1" endX="-4" endY="-1" />
     <Segment startX="-4" startY="-1" endX="-5" endY="-1" />
-    <Segment startX="5" startY="-2" endX="4" endY="-2" />
+    <!--<Segment startX="5" startY="-2" endX="4" endY="-2" />
     <Segment startX="4" startY="-2" endX="3" endY="-2" />
     <Segment startX="3" startY="-2" endX="2" endY="-2" />
     <Segment startX="2" startY="-2" endX="1" endY="-2" />
@@ -88,7 +88,7 @@
     <Segment startX="-1" startY="-2" endX="-2" endY="-2" />
     <Segment startX="-2" startY="-2" endX="-3" endY="-2" />
     <Segment startX="-3" startY="-2" endX="-4" endY="-2" />
-    <Segment startX="-4" startY="-2" endX="-5" endY="-2" />
+    <Segment startX="-4" startY="-2" endX="-5" endY="-2" />-->
     <Segment startX="5" startY="-3" endX="4" endY="-3" />
     <Segment startX="4" startY="-3" endX="3" endY="-3" />
     <Segment startX="3" startY="-3" endX="2" endY="-3" />
@@ -99,7 +99,7 @@
     <Segment startX="-2" startY="-3" endX="-3" endY="-3" />
     <Segment startX="-3" startY="-3" endX="-4" endY="-3" />
     <Segment startX="-4" startY="-3" endX="-5" endY="-3" />
-    <Segment startX="5" startY="-4" endX="4" endY="-4" />
+    <!--<Segment startX="5" startY="-4" endX="4" endY="-4" />
     <Segment startX="4" startY="-4" endX="3" endY="-4" />
     <Segment startX="3" startY="-4" endX="2" endY="-4" />
     <Segment startX="2" startY="-4" endX="1" endY="-4" />
@@ -108,7 +108,7 @@
     <Segment startX="-1" startY="-4" endX="-2" endY="-4" />
     <Segment startX="-2" startY="-4" endX="-3" endY="-4" />
     <Segment startX="-3" startY="-4" endX="-4" endY="-4" />
-    <Segment startX="-4" startY="-4" endX="-5" endY="-4" />
+    <Segment startX="-4" startY="-4" endX="-5" endY="-4" />-->
     <Segment startX="5" startY="-5" endX="4" endY="-5" />
     <Segment startX="4" startY="-5" endX="3" endY="-5" />
     <Segment startX="3" startY="-5" endX="2" endY="-5" />
@@ -129,7 +129,7 @@
     <Segment startX="5" startY="-2" endX="5" endY="-3" />
     <Segment startX="5" startY="-3" endX="5" endY="-4" />
     <Segment startX="5" startY="-4" endX="5" endY="-5" />
-    <Segment startX="4" startY="5" endX="4" endY="4" />
+    <!--<Segment startX="4" startY="5" endX="4" endY="4" />
     <Segment startX="4" startY="4" endX="4" endY="3" />
     <Segment startX="4" startY="3" endX="4" endY="2" />
     <Segment startX="4" startY="2" endX="4" endY="1" />
@@ -138,7 +138,7 @@
     <Segment startX="4" startY="-1" endX="4" endY="-2" />
     <Segment startX="4" startY="-2" endX="4" endY="-3" />
     <Segment startX="4" startY="-3" endX="4" endY="-4" />
-    <Segment startX="4" startY="-4" endX="4" endY="-5" />
+    <Segment startX="4" startY="-4" endX="4" endY="-5" />-->
     <Segment startX="3" startY="5" endX="3" endY="4" />
     <Segment startX="3" startY="4" endX="3" endY="3" />
     <Segment startX="3" startY="3" endX="3" endY="2" />
@@ -149,7 +149,7 @@
     <Segment startX="3" startY="-2" endX="3" endY="-3" />
     <Segment startX="3" startY="-3" endX="3" endY="-4" />
     <Segment startX="3" startY="-4" endX="3" endY="-5" />
-    <Segment startX="2" startY="5" endX="2" endY="4" />
+    <!--<Segment startX="2" startY="5" endX="2" endY="4" />
     <Segment startX="2" startY="4" endX="2" endY="3" />
     <Segment startX="2" startY="3" endX="2" endY="2" />
     <Segment startX="2" startY="2" endX="2" endY="1" />
@@ -158,7 +158,7 @@
     <Segment startX="2" startY="-1" endX="2" endY="-2" />
     <Segment startX="2" startY="-2" endX="2" endY="-3" />
     <Segment startX="2" startY="-3" endX="2" endY="-4" />
-    <Segment startX="2" startY="-4" endX="2" endY="-5" />
+    <Segment startX="2" startY="-4" endX="2" endY="-5" />-->
     <Segment startX="1" startY="5" endX="1" endY="4" />
     <Segment startX="1" startY="4" endX="1" endY="3" />
     <Segment startX="1" startY="3" endX="1" endY="2" />
@@ -169,7 +169,7 @@
     <Segment startX="1" startY="-2" endX="1" endY="-3" />
     <Segment startX="1" startY="-3" endX="1" endY="-4" />
     <Segment startX="1" startY="-4" endX="1" endY="-5" />
-    <Segment startX="0" startY="5" endX="0" endY="4" />
+    <!--<Segment startX="0" startY="5" endX="0" endY="4" />
     <Segment startX="0" startY="4" endX="0" endY="3" />
     <Segment startX="0" startY="3" endX="0" endY="2" />
     <Segment startX="0" startY="2" endX="0" endY="1" />
@@ -178,7 +178,7 @@
     <Segment startX="0" startY="-1" endX="0" endY="-2" />
     <Segment startX="0" startY="-2" endX="0" endY="-3" />
     <Segment startX="0" startY="-3" endX="0" endY="-4" />
-    <Segment startX="0" startY="-4" endX="0" endY="-5" />
+    <Segment startX="0" startY="-4" endX="0" endY="-5" />-->
     <Segment startX="-1" startY="5" endX="-1" endY="4" />
     <Segment startX="-1" startY="4" endX="-1" endY="3" />
     <Segment startX="-1" startY="3" endX="-1" endY="2" />
@@ -189,7 +189,7 @@
     <Segment startX="-1" startY="-2" endX="-1" endY="-3" />
     <Segment startX="-1" startY="-3" endX="-1" endY="-4" />
     <Segment startX="-1" startY="-4" endX="-1" endY="-5" />
-    <Segment startX="-2" startY="5" endX="-2" endY="4" />
+    <!--<Segment startX="-2" startY="5" endX="-2" endY="4" />
     <Segment startX="-2" startY="4" endX="-2" endY="3" />
     <Segment startX="-2" startY="3" endX="-2" endY="2" />
     <Segment startX="-2" startY="2" endX="-2" endY="1" />
@@ -198,7 +198,7 @@
     <Segment startX="-2" startY="-1" endX="-2" endY="-2" />
     <Segment startX="-2" startY="-2" endX="-2" endY="-3" />
     <Segment startX="-2" startY="-3" endX="-2" endY="-4" />
-    <Segment startX="-2" startY="-4" endX="-2" endY="-5" />
+    <Segment startX="-2" startY="-4" endX="-2" endY="-5" />-->
     <Segment startX="-3" startY="5" endX="-3" endY="4" />
     <Segment startX="-3" startY="4" endX="-3" endY="3" />
     <Segment startX="-3" startY="3" endX="-3" endY="2" />
@@ -209,7 +209,7 @@
     <Segment startX="-3" startY="-2" endX="-3" endY="-3" />
     <Segment startX="-3" startY="-3" endX="-3" endY="-4" />
     <Segment startX="-3" startY="-4" endX="-3" endY="-5" />
-    <Segment startX="-4" startY="5" endX="-4" endY="4" />
+    <!--<Segment startX="-4" startY="5" endX="-4" endY="4" />
     <Segment startX="-4" startY="4" endX="-4" endY="3" />
     <Segment startX="-4" startY="3" endX="-4" endY="2" />
     <Segment startX="-4" startY="2" endX="-4" endY="1" />
@@ -218,7 +218,7 @@
     <Segment startX="-4" startY="-1" endX="-4" endY="-2" />
     <Segment startX="-4" startY="-2" endX="-4" endY="-3" />
     <Segment startX="-4" startY="-3" endX="-4" endY="-4" />
-    <Segment startX="-4" startY="-4" endX="-4" endY="-5" />
+    <Segment startX="-4" startY="-4" endX="-4" endY="-5" />-->
     <Segment startX="-5" startY="5" endX="-5" endY="4" />
     <Segment startX="-5" startY="4" endX="-5" endY="3" />
     <Segment startX="-5" startY="3" endX="-5" endY="2" />
@@ -236,18 +236,16 @@
   <levelDeck name="Level Deck">
     <Cards>
       <Card name="AOE Tower" count="2" />
-      <Card name="Basic Tower" count="5" />
-      <Card name="Challenger Tower" count="1" />
+      <Card name="Light Shield" count="5" />
       <Card name="Fast Upgrade" count="4" />
-      <Card name="Heavy Tower" count="2" />
       <Card name="Heavy Upgrade" count="2" />
       <Card name="Life Tap" count="3" />
-      <Card name="Nova Tower" count="2" />
+      <Card name="Nova Tower" count="3" />
       <Card name="Range Upgrade" count="3" />
       <Card name="Recycle" count="2" />
-      <Card name="Reinforce" count="1" />
-      <Card name="Shredder Tower" count="2" />
-      <Card name="Sniper Tower" count="4" />
+      <Card name="Reinforce" count="2" />
+      <Card name="Fast Tower" count="3" />
+      <Card name="Sniper Tower" count="3" />
       <Card name="Summon Swarm" count="3" />
     </Cards>
   </levelDeck>

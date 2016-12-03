@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <CardTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Cards>
-    <Card Type="tower" Name="AOE Tower" Description="slow and low damage, but attacks EVERYTHING in range" Charges="4" Art="AOE_Tower.png" Tooltip="Tower_Round.png" Token="false">
-      <towerData Recharge="2" Range="2.5" Damage="10" Lifespan="5" UpgradeCap="3" Sprite="Tower_Round.png">
+    <Card Type="tower" Name="AOE Tower" Description="slow, but attacks EVERYTHING in range" Charges="4" Art="AOE_Tower.png" Tooltip="Tower_Round.png" Token="false">
+      <towerData Recharge="2" Range="2.5" Damage="20" Lifespan="5" UpgradeCap="3" Sprite="Tower_Round.png">
         <towerColor r="0" g="1" b="0" a="1" />
       </towerData>
       <effectData>
@@ -144,7 +144,7 @@
       </effectData>
     </Card>
     <Card Type="tower" Name="Shredder Tower" Description="Does very little damage, but strips away armor" Charges="4" Art="Shredder_Tower.png" Tooltip="Tower_Diamond.png" Token="false">
-      <towerData Recharge="0.75" Range="2" Damage="0" Lifespan="5" UpgradeCap="3" Sprite="Tower_Diamond.png">
+      <towerData Recharge="0.5" Range="3" Damage="1" Lifespan="5" UpgradeCap="3" Sprite="Tower_Diamond.png">
         <towerColor r="0" g="0.33" b="1" a="1" />
       </towerData>
       <effectData>
@@ -160,11 +160,12 @@
       </towerData>
       <effectData>
         <Effects>
+          <Effect name="targetHealth" />
           <Effect name="damagePercent" strength="10" />
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Supernova Tower" Description="The fury of a thousand suns" Charges="1" Art="Supernova_Tower.png" Tooltip="Tower_Round.png" Token="false">
+    <Card Type="tower" Name="Supernova Tower" Description="Fury of a thousand suns" Charges="1" Art="Supernova_Tower.png" Tooltip="Tower_Round.png" Token="false">
       <towerData Recharge="60" Range="999" Damage="200000" Lifespan="1" UpgradeCap="0" Sprite="Tower_Round.png">
         <towerColor r="1" g="0" b="1" a="1" />
       </towerData>

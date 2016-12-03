@@ -85,7 +85,7 @@ public class EnemyData
         if ((effectData != null) && (effectData.effects.Count > 0))
             foreach (IEffect e in effectData.effects)
                 if (e.Name != null)
-                    description += "\n" + "<Color=#" + e.effectColorHex + ">-" + e.Name + "</Color>";
+                    description += "\n" + e.Name;
 
         return description;
     }

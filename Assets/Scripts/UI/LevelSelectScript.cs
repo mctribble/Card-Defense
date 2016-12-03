@@ -238,7 +238,7 @@ public class LevelSelectScript : BaseBehaviour
 
         //create a button for using the Suggested Deck
         MenuButtonScript ldButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
-        ldButton.SendMessage("setButtonText", "Default Level Deck"); //set the text
+        ldButton.SendMessage("setButtonText", "Suggested Deck"); //set the text
         ldButton.SendMessage("setColor", levelDeckColor);            //and the color
         ldButton.transform.SetParent(this.transform, false);         //add it to the menu
         menuButtons.Add(ldButton);                                   //and add it to the list of buttons
@@ -423,7 +423,7 @@ public class LevelSelectScript : BaseBehaviour
                 SceneManager.LoadScene("Deck Editor");
                 break;
 
-            case "Default Level Deck":
+            case "Suggested Deck":
                 //player wants to use the predefined deck for this level.  Load the level immediately and then let the level manager load the deck for us when it sees we haven't.
                 LevelManagerScript.instance.SendMessage("loadLevel", chosenLevel);
                 Destroy(menuRoot); //we are done with this menu.  Destroy it.
@@ -478,8 +478,8 @@ public class LevelSelectScript : BaseBehaviour
                 infoText.text = "randomly chooses cards to create a brand new deck.  Warning: deck quality will vary wildly!";
                 break;
 
-            case "Default Level Deck":
-                //treat the default level deck button as if it were a reference to the level deck
+            case "Suggested Deck":
+                //treat the Suggested Deck button as if it were a reference to the level deck
                 if ((chosenLevel.premadeDeckName == null) || (chosenLevel.premadeDeckName == ""))
                     DeckHovered(chosenLevel.levelDeck);
                 else

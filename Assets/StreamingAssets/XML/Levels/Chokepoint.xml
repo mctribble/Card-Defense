@@ -2,7 +2,7 @@
 <Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
   <difficulty>easy</difficulty>
   <description>Coming together and then dividing again</description>
-  <randomWaveCount>30</randomWaveCount>
+  <randomWaveCount>25</randomWaveCount>
   <Waves />
   <Spawners>
     <Spawner spawnX="-13" spawnY="-2" />
