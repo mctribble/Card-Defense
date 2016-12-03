@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <CardTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Cards>
-    <Card Type="tower" Name="AOE Tower" Description="slow, but attacks EVERYTHING in range" Charges="4" Art="AOE_Tower.png" Tooltip="Tower_Round.png" Token="false">
+    <Card Type="tower" Name="AOE Tower" Description="slow, but attacks everything in range" Charges="4" Art="AOE_Tower.png" Tooltip="Tower_Round.png" Token="false">
       <towerData Recharge="2" Range="2.5" Damage="20" Lifespan="5" UpgradeCap="3" Sprite="Tower_Round.png">
         <towerColor r="0" g="1" b="0" a="1" />
       </towerData>

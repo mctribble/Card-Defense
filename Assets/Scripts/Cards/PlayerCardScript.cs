@@ -93,7 +93,7 @@ public class PlayerCardData : System.Object
             case PlayerCardType.tower:
                 //present tower stats
                 description += "Max Upgrades: " + towerData.upgradeCap + '\n' +
-                               towerData.attackPower + " damage every " + towerData.rechargeTime + " seconds\n" +
+                               "does " + towerData.attackPower + " damage every " + towerData.rechargeTime + " seconds\n" +
                                '(' + (towerData.attackPower/towerData.rechargeTime) + "/second)\n" +
                                "Range: " + towerData.range;
 
