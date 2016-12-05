@@ -260,7 +260,6 @@ public class LevelManagerScript : BaseBehaviour
     /// </summary>
     private IEnumerator loadLevel(LevelData levelToLoad)
     {
-        Debug.Log("loading level: " + levelToLoad.fileName);
         data = levelToLoad;
 
         //test dependencies, if we are on a platform that does that
@@ -280,7 +279,6 @@ public class LevelManagerScript : BaseBehaviour
         }
 
         //set background using WWW, even if we are not on a web build, since this is the "right" way to load images at runtime
-        Debug.Log("background: " + data.background);
         string filename = Application.streamingAssetsPath + "/Art/Backgrounds/" + data.background;
         if (Application.platform != RuntimePlatform.WebGLPlayer)
             filename = "file:///" + filename;
@@ -296,8 +294,6 @@ public class LevelManagerScript : BaseBehaviour
         //if no deck has been loaded yet, then use the level deck
         if (DeckManagerScript.instance.deckSize == 0)
             loadLevelDeck();
-
-        Debug.Log("deck: " + DeckManagerScript.instance.currentDeckName);
 
         //wait a few frames to give other managers a chance to catch up
         yield return null;
@@ -317,7 +313,6 @@ public class LevelManagerScript : BaseBehaviour
         }
 
         //generate the random waves
-        Debug.Log("random waves: " + data.randomWaveCount);
         for (uint i = 0; i < data.randomWaveCount; i++)
         {
             //figure out which wave we are making
@@ -362,7 +357,6 @@ public class LevelManagerScript : BaseBehaviour
         wavesInDeck = data.waves.Count;
 
         //create the spawners
-        Debug.Log("spawn points: " + data.spawners.Count);
         foreach (SpawnerData sd in data.spawners)
         {
             GameObject s = (GameObject) GameObject.Instantiate(spawnerPrefab); //create spawner
@@ -371,7 +365,6 @@ public class LevelManagerScript : BaseBehaviour
         }
 
         //create the towers
-        Debug.Log("premade towers: " + data.towers.Count);
         foreach (PremadeTower pt in data.towers)
         {
             GameObject t = (GameObject) GameObject.Instantiate(towerPrefab, new Vector3(pt.x, pt.y, -3), Quaternion.identity);  //summon tower

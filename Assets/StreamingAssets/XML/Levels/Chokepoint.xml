@@ -52,8 +52,7 @@
     <Tower name="Ping Tower" x="-6" y="1">
       <Upgrades>
         <Upgrade Name="Range Upgrade" Count="1" />
-        <Upgrade Name="Fast Upgrade" Count="2" />
-        <Upgrade Name="Preservation Upgrade" Count="2" />
+        <Upgrade Name="Fast Upgrade" Count="1" />
       </Upgrades>
     </Tower>
   </Towers>

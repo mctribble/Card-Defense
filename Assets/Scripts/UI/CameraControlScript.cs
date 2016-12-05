@@ -19,6 +19,7 @@ public class CameraControlScript : BaseBehaviour
 
     public float cameraPadding;  //how much padding to add when adjusting the camera to see the entire level
     public string thumbnailPath; //where to save level thumbnails
+    public string levelPath;     //where to find level files for timestamp comparison
 
     private Camera cameraRef;
 
@@ -88,10 +89,34 @@ public class CameraControlScript : BaseBehaviour
     }
 
     /// <summary>
+    /// forces an update of the level screenshot by deleting the existing one and calling saveLevelThumbnail()
+    /// </summary>
+    [Show] public void forceUpdateLevelThumbnail()
+    {
+        //skip if the platform does not support it
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            Debug.LogWarning("Could not force update thumbnail: on WebGLPlayer.");
+            return;
+        }
+
+        //skip if no level is loaded
+        if (LevelManagerScript.instance.levelLoaded == false)
+        {
+            Debug.LogWarning("Could not force update thumbnail: no level loaded.");
+            return;
+        }
+
+        //update screenshot
+        showEntireLevel();
+        StartCoroutine(saveLevelThumbnail());
+    }
+
+    /// <summary>
     /// takes a screenshot of the level and saves it as a .png with the same name as the level to StreamingAssets\Level Thumbnails
     /// if there is no level loaded, logs a warning instead
     /// </summary>
-    [Show] public IEnumerator saveLevelThumbnail()
+    public IEnumerator saveLevelThumbnail()
     {
         //skip if the platform does not support it
         if (Application.platform == RuntimePlatform.WebGLPlayer)
@@ -102,6 +127,21 @@ public class CameraControlScript : BaseBehaviour
             string screenshotName = Path.Combine(Application.streamingAssetsPath, thumbnailPath); //find the folder we're saving to
             screenshotName = Path.Combine(screenshotName, Path.GetFileNameWithoutExtension(LevelManagerScript.instance.data.fileName)); //add the file name of the level
             screenshotName += ".png"; //add the extension
+
+            string levelName = Path.Combine(Path.Combine(Application.streamingAssetsPath, levelPath), LevelManagerScript.instance.data.fileName); //find the level file
+
+            //if the screenshot file already exists, and it is newer than the level file, dont bother taking a screenshot
+            if (File.Exists(screenshotName))
+            {
+                FileInfo screenshotFile = new FileInfo(screenshotName);
+                FileInfo levelFile = new FileInfo(levelName);
+
+                if (screenshotFile.LastWriteTime > levelFile.LastWriteTime)
+                {
+                    Debug.Log("Did not update screenshot because it is newer than the level file was last modified");
+                    yield break;
+                }
+            }
 
             //take the screenshot
             UICanvas.enabled = false;
