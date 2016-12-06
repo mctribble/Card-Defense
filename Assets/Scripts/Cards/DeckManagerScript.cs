@@ -187,7 +187,6 @@ public class DeckCollection
     /// <summary>
     /// returns a new DeckCollection loaded from the given file
     /// </summary>
-    /// <returns></returns>
     public static DeckCollection Load(Stream stream, string filePath)
     {
         XmlSerializer serializer = new XmlSerializer(typeof(DeckCollection));

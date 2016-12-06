@@ -154,7 +154,6 @@ public class LevelSelectScript : BaseBehaviour
     {
         //fetch the manifest
         string manifestPath = Application.streamingAssetsPath + '/' + levelDir + "levelManifest.txt";
-        //while (manifestPath.StartsWith("/")) manifestPath = manifestPath.Substring(1); //remove any leading /'s
         Debug.Log("Looking for level manifest at " + manifestPath);
         WWW request = new WWW(manifestPath);
         yield return request;
@@ -330,6 +329,8 @@ public class LevelSelectScript : BaseBehaviour
     {
         //start with the level file name, but replace the file extension with a newline
         infoText.text = data.fileName.Replace(".xml", ":\n");
+        infoText.text += " Par Score: " + ScoreManagerScript.instance.parScore(data) + '\n';
+        infoText.text += "High Score: " + ScoreManagerScript.instance.playerScores.getTopScoreForLevel(data.fileName) + '\n';
 
         //these values we can simply use directly
         infoText.text +=
