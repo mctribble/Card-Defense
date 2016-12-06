@@ -113,7 +113,7 @@ public class EffectPoison : BaseEffectPeriodic
         //construct event
         DamageEventData damageEvent = new DamageEventData();
         damageEvent.source = null;
-        damageEvent.dest = e.gameObject;
+        damageEvent.dest = e;
         damageEvent.rawDamage = roundedDamage;
         damageEvent.effects = null;
 

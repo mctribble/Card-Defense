@@ -11,9 +11,9 @@ using System.Collections;
 /// </summary>
 public struct BurstShotData
 {
-    public DamageEventData  damageEvent; 
-    public List<GameObject> targetList;  
-    public float            burstRange;  
+    public DamageEventData   damageEvent; 
+    public List<EnemyScript> targetList;  
+    public float             burstRange;  
 }
 
 //round burst attack used by towers with TargetAll.  expands to the towers range and attacks enemies as it reaches them.
@@ -23,14 +23,17 @@ public class BurstShotScript : BaseBehaviour
     public Color color;     //default color to use for the burst
     public float lookAhead; //seconds to look ahead when warning enemies about oncoming damage
 
-    //component references
-    public SpriteRenderer spriteRenderer;
+    public SpriteRenderer spriteRenderer; //component reference
+
+    //sound data
     public AudioClip[]    burstSounds;
     public AudioSource    audioSource;
+    public static int     maxSoundsAtOnce;
+    private static int    curSoundsAtOnce;
 
     private bool                  initialized;     //whether or not this shot has been initialized
     private List<DamageEventData> expectedToHit;   //list of enemies that we told to expect damage and the events associated with those hits
-    private List<GameObject>      alreadyHit;      //list of enemies we already dealt damage
+    private List<EnemyScript>     alreadyHit;      //list of enemies we already dealt damage
     private DamageEventData       baseDamageEvent; //damage event to base all the others on
     private float                 curScale;        //current scale of this attack
     private float                 maxScale;        //maximum scale this attack should reach
@@ -41,7 +44,7 @@ public class BurstShotScript : BaseBehaviour
         spriteRenderer.color = color;
         curScale = 0.0f;
         expectedToHit = new List<DamageEventData>();
-        alreadyHit = new List<GameObject>();
+        alreadyHit = new List<EnemyScript>();
     }
 
     // Update is called once per frame
@@ -60,8 +63,8 @@ public class BurstShotScript : BaseBehaviour
             lookAheadDist = Mathf.Min(lookAheadDist, maxScale); //don't look further ahead than we will actually travel
 
             //find any enemies we are about to hit that dont already know its coming, and warn them
-            List<GameObject> toWarnThisFrame = new List<GameObject>();
-            foreach (GameObject enemy in EnemyManagerScript.instance.activeEnemies)
+            List<EnemyScript> toWarnThisFrame = new List<EnemyScript>();
+            foreach (EnemyScript enemy in EnemyManagerScript.instance.activeEnemies)
             {
                 float enemyDist = Vector2.Distance (enemy.transform.position, transform.position);
                 if (enemyDist <= lookAheadDist)
@@ -70,7 +73,7 @@ public class BurstShotScript : BaseBehaviour
                             toWarnThisFrame.Add(enemy);
             }
 
-            foreach (GameObject enemy in toWarnThisFrame)
+            foreach (EnemyScript enemy in toWarnThisFrame)
             {
                 DamageEventData ded = new DamageEventData();
                 ded.source = baseDamageEvent.source;
@@ -84,7 +87,7 @@ public class BurstShotScript : BaseBehaviour
                         if (i.triggersAs(EffectType.enemyDamaged))
                             ((IEffectEnemyDamaged)i).expectedDamage(ref ded);
 
-                enemy.SendMessage("onExpectedDamage", ded);
+                enemy.onExpectedDamage(ref ded);
                 expectedToHit.Add(ded);
             }
 
@@ -126,8 +129,9 @@ public class BurstShotScript : BaseBehaviour
                     }
                 }
 
-                //deal the damage.  We dont mind if there is no receiver, since that just means the enemy is no longer a valid target for whatever reason
-                ded.dest.SendMessage("onDamage", ded, SendMessageOptions.DontRequireReceiver);
+                //deal the damage.  We dont mind if the reference is null now, since that just means it is no longer a valid target for some reason
+                if (ded.dest != null)
+                    ded.dest.onDamage(ded);
 
                 expectedToHit.Remove(ded);
                 alreadyHit.Add(ded.dest);
@@ -162,7 +166,8 @@ public class BurstShotScript : BaseBehaviour
         //play one of the sounds at random
         int soundToPlay = Random.Range(0, burstSounds.Length);
         audioSource.clip = burstSounds[soundToPlay];
-        audioSource.Play();
+        if (isActiveAndEnabled)
+            StartCoroutine(playRespectLimit(audioSource)); //plays the sound, if we are not at the sound cap and the object is not disabled
     }
 
     //overrides the default color
@@ -171,4 +176,23 @@ public class BurstShotScript : BaseBehaviour
         color = newColor;
         spriteRenderer.color = newColor;
     }
+
+    /// <summary>
+    /// plays a sound from the given source if the limit of simultaneous sounds has not been reached.
+    /// Also tracks number of sounds playing
+    /// </summary>
+    private IEnumerator playRespectLimit(AudioSource source)
+    {
+        //skip if at the cap
+        if (curSoundsAtOnce == maxSoundsAtOnce)
+            yield break;
+
+        //otherwise, play the sound and track it
+        curSoundsAtOnce++;
+        source.Play();
+        while (source.isPlaying)
+            yield return null;
+        curSoundsAtOnce--;
+    }
 }
+

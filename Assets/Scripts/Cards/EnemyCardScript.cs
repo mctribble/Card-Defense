@@ -50,7 +50,7 @@ public class WaveData
         }
     }
 
-    [XmlIgnore] private List<GameObject> enemyList;
+    [XmlIgnore] private List<EnemyScript> enemyList;
 
     //default.  these values are meant to be VERY noticeable if a wave is left with default data
     public WaveData()
@@ -77,7 +77,7 @@ public class WaveData
     }
 
     //survivor wave constructor
-    public WaveData(List<GameObject> enemies, int spawnCount, int totalRemainingHealth, float waveTime)
+    public WaveData(List<EnemyScript> enemies, int spawnCount, int totalRemainingHealth, float waveTime)
     {
         data = null; //enemy data doesnt apply for survival waves, since they have multiple enemy types
         budget = int.MaxValue; //budget doesnt apply either, so make sure it stands out if used accidentally
@@ -120,7 +120,7 @@ public class WaveData
             if (enemyList == null)
                 return (spawnCount - spawnedThisWave) * enemyData.maxHealth;
             else
-                return enemyList.Sum(x => x.GetComponent<EnemyScript>().curHealth);
+                return enemyList.Sum(x => x.curHealth);
         }
     }
 
@@ -139,9 +139,9 @@ public class WaveData
             return;
         }
 
-        GameObject e = enemyList.First();
+        EnemyScript e = enemyList.First();
         enemyList.Remove(e);
-        e.SetActive(true);
+        e.gameObject.SetActive(true);
         EnemyManagerScript.instance.EnemySpawned(e);
     }
 
@@ -169,7 +169,7 @@ public class EnemyCardScript : CardScript
     public WaveData   wave;                 //wave associated with this card
     private string    enemyType;            //name of the enemy type currently depicted.  Cached to detect enemy type changes
 
-    private List<GameObject> survivorList; //if this is a survivor waves, holds references to the existing enemies that are to reappear when this wave attacks
+    private List<EnemyScript> survivorList; //if this is a survivor waves, holds references to the existing enemies that are to reappear when this wave attacks
 
     //init
     protected override void Awake()
@@ -213,9 +213,8 @@ public class EnemyCardScript : CardScript
         //error catch: purge survivors that are actually dead
         survivorList.RemoveAll(go => go == null);
 
-        foreach (GameObject go in survivorList)
+        foreach (EnemyScript e in survivorList)
         {
-            EnemyScript e = go.GetComponent<EnemyScript>();
             spawnCount++;
             totalRemainingHealth += e.curHealth;
 

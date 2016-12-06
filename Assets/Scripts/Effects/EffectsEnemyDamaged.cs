@@ -58,7 +58,7 @@ public class EffectReduceEnemyEffectOnDamage : BaseEffectEnemyDamaged
     //reduce the effect
     public override void actualDamage(ref DamageEventData d)
     {
-        EnemyScript enemy = d.dest.GetComponent<EnemyScript>();
+        EnemyScript enemy = d.dest;
 
         if (enemy.effectData != null)
             foreach (IEffect e in enemy.effectData.effects)
@@ -79,7 +79,7 @@ public class EffectInvScaleSpeedWithDamage : BaseEffectEnemyDamaged
     //recalculate speed
     public override void actualDamage(ref DamageEventData d)
     {
-        EnemyScript e = d.dest.GetComponent<EnemyScript>();
+        EnemyScript e = d.dest;
         float damageRatio = 1 - (e.curHealth / e.maxHealth);
         e.unitSpeed = Mathf.Lerp(e.baseUnitSpeed, 1, damageRatio);
     }
@@ -97,7 +97,7 @@ public class EffectScaleSpeedWithDamage : BaseEffectEnemyDamaged
     //recalculate speed
     public override void actualDamage(ref DamageEventData d)
     {
-        EnemyScript e = d.dest.GetComponent<EnemyScript>();
+        EnemyScript e = d.dest;
         float damageRatio = 1 - (e.curHealth / e.maxHealth);
         e.unitSpeed = Mathf.Lerp(e.baseUnitSpeed, (e.baseUnitSpeed * strength), damageRatio);
     }
@@ -157,12 +157,12 @@ public class EffectChainHit : BaseEffectEnemyDamaged
     [Hide] public override string Name { get { return "chains to all within " + strength; } } //returns name and strength
     [Show] public override string XMLName { get { return "chainHit"; } } //name used to refer to this effect in XML
 
-    private List<GameObject> enemiesAlreadyHit;
+    private List<EnemyScript> enemiesAlreadyHit;
 
     //constructor
     public EffectChainHit()
     {
-        enemiesAlreadyHit = new List<GameObject>();
+        enemiesAlreadyHit = new List<EnemyScript>();
     }
 
     //use expectedDamage() to prevent the attack from hitting the same enemy twice
@@ -211,7 +211,7 @@ public class EffectDamagePercent : BaseEffectEnemyDamaged
 
     public override void expectedDamage(ref DamageEventData d)
     {
-        d.rawDamage += d.dest.GetComponent<EnemyScript>().maxHealth * (strength / 100.0f);
+        d.rawDamage += d.dest.maxHealth * (strength / 100.0f);
     }
 
     public override void actualDamage(ref DamageEventData d) { }

@@ -300,7 +300,6 @@ public class LevelManagerScript : BaseBehaviour
         yield return null;
         yield return null;
 
-        Debug.Log("predefined waves: " + data.waves.Count);
         //apply wave effects on predefined waves
         for (int i = 0; i < data.waves.Count; i++)
         {
@@ -709,6 +708,7 @@ public class LevelManagerScript : BaseBehaviour
         foreach (GameObject e in GameObject.FindGameObjectsWithTag("Bullet")) Destroy(e);
         foreach (GameObject e in GameObject.FindGameObjectsWithTag("AreaAttack")) Destroy(e);
         foreach (GameObject e in GameObject.FindGameObjectsWithTag("Path")) Destroy(e);
+        data.waves.RemoveAll(wd => wd.isRandomWave);
 
         //dump the hands
         HandScript.playerHand.SendMessage("Show");

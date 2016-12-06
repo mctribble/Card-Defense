@@ -10,9 +10,9 @@ using Vexe.Runtime.Types;
 /// </summary>
 public struct DirectionalShotData
 {
-    public DamageEventData  damageEvent;
-    public List<GameObject> targetList; 
-    public Vector2          attackDir;  
+    public DamageEventData   damageEvent;
+    public List<EnemyScript> targetList; 
+    public Vector2           attackDir;  
 }
 
 /// <summary>
@@ -35,7 +35,7 @@ public class DirectionalShotScript : BaseBehaviour
     private bool                  initialized;     //whether or not this object is ready for action
     private Vector3               attackDir;       //direction the attack is moving
     private List<DamageEventData> expectedToHit;   //list of enemies that we told to expect damage and the events associated with those hits
-    private List<GameObject>      alreadyHit;      //list of enemies we already dealt damage
+    private List<EnemyScript>     alreadyHit;      //list of enemies we already dealt damage
     private DamageEventData       baseDamageEvent; //damage event to base all the others on
 
 	// Use this for initialization
@@ -45,7 +45,7 @@ public class DirectionalShotScript : BaseBehaviour
         sprite.color = defaultColor;
         initialized = false;
         expectedToHit = new List<DamageEventData>();
-        alreadyHit = new List<GameObject>();
+        alreadyHit = new List<EnemyScript>();
 	}
 
 	// Update is called once per frame
@@ -77,14 +77,14 @@ public class DirectionalShotScript : BaseBehaviour
             }
 
             //find any enemies we are about to hit that dont already know its coming, and warn them
-            List<GameObject> toWarnThisFrame = new List<GameObject>();
-            foreach (GameObject enemy in EnemyManagerScript.instance.activeEnemies)
+            List<EnemyScript> toWarnThisFrame = new List<EnemyScript>();
+            foreach (EnemyScript enemy in EnemyManagerScript.instance.activeEnemies)
                 if (lookAheadRegion.Contains(enemy.transform.position))
                     if (expectedToHit.Exists(ded => ded.dest == enemy) == false)  //(if there is not already a damage event with enemy as the destination) (https://msdn.microsoft.com/en-us/library/bb397687.aspx)
                         if (alreadyHit.Contains(enemy) == false)
                             toWarnThisFrame.Add(enemy);
 
-            foreach (GameObject enemy in toWarnThisFrame)
+            foreach (EnemyScript enemy in toWarnThisFrame)
             {
                 DamageEventData ded = new DamageEventData();
                 ded.source = baseDamageEvent.source;
@@ -98,7 +98,7 @@ public class DirectionalShotScript : BaseBehaviour
                         if (i.triggersAs(EffectType.enemyDamaged))
                             ((IEffectEnemyDamaged)i).expectedDamage(ref ded);
 
-                enemy.SendMessage("onExpectedDamage", ded);
+                enemy.onExpectedDamage(ref ded);
                 expectedToHit.Add(ded);
             }
 
@@ -146,8 +146,9 @@ public class DirectionalShotScript : BaseBehaviour
                     }
                 }
 
-                //deal the damage.  We dont mind if there is no receiver, since that just means the enemy is no longer a valid target for whatever reason
-                ded.dest.SendMessage("onDamage", ded, SendMessageOptions.DontRequireReceiver);
+                //deal the damage.  We dont mind if its null, since that just means the enemy is no longer a valid target for whatever reason
+                if (ded.dest != null)
+                    ded.dest.onDamage(ded);
 
                 expectedToHit.Remove(ded);
                 alreadyHit.Add(ded.dest);
@@ -169,7 +170,7 @@ public class DirectionalShotScript : BaseBehaviour
         baseDamageEvent = data.damageEvent;
 
         //put the initial target list on the expected list and inform those enemies
-        foreach (GameObject t in data.targetList)
+        foreach (EnemyScript t in data.targetList)
         {
             DamageEventData ded = new DamageEventData();
             ded.source = baseDamageEvent.source;
@@ -177,7 +178,7 @@ public class DirectionalShotScript : BaseBehaviour
             ded.effects = baseDamageEvent.effects;
             ded.dest = t;
 
-            t.GetComponent<EnemyScript>().onExpectedDamage(ref ded);
+            t.onExpectedDamage(ref ded);
             expectedToHit.Add(ded);
         }
 

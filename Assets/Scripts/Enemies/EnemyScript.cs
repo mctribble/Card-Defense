@@ -260,7 +260,7 @@ public class EnemyScript : BaseBehaviour
         //damage player...
         if (damage > 0)
         {
-            DeckManagerScript.instance.SendMessage("Damage", damage);
+            DeckManagerScript.instance.Damage(damage);
             MessageHandlerScript.instance.spawnPlayerDamageText(transform.localPosition, damage);
         }
 
@@ -276,7 +276,7 @@ public class EnemyScript : BaseBehaviour
         LevelManagerScript.instance.totalRemainingHealth -= curHealth;
 
         //report it as a survivor, and then disable it until it is spawned into the next wave
-        EnemyManagerScript.instance.EnemySurvived(gameObject);
+        EnemyManagerScript.instance.EnemySurvived(this);
         gameObject.SetActive(false);        
 
         yield break; //done
@@ -298,7 +298,7 @@ public class EnemyScript : BaseBehaviour
 
         //if a death is expected, report self as dead so towers ignore this unit
         if (expectedHealth <= 0)
-            EnemyManagerScript.instance.SendMessage("EnemyExpectedDeath", gameObject);
+            EnemyManagerScript.instance.EnemyExpectedDeath(this);
     }
 
     /// <summary>
@@ -357,8 +357,8 @@ public class EnemyScript : BaseBehaviour
         {
             int soundToPlay = Random.Range(0, enemyHitSounds.Length);
             audioSource.clip = enemyHitSounds[soundToPlay];
-            //audioSource.Play();
-            StartCoroutine(playRespectLimit(audioSource)); //plays the sound, if we are not at the sound cap
+            if (isActiveAndEnabled)
+                StartCoroutine(playRespectLimit(audioSource)); //plays the sound, if we are not at the sound cap and the object is not disabled
         }
 
         if (curHealth <= 0)
@@ -368,7 +368,7 @@ public class EnemyScript : BaseBehaviour
             {
                 Debug.LogWarning("Enemy did not expect to die, but did anyway!  This can cause targeting issues as towers attack an enemy that will die anyway.");
                 expectedHealth = 0;
-                EnemyManagerScript.instance.EnemyExpectedDeath(gameObject);
+                EnemyManagerScript.instance.EnemyExpectedDeath(this);
             }
 
             //if dead, report the kill to the tower that shot it
@@ -395,22 +395,23 @@ public class EnemyScript : BaseBehaviour
     }
 
     //stores a new path for this unit to follow
-    private void SetPath(List<Vector2> p)
+    public void SetPath(List<Vector2> p)
     {
         path = p;               //save path
         currentDestination = 0; //go towards the first destination
     }
 
     //stores the data specific to this type of enemy
-    private System.Collections.IEnumerator SetData(EnemyData d)
+    public void SetData(EnemyData d) { StartCoroutine(SetDataCoroutine(d)); }
+    private IEnumerator SetDataCoroutine(EnemyData d)
     {
-        enemyTypeName  = d.name;
-        damage         = d.attack;
-        maxHealth      = d.maxHealth;
-        curHealth      = d.maxHealth;
+        enemyTypeName = d.name;
+        damage = d.attack;
+        maxHealth = d.maxHealth;
+        curHealth = d.maxHealth;
         expectedHealth = d.maxHealth;
-        unitSpeed      = d.unitSpeed;
-        baseUnitSpeed  = d.unitSpeed;
+        unitSpeed = d.unitSpeed;
+        baseUnitSpeed = d.unitSpeed;
 
         if (d.effectData != null)
             effectData = d.effectData.clone();

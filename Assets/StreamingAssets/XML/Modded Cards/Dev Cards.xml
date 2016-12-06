@@ -16,7 +16,7 @@
       </towerData>
       <effectData>
         <Effects>
-          <Effect name="chainHit" strength="3" />
+          <Effect name="chainHit" strength="1" />
           <Effect name="targetClosest" />
         </Effects>
       </effectData>

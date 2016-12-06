@@ -1,6 +1,7 @@
 Chokepoint.xml
 congestion.xml
 Divergence.xml
+Endurance.xml
 Grid.xml
 parallel tasks.xml
 Prototype.xml

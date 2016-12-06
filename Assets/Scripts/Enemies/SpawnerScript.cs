@@ -68,8 +68,8 @@ public class SpawnerScript : BaseBehaviour
     /// <param name="type">the type of enemy to spawn</param>
     public void Spawn(float timePassedSinceSpawn, EnemyData type)
     {
-        GameObject enemy = (GameObject)Object.Instantiate(enemyPrefab, spawnPos, Quaternion.identity);  //spawn the enemy
-        enemy.SendMessage("SetData", type);                                                             //set its type
+        EnemyScript enemy = ((GameObject)Object.Instantiate(enemyPrefab, spawnPos, Quaternion.identity)).GetComponent<EnemyScript>(); //spawn the enemy
+        enemy.SetData(type); //set its type
 
         //set its path
         List<Vector2> path = null;
@@ -91,9 +91,10 @@ public class SpawnerScript : BaseBehaviour
             
             path.Insert(0, forcedFirstDestination.Value);
         }
-        enemy.SendMessage("SetPath", path);                           //tell the enemy the path it should follow
-        enemy.SendMessage("triggerOnEnemySpawned");                   //tell the enemy to trigger spawn effects
-        enemy.SendMessage("moveForwardByTime", timePassedSinceSpawn); //move the enemy forward to account for how much time has passed between when this enemy should have spawned and when the spawner got told about it
-        EnemyManagerScript.instance.EnemySpawned(enemy);              //report it to the enemy manager
+
+        enemy.SetPath(path);                             //tell the enemy the path it should follow
+        enemy.triggerOnEnemySpawned();                   //tell the enemy to trigger spawn effects
+        enemy.moveForwardByTime(timePassedSinceSpawn);   //move the enemy forward to account for how much time has passed between when this enemy should have spawned and when the spawner got told about it
+        EnemyManagerScript.instance.EnemySpawned(enemy); //report it to the enemy manager
     }
 }

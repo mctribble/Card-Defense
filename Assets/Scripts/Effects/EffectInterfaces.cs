@@ -351,7 +351,7 @@ public class EffectData : System.Object
     /// the XMLName of the actual effect used is also cached in lastUsedTargetingEffect for use by anything that wants to know how the targeting happened
     /// </summary>
     //the result is cached since it is needed regularly but changes rarely
-    public List<GameObject> doTowerTargeting(Vector2 towerPosition, float towerRange)
+    public List<EnemyScript> doTowerTargeting(Vector2 towerPosition, float towerRange)
     {
         //cache a list of targeting effects on this object.  each one is tested in turn, and the first that returns a non-null response has its result returned to the tower
         if (cachedTowerTargetingList == null)
@@ -367,7 +367,7 @@ public class EffectData : System.Object
         }
 
         //find the first targeting effect that returns an actual result
-        List<GameObject> res = null;
+        List<EnemyScript> res = null;
         foreach (IEffectTowerTargeting ie in cachedTowerTargetingList)
         {
             res = ie.findTargets(towerPosition, towerRange);
@@ -391,7 +391,7 @@ public class EffectData : System.Object
         if (res == null)
         {
             MessageHandlerScript.Error("no targeting effect, not even the default, provided a result list!");
-            return new List<GameObject>();
+            return new List<EnemyScript>();
         }
         else
         {
@@ -710,7 +710,7 @@ public interface IEffectEnemyReachedGoal : IEffect
 //effect alters the way a tower targets enemies.  if multiple are present, only the last is actually used
 public interface IEffectTowerTargeting : IEffect
 {
-    List<GameObject> findTargets(Vector2 towerPosition, float towerRange);
+    List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange);
 }
 
 //effect triggers on every update

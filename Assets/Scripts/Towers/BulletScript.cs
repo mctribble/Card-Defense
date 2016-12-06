@@ -12,8 +12,8 @@ public struct DamageEventData
 {
     public float      rawDamage;
     public EffectData effects;
-    public GameObject source;
-    public GameObject dest;
+    public TowerScript source;
+    public EnemyScript dest;
 }
 
 public class BulletScript : BaseBehaviour
