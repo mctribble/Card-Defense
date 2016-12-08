@@ -25,6 +25,20 @@
         <Card name="Spitfire Upgrade" count="1" />
       </Cards>
     </Deck>
+    <Deck name="Conjuration">
+      <Cards>
+        <Card name="Conjure Spell" count="10" />
+        <Card name="Conjure Tower" count="10" />
+        <Card name="Conjure Upgrade" count="10" />
+        <Card name="Light Shield" count="3" />
+        <Card name="Summon Standard" count="3" />
+        <Card name="Basic Upgrade" count="4" />
+        <Card name="Fast Upgrade" count="4" />
+        <Card name="Heavy Upgrade" count="4" />
+        <Card name="Plague Tower" count="3" />
+        <Card name="Scavenge" count="4" />
+      </Cards>
+    </Deck>
     <Deck name="Prototype Deck">
       <Cards>
         <Card name="Fast Tower" count="3" />

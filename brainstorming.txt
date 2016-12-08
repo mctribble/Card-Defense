@@ -9,9 +9,9 @@ animated enemy sprites?
 ================================================================
 content goals:
 enemies: 10/10  <<DONE!!>>
-levels:  08/30
+levels:  09/30
 cards:   43/100 (+3 token)
-decks:   05/10
+decks:   06/10
 ================================================================
 balance:
 find a way to record statistics to aid in balancing content?

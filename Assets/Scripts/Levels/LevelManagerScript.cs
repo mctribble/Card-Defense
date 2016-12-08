@@ -333,6 +333,21 @@ public class LevelManagerScript : BaseBehaviour
             EnemyData waveEnemy = EnemyTypeManagerScript.instance.getRandomEnemyType(waveBudget);
             waveEnemy = EnemyTypeManagerScript.instance.getRandomEnemyType(waveBudget).clone(); //tries to find an enemy type that the current budget can afford
 
+            //forbid random generation from producing multiple ping waves in succession
+            int loopCount = 0;
+            while ((i > 0) && (waveEnemy.name == "Ping") && (data.waves[data.waves.Count - 1].enemyData.name == "Ping")) //while both this and the ping wave are Ping...
+            {
+                waveEnemy = EnemyTypeManagerScript.instance.getRandomEnemyType(waveBudget).clone(); //change this to something else
+
+                //just in case: avoid infinite loops by only trying up to 100 times
+                loopCount++;
+                if (loopCount == 100)
+                {
+                    Debug.LogWarning("Random wave generation is still picking Ping aft 100 tries!  Giving up and letting it have sequential Ping waves.");
+                    break;
+                }
+            }
+
             //time: min(wave*linear, maxwavetime)
             float waveTime = Mathf.Min(wave*data.waveTimeLinear, data.waveTimeMax);
 
