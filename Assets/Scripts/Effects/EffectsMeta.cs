@@ -40,6 +40,9 @@ public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
     public virtual void playerCardDrawn(CardScript playerCard) { if (shouldApplyInnerEffect()) { ((IEffectCardDrawn)innerEffect).playerCardDrawn(playerCard); } }
     public virtual void enemyCardDrawn(EnemyScript enemyCard) { if (shouldApplyInnerEffect()) { ((IEffectCardDrawn)innerEffect).enemyCardDrawn(enemyCard); } }
 
+    //returns the XMLName, skipping over any meta effects if they are present.  See also: EffectTypeManagerScript.parse()
+    [Hide] public override string FinalXMLName { get { return innerEffect.FinalXMLName; } } 
+
     //enemyDamage effects need special care since they are handled twice but should only be tested once
     ushort enemyDamageEFfectTriggers;
     public virtual void expectedDamage(ref DamageEventData d)
@@ -58,6 +61,9 @@ public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
             ((IEffectEnemyDamaged)innerEffect).actualDamage(ref d);
         }
     } 
+
+    //targeting effects return priority of child
+    [Hide] public TargetingPriority priority { get { return ((IEffectTowerTargeting)innerEffect).priority; } }
 
     //returns whether or not the inner effect requires us to cache values
     protected bool shouldCacheValue()

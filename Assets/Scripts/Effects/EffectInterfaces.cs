@@ -349,6 +349,7 @@ public class EffectData : System.Object
     /// <summary>
     /// helper function that returns the targeting effect currently in use by the tower
     /// the XMLName of the actual effect used is also cached in lastUsedTargetingEffect for use by anything that wants to know how the targeting happened
+    /// targeting effect prority is set by the effects themselves, and generally prefers more targets than fewer targets, and more specific targets to less specific ones
     /// </summary>
     //the result is cached since it is needed regularly but changes rarely
     public List<EnemyScript> doTowerTargeting(Vector2 towerPosition, float towerRange)
@@ -361,9 +362,9 @@ public class EffectData : System.Object
 
             foreach (IEffect e in effects)
                 if (e.triggersAs(EffectType.towerTargeting))
-                    cachedTowerTargetingList.Add( (IEffectTowerTargeting)e );
+                    cachedTowerTargetingList.Add((IEffectTowerTargeting)e);
 
-            cachedTowerTargetingList.Reverse();
+            cachedTowerTargetingList = cachedTowerTargetingList.OrderByDescending(te => te.priority).ToList(); //respect effect priorities
         }
 
         //find the first targeting effect that returns an actual result
@@ -622,6 +623,7 @@ public interface IEffect
 
     string        Name            { get; } //user-friendly name of this effect
     string        XMLName         { get; } //name used to refer to this effect in XML.  See also: EffectTypeManagerScript.parse()
+    string        FinalXMLName    { get; } //returns the XMLName, skipping over any meta effects if they are present.  See also: EffectTypeManagerScript.parse()
     TargetingType targetingType   { get; } //specifies what this card must target when casting, if anything
 
     EffectData parentData { get; set; } //contains a reference to the parent effectData
@@ -644,6 +646,9 @@ public abstract class BaseEffect : IEffect
 
     [Hide] public abstract string Name { get; } //user-friendly name of this effect
     [Show] public abstract string XMLName { get; } //name used to refer to this effect in XML.  See also: EffectTypeManagerScript.parse()
+
+    //returns the XMLName, skipping over any meta effects if they are present.  See also: EffectTypeManagerScript.parse()
+    [Hide] public virtual  string FinalXMLName { get { return XMLName; } } 
 
     //contains a reference to the parent effectData
     [Hide] public EffectData parentData {get; set;}
@@ -707,9 +712,11 @@ public interface IEffectEnemyReachedGoal : IEffect
     void trigger(EnemyScript enemy);
 }
 
-//effect alters the way a tower targets enemies.  if multiple are present, only the last is actually used
+//effect alters the way a tower targets enemies.  if multiple are present, then higher priority takes precedence
 public interface IEffectTowerTargeting : IEffect
 {
+    TargetingPriority priority { get; } 
+
     List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange);
 }
 

@@ -2,6 +2,19 @@
 using UnityEngine;
 using Vexe.Runtime.Types;
 
+//order in which multiple targeting effects are prioritized.  Higher effects go first
+public enum TargetingPriority
+{
+    DEFAULT    = 0,
+    RANDOM     = 1,
+    BY_STAT    = 2,
+    MOUSE      = 3,
+    ORTHOGONAL = 4,
+    MULTIPLE   = 5,
+    ALL        = 6,
+}
+
+
 /// <summary>
 /// all TowerTargeting effects trigger when an enemy is damaged.  
 /// The effect itself could be attached either to the attacking tower or the defending enemy.  
@@ -11,6 +24,8 @@ public abstract class BaseEffectTowerTargeting : BaseEffect, IEffectTowerTargeti
 {
     [Hide] public override TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast
     [Hide] public override EffectType    effectType    { get { return EffectType.towerTargeting; } }  //effect type
+
+    [Hide] public abstract TargetingPriority priority { get; }
 
     public abstract List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange);
 }
@@ -22,6 +37,7 @@ public class EffectTargetDefault : BaseEffectTowerTargeting
 {
     [Hide] public override string Name { get { return "Target: default"; } } //returns name and strength
     [Show] public override string XMLName { get { return "<NO_XML_NAME>"; } } //name used to refer to this effect in XML.  This should never happen for this effect since it is a placeholder
+    [Hide] public override TargetingPriority priority { get { return TargetingPriority.DEFAULT; } } //priority of this targeting effect
 
     public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
@@ -48,6 +64,7 @@ public class EffectTargetArmor : BaseEffectTowerTargeting
 {
     [Hide] public override string Name { get { return "Target: highest armor"; } } //returns name and strength
     [Show] public override string XMLName { get { return "targetArmor"; } } //name used to refer to this effect in XML
+    [Hide] public override TargetingPriority priority { get { return TargetingPriority.BY_STAT; } } //priority of this targeting effect
 
     public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
@@ -86,6 +103,7 @@ public class EffectTargetAll : BaseEffectTowerTargeting
 {
     [Hide] public override string Name { get { return "Target: all in range"; } } //returns name and strength
     [Show] public override string XMLName { get { return "targetAll"; } } //name used to refer to this effect in XML
+    [Hide] public override TargetingPriority priority { get { return TargetingPriority.ALL; } } //priority of this targeting effect
 
     public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
@@ -98,6 +116,7 @@ public class EffectTargetBurst : BaseEffectTowerTargeting
 {
     [Hide] public override string Name { get { return "Target: all in range"; } } //returns name and strength
     [Show] public override string XMLName { get { return "targetBurst"; } } //name used to refer to this effect in XML
+    [Hide] public override TargetingPriority priority { get { return TargetingPriority.ALL; } } //priority of this targeting effect
 
     public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
@@ -109,7 +128,8 @@ public class EffectTargetBurst : BaseEffectTowerTargeting
 public class EffectTargetClosest : BaseEffectTowerTargeting
 {
     [Hide] public override string Name { get { return "Target: closest"; } } //returns name and strength
-    [Show] public override string XMLName { get { return "targetClosest"; } } //name used to refer to this effect in XML.  This should never happen for this effect since it is a placeholder
+    [Show] public override string XMLName { get { return "targetClosest"; } } //name used to refer to this effect in XML.
+    [Hide] public override TargetingPriority priority { get { return TargetingPriority.BY_STAT; } } //priority of this targeting effect
 
     public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
@@ -145,6 +165,7 @@ public class EffectTargetMultishot : BaseEffectTowerTargeting
 {
     [Hide] public override string Name { get { return "Target: up to " + Mathf.Floor(strength) + " enemies"; } } //returns name and strength
     [Show] public override string XMLName { get { return "targetMultishot"; } } //name used to refer to this effect in XML
+    [Hide] public override TargetingPriority priority { get { return TargetingPriority.MULTIPLE; } } //priority of this targeting effect
 
     public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
@@ -169,6 +190,7 @@ public class EffectTargetRandom : BaseEffectTowerTargeting
 {
     [Hide] public override string Name { get { return "Target: random"; } } //returns name and strength
     [Show] public override string XMLName { get { return "targetRandom"; } } //name used to refer to this effect in XML
+    [Hide] public override TargetingPriority priority { get { return TargetingPriority.RANDOM; } } //priority of this targeting effect
 
     public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
@@ -190,6 +212,7 @@ public class EffectTargetHealth : BaseEffectTowerTargeting
 {
     [Hide] public override string Name { get { return "Target: highest health"; } } //returns name and strength
     [Show] public override string XMLName { get { return "targetHealth"; } } //name used to refer to this effect in XML
+    [Hide] public override TargetingPriority priority { get { return TargetingPriority.BY_STAT; } } //priority of this targeting effect
 
     public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
@@ -231,6 +254,7 @@ public class EffectTargetMouse : BaseEffectTowerTargeting
 
     [Hide] public override string Name { get { return "Target: near mouse"; } } //returns name and strength
     [Show] public override string XMLName { get { return "targetMouse"; } } //name used to refer to this effect in XML
+    [Hide] public override TargetingPriority priority { get { return TargetingPriority.MOUSE; } } //priority of this targeting effect
 
     public EffectTargetMouse() { cachedEnemiesNearMouse = null; cachedFrame = -1; cachedRange = 0.0f; }
 
@@ -264,6 +288,7 @@ public class EffectTargetSpeed : BaseEffectTowerTargeting
 {
     [Hide] public override string Name { get { return "Target: highest Speed"; } } //returns name and strength
     [Show] public override string XMLName { get { return "targetSpeed"; } } //name used to refer to this effect in XML
+    [Hide] public override TargetingPriority priority { get { return TargetingPriority.BY_STAT; } } //priority of this targeting effect
 
     public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
@@ -300,6 +325,7 @@ public class EffectTargetOrthogonal : BaseEffectTowerTargeting
 {
     [Hide] public override string Name { get { return "Target: Orthogonal"; } } //returns name and strength
     [Show] public override string XMLName { get { return "targetOrthogonal"; } } //name used to refer to this effect in XML
+    [Hide] public override TargetingPriority priority { get { return TargetingPriority.ORTHOGONAL; } } //priority of this targeting effect
 
     public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
