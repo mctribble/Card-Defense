@@ -81,7 +81,7 @@ public class EffectInvScaleSpeedWithDamage : BaseEffectEnemyDamaged
     {
         EnemyScript e = d.dest;
         float damageRatio = 1 - (e.curHealth / e.maxHealth);
-        e.unitSpeed = Mathf.Lerp(e.baseUnitSpeed, 1, damageRatio);
+        e.unitSpeed = Mathf.Lerp(e.unitSpeedWhenSpawned, 1, damageRatio);
     }
 }
 
@@ -99,7 +99,7 @@ public class EffectScaleSpeedWithDamage : BaseEffectEnemyDamaged
     {
         EnemyScript e = d.dest;
         float damageRatio = 1 - (e.curHealth / e.maxHealth);
-        e.unitSpeed = Mathf.Lerp(e.baseUnitSpeed, (e.baseUnitSpeed * strength), damageRatio);
+        e.unitSpeed = Mathf.Lerp(e.unitSpeedWhenSpawned, (e.unitSpeedWhenSpawned * strength), damageRatio);
     }
 }
 

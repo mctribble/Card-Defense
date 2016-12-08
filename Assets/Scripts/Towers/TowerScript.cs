@@ -606,7 +606,7 @@ public class TowerScript : BaseBehaviour
             colorString = "lime";
         else
             colorString = "white";
-        tooltipText.text += attackPower + " <color=" + colorString + "> " + attackChange.ToString("+ ####0.#;- ####0.#") + "</color> damage ";
+        tooltipText.text += attackPower.ToString("F2") + " <color=" + colorString + "> " + attackChange.ToString("+ ####0.##;- ####0.##") + "</color> damage ";
 
         //charge time
         colorString = "magenta";
@@ -616,7 +616,7 @@ public class TowerScript : BaseBehaviour
             colorString = "red";
         else
             colorString = "white";
-        tooltipText.text += "every " + rechargeTime + " <color=" + colorString + "> " + rechargeChange.ToString("+ ####0.#;- ####0.#") + "</color> seconds\n";
+        tooltipText.text += "every " + rechargeTime.ToString("F2") + " <color=" + colorString + "> " + rechargeChange.ToString("+ ####0.##;- ####0.##") + "</color> seconds\n";
 
         //DPS
         colorString = "magenta";
@@ -743,8 +743,8 @@ public class TowerScript : BaseBehaviour
         tooltipText.text =
             towerName + "\n" +
             upgradeCount + "/" + upgradeCap + " upgrades\n" +
-            attackPower + " damage every " + rechargeTime.ToString("F1") + " seconds\n" +
-            "(" + (attackPower / rechargeTime).ToString("F1") + " per second)\n" +
+            attackPower + " damage every " + rechargeTime.ToString("F2") + " seconds\n" +
+            "(" + (attackPower / rechargeTime).ToString("F2") + " per second)\n" +
             "range: " + range;
 
         if ((effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false)) //special display on infinite lifespan

@@ -221,7 +221,7 @@ public class EnemyTypeManagerScript : BaseBehaviour
     public EnemyData getRandomEnemyType(int maxSpawnCost)
     {
         //choose only enemies we can afford
-        List<EnemyData> typesToChooseFrom = types.enemyTypes.FindAll(ed => ed.spawnCost < maxSpawnCost);
+        List<EnemyData> typesToChooseFrom = types.enemyTypes.FindAll(ed => ed.baseSpawnCost < maxSpawnCost);
 
         //if that list is empty, then search all of them so we can at least return something meaningful
         if (typesToChooseFrom.Count == 0)

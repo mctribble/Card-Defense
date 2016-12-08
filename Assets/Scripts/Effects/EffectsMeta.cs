@@ -520,7 +520,7 @@ public class EffectScaleEffectWithBudget : BaseEffectMeta
             Debug.LogWarning("ScaleEffectWithBudget triggered repeatedly!");
         }
 
-        innerEffect.strength = Mathf.RoundToInt((((float)currentWaveData.budget) / ((float)currentWaveData.enemyData.spawnCost)) * innerEffect.strength);
+        innerEffect.strength = Mathf.RoundToInt((((float)currentWaveData.budget) / ((float)currentWaveData.enemyData.baseSpawnCost)) * innerEffect.strength);
         alreadyScaled = true;
 
         if (innerEffect.triggersAs(EffectType.wave))

@@ -41,20 +41,56 @@ public class XMLColor
 };
 
 /// <summary>
+/// Describes how an enemy type should upgrade as it ranks up
+/// </summary>
+[System.Serializable]
+public class RankInfo
+{
+    [XmlAttribute] public int   rankUpSpawnCount { get; set; } //if a wave would spawn more than this many enemies, it ranks up
+
+    //each of these shows how much the given stat increases on rank up.  for integer stats, the result is rounded up.
+    [XmlAttribute] public float spawnCostMult {get; set; } 
+    [XmlAttribute] public float attackMult    {get; set; } 
+    [XmlAttribute] public float maxHealthMult {get; set; } 
+    [XmlAttribute] public float unitSpeedMult {get; set; } 
+
+    //default values
+    public RankInfo()
+    {
+        rankUpSpawnCount = 200;
+        spawnCostMult = 2.0f;
+        attackMult    = 2.0f;
+        maxHealthMult = 2.0f;
+        unitSpeedMult = 1.0f;
+    }
+}
+
+/// <summary>
 /// contains everything needed to define an enemy type
 /// </summary>
 [System.Serializable]
 public class EnemyData
 {
-    //indicates whether this enemy definition
+    //indicates whether this enemy definition is modded
     [XmlIgnore][Comment("Modded enemy definitions are not saved from the inspector.")]
-    public bool isModded = false;
+    public bool isModded;
 
-    [XmlAttribute]             public string name;       //used to identify this enemy type
-    [XmlAttribute][iMin(1)]    public int    spawnCost;	 //used for wave generation: more expensive enemies spawn in smaller numbers
-    [XmlAttribute][iMin(1)]    public int    attack;     //number of charges knocked off if the enemy reaches the goal
-    [XmlAttribute][iMin(1)]    public int    maxHealth;  //max health
-    [XmlAttribute][fMin(0.1f)] public float  unitSpeed;  //speed, measured in distance/second
+    [XmlAttribute][Show] public string name {get; set;} //used to identify this enemy type
+
+    [XmlIgnore][iMin(1)][iMax(3999)] public int currentRank {get; set;} //higher ranks are stronger, but also more expensive.  Waves rank up when their spawn count gets too high.
+    [Show][XmlElement("rankInfo")]   public RankInfo rankInfo;          //how and when this enemy ranks up
+
+    //stats for rank I
+    [XmlAttribute("spawnCost")][iMin(1)]    public int   baseSpawnCost {get; set;} //used for wave generation: more expensive enemies spawn in smaller numbers
+    [XmlAttribute("attack")]   [iMin(1)]    public int   baseAttack    {get; set;} //number of charges knocked off if the enemy reaches the goal
+    [XmlAttribute("maxHealth")][iMin(1)]    public int   baseMaxHealth {get; set;} //max health
+    [XmlAttribute("unitSpeed")][fMin(0.1f)] public float baseUnitSpeed {get; set;} //speed, measured in distance/second
+
+    //stats at the current rank
+    [XmlIgnore][Show] public int   currentSpawnCost { get { return Mathf.FloorToInt(baseSpawnCost * Mathf.Pow(rankInfo.spawnCostMult, (currentRank - 1))); } }
+    [XmlIgnore][Show] public int   currentAttack    { get { return Mathf.FloorToInt(baseAttack    * Mathf.Pow(rankInfo.attackMult,    (currentRank - 1))); } }
+    [XmlIgnore][Show] public int   currentMaxHealth { get { return Mathf.FloorToInt(baseMaxHealth * Mathf.Pow(rankInfo.maxHealthMult, (currentRank - 1))); } }
+    [XmlIgnore][Show] public float currentUnitSpeed { get { return                 (baseUnitSpeed * Mathf.Pow(rankInfo.unitSpeedMult, (currentRank - 1))); } }
 
     public XMLColor   unitColor;  //used to colorize the enemy sprite
     public EffectData effectData; //specifies which effects are attached to this enemy type and what their parameters are
@@ -77,9 +113,9 @@ public class EnemyData
     public string getDescription()
     {
         //enemy stats
-        string description = "Health: " + maxHealth + '\n' +
-                             "Attack: " + attack    + '\n' +
-                             "Speed: "  + unitSpeed;
+        string description = "Health: " + currentMaxHealth + '\n' +
+                             "Attack: " + currentAttack    + '\n' +
+                             "Speed: "  + currentUnitSpeed;
 
         //effects
         if ((effectData != null) && (effectData.effects.Count > 0))
@@ -102,6 +138,14 @@ public class EnemyData
     }
 
     public override string ToString() { return name; } //for friendlier display in debugger
+
+    //default values
+    public EnemyData()
+    {
+        isModded    = false;
+        currentRank = 1;
+        rankInfo    = new RankInfo();
+    }
 };
 
 /// <summary>
@@ -131,13 +175,13 @@ public class EnemyScript : BaseBehaviour
     //enemy data
     public int        damage;        
     public int        maxHealth;
-    public float      baseUnitSpeed;    
     public float      unitSpeed; 
+    public float      unitSpeedWhenSpawned;    
     public EffectData effectData;
 
     //used for health bar
-    public Color    healthyColor; //color when healthy
-    public Color    dyingColor;   //color when near death
+    public Color healthyColor; //color when healthy
+    public Color dyingColor;   //color when near death
 
     public bool goalFinalChance; //this is true for the very short period between reaching the goal and dealing damage to give attacks a final chance to kill this enemy
 
@@ -405,13 +449,13 @@ public class EnemyScript : BaseBehaviour
     public void SetData(EnemyData d) { StartCoroutine(SetDataCoroutine(d)); }
     private IEnumerator SetDataCoroutine(EnemyData d)
     {
-        enemyTypeName = d.name;
-        damage = d.attack;
-        maxHealth = d.maxHealth;
-        curHealth = d.maxHealth;
-        expectedHealth = d.maxHealth;
-        unitSpeed = d.unitSpeed;
-        baseUnitSpeed = d.unitSpeed;
+        enemyTypeName        = d.name;
+        damage               = d.currentAttack;
+        maxHealth            = d.currentMaxHealth;
+        curHealth            = d.currentMaxHealth;
+        expectedHealth       = d.currentMaxHealth;
+        unitSpeed            = d.currentUnitSpeed;
+        unitSpeedWhenSpawned = d.currentUnitSpeed;
 
         if (d.effectData != null)
             effectData = d.effectData.clone();

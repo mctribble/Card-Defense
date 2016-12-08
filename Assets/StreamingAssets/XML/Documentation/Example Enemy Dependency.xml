@@ -4,9 +4,11 @@
 <EnemyTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Enemies.xsd" enemyFileDependencies="Example Enemies">
   <Enemies>
     <Enemy name="ExEnemy" spawnCost="1" attack="1" maxHealth="1" unitSpeed="2" sprite="Enemy_Basic.png">
+      <rankInfo rankUpSpawnCount="200" spawnCostMult="2" attackMult="2" maxHealthMult="2" unitSpeedMult="1" />
       <unitColor r="0.1" g="0.1" b="0.1" a="0.8" />
     </Enemy>
     <Enemy name="ExEnemy2" spawnCost="1000" attack="50" maxHealth="9999" unitSpeed="1" sprite="Enemy_Basic.png">
+      <rankInfo rankUpSpawnCount="200" spawnCostMult="2" attackMult="2" maxHealthMult="2" unitSpeedMult="1" />
       <unitColor r="1" g="1" b="1" a="1"/>
     </Enemy>
   </Enemies>

@@ -124,7 +124,7 @@ public class EffectScaleAttackWithBudget : BaseEffectWave
     public override WaveData alteredWaveData(WaveData currentWaveData)
     {
         WaveData newData = currentWaveData;
-        newData.enemyData.attack = Mathf.RoundToInt((((float)newData.budget) / ((float)newData.enemyData.spawnCost)) * newData.enemyData.attack);
+        newData.enemyData.baseAttack = Mathf.RoundToInt((((float)newData.budget) / ((float)newData.enemyData.baseSpawnCost)) * newData.enemyData.baseAttack);
         return newData;
     }
 }
@@ -138,7 +138,7 @@ public class EffectScaleHealthWithBudget : BaseEffectWave
     public override WaveData alteredWaveData(WaveData currentWaveData)
     {
         WaveData newData = currentWaveData;
-        newData.enemyData.maxHealth = Mathf.RoundToInt((((float)newData.budget) / ((float)newData.enemyData.spawnCost)) * newData.enemyData.maxHealth);
+        newData.enemyData.baseMaxHealth = Mathf.RoundToInt((((float)newData.budget) / ((float)newData.enemyData.baseSpawnCost)) * newData.enemyData.baseMaxHealth);
         return newData;
     }
 }
@@ -152,7 +152,7 @@ public class EffectScaleSpeedWithBudget : BaseEffectWave
     public override WaveData alteredWaveData(WaveData currentWaveData)
     {
         WaveData newData = currentWaveData;
-        newData.enemyData.unitSpeed = Mathf.RoundToInt((((float)newData.budget) / ((float)newData.enemyData.spawnCost)) * newData.enemyData.unitSpeed);
+        newData.enemyData.baseUnitSpeed = Mathf.RoundToInt((((float)newData.budget) / ((float)newData.enemyData.baseSpawnCost)) * newData.enemyData.baseUnitSpeed);
         return newData;
     }
 }

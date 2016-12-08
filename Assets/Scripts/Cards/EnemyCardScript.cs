@@ -102,7 +102,7 @@ public class WaveData
             else if (enemyData == null)
                 result = enemyList.Count;
             else
-                result = Mathf.FloorToInt(budget / enemyData.spawnCost);
+                result = Mathf.FloorToInt(budget / enemyData.currentSpawnCost);
 
             //always spawn at least one enemy
             if (result < 1)
@@ -118,7 +118,7 @@ public class WaveData
         get
         {
             if (enemyList == null)
-                return (spawnCount - spawnedThisWave) * enemyData.maxHealth;
+                return (spawnCount - spawnedThisWave) * enemyData.currentMaxHealth;
             else
                 return enemyList.Sum(x => x.curHealth);
         }
@@ -248,7 +248,7 @@ public class EnemyCardScript : CardScript
 
         //update title text (???????x????)
         if (survivorList == null)
-            title.text = "<color=#" + wave.enemyData.unitColor.toHex() + ">" + wave.enemyData.name + "</color> x" + (wave.spawnCount - wave.spawnedThisWave);
+            title.text = "<color=#" + wave.enemyData.unitColor.toHex() + ">" + wave.enemyData.name + " " + wave.enemyData.currentRank.ToRomanNumeral() + "</color> x" + (wave.spawnCount - wave.spawnedThisWave);
         else
             title.text = "Survivors x" + (wave.spawnCount - wave.spawnedThisWave);
 

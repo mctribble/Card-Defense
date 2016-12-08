@@ -9,6 +9,15 @@
               <xsd:element maxOccurs="unbounded" name="Enemy">
                 <xsd:complexType>
                   <xsd:sequence>
+                    <xsd:element name="rankInfo">
+                      <xsd:complexType>
+                        <xsd:attribute name="rankUpSpawnCount" type="xsd:int"   use="required" />
+                        <xsd:attribute name="spawnCostMult"    type="xsd:int"   use="required" />
+                        <xsd:attribute name="attackMult"       type="xsd:float" use="required" />
+                        <xsd:attribute name="maxHealthMult"    type="xsd:float" use="required" />
+                        <xsd:attribute name="unitSpeedMult"    type="xsd:float" use="required" />
+                      </xsd:complexType>
+                    </xsd:element>
                     <xsd:element name="unitColor">
                       <xsd:complexType>
                         <xsd:attribute name="r" type="xsd:float" use="required" />
@@ -31,12 +40,12 @@
                       </xsd:complexType>
                     </xsd:element>
                   </xsd:sequence>
-                  <xsd:attribute name="name" type="xsd:string" use="required" />
+                  <xsd:attribute name="name"      type="xsd:string"        use="required" />
                   <xsd:attribute name="spawnCost" type="xsd:unsignedShort" use="required" />
-                  <xsd:attribute name="attack" type="xsd:unsignedByte" use="required" />
+                  <xsd:attribute name="attack"    type="xsd:unsignedByte"  use="required" />
                   <xsd:attribute name="maxHealth" type="xsd:unsignedShort" use="required" />
-                  <xsd:attribute name="unitSpeed" type="xsd:unsignedByte" use="required" />
-                  <xsd:attribute name="sprite" type="xsd:string" use="required" />
+                  <xsd:attribute name="unitSpeed" type="xsd:unsignedByte"  use="required" />
+                  <xsd:attribute name="sprite"    type="xsd:string"        use="required" />
                 </xsd:complexType>
               </xsd:element>
             </xsd:sequence>
@@ -51,9 +60,9 @@
     <xsd:sequence>
       <xsd:element name="Effect" type="tEffect" minOccurs="0"/>
     </xsd:sequence>
-    <xsd:attribute name="name" type="xsd:string" use="required" />
+    <xsd:attribute name="name"     type="xsd:string"  use="required" />
     <xsd:attribute name="strength" type="xsd:decimal" use="optional" />
-    <xsd:attribute name="argument" type="xsd:string" use="optional" />
+    <xsd:attribute name="argument" type="xsd:string"  use="optional" />
   </xsd:complexType>
   
 </xs:schema>
