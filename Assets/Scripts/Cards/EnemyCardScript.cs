@@ -141,7 +141,8 @@ public class WaveData
 
         EnemyScript e = enemyList.First();
         enemyList.Remove(e);
-        e.gameObject.SetActive(true);
+        if (e != null)
+            e.gameObject.SetActive(true);
         EnemyManagerScript.instance.EnemySpawned(e);
     }
 

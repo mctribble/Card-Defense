@@ -126,7 +126,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Ping Tower" Description="Rapid waves of damage that excel at wiping out Ping waves" Charges="4" Art="Ping_Tower.png" Tooltip="Tower_Round.png" Token="false">
+    <Card Type="tower" Name="Ping Tower" Description="Rapid waves of damage that excel at fighting large groups" Charges="4" Art="Ping_Tower.png" Tooltip="Tower_Round.png" Token="false">
       <towerData Recharge="0.2" Range="1.5" Damage="1" Lifespan="2" UpgradeCap="3" Sprite="Tower_Round.png">
         <towerColor r="0.2" g="1" b="1" a="1" />
       </towerData>
@@ -159,7 +159,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Sniper Tower" Description="Specializes in slaying Giants" Charges="3" Art="Sniper_Tower.png" Tooltip="Tower_Octagon.png" Token="false">
+    <Card Type="tower" Name="Sniper Tower" Description="Specializes in slaying Giants" Charges="2" Art="Sniper_Tower.png" Tooltip="Tower_Octagon.png" Token="false">
       <towerData Recharge="7.5" Range="999" Damage="300" Lifespan="5" UpgradeCap="1" Sprite="Tower_Octagon.png">
         <towerColor r="0" g="0" b="1" a="1" />
       </towerData>
@@ -263,21 +263,21 @@
     <Card Type="spell" Name="Conjure Spell" Description="Something from nothing, but will it be helpful?" Charges="3" Art="Conjure_Spell.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>
-          <Effect name="conjureSpellCard" strength="2" />
+          <Effect name="conjureSpellCard" strength="1" />
         </Effects>
       </effectData>
     </Card>
     <Card Type="spell" Name="Conjure Tower" Description="Something from nothing, but will it be helpful?" Charges="3" Art="Conjure_Tower.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>
-          <Effect name="conjureTowerCard" strength="2" />
+          <Effect name="conjureTowerCard" strength="1" />
         </Effects>
       </effectData>
     </Card>
     <Card Type="spell" Name="Conjure Upgrade" Description="Something from nothing, but will it be helpful?" Charges="3" Art="Conjure_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>
-          <Effect name="conjureUpgradeCard" strength="2" />
+          <Effect name="conjureUpgradeCard" strength="1" />
         </Effects>
       </effectData>
     </Card>
@@ -362,11 +362,12 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="spell" Name="Reinforce" Charges="1" Art="Strong_Reinforce.png" Tooltip="Tower_Basic.png" Token="false">
+    <Card Type="spell" Name="Reinforce" Charges="1" Description="quite useful, but attracts unwanted attention" Art="Reinforce.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>
           <Effect name="allTowersLifespanBonus" strength="3" />
           <Effect name="noUpgradeCost" />
+          <Effect name="drawEnemyCard" strength="1" />
         </Effects>
       </effectData>
     </Card>
@@ -402,10 +403,11 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="spell" Name="Strong Reinforce" Charges="1" Art="Strong_Reinforce.png" Tooltip="Tower_Basic.png" Token="false">
+    <Card Type="spell" Name="Strong Reinforce" Charges="1" Description="extremely useful, but attracts unwanted attention and consumes upgrade slots" Art="Strong_Reinforce.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>
           <Effect name="allTowersLifespanBonus" strength="6" />
+          <Effect name="drawEnemyCard" strength="1" />
         </Effects>
       </effectData>
     </Card>
