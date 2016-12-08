@@ -352,7 +352,7 @@ public class LevelManagerScript : BaseBehaviour
             float waveTime = Mathf.Min(wave*data.waveTimeLinear, data.waveTimeMax);
 
             //create the wave data
-            WaveData waveData = new WaveData(waveEnemy.name, waveBudget, waveTime);
+            WaveData waveData = new WaveData(waveEnemy, waveBudget, waveTime);
 
             //mark it as a random wave so it doesnt get saved from the inspector
             waveData.isRandomWave = true;

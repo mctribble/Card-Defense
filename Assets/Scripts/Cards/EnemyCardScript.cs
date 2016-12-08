@@ -65,9 +65,10 @@ public class WaveData
     }
 
     //specific data
-    public WaveData(string waveType, int waveBudget, float waveTime)
+    public WaveData(EnemyData waveType, int waveBudget, float waveTime)
     {
-        type = waveType;
+        type = waveType.name;
+        enemyData = waveType;
         budget = waveBudget;
         time = waveTime;
         message = null;

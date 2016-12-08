@@ -64,7 +64,7 @@ public class EffectChangeWaveType : BaseEffectWave
 
     public override WaveData alteredWaveData(WaveData currentWaveData)
     {
-        return new WaveData(argument, currentWaveData.budget, currentWaveData.time);
+        return new WaveData(EnemyTypeManagerScript.instance.getEnemyTypeByName(argument), currentWaveData.budget, currentWaveData.time);
     }
 }
 
