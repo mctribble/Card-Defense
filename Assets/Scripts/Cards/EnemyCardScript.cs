@@ -47,6 +47,7 @@ public class WaveData
         set
         {
             data = value;
+            recalculateRank();
         }
     }
 
@@ -75,6 +76,7 @@ public class WaveData
         forcedSpawnCount = -1;
         spawnedThisWave = 0;
         isRandomWave = false;
+        recalculateRank();
     }
 
     //survivor wave constructor
@@ -91,7 +93,21 @@ public class WaveData
         isRandomWave = false;
     }
 
-    //returns number of enemies to spawn this wave.  Cache the value to make sure we give the original spawn count, unaltered by anything that happens during the wave
+    /// <summary>
+    /// updates the rank based on the current wave stats.  This should be called whenever something happens that could change the spawnCount
+    /// </summary>
+    public void recalculateRank()
+    {
+        //skip on survivor waves, since rank doesnt mean anything for them
+        if (isSurvivorWave)
+            return;
+
+        enemyData.currentRank = 1;
+        while (spawnCount > enemyData.rankInfo.rankUpSpawnCount)
+            enemyData.currentRank++;
+    }
+
+    //returns number of enemies to spawn this wave.
     public int spawnCount
     {
         get
@@ -151,9 +167,16 @@ public class WaveData
     public override string ToString()
     {
         if (Application.isPlaying)
-            return type + "(" + spawnCount + ")" + " {Bu: " + budget + " Ti: " + time.ToString("F1") + "}";
+        {
+            if (isSurvivorWave)
+                return spawnCount + " Survivors {Ti: " + time.ToString("F1") + "}";
+            else
+                return type + " " + enemyData.currentRank.ToRomanNumeral() + "(" + spawnCount + ")" + " {Bu: " + budget + " Ti: " + time.ToString("F1") + "}";
+        }
         else
+        {
             return "<start game to see>";
+        }
     }
 }
 
