@@ -90,7 +90,7 @@ public class EnemyData
     [XmlIgnore][Show] public int   currentSpawnCost { get { return Mathf.FloorToInt(baseSpawnCost * Mathf.Pow(rankInfo.spawnCostMult, (currentRank - 1))); } }
     [XmlIgnore][Show] public int   currentAttack    { get { return Mathf.FloorToInt(baseAttack    * Mathf.Pow(rankInfo.attackMult,    (currentRank - 1))); } }
     [XmlIgnore][Show] public int   currentMaxHealth { get { return Mathf.FloorToInt(baseMaxHealth * Mathf.Pow(rankInfo.maxHealthMult, (currentRank - 1))); } }
-    [XmlIgnore][Show] public float currentUnitSpeed { get { return                 (baseUnitSpeed * Mathf.Pow(rankInfo.unitSpeedMult, (currentRank - 1))); } }
+    [XmlIgnore][Show] public float currentUnitSpeed { get { return        Mathf.Min(baseUnitSpeed * Mathf.Pow(rankInfo.unitSpeedMult, (currentRank - 1)), EnemyScript.speedLimit); } }
 
     public XMLColor   unitColor;  //used to colorize the enemy sprite
     public EffectData effectData; //specifies which effects are attached to this enemy type and what their parameters are
@@ -162,20 +162,25 @@ public class EnemyScript : BaseBehaviour
     public SpriteRenderer enemyImage;         //sprite component for this enemy
     public Image          healthbar;          //image used for the health bar
     public Image          deathBurst;         //image used for the death explosion
-    public float          deathBurstSize;     //max scale of the death burst
-    public float          deathBurstTime;     //time taken to animate death burst
+
+    //constant settings set here instead of inspector to save on memory instead of recreating these on every enemy
+    //I tried pretty hard to convince unity to show constants or statics, but it doesnt want to do s
+    public const float deathBurstSize  = 1.0f; //max scale of the death burst
+    public const float deathBurstTime  = 0.2f; //time taken to animate death burst
+    public const float speedLimit      = 7.5f; //maximum speed an enemy is ever allowed to travel.  Enforced as a cap on unitSpeed.
+    public const int   maxSoundsAtOnce = 25;   //limit to how many sounds can be played at once, shared across ALL enemies
 
     //sound settings
     public AudioSource audioSource;     //source to use to play sounds from
     public AudioClip[] enemyHitSounds;  //sounds to play when the player is hurt.  one of these is chosen at random.
     public AudioClip[] deathSounds;     //sounds to play when this enemy is dead.  one of these is chosen at random.
-    public static int  maxSoundsAtOnce; //limit to how many sounds can be played at once, shared across ALL enemies
     private static int curSoundsAtOnce; //number of sounds currently playing, shared across ALL enemies
 
     //enemy data
     public int        damage;        
     public int        maxHealth;
-    public float      unitSpeed; 
+    private float     _unitSpeed;
+    public float      unitSpeed { get { return _unitSpeed; } set { _unitSpeed = Mathf.Min(value, speedLimit); } }
     public float      unitSpeedWhenSpawned;    
     public EffectData effectData;
 
@@ -311,9 +316,8 @@ public class EnemyScript : BaseBehaviour
         ScoreManagerScript.instance.flawless = false;
 
         //reset the enemy by putting it at a random spawner with a new path
-        GameObject[] spawners = GameObject.FindGameObjectsWithTag("spawner");
-        int spawnerIndex = Random.Range(0, spawners.Length);
-        transform.position = spawners[spawnerIndex].transform.position;
+        int spawnerIndex = Random.Range(0, LevelManagerScript.instance.spawnerObjects.Count);
+        transform.position = LevelManagerScript.instance.spawnerObjects[spawnerIndex].GetComponent<SpawnerScript>().spawnPos;
         path = PathManagerScript.instance.CalculatePathFromPos(transform.position);
         currentDestination = 0;
         goalFinalChance = false;

@@ -112,9 +112,6 @@ public class BulletScript : BaseBehaviour
         //tell enemy to expect the damage
         enemyRef.onExpectedDamage(ref data);
 
-        //while amusing, bullets that cant catch up with the enemy aren't very useful.  Force speed to be at least slightly higher than the target speed
-        speed = Mathf.Max(speed, (data.dest.unitSpeed + 0.1f));
-
         initialized = true;
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
@@ -21,7 +22,13 @@ public class WaveData
     //indicates whether or not this wave was randomly generated.  Random waves are not written back to the file when saving level definitions
     [XmlIgnore][Comment("random waves are not saved to the level file.",helpButton:true)]
     public bool isRandomWave;
-    
+
+    //like ToString(), but returns a shorter, simpler result
+    public string ToShortString()
+    {
+        return data.name + " " + data.currentRank.ToRomanNumeral() + "x" + spawnCount;
+    }
+
     //wave budget.  
     [XmlAttribute]
     public int budget;

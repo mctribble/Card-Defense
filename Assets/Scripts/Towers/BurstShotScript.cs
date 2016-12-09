@@ -26,10 +26,10 @@ public class BurstShotScript : BaseBehaviour
     public SpriteRenderer spriteRenderer; //component reference
 
     //sound data
-    public AudioClip[]    burstSounds;
-    public AudioSource    audioSource;
-    public static int     maxSoundsAtOnce;
-    private static int    curSoundsAtOnce;
+    public AudioClip[] burstSounds;
+    public AudioSource audioSource;
+    public int         maxSoundsAtOnce;
+    private static int curSoundsAtOnce;
 
     private bool                  initialized;     //whether or not this shot has been initialized
     private List<DamageEventData> expectedToHit;   //list of enemies that we told to expect damage and the events associated with those hits

@@ -656,6 +656,7 @@ public class LevelManagerScript : BaseBehaviour
 
         //wave is over
         wavesSpawning--;
+        Destroy(spawner.gameObject);
         yield break;
     }
 

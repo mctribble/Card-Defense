@@ -4,6 +4,7 @@ some lingering cause of enemies not knowing to expect damage
 ================================================================
 presentation:
 need art for conjure tower/upgrade/spell
+need to update art for Ping tower
 better range display, especially when upgrading and for special targeting types
 animated enemy sprites?
 ================================================================

@@ -2,14 +2,6 @@
 <!-- These cards are intended only for development purposes -->
 <CardTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Cards.xsd">
   <Cards>
-    <Card Type="tower" Name="Dev Purge Tower" Description="Kills everything that comes close" Charges="99" Art="Dev_Art.png" Tooltip="Dev_Tower.png" Token="false">
-      <towerData Recharge="0.001" Range="1" Damage="500" Lifespan="99" UpgradeCap="3" Sprite="Dev_Tower.png" />
-      <effectData>
-        <Effects>
-          <Effect name="targetAll" />
-        </Effects>
-      </effectData>
-    </Card>
     <Card Type="tower" Name="Dev Chain Purge Tower" Description="kills entire waves of enemies with one hit" Charges="99" Art="Dev_Art.png" Tooltip="Dev_Tower.png" Token="false">
       <towerData Recharge="0.1" Range="1" Damage="999999" Lifespan="99" UpgradeCap="3" Sprite="Dev_Tower.png" >
         <towerColor r="1" g="0" b="0" a="1"/>
@@ -18,6 +10,28 @@
         <Effects>
           <Effect name="chainHit" strength="1" />
           <Effect name="targetClosest" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="tower" Name="Dev Nova Tower" Description="Kills everything everywhere every time" Charges="99" Art="Dev_Art.png" Tooltip="Dev_Tower.png" Token="false">
+      <towerData Recharge="1" Range="50" Damage="1" Lifespan="99" UpgradeCap="3" Sprite="Dev_Tower.png">
+        <towerColor r="0" g="1" b="0" a="1"/>
+      </towerData>
+      <effectData>
+        <Effects>
+          <Effect name="targetBurst" />
+          <Effect name="damagePercent" strength="100" />
+          <Effect name="armorPierce" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="tower" Name="Dev Purge Tower" Description="Kills everything that comes close" Charges="99" Art="Dev_Art.png" Tooltip="Dev_Tower.png" Token="false">
+      <towerData Recharge="0.001" Range="1" Damage="500" Lifespan="99" UpgradeCap="3" Sprite="Dev_Tower.png">
+        <towerColor r="0" g="0" b="1" a="1"/>
+      </towerData>
+      <effectData>
+        <Effects>
+          <Effect name="targetAll" />
         </Effects>
       </effectData>
     </Card>

@@ -362,7 +362,7 @@ public class LevelSelectScript : BaseBehaviour
         else
         {
             infoImage.sprite = Resources.Load<Sprite>("Sprites/Error");
-            Debug.LogError("could not load level thumbnail (" + www.error + ")");
+            Debug.LogWarning("could not load level thumbnail (" + www.error + ")");
         }
 
         infoImage.type = Image.Type.Sliced;
