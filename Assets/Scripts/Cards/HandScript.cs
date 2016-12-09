@@ -618,7 +618,7 @@ public class HandScript : BaseBehaviour
             {
                 return IncomingWaves.Sum(x => x.totalRemainingHealth);
             }
-            catch (System.OverflowException e)
+            catch (System.OverflowException)
             {
                 Debug.LogWarning("totalRemainingHealth overflow!");
                 return int.MaxValue;
