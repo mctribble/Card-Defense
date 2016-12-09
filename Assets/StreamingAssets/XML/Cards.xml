@@ -166,7 +166,7 @@
       <effectData>
         <Effects>
           <Effect name="targetHealth" />
-          <Effect name="damagePercent" strength="10" />
+          <Effect name="damagePercent" strength="5" />
         </Effects>
       </effectData>
     </Card>

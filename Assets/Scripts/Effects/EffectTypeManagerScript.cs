@@ -46,9 +46,10 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "invScaleEffectWithTime":    ie = new EffectInvScaleEffectWithTime(); break;
             case "invScaleSpeedWithDamage":   ie = new EffectInvScaleSpeedWithDamage(); break;
             case "invScaleSpeedWithTime":     ie = new EffectInvScaleSpeedWithTime(); break;
-            case "scaleAttackhWithBudget":    ie = new EffectScaleAttackWithBudget(); break;
+            case "scaleAttackWithBudget":     ie = new EffectScaleAttackWithBudget(); break;
             case "scaleEffectWithBudget":     ie = new EffectScaleEffectWithBudget(); break;
             case "scaleEffectWithDamage":     ie = new EffectScaleEffectWithDamage(); break;
+            case "scaleEffectWithRank":       ie = new EffectScaleEffectWithRank(); break;
             case "scaleEffectWithTime":       ie = new EffectScaleEffectWithTime(); break;
             case "scaleHealthWithBudget":     ie = new EffectScaleHealthWithBudget(); break;
             case "scaleSpeedWithBudget":      ie = new EffectScaleSpeedWithBudget(); break;

@@ -310,8 +310,11 @@ public class EnemyScript : BaseBehaviour
 
         ScoreManagerScript.instance.flawless = false;
 
-        //reset the enemy
-        transform.position = startPos;
+        //reset the enemy by putting it at a random spawner with a new path
+        GameObject[] spawners = GameObject.FindGameObjectsWithTag("spawner");
+        int spawnerIndex = Random.Range(0, spawners.Length);
+        transform.position = spawners[spawnerIndex].transform.position;
+        path = PathManagerScript.instance.CalculatePathFromPos(transform.position);
         currentDestination = 0;
         goalFinalChance = false;
 

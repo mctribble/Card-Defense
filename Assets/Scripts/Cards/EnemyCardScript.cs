@@ -102,9 +102,18 @@ public class WaveData
         if (isSurvivorWave)
             return;
 
+        //set rank
+        int oldRank = enemyData.currentRank;
         enemyData.currentRank = 1;
         while (spawnCount > enemyData.rankInfo.rankUpSpawnCount)
             enemyData.currentRank++;
+
+        //if rank changed, call effects
+        if (oldRank != enemyData.currentRank)
+            if (enemyData.effectData != null)
+                foreach (IEffect ie in enemyData.effectData.effects)
+                    if (ie.triggersAs(EffectType.rank))
+                        ((IEffectRank)ie).rankChanged(enemyData.currentRank);
     }
 
     //returns number of enemies to spawn this wave.

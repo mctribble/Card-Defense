@@ -18,6 +18,7 @@ scaleAttackhWithBudget    | enemy attack scales up with wave budget
 scaleAttackWithHealth     | monster deals more damage as it gets injured
 scaleEffectWithBudget     | target enemy effect scales up with wave budget
 scaleEffectWithDamage     | target enemy effect scales up as the enemy takes damage (max strength: base * x)
+scaleEffectWithRank       | target enemy effect scales up with the rank of the wave (multiplied by X per rank, like how stats scale)
 scaleEffectWithTime       | target enemy effect gets stronger by X/s
 scaleHealthWithBudget     | enemy health scales up with wave budget
 scaleSpeedWithBudget      | enemy speed  scales up with wave budget

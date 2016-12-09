@@ -38,6 +38,7 @@ public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
     public virtual void onTowerDeath(TowerScript tower) { if (shouldApplyInnerEffect()) { ((IEffectDeath)innerEffect).onTowerDeath(tower); } }
     public virtual void onEnemySpawned(EnemyScript enemy) {  if (shouldApplyInnerEffect()) { ((IEffectOnEnemySpawned)innerEffect).onEnemySpawned(enemy); } }
     public virtual void playerCardDrawn(CardScript playerCard) { if (shouldApplyInnerEffect()) { ((IEffectCardDrawn)innerEffect).playerCardDrawn(playerCard); } }
+    public virtual void rankChanged(int rank) { if (shouldApplyInnerEffect()) { ((IEffectRank)innerEffect).rankChanged(rank); } }
     public virtual void enemyCardDrawn(EnemyScript enemyCard) { if (shouldApplyInnerEffect()) { ((IEffectCardDrawn)innerEffect).enemyCardDrawn(enemyCard); } }
 
     //returns the XMLName, skipping over any meta effects if they are present.  See also: EffectTypeManagerScript.parse()
@@ -174,10 +175,13 @@ public class EffectIfRollRange : BaseEffectMeta
     {
         get
         {
-            if (innerEffect == null)
-                return "[" + rangeMin + " - " + rangeMax + "]" + "do nothing";
+            string rangeString;
+            if (rangeMin == rangeMax)
+                rangeString = "[" + rangeMin + "]";
             else
-                return "[" + rangeMin + " - " + rangeMax + "]" + innerEffect.Name;
+                rangeString = "[" + rangeMin + " - " + rangeMax + "]";
+
+            return rangeString + innerEffect.Name;
         }
     }
     public override IEffect innerEffect
@@ -527,6 +531,46 @@ public class EffectScaleEffectWithBudget : BaseEffectMeta
             return base.alteredWaveData(currentWaveData);
         else
             return currentWaveData;
+    }
+
+    //since we altered the inner effect, when it gets cloned we need to copy over the changes
+    public override IEffect cloneInnerEffect()
+    {
+        IEffect clone = base.cloneInnerEffect();
+        clone.strength = innerEffect.strength;
+        return clone;
+    }
+}
+
+//target enemy effect scales up with the rank of the wave (multiplied by X per rank, like how stats scale)
+public class EffectScaleEffectWithRank : BaseEffectMeta
+{
+    public override string Name { get { return "[ranked]" + innerEffect.Name; } } //returns name and strength
+    public override string XMLName { get { return "scaleEffectWithRank"; } } //name used to refer to this effect in XML
+
+    public override bool shouldApplyInnerEffect() { return true; } //always trigger inner effect
+
+    //allow this to trigger as an onDamage effect even if the child does not
+    public override bool triggersAs(EffectType triggerType)
+    {
+        return triggerType == EffectType.rank || base.triggersAs(triggerType);
+    }
+
+    private bool  alreadyScaled = false;
+    private float baseEffectStrength = 0.0f;
+
+    public override void rankChanged(int rank)
+    {
+        if (alreadyScaled == false)
+        {
+            baseEffectStrength = innerEffect.strength;
+            alreadyScaled = true;
+        }
+
+        innerEffect.strength = baseEffectStrength * Mathf.Pow(strength, (rank - 1));
+
+        if (innerEffect.triggersAs(EffectType.rank))
+            base.rankChanged(rank);
     }
 
     //since we altered the inner effect, when it gets cloned we need to copy over the changes
