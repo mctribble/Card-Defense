@@ -24,9 +24,10 @@ public enum TargetingType
 
 /// <summary>
 /// different effect types.  Each type is triggered under different circumstances  
+/// attack          : triggers when the tower/enemy attacks.  Only triggers once per attack, even if that attack is directed at multiple entities
 /// cardDrawn       : triggers when the card is drawn
 /// death           : triggers when the tower/enemy is destroyed
-/// enemyDamaged    : triggers when an enemy is damaged.  Could be attached to the attacking tower or the defending enemy
+/// enemyDamaged    : triggers when an enemy is damaged.  Could be attached to the attacking tower or the defending enemy.  Also triggers when attacks are created
 /// enemyReachedGoal: triggers when an enemy reaches their goal
 /// everyRound      : triggers once every round (uses IEffectInstant)
 /// instant         : triggers instantly without the need for a target
@@ -41,6 +42,7 @@ public enum TargetingType
 /// </summary>
 public enum EffectType
 {
+    attack, 
     cardDrawn,
     death,
     enemyDamaged,
@@ -738,7 +740,7 @@ public interface IEffectOvercharge : IEffect
 
 //effect targets another effect.  As such, it must implement interfaces for ALL other effect types, since we dont know what kind the child may be.
 //we also provide a way to check what the inner effect is, and whether it would be applied if this one is triggered
-public interface IEffectMeta : IEffect, IEffectEnemyDamaged, IEffectEnemyReachedGoal, IEffectInstant, IEffectOvercharge, IEffectPeriodic, IEffectProperty, IEffectRank, IEffectSelf, IEffectTowerTargeting, IEffectWave, IEffectDeath, IEffectOnEnemySpawned, IEffectCardDrawn
+public interface IEffectMeta : IEffect, IEffectEnemyDamaged, IEffectEnemyReachedGoal, IEffectInstant, IEffectOvercharge, IEffectPeriodic, IEffectProperty, IEffectRank, IEffectSelf, IEffectTowerTargeting, IEffectWave, IEffectDeath, IEffectOnEnemySpawned, IEffectCardDrawn, IEffectAttack
 {
     IEffect innerEffect { get; set; } //effect targeted by this metaEffect
     bool shouldApplyInnerEffect(); //returns whether or not the innerIeffect would trigger if this effect is
@@ -755,4 +757,11 @@ public interface IEffectDeath : IEffect
 public interface IEffectRank : IEffect
 {
     void rankChanged(int rank);
+}
+
+//effect is triggered when the tower or enemy attacks.  only triggers once, even if the attack hits multiple entities
+public interface IEffectAttack : IEffect
+{
+    void towerAttack(TowerScript tower);
+    void enemyAttack(EnemyScript enemy);
 }

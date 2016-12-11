@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
+  <difficulty>testing only</difficulty>
+  <description>Developer map with many enemies for testing performance issues</description>
+  <randomWaveCount>0</randomWaveCount>
+  <Waves>
+    <Wave type="Assassin" budget="10000" time="30" />
+    <Wave type="Carrier" budget="10000" time="30" />
+    <Wave type="Giant" budget="10000" time="30" />
+    <Wave type="Ping" budget="10000" time="30" />
+    <Wave type="Refurb" budget="10000" time="30" />
+    <Wave type="Regenerative Tank" budget="10000" time="30" />
+    <Wave type="Scrambled" budget="10000" time="30" />
+    <Wave type="Standard" budget="10000" time="30" />
+    <Wave type="Swarm" budget="10000" time="30" />
+    <Wave type="Tank" budget="10000" time="30" />
+  </Waves>
+  <Spawners>
+    <Spawner spawnX="0" spawnY="0" />
+    <Spawner spawnX="0" spawnY="1" />
+  </Spawners>
+  <PathSegments>
+    <Segment startX="0" startY="0" endX="0" endY="-1" />
+    <Segment startX="0" startY="-1" endX="2" endY="-1" />
+    <Segment startX="2" startY="-1" endX="2" endY="3" />
+    <Segment startX="2" startY="3" endX="-8" endY="3" />
+    <Segment startX="-8" startY="3" endX="-8" endY="-2" />
+    <Segment startX="-8" startY="-2" endX="-4" endY="-2" />
+    <Segment startX="-4" startY="-2" endX="-4" endY="2" />
+    <Segment startX="-4" startY="2" endX="-7" endY="2" />
+    <Segment startX="-7" startY="2" endX="-7" endY="-1" />
+    <Segment startX="-7" startY="-1" endX="-5" endY="-1" />
+    <Segment startX="-5" startY="-1" endX="-5" endY="1" />
+    <Segment startX="-5" startY="1" endX="-6" endY="1" />
+    <Segment startX="0" startY="1" endX="0" endY="2" />
+    <Segment startX="0" startY="2" endX="-2" endY="2" />
+    <Segment startX="-2" startY="2" endX="-2" endY="-2" />
+    <Segment startX="-2" startY="-2" endX="8" endY="-2" />
+    <Segment startX="8" startY="-2" endX="8" endY="3" />
+    <Segment startX="8" startY="3" endX="4" endY="3" />
+    <Segment startX="4" startY="3" endX="4" endY="-1" />
+    <Segment startX="4" startY="-1" endX="7" endY="-1" />
+    <Segment startX="7" startY="-1" endX="7" endY="2" />
+    <Segment startX="7" startY="2" endX="5" endY="2" />
+    <Segment startX="5" startY="2" endX="5" endY="0" />
+    <Segment startX="5" startY="0" endX="6" endY="0" />
+  </PathSegments>
+  <Towers>
+    <Tower name="Fast Tower" x="-6.5" y="0.5" />
+    <Tower name="Fast Tower" x="-5.5" y="0.5" />
+    <Tower name="Fast Tower" x="-6.5" y="-0.5" />
+    <Tower name="Fast Tower" x="-5.5" y="-0.5" />
+    <Tower name="Fast Tower" x="-6.5" y="0" />
+    <Tower name="Fast Tower" x="-6" y="0.5" />
+    <Tower name="Fast Tower" x="-6" y="-0.5" />
+    <Tower name="Fast Tower" x="-5.5" y="0" />
+    <Tower name="Fast Tower" x="-6" y="0" />
+    <Tower name="Fast Tower" x="6.5" y="1.5" />
+    <Tower name="Fast Tower" x="5.5" y="1.5" />
+    <Tower name="Fast Tower" x="6.5" y="0.5" />
+    <Tower name="Fast Tower" x="5.5" y="0.5" />
+    <Tower name="Fast Tower" x="6.5" y="1" />
+    <Tower name="Fast Tower" x="6" y="1.5" />
+    <Tower name="Fast Tower" x="6" y="0.5" />
+    <Tower name="Fast Tower" x="5.5" y="1" />
+    <Tower name="Fast Tower" x="6" y="1" />
+    <Tower name="Shredder Tower" x="-0.5" y="0">
+      <Upgrades>
+        <Upgrade Name="Fast Upgrade" Count="5" />
+      </Upgrades>
+    </Tower>
+    <Tower name="Shredder Tower" x="-0.5" y="1">
+      <Upgrades>
+        <Upgrade Name="Fast Upgrade" Count="5" />
+      </Upgrades>
+    </Tower>
+    <Tower name="Shredder Tower" x="0.5" y="0">
+      <Upgrades>
+        <Upgrade Name="Fast Upgrade" Count="5" />
+      </Upgrades>
+    </Tower>
+    <Tower name="Shredder Tower" x="0.5" y="1">
+      <Upgrades>
+        <Upgrade Name="Fast Upgrade" Count="5" />
+      </Upgrades>
+    </Tower>
+    <Tower name="Challenger Tower" x="-1" y="-5" />
+    <Tower name="Challenger Tower" x="-0.5" y="-5" />
+    <Tower name="Challenger Tower" x="0" y="-5" />
+    <Tower name="Challenger Tower" x="0.5" y="-5" />
+    <Tower name="Challenger Tower" x="1" y="-5" />
+  </Towers>
+  <shuffleDeck>false</shuffleDeck>
+  <levelDeck name="Level Deck">
+    <Cards>
+      <Card name="Dev Purge Tower" count="2" />
+      <Card name="Chain Hit" count="1" />
+      <Card name="Gambit" count="2" />
+      <Card name="Orthogonal Tower" count="2" />
+      <Card name="Reinforce" count="5" />
+      <Card name="Shield" count="200" />
+    </Cards>
+  </levelDeck>
+</Level>

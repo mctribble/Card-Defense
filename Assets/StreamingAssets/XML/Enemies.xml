@@ -6,8 +6,10 @@
       <unitColor r="0.2" g="0.75" b="0.2" a="0.4" />
       <effectData>
         <Effects>
-          <Effect name="scaleEffectWithRank" strength="2">
-            <Effect name="damageHand" strength="3" />
+          <Effect name="onAttack">
+            <Effect name="scaleEffectWithRank" strength="2">
+              <Effect name="damageHand" strength="3" />
+            </Effect>
           </Effect>
         </Effects>
       </effectData>

@@ -662,7 +662,7 @@ public class DeckManagerScript : BaseBehaviour
     /// </summary>
     /// <param name="d">how much damage to deal</param>
     /// <param name="sourcePosition">where to spawn the damage text</param>
-    public void DamageHand(int d, Vector2 sourcePosition)
+    public void DamageHand(int d)
     {
         //if the player doesnt have a hand, something is seriously wrong
         if (playerHand == null)
@@ -678,7 +678,10 @@ public class DeckManagerScript : BaseBehaviour
         {
             //if the damage wasn't all dealt, forward the rest to the deck
             Damage(d - damageDealt);
-            MessageHandlerScript.instance.spawnPlayerDamageText(sourcePosition, (d - damageDealt));
+
+            //show the damage text for the excess right in the center of the area for the player's hand 
+            Vector3 textPos = Camera.main.ScreenToWorldPoint(playerHand.transform.position); 
+            MessageHandlerScript.instance.spawnPlayerDamageText(textPos, (d - damageDealt));
         }
         else
         {

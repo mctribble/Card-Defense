@@ -302,9 +302,16 @@ public class EnemyScript : BaseBehaviour
 
         //trigger effects...
         if (effectData != null)
+        {
             foreach (IEffect e in effectData.effects)
+            {
                 if (e.triggersAs(EffectType.enemyReachedGoal))
                     ((IEffectEnemyReachedGoal)e).trigger(this);
+
+                if (e.triggersAs(EffectType.attack))
+                    ((IEffectAttack)e).enemyAttack(this);
+            }
+        }
 
         //damage player...
         if (damage > 0)

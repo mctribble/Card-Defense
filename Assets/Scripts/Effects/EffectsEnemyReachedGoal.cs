@@ -35,16 +35,3 @@ public class EffectInvScaleAttackWithHealth: BaseEffectEnemyReachedGoal
         enemy.damage = Mathf.CeilToInt(enemy.damage * (((float)enemy.curHealth) / ((float)enemy.maxHealth)));
     }
 }
-
-//deals X damage to the players hand
-public class EffectDamageHand : BaseEffectEnemyReachedGoal
-{
-    [Hide] public override string Name { get { return "deals " + strength + " damage to the players hand"; } }
-    [Show] public override string XMLName { get { return "damageHand"; } }
-
-    public override void trigger(EnemyScript enemy)
-    {
-        DeckManagerScript.instance.DamageHand(Mathf.FloorToInt(strength), enemy.transform.position);
-    }
-}
-

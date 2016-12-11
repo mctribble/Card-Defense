@@ -281,7 +281,7 @@ public class EffectShuffle : BaseEffectInstant
 //damages the player
 public class EffectDamagePlayer : BaseEffectInstant
 {
-    [Hide] public override string Name { get { return "player takes " + strength + " damage."; } } //returns name and strength
+    [Hide] public override string Name { get { return "you take " + strength + " damage."; } } //returns name and strength
     [Show] public override string XMLName { get { return "damagePlayer"; } } //name used to refer to this effect in XML
 
     public override void trigger()
@@ -289,6 +289,19 @@ public class EffectDamagePlayer : BaseEffectInstant
         DeckManagerScript.instance.Damage(Mathf.RoundToInt(strength));
     }
 }
+
+//deals X damage to the players hand
+public class EffectDamageHand : BaseEffectInstant
+{
+    [Hide] public override string Name { get { return "deals " + strength + " damage to your hand"; } }
+    [Show] public override string XMLName { get { return "damageHand"; } }
+
+    public override void trigger()
+    {
+        DeckManagerScript.instance.DamageHand(Mathf.FloorToInt(strength));
+    }
+}
+
 
 //rolls an x-sided die.  the result can be fetched from argument and used by other effects.
 class EffectDieRoll : BaseEffectInstant

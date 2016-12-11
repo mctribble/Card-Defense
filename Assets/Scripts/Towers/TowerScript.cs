@@ -285,6 +285,12 @@ public class TowerScript : BaseBehaviour
                 }
             }
 
+            //trigger attack effects
+            if (effects != null)
+                foreach (IEffect effect in effects.effects)
+                    if (effect.triggersAs(EffectType.attack))
+                        ((IEffectAttack)effect).towerAttack(this);
+
             //create a struct and fill it with data about the attack
             DamageEventData ded = new DamageEventData();
             ded.rawDamage = attackPower;
@@ -298,7 +304,7 @@ public class TowerScript : BaseBehaviour
                 int usedOvercharge = Mathf.Min(availableOvercharge, effects.propertyEffects.maxOvercharge.Value); //if there are more available than our max, still only use the max
                 shotCharge -= usedOvercharge; //decrement gauge
 
-                //apply effects
+                //trigger overcharge effects
                 foreach (IEffect effect in effects.effects)
                     if (effect.triggersAs(EffectType.overcharge))
                         ((IEffectOvercharge)effect).trigger(ref ded, usedOvercharge);
@@ -422,9 +428,15 @@ public class TowerScript : BaseBehaviour
     }
 
     /// <summary>
-    /// NOTE: this is a coroutine.
+    /// sets the tower definition.  Uses a coroutine behind the scenes, but calling could should not need to care.
     /// </summary>
-    private IEnumerator SetData(TowerData d)
+    public void SetData(TowerData d) { StartCoroutine(SetDataCoroutine(d)); }
+
+    /// <summary>
+    /// handles setting tower data.  
+    /// <see cref="SetData(TowerData)"/>
+    /// </summary>
+    private IEnumerator SetDataCoroutine(TowerData d)
     {
         towerName = d.towerName;
         rechargeTime = d.rechargeTime;
@@ -505,14 +517,14 @@ public class TowerScript : BaseBehaviour
     }
 
     //helper functions to allow calling Upgrade through sendMessage (Unity message handling doesn't understand default parameters)
-    private void FreeUpgrade(UpgradeData d) { Upgrade(d, true, true); }
-    private void Upgrade(UpgradeData d) { Upgrade(d, false, false); }
-    private void UpgradeIgnoreCap(UpgradeData d) { Upgrade(d, true, false); }
+    public void FreeUpgrade(UpgradeData d) { Upgrade(d, true, true); }
+    public void Upgrade(UpgradeData d) { Upgrade(d, false, false); }
+    public void UpgradeIgnoreCap(UpgradeData d) { Upgrade(d, true, false); }
 
     /// <summary>
     /// receives upgrade data and uses it to modify the tower.  If ignoreCap is true, then it can exceed the upgrade cap to do so
     /// </summary>
-    private void Upgrade(UpgradeData d, bool ignoreCap, bool noUpgradeCost)
+    public void Upgrade(UpgradeData d, bool ignoreCap, bool noUpgradeCost)
     {
         //ignore if upgrades are forbidden
         if (effects != null)

@@ -45,6 +45,13 @@ public class BurstShotScript : BaseBehaviour
         curScale = 0.0f;
         expectedToHit = new List<DamageEventData>();
         alreadyHit = new List<EnemyScript>();
+        LevelManagerScript.instance.RoundOverEvent += roundOverHandler; //register event so we can destroy ourselves when the round ends
+    }
+
+    //we are done if the round ends
+    private void roundOverHandler()
+    {
+        StartCoroutine(onDone());
     }
 
     // Update is called once per frame
@@ -147,6 +154,7 @@ public class BurstShotScript : BaseBehaviour
     private IEnumerator onDone()
     {
         initialized = false; //stop updating the burst so we dont attack things
+        LevelManagerScript.instance.RoundOverEvent -= roundOverHandler; //unregister ourselves for the event
 
         spriteRenderer.enabled = false;
 

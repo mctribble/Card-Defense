@@ -4,9 +4,6 @@
 regeneration | enemy recovers X health per second.  
 poison       | enemy takes X damage per second for Y seconds
 
-<<Enemy Effects (Reached Goal)>>
-damageHand | deals X damage to the players hand
-
 <<Enemy Effects (Stat Scaling)>>
 fixedSpawnCount           | waves of this enemy type always spawn exactly this many enemies.  Best when used with budget scaling effects
 invScaleAttackWithHealth  | enemy deals less damage as it gets injured
@@ -44,6 +41,7 @@ allTowersLifespanBonus | all towers on the map last X waves longer
 conjureSpellCard       | player conjures X spells, which are chosen randomly from all available un-modded spells and added directly to the hand as tokens
 conjureTowerCard       | player conjures X towers, which are chosen randomly from all available un-modded spells and added directly to the hand as tokens
 conjureUpgradeCard     | player conjures X upgrades, which are chosen randomly from all available un-modded spells and added directly to the hand as tokens
+damageHand			   | player's HAND takes x damage.  If the hand does not have enough charges, excess damage is dealt to their deck
 damagePlayer           | player takes X damage
 discardChosenCard      | player chooses up to X cards to discard.  Must be on a card.
 discardRandomCard      | player discards up to X cards chosen at random.  Must be on a card.
@@ -88,6 +86,7 @@ effectCharges    | child effect can only occur up to X times
 effectCooldown   | child effect triggers under normal conditions, but only if it has been at least X seconds since the last trigger
 everyRound       | target instant effect triggers once every round
 onCardDrawn      | target instant effect triggers when the card is drawn
+onAttack		 | target instant effect triggers when the tower fires or when the enemy deals damage
 onEnemySpawned   | target instant effect triggers when the enemy spawns.  Does not trigger twice if the unit survives and spawns again in the next wave.
 percentageChance | child effect has an X% chance of triggering
 ifRollRange      | child effect triggers if the die rolled anything from X to Y.  Requires dieRoll effect to work

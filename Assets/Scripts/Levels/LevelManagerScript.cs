@@ -381,12 +381,12 @@ public class LevelManagerScript : BaseBehaviour
         //create the towers
         foreach (PremadeTower pt in data.towers)
         {
-            GameObject t = (GameObject) GameObject.Instantiate(towerPrefab, new Vector3(pt.x, pt.y, -3), Quaternion.identity);  //summon tower
+            TowerScript t = ((GameObject)Instantiate(towerPrefab, new Vector3(pt.x, pt.y, -3), Quaternion.identity)).GetComponent<TowerScript>();  //summon tower
             PlayerCardData c = CardTypeManagerScript.instance.getCardByName(pt.name);
             c.towerData.towerName = pt.name;
-            t.SendMessage("SetData", c.towerData); //pass it the definition
+            t.SetData(c.towerData); //pass it the definition
             if ((c.effectData != null) && (c.effectData.effects.Count > 0))
-                t.SendMessage("AddEffects", c.effectData); //pass it the effects
+                t.AddEffects(c.effectData); //pass it the effects
 
             //apply upgrades
             foreach (PremadeTowerUpgrade ptu in pt.upgrades)
@@ -397,14 +397,14 @@ public class LevelManagerScript : BaseBehaviour
                     PlayerCardData upgradeCardData = CardTypeManagerScript.instance.getCardByName(ptu.Name);
 
                     if ( (upgradeCardData.effectData != null) && (upgradeCardData.effectData.propertyEffects.noUpgradeCost) )
-                        t.SendMessage("FreeUpgrade", upgradeCardData.upgradeData);
+                        t.FreeUpgrade(upgradeCardData.upgradeData);
                     else
-                        t.SendMessage("UpgradeIgnoreCap", upgradeCardData.upgradeData);
+                        t.UpgradeIgnoreCap(upgradeCardData.upgradeData);
 
                     //also give it the effects
                     if (upgradeCardData.effectData != null)
                     {
-                        t.SendMessage("AddEffects", upgradeCardData.effectData);
+                        t.AddEffects(upgradeCardData.effectData);
                     }
                 }
             }
@@ -423,6 +423,16 @@ public class LevelManagerScript : BaseBehaviour
         //fire the level loaded event so interested objects can act on it
         LevelLoadedEvent();
         Debug.Log("Level loaded.");
+
+        //fire every round effects on any premade towers
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Tower"))
+        {
+            TowerScript t = go.GetComponent<TowerScript>();
+            if (t.effects != null)
+                foreach (IEffect e in t.effects.effects)
+                    if (e.triggersAs(EffectType.everyRound))
+                        ((IEffectInstant)e).trigger();
+        }
     }
 
     /// <summary>
@@ -531,7 +541,7 @@ public class LevelManagerScript : BaseBehaviour
         {
             HandScript.enemyHand.drawCard(true, true, true, true);
         }
-        else if (wavesInDeck == 0) //if there were no survivors, and the enemy deck is empty, then the player wins.
+        else if ( (wavesInDeck == 0) && (HandScript.enemyHand.currentHandSize == 0) ) //if there were no survivors, and there are no more enemies,  then the player wins.
         {
             yield return StartCoroutine(MessageHandlerScript.ShowAndYield("Level Complete!\n" + ScoreManagerScript.instance.report(true))); //tell user they won and wait for them to answer
             UnityEngine.SceneManagement.SceneManager.LoadScene("Game"); //then restart the scene

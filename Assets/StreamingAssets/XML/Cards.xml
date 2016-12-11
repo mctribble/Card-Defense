@@ -181,7 +181,9 @@
           <Effect name="infiniteTowerLifespan" />
           <Effect name="limitedAmmo" strength="1" />
           <Effect name="armorPierce" />
-          <Effect name="damagePlayer" strength="10" />
+          <Effect name="onAttack">
+            <Effect name="damagePlayer" strength="10" />
+          </Effect>
         </Effects>
       </effectData>
     </Card>

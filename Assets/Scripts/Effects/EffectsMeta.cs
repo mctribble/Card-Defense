@@ -40,6 +40,8 @@ public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
     public virtual void playerCardDrawn(CardScript playerCard) { if (shouldApplyInnerEffect()) { ((IEffectCardDrawn)innerEffect).playerCardDrawn(playerCard); } }
     public virtual void rankChanged(int rank) { if (shouldApplyInnerEffect()) { ((IEffectRank)innerEffect).rankChanged(rank); } }
     public virtual void enemyCardDrawn(EnemyScript enemyCard) { if (shouldApplyInnerEffect()) { ((IEffectCardDrawn)innerEffect).enemyCardDrawn(enemyCard); } }
+    public virtual void towerAttack(TowerScript tower) { if (shouldApplyInnerEffect()) { ((IEffectAttack)innerEffect).towerAttack(tower); } }
+    public virtual void enemyAttack(EnemyScript enemy) { if (shouldApplyInnerEffect()) { ((IEffectAttack)innerEffect).enemyAttack(enemy); } }
 
     //returns the XMLName, skipping over any meta effects if they are present.  See also: EffectTypeManagerScript.parse()
     [Hide] public override string FinalXMLName { get { return innerEffect.FinalXMLName; } } 
@@ -302,10 +304,7 @@ public class EffectEveryRound : BaseEffectMeta
     public override bool   shouldApplyInnerEffect() { return true; }
 
     //regardless of how the inner effect normally triggers, we want it to fire once every round.  We need to keep the triggertype == EffectType.meta so we dont break EffectData.cloneEffect()
-    public override bool triggersAs(EffectType triggerType)
-    {
-        return (triggerType == EffectType.everyRound) || (triggerType == EffectType.meta);
-    }
+    public override bool triggersAs(EffectType triggerType) { return (triggerType == EffectType.everyRound) || (triggerType == EffectType.meta); }
 
     //because we use IEffectInstant, we can only target instant or everyRound effects
     public override IEffect innerEffect
@@ -329,10 +328,7 @@ public class EffectOnEnemySpawned : BaseEffectMeta
     public override bool shouldApplyInnerEffect() { return true; }
 
     //regardless of how the inner effect normally triggers, we want it to fire once every round.  We need to keep the triggertype == EffectType.meta so we dont break EffectData.cloneEffect()
-    public override bool triggersAs(EffectType triggerType)
-    {
-        return (triggerType == EffectType.enemySpawned) || (triggerType == EffectType.meta) || base.triggersAs(triggerType);
-    }
+    public override bool triggersAs(EffectType triggerType) { return (triggerType == EffectType.enemySpawned) || (triggerType == EffectType.meta) || base.triggersAs(triggerType); }
 
     //because we use IEffectInstant, we can only target instant or everyRound effects
     public override IEffect innerEffect
@@ -365,10 +361,7 @@ public class EffectScaleEffectWithDamage : BaseEffectMeta
     public override bool shouldApplyInnerEffect() { return true; } //always trigger inner effect
 
     //allow this to trigger as an onDamage effect even if the child does not
-    public override bool triggersAs(EffectType triggerType)
-    {
-        return triggerType == EffectType.enemyDamaged || base.triggersAs(triggerType);
-    }
+    public override bool triggersAs(EffectType triggerType) { return triggerType == EffectType.enemyDamaged || base.triggersAs(triggerType); }
 
     //we dont need to do anything on expected damage
     public override void expectedDamage(ref DamageEventData d) { if (innerEffect.triggersAs(EffectType.enemyDamaged)) base.expectedDamage(ref d); } //pass to child if it is also an enemyDamaged effect
@@ -595,4 +588,20 @@ public class EffectOnCardDrawn : BaseEffectMeta
     //behave the same regardless of what type of card is drawn
     public override void playerCardDrawn(CardScript playerCard) { ((IEffectInstant)innerEffect).trigger(); }
     public override void enemyCardDrawn(EnemyScript enemyCard) { ((IEffectInstant)innerEffect).trigger(); }
+}
+
+//target instant triggers when the tower or enemy attacks something
+public class EffectOnAttack : BaseEffectMeta
+{
+    public override string Name { get { return "When this attacks, " + innerEffect.Name; } }
+    public override string XMLName { get { return "onAttack"; } }
+
+    public override bool shouldApplyInnerEffect() { return true; }
+
+    //regardless of how the child normally triggers, we only want it to fire when this attacks.  
+    public override bool triggersAs(EffectType triggerType) { return triggerType == EffectType.attack || triggerType == EffectType.meta; }
+
+    //behave the same regardless of what type of entity attacked
+    public override void towerAttack(TowerScript tower) { ((IEffectInstant)innerEffect).trigger(); }
+    public override void enemyAttack(EnemyScript enemy) { ((IEffectInstant)innerEffect).trigger(); }
 }
