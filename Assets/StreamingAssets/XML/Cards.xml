@@ -222,6 +222,24 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="upgrade" Name="Piercing Ammo" Description="allows attacks to ignore armor" Charges="3" Art="Piercing_Ammo.png" Tooltip="Tower_Basic.png" Token="false">
+      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1.1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="3" />
+      <effectData>
+        <Effects>
+          <Effect name="armorPierce" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="upgrade" Name="Poison Ammo" Description="Dishes out a lot of damage, but takes a long time to do it" Charges="3" Art="Piercing_Ammo.png" Tooltip="Tower_Basic.png" Token="false">
+      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="3" />
+      <effectData>
+        <Effects>
+          <Effect name="scaleEffectByTowerAttack">
+            <Effect name="poison" strength="0.2" argument="30" />
+          </Effect>
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="upgrade" Name="Preservation Upgrade" Description="Don't leave me!" Charges="3" Art="Preservation_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
       <upgradeData RechargeMult="1.1" RangeMult="0.9" DamageMult="0.9" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="15" />
       <effectData>

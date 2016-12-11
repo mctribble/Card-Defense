@@ -4,12 +4,16 @@
   <description>Developer map with many enemies for testing performance issues</description>
   <randomWaveCount>0</randomWaveCount>
   <Waves>
-    <Wave type="Swarm" budget="10000" time="30" />
+    <Wave type="Assassin" budget="10000" time="30" />
+    <Wave type="Carrier" budget="10000" time="30" />
+    <Wave type="Giant" budget="10000" time="30" />
+    <Wave type="Ping" budget="10000" time="30" />
+    <Wave type="Refurb" budget="10000" time="30" />
+    <Wave type="Regenerative Tank" budget="10000" time="30" />
+    <Wave type="Scrambled" budget="10000" time="30" />
     <Wave type="Standard" budget="10000" time="30" />
-    <Wave type="Swarm" budget="20000" time="30" />
-    <Wave type="Standard" budget="20000" time="30" />
-    <Wave type="Swarm" budget="30000" time="30" />
-    <Wave type="Standard" budget="30000" time="30" />
+    <Wave type="Swarm" budget="10000" time="30" />
+    <Wave type="Tank" budget="10000" time="30" />
   </Waves>
   <Spawners>
     <Spawner spawnX="0" spawnY="0" />
@@ -80,6 +84,11 @@
         <Upgrade Name="Fast Upgrade" Count="5" />
       </Upgrades>
     </Tower>
+    <Tower name="Challenger Tower" x="-1" y="-5" />
+    <Tower name="Challenger Tower" x="-0.5" y="-5" />
+    <Tower name="Challenger Tower" x="0" y="-5" />
+    <Tower name="Challenger Tower" x="0.5" y="-5" />
+    <Tower name="Challenger Tower" x="1" y="-5" />
   </Towers>
   <shuffleDeck>false</shuffleDeck>
   <levelDeck name="Level Deck">

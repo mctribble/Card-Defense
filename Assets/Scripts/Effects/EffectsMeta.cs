@@ -433,6 +433,41 @@ public class EffectInvScaleEffectWithDamage : BaseEffectMeta
     }
 }
 
+//on towers, multiplies effect strength by attack power of the tower.  Use this to create effects whose strength vary with the strength of the tower, like the poison on "Poison Ammo".
+public class EffectScaleEffectWithTowerAttack : BaseEffectMeta
+{
+    public override string Name { get { return "[scales with tower attack]" + innerEffect.Name; } } //returns name and strength
+    public override string XMLName { get { return "scaleEffectByTowerAttack"; } } //name used to refer to this effect in XML
+
+    private float? effectBaseStrength; //original strength of the inner effect
+
+    public override bool shouldApplyInnerEffect() { return true; } //always trigger inner effect
+
+    //allow this to trigger as an onDamage effect even if the child does not
+    public override bool triggersAs(EffectType triggerType) { return triggerType == EffectType.enemyDamaged || base.triggersAs(triggerType); }
+
+    //we dont need to do anything on expected damage
+    public override void expectedDamage(ref DamageEventData d) { if (innerEffect.triggersAs(EffectType.enemyDamaged)) base.expectedDamage(ref d); } //pass to child if it is also an enemyDamaged effect
+
+    //recalculate effect strength
+    public override void actualDamage(ref DamageEventData d)
+    {
+        if (effectBaseStrength == null)
+            effectBaseStrength = innerEffect.strength;
+
+        if (d.source != null) //some things, like poison, do not have a tower to list as the damage source.  We can ignore these.
+            innerEffect.strength = effectBaseStrength.Value * d.source.attackPower;
+    }
+
+    //since we altered the inner effect, when it gets cloned we need to copy over the changes
+    public override IEffect cloneInnerEffect()
+    {
+        IEffect clone = base.cloneInnerEffect();
+        clone.strength = innerEffect.strength;
+        return clone;
+    }
+}
+
 //enemy effect gets stronger by X/second
 public class EffectScaleEffectWithTime : BaseEffectMeta
 {

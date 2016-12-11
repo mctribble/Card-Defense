@@ -82,14 +82,15 @@ maxOvercharge    | tower can have up to X points of overcharge (currently we can
 overchargeDamage | tower deals (1+X) times as much damage when overcharged
 
 <<meta effects (target another effect)>>
-effectCharges    | child effect can only occur up to X times
-effectCooldown   | child effect triggers under normal conditions, but only if it has been at least X seconds since the last trigger
-everyRound       | target instant effect triggers once every round
-onCardDrawn      | target instant effect triggers when the card is drawn
-onAttack		 | target instant effect triggers when the tower fires or when the enemy deals damage
-onEnemySpawned   | target instant effect triggers when the enemy spawns.  Does not trigger twice if the unit survives and spawns again in the next wave.
-percentageChance | child effect has an X% chance of triggering
-ifRollRange      | child effect triggers if the die rolled anything from X to Y.  Requires dieRoll effect to work
+effectCharges            | child effect can only occur up to X times
+effectCooldown           | child effect triggers under normal conditions, but only if it has been at least X seconds since the last trigger
+everyRound               | target instant effect triggers once every round
+onCardDrawn              | target instant effect triggers when the card is drawn
+onAttack		         | target instant effect triggers when the tower fires or when the enemy deals damage
+onEnemySpawned           | target instant effect triggers when the enemy spawns.  Does not trigger twice if the unit survives and spawns again in the next wave.
+percentageChance         | child effect has an X% chance of triggering
+scaleEffectByTowerAttack | on towers, multiplies effect strength by attack power of the tower.  Use this to create effects whose strength vary with the strength of the tower, like the poison on "Poison Ammo".
+ifRollRange              | child effect triggers if the die rolled anything from X to Y.  Requires dieRoll effect to work
 
 <<death effects (occur when the tower/enemy dies)>>
 spawnEnemyOnDeath | spawns X enemies of type Y.  On enemies, it spawns where the enemy died.  On towers, this is unsupported

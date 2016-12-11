@@ -1,6 +1,5 @@
 Chokepoint.xml
 congestion.xml
-Dev Performance Test.xml
 Divergence.xml
 Endurance (Expert).xml
 Endurance.xml
