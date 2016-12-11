@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
-  <difficulty>probably impossible</difficulty>
-  <description>Seriously: $20 to the first person who can give me evidence of having beat this, preferably including a list of cards in your deck.  If this can be beat, probably something is broken.  Modded cards don't count, obviously.</description>
+  <difficulty>virtually impossible</difficulty>
+  <description>It can be done, but good luck pulling it off...</description>
   <randomWaveCount>100</randomWaveCount>
   <Waves />
   <Spawners>

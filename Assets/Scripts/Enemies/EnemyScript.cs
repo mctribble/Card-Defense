@@ -86,11 +86,13 @@ public class EnemyData
     [XmlAttribute("maxHealth")][iMin(1)]    public int   baseMaxHealth {get; set;} //max health
     [XmlAttribute("unitSpeed")][fMin(0.1f)] public float baseUnitSpeed {get; set;} //speed, measured in distance/second
 
-    //stats at the current rank
-    [XmlIgnore][Show] public int   currentSpawnCost { get { return Mathf.FloorToInt(baseSpawnCost * Mathf.Pow(rankInfo.spawnCostMult, (currentRank - 1))); } }
-    [XmlIgnore][Show] public int   currentAttack    { get { return Mathf.FloorToInt(baseAttack    * Mathf.Pow(rankInfo.attackMult,    (currentRank - 1))); } }
-    [XmlIgnore][Show] public int   currentMaxHealth { get { return Mathf.FloorToInt(baseMaxHealth * Mathf.Pow(rankInfo.maxHealthMult, (currentRank - 1))); } }
-    [XmlIgnore][Show] public float currentUnitSpeed { get { return        Mathf.Min(baseUnitSpeed * Mathf.Pow(rankInfo.unitSpeedMult, (currentRank - 1)), EnemyScript.speedLimit); } }
+    //stats at the current rank, with overflow checks
+    [XmlIgnore][Show] public int   currentSpawnCost { get { int result = Mathf.FloorToInt(baseSpawnCost * Mathf.Pow(rankInfo.spawnCostMult, (currentRank - 1))); if(result < 0) { Debug.LogWarning("SpawnCost overflow!"); return int.MaxValue; } else { return result; } } }
+    [XmlIgnore][Show] public int   currentAttack    { get { int result = Mathf.FloorToInt(baseAttack    * Mathf.Pow(rankInfo.attackMult,    (currentRank - 1))); if(result < 0) { Debug.LogWarning("attack    overflow!"); return int.MaxValue; } else { return result; } } }
+    [XmlIgnore][Show] public int   currentMaxHealth { get { int result = Mathf.FloorToInt(baseMaxHealth * Mathf.Pow(rankInfo.maxHealthMult, (currentRank - 1))); if(result < 0) { Debug.LogWarning("maxhealth overflow!"); return int.MaxValue; } else { return result; } } }
+
+    //speed, capped at speedLimit
+    [XmlIgnore][Show] public float currentUnitSpeed { get { return Mathf.Min(baseUnitSpeed * Mathf.Pow(rankInfo.unitSpeedMult, (currentRank - 1)), EnemyScript.speedLimit); } }
 
     public XMLColor   unitColor;  //used to colorize the enemy sprite
     public EffectData effectData; //specifies which effects are attached to this enemy type and what their parameters are

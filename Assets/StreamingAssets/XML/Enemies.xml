@@ -110,7 +110,7 @@
       </effectData>
     </Enemy>
     <Enemy name="Refurb" spawnCost="100" attack="5" maxHealth="25" unitSpeed="1" sprite="Enemy_Elite.png">
-      <rankInfo rankUpSpawnCount="50" spawnCostMult="2" attackMult="2" maxHealthMult="2" unitSpeedMult="1" />
+      <rankInfo rankUpSpawnCount="50" spawnCostMult="2" attackMult="2" maxHealthMult="1.75" unitSpeedMult="1" />
       <unitColor r="0.2" g="1" b="1" a="1" />
       <effectData>
         <Effects>
