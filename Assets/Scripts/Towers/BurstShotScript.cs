@@ -2,6 +2,7 @@
 using Vexe.Runtime.Types;
 using System.Collections.Generic;
 using System.Collections;
+using System.Linq;
 
 /// <summary>
 /// contains all the data needed to initialize a burst shot:
@@ -70,29 +71,28 @@ public class BurstShotScript : BaseBehaviour
             lookAheadDist = Mathf.Min(lookAheadDist, maxScale); //don't look further ahead than we will actually travel
 
             //find any enemies we are about to hit that dont already know its coming, and warn them
-            foreach (EnemyScript enemy in EnemyManagerScript.instance.activeEnemies.FindAll(e => Vector2.Distance(e.transform.position, transform.position) < lookAheadDist))
+            List<EnemyScript> enemiesToWarn = EnemyManagerScript.instance.activeEnemies                                                                      //enemies that are still active
+                                              .Except(alreadyHit)                                                                                            //and we have not already hit
+                                              .Where(e => expectedToHit.Exists(ded => ded.dest == e) == false)                                               //and we have not already warned
+                                              .Where(e => Vector2.Distance(e.transform.position, transform.position) < lookAheadDist).ToList<EnemyScript>(); //and are within the lookahead distance
+
+            foreach (EnemyScript enemy in enemiesToWarn)
             {
-                if (expectedToHit.Exists(ded => ded.dest == enemy) == false)  //and there is not already a damage event with enemy as the destination
-                {
-                    if (alreadyHit.Contains(enemy) == false) //and we have not already hit that enemy
-                    {
-                        //then create a damage event for that enemy and use it to warn them about the incoming damage
-                        DamageEventData ded = new DamageEventData();
-                        ded.source = baseDamageEvent.source;
-                        ded.dest = enemy;
-                        ded.rawDamage = baseDamageEvent.rawDamage;
-                        ded.effects = baseDamageEvent.effects;
+                //then create a damage event for that enemy and use it to warn them about the incoming damage
+                DamageEventData ded = new DamageEventData();
+                ded.source = baseDamageEvent.source;
+                ded.dest = enemy;
+                ded.rawDamage = baseDamageEvent.rawDamage;
+                ded.effects = baseDamageEvent.effects;
 
-                        //trigger effects
-                        if (ded.effects != null)
-                            foreach (IEffect i in ded.effects.effects)
-                                if (i.triggersAs(EffectType.enemyDamaged))
-                                    ((IEffectEnemyDamaged)i).expectedDamage(ref ded);
+                //trigger effects
+                if (ded.effects != null)
+                    foreach (IEffect i in ded.effects.effects)
+                        if (i.triggersAs(EffectType.enemyDamaged))
+                            ((IEffectEnemyDamaged)i).expectedDamage(ref ded);
 
-                        enemy.onExpectedDamage(ref ded);
-                        expectedToHit.Add(ded);
-                    }
-                }
+                enemy.onExpectedDamage(ref ded);
+                expectedToHit.Add(ded);
             }
 
             //figure out which enemies we need to attack this frame and attack them
