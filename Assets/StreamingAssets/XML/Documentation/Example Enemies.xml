@@ -17,7 +17,7 @@
         float  spawnCostMult:    spawnCost is multiplied by this much every time the wave ranks up.  (in this case, spawn cost will be 2x normal at rank II, 4x normal at rank III, etc.)
         float  attackMult:       attack    is multiplied by this much every time the wave ranks up.
         float  maxHealthMult:    maxHealth is multiplied by this much every time the wave ranks up.
-        float  unitSpeedMult:    unitSpeed is multiplied by this much every time the wave ranks up.-->
+        float  unitSpeedMult:    unitSpeed is multiplied by this much every time the wave ranks up.  Note that base game enemies do not actually use this, and there is a global speed limit in place to prevent enemies outrunning bullets.-->
         <rankInfo rankUpSpawnCount="200" spawnCostMult="2" attackMult="2" maxHealthMult="2" unitSpeedMult="1" />
         <!--unitColor: the enemy sprite is colorized with this.  Values range from 0 to 1.-->
         <unitColor r="0" g="0" b="1" a="1" />

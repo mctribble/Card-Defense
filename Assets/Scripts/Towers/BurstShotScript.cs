@@ -70,84 +70,81 @@ public class BurstShotScript : BaseBehaviour
             lookAheadDist = Mathf.Min(lookAheadDist, maxScale); //don't look further ahead than we will actually travel
 
             //find any enemies we are about to hit that dont already know its coming, and warn them
-            List<EnemyScript> toWarnThisFrame = new List<EnemyScript>();
-            foreach (EnemyScript enemy in EnemyManagerScript.instance.activeEnemies)
+            foreach (EnemyScript enemy in EnemyManagerScript.instance.activeEnemies.FindAll(e => Vector2.Distance(e.transform.position, transform.position) < lookAheadDist))
             {
-                float enemyDist = Vector2.Distance (enemy.transform.position, transform.position);
-                if (enemyDist <= lookAheadDist)
-                    if (expectedToHit.Exists(ded => ded.dest == enemy) == false)  //(if there is not already a damage event with enemy as the destination) (https://msdn.microsoft.com/en-us/library/bb397687.aspx)
-                        if (alreadyHit.Contains(enemy) == false)
-                            toWarnThisFrame.Add(enemy);
-            }
-
-            foreach (EnemyScript enemy in toWarnThisFrame)
-            {
-                DamageEventData ded = new DamageEventData();
-                ded.source = baseDamageEvent.source;
-                ded.dest = enemy;
-                ded.rawDamage = baseDamageEvent.rawDamage;
-                ded.effects = baseDamageEvent.effects;
-
-                //trigger effects
-                if (ded.effects != null)
-                    foreach (IEffect i in ded.effects.effects)
-                        if (i.triggersAs(EffectType.enemyDamaged))
-                            ((IEffectEnemyDamaged)i).expectedDamage(ref ded);
-
-                enemy.onExpectedDamage(ref ded);
-                expectedToHit.Add(ded);
-            }
-
-            //figure out which enemies we need to attack this frame
-            List<DamageEventData> toHitThisFrame = new List<DamageEventData>();
-
-            if (curScale != maxScale)
-            {
-                //normal check: attack everything inside the burst
-                foreach (DamageEventData ded in expectedToHit)
-                    if (Vector2.Distance(ded.dest.transform.position, transform.position) <= curScale)
-                        toHitThisFrame.Add(ded);
-            }
-            else
-            {
-                //if we are dying this frame, attack everything on our expected list.  This way we still hit things that very narrowly avoided the attack, even if they technically should have "escaped".
-                toHitThisFrame = new List<DamageEventData>(expectedToHit);
-            }
-
-            //attack them
-            for (int e = 0; e < toHitThisFrame.Count; e++)
-            {
-                DamageEventData ded = toHitThisFrame[e];
-
-                //trigger effects
-                if (ded.effects != null)
+                if (expectedToHit.Exists(ded => ded.dest == enemy) == false)  //and there is not already a damage event with enemy as the destination
                 {
-                    foreach (IEffect i in ded.effects.effects)
+                    if (alreadyHit.Contains(enemy) == false) //and we have not already hit that enemy
                     {
-                        if (i.triggersAs(EffectType.enemyDamaged))
-                        {
-                            float damageBefore = ded.rawDamage;
-                            ((IEffectEnemyDamaged)i).actualDamage(ref ded);
+                        //then create a damage event for that enemy and use it to warn them about the incoming damage
+                        DamageEventData ded = new DamageEventData();
+                        ded.source = baseDamageEvent.source;
+                        ded.dest = enemy;
+                        ded.rawDamage = baseDamageEvent.rawDamage;
+                        ded.effects = baseDamageEvent.effects;
 
-                            //warn if damage amount changed in .actualDamage(), as this causes hard-to-find bugs.  anything that changes amount of damage done should happen in expectedDamage()
-                            if (damageBefore != ded.rawDamage)
-                                Debug.LogWarning("damage amount altered in .actualDamage() call of " + i.XMLName + "!");
-                        }
+                        //trigger effects
+                        if (ded.effects != null)
+                            foreach (IEffect i in ded.effects.effects)
+                                if (i.triggersAs(EffectType.enemyDamaged))
+                                    ((IEffectEnemyDamaged)i).expectedDamage(ref ded);
+
+                        enemy.onExpectedDamage(ref ded);
+                        expectedToHit.Add(ded);
                     }
                 }
-
-                //deal the damage.  We dont mind if the reference is null now, since that just means it is no longer a valid target for some reason
-                if (ded.dest != null)
-                    ded.dest.onDamage(ded);
-
-                expectedToHit.Remove(ded);
-                alreadyHit.Add(ded.dest);
             }
 
+            //figure out which enemies we need to attack this frame and attack them
+            //we use removeAll() and a helper function instead of looping here for performance reasons.  
+            //Short explanation: removeAll() can modify in-place while the work happens, so there is a lot less looping that has to happen
+            //Long explanation: see http://stackoverflow.com/questions/32351499/how-is-it-possible-that-removeall-in-linq-is-much-faster-than-iteration
+            expectedToHit.RemoveAll(ded => hitIfInRange(ded)); //for each enemy we've already warned
+            
             //if we are at max scale, we are done.  
             if (curScale == maxScale)
                 StartCoroutine(onDone());
         }
+    }
+
+    //helper function for Update().  If the given enemy needs to be attacked, attack it and return true.  otherwise, return false.
+    private bool hitIfInRange(DamageEventData ded)
+    {
+        if ((curScale == maxScale) || //if this is the last frame the attack is alive
+             (Vector2.Distance(ded.dest.transform.position, transform.position) <= curScale)) //or the enemy is within the burst
+
+        {
+            //then this enemy needs to be hit.  Trigger effects
+            if (ded.effects != null)
+            {
+                foreach (IEffect i in ded.effects.effects)
+                {
+                    if (i.triggersAs(EffectType.enemyDamaged))
+                    {
+
+                        float damageBefore = ded.rawDamage;
+                        ((IEffectEnemyDamaged)i).actualDamage(ref ded);
+
+                        //warn if damage amount changed in .actualDamage(), as this causes hard-to-find bugs.  anything that changes amount of damage done should happen in expectedDamage()
+                        if (damageBefore != ded.rawDamage)
+                            Debug.LogWarning("damage amount altered in .actualDamage() call of " + i.XMLName + "!");
+                    }
+                }
+            }
+
+            //deal the damage.  We dont mind if the reference is null now, since that just means it is no longer a valid target for some reason
+            if (ded.dest != null)
+                ded.dest.onDamage(ded);
+
+            //add it to the list of things we already hit
+            alreadyHit.Add(ded.dest);
+
+            //return true to indicate we made an attack
+            return true;
+        }
+        else
+            return false; //we did not make an attack
+
     }
 
     //hides visuals, waits for sound to finish, then destroys self
