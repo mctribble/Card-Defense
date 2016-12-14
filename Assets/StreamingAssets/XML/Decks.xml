@@ -145,7 +145,8 @@
         <Card name="Recycle" count="2" />
         <Card name="Reinforce" count="1"/>
         <Card name="Strong Reinforce" count="2" />
-        <Card name="Sniper Tower" count="5" />
+        <Card name="Sniper Tower" count="3" />
+        <Card name="Giant Sniper" count="2" />
         <Card name="Spitfire Upgrade" count="3" />
       </Cards>
     </Deck>

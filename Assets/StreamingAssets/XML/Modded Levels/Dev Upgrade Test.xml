@@ -4,11 +4,11 @@
   <description>Developer map for testing upgrades</description>
   <randomWaveCount>0</randomWaveCount>
   <Waves>
-    <Wave type="Refurb" budget="1" time="0.9836545" />
-    <Wave type="Refurb" budget="600" time="1.98383343" />
+    <Wave type="Armored" budget="1" time="0.9836545" />
+    <Wave type="Armored" budget="600" time="1.98383343" />
     <Wave type="Ping" budget="1200" time="3.98440981" />
     <Wave type="Ping" budget="1800" time="7.98343372" />
-    <Wave type="Refurb" budget="2400" time="10" />
+    <Wave type="Armored" budget="2400" time="10" />
   </Waves>
   <Spawners>
     <Spawner spawnX="-5" spawnY="5" />

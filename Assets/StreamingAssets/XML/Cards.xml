@@ -159,14 +159,25 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Sniper Tower" Description="Specializes in slaying Giants" Charges="2" Art="Sniper_Tower.png" Tooltip="Tower_Octagon.png" Token="false">
-      <towerData Recharge="7.5" Range="999" Damage="300" Lifespan="5" UpgradeCap="1" Sprite="Tower_Octagon.png">
+    <Card Type="tower" Name="Sniper Tower" Description="Specializes in slaying heavily armored foes" Charges="2" Art="Sniper_Tower.png" Tooltip="Tower_Octagon.png" Token="false">
+      <towerData Recharge="7.5" Range="999" Damage="300" Lifespan="4" UpgradeCap="2" Sprite="Tower_Octagon.png">
         <towerColor r="0" g="0" b="1" a="1" />
       </towerData>
       <effectData>
         <Effects>
           <Effect name="targetHealth" />
-          <Effect name="damagePercent" strength="5" />
+          <Effect name="armorPierce" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="tower" Name="Giant Sniper" Description="Variation of Sniper Tower that specializes in slaying giants" Charges="2" Art="Giant_Sniper.png" Tooltip="Tower_Octagon.png" Token="false">
+      <towerData Recharge="7.5" Range="999" Damage="300" Lifespan="6" UpgradeCap="0" Sprite="Tower_Octagon.png">
+        <towerColor r="0" g="0" b="1" a="1" />
+      </towerData>
+      <effectData>
+        <Effects>
+          <Effect name="targetHealth" />
+          <Effect name="damagePercent" strength="10" />
         </Effects>
       </effectData>
     </Card>
@@ -428,6 +439,54 @@
         <Effects>
           <Effect name="allTowersLifespanBonus" strength="6" />
           <Effect name="drawEnemyCard" strength="1" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="spell" Name="Summon Armored" Description="Easily defeated with the proper defenses, but very dangerous otherwise" Charges="2" Art="Summon_Armored.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="changeWaveType" argument="Armored" />
+          <Effect name="damagePlayer" strength="3" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="spell" Name="Summon Assassin" Description="Despite the name, they have nothing to do with butts." Charges="2" Art="Summon_Assassin.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="changeWaveType" argument="Assassin" />
+          <Effect name="damagePlayer" strength="3" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="spell" Name="Summon Carrier" Description="They speak loudly and carry a lot of small sticks." Charges="2" Art="Summon_Carrier.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="changeWaveType" argument="Carrier" />
+          <Effect name="damagePlayer" strength="3" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="spell" Name="Summon Giant" Description="Just dont ask them about the weather." Charges="2" Art="Summon_Giant.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="changeWaveType" argument="Giant" />
+          <Effect name="damagePlayer" strength="3" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="spell" Name="Summon Regenerative Tank" Description="Not advised if your defenses are too spread out" Charges="2" Art="Summon_Regenerative_Tank.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="changeWaveType" argument="Regenerative Tank" />
+          <Effect name="damagePlayer" strength="3" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="spell" Name="Summon Scrambled" Description="WARNING: does not summon scrambled eggs" Charges="2" Art="Summon_Scrambled.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="changeWaveType" argument="Scrambled" />
+          <Effect name="damagePlayer" strength="3" />
         </Effects>
       </effectData>
     </Card>

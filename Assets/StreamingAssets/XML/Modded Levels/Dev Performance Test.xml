@@ -8,7 +8,7 @@
     <Wave type="Carrier" budget="10000" time="30" />
     <Wave type="Giant" budget="10000" time="30" />
     <Wave type="Ping" budget="10000" time="30" />
-    <Wave type="Refurb" budget="10000" time="30" />
+    <Wave type="Armored" budget="10000" time="30" />
     <Wave type="Regenerative Tank" budget="10000" time="30" />
     <Wave type="Scrambled" budget="10000" time="30" />
     <Wave type="Standard" budget="10000" time="30" />

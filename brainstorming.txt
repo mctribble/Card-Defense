@@ -2,18 +2,25 @@ known issues:
 some lingering cause of enemies not knowing to expect damage
 [WebGL] need a placeholder image while level thumbnails are loading.
 ================================================================
-presentation:
-need art for conjure tower/upgrade/spell
-need art for piercing/poison ammo
+art needed for:
+conjure tower/upgrade/spell
+piercing/poison ammo
+summon armored/assassin/carrier/giant/regenerative tank/scrambled
+Giant Sniper
+================================================================
+art needs updating for:
+Sniper Tower
+Ping Tower
+================================================================
+other presenation/art:
 need some level backgrounds
-need to update art for Ping tower
 better range display, especially when upgrading and for special targeting types
 animated enemy sprites?
 ================================================================
 content goals:
 enemies: 10/10  <<DONE!!>>
 levels:  10/30
-cards:   45/100 (+3 token)
+cards:   52/100 (+3 token)
 decks:   07/10
 ================================================================
 balance:

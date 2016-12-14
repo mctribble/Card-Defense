@@ -105,9 +105,9 @@ public class LevelData
 
     //budget: absolute + (wave * linear) + (wave * squared)^2 + (exponential^wave)
     [DefaultValue(100.0f)] public float waveGrowthAbsolute     = 100.0f;
-    [DefaultValue(8.0f)]   public float waveGrowthLinear       = 8.0f;
-    [DefaultValue(2.7f)]   public float waveGrowthSquared      = 2.7f;
-    [DefaultValue(1.2f)]   public float waveGrowthExponential  = 1.2f;
+    [DefaultValue(10.0f)]   public float waveGrowthLinear      = 10.0f;
+    [DefaultValue(2.3f)]   public float waveGrowthSquared      = 2.3f;
+    [DefaultValue(1.1f)]   public float waveGrowthExponential  = 1.1f;
 
     //time: min(wave*linear, maxwavetime)
     [DefaultValue(1.1f)]  public float waveTimeLinear = 1.1f;

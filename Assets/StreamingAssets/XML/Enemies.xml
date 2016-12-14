@@ -1,6 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <EnemyTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Enemies>
+    <Enemy name="Armored" spawnCost="100" attack="5" maxHealth="25" unitSpeed="1" sprite="Enemy_Elite.png">
+      <rankInfo rankUpSpawnCount="50" spawnCostMult="2" attackMult="2" maxHealthMult="1.75" unitSpeedMult="1" />
+      <unitColor r="0.2" g="1" b="1" a="1" />
+      <effectData>
+        <Effects>
+          <Effect name="scaleEffectWithRank" strength="1.5">
+            <Effect name="armor" strength="500" />
+          </Effect>
+        </Effects>
+      </effectData>
+    </Enemy>
     <Enemy name="Assassin" spawnCost="30" attack="0" maxHealth="60" unitSpeed="4" sprite="Enemy_Strong.png">
       <rankInfo rankUpSpawnCount="150" spawnCostMult="2" attackMult="1" maxHealthMult="2" unitSpeedMult="1" />
       <unitColor r="0.2" g="0.75" b="0.2" a="0.4" />
@@ -27,25 +38,6 @@
         </Effects>
       </effectData>
     </Enemy>
-    <Enemy name="Standard" spawnCost="20" attack="2" maxHealth="50" unitSpeed="2" sprite="Enemy_Basic.png">
-      <rankInfo rankUpSpawnCount="150" spawnCostMult="2" attackMult="2" maxHealthMult="2" unitSpeedMult="1" />
-      <unitColor r="0" g="1" b="0" a="1" />
-    </Enemy>
-    <Enemy name="Swarm" spawnCost="12" attack="1" maxHealth="8" unitSpeed="5" sprite="Enemy_Basic.png">
-      <rankInfo rankUpSpawnCount="200" spawnCostMult="2" attackMult="2" maxHealthMult="2" unitSpeedMult="1" />
-      <unitColor r="1" g="0" b="0" a="1" />
-    </Enemy>
-    <Enemy name="Tank" spawnCost="125" attack="5" maxHealth="400" unitSpeed="1" sprite="Enemy_Strong.png">
-      <rankInfo rankUpSpawnCount="75" spawnCostMult="2" attackMult="2" maxHealthMult="2" unitSpeedMult="1" />
-      <unitColor r="0" g="0" b="1" a="1" />
-      <effectData>
-        <Effects>
-          <Effect name="scaleEffectWithRank" strength="1.5">
-            <Effect name="armor" strength="15" />
-          </Effect>
-        </Effects>
-      </effectData>
-    </Enemy>
     <Enemy name="Giant" spawnCost="400" attack="8" maxHealth="600" unitSpeed="1" sprite="Enemy_Boss.png">
       <rankInfo rankUpSpawnCount="200" spawnCostMult="2" attackMult="2" maxHealthMult="2" unitSpeedMult="1" />
       <unitColor r="0.75" g="0" b="0.75" a="1" />
@@ -55,6 +47,17 @@
           <Effect name="scaleHealthWithBudget" />
           <Effect name="scaleAttackWithBudget" />
           <Effect name="invScaleAttackWithHealth" />
+        </Effects>
+      </effectData>
+    </Enemy>
+    <Enemy name="Ping" spawnCost="20" attack="0" maxHealth="5" unitSpeed="2" sprite="Enemy_Basic.png">
+      <rankInfo rankUpSpawnCount="200" spawnCostMult="2" attackMult="2" maxHealthMult="2.5" unitSpeedMult="1" />
+      <unitColor r="0.45" g="0.45" b="0.45" a="1" />
+      <effectData>
+        <Effects>
+          <Effect name="onCardDrawn">
+            <Effect name="drawEnemyCard" strength="1" />
+          </Effect>
         </Effects>
       </effectData>
     </Enemy>
@@ -98,23 +101,22 @@
         </Effects>
       </effectData>
     </Enemy>
-    <Enemy name="Ping" spawnCost="20" attack="0" maxHealth="5" unitSpeed="2" sprite="Enemy_Basic.png">
-      <rankInfo rankUpSpawnCount="200" spawnCostMult="2" attackMult="2" maxHealthMult="2.5" unitSpeedMult="1" />
-      <unitColor r="0.45" g="0.45" b="0.45" a="1" />
-      <effectData>
-        <Effects>
-          <Effect name="onCardDrawn">
-            <Effect name="drawEnemyCard" strength="1" />
-          </Effect>
-        </Effects>
-      </effectData>
+    <Enemy name="Standard" spawnCost="20" attack="2" maxHealth="50" unitSpeed="2" sprite="Enemy_Basic.png">
+      <rankInfo rankUpSpawnCount="150" spawnCostMult="2" attackMult="2" maxHealthMult="2" unitSpeedMult="1" />
+      <unitColor r="0" g="1" b="0" a="1" />
     </Enemy>
-    <Enemy name="Refurb" spawnCost="100" attack="5" maxHealth="25" unitSpeed="1" sprite="Enemy_Elite.png">
-      <rankInfo rankUpSpawnCount="50" spawnCostMult="2" attackMult="2" maxHealthMult="1.75" unitSpeedMult="1" />
-      <unitColor r="0.2" g="1" b="1" a="1" />
+    <Enemy name="Swarm" spawnCost="12" attack="1" maxHealth="8" unitSpeed="5" sprite="Enemy_Basic.png">
+      <rankInfo rankUpSpawnCount="200" spawnCostMult="2" attackMult="2" maxHealthMult="2" unitSpeedMult="1" />
+      <unitColor r="1" g="0" b="0" a="1" />
+    </Enemy>
+    <Enemy name="Tank" spawnCost="125" attack="5" maxHealth="400" unitSpeed="1" sprite="Enemy_Strong.png">
+      <rankInfo rankUpSpawnCount="75" spawnCostMult="2" attackMult="2" maxHealthMult="2" unitSpeedMult="1" />
+      <unitColor r="0" g="0" b="1" a="1" />
       <effectData>
         <Effects>
-          <Effect name="armor" strength="500" />
+          <Effect name="scaleEffectWithRank" strength="1.5">
+            <Effect name="armor" strength="15" />
+          </Effect>
         </Effects>
       </effectData>
     </Enemy>
