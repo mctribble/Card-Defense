@@ -228,7 +228,7 @@ public class LevelManagerScript : BaseBehaviour
     //current status (only visible if there is a loaded level, since the values are only meaningful in that context)
     [VisibleWhen("levelLoaded")] public int   wavesInDeck;               //number of enemy groups remaining in the deck
     [VisibleWhen("levelLoaded")] public int   wavesSpawning;             //number of waves currently attacking
-    [VisibleWhen("levelLoaded")] public int   deadThisWave { get; set; } //number of monsters dead this wave
+    //[VisibleWhen("levelLoaded")] public int   deadThisWave { get; set; } //number of monsters dead this wave
     [VisibleWhen("levelLoaded")] public int   totalSpawnedThisWave;      //how many enemies have already spawned this wave
     [VisibleWhen("levelLoaded")] public float desiredTimeScale;          //the game speed the player wants to play at
 
@@ -249,7 +249,6 @@ public class LevelManagerScript : BaseBehaviour
         instance = this;
         wavesSpawning = 0;
         wavesInDeck = 0;
-        deadThisWave = 0;
         levelLoaded = false;
         totalSpawnCount = -1;
         desiredTimeScale = 1.0f;
@@ -530,8 +529,6 @@ public class LevelManagerScript : BaseBehaviour
             t.SendMessage("WaveOver");
         }
 
-        deadThisWave = 0;
-
         //draw
         yield return new WaitForSeconds(1.0f);
         HandScript.playerHand.drawCard();
@@ -655,8 +652,9 @@ public class LevelManagerScript : BaseBehaviour
 
                 timeToNextSpawn += timeBetweenSpawns; //update spawn timer
 
-                //update spawn counter
+                //update spawn counters
                 wave.spawnedThisWave++;
+                totalSpawnedThisWave++;
 
                 //bail if we have finished spawning baddies
                 if (wave.spawnedThisWave == wave.spawnCount)

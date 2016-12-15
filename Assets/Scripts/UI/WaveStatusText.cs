@@ -48,7 +48,7 @@ public class WaveStatusText : BaseBehaviour
         else
         {
             //wave has finished spawning: "???? remain (????? health)"
-            enemyStatText.text = (LevelManagerScript.instance.SpawnCount - LevelManagerScript.instance.deadThisWave) + " remain (" + LevelManagerScript.instance.totalRemainingHealth + " health)";
+            enemyStatText.text = (EnemyManagerScript.instance.activeEnemies.Count) + " remain (" + LevelManagerScript.instance.totalRemainingHealth + " health)";
         }
 
         //if the game speed is not 1.0, add text to show what it is

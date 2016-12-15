@@ -331,8 +331,7 @@ public class EnemyScript : BaseBehaviour
         currentDestination = 0;
         goalFinalChance = false;
 
-        //update wave stats
-        LevelManagerScript.instance.deadThisWave++;
+        //update wave health tracker
         LevelManagerScript.instance.totalRemainingHealth -= curHealth;
 
         //report it as a survivor, and then disable it until it is spawned into the next wave
@@ -430,9 +429,6 @@ public class EnemyScript : BaseBehaviour
                 expectedHealth = 0;
                 EnemyManagerScript.instance.EnemyExpectedDeath(this);
             }
-
-            //if dead, report the kill to the tower that shot it
-            LevelManagerScript.instance.deadThisWave++;
 
             //(bugfix: works around race condition where an enemy is deactivated and then dies immediately afterward
             if (gameObject.activeSelf == false)
