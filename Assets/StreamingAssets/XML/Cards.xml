@@ -172,7 +172,7 @@
     </Card>
     <Card Type="tower" Name="Giant Sniper" Description="Variation of Sniper Tower that specializes in slaying giants" Charges="2" Art="Giant_Sniper.png" Tooltip="Tower_Octagon.png" Token="false">
       <towerData Recharge="7.5" Range="999" Damage="300" Lifespan="6" UpgradeCap="0" Sprite="Tower_Octagon.png">
-        <towerColor r="0" g="0" b="1" a="1" />
+        <towerColor r="0.75" g="0" b="0.75" a="1" />
       </towerData>
       <effectData>
         <Effects>

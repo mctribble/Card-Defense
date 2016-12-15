@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
-  <difficulty>virtually impossible</difficulty>
-  <description>this level may or may not actually be possible.  you have been warned.</description>
+  <difficulty>hard</difficulty>
+  <description>the layout is simple, but there are many, many foes to face</description>
   <randomWaveCount>100</randomWaveCount>
   <Waves />
   <Spawners>

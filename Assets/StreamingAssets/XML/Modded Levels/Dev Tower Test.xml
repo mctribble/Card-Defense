@@ -34,7 +34,7 @@
     <Tower name="Plague Tower" x="7" y="-8" />
     <Tower name="Shredder Tower" x="7.5" y="-8" />
     <Tower name="Sniper Tower" x="8" y="-8" />
-    <Tower name="Giant Sniper" x="8" y="8.5" />
+    <Tower name="Giant Sniper" x="8" y="-8.5" />
     <Tower name="Supernova Tower" x="8.5" y="-8" />
     <Tower name="Dev Purge Tower" x="8.5" y="2.5" />
     <Tower name="Mouse Tower" x="9" y="-6" />
