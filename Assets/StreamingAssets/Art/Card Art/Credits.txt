@@ -42,6 +42,12 @@ Shredder_Tower
 Sniper_Tower
 Spitfire_Upgrade
 Strong_Reinforce
+Summon_Armored
+Summon_Assassin
+Summon_Carrier
+Summon_Giant
+Summon_Regenerative_Tank
+Summon_Scrambled
 Summon_Standard
 Summon_Swarm
 Summon_Tank
