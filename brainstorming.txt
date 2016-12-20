@@ -4,7 +4,6 @@ some lingering cause of enemies not knowing to expect damage
 ================================================================
 art needed for:
 conjure tower/upgrade/spell
-piercing/poison ammo
 ================================================================
 art needs updating for:
 ================================================================

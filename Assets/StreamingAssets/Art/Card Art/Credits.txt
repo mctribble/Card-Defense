@@ -27,8 +27,10 @@ Range_Upgrade
 Recycle
 Orthogonal_Tower
 Overcharge_Tower
+Piercing_Ammo
 Ping_Tower
 Plague_Tower
+Poison_Ammo
 Preservation_Upgrade
 Program_funding
 Pulse_Upgrade
