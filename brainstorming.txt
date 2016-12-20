@@ -5,11 +5,8 @@ some lingering cause of enemies not knowing to expect damage
 art needed for:
 conjure tower/upgrade/spell
 piercing/poison ammo
-Giant Sniper
 ================================================================
 art needs updating for:
-Sniper Tower
-Ping Tower
 ================================================================
 other presenation/art:
 need some level backgrounds

@@ -11,6 +11,7 @@ Explosive_Tower
 Fast_Tower
 Fast_Upgrade
 Gambit
+Giant_Sniper
 Heavy_Tower
 Heavy_Upgrade
 Improvised_Spell
