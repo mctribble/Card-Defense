@@ -13,22 +13,35 @@ Fast_Upgrade
 Gambit
 Heavy_Tower
 Heavy_Upgrade
+Improvised_Spell
+Improvised_Tower
+Improvised_Upgrade
+Infrastructure_Funding
 Life Tap
+Manual_Control
+Mouse_Tower
+Nova_Tower
 Nova_Tower
 Range_Upgrade
 Recycle
 Orthogonal_Tower
 Overcharge_Tower
+Ping_Tower
 Plague_Tower
 Preservation_Upgrade
+Program_funding
 Pulse_Upgrade
+Range_Upgrade
+Recycle
 Reinforce
 Risky Draw
+Scavange
 Self_Destruct_Upgrade
 Shield
 Shredder_Tower
 Sniper_Tower
 Spitfire_Upgrade
+Strong_Reinforce
 Summon_Standard
 Summon_Swarm
 Summon_Tank

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -218,7 +219,12 @@ public class LevelManagerScript : BaseBehaviour
     [VisibleWhen("shouldShowRefs")] public GameObject  explosionPrefab;   //prefab used to create explosions
     [VisibleWhen("shouldShowRefs")] public GameObject  pathTooltipPrefab; //prefab used to create the path laying tooltip
     [VisibleWhen("shouldShowRefs")] public RawImage    background;        //reference to the background texture
-    [VisibleWhen("shouldShowRefs")] public AudioSource musicSource;       //audio source to use for playing background music
+
+    //audio settings
+    [VisibleWhen("shouldShowRefs")] public AudioClip[] levelMusic;  //array of songs to use for playing music
+    [VisibleWhen("shouldShowRefs")] public AudioSource musicSource; //audio source to use for playing level music
+    [VisibleWhen("shouldShowRefs")] public float minSilence;        //minimum delay between songs
+    [VisibleWhen("shouldShowRefs")] public float maxSilence;        //maximum delay between songs
 
     //data for the level itself
     [Hide] public bool levelLoaded;                     //indicates whether a level has been loaded or not
@@ -228,7 +234,6 @@ public class LevelManagerScript : BaseBehaviour
     //current status (only visible if there is a loaded level, since the values are only meaningful in that context)
     [VisibleWhen("levelLoaded")] public int   wavesInDeck;               //number of enemy groups remaining in the deck
     [VisibleWhen("levelLoaded")] public int   wavesSpawning;             //number of waves currently attacking
-    //[VisibleWhen("levelLoaded")] public int   deadThisWave { get; set; } //number of monsters dead this wave
     [VisibleWhen("levelLoaded")] public int   totalSpawnedThisWave;      //how many enemies have already spawned this wave
     [VisibleWhen("levelLoaded")] public float desiredTimeScale;          //the game speed the player wants to play at
 
@@ -246,6 +251,16 @@ public class LevelManagerScript : BaseBehaviour
     // Use this for initialization
     private void Awake()
     {
+        //shuffle music
+        for (int i = 0; i < levelMusic.Length; i++)
+        {
+            int j = UnityEngine.Random.Range(0, levelMusic.Length);
+            AudioClip temp = levelMusic[i];
+            levelMusic[i] = levelMusic[j];
+            levelMusic[j] = temp;
+        }
+
+        //init vars
         instance = this;
         wavesSpawning = 0;
         wavesInDeck = 0;
@@ -417,7 +432,7 @@ public class LevelManagerScript : BaseBehaviour
         UpdateWaveStats();
 
         //start the music
-        musicSource.Play();
+        StartCoroutine(playMusic());
 
         //fire the level loaded event so interested objects can act on it
         LevelLoadedEvent();
@@ -431,6 +446,26 @@ public class LevelManagerScript : BaseBehaviour
                 foreach (IEffect e in t.effects.effects)
                     if (e.triggersAs(EffectType.everyRound))
                         ((IEffectInstant)e).trigger();
+        }
+    }
+
+    /// <summary>
+    /// plays the first song in the list, waits a random period, then plays the next.  loops back around if it needs to
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator playMusic()
+    {
+        int curSong = 0;
+        while (true)
+        {
+            musicSource.clip = levelMusic[curSong];
+            musicSource.Play();
+
+            while (musicSource.isPlaying)
+                yield return new WaitForSeconds(0.1f);
+
+            curSong = (curSong + 1) % levelMusic.Length;
+            yield return new WaitForSeconds(UnityEngine.Random.Range(minSilence, maxSilence));
         }
     }
 
@@ -573,7 +608,7 @@ public class LevelManagerScript : BaseBehaviour
         yield return new WaitForSeconds(1.0f);
 
         //spawn monsters.  Distribute spawns as evenly as possible
-        int curSpawner = Random.Range(0, spawnerCount);
+        int curSpawner = UnityEngine.Random.Range(0, spawnerCount);
         float timeToNextSpawn = 0;
         while ( (d.spawnCount - d.spawnedThisWave) > 0)
         {
