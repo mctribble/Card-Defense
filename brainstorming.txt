@@ -14,7 +14,6 @@ Ping Tower
 ================================================================
 other presenation/art:
 need some level backgrounds
-better range display, especially when upgrading and for special targeting types
 animated enemy sprites?
 ================================================================
 content goals:
