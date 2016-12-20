@@ -68,6 +68,7 @@ public class TowerScript : BaseBehaviour
     //component references for all the display objects
     [VisibleWhen("isEditor")] public Image towerImage;
     [VisibleWhen("isEditor")] public Image rangeImage;
+    [VisibleWhen("isEditor")] public Image upgradeRangeImage;
     [VisibleWhen("isEditor")] public Image chargeGaugeImage1x;
     [VisibleWhen("isEditor")] public Image chargeGaugeImage2x;
     [VisibleWhen("isEditor")] public Image chargeGaugeImage3x;
@@ -86,6 +87,7 @@ public class TowerScript : BaseBehaviour
     {
         //init vars
         rangeImage.enabled = false;
+        upgradeRangeImage.enabled = false;
         upgradeCount = 0;
         maxCharge = 1.0f;
         effects = null;
@@ -671,6 +673,10 @@ public class TowerScript : BaseBehaviour
             foreach (IEffect e in effects.effects)
                 if (e.Name != null)
                     tooltipText.text += "\n" + "-" + e.Name;
+
+        //also show the upgrade range
+        upgradeRangeImage.transform.localScale = new Vector3(newRange, newRange, 1.0f);
+        upgradeRangeImage.enabled = true;
     }
 
     /// <summary>
@@ -729,26 +735,6 @@ public class TowerScript : BaseBehaviour
         Destroy(gameObject);
     }
 
-    /// <summary>
-    /// called when an upgrade card is being played. Change the lifespanText to show remaining upgrade slots instead
-    /// </summary>
-    private void showUpgradeInfo()
-    {
-        lifespanText.text = (upgradeCap - upgradeCount).ToString();
-        if (upgradeCount == upgradeCap)
-            lifespanText.color = textColorAmmo;
-        else
-            lifespanText.color = textColorLifespan;
-    }
-
-    /// <summary>
-    /// called when the upgrade is done.  Restores text to normal after a previous call to showUpgradeInfo
-    /// </summary>
-    private void hideUpgradeInfo()
-    {
-        updateLifespanText();
-    }
-
     //these update text associated with the tower when things change
     private void UpdateTooltipText()
     {
@@ -771,6 +757,9 @@ public class TowerScript : BaseBehaviour
             foreach (IEffect e in effects.effects)
                 if (e.Name != null)
                     tooltipText.text += "\n" + "-" + e.Name;
+
+        //disable the upgrade range
+        upgradeRangeImage.enabled = false;
     }
     private void updateLifespanText()
     {
