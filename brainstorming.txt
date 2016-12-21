@@ -4,6 +4,7 @@ some lingering cause of enemies not knowing to expect damage
 ================================================================
 art needed for:
 conjure tower/upgrade/spell
+double/quad-barrel upgrade
 ================================================================
 art needs updating for:
 ================================================================
@@ -14,7 +15,7 @@ animated enemy sprites?
 content goals:
 enemies: 10/10  <<DONE!!>>
 levels:  10/30
-cards:   52/100 (+3 token)
+cards:   54/100 (+3 token)
 decks:   07/10
 ================================================================
 balance:
