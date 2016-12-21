@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Xml.Serialization;
 using UnityEngine;
+using UnityEngine.Analytics;
 using Vexe.Runtime.Types;
 
 /// <summary>
@@ -223,6 +224,21 @@ public class ScoreManagerScript : BaseBehaviour
             playerScores.Save(Path.Combine(Application.persistentDataPath, "playerScores.xml")); //TODO: make save file per-user if/when user accounts exist
             result += "\n<<<<<NEW HIGH SCORE!>>>>>";
         }
+
+        //track the result
+        AnalyticsResult ar = Analytics.CustomEvent("gameOver", new Dictionary<string, object>
+        {
+            {"levelName", LevelManagerScript.instance.data.fileName},
+            {"playerWon", PlayerWon},
+            {"flawless", flawless},
+            {"wavesCleared", wavesCleared },
+            {"enemyCardsDrawn", enemyCardsDrawn },
+            {"bonusPoints", bonusPoints },
+            {"score", totalScore}
+        });
+
+        if (ar != AnalyticsResult.Ok)
+            Debug.LogWarning("Could not track gameOver: " + ar);
 
         return result;
     }

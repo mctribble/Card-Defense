@@ -455,7 +455,7 @@ public class DeckManagerScript : BaseBehaviour
     /// note that this does NOT shuffle the deck, since there are (rare) instances where this should not happen
     /// </summary>
     /// <seealso cref="Shuffle"/>
-    private void SetDeck(XMLDeck newDeck)
+    public void SetDeck(XMLDeck newDeck)
     {
         //init
         currentDeckName = newDeck.name;
@@ -623,6 +623,7 @@ public class DeckManagerScript : BaseBehaviour
     {
         int targetCardCount = UnityEngine.Random.Range(30,61); //.Range() excludes upper bound, so this is actually 30-60 inclusive.
         XMLDeck randomDeck = new XMLDeck();
+        randomDeck.name = "randomly generated";
 
         //while there is still room in the deck, add more cards.
         while (randomDeck.cardCount < targetCardCount)

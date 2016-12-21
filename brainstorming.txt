@@ -18,8 +18,11 @@ levels:  10/30
 cards:   54/100 (+3 token)
 decks:   07/10
 ================================================================
+analytics:
+check back on the analytics to see how they're doing and tweak things
+================================================================
 balance:
-find a way to record statistics to aid in balancing content?
+find a way to generate .csv files to aid in balancing content?
 difficulty settings??
 use scoring to make gemcraft style progression?
 ================================================================

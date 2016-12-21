@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
+using UnityEngine.Analytics;
 
 /// <summary>
 /// XML representation of an upgrade to be applied to a premade tower
@@ -436,7 +437,11 @@ public class LevelManagerScript : BaseBehaviour
 
         //fire the level loaded event so interested objects can act on it
         LevelLoadedEvent();
-        Debug.Log("Level loaded.");
+
+        //track it in analytics
+        AnalyticsResult ar = Analytics.CustomEvent("levelLoaded", new Dictionary<string, object> { {"levelName", data.fileName} });
+        if (ar != AnalyticsResult.Ok)
+            Debug.LogWarning("Failed to track levelLoaded: " + ar + ')');
 
         //fire every round effects on any premade towers
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("Tower"))

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using UnityEngine.Analytics;
 
 /// <summary>
 /// handles the level select menu
@@ -373,9 +374,21 @@ public class LevelSelectScript : BaseBehaviour
     /// </summary>
     private void DeckSelected(XMLDeck deck)
     {
-        DeckManagerScript.instance.SendMessage("SetDeck", deck); //send deck manager the chosen deck
+        DeckManagerScript.instance.SetDeck(deck); //send deck manager the chosen deck
         DeckManagerScript.instance.Shuffle(); //always shuffle the deck, regardless of what the level file says, if the deck did not come from the level file
         LevelManagerScript.instance.SendMessage("loadLevel", chosenLevel); //load the previously chosen level
+
+        //track it
+        AnalyticsResult ar;
+
+        if (DeckManagerScript.instance.playerDecks.decks.Contains(deck))
+            ar = Analytics.CustomEvent("deckLoaded", new Dictionary<string, object> { { "deckName", "customDeck" } }); //player decks all get the label "customDeck" to lump them together in analytics
+        else
+            ar = Analytics.CustomEvent("deckLoaded", new Dictionary<string, object> { {"deckName", deck.name } }); //everything else uses the name of the deck
+
+        if (ar != AnalyticsResult.Ok)
+            Debug.LogWarning("failed to track deckLoaded: " + ar);
+
         Destroy(menuRoot); //we are done with this menu.  Destroy it.
     }
 
@@ -425,8 +438,14 @@ public class LevelSelectScript : BaseBehaviour
                 break;
 
             case "Suggested Deck":
-                //player wants to use the predefined deck for this level.  Load the level immediately and then let the level manager load the deck for us when it sees we haven't.
-                LevelManagerScript.instance.SendMessage("loadLevel", chosenLevel);
+                //player wants to use the predefined deck for this level.  
+                LevelManagerScript.instance.SendMessage("loadLevel", chosenLevel); //Load the level (the level manager will load the deck for us when it sees we haven't).
+
+                //track it
+                AnalyticsResult ar = Analytics.CustomEvent("deckLoaded", new Dictionary<string, object> { {"deckName", "levelDefault" } }); //default level decks all get the label "levelDefault" to lump them together in analytics
+                if (ar != AnalyticsResult.Ok)
+                    Debug.LogWarning("failed to track deckLoaded: " + ar);
+
                 Destroy(menuRoot); //we are done with this menu.  Destroy it.
                 break;
 
