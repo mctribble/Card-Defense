@@ -25,10 +25,10 @@ namespace Vexe.FastSave
                .Add<MeshRenderer>("shadowCastingMode", "receiveShadows", "sharedMaterials", "useLightProbes", "reflectionProbeUsage", "probeAnchor")
                .Add<SkinnedMeshRenderer>("shadowCastingMode", "receiveShadows", "sharedMaterials", "useLightProbes", "reflectionProbeUsage", "probeAnchor", "rootBone", "quality", "localBounds", "sharedMesh", "updateWhenOffscreen")
                .Add<TrailRenderer>("shadowCastingMode", "receiveShadows", "sharedMaterials", "useLightProbes", "reflectionProbeUsage", "probeAnchor", "time", "startWidth", "endWidth", "autodestruct")
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable 0618 // Type or member is obsolete
                .Add<ParticleRenderer>("shadowCastingMode", "receiveShadows", "sharedMaterials", "useLightProbes", "reflectionProbeUsage", "probeAnchor", "cameraVelocityScale", "particleRenderMode", "lengthScale", "velocityScale", "maxParticleSize", "uvAnimationCycles", "uvAnimationXTile", "uvAnimationYTile", "uvTiles")
                .Add<ParticleAnimator>("doesAnimateColor", "colorAnimation", "worldRotationAxis", "localRotationAxis", "rndForce", "force", "sizeGrow", "damping", "autodestruct")
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore 0618 // Type or member is obsolete
                .Add<Camera>("fieldOfView", "orthographicSize", "orthographic", "nearClipPlane", "farClipPlane", "backgroundColor", "clearFlags", "rect", "depth", "renderingPath", "hdr", "targetTexture")
                .Add<CharacterController>("stepOffset", "radius", "height", "center")
                .Add<AudioSource>("clip", "volume", "pitch", "time", "mute", "playOnAwake", "loop")
