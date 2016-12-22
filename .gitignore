@@ -4,7 +4,6 @@ Temp/
 Library/
 Build/
 AssetPackages/
-Assets/Resources/Scores
 .vs/
 
 *.svd
@@ -13,5 +12,3 @@ Assets/Resources/Scores
 *.sln
 *.csproj
 *.pidb
-
-ProjectSettings/EditorBuildSettings.asset
