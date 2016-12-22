@@ -27,6 +27,7 @@ armor                     | enemy receives X less damage from every hit, with a 
 chainHit				  | attack spreads to all enemies within X of each other through a series of consecutive explosions.  No enemy will be hit twice.  
 damagePercent             | enemy takes damage equal to X% of their max health
 reduceEnemyEffectOnDamage | hit enemies have the strength of effect Y reduced by X
+resonantTowerAttack       | tower attack gets X times stronger for each tower that has this effect with the same value for Y
 secondaryBurst            | when a valid attack is made, the tower also creates a burst attack with radius X and strength Y
 splashDamage			  | attack causes a secondary explosion, dealing X damage to all enemies within Y of the impact site.  Effects do not spread to secondary targets
 
@@ -87,7 +88,7 @@ effectCooldown           | child effect triggers under normal conditions, but on
 everyRound               | target instant effect triggers once every round
 onCardDrawn              | target instant effect triggers when the card is drawn
 onAttack		         | target instant effect triggers when the tower fires or when the enemy deals damage
-onEnemySpawned           | target instant effect triggers when the enemy spawns.  Does not trigger twice if the unit survives and spawns again in the next wave.
+onSpawned	             | target instant effect triggers when the enemy spawns.  Does not trigger twice if the unit survives and spawns again in the next wave.
 percentageChance         | child effect has an X% chance of triggering
 scaleEffectByTowerAttack | on towers, multiplies effect strength by attack power of the tower.  Use this to create effects whose strength vary with the strength of the tower, like the poison on "Poison Ammo".
 ifRollRange              | child effect triggers if the die rolled anything from X to Y.  Requires dieRoll effect to work

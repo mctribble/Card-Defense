@@ -148,6 +148,16 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="tower" Name="Resonant Tower" Charges="3" Art="Resonant_Tower.png" Tooltip="Tower_Diamond.png" Token="false">
+      <towerData Recharge="1" Range="3" Damage="20" Lifespan="4" UpgradeCap="3" Sprite="Tower_Diamond.png">
+        <towerColor r="1" g="1" b="1" a="1" />
+      </towerData>
+      <effectData>
+        <Effects>
+          <Effect name="resonantTowerAttack" strength="1.25" argument="Resonant Tower" />
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="tower" Name="Shredder Tower" Description="Does very little damage, but strips away armor" Charges="4" Art="Shredder_Tower.png" Tooltip="Tower_Diamond.png" Token="false">
       <towerData Recharge="0.5" Range="3" Damage="1" Lifespan="5" UpgradeCap="3" Sprite="Tower_Diamond.png">
         <towerColor r="0" g="0.33" b="1" a="1" />
@@ -234,18 +244,10 @@
       </effectData>
     </Card>
     <Card Type="upgrade" Name="Double-Barrel Upgrade" Description="Best on towers that dont already have specialized targeting" Charges="3" Art="Double_Barrel_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
-      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0.75" DamageMod="0" WaveBonus="3" />
+      <upgradeData RechargeMult="1.25" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="3" />
       <effectData>
         <Effects>
           <Effect name="targetMultishot" strength="2" />
-        </Effects>
-      </effectData>
-    </Card>
-    <Card Type="upgrade" Name="Quad-Barrel Upgrade" Description="less damage, but effective against groups" Charges="3" Art="Double_Barrel_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
-      <upgradeData RechargeMult="1.2" RangeMult="1" DamageMult="0.8" RechargeMod="0" RangeMod="1" DamageMod="0" WaveBonus="3" />
-      <effectData>
-        <Effects>
-          <Effect name="targetMultishot" strength="4" />
         </Effects>
       </effectData>
     </Card>
@@ -282,6 +284,14 @@
           <Effect name="effectCooldown" strength="3">
             <Effect name="secondaryBurst" strength="10" argument="1.5" />
           </Effect>
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="upgrade" Name="Quad-Barrel Upgrade" Description="less damage, but effective against groups" Charges="3" Art="Double_Barrel_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
+      <upgradeData RechargeMult="1.2" RangeMult="1" DamageMult="0.8" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="3" />
+      <effectData>
+        <Effects>
+          <Effect name="targetMultishot" strength="4" />
         </Effects>
       </effectData>
     </Card>

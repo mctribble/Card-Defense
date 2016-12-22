@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Vexe.Runtime.Types;
 
@@ -176,12 +177,8 @@ public class EffectTargetMultishot : BaseEffectTowerTargeting
         if ((validTargets == null) || (validTargets.Count == 0))
             return validTargets;
 
-        //prune down to strength if there are more than that
-        if (validTargets.Count > Mathf.FloorToInt(strength))
-            validTargets.RemoveRange(Mathf.FloorToInt(strength), int.MaxValue);
-
-        //return the list
-        return validTargets;
+        //return the first X enemies in the list
+        return validTargets.Take(Mathf.FloorToInt(strength)).ToList();
     }
 }
 

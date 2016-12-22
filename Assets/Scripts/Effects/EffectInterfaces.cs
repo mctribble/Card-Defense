@@ -37,6 +37,7 @@ public enum TargetingType
 /// property        : is never triggered.  instead, other code tests whether or not it exists on a given object and behave accordingly
 /// rank            : triggers when the enemy rank changes
 /// self            : affects the card it is attached to (i.e.: to gain/lose charges when cast)
+/// spawn           : triggers when the enemy or tower is spawned
 /// towerTargeting  : alters the way a tower targets enemies.  if multiple are present, only the last is actually used
 /// wave            : alters the current wave
 /// </summary>
@@ -47,7 +48,6 @@ public enum EffectType
     death,
     enemyDamaged,
     enemyReachedGoal,
-    enemySpawned,
     everyRound,
     instant,
     meta,
@@ -56,6 +56,7 @@ public enum EffectType
     property,
     rank,
     self,
+    spawn,
     towerTargeting,
     wave,
 };
@@ -694,9 +695,10 @@ public interface IEffectProperty : IEffect
 }
 
 //effect triggers when an enemy is spawned.  applies to the enemy in question, and triggered individually for each unit.  If the enemy survives, the effect IS NOT triggered again.
-public interface IEffectOnEnemySpawned
+public interface IEffectOnSpawned
 {
     void onEnemySpawned(EnemyScript enemy);
+    void onTowerSpawned(TowerScript tower);
 }
 
 //effect affects the card it is attached to (i.e.: to gain/lose charges when cast)
@@ -740,7 +742,7 @@ public interface IEffectOvercharge : IEffect
 
 //effect targets another effect.  As such, it must implement interfaces for ALL other effect types, since we dont know what kind the child may be.
 //we also provide a way to check what the inner effect is, and whether it would be applied if this one is triggered
-public interface IEffectMeta : IEffect, IEffectEnemyDamaged, IEffectEnemyReachedGoal, IEffectInstant, IEffectOvercharge, IEffectPeriodic, IEffectProperty, IEffectRank, IEffectSelf, IEffectTowerTargeting, IEffectWave, IEffectDeath, IEffectOnEnemySpawned, IEffectCardDrawn, IEffectAttack
+public interface IEffectMeta : IEffect, IEffectEnemyDamaged, IEffectEnemyReachedGoal, IEffectInstant, IEffectOvercharge, IEffectPeriodic, IEffectProperty, IEffectRank, IEffectSelf, IEffectTowerTargeting, IEffectWave, IEffectDeath, IEffectOnSpawned, IEffectCardDrawn, IEffectAttack
 {
     IEffect innerEffect { get; set; } //effect targeted by this metaEffect
     bool shouldApplyInnerEffect(); //returns whether or not the innerIeffect would trigger if this effect is

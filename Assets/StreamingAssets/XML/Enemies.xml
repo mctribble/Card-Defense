@@ -75,7 +75,7 @@
       <unitColor r="1" g="1" b="0.2" a="1" />
       <effectData>
         <Effects>
-          <Effect name="onEnemySpawned">
+          <Effect name="onSpawned">
             <Effect name="dieRoll" strength="4" />
           </Effect>
           <Effect name="ifRollRange" strength="1" argument="1">

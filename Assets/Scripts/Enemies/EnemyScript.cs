@@ -446,8 +446,8 @@ public class EnemyScript : BaseBehaviour
     {
         if (effectData != null)
             foreach (IEffect ie in effectData.effects)
-                if (ie.triggersAs(EffectType.enemySpawned))
-                    ((IEffectOnEnemySpawned)ie).onEnemySpawned(this);
+                if (ie.triggersAs(EffectType.spawn))
+                    ((IEffectOnSpawned)ie).onEnemySpawned(this);
     }
 
     //stores a new path for this unit to follow

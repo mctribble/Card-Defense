@@ -36,7 +36,8 @@ public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
     public virtual void trigger(EnemyScript enemy) { if (shouldApplyInnerEffect()) { ((IEffectEnemyReachedGoal)innerEffect).trigger(enemy); } }
     public virtual void onEnemyDeath(EnemyScript enemy) { if (shouldApplyInnerEffect()) { ((IEffectDeath)innerEffect).onEnemyDeath(enemy); } }
     public virtual void onTowerDeath(TowerScript tower) { if (shouldApplyInnerEffect()) { ((IEffectDeath)innerEffect).onTowerDeath(tower); } }
-    public virtual void onEnemySpawned(EnemyScript enemy) {  if (shouldApplyInnerEffect()) { ((IEffectOnEnemySpawned)innerEffect).onEnemySpawned(enemy); } }
+    public virtual void onTowerSpawned(TowerScript tower) { if (shouldApplyInnerEffect()) { ((IEffectOnSpawned)innerEffect).onTowerSpawned(tower); } }
+    public virtual void onEnemySpawned(EnemyScript enemy) {  if (shouldApplyInnerEffect()) { ((IEffectOnSpawned)innerEffect).onEnemySpawned(enemy); } }
     public virtual void playerCardDrawn(CardScript playerCard) { if (shouldApplyInnerEffect()) { ((IEffectCardDrawn)innerEffect).playerCardDrawn(playerCard); } }
     public virtual void rankChanged(int rank) { if (shouldApplyInnerEffect()) { ((IEffectRank)innerEffect).rankChanged(rank); } }
     public virtual void enemyCardDrawn(EnemyScript enemyCard) { if (shouldApplyInnerEffect()) { ((IEffectCardDrawn)innerEffect).enemyCardDrawn(enemyCard); } }
@@ -321,14 +322,14 @@ public class EffectEveryRound : BaseEffectMeta
 }
 
 //target instant effect triggers when the enemy is spawned (using IEffectInstant)
-public class EffectOnEnemySpawned : BaseEffectMeta
+public class EffectOnSpawned : BaseEffectMeta
 {
     public override string Name { get { return "[on spawn]" + innerEffect.Name; } }
-    public override string XMLName { get { return "onEnemySpawned"; } }
+    public override string XMLName { get { return "onSpawned"; } }
     public override bool shouldApplyInnerEffect() { return true; }
 
     //regardless of how the inner effect normally triggers, we want it to fire once every round.  We need to keep the triggertype == EffectType.meta so we dont break EffectData.cloneEffect()
-    public override bool triggersAs(EffectType triggerType) { return (triggerType == EffectType.enemySpawned) || (triggerType == EffectType.meta) || base.triggersAs(triggerType); }
+    public override bool triggersAs(EffectType triggerType) { return (triggerType == EffectType.spawn) || (triggerType == EffectType.meta) || base.triggersAs(triggerType); }
 
     //because we use IEffectInstant, we can only target instant or everyRound effects
     public override IEffect innerEffect
@@ -339,7 +340,7 @@ public class EffectOnEnemySpawned : BaseEffectMeta
             if (value.triggersAs(EffectType.instant))
                 base.innerEffect = value;
             else
-                MessageHandlerScript.Error(cardName + ": Effect OnEnemySpawned can only target instant");
+                MessageHandlerScript.Error(cardName + ": Effect onSpawned can only target instant");
         }
     }
 

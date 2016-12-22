@@ -403,6 +403,9 @@ public class LevelManagerScript : BaseBehaviour
             if ((c.effectData != null) && (c.effectData.effects.Count > 0))
                 t.AddEffects(c.effectData); //pass it the effects
 
+            //trigger effects
+            t.triggerOnTowerSpawned();
+
             //apply upgrades
             foreach (PremadeTowerUpgrade ptu in pt.upgrades)
             {

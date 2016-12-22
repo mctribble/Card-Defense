@@ -58,6 +58,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "chainHit":                   ie = new EffectChainHit();                   break;
             case "damagePercent":              ie = new EffectDamagePercent();              break;
             case "reduceEnemyEffectOnDamage":  ie = new EffectReduceEnemyEffectOnDamage();  break;
+            case "resonantTowerAttack":        ie = new EffectResonantTowerAttack(); break;
             case "secondaryBurst":             ie = new EffectSecondaryBurst();             break;
             case "splashDamage":               ie = new EffectSplashDamage();               break;
 
@@ -118,7 +119,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "everyRound":                 ie = new EffectEveryRound();                 break;
             case "onAttack":                   ie = new EffectOnAttack();                   break;
             case "onCardDrawn":                ie = new EffectOnCardDrawn();                break;
-            case "onEnemySpawned":             ie = new EffectOnEnemySpawned();             break;
+            case "onSpawned":                  ie = new EffectOnSpawned();                  break;
             case "percentageChance":           ie = new EffectPercentageChance();           break;
             case "scaleEffectByTowerAttack":   ie = new EffectScaleEffectWithTowerAttack(); break;
             case "ifRollRange":                ie = new EffectIfRollRange();                break;

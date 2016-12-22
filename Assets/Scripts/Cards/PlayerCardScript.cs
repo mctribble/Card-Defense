@@ -523,6 +523,9 @@ public class PlayerCardScript : CardScript, IPointerClickHandler
         if (card.data.effectData != null)
             instance.SendMessage("SetEffectData", card.data.effectData);
 
+        //trigger effects
+        instance.SendMessage("triggerOnTowerSpawned");
+
         //perform steps that must be done on every cast
         Cast();
     }

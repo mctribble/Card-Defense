@@ -101,6 +101,17 @@ public class TowerScript : BaseBehaviour
         updateLifespanText();
     }
 
+    /// <summary>
+    /// triggers any effects on this tower that are meant to run when the enemy spawns.
+    /// </summary>
+    public void triggerOnTowerSpawned()
+    {
+        if (effects != null)
+            foreach (IEffect ie in effects.effects)
+                if (ie.triggersAs(EffectType.spawn))
+                    ((IEffectOnSpawned)ie).onTowerSpawned(this);
+    }
+
     // Update is called once per frame
     private void Update()
     {
@@ -230,7 +241,7 @@ public class TowerScript : BaseBehaviour
 
             //if out of ammo, destroy tower
             if (effects.propertyEffects.limitedAmmo == 0)
-                onDeath();
+                Destroy(gameObject);
         }
     }
 
@@ -717,22 +728,19 @@ public class TowerScript : BaseBehaviour
         updateLifespanText();
 
         if (wavesRemaining == 0)
-            onDeath();
+            Destroy(gameObject);
     }
 
     /// <summary>
     /// called when the tower is destroyed.  responsible for death effects
     /// </summary>
-    private void onDeath()
+    private void onDestroy()
     {
         //trigger effects
         if (effects != null)
             foreach (IEffect ie in effects.effects)
                 if (ie.triggersAs(EffectType.death))
                     ((IEffectDeath)ie).onTowerDeath(this);
-
-        //destroy self
-        Destroy(gameObject);
     }
 
     //these update text associated with the tower when things change
