@@ -18,6 +18,21 @@ public class EditorBalanceTesterScript : BaseBehaviour
     public bool includeModdedCards;
     public bool includeLimitedAmmoCards;
     public bool includeUpgradesWithoutStatChanges;
+    public bool includeFormulas;
+
+    //cell formulas and headers we can use to do statistical calculations in the resulting file.  Formulas are for openOffice calc.  (empty sections are for padding)
+    //the formulas are messy because we use relative references everywhere so we dont have to track our location in the spreadsheet
+    //they are simply added in as solid strings
+    private const string FORMULA_HEADERS = "," + ",Median" + ",Min" + ",Max" + ",Average" + ",Std Deviation" + ",outlier if below:" + ",outlier if above:";
+    private const string FORMULAS = 
+        "," +
+        ",=MEDIAN(INDIRECT(ADDRESS(ROW();2)):INDIRECT(ADDRESS(ROW();COLUMN()-2)))" +
+        ",=MIN(INDIRECT(ADDRESS(ROW();2)):INDIRECT(ADDRESS(ROW();COLUMN()-3)))" +
+        ",=MAX(INDIRECT(ADDRESS(ROW();2)):INDIRECT(ADDRESS(ROW();COLUMN()-4)))" +
+        ",=AVERAGE(INDIRECT(ADDRESS(ROW();2)):INDIRECT(ADDRESS(ROW();COLUMN()-5)))" +
+        ",=STDEV(INDIRECT(ADDRESS(ROW();2)):INDIRECT(ADDRESS(ROW();COLUMN()-6)))" +
+        ",=QUARTILE(INDIRECT(ADDRESS(ROW();2)):INDIRECT(ADDRESS(ROW();COLUMN()-7));1) - ((QUARTILE(INDIRECT(ADDRESS(ROW();2)):INDIRECT(ADDRESS(ROW();COLUMN()-7));3)-QUARTILE(INDIRECT(ADDRESS(ROW();2)):INDIRECT(ADDRESS(ROW();COLUMN()-7));1)) * 3)" +
+        ",=QUARTILE(INDIRECT(ADDRESS(ROW();2)):INDIRECT(ADDRESS(ROW();COLUMN()-8));3) + ((QUARTILE(INDIRECT(ADDRESS(ROW();2)):INDIRECT(ADDRESS(ROW();COLUMN()-8));3)-QUARTILE(INDIRECT(ADDRESS(ROW();2)):INDIRECT(ADDRESS(ROW();COLUMN()-8));1)) * 3)";
 
     /// <summary>
     /// generates a large .CSV file listing how each tower has a stat affected by each upgrade, applied various times
@@ -71,17 +86,19 @@ public class EditorBalanceTesterScript : BaseBehaviour
             //header
             spreadsheet.Write("base stats");
             towerCards.ForEach(pcd => spreadsheet.Write(',' + pcd.cardName));
+            if (includeFormulas)
+                spreadsheet.Write(FORMULA_HEADERS);
             spreadsheet.WriteLine();
 
             //stats
-            spreadsheet.Write("damage");       towerCards.ForEach(pcd => spreadsheet.Write(',' + pcd.towerData.attackPower .ToString("F3"))); spreadsheet.WriteLine();
-            spreadsheet.Write("recharge");     towerCards.ForEach(pcd => spreadsheet.Write(',' + pcd.towerData.rechargeTime.ToString("F3"))); spreadsheet.WriteLine();
-            spreadsheet.Write("DPS_1");        towerCards.ForEach(pcd => spreadsheet.Write(',' + DPS_1(pcd)                .ToString("F3"))); spreadsheet.WriteLine();
-            spreadsheet.Write("DPS_10");       towerCards.ForEach(pcd => spreadsheet.Write(',' + DPS_10(pcd)               .ToString("F3"))); spreadsheet.WriteLine();
-            spreadsheet.Write("DPS_10_range"); towerCards.ForEach(pcd => spreadsheet.Write(',' + DPS_10_range(pcd)         .ToString("F3"))); spreadsheet.WriteLine();
-            spreadsheet.Write("DPS_100");      towerCards.ForEach(pcd => spreadsheet.Write(',' + DPS_100(pcd)              .ToString("F3"))); spreadsheet.WriteLine();
-            spreadsheet.Write("range");        towerCards.ForEach(pcd => spreadsheet.Write(',' + pcd.towerData.range       .ToString("F3"))); spreadsheet.WriteLine();
-            spreadsheet.Write("lifespan");     towerCards.ForEach(pcd => spreadsheet.Write(',' + pcd.towerData.lifespan    .ToString("F3"))); spreadsheet.WriteLine();
+            spreadsheet.Write("damage");       towerCards.ForEach(pcd => spreadsheet.Write(',' + pcd.towerData.attackPower .ToString("F3"))); if (includeFormulas) spreadsheet.Write(FORMULAS); spreadsheet.WriteLine();
+            spreadsheet.Write("recharge");     towerCards.ForEach(pcd => spreadsheet.Write(',' + pcd.towerData.rechargeTime.ToString("F3"))); if (includeFormulas) spreadsheet.Write(FORMULAS); spreadsheet.WriteLine();
+            spreadsheet.Write("DPS_1");        towerCards.ForEach(pcd => spreadsheet.Write(',' + DPS_1(pcd)                .ToString("F3"))); if (includeFormulas) spreadsheet.Write(FORMULAS); spreadsheet.WriteLine();
+            spreadsheet.Write("DPS_10");       towerCards.ForEach(pcd => spreadsheet.Write(',' + DPS_10(pcd)               .ToString("F3"))); if (includeFormulas) spreadsheet.Write(FORMULAS); spreadsheet.WriteLine();
+            spreadsheet.Write("DPS_10_range"); towerCards.ForEach(pcd => spreadsheet.Write(',' + DPS_10_range(pcd)         .ToString("F3"))); if (includeFormulas) spreadsheet.Write(FORMULAS); spreadsheet.WriteLine();
+            spreadsheet.Write("DPS_100");      towerCards.ForEach(pcd => spreadsheet.Write(',' + DPS_100(pcd)              .ToString("F3"))); if (includeFormulas) spreadsheet.Write(FORMULAS); spreadsheet.WriteLine();
+            spreadsheet.Write("range");        towerCards.ForEach(pcd => spreadsheet.Write(',' + pcd.towerData.range       .ToString("F3"))); if (includeFormulas) spreadsheet.Write(FORMULAS); spreadsheet.WriteLine();
+            spreadsheet.Write("lifespan");     towerCards.ForEach(pcd => spreadsheet.Write(',' + pcd.towerData.lifespan    .ToString("F3"))); if (includeFormulas) spreadsheet.Write(FORMULAS); spreadsheet.WriteLine();
 
             //a line of padding
             spreadsheet.WriteLine();
@@ -95,6 +112,8 @@ public class EditorBalanceTesterScript : BaseBehaviour
                     //header
                     spreadsheet.Write(curTower.cardName + '(' + quantity + '/' + curTower.towerData.upgradeCap + ')');
                     upgradeCards.ForEach(pcd => spreadsheet.Write(',' + pcd.cardName));
+                    if (includeFormulas)
+                        spreadsheet.Write(FORMULA_HEADERS);
                     spreadsheet.WriteLine();
 
                     //create test towers and give them the upgrades
@@ -123,14 +142,14 @@ public class EditorBalanceTesterScript : BaseBehaviour
                     }
 
                     //use the upgraded towers to populate the spreadsheet stats
-                    spreadsheet.Write("damage");       testTowers.ForEach(tower => spreadsheet.Write(',' + tower.attackPower   .ToString("F3"))); spreadsheet.WriteLine();
-                    spreadsheet.Write("recharge");     testTowers.ForEach(tower => spreadsheet.Write(',' + tower.rechargeTime  .ToString("F3"))); spreadsheet.WriteLine();
-                    spreadsheet.Write("DPS_1");        testTowers.ForEach(tower => spreadsheet.Write(',' + DPS_1(tower)        .ToString("F3"))); spreadsheet.WriteLine();
-                    spreadsheet.Write("DPS_10");       testTowers.ForEach(tower => spreadsheet.Write(',' + DPS_10(tower)       .ToString("F3"))); spreadsheet.WriteLine();
-                    spreadsheet.Write("DPS_10_range"); testTowers.ForEach(tower => spreadsheet.Write(',' + DPS_10_range(tower) .ToString("F3"))); spreadsheet.WriteLine();
-                    spreadsheet.Write("DPS_100");      testTowers.ForEach(tower => spreadsheet.Write(',' + DPS_100(tower)      .ToString("F3"))); spreadsheet.WriteLine();
-                    spreadsheet.Write("range");        testTowers.ForEach(tower => spreadsheet.Write(',' + tower.range         .ToString("F3"))); spreadsheet.WriteLine();
-                    spreadsheet.Write("lifespan");     testTowers.ForEach(tower => spreadsheet.Write(',' + tower.wavesRemaining.ToString("F3"))); spreadsheet.WriteLine();
+                    spreadsheet.Write("damage");       testTowers.ForEach(tower => spreadsheet.Write(',' + tower.attackPower   .ToString("F3"))); if (includeFormulas) spreadsheet.Write(FORMULAS); spreadsheet.WriteLine();
+                    spreadsheet.Write("recharge");     testTowers.ForEach(tower => spreadsheet.Write(',' + tower.rechargeTime  .ToString("F3"))); if (includeFormulas) spreadsheet.Write(FORMULAS); spreadsheet.WriteLine();
+                    spreadsheet.Write("DPS_1");        testTowers.ForEach(tower => spreadsheet.Write(',' + DPS_1(tower)        .ToString("F3"))); if (includeFormulas) spreadsheet.Write(FORMULAS); spreadsheet.WriteLine();
+                    spreadsheet.Write("DPS_10");       testTowers.ForEach(tower => spreadsheet.Write(',' + DPS_10(tower)       .ToString("F3"))); if (includeFormulas) spreadsheet.Write(FORMULAS); spreadsheet.WriteLine();
+                    spreadsheet.Write("DPS_10_range"); testTowers.ForEach(tower => spreadsheet.Write(',' + DPS_10_range(tower) .ToString("F3"))); if (includeFormulas) spreadsheet.Write(FORMULAS); spreadsheet.WriteLine();
+                    spreadsheet.Write("DPS_100");      testTowers.ForEach(tower => spreadsheet.Write(',' + DPS_100(tower)      .ToString("F3"))); if (includeFormulas) spreadsheet.Write(FORMULAS); spreadsheet.WriteLine();
+                    spreadsheet.Write("range");        testTowers.ForEach(tower => spreadsheet.Write(',' + tower.range         .ToString("F3"))); if (includeFormulas) spreadsheet.Write(FORMULAS); spreadsheet.WriteLine();
+                    spreadsheet.Write("lifespan");     testTowers.ForEach(tower => spreadsheet.Write(',' + tower.wavesRemaining.ToString("F3"))); if (includeFormulas) spreadsheet.Write(FORMULAS); spreadsheet.WriteLine();
 
                     //a line of padding
                     spreadsheet.WriteLine();
