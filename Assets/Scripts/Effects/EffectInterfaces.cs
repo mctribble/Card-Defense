@@ -362,16 +362,7 @@ public class EffectData : System.Object
     {
         //cache a list of targeting effects on this object.  each one is tested in turn, and the first that returns a non-null response has its result returned to the tower
         if (cachedTowerTargetingList == null)
-        {
-            cachedTowerTargetingList = new List<IEffectTowerTargeting>();
-            cachedTowerTargetingList.Add(EffectTargetDefault.instance);
-
-            foreach (IEffect e in effects)
-                if (e.triggersAs(EffectType.towerTargeting))
-                    cachedTowerTargetingList.Add((IEffectTowerTargeting)e);
-
-            cachedTowerTargetingList = cachedTowerTargetingList.OrderByDescending(te => te.priority).ToList(); //respect effect priorities
-        }
+            updateCachedTowerTargetingList();
 
         //find the first targeting effect that returns an actual result
         List<EnemyScript> res = null;
@@ -404,6 +395,26 @@ public class EffectData : System.Object
         {
             return res;
         }
+    }
+
+    /// <summary>
+    /// searches the effects and builds a prioritized list of all the targeting effects.  to be used for targeting
+    /// </summary>
+    private void updateCachedTowerTargetingList()
+    {
+        //make sure effects are parsed
+        parseEffects();
+
+        //start with just the default targeting
+        cachedTowerTargetingList = new List<IEffectTowerTargeting>();
+        cachedTowerTargetingList.Add(EffectTargetDefault.instance);
+
+        //find all the targeting effects
+        foreach (IEffect e in effects)
+            if (e.triggersAs(EffectType.towerTargeting))
+                cachedTowerTargetingList.Add((IEffectTowerTargeting)e);
+
+        cachedTowerTargetingList = cachedTowerTargetingList.OrderByDescending(te => te.priority).ToList(); //prioritize the list
     }
 
     /// <summary>
@@ -526,6 +537,25 @@ public class EffectData : System.Object
         }
     }
 
+    //returns the max number of enemies a tower with these effects could target
+    public int maxTargets
+    {
+        get
+        {
+            //make sure we have a targeting list
+            if (cachedTowerTargetingList == null)
+                updateCachedTowerTargetingList();
+
+
+            if ((cachedTowerTargetingList[0].priority == TargetingPriority.ALL) || (cachedTowerTargetingList[0].priority == TargetingPriority.ORTHOGONAL)) //these have no limit on target count
+                return int.MaxValue;
+            else if (cachedTowerTargetingList[0].priority == TargetingPriority.MULTIPLE) //these can attack up to X enemies
+                return Mathf.FloorToInt(cachedTowerTargetingList[0].strength);
+            else
+                return 1;
+        }
+    }
+
     /// <summary>
     /// helper function that updates all periodic effects on an enemy
     /// </summary>
@@ -552,11 +582,14 @@ public class EffectData : System.Object
     /// <param name="cardName">optional name to provide the new effects for logging purposes</param>
     public void parseEffects(string cardName = "<UNKNOWN_CARD>")
     {
-        foreach (XMLEffect xe in XMLEffects)
+        if (XMLEffects.Count > Effects.Count)
         {
-            IEffect ie = EffectTypeManagerScript.instance.parse(xe, cardName);
-            if (ie != null)
-                Add(ie);
+            foreach (XMLEffect xe in XMLEffects)
+            {
+                IEffect ie = EffectTypeManagerScript.instance.parse(xe, cardName);
+                if (ie != null)
+                    Add(ie);
+            }
         }
     }
 

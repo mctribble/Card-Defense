@@ -58,7 +58,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "chainHit":                   ie = new EffectChainHit();                   break;
             case "damagePercent":              ie = new EffectDamagePercent();              break;
             case "reduceEnemyEffectOnDamage":  ie = new EffectReduceEnemyEffectOnDamage();  break;
-            case "resonantTowerAttack":        ie = new EffectResonantTowerAttack(); break;
+            case "resonantTowerAttack":        ie = new EffectResonantTowerAttack();        break;
             case "secondaryBurst":             ie = new EffectSecondaryBurst();             break;
             case "splashDamage":               ie = new EffectSplashDamage();               break;
 
