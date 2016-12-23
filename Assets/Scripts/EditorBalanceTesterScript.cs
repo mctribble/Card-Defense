@@ -164,16 +164,16 @@ public class EditorBalanceTesterScript : BaseBehaviour
     }
 
     //helper functions to get values for DPS_1, DPS_10, DPS_10_range, and DPS_100
-    private int   maxTargets  (PlayerCardData pcd) { if (pcd.effectData == null) return 1; else return pcd.effectData.maxTargets; } //max targets the given tower card can attack
-    private float DPS_1       (PlayerCardData pcd) { return pcd.towerData.attackPower / pcd.towerData.rechargeTime; }               //damage per second the given tower card does, if it has 1  enemy in range
-    private float DPS_10      (PlayerCardData pcd) { return Mathf.Min(maxTargets(pcd), 10)  * DPS_1(pcd); }                         //damage per second the given tower card does, if it has 10 enemies in range
-    private float DPS_10_range(PlayerCardData pcd) { return Mathf.Min(maxTargets(pcd), 10)  * DPS_1(pcd) * pcd.towerData.range; }   //damage per second the given tower card does, if it has 10*range enemies in range
-    private float DPS_100     (PlayerCardData pcd) { return Mathf.Min(maxTargets(pcd), 100) * DPS_1(pcd); }                         //damage per second the given tower card does, if it has 100 enemies in range
-
-    private int   maxTargets  (TowerScript tower) { if (tower.effects == null) return 1; else return tower.effects.maxTargets; } //max targets the given tower card can attack
-    private float DPS_1       (TowerScript tower) { return tower.attackPower / tower.rechargeTime; }                             //damage per second the given tower card does, if it has 1  enemy in range
-    private float DPS_10      (TowerScript tower) { return Mathf.Min(maxTargets(tower), 10)  * DPS_1(tower); }                   //damage per second the given tower card does, if it has 10 enemies in range
-    private float DPS_10_range(TowerScript tower) { return Mathf.Min(maxTargets(tower), 10)  * DPS_1(tower) * tower.range; }     //damage per second the given tower card does, if it has 10*range enemies in range
-    private float DPS_100     (TowerScript tower) { return Mathf.Min(maxTargets(tower), 100) * DPS_1(tower); }                   //damage per second the given tower card does, if it has 100 enemies in range
+    private int   maxTargets  (PlayerCardData pcd) { if (pcd.effectData == null) return 1; else return pcd.effectData.maxTargets; }                         //max targets the given tower card can attack
+    private float DPS_1       (PlayerCardData pcd) { return pcd.towerData.attackPower / pcd.towerData.rechargeTime; }                                       //damage per second the given tower card does, if it has 1  enemy in range
+    private float DPS_10      (PlayerCardData pcd) { return Mathf.Min(maxTargets(pcd), 10)  * DPS_1(pcd); }                                                 //damage per second the given tower card does, if it has 10 enemies in range
+    private float DPS_10_range(PlayerCardData pcd) { return Mathf.Min(maxTargets(pcd), 10)  * DPS_1(pcd) + (pcd.towerData.range * (maxTargets(pcd) - 1)); } //damage per second the given tower card does, if it has 10*range enemies in range
+    private float DPS_100     (PlayerCardData pcd) { return Mathf.Min(maxTargets(pcd), 100) * DPS_1(pcd); }                                                 //damage per second the given tower card does, if it has 100 enemies in range
+                                                                                                                                                            
+    private int   maxTargets  (TowerScript tower) { if (tower.effects == null) return 1; else return tower.effects.maxTargets; }                         //max targets the given tower card can attack
+    private float DPS_1       (TowerScript tower) { return tower.attackPower / tower.rechargeTime; }                                                     //damage per second the given tower card does, if it has 1  enemy in range
+    private float DPS_10      (TowerScript tower) { return Mathf.Min(maxTargets(tower), 10)  * DPS_1(tower); }                                           //damage per second the given tower card does, if it has 10 enemies in range
+    private float DPS_10_range(TowerScript tower) { return Mathf.Min(maxTargets(tower), 10)  * DPS_1(tower) + (tower.range * (maxTargets(tower) - 1)); } //damage per second the given tower card does, if it has 10*range enemies in range
+    private float DPS_100     (TowerScript tower) { return Mathf.Min(maxTargets(tower), 100) * DPS_1(tower); }                                           //damage per second the given tower card does, if it has 100 enemies in range
     
 }

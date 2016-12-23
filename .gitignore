@@ -12,3 +12,5 @@ AssetPackages/
 *.sln
 *.csproj
 *.pidb
+
+*.~lock.*
