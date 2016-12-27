@@ -351,7 +351,7 @@ public class EffectOnSpawned : BaseEffectMeta
     }
 }
 
-//enemy effect scales up as it takes damage (range: base to base*strength)
+//target enemy effect scales up as the enemy takes damage.  Increases proportionally if x = 1.Higher / lower values cause it to increase faster/slower, respectively.
 public class EffectScaleEffectWithDamage : BaseEffectMeta
 {
     public override string Name { get { return "[scales up as it takes damage]" + innerEffect.Name; } } //returns name and strength
@@ -376,8 +376,9 @@ public class EffectScaleEffectWithDamage : BaseEffectMeta
         if (effectBaseStrength == null)
             effectBaseStrength = innerEffect.strength;
 
-        float damageRatio = 1 - (e.curHealth / e.maxHealth);
-        innerEffect.strength = Mathf.Lerp(effectBaseStrength.Value, (effectBaseStrength.Value * strength), damageRatio);
+        float scaleRatio = 1 - ((float)e.curHealth / (float)e.maxHealth);                //ratio we are scaling by
+        float scaleFactor = ((scaleRatio -1 ) * strength) + 1;                           //factor to use for scaling
+        innerEffect.strength = Mathf.RoundToInt(scaleFactor * effectBaseStrength.Value); //scale
 
         if (innerEffect.triggersAs(EffectType.enemyDamaged)) base.expectedDamage(ref d); //pass to child if it is also an enemyDamaged effect
     }
@@ -391,8 +392,8 @@ public class EffectScaleEffectWithDamage : BaseEffectMeta
     }
 }
 
-//enemy effect scales down as it takes damage (range: base to 1)
-public class EffectInvScaleEffectWithDamage : BaseEffectMeta
+//target enemy effect weakens as it takes damage.  Decreases proportionally if x = 1.  Higher/lower values cause it to decrease faster/slower, respectively.
+public class EffectinvScaleEffectWithDamage : BaseEffectMeta
 {
     public override string Name { get { return "[scales down as it takes damage]" + innerEffect.Name; } } //returns name and strength
     public override string XMLName { get { return "invScaleEffectWithDamage"; } } //name used to refer to this effect in XML
@@ -419,8 +420,9 @@ public class EffectInvScaleEffectWithDamage : BaseEffectMeta
         if (effectBaseStrength == null)
             effectBaseStrength = innerEffect.strength;
 
-        float damageRatio = 1 - (e.curHealth / e.maxHealth);
-        innerEffect.strength = Mathf.Lerp(effectBaseStrength.Value, 1, damageRatio);
+        float healthRatio = (float)e.curHealth / (float)e.maxHealth;                                 //how much health the unit still has (0: dead.  1: full health)
+        innerEffect.strength = Mathf.CeilToInt(effectBaseStrength.Value * (healthRatio / strength)); //scale
+        innerEffect.strength = Mathf.Max(innerEffect.strength, 1.0f);                                //enforce minimum
 
         if (innerEffect.triggersAs(EffectType.enemyDamaged)) base.expectedDamage(ref d); //pass to child if it is also an enemyDamaged effect
     }
@@ -469,7 +471,7 @@ public class EffectScaleEffectWithTowerAttack : BaseEffectMeta
     }
 }
 
-//enemy effect gets stronger by X/second
+//target enemy effect gets stronger by X/s
 public class EffectScaleEffectWithTime : BaseEffectMeta
 {
     public override string Name { get { return "[increases by " + strength + "/s]"; } } //returns name and strength
@@ -499,7 +501,7 @@ public class EffectScaleEffectWithTime : BaseEffectMeta
     }
 }
 
-//enemy effecY gets weaker by X/second (min 0)
+//target enemy effect weakens by x/s.  
 public class EffectInvScaleEffectWithTime : BaseEffectMeta
 {
     public override string Name { get { return "[decreases by " + strength + "/s]"; } } //returns name and strength
@@ -515,8 +517,10 @@ public class EffectInvScaleEffectWithTime : BaseEffectMeta
 
     public override void UpdateEnemy(EnemyScript e, float deltaTime)
     {
-        innerEffect.strength -= (strength * deltaTime);
-        innerEffect.strength = Mathf.Max(innerEffect.strength, 0.0f);
+        innerEffect.strength -= (strength * deltaTime);               //weaken target effect
+        innerEffect.strength = Mathf.Max(innerEffect.strength, 0.0f); //enforce minimum
+        if (innerEffect.strength == 0.0f)                             //if at minimum, we are done
+            done = true;
 
         if (innerEffect.triggersAs(EffectType.periodic)) base.UpdateEnemy(e, deltaTime); //pass to child if it is also a periodic effect
     }
@@ -528,9 +532,13 @@ public class EffectInvScaleEffectWithTime : BaseEffectMeta
         clone.strength = innerEffect.strength;
         return clone;
     }
+
+    //once we reach the floor, this effect can be removed
+    private bool done;
+    public override bool shouldBeRemoved() { return base.shouldBeRemoved() || done; }
 }
 
-//enemy health increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
+//target enemy effect scales up with wave budget.  Increases proportionally if x = 1.Higher / lower values cause it to increase faster/slower, respectively.
 public class EffectScaleEffectWithBudget : BaseEffectMeta
 {
     public override string Name { get { return "[scaled]" + innerEffect.Name; } } //returns name and strength
@@ -553,7 +561,10 @@ public class EffectScaleEffectWithBudget : BaseEffectMeta
             Debug.LogWarning("ScaleEffectWithBudget triggered repeatedly!");
         }
 
-        innerEffect.strength = (((float)currentWaveData.budget) / ((float)currentWaveData.enemyData.baseSpawnCost)) * innerEffect.strength;
+        float scaleRatio = (float)currentWaveData.budget / (float)currentWaveData.enemyData.baseSpawnCost; //ratio we are scaling by
+        float scaleFactor = ((scaleRatio -1) * strength) + 1;                                              //factor to use for scaling
+        innerEffect.strength = Mathf.RoundToInt(scaleFactor * innerEffect.strength);                       //scale
+
         alreadyScaled = true;
 
         if (innerEffect.triggersAs(EffectType.wave))

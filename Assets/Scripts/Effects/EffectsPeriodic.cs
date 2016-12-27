@@ -123,7 +123,7 @@ public class EffectPoison : BaseEffectPeriodic
     }
 }
 
-//enemy slows down by X/second (min 1)
+//enemy slows down by x/s (min 1.  Decreases proportionally if x = 1.  Higher/lower values cause it to decrease faster/slower, respectively.
 public class EffectInvScaleSpeedWithTime : BaseEffectPeriodic
 {
     [Hide] public override string Name { get { return "Speed decreases by " + strength + "/s"; } } //returns name and strength
@@ -131,18 +131,18 @@ public class EffectInvScaleSpeedWithTime : BaseEffectPeriodic
 
     public override void UpdateEnemy(EnemyScript e, float deltaTime)
     {
-        e.unitSpeed -= (strength * deltaTime);
-        e.unitSpeed = Mathf.Max(e.unitSpeed, 1.0f);
-        if (e.unitSpeed == 1.0f)
+        e.unitSpeed -= (strength * deltaTime);      //slow enemy
+        e.unitSpeed = Mathf.Max(e.unitSpeed, 1.0f); //enforce minimum
+        if (e.unitSpeed == 1.0f)                    //if at minimum, we are done
             done = true;
     }
 
     //effect can be removed once it has hit the floor
     private bool done = false;
-    public override bool shouldBeRemoved() { return done; }
+    public override bool shouldBeRemoved() { return base.shouldBeRemoved() || done; }
 }
 
-//enemy speeds up by X/second
+//enemy slows down by x/s (min 1)
 public class EffectScaleSpeedWithTime : BaseEffectPeriodic
 {
     [Hide] public override string Name { get { return "Speed increases by " + strength + "/s"; } } //returns name and strength

@@ -67,8 +67,8 @@ public class EffectReduceEnemyEffectOnDamage : BaseEffectEnemyDamaged
     }
 }
 
-//enemy slows down as it takes damage (range: base -> 1)
-public class EffectInvScaleSpeedWithDamage : BaseEffectEnemyDamaged
+//enemy slows down (to 1) as it takes damage.  Decreases proportionally if x = 1.  Higher/lower values cause it to decrease faster/slower, respectively.
+public class EffectinvScaleSpeedWithDamage : BaseEffectEnemyDamaged
 {
     [Hide] public override string Name { get { return "slows down as it takes damage"; } } //returns name and strength
     [Show] public override string XMLName { get { return "invScaleSpeedWithDamage"; } } //name used to refer to this effect in XML
@@ -79,13 +79,14 @@ public class EffectInvScaleSpeedWithDamage : BaseEffectEnemyDamaged
     //recalculate speed
     public override void actualDamage(ref DamageEventData d)
     {
-        EnemyScript e = d.dest;
-        float damageRatio = 1 - (e.curHealth / e.maxHealth);
-        e.unitSpeed = Mathf.Lerp(e.unitSpeedWhenSpawned, 1, damageRatio);
+        EnemyScript e = d.dest;                                                             //enemy reference
+        float healthRatio = (float)e.curHealth / (float)e.maxHealth;                        //how much health the unit still has (0: dead.  1: full health)
+        e.unitSpeed = Mathf.CeilToInt(e.unitSpeedWhenSpawned * (healthRatio / strength));   //scale
+        e.unitSpeed = Mathf.Min(e.unitSpeed, 1.0f);                                         //enforce minimum
     }
 }
 
-//enemy speeds up as it takes damage (range: base -> base*strength)
+//enemy gets faster as it takes damage.  Increases proportionally if x = 1.  Higher/lower values cause it to increase faster/slower, respectively.
 public class EffectScaleSpeedWithDamage : BaseEffectEnemyDamaged
 {
     [Hide] public override string Name { get { return "gets up to " + argument + " times faster as it takes damage"; } } //returns name and strength
@@ -98,8 +99,9 @@ public class EffectScaleSpeedWithDamage : BaseEffectEnemyDamaged
     public override void actualDamage(ref DamageEventData d)
     {
         EnemyScript e = d.dest;
-        float damageRatio = 1 - (e.curHealth / e.maxHealth);
-        e.unitSpeed = Mathf.Lerp(e.unitSpeedWhenSpawned, (e.unitSpeedWhenSpawned * strength), damageRatio);
+        float scaleRatio = 1 - ((float)e.curHealth / (float)e.maxHealth);     //ratio we are scaling by
+        float scaleFactor = ((scaleRatio -1 ) * strength) + 1;                //factor to use for scaling
+        e.unitSpeed = Mathf.RoundToInt(scaleFactor * e.unitSpeedWhenSpawned); //scale
     }
 }
 

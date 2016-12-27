@@ -38,12 +38,13 @@ public class EffectTypeManagerScript : BaseBehaviour
                                                                                             
             //<<Enemy Effects (Stat Scaling)>>                                              
             case "fixedSpawnCount":            ie = new EffectFixedSpawnCount();            break;
-            case "invScaleAttackWithHealth":   ie = new EffectInvScaleAttackWithHealth();   break;
-            case "invScaleEffectWithDamage":   ie = new EffectInvScaleEffectWithDamage();   break;
+            case "invScaleAttackWithDamage":   ie = new EffectinvScaleAttackWithDamage();   break;
+            case "invScaleEffectWithDamage":   ie = new EffectinvScaleEffectWithDamage();   break;
             case "invScaleEffectWithTime":     ie = new EffectInvScaleEffectWithTime();     break;
-            case "invScaleSpeedWithDamage":    ie = new EffectInvScaleSpeedWithDamage();    break;
+            case "invScaleSpeedWithDamage":    ie = new EffectinvScaleSpeedWithDamage();    break;
             case "invScaleSpeedWithTime":      ie = new EffectInvScaleSpeedWithTime();      break;
             case "scaleAttackWithBudget":      ie = new EffectScaleAttackWithBudget();      break;
+            case "scaleAttackWithDamage":      ie = new EffectscaleAttackWithDamage();      break;
             case "scaleEffectWithBudget":      ie = new EffectScaleEffectWithBudget();      break;
             case "scaleEffectWithDamage":      ie = new EffectScaleEffectWithDamage();      break;
             case "scaleEffectWithRank":        ie = new EffectScaleEffectWithRank();        break;

@@ -91,20 +91,10 @@ public class EffectTimePercentageChange : BaseEffectWave
     }
 }
 
-//forces the wave to spawn with exactly X enemies
+//waves of this enemy type always spawn exactly X enemies.  Best when used with budget scaling effects, so stronger waves can continue getting stronger.
 public class EffectFixedSpawnCount : BaseEffectWave
 {
-    [Hide] public override string Name //returns name and strength
-    {
-        get
-        {
-            if (strength == 1)
-                return "Unique";
-            else
-                return "Spawns in groups of " + strength;
-        }
-    }
-
+    [Hide] public override string Name { get { return "Always spawns " + strength + " per card"; } } //returns name and strength
     [Show] public override string XMLName { get { return "fixedSpawnCount"; } } //name used to refer to this effect in XML
 
     public override WaveData alteredWaveData(WaveData currentWaveData)
@@ -115,7 +105,7 @@ public class EffectFixedSpawnCount : BaseEffectWave
     }
 }
 
-//enemy Attack increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
+//enemy attack scales up with wave budget.  Increases proportionally if x = 1.  Higher/lower values cause it to decrease faster/slower, respectively.
 public class EffectScaleAttackWithBudget : BaseEffectWave
 {
     [Hide] public override string Name { get { return "attack increases on tougher waves"; } } //returns name and strength
@@ -124,12 +114,14 @@ public class EffectScaleAttackWithBudget : BaseEffectWave
     public override WaveData alteredWaveData(WaveData currentWaveData)
     {
         WaveData newData = currentWaveData;
-        newData.enemyData.baseAttack = Mathf.RoundToInt((((float)newData.budget) / ((float)newData.enemyData.baseSpawnCost)) * newData.enemyData.baseAttack);
+        float scaleRatio = (float)newData.budget / (float)newData.enemyData.baseSpawnCost;            //ratio we are scaling by
+        float scaleFactor = ((scaleRatio -1) * strength) + 1;                                         //factor to use for scaling
+        newData.enemyData.baseAttack = Mathf.RoundToInt( scaleFactor * newData.enemyData.baseAttack); //scale
         return newData;
     }
 }
 
-//enemy health increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
+//enemy health scales up with wave budget.  Increases proportionally if x = 1.  Higher/lower values cause it to increase faster/slower, respectively.
 public class EffectScaleHealthWithBudget : BaseEffectWave
 {
     [Hide] public override string Name { get { return "health increases on tougher waves"; } } 
@@ -138,12 +130,14 @@ public class EffectScaleHealthWithBudget : BaseEffectWave
     public override WaveData alteredWaveData(WaveData currentWaveData)
     {
         WaveData newData = currentWaveData;
-        newData.enemyData.baseMaxHealth = Mathf.RoundToInt((((float)newData.budget) / ((float)newData.enemyData.baseSpawnCost)) * newData.enemyData.baseMaxHealth);
+        float scaleRatio = (float)newData.budget / (float)newData.enemyData.baseSpawnCost;                 //ratio we are scaling by
+        float scaleFactor = ((scaleRatio -1) * strength) + 1;                                              //factor to use for scaling
+        newData.enemyData.baseMaxHealth = Mathf.RoundToInt(scaleFactor * newData.enemyData.baseMaxHealth); //scale
         return newData;
     }
 }
 
-//enemy health increases proportionally with budget (ex: if budget is twice the spawn cost, health is twice as high as in the definition)
+//enemy speed  scales up with wave budget.  Increases proportionally if x = 1.  Higher/lower values cause it to increase faster/slower, respectively.
 public class EffectScaleSpeedWithBudget : BaseEffectWave
 {
     [Hide] public override string Name { get { return "speed increases on tougher waves"; } }
@@ -152,7 +146,9 @@ public class EffectScaleSpeedWithBudget : BaseEffectWave
     public override WaveData alteredWaveData(WaveData currentWaveData)
     {
         WaveData newData = currentWaveData;
-        newData.enemyData.baseUnitSpeed = Mathf.RoundToInt((((float)newData.budget) / ((float)newData.enemyData.baseSpawnCost)) * newData.enemyData.baseUnitSpeed);
+        float scaleRatio = (float)newData.budget / (float)newData.enemyData.baseSpawnCost;                    //ratio we are scaling by
+        float scaleFactor = ((scaleRatio -1) * strength) + 1;                                                 //factor to use for scaling
+        newData.enemyData.baseUnitSpeed = Mathf.RoundToInt(scaleFactor * newData.enemyData.currentUnitSpeed); //scale
         return newData;
     }
 }
