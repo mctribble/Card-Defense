@@ -702,7 +702,7 @@ public class DeckManagerScript : BaseBehaviour
         LevelManagerScript.instance.musicSource.Stop();
 
         //score report
-        yield return MessageHandlerScript.ShowAndYield("GAME OVER!\n" + ScoreManagerScript.instance.report(false));
+        yield return MessageHandlerScript.ShowAndYield("GAME OVER!\n" + ScoreManagerScript.instance.report(false, LevelManagerScript.instance.endurance));
 
         //reload
         UnityEngine.SceneManagement.SceneManager.LoadScene("Game");

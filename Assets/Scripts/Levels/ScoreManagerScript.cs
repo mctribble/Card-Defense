@@ -133,6 +133,7 @@ public class ScoreManagerScript : BaseBehaviour
 
     //scoring constants
     public uint CLEAR_VALUE;      //for winning
+    public uint ENDURANCE_VALUE;  //for playing on endurance
     public uint WAVE_VALUE;       //for clearing a wave
     public uint ENEMY_DRAW_VALUE; //for drawing an enemy card
     public uint FLAWLESS_VALUE;   //for winning without taking damage from enemies
@@ -182,19 +183,23 @@ public class ScoreManagerScript : BaseBehaviour
     /// <summary>
     /// returns a string of the score report.  PlayerWon indicates whether or not the player won the level
     /// </summary>
-    public string report(bool PlayerWon)
+    public string report(bool PlayerWon, bool endurance)
     {
         string result = "";
         uint totalScore = 0;
 
         if (PlayerWon)
         {
-            result += "Victory!:   " + CLEAR_VALUE + '\n';
+            result += "Victory!:     " + CLEAR_VALUE + '\n';
             totalScore += CLEAR_VALUE;
+        }
+        else if (endurance)
+        {
+            result += "Endurance:    " + ENDURANCE_VALUE + '\n';
         }
         else
         {
-            result += "Defeat!:    " + 0 + '\n';
+            result += "Defeat!:      " + 0 + '\n';
         }
 
         result +=     "Wave bonus:   " + wavesCleared * WAVE_VALUE + '\n';
@@ -216,7 +221,7 @@ public class ScoreManagerScript : BaseBehaviour
         }
 
         result +=     "=================\n";
-        result +=     "Total:      " + totalScore;
+        result +=     "Total:        " + totalScore;
 
         //record the score, and save the collection if it is a new high for this level
         if (playerScores.recordScoreForLevel(LevelManagerScript.instance.data.fileName, totalScore))

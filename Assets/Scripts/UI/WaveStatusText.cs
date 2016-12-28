@@ -35,7 +35,10 @@ public class WaveStatusText : BaseBehaviour
             return;
 
         //enemy deck counter
-        enemyDeckText.text = LevelManagerScript.instance.wavesInDeck + "/" + LevelManagerScript.instance.data.waves.Count;
+        if (LevelManagerScript.instance.endurance)
+            enemyDeckText.text = "∞";
+        else
+            enemyDeckText.text = LevelManagerScript.instance.wavesInDeck + "/" + LevelManagerScript.instance.data.waves.Count;
 
         //wave stats
         int stillToSpawn = LevelManagerScript.instance.SpawnCount - LevelManagerScript.instance.totalSpawnedThisWave;

@@ -1,10 +1,9 @@
 Chokepoint.xml
 congestion.xml
 Divergence.xml
-Endurance (Expert).xml
-Endurance.xml
 Grid.xml
 parallel tasks.xml
 Prototype.xml
 Short Circuit.xml
+Spiral Mountain.xml
 symmetry.xml

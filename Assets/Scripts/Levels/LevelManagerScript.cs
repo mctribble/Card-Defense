@@ -233,10 +233,11 @@ public class LevelManagerScript : BaseBehaviour
     [Hide] public List<GameObject> spawnerObjects;      //list of the enemy spawner objects
 
     //current status (only visible if there is a loaded level, since the values are only meaningful in that context)
-    [VisibleWhen("levelLoaded")] public int   wavesInDeck;               //number of enemy groups remaining in the deck
-    [VisibleWhen("levelLoaded")] public int   wavesSpawning;             //number of waves currently attacking
-    [VisibleWhen("levelLoaded")] public int   totalSpawnedThisWave;      //how many enemies have already spawned this wave
-    [VisibleWhen("levelLoaded")] public float desiredTimeScale;          //the game speed the player wants to play at
+    [VisibleWhen("levelLoaded")] public int   wavesInDeck;          //number of enemy groups remaining in the deck
+    [VisibleWhen("levelLoaded")] public int   wavesSpawning;        //number of waves currently attacking
+    [VisibleWhen("levelLoaded")] public int   totalSpawnedThisWave; //how many enemies have already spawned this wave
+    [VisibleWhen("levelLoaded")] public float desiredTimeScale;     //the game speed the player wants to play at
+    [VisibleWhen("levelLoaded")] public bool  endurance;            //whether or not we are playing endurance
 
     //private vars
     private int        totalSpawnCount;          //how many enemies still need spawning this wave
@@ -268,6 +269,7 @@ public class LevelManagerScript : BaseBehaviour
         levelLoaded = false;
         totalSpawnCount = -1;
         desiredTimeScale = 1.0f;
+        endurance = false;
     }
 
     /// <summary>
@@ -326,64 +328,14 @@ public class LevelManagerScript : BaseBehaviour
             //Debug.Log("wave " + (i+1) + ": " + data.waves[i].ToString());
         }
 
+        //init wave count
+        wavesInDeck = data.waves.Count;
+
         //generate the random waves
         for (uint i = 0; i < data.randomWaveCount; i++)
         {
-            //figure out which wave we are making
-            int wave = data.waves.Count + 1;
-
-            //budget: wave * linear + (wave * squared)^2 + exponential^wave
-            int waveBudget = Mathf.RoundToInt(data.waveGrowthAbsolute +								//absolute growth
-			                                  (wave * data.waveGrowthLinear) + 	                    //linear growth
-			                                  (Mathf.Pow( (wave * data.waveGrowthSquared), 2.0f)) +	//squared growth
-			                                  (Mathf.Pow( data.waveGrowthExponential, wave)));      //exponential growth (WARNING: this gets HUGE!)
-
-            if (waveBudget < 0)
-            {
-                waveBudget = 0;
-                Debug.LogWarning("negative wave budget!  reset to 0.");
-            }
-
-            //enemy type: random (TODO: maybe make harder enemy types more common in later waves?  How would we define this?)
-            EnemyData waveEnemy = EnemyTypeManagerScript.instance.getRandomEnemyType(waveBudget);
-            waveEnemy = EnemyTypeManagerScript.instance.getRandomEnemyType(waveBudget).clone(); //tries to find an enemy type that the current budget can afford
-
-            //forbid random generation from producing multiple ping waves in succession
-            int loopCount = 0;
-            while ((i > 0) && (waveEnemy.name == "Ping") && (data.waves[data.waves.Count - 1].enemyData.name == "Ping")) //while both this and the ping wave are Ping...
-            {
-                waveEnemy = EnemyTypeManagerScript.instance.getRandomEnemyType(waveBudget).clone(); //change this to something else
-
-                //just in case: avoid infinite loops by only trying up to 100 times
-                loopCount++;
-                if (loopCount == 100)
-                {
-                    Debug.LogWarning("Random wave generation is still picking Ping aft 100 tries!  Giving up and letting it have sequential Ping waves.");
-                    break;
-                }
-            }
-
-            //time: min(wave*linear, maxwavetime)
-            float waveTime = Mathf.Min(wave*data.waveTimeLinear, data.waveTimeMax);
-
-            //create the wave data
-            WaveData waveData = new WaveData(waveEnemy, waveBudget, waveTime);
-
-            //mark it as a random wave so it doesnt get saved from the inspector
-            waveData.isRandomWave = true;
-
-            //if there are wave effects on the enemy type, apply them now
-            if (waveEnemy.effectData != null)
-                foreach(IEffect e in waveEnemy.effectData.effects)
-                    if (e.triggersAs(EffectType.wave))
-                        waveData = ((IEffectWave)e).alteredWaveData(waveData);
-
-            //Debug.Log("wave " + wave + ": " + waveData.ToString());
-            data.waves.Add(waveData);
+            generateRandomWave();
         }
-
-        //init wave count
-        wavesInDeck = data.waves.Count;
 
         //create the spawners
         foreach (SpawnerData sd in data.spawners)
@@ -455,6 +407,65 @@ public class LevelManagerScript : BaseBehaviour
                     if (e.triggersAs(EffectType.everyRound))
                         ((IEffectInstant)e).trigger();
         }
+    }
+
+    /// <summary>
+    /// generates a random wave and adds it to the list
+    /// </summary>
+    public void generateRandomWave()
+    {
+        //figure out which wave we are making
+        int wave = data.waves.Count + 1;
+
+        //budget: wave * linear + (wave * squared)^2 + exponential^wave
+        int waveBudget = Mathf.RoundToInt(data.waveGrowthAbsolute +								    //absolute growth
+			                                  (wave * data.waveGrowthLinear) + 	                    //linear growth
+			                                  (Mathf.Pow( (wave * data.waveGrowthSquared), 2.0f)) +	//squared growth
+			                                  (Mathf.Pow( data.waveGrowthExponential, wave)));      //exponential growth (WARNING: this gets HUGE!)
+
+        if (waveBudget < 0)
+        {
+            waveBudget = 0;
+            Debug.LogWarning("negative wave budget!  reset to 0.");
+        }
+
+        //enemy type: random (TODO: maybe make harder enemy types more common in later waves?  How would we define this?)
+        EnemyData waveEnemy = EnemyTypeManagerScript.instance.getRandomEnemyType(waveBudget);
+        waveEnemy = EnemyTypeManagerScript.instance.getRandomEnemyType(waveBudget).clone(); //tries to find an enemy type that the current budget can afford
+
+        //forbid random generation from producing multiple ping waves in succession
+        int loopCount = 0;
+        while ((wave > 1) && (waveEnemy.name == "Ping") && (data.waves[data.waves.Count - 1].enemyData.name == "Ping")) //while both this and the ping wave are Ping...
+        {
+            waveEnemy = EnemyTypeManagerScript.instance.getRandomEnemyType(waveBudget).clone(); //change this to something else
+
+            //just in case: avoid infinite loops by only trying up to 100 times
+            loopCount++;
+            if (loopCount == 100)
+            {
+                Debug.LogWarning("Random wave generation is still picking Ping aft 100 tries!  Giving up and letting it have sequential Ping waves.");
+                break;
+            }
+        }
+
+        //time: min(wave*linear, maxwavetime)
+        float waveTime = Mathf.Min(wave*data.waveTimeLinear, data.waveTimeMax);
+
+        //create the wave data
+        WaveData waveData = new WaveData(waveEnemy, waveBudget, waveTime);
+
+        //mark it as a random wave so it doesnt get saved from the inspector
+        waveData.isRandomWave = true;
+
+        //if there are wave effects on the enemy type, apply them now
+        if (waveEnemy.effectData != null)
+            foreach (IEffect e in waveEnemy.effectData.effects)
+                if (e.triggersAs(EffectType.wave))
+                    waveData = ((IEffectWave)e).alteredWaveData(waveData);
+
+        //Debug.Log("wave " + wave + ": " + waveData.ToString());
+        data.waves.Add(waveData);
+        wavesInDeck++;
     }
 
     /// <summary>
@@ -583,9 +594,20 @@ public class LevelManagerScript : BaseBehaviour
         }
         else if ( (wavesInDeck == 0) && (HandScript.enemyHand.currentHandSize == 0) ) //if there were no survivors, and there are no more enemies,  then the player wins.
         {
-            yield return StartCoroutine(MessageHandlerScript.ShowAndYield("Level Complete!\n" + ScoreManagerScript.instance.report(true))); //tell user they won and wait for them to answer
-            UnityEngine.SceneManagement.SceneManager.LoadScene("Game"); //then restart the scene
-            yield break;
+            yield return StartCoroutine(MessageHandlerScript.ShowAndYield("Level Complete!\n" + ScoreManagerScript.instance.report(true, false))); //tell user they won and wait for them to answer
+
+            //prompt userr to continue in endurance
+            yield return StartCoroutine(MessageHandlerScript.PromptYesNo("Continue in endurance?"));
+
+            if (MessageHandlerScript.responseToLastPrompt == "Yes")
+            {
+                LevelManagerScript.instance.endurance = true;               //if player wants to, then set it to endurance and keep going
+            }
+            else
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Game"); //if not, then restart the scene
+                yield break;
+            }
         }
 
         //draw a new enemy card
@@ -740,16 +762,22 @@ public class LevelManagerScript : BaseBehaviour
     }
 
     /// <summary>
-    /// called by the enemy hand when it wants to draw a new enemy card.  Updates the wave counter and returns the wave on top of the deck
+    /// called by the enemy hand when it wants to draw a new enemy card.  Updates the wave counter and returns the wave on top of the deck.
+    /// if the deck is empty, this either generates a new wave to draw or returns null, depending on if we are in endurance mode
     /// </summary>
     public WaveData DrawEnemy()
     {
-        if (wavesInDeck > 0)
+        //special case: enemy deck empty
+        if (wavesInDeck == 0)
         {
-            return data.waves[data.waves.Count - wavesInDeck--];
+            if (endurance)
+                generateRandomWave(); //in endurance, we generate a new wave on the spot and draw that
+            else
+                return null; //otherwise, we return null to indicate the deck is empty
         }
-        else
-            return null;
+
+        //general case: return the next wave
+        return data.waves[data.waves.Count - wavesInDeck--];
     }
 
     /// <summary>

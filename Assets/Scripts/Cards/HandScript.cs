@@ -138,8 +138,11 @@ public class HandScript : BaseBehaviour
         {
             if (drawSurvivorWave == false) //an empty enemy deck is fine if we're drawing a survivor wave instead of from the deck
             {
-                Debug.Log("Can't draw: enemy deck empty.");
-                return;
+                if (LevelManagerScript.instance.endurance == false) //it is also fine in endurance
+                {
+                    Debug.Log("Can't draw: enemy deck empty.");
+                    return;
+                }
             }
         }
 

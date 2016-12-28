@@ -259,7 +259,7 @@ public class EnemyCardScript : CardScript
             spawnCount++;
             totalRemainingHealth += e.curHealth;
 
-            if ( (numTypesFound <= 6) && (typesFound.Contains(e.enemyTypeName) == false) )
+            if ( (numTypesFound <= 5) && (typesFound.Contains(e.enemyTypeName) == false) )
             {
                 typesFound[numTypesFound] = e.enemyTypeName;
                 spritesToSet[numTypesFound] = e.enemyImage;
