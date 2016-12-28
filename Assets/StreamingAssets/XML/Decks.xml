@@ -57,20 +57,20 @@
         <Card name="Basic Upgrade" count="6" />
       </Cards>
     </Deck>
-    <Deck name="Prototype Deck">
+    <Deck name="Starter Deck">
       <Cards>
         <Card name="Fast Tower" count="3" />
+        <Card name="Fast Upgrade" count="3" />
         <Card name="Heavy Tower" count="3" />
-        <Card name="Basic Upgrade" count="4" />
+        <Card name="Basic Upgrade" count="3" />
         <Card name="Enrage" count="3" />
         <Card name="Basic Tower" count="5" />
         <Card name="Heavy Upgrade" count="2" />
-        <Card name="Life Tap" count="1" />
+        <Card name="Life Tap" count="2" />
         <Card name="Shield" count="1" />
         <Card name="Reinforce" count="2" />
         <Card name="Recycle" count="2" />
         <Card name="Summon Swarm" count="1" />
-        <Card name="Time Crunch" count="1" />
         <Card name="Nova Tower" count="2" />
       </Cards>
     </Deck>
