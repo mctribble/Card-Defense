@@ -13,9 +13,9 @@
   <randomWaveCount>12</randomWaveCount>
   <!-- optional wave generation settings.  Values shown are the default settings that will be used if none are provided.-->
   <!-- wave growth formula: budget = waveGrowthAbsolute + (wave * waveGrowthLinear) + (wave * waveGrowthSquared)^2 + (waveGrowthExponential^wave)-->
-  <waveGrowthAbsolute>100</waveGrowthAbsolute>
-  <waveGrowthLinear>10</waveGrowthLinear>
-  <waveGrowthSquared>2.3</waveGrowthSquared>
+  <waveGrowthAbsolute>50</waveGrowthAbsolute>
+  <waveGrowthLinear>8</waveGrowthLinear>
+  <waveGrowthSquared>2.2</waveGrowthSquared>
   <waveGrowthExponential>1.1</waveGrowthExponential>
   <!-- wave time is wave * waveTimeLinear, but cannot exceed waveTimeMax.  Again, these are optional.  The values shown are the defaults if you dont specify them yourself.-->
   <waveTimeLinear>1.1</waveTimeLinear>

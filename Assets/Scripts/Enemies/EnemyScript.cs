@@ -322,7 +322,9 @@ public class EnemyScript : BaseBehaviour
             MessageHandlerScript.instance.spawnPlayerDamageText(transform.localPosition, damage);
         }
 
-        ScoreManagerScript.instance.flawless = false;
+        //the flawless bonus is not removed if damage is taken in endurance, since it cannot be avoided in endurance anyway.
+        if (LevelManagerScript.instance.endurance == false)
+            ScoreManagerScript.instance.flawless = false;
 
         //reset the enemy by putting it at a random spawner with a new path
         int spawnerIndex = Random.Range(0, LevelManagerScript.instance.spawnerObjects.Count);

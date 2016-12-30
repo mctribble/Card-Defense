@@ -106,10 +106,10 @@ public class LevelData
     public int randomWaveCount;
 
     //budget: absolute + (wave * linear) + (wave * squared)^2 + (exponential^wave)
-    [DefaultValue(100.0f)] public float waveGrowthAbsolute     = 100.0f;
-    [DefaultValue(10.0f)]   public float waveGrowthLinear      = 10.0f;
-    [DefaultValue(2.3f)]   public float waveGrowthSquared      = 2.3f;
-    [DefaultValue(1.1f)]   public float waveGrowthExponential  = 1.1f;
+    [DefaultValue(50.0f)] public float waveGrowthAbsolute    = 50.0f;
+    [DefaultValue(8.0f)]  public float waveGrowthLinear      = 8.0f;
+    [DefaultValue(2.2f)]  public float waveGrowthSquared     = 2.2f;
+    [DefaultValue(1.1f)]  public float waveGrowthExponential = 1.1f;
 
     //time: min(wave*linear, maxwavetime)
     [DefaultValue(1.1f)]  public float waveTimeLinear = 1.1f;
@@ -592,9 +592,15 @@ public class LevelManagerScript : BaseBehaviour
         {
             HandScript.enemyHand.drawCard(true, true, true, true);
         }
-        else if ( (wavesInDeck == 0) && (HandScript.enemyHand.currentHandSize == 0) ) //if there were no survivors, and there are no more enemies,  then the player wins.
+        else if ( //if there were no survivors... 
+                  (wavesInDeck == 0) && //and there are no more enemies in the deck... 
+                  (HandScript.enemyHand.currentHandSize == 0) && //and the enemy hand is empty...
+                  (LevelManagerScript.instance.endurance == false) ) //and we are not in endurance...
         {
-            yield return StartCoroutine(MessageHandlerScript.ShowAndYield("Level Complete!\n" + ScoreManagerScript.instance.report(true, false))); //tell user they won and wait for them to answer
+            //then the player wins!
+
+            //tell user they won and wait for them to answer
+            yield return StartCoroutine(MessageHandlerScript.ShowAndYield("Level Complete!\n" + ScoreManagerScript.instance.report(true, false))); 
 
             //prompt userr to continue in endurance
             yield return StartCoroutine(MessageHandlerScript.PromptYesNo("Continue in endurance?"));

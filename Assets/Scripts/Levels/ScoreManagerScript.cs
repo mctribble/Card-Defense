@@ -239,6 +239,7 @@ public class ScoreManagerScript : BaseBehaviour
             {"wavesCleared", wavesCleared },
             {"enemyCardsDrawn", enemyCardsDrawn },
             {"bonusPoints", bonusPoints },
+            {"endurance", LevelManagerScript.instance.endurance },
             {"score", totalScore}
         });
 

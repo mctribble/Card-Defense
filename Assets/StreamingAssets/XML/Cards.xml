@@ -62,7 +62,7 @@
       </effectData>
     </Card>
     <Card Type="tower" Name="Fast Tower" Description="Suitable for fighting swarms" Charges="4" Art="Fast_Tower.png" Tooltip="Tower_Basic.png" Token="false">
-      <towerData Recharge="0.1" Range="2" Damage="3" Lifespan="3" UpgradeCap="3" Sprite="Tower_Basic.png">
+      <towerData Recharge="0.12" Range="2" Damage="4" Lifespan="3" UpgradeCap="3" Sprite="Tower_Basic.png">
         <towerColor r="1" g="0" b="0" a="1" />
       </towerData>
     </Card>
