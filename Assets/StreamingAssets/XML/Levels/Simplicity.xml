@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
+  <difficulty>medium</difficulty>
+  <description>A simple level suitable for beginners</description>
+  <randomWaveCount>25</randomWaveCount>
+  <Waves />
+  <Spawners>
+    <Spawner spawnX="15" spawnY="0" />
+  </Spawners>
+  <PathSegments>
+    <Segment startX="15" startY="0" endX="10" endY="0" />
+    <Segment startX="10" startY="0" endX="10" endY="1" />
+    <Segment startX="10" startY="0" endX="10" endY="-1" />
+    <Segment startX="10" startY="1" endX="6" endY="1" />
+    <Segment startX="6" startY="1" endX="6" endY="0" />
+    <Segment startX="10" startY="-1" endX="6" endY="-1" />
+    <Segment startX="6" startY="-1" endX="6" endY="0" />
+    <Segment startX="10" startY="0" endX="6" endY="0" />
+    <Segment startX="6" startY="0" endX="4" endY="0" />
+    <Segment startX="4" startY="0" endX="4" endY="4" />
+    <Segment startX="4" startY="4" endX="-4" endY="4" />
+    <Segment startX="-4" startY="4" endX="-4" endY="-2" />
+    <Segment startX="-4" startY="-2" endX="0" endY="-2" />
+    <Segment startX="0" startY="-2" endX="0" endY="2" />
+    <Segment startX="0" startY="2" endX="-2" endY="2" />
+  </PathSegments>
+  <Towers />
+  <shuffleDeck>true</shuffleDeck>
+  <premadeDeckName>Starter Deck</premadeDeckName>
+</Level>
