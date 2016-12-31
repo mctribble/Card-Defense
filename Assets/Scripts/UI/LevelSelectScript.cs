@@ -60,14 +60,14 @@ public class LevelSelectScript : BaseBehaviour
                 int test = Random.Range(0,500);
                 PlayerPrefs.SetInt("saveTest", test);
                 if (PlayerPrefs.HasKey("saveTest") == false)
-                    MessageHandlerScript.Error("Data saving doesn't seem to be working.  If you make a deck it may disappear when you reload the page.");
+                    MessageHandlerScript.ShowAndYield("Data saving doesn't seem to be working.  If you make a deck it may disappear when you reload the page.");
                 else
                     if (PlayerPrefs.GetInt("saveTest") != test)
-                        MessageHandlerScript.Error("Data saving doesn't seem to be working.  If you make a deck it may disappear when you reload the page.");
+                    MessageHandlerScript.ShowAndYield("Data saving doesn't seem to be working.  If you make a deck it may disappear when you reload the page.");
             }
             catch (System.Exception e)
             {
-                MessageHandlerScript.Error("Data saving doesn't seem to be working.  If you make a deck it may disappear when you reload the page. \n(" + e.Message + ")");
+                MessageHandlerScript.ShowAndYield("Data saving doesn't seem to be working.  If you make a deck it may disappear when you reload the page. \n(" + e.Message + ")");
             }
         }
 
@@ -463,7 +463,7 @@ public class LevelSelectScript : BaseBehaviour
                 break;
 
             default:
-                MessageHandlerScript.Error("LevelSelectScript doesnt know how to handle this button!");
+                Debug.LogError("LevelSelectScript doesnt know how to handle this button!");
                 break;
         }
     }

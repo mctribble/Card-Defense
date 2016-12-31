@@ -55,6 +55,9 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
     /// </summary>
     public Vector2 combatTextPosition { get { return Camera.main.ScreenToWorldPoint ( idleLocation + new Vector2( (Screen.width / 2), (Screen.height - (cardFront.rectTransform.rect.height / 4) ) ) ); } }
 
+    public virtual bool    discardable { get { return true; } } //returns whether or not this card can be discarded.  Almost all can.
+    public abstract string cardName    { get; }                 //returns the name of the card
+
     //simple FSM
     protected enum State
     {
@@ -239,8 +242,8 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
     /// </summary>
     public virtual void OnPointerEnter(PointerEventData eventData)
     {
-        //ignore this event if hidden or discarding
-        if (hidden || (state == State.discarding))
+        //ignore this event if hidden, discarding, or if a message is being shown to the player
+        if (hidden || (state == State.discarding) || MessageHandlerScript.instance.messageBeingShown)
             return;
 
         siblingIndex = transform.GetSiblingIndex(); //save the current index for later

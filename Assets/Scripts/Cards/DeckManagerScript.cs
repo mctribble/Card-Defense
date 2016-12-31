@@ -216,7 +216,7 @@ public class DeckCollection
         //if the deck did not exist, use a default deck and print a warning
         if (result == null)
         {
-            MessageHandlerScript.Warning("Deck " + targetDeck + " could not be found.  Using a default deck instead");
+            Debug.LogWarning("Deck " + targetDeck + " could not be found.  Using a default deck instead");
             result = new XMLDeck();
             result.contents = new List<XMLDeckEntry>();
             result.contents.Add(new XMLDeckEntry("Basic Tower", 60));
@@ -361,7 +361,7 @@ public class DeckManagerScript : BaseBehaviour
         //show error if there was one
         if (request.error != null)
         {
-            MessageHandlerScript.Error("Error loading premade decks:\n" + request.error);
+            Debug.LogError("Error loading premade decks:\n" + request.error);
             yield break;
         }
 
@@ -668,7 +668,7 @@ public class DeckManagerScript : BaseBehaviour
         //if the player doesnt have a hand, something is seriously wrong
         if (playerHand == null)
         {
-            MessageHandlerScript.Error("The player doesnt have a hand to damage!");
+            Debug.LogError("The player doesnt have a hand to damage!");
             return;
         }
 

@@ -68,7 +68,7 @@ public class DrawOnClickScript : BaseBehaviour, IPointerClickHandler
                     }
                     break;
                 default:
-                    MessageHandlerScript.Warning("DrawOnClickScript doesnt know how to draw to a hand of that type");
+                    Debug.LogWarning("DrawOnClickScript doesnt know how to draw to a hand of that type");
                     break;
             }
         }

@@ -103,6 +103,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             //<<property effects(changes how something behaves, but is never triggered) >>  
             case "armorPierce":                ie = new EffectArmorPierce();                break;
             case "attackColor":                ie = new EffectAttackColor();                break;
+            case "cannotBeDiscarded":          ie = new EffectCannotBeDiscarded();          break;
             case "infiniteTowerLifespan":      ie = new EffectInfiniteTowerLifespan();      break;
             case "limitedAmmo":                ie = new EffectLimitedAmmo();                break;
             case "manualFire":                 ie = new EffectManualFire();                 break;
@@ -143,7 +144,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             }
             catch (InvalidCastException)
             {
-                MessageHandlerScript.Warning("Found an inner effect on an effect that can't use them.");
+                Debug.LogWarning("Found an inner effect on an effect that can't use them.");
             }
         }
 

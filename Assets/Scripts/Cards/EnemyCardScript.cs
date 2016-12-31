@@ -168,7 +168,7 @@ public class WaveData
         //error if the enemy list is empty
         if ((enemyList == null) || (enemyList.Count == 0))
         {
-            MessageHandlerScript.Error("WaveData can't spawn an enemy because the list is already empty");
+            Debug.LogError("WaveData can't spawn an enemy because the list is already empty");
             return;
         }
 
@@ -202,7 +202,7 @@ public class WaveData
 public class EnemyCardScript : CardScript
 {
     [VisibleWhen("shouldShowRefs")] public Vector2    discardDisplacement; //where to move from the idle position when discarding
-    [VisibleWhen("shouldShowRefs")] public GameObject art; //parent of card art images
+    [VisibleWhen("shouldShowRefs")] public GameObject art;                 //parent of card art images
 
     //wave stats
     [Hide] public int spawnCount;           //number of enemies that still need spawning in this wave
@@ -211,6 +211,8 @@ public class EnemyCardScript : CardScript
     private string    enemyType;            //name of the enemy type currently depicted.  Cached to detect enemy type changes
 
     private List<EnemyScript> survivorList; //if this is a survivor waves, holds references to the existing enemies that are to reappear when this wave attacks
+
+    public override string cardName { get { return wave.ToShortString(); } } //returns the name of the card
 
     //init
     protected override void Awake()
@@ -305,8 +307,12 @@ public class EnemyCardScript : CardScript
     //discards this card
     public override IEnumerator Discard()
     {
+        //bail if this card has already been destroyed
+        if (gameObject == null)
+            yield break;
+
         state = State.discarding;
-        hand.SendMessage("Discard", gameObject);
+        hand.SendMessage("Discard", this);
 
         //move to discard location
         Vector3 discardLocation = idleLocation + discardDisplacement; 

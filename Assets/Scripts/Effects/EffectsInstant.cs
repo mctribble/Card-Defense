@@ -320,7 +320,7 @@ class EffectDieRoll : BaseEffectInstant
         int rollMax = Mathf.RoundToInt(strength);
         if (rollMax < 2)
         {
-            MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + " could not roll the die because it has less than 2 sides.");
+            Debug.LogWarning("<" + cardName + "> " + XMLName + " could not roll the die because it has less than 2 sides.");
             argument = null;
         }
         else

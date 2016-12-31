@@ -20,7 +20,7 @@ public class PlayerCardData : System.Object
 
     //card data
     [XmlAttribute("Type")] public PlayerCardType cardType; //determines aspects of how the card should behave and the meaning of other values.  See enum dec for more info
-    [XmlAttribute("Name")] public string   cardName; //name of the card
+    [XmlAttribute("Name")] public string         cardName; //name of the card
 
     [XmlAttribute("Description")]
     [DefaultValue("")]
@@ -258,6 +258,9 @@ public class PlayerCardScript : CardScript, IPointerClickHandler
 
     private GameObject tooltipInstance; //instance of the tooltip object, if present
 
+    public override bool discardable { get { return (card.data.effectData == null) || (card.data.effectData.propertyEffects.cannotBeDiscarded == false); } } //returns whether or not this card can be discarded
+    public override string cardName  { get { return card.data.cardName; } } //returns the name of the card
+
     // Use this for initialization
     protected override void Awake()
     {
@@ -273,7 +276,7 @@ public class PlayerCardScript : CardScript, IPointerClickHandler
         state = State.discarding; //set the state so that other behavior on this card gets suspended
         //remove ourselves from the hand, if present
         if (hand != null)
-            hand.SendMessage("Discard", gameObject);
+            hand.SendMessage("Discard", this);
 
         //if the card has charges left, tined it back to the deck immediately without waiting for the animation
         if (card.charges > 0)
@@ -451,7 +454,7 @@ public class PlayerCardScript : CardScript, IPointerClickHandler
                 }
 
                 if (effectApplied == false)
-                    MessageHandlerScript.Warning("I dont know how to apply " + e.XMLName + " on a card.");
+                    Debug.LogWarning("I dont know how to apply " + e.XMLName + " on a card.");
             }
 
             //perform steps that must be done on every cast

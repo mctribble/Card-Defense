@@ -5,7 +5,6 @@
   <randomWaveCount>20</randomWaveCount>
   <waveGrowthLinear>5</waveGrowthLinear>
   <waveGrowthSquared>2.4</waveGrowthSquared>
-  <waveGrowthExponential>1.1</waveGrowthExponential>
   <waveTimeLinear>1.3</waveTimeLinear>
   <waveTimeMax>25</waveTimeMax>
   <Waves />
@@ -100,8 +99,8 @@
       <Card name="Light Shield" count="5" />
       <Card name="Range Upgrade" count="5" />
       <Card name="Recycle" count="2" />
-      <Card name="Shredder Tower" count="4" />
       <Card name="Sniper Tower" count="5" />
+      <Card name="Summon Swarm" count="4" />
     </Cards>
   </levelDeck>
 </Level>

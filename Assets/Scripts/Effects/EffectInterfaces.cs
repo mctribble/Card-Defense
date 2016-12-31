@@ -184,6 +184,7 @@ public struct PropertyEffects
     public bool   manualFire;
     public bool   noUpgradeCost;
     public bool   upgradesForbidden;
+    public bool   cannotBeDiscarded;
     public Color? attackColor;
     public int?   limitedAmmo;
     public int?   maxOvercharge;
@@ -269,7 +270,7 @@ public class EffectData : System.Object
             case "scaleSpeedWithBudget":
                 if (containsEffect("fixedSpawnCount") == false)
                 {
-                    MessageHandlerScript.Warning("<" + e.cardName + ">: units must have fixedSpawnCount in order to use budget scaling effects.  Skipping " + e.XMLName);
+                    Debug.LogWarning("<" + e.cardName + ">: units must have fixedSpawnCount in order to use budget scaling effects.  Skipping " + e.XMLName);
                     return false;
                 }
                 break;
@@ -278,7 +279,7 @@ public class EffectData : System.Object
             case "ifRollRange":
                 if (containsEffect("dieRoll") == false)
                 {
-                    MessageHandlerScript.Warning("<" + e.cardName + ">: units must have dieRoll in order to use roll effects.  Skipping " + e.XMLName);
+                    Debug.LogWarning("<" + e.cardName + ">: units must have dieRoll in order to use roll effects.  Skipping " + e.XMLName);
                     return false;
                 }
                 break;
@@ -388,7 +389,7 @@ public class EffectData : System.Object
 
         if (res == null)
         {
-            MessageHandlerScript.Error("no targeting effect, not even the default, provided a result list!");
+            Debug.LogError("no targeting effect, not even the default, provided a result list!");
             return new List<EnemyScript>();
         }
         else
@@ -446,6 +447,7 @@ public class EffectData : System.Object
                         //properties that shouldnt change
                         case "armorPierce": if (value.armorPierce != propertyEffects.armorPierce) Debug.LogWarning("updating that property is not supported"); break;
                         case "attackColor": if (value.attackColor != propertyEffects.attackColor) Debug.LogWarning("updating that property is not supported"); break;
+                        case "cannotBeDiscarded": if (value.cannotBeDiscarded != propertyEffects.cannotBeDiscarded) Debug.LogWarning("updating that property is not supported"); break;
                         case "infiniteTowerLifespan": if (value.infiniteTowerLifespan != propertyEffects.infiniteTowerLifespan) Debug.LogWarning("updating that property is not supported"); break;
                         case "returnsToTopOfDeck": if (value.returnsToTopOfDeck != propertyEffects.infiniteTowerLifespan) Debug.LogWarning("updating that property is not supported"); break;
                         case "manualFire": if (value.manualFire != propertyEffects.manualFire) Debug.LogWarning("updating that property is not supported"); break;
@@ -516,6 +518,7 @@ public class EffectData : System.Object
                                 break;
 
                             case "armorPierce": newPropertyEffects.armorPierce = true; break;
+                            case "cannotBeDiscarded": newPropertyEffects.cannotBeDiscarded = true; break;
                             case "infiniteTowerLifespan": newPropertyEffects.infiniteTowerLifespan = true; break;
                             case "limitedAmmo": newPropertyEffects.limitedAmmo = Mathf.RoundToInt(examining.strength); break;
                             case "manualFire": newPropertyEffects.manualFire = true; break;

@@ -175,7 +175,7 @@ public class EnemyTypeManagerScript : BaseBehaviour
         //show error if there was one
         if (request.error != null)
         {
-            MessageHandlerScript.Error("Error loading enemy types:\n" + request.error);
+            Debug.LogError("Error loading enemy types:\n" + request.error);
             yield break;
         }
 

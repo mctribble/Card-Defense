@@ -160,7 +160,7 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
                 SendMessageUpwards("TextButtonSelected", buttonText.text, SendMessageOptions.DontRequireReceiver);
                 break;
             default:
-                MessageHandlerScript.Error("MenuButtonScript cant handle this button type!");
+                Debug.LogError("MenuButtonScript cant handle this button type!");
                 break;
         }
     }
@@ -186,7 +186,7 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
                 SendMessageUpwards("TextButtonHovered", buttonText.text, SendMessageOptions.DontRequireReceiver);
                 break;
             default:
-                MessageHandlerScript.Error("MenuButtonScript cant handle this button type!");
+                Debug.LogError("MenuButtonScript cant handle this button type!");
                 break;
         }
     }

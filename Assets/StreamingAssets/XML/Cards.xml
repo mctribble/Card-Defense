@@ -353,6 +353,15 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="spell" Name="Gather Power" Description="Gives you more to work with, but attracts more enemies.  Usable once per round" Charges="1" Art="Enrage.png" Tooltip="Tower_Basic.png" Token="true">
+      <effectData>
+        <Effects>
+          <Effect name="drawEnemyCard" strength="1" />
+          <Effect name="drawCard" strength="2" />
+          <Effect name="cannotBeDiscarded" />
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="spell" Name="Gambit" Description="Feeling lucky?" Charges="5" Art="Gambit.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>

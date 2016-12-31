@@ -77,7 +77,7 @@ public class DeckEditorFilter
             case SortingRule.type:    sorted.Sort(new CardTypeComparer());    break;
             case SortingRule.charges: sorted.Sort(new CardChargesComparer()); break;
             default:
-                MessageHandlerScript.Error("sortCardData doesnt know how to handle this sorting rule");
+                Debug.LogError("sortCardData doesnt know how to handle this sorting rule");
                 break;
         }
 
@@ -96,7 +96,7 @@ public class DeckEditorFilter
             case SortingRule.type: sorted.Sort(new CardTypeComparer()); break;
             case SortingRule.charges: sorted.Sort(new CardChargesComparer()); break;
             default:
-                MessageHandlerScript.Error("sortCardData doesnt know how to handle this sorting rule");
+                Debug.LogError("sortCardData doesnt know how to handle this sorting rule");
                 break;
         }
 
@@ -250,7 +250,7 @@ public class DeckEditorMainScript : BaseBehaviour
         //if the entry was not in the deck, bail
         if (oldEntry == null)
         {
-            MessageHandlerScript.Error("updated an entry that is not in the deck!");
+            Debug.LogError("updated an entry that is not in the deck!");
             return;
         }
 
@@ -326,7 +326,7 @@ public class DeckEditorMainScript : BaseBehaviour
                 break;
 
             default: //button has not been implemented.  Print warning.
-                MessageHandlerScript.Error("DeckEditorMainScript doesn't know how to respond to this button");
+                Debug.LogError("DeckEditorMainScript doesn't know how to respond to this button");
                 break;
         }
     }
@@ -358,7 +358,7 @@ public class DeckEditorMainScript : BaseBehaviour
             case 1: filter.type = PlayerCardType.tower; break;
             case 2: filter.type = PlayerCardType.spell; break;
             case 3: filter.type = PlayerCardType.upgrade; break;
-            default: MessageHandlerScript.Error("unknown filter type"); break;
+            default: Debug.LogError("unknown filter type"); break;
         }
         BroadcastMessage("filterChanged", filter); //report the new filter settings to children
 
@@ -378,7 +378,7 @@ public class DeckEditorMainScript : BaseBehaviour
             case 0: filter.sortBy = DeckEditorFilter.SortingRule.name; break;
             case 1: filter.sortBy = DeckEditorFilter.SortingRule.charges; break;
             case 2: filter.sortBy = DeckEditorFilter.SortingRule.type; break;
-            default: MessageHandlerScript.Error("unknown sort type"); break;
+            default: Debug.LogError("unknown sort type"); break;
         }
         BroadcastMessage("filterChanged", filter); //report the new filter settings to children
 

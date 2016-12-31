@@ -53,7 +53,7 @@ public class EffectChangeWaveType : BaseEffectWave
             }
             catch (System.Collections.Generic.KeyNotFoundException)
             {
-                MessageHandlerScript.Warning("<" + cardName + ">Could not find an enemy type named " + m_argument + ": defaulting to Standard.");
+                Debug.LogWarning("<" + cardName + ">Could not find an enemy type named " + m_argument + ": defaulting to Standard.");
                 m_argument = "Standard";
             }
         }

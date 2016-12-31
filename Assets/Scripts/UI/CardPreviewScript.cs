@@ -12,6 +12,8 @@ public class CardPreviewScript : CardScript, IPointerClickHandler
     public PlayerCardData data; //card type being previewed
     public Image art;           //reference to card art image
 
+    public override string cardName { get { return data.cardName; } }
+
     //register to be informed about type reloads
     private IEnumerator Start()
     {
@@ -42,7 +44,7 @@ public class CardPreviewScript : CardScript, IPointerClickHandler
 
         //if data is now null, throw a warning
         if (data == null)
-            MessageHandlerScript.Warning("The card types were reloaded, but the card type being previewed was not found and could not be updated!");
+            Debug.LogWarning("The card types were reloaded, but the card type being previewed was not found and could not be updated!");
     }
 
     /// <summary>
@@ -118,7 +120,7 @@ public class CardPreviewScript : CardScript, IPointerClickHandler
     {
         //just destroy self with no animation
         state = State.discarding;
-        hand.SendMessage("Discard", gameObject);
+        hand.SendMessage("Discard", this);
         Destroy(gameObject);
         yield break;
     }

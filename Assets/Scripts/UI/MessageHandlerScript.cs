@@ -23,7 +23,12 @@ public class MessageHandlerScript : BaseBehaviour
     /// text of the button selected on the last prompt.  null if there was no previous prompt
     /// </summary>
     [Show] public static string responseToLastPrompt;
+
+    //singleton instance
     public static MessageHandlerScript instance;
+
+    //indicates whether or not a message is being displayed
+    [Show] public bool messageBeingShown { get { return messageBox.activeInHierarchy; } }
 
     //init
     private void Start()
@@ -108,28 +113,6 @@ public class MessageHandlerScript : BaseBehaviour
     /// </summary>
     /// <param name="message"></param>
     public static void ShowNoYield(string message) { instance.StartCoroutine(ShowAndYield(message)); }
-
-    /// <summary>
-    /// like ShowNoYield, but reroutes the message to the log if we are running a debug build
-    /// </summary>
-    public static void Warning(string message)
-    {
-        if (Debug.isDebugBuild)
-            Debug.LogWarning(message);
-        else
-            MessageHandlerScript.ShowNoYield("WARNING: " + message);
-    }
-
-    /// <summary>
-    /// like ShowNoYield, but duplicates to the log if we are running a debug build
-    /// </summary>
-    public static void Error(string message)
-    {
-        if (Debug.isDebugBuild)
-            Debug.LogError(message);
-
-        MessageHandlerScript.ShowNoYield("ERROR: " + message);
-    }
 
     /// <summary>
     /// spawns floating combat text to represent an enemy having damaged the player

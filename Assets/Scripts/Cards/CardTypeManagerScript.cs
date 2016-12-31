@@ -140,7 +140,7 @@ public class CardTypeManagerScript : BaseBehaviour
         //show error if there was one
         if (request.error != null)
         {
-            MessageHandlerScript.Error("Error loading card types:\n" + request.error);
+            Debug.LogError("Error loading card types:\n" + request.error);
             yield break;
         }
 
@@ -279,7 +279,7 @@ public class CardTypeManagerScript : BaseBehaviour
             }
         }
 
-        MessageHandlerScript.Error("Could not find card type " + name + ".");
+        Debug.LogError("Could not find card type " + name + ".");
         return null;
     }
 

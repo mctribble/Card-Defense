@@ -121,7 +121,7 @@ public class EffectSplashDamage : BaseEffectEnemyDamaged
             }
             catch (Exception)
             {
-                MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + " could not convert the argument to a valid number.  Defaulting to 1.0");
+                Debug.LogWarning("<" + cardName + "> " + XMLName + " could not convert the argument to a valid number.  Defaulting to 1.0");
             }
         }
     }
@@ -235,7 +235,7 @@ public class EffectSecondaryBurst : BaseEffectEnemyDamaged
             }
             catch (Exception)
             {
-                MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + " could not convert the argument to a valid number.  Defaulting to 1.0");
+                Debug.LogWarning("<" + cardName + "> " + XMLName + " could not convert the argument to a valid number.  Defaulting to 1.0");
             }
         }
     }

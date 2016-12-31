@@ -76,3 +76,10 @@ class EffectUpgradesForbidden : BaseEffectProperty
     [Hide] public override string Name { get { return "Cannot be upgraded"; } } //returns name and strength
     [Show] public override string XMLName { get { return "upgradesForbidden"; } } //name used to refer to this effect in XML.
 }
+
+//tower cannot be discarded
+class EffectCannotBeDiscarded : BaseEffectProperty
+{
+    [Hide] public override string Name { get { return "Cannot be randomly discarded"; } } //returns name and strength
+    [Show] public override string XMLName { get { return "cannotBeDiscarded"; } } //name used to refer to this effect in XML.
+}

@@ -278,6 +278,7 @@ public class LevelManagerScript : BaseBehaviour
     private IEnumerator loadLevel(LevelData levelToLoad)
     {
         data = levelToLoad;
+        endurance = false;
 
         //test dependencies, if we are on a platform that does that
         if (Application.platform != RuntimePlatform.WebGLPlayer)
@@ -289,7 +290,7 @@ public class LevelManagerScript : BaseBehaviour
             //test for mod dependencies.  If unmet, show message and reload the scene
             if (DependencyManagerScript.instance.testLevelDependencies(data) == false)
             {
-                MessageHandlerScript.Error("Could not load level: unmet dependencies");
+                Debug.LogError("Could not load level: unmet dependencies");
                 UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
                 yield break;
             }
@@ -333,7 +334,13 @@ public class LevelManagerScript : BaseBehaviour
 
         //generate the random waves
         for (uint i = 0; i < data.randomWaveCount; i++)
+            generateRandomWave();
+
+        //the last wave cannot be ping
+        while(data.waves[data.waves.Count-1].enemyData.name == "Ping")
         {
+            data.waves.RemoveAt(data.waves.Count - 1);
+            wavesInDeck--;
             generateRandomWave();
         }
 

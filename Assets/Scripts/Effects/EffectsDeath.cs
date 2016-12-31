@@ -67,6 +67,6 @@ class EffectSpawnEnemyOnDeath : BaseEffectDeath
 
     public override void onTowerDeath(TowerScript t)
     {
-        MessageHandlerScript.Warning("spawnEnemyOnDeath does not support towers.");
+        Debug.LogWarning("spawnEnemyOnDeath does not support towers.");
     }
 }

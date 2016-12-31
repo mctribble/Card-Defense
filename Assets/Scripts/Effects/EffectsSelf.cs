@@ -95,7 +95,7 @@ public class EffectDiscardRandom : BaseEffectSelf
     public override void trigger(ref PlayerCard card, GameObject card_gameObject)
     {
         HandScript handRef = HandScript.playerHand;
-        handRef.StartCoroutine(handRef.discardRandomCards(card_gameObject, Mathf.FloorToInt(strength)));
+        handRef.StartCoroutine(handRef.discardRandomCards(card_gameObject.GetComponent<CardScript>(), Mathf.FloorToInt(strength)));
     }
 }
 
@@ -107,14 +107,14 @@ public class EffectReplaceRandomCard : BaseEffectSelf
 
     public override void trigger(ref PlayerCard card, GameObject card_gameObject)
     {
-        int toReplace = Mathf.Min( Mathf.RoundToInt(strength), HandScript.playerHand.currentHandSize-1);  //how many cards are being replaced
+        int toReplace = Mathf.Min( Mathf.RoundToInt(strength), HandScript.playerHand.discardableCardCount-1);  //how many cards are being replaced
 
         //if we are replacing the entire hand, do them all at once with no delay
         bool applyDelay = true;
         if (toReplace == HandScript.playerHand.currentHandSize - 1)
             applyDelay = false;
 
-        HandScript.playerHand.StartCoroutine(HandScript.playerHand.discardRandomCards(card_gameObject, toReplace, applyDelay)); //discard toReplace random cards that are NOT this one (this card will be discarded regardless, since it was just played)
+        HandScript.playerHand.StartCoroutine(HandScript.playerHand.discardRandomCards(card_gameObject.GetComponent<CardScript>(), toReplace, applyDelay)); //discard toReplace random cards that are NOT this one (this card will be discarded regardless, since it was just played)
         HandScript.playerHand.StartCoroutine(HandScript.playerHand.drawCards(toReplace, applyDelay)); //draw new cards to replace them
     }
 }

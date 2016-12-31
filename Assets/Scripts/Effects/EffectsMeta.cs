@@ -77,7 +77,7 @@ public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
         //it doesnt make sense for a property to be targeted by another effect, since it doesnt actually do anything on its own
         if (innerEffect.triggersAs(EffectType.property))
         {
-            MessageHandlerScript.Warning("<" + cardName + ">meta effects should not target property effects!");
+            Debug.LogWarning("<" + cardName + ">meta effects should not target property effects!");
             return true;
         }
 
@@ -127,7 +127,7 @@ public class EffectPercentageChance : BaseEffectMeta
         //never apply inner effect if it is null
         if (innerEffect == null)
         {
-            MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + " has no target and did nothing.");
+            Debug.LogWarning("<" + cardName + "> " + XMLName + " has no target and did nothing.");
             return false;
         }
 
@@ -167,7 +167,7 @@ public class EffectIfRollRange : BaseEffectMeta
             }
             catch (Exception)
             {
-                MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + " could not convert argument to an int.  defaulted to 2");
+                Debug.LogWarning("<" + cardName + "> " + XMLName + " could not convert argument to an int.  defaulted to 2");
                 rangeMax = 2;
             }
         }
@@ -206,7 +206,7 @@ public class EffectIfRollRange : BaseEffectMeta
         //throw warning if no die has been rolled
         if (parentData.propertyEffects.dieRoll == null)
         {
-            MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + ":no die has been rolled!");
+            Debug.LogWarning("<" + cardName + "> " + XMLName + ":no die has been rolled!");
             return false;
         }
 
@@ -219,7 +219,7 @@ public class EffectIfRollRange : BaseEffectMeta
         }
         else
         {
-            MessageHandlerScript.Warning("<" + cardName + "> " + XMLName + ": range max is lower than range min!  Try switching strength and argument");
+            Debug.LogWarning("<" + cardName + "> " + XMLName + ": range max is lower than range min!  Try switching strength and argument");
             return false;
         }
     }
@@ -316,7 +316,7 @@ public class EffectEveryRound : BaseEffectMeta
             if (value.triggersAs(EffectType.instant) || value.triggersAs(EffectType.everyRound))
                 base.innerEffect = value;
             else
-                MessageHandlerScript.Error(cardName + ": EffectEveryRound can only target instant or everyRound effects");
+                Debug.LogError(cardName + ": EffectEveryRound can only target instant or everyRound effects");
         }
     }
 }
@@ -340,7 +340,7 @@ public class EffectOnSpawned : BaseEffectMeta
             if (value.triggersAs(EffectType.instant))
                 base.innerEffect = value;
             else
-                MessageHandlerScript.Error(cardName + ": Effect onSpawned can only target instant");
+                Debug.LogError(cardName + ": Effect onSpawned can only target instant");
         }
     }
 

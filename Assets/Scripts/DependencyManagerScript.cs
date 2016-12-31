@@ -87,7 +87,7 @@ public class DependencyManagerScript : BaseBehaviour
         //now that we have done all we can, report anything we havent managed to handle
         foreach (EnemyTypeCollection etc in files)
             if(handled.Contains(etc) == false)
-                MessageHandlerScript.Warning(etc.fileName + " has unmet dependencies and was not loaded!");
+                Debug.LogWarning(etc.fileName + " has unmet dependencies and was not loaded!");
 
         //return the rest.
         enemyDepenciesHandled = true;
@@ -174,7 +174,7 @@ public class DependencyManagerScript : BaseBehaviour
         //now that we have done all we can, report anything we havent managed to handle
         foreach (CardTypeCollection ctc in files)
             if (handled.Contains(ctc) == false)
-                MessageHandlerScript.Warning(ctc.fileName + " has unmet dependencies and was not loaded!");
+                Debug.LogWarning(ctc.fileName + " has unmet dependencies and was not loaded!");
 
         //return the rest.
         cardDependenciesHandled = true;

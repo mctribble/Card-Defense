@@ -37,14 +37,16 @@
   <shuffleDeck>true</shuffleDeck>
   <levelDeck name="Level Deck">
     <Cards>
-      <Card name="Basic Tower" count="7" />
-      <Card name="Basic Upgrade" count="10" />
+      <Card name="AOE Tower" count="7" />
+      <Card name="Basic Upgrade" count="6" />
       <Card name="Enrage" count="5" />
       <Card name="Fast Tower" count="7" />
+      <Card name="Fast Upgrade" count="2" />
       <Card name="Heavy Tower" count="7" />
+      <Card name="Heavy Upgrade" count="2" />
       <Card name="Life Tap" count="2" />
       <Card name="Reinforce" count="1" />
-      <Card name="Shield" count="1" />
+      <Card name="Shield" count="2" />
     </Cards>
   </levelDeck>
 </Level>

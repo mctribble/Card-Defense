@@ -69,7 +69,7 @@ public class EffectPoison : BaseEffectPeriodic
             }
             catch (FormatException)
             {
-                MessageHandlerScript.Warning("<" + cardName + ">" + XMLName + " effect could not convert the argument to a number and defaulted to 1.0");
+                Debug.LogWarning("<" + cardName + ">" + XMLName + " effect could not convert the argument to a number and defaulted to 1.0");
                 maxPoisonTime = 1.0f;
             }
 
