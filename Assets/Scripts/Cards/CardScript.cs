@@ -16,6 +16,15 @@ public enum PlayerCardType
     spell		//other effects
 }
 
+//simple FSM
+public enum CardState
+{
+    idle,
+    moving,
+    casting,
+    discarding
+}
+
 /// <summary>
 /// represents a card being shown on the screen
 /// </summary>
@@ -53,21 +62,12 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
     /// <summary>
     /// returns, in world space, where floating combat text related to this card should spawn
     /// </summary>
-    public Vector2 combatTextPosition { get { return Camera.main.ScreenToWorldPoint ( idleLocation + new Vector2( (Screen.width / 2), (Screen.height - (cardFront.rectTransform.rect.height / 4) ) ) ); } }
+    public Vector2 combatTextPosition { get { return Camera.main.ScreenToWorldPoint(idleLocation + new Vector2((Screen.width / 2), (Screen.height - (cardFront.rectTransform.rect.height / 4)))); } }
 
-    public virtual bool    discardable { get { return true; } } //returns whether or not this card can be discarded.  Almost all can.
-    public abstract string cardName    { get; }                 //returns the name of the card
+    public virtual bool discardable { get { return true; } } //returns whether or not this card can be discarded.  Almost all can.
+    public abstract string cardName { get; }                 //returns the name of the card
 
-    //simple FSM
-    protected enum State
-    {
-        idle,
-        moving,
-        casting,
-        discarding
-    }
-
-    [Show] protected State state;
+    [Show] public CardState state { get; protected set; }
 
     // Use this for initialization
     protected virtual void Awake()
@@ -77,7 +77,7 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
         targetLocation = idleLocation;
 
         //start idle and face down
-        state = State.idle;
+        state = CardState.idle;
         faceDown = true;
         cardBack.enabled = true;
 
@@ -99,7 +99,7 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
     protected virtual void Update()
     {
         //if idle, there is nothing to do.  If discarding, then DiscardCoroutine is doing the work
-        if (state == State.idle || state == State.discarding)
+        if (state == CardState.idle || state == CardState.discarding)
             return;
 
         //calculate new position
@@ -111,7 +111,7 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
 
         //go idle if reached target
         if (newPosition == targetLocation)
-            state = State.idle;
+            state = CardState.idle;
     }
 
     /// <summary>
@@ -121,7 +121,7 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
     public IEnumerator waitForIdle()
     {
         yield return null;
-        while (state != State.idle)
+        while (state != CardState.idle)
             yield return null;
     }
 
@@ -131,7 +131,7 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
     public IEnumerator waitForIdleOrDiscarding()
     {
         yield return null;
-        while ((state != State.idle) && (state != State.discarding))
+        while ((state != CardState.idle) && (state != CardState.discarding))
             yield return null;
     }
 
@@ -146,10 +146,10 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
         {
             yield return null;
 
-            if (state == State.discarding)
+            if (state == CardState.discarding)
                 isReady = true;
 
-            if (state == State.idle)
+            if (state == CardState.idle)
                 if (isTurning == false)
                     if (isScaling == false)
                         isReady = true;
@@ -243,7 +243,7 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
     public virtual void OnPointerEnter(PointerEventData eventData)
     {
         //ignore this event if hidden, discarding, or if a message is being shown to the player
-        if (hidden || (state == State.discarding) || MessageHandlerScript.instance.messageBeingShown)
+        if (hidden || (state == CardState.discarding) || MessageHandlerScript.instance.messageBeingShown)
             return;
 
         siblingIndex = transform.GetSiblingIndex(); //save the current index for later
@@ -252,7 +252,7 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
         //tell card to move when moused over
         targetLocation = idleLocation;
         targetLocation.y += GetComponent<RectTransform>().rect.height * mouseOverMod;
-        state = State.moving;
+        state = CardState.moving;
     }
 
     /// <summary>
@@ -261,14 +261,14 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
     public virtual void OnPointerExit(PointerEventData eventData)
     {
         //ignore this event if hidden or discarding
-        if (hidden || (state == State.discarding))
+        if (hidden || (state == CardState.discarding))
             return;
 
         transform.SetSiblingIndex(siblingIndex); //restore to old position in the draw order
 
         //tell card to reset when no longer moused over
         targetLocation = idleLocation;
-        state = State.moving;
+        state = CardState.moving;
     }
 
     public abstract void Hide();
@@ -280,12 +280,12 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
             return;
 
         //ignore if discarding
-        if (state == State.discarding)
+        if (state == CardState.discarding)
             return;
 
         //go back to the idle location
         targetLocation = idleLocation;
-        state = State.moving;
+        state = CardState.moving;
 
         hidden = false;//clear hidden flag
     }
@@ -303,9 +303,9 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
         idleLocation = newIdle; //update location
 
         //if card is not hidden or dying, tell it to relocate itself
-        if ((hidden == false) && (state != State.discarding))
+        if ((hidden == false) && (state != CardState.discarding))
         {
-            state = State.moving;
+            state = CardState.moving;
             targetLocation = idleLocation;
         }
     }

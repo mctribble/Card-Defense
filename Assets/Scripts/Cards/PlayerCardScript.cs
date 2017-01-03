@@ -273,7 +273,7 @@ public class PlayerCardScript : CardScript, IPointerClickHandler
     /// </summary>
     public override IEnumerator Discard()
     {
-        state = State.discarding; //set the state so that other behavior on this card gets suspended
+        state = CardState.discarding; //set the state so that other behavior on this card gets suspended
         //remove ourselves from the hand, if present
         if (hand != null)
             hand.SendMessage("Discard", this);
@@ -395,7 +395,7 @@ public class PlayerCardScript : CardScript, IPointerClickHandler
             //    foreach (GameObject tower in GameObject.FindGameObjectsWithTag("Tower"))
             //        tower.SendMessage("hideUpgradeInfo");
 
-            state = State.idle;  //reset state
+            state = CardState.idle;  //reset state
                                  //send a message to all cards except this one to tell them to come back out
             foreach (GameObject c in cards)
                 if (c != this.gameObject)
@@ -406,11 +406,11 @@ public class PlayerCardScript : CardScript, IPointerClickHandler
         }
 
         //ignore this event if hidden or discarding
-        if (hidden || (state == State.discarding))
+        if (hidden || (state == CardState.discarding))
             yield break;
 
         //start casting when clicked
-        state = State.casting;
+        state = CardState.casting;
 
         //send a message to all cards except this one to tell them to hide
         foreach (GameObject c in cards)
@@ -503,14 +503,14 @@ public class PlayerCardScript : CardScript, IPointerClickHandler
     public override void Hide()
     {
         //ignore if discarding
-        if (state == State.discarding)
+        if (state == CardState.discarding)
             return;
 
         //cards hide just underneath the center of the screen
         targetLocation.x = 0;
         targetLocation.y = transform.root.GetComponent<RectTransform>().rect.yMin - 200;
 
-        state = State.moving;       //mark this card as in motion
+        state = CardState.moving;       //mark this card as in motion
         hidden = true;              //mark this card as hidden
     }
 

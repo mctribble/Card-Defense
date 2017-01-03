@@ -30,7 +30,7 @@ public class HandScript : BaseBehaviour
     public HandFaction handOwner;        //indicates ownership of the hand
     public int         startingHandSize; //cards the player starts with
     public int         maximumHandSize;  //max number of cards the player can have
-    public int         currentHandSize;  //number of cards currently in hand
+    public int         currentHandSize {get { return cards.Count; } }  //number of cards currently in hand
     public bool        handHidden;       //whether or not the hand is hidden
     public CardScript  selectedCard;     //holds return value for selectCard() coroutine
 
@@ -44,15 +44,14 @@ public class HandScript : BaseBehaviour
     public float discardDelay;  //delay given between discarding multiple cards
     
     //private info
-    private CardScript[] cards; //stores the number of cards
-    private bool busy;          //if true, we are currently drawing/discarding and we need to wait before starting another such operation
+    private List<CardScript> cards; //stores the number of cards
+    private bool busy;              //if true, we are currently drawing/discarding and we need to wait before starting another such operation
 
     // Use this for initialization
     // it is a coroutine for animation purposes
     private IEnumerator Start()
     {
-        cards = new CardScript[maximumHandSize]; //construct array to hold the hand
-        currentHandSize = 0; //no cards yet
+        cards = new List<CardScript>(); //construct array to hold the hand
         busy = false; //we are not busy
         selectedCard = null; //no selection yet
 
@@ -87,7 +86,7 @@ public class HandScript : BaseBehaviour
 
         //generate the "gather power" token if this is a player hand
         if (handOwner == HandFaction.player)
-            drawToken("Gather Power");
+            drawToken("Gather Power", true, true, true, true);
 
         yield break;
     }
@@ -112,16 +111,8 @@ public class HandScript : BaseBehaviour
     /// </summary>
     /// <param name="tokenName">name of the token to create</param>
     /// <see cref="drawCard(bool, bool, bool, bool, PlayerCard?)"/>
-    public void drawToken(string tokenName, bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true) { StartCoroutine(drawTokenCoroutine(tokenName, flipOver, turnToIdentity, scaleToIdentity)); }
-    public IEnumerator drawTokenCoroutine(string tokenName, bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true)
+    public void drawToken(string tokenName, bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true, bool ignoreHandCap = false) 
     {
-        //wait until we arent busy
-        do
-        {
-            yield return null;
-        } while (busy);
-        busy = true;
-
         //create card
         PlayerCard token = new PlayerCard();
         token.data = CardTypeManagerScript.instance.getCardByName(tokenName);
@@ -131,8 +122,7 @@ public class HandScript : BaseBehaviour
         token.data.isToken = true;
 
         //draw it
-        drawCard(flipOver, turnToIdentity, scaleToIdentity, false, token);
-        busy = false;
+        drawCard(flipOver, turnToIdentity, scaleToIdentity, false, token, ignoreHandCap);
     }
 
     /// <summary>
@@ -168,14 +158,15 @@ public class HandScript : BaseBehaviour
     /// <param name="scaleToIdentity">scaleToIdentity: card should scale itself to (1,1,1) while moving</param>
     /// <param name="drawSurvivorWave">drawSurvivorWave: (enemy hands only) sets up the new card with a survivor wave instead of a wave from the deck</param>
     /// <param name="cardToDraw">if this is not null, then the given PlayerCard is drawn instead of fetching one from the deck.  This parameter is ignored in enemy hands since they draw WaveData's instead.</param>
-    public void drawCard(bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true, bool drawSurvivorWave = false, PlayerCard? cardToDraw = null)
+    /// <param name="ignoreHandCap">if this is true, the hand can draw even if it is full</param>
+    public void drawCard(bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true, bool drawSurvivorWave = false, PlayerCard? cardToDraw = null, bool ignoreHandCap = false)
     {
         //unsupported for selection hands, since those are used as a sort of menu
         if (handOwner == HandFaction.selection)
             throw new System.NotImplementedException();
 
         //bail if reached max
-        if (currentHandSize == maximumHandSize)
+        if ( (currentHandSize == maximumHandSize) && (ignoreHandCap == false) )
         {
             Debug.Log("Can't draw: hand is full.");
             return;
@@ -263,27 +254,25 @@ public class HandScript : BaseBehaviour
     /// <param name="drawSurvivorWave">drawSurvivorWave: (enemy hands only) sets up the new card with a survivor wave instead of a wave from the deck</param>
     public void addCard(CardScript cardToAdd, bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true)
     {
-        cards[currentHandSize] = cardToAdd; //add the card to the hand
+        cards.Add(cardToAdd); //add the card to the hand
 
-        cards[currentHandSize].SendMessage("SetHand", gameObject);     //tell the card which hand owns it
+        cardToAdd.SendMessage("SetHand", gameObject);     //tell the card which hand owns it
 
         //if set, tell it to turn upright
         if (turnToIdentity)
-            cards[currentHandSize].SendMessage("turnToQuaternion", Quaternion.identity);
+            cardToAdd.SendMessage("turnToQuaternion", Quaternion.identity);
 
         //if set, tell it to scale to its normal size
         if (scaleToIdentity)
-            cards[currentHandSize].SendMessage("scaleToVector", Vector3.one);
+            cardToAdd.SendMessage("scaleToVector", Vector3.one);
 
         //if set, tell it to flip face up after its done moving
         if (flipOver)
-            cards[currentHandSize].SendMessage("flipFaceUpWhenIdle");
+            cardToAdd.SendMessage("flipFaceUpWhenIdle");
 
         //if the hand is currently hidden, tell the new card to hide itself
         if (handHidden)
-            cards[currentHandSize].SendMessage("Hide");
-
-        currentHandSize++;  //increment card count
+            cardToAdd.SendMessage("Hide");
 
         //rearrange cards
         updateCardIdleLocations(); //rearrange the cards
@@ -307,14 +296,6 @@ public class HandScript : BaseBehaviour
     /// </summary>
     public IEnumerator drawCards(int drawCount, bool delay = true)
     {
-        //wait until we arent busy
-        do
-        {
-            yield return null;
-        }
-        while (busy);
-        busy = true;
-
         //draw the cards
         while (drawCount > 0)
         {
@@ -330,31 +311,13 @@ public class HandScript : BaseBehaviour
             yield break;
 
         //wait for all cards to be idle
-        if (handOwner == HandFaction.player)
-        {
-            foreach (CardScript c in cards)
-            {
-                if (c == null) continue;
-                CardScript waitCard = c;
-                yield return StartCoroutine(waitCard.waitForIdleOrDiscarding());
-            }
-        }
-        else
-        {
-            foreach (CardScript c in cards)
-            {
-                if (c == null) continue;
-                EnemyCardScript waitCard = c.GetComponent<EnemyCardScript>();
-                yield return StartCoroutine(waitCard.waitForIdleOrDiscarding());
-            }
-        }
+        while (cards.All(c => (c.state == CardState.idle) || (c.state == CardState.discarding)))
+            yield return null;
 
         //flip the entire hand face up at once
         foreach (CardScript c in cards)
-            if (c != null)
-                c.SendMessage("flipFaceUp");
+            c.SendMessage("flipFaceUp");
 
-        busy = false;
         yield break;
     }
 
@@ -554,30 +517,15 @@ public class HandScript : BaseBehaviour
     /// </summary>
     public void Discard(CardScript card)
     {
-        //locate the card to remove
-        int index = -1;
-        for (int c = 0; c < currentHandSize; c++)
-        {
-            if (cards[c] == card)
-            {
-                index = c;
-                break;
-            }
-        }
+        bool result = cards.Remove(card);
 
         //bail and print warning if that card didnt exist
-        if (index == -1)
+        if (result == false)
         {
             Debug.LogWarning("Attempted to discard something that doesn't exist!");
             return;
         }
 
-        //move the others down the list
-        for (int c = index; c < currentHandSize - 1; c++)
-            cards[c] = cards[c+1];
-        cards[maximumHandSize-1] = null; //the last slot is now guaranteed to be empty
-
-        currentHandSize--; //decrement card count
         updateCardIdleLocations(); //rearrange the hand
     }
 

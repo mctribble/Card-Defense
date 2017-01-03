@@ -119,7 +119,7 @@ public class CardPreviewScript : CardScript, IPointerClickHandler
     public override IEnumerator Discard()
     {
         //just destroy self with no animation
-        state = State.discarding;
+        state = CardState.discarding;
         hand.SendMessage("Discard", this);
         Destroy(gameObject);
         yield break;

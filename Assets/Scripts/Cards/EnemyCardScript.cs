@@ -311,7 +311,7 @@ public class EnemyCardScript : CardScript
         if (gameObject == null)
             yield break;
 
-        state = State.discarding;
+        state = CardState.discarding;
         hand.SendMessage("Discard", this);
 
         //move to discard location
@@ -359,14 +359,14 @@ public class EnemyCardScript : CardScript
     public override void Hide()
     {
         //ignore if discarding
-        if (state == State.discarding)
+        if (state == CardState.discarding)
             return;
 
         //cards hide just above the center of the screen
         targetLocation.x = 0;
         targetLocation.y = transform.root.GetComponent<RectTransform>().rect.yMax + 200;
 
-        state = State.moving;       //mark this card as in motion
+        state = CardState.moving;       //mark this card as in motion
         hidden = true;              //mark this card as hidden
     }
 
