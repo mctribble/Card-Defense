@@ -141,19 +141,23 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
     /// </summary>
     public IEnumerator waitForReady()
     {
-        bool isReady = false;
-        while (isReady == false)
-        {
+        while (isReady() == false)
             yield return null;
+    }
 
-            if (state == CardState.discarding)
-                isReady = true;
+    //returns whether or not the card is "ready".
+    //A card is deemed ready for movement if it is idle and not already undergoing some form of rotation/scaling, or if it is being discarded
+    public bool isReady()
+    {
+        if (state == CardState.discarding)
+            return true;
 
-            if (state == CardState.idle)
-                if (isTurning == false)
-                    if (isScaling == false)
-                        isReady = true;
-        }
+        if (state == CardState.idle)
+            if (isTurning == false)
+                if (isScaling == false)
+                    return true;
+
+        return false;
     }
 
     //card flip helpers

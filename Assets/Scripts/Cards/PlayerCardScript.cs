@@ -428,9 +428,9 @@ public class PlayerCardScript : CardScript, IPointerClickHandler
 
                 if (e.triggersAs(EffectType.wave))
                 {
-                    HandScript.enemyHand.applyWaveEffect((IEffectWave)e);
+                    EnemyHandScript.instance.applyWaveEffect((IEffectWave)e);
                     LevelManagerScript.instance.UpdateWaveStats();
-                    HandScript.enemyHand.updateEnemyCards();
+                    EnemyHandScript.instance.updateEnemyCards();
                     effectApplied = true;
                 }
 

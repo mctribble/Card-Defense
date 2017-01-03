@@ -41,7 +41,7 @@ public class EffectConjureSpellCard : BaseEffectInstant
         }
 
         //"draw" them
-        HandScript.playerHand.StartCoroutine(HandScript.playerHand.drawCards(conjuredCards.ToArray(), true));
+        PlayerHandScript.instance.StartCoroutine(PlayerHandScript.instance.drawCards(conjuredCards.ToArray(), true));
     }
 }
 
@@ -72,7 +72,7 @@ public class EffectConjureTowerCard : BaseEffectInstant
         }
 
         //"draw" them
-        HandScript.playerHand.StartCoroutine(HandScript.playerHand.drawCards(conjuredCards.ToArray(), true));
+        PlayerHandScript.instance.StartCoroutine(PlayerHandScript.instance.drawCards(conjuredCards.ToArray(), true));
     }
 }
 
@@ -103,7 +103,7 @@ public class EffectConjureUpgradeCard : BaseEffectInstant
         }
 
         //"draw" them
-        HandScript.playerHand.StartCoroutine(HandScript.playerHand.drawCards(conjuredCards.ToArray(), true));
+        PlayerHandScript.instance.StartCoroutine(PlayerHandScript.instance.drawCards(conjuredCards.ToArray(), true));
     }
 }
 
@@ -113,7 +113,7 @@ public class EffectDrawCard : BaseEffectInstant
     [Hide] public override string Name { get { return "Draw " + strength + " cards"; } } //returns name and strength
     [Show] public override string XMLName { get { return "drawCard"; } } //name used to refer to this effect in XML
 
-    public override void trigger() { HandScript.playerHand.StartCoroutine(HandScript.playerHand.drawCards( Mathf.FloorToInt(strength) ) ); }
+    public override void trigger() { PlayerHandScript.instance.StartCoroutine(PlayerHandScript.instance.drawCards( Mathf.FloorToInt(strength) ) ); }
 }
 
 //draws x enemy cards
@@ -122,7 +122,7 @@ public class EffectDrawEnemyCard : BaseEffectInstant
     [Hide] public override string Name { get { return "Draw " + strength + " enemy cards"; } } //returns name and strength
     [Show] public override string XMLName { get { return "drawEnemyCard"; } } //name used to refer to this effect in XML
 
-    public override void trigger() { HandScript.enemyHand.StartCoroutine(HandScript.enemyHand.drawCards( Mathf.FloorToInt(strength) ) ); }
+    public override void trigger() { EnemyHandScript.instance.StartCoroutine(EnemyHandScript.instance.drawCards( Mathf.FloorToInt(strength) ) ); }
 }
 
 //player draws X spells from their deck.  if there are not enough, "Improvised Spell" tokens are created instead.
@@ -160,7 +160,7 @@ public class EffectDrawSpellCard : BaseEffectInstant
         }
 
         //tell the hand to draw these specific Cards.
-        HandScript.playerHand.StartCoroutine(HandScript.playerHand.drawCards( cards ) );
+        PlayerHandScript.instance.StartCoroutine(PlayerHandScript.instance.drawCards( cards ) );
     }
 }
 
@@ -199,7 +199,7 @@ public class EffectDrawTowerCard : BaseEffectInstant
         }
 
         //tell the hand to draw these specific Cards.
-        HandScript.playerHand.StartCoroutine(HandScript.playerHand.drawCards( cards ) );
+        PlayerHandScript.instance.StartCoroutine(PlayerHandScript.instance.drawCards( cards ) );
     }
 }
 
@@ -238,7 +238,7 @@ public class EffectDrawUpgradeCard : BaseEffectInstant
         }
 
         //tell the hand to draw these specific Cards.
-        HandScript.playerHand.StartCoroutine(HandScript.playerHand.drawCards(cards));
+        PlayerHandScript.instance.StartCoroutine(PlayerHandScript.instance.drawCards(cards));
     }
 }
 

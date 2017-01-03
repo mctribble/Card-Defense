@@ -569,7 +569,7 @@ public class DeckManagerScript : BaseBehaviour
                 //spawn a card and kill it immediately to report ch destruction to the player
                 CardScript deadCard = Instantiate(playerCardPrefab).GetComponent<CardScript>(); //create the card
 
-               deadCard.transform.SetParent(HandScript.playerHand.transform.root); //declare the new card a child of the UI Canvas, which can be found at the root of the tree containing the player hand
+               deadCard.transform.SetParent(PlayerHandScript.instance.transform.root); //declare the new card a child of the UI Canvas, which can be found at the root of the tree containing the player hand
 
                 //position card to match up with the deck image we are spawning at
                 RectTransform spawnT = deckImage.rectTransform;
@@ -673,7 +673,7 @@ public class DeckManagerScript : BaseBehaviour
         }
 
         //delegate to the hand object to deal damage
-        int damageDealt = playerHand.Damage(d);
+        int damageDealt = PlayerHandScript.instance.Damage(d);
 
         if (damageDealt < d)
         {

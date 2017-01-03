@@ -524,7 +524,7 @@ public class LevelManagerScript : BaseBehaviour
     private void Update()
     {
         //spacebar starts wave
-        if (Input.GetKeyUp(KeyCode.Space) && wavesSpawning == 0 && HandScript.enemyHand.currentHandSize > 0)
+        if (Input.GetKeyUp(KeyCode.Space) && wavesSpawning == 0 && EnemyHandScript.instance.currentHandSize > 0)
         {
             StartCoroutine("spawnWaves");
         }
@@ -565,7 +565,7 @@ public class LevelManagerScript : BaseBehaviour
     private IEnumerator spawnWaves()
     {
         //start the waves
-        foreach (WaveData d in HandScript.enemyHand.IncomingWaves)
+        foreach (WaveData d in EnemyHandScript.instance.IncomingWaves)
             StartCoroutine(spawnWave(d));
 
         //wait for them to finish
@@ -581,7 +581,7 @@ public class LevelManagerScript : BaseBehaviour
                     break;
         }
 
-        HandScript.playerHand.SendMessage("Show"); //show the hand
+        PlayerHandScript.instance.SendMessage("Show"); //show the hand
 
         //find all towers in the level and tell them a wave ended
         GameObject[] towers = GameObject.FindGameObjectsWithTag("Tower");
@@ -592,16 +592,16 @@ public class LevelManagerScript : BaseBehaviour
 
         //draw
         yield return new WaitForSeconds(1.0f);
-        HandScript.playerHand.drawCard();
+        PlayerHandScript.instance.drawCard();
 
         //if there are any survivors, draw a new survivor card to represent them
         if ((EnemyManagerScript.instance.survivors != null) && (EnemyManagerScript.instance.survivors.Count > 0))
         {
-            HandScript.enemyHand.drawCard(true, true, true, true);
+            EnemyHandScript.instance.drawCard(true, true, true, true);
         }
         else if ( //if there were no survivors... 
                   (wavesInDeck == 0) && //and there are no more enemies in the deck... 
-                  (HandScript.enemyHand.currentHandSize == 0) && //and the enemy hand is empty...
+                  (EnemyHandScript.instance.currentHandSize == 0) && //and the enemy hand is empty...
                   (LevelManagerScript.instance.endurance == false) ) //and we are not in endurance...
         {
             //then the player wins!
@@ -624,7 +624,7 @@ public class LevelManagerScript : BaseBehaviour
         }
 
         //draw a new enemy card
-        HandScript.enemyHand.drawCard();
+        EnemyHandScript.instance.drawCard();
 
         //fire event
         RoundOverEvent();
@@ -645,7 +645,7 @@ public class LevelManagerScript : BaseBehaviour
         int   spawnerCount = spawnerObjects.Count;          //number of spawners
         float timeBetweenSpawns = d.time / totalSpawnCount; //delay between each spawn
 
-        HandScript.playerHand.SendMessage("Hide"); //hide the hand
+        PlayerHandScript.instance.SendMessage("Hide"); //hide the hand
 
         //slight delay before spawning
         yield return new WaitForSeconds(1.0f);
@@ -688,7 +688,7 @@ public class LevelManagerScript : BaseBehaviour
         wavesSpawning--;
 
         //discard the card associated with this wave
-        HandScript.enemyHand.discardWave(d);
+        EnemyHandScript.instance.discardWave(d);
 
         //count this as a cleared wave for scoring (this counts waves that still had surviving enemies, but does not count waves made up from those survivors.)
         if (d.isSurvivorWave == false)
@@ -751,9 +751,9 @@ public class LevelManagerScript : BaseBehaviour
     /// </summary>
     public void UpdateWaveStats()
     {
-        HandScript.enemyHand.UpdateWaveStats();
-        totalSpawnCount = HandScript.enemyHand.spawnCount;
-        totalRemainingHealth = HandScript.enemyHand.totalRemainingHealth;
+        EnemyHandScript.instance.UpdateWaveStats();
+        totalSpawnCount = EnemyHandScript.instance.spawnCount;
+        totalRemainingHealth = EnemyHandScript.instance.totalRemainingHealth;
         totalSpawnedThisWave = 0;
     }
 
@@ -819,9 +819,9 @@ public class LevelManagerScript : BaseBehaviour
         data.waves.RemoveAll(wd => wd.isRandomWave);
 
         //dump the hands
-        HandScript.playerHand.SendMessage("Show");
-        yield return StartCoroutine(HandScript.playerHand.discardRandomCards(null, 999, false));
-        yield return StartCoroutine(HandScript.enemyHand.discardRandomCards(null, 999, false));
+        PlayerHandScript.instance.SendMessage("Show");
+        yield return StartCoroutine(PlayerHandScript.instance.discardRandomCards(null, 999, false));
+        yield return StartCoroutine(EnemyHandScript.instance.discardRandomCards(null, 999, false));
 
         Debug.Log("Reloading Level...");
 
@@ -830,8 +830,8 @@ public class LevelManagerScript : BaseBehaviour
         DeckManagerScript.instance.SendMessage("Reset");
         ScoreManagerScript.instance.SendMessage("Reset");
         PathManagerScript.instance.SendMessage("Reset");
-        HandScript.playerHand.SendMessage("Reset");
-        HandScript.enemyHand.SendMessage("Reset");
+        PlayerHandScript.instance.SendMessage("Reset");
+        EnemyHandScript.instance.SendMessage("Reset");
 
         //reload the level
         Awake();
@@ -849,7 +849,7 @@ public class LevelManagerScript : BaseBehaviour
         if (pathTooltip == null)
         {
             pathTooltip = GameObject.Instantiate(pathTooltipPrefab);
-            pathTooltip.transform.SetParent(HandScript.playerHand.transform.root); //put it in the UI Canvas, found through the player hand since it must also be in the UI Canvas.
+            pathTooltip.transform.SetParent(PlayerHandScript.instance.transform.root); //put it in the UI Canvas, found through the player hand since it must also be in the UI Canvas.
         }
         else
         {

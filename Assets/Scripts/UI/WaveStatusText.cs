@@ -46,7 +46,7 @@ public class WaveStatusText : BaseBehaviour
         {
             //wave has not started or is still spawning: "?????? incoming (???s)"
             enemyStatText.text = stillToSpawn + " incoming (" +
-            HandScript.enemyHand.longestTime.ToString("F1") + "s)";
+            EnemyHandScript.instance.longestTime.ToString("F1") + "s)";
         }
         else
         {
