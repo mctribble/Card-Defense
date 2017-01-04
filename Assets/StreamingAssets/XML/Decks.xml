@@ -46,14 +46,13 @@
         <Card name="Black Plague Tower" count="2" />
         <Card name="Challenger Tower" count="1" />
         <Card name="Enrage" count="3" />
-        <Card name="Heavy Tower" count="4" />
-        <Card name="Heavy Upgrade" count="6" />
-        <Card name="Light Shield" count="3" />
+        <Card name="AOE Tower" count="4" />
+        <Card name="Light Shield" count="5" />
         <Card name="Mouse Tower" count="5" />
         <Card name="Recycle" count="3" />
         <Card name="Fast Tower" count="4" />
         <Card name="Fast Upgrade" count="6" />
-        <Card name="Range Upgrade" count="2" />
+        <Card name="Range Upgrade" count="4" />
         <Card name="Basic Upgrade" count="6" />
       </Cards>
     </Deck>

@@ -5,38 +5,38 @@
   <randomWaveCount>25</randomWaveCount>
   <Waves />
   <Spawners>
-    <Spawner spawnX="6" spawnY="-6" />
+    <Spawner spawnX="0.5" spawnY="-8" />
   </Spawners>
   <PathSegments>
-    <Segment startX="6" startY="-6" endX="12" endY="-6" />
-    <Segment startX="12" startY="-6" endX="12" endY="-5" />
-    <Segment startX="12" startY="-5" endX="6" endY="-5" />
-    <Segment startX="6" startY="-5" endX="6" endY="-3" />
-    <Segment startX="6" startY="-3" endX="8" endY="-3" />
-    <Segment startX="8" startY="-3" endX="8" endY="-2" />
-    <Segment startX="8" startY="-2" endX="10" endY="-2" />
-    <Segment startX="10" startY="-2" endX="10" endY="-1" />
-    <Segment startX="10" startY="-1" endX="12" endY="-1" />
-    <Segment startX="12" startY="-1" endX="12" endY="1" />
-    <Segment startX="12" startY="1" endX="13" endY="1" />
-    <Segment startX="13" startY="1" endX="13" endY="3" />
-    <Segment startX="13" startY="3" endX="14" endY="3" />
-    <Segment startX="14" startY="3" endX="14" endY="10" />
-    <Segment startX="14" startY="10" endX="-3" endY="10" />
-    <Segment startX="-3" startY="10" endX="-3" endY="3" />
-    <Segment startX="-3" startY="3" endX="-2" endY="3" />
-    <Segment startX="-2" startY="3" endX="-2" endY="1" />
-    <Segment startX="-2" startY="1" endX="-1" endY="1" />
-    <Segment startX="-1" startY="1" endX="-1" endY="-1" />
-    <Segment startX="-1" startY="-1" endX="1" endY="-1" />
-    <Segment startX="1" startY="-1" endX="1" endY="-2" />
-    <Segment startX="1" startY="-2" endX="3" endY="-2" />
-    <Segment startX="3" startY="-2" endX="3" endY="-3" />
-    <Segment startX="3" startY="-3" endX="5" endY="-3" />
-    <Segment startX="5" startY="-3" endX="5" endY="-5" />
-    <Segment startX="5" startY="-5" endX="-1" endY="-5" />
-    <Segment startX="-1" startY="-5" endX="-1" endY="-6" />
-    <Segment startX="-1" startY="-6" endX="5" endY="-6" />
+    <Segment startX="0.5" startY="-8" endX="6.5" endY="-8" />
+    <Segment startX="6.5" startY="-8" endX="6.5" endY="-7" />
+    <Segment startX="6.5" startY="-7" endX="0.5" endY="-7" />
+    <Segment startX="0.5" startY="-7" endX="0.5" endY="-5" />
+    <Segment startX="0.5" startY="-5" endX="2.5" endY="-5" />
+    <Segment startX="2.5" startY="-5" endX="2.5" endY="-4" />
+    <Segment startX="2.5" startY="-4" endX="4.5" endY="-4" />
+    <Segment startX="4.5" startY="-4" endX="4.5" endY="-3" />
+    <Segment startX="4.5" startY="-3" endX="6.5" endY="-3" />
+    <Segment startX="6.5" startY="-3" endX="6.5" endY="-1" />
+    <Segment startX="6.5" startY="-1" endX="7.5" endY="-1" />
+    <Segment startX="7.5" startY="-1" endX="7.5" endY="1" />
+    <Segment startX="7.5" startY="1" endX="8.5" endY="1" />
+    <Segment startX="8.5" startY="1" endX="8.5" endY="8" />
+    <Segment startX="8.5" startY="8" endX="-8.5" endY="8" />
+    <Segment startX="-8.5" startY="8" endX="-8.5" endY="1" />
+    <Segment startX="-8.5" startY="1" endX="-7.5" endY="1" />
+    <Segment startX="-7.5" startY="1" endX="-7.5" endY="-1" />
+    <Segment startX="-7.5" startY="-1" endX="-6.5" endY="-1" />
+    <Segment startX="-6.5" startY="-1" endX="-6.5" endY="-3" />
+    <Segment startX="-6.5" startY="-3" endX="-4.5" endY="-3" />
+    <Segment startX="-4.5" startY="-3" endX="-4.5" endY="-4" />
+    <Segment startX="-4.5" startY="-4" endX="-2.5" endY="-4" />
+    <Segment startX="-2.5" startY="-4" endX="-2.5" endY="-5" />
+    <Segment startX="-2.5" startY="-5" endX="-0.5" endY="-5" />
+    <Segment startX="-0.5" startY="-5" endX="-0.5" endY="-7" />
+    <Segment startX="-0.5" startY="-7" endX="-6.5" endY="-7" />
+    <Segment startX="-6.5" startY="-7" endX="-6.5" endY="-8" />
+    <Segment startX="-6.5" startY="-8" endX="-0.5" endY="-8" />
   </PathSegments>
   <Towers />
   <shuffleDeck>true</shuffleDeck>

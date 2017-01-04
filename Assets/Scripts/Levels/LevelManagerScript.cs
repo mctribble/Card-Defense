@@ -913,4 +913,40 @@ public class LevelManagerScript : BaseBehaviour
             Destroy(e);
         PathManagerScript.instance.SendMessage("Reset");
     }
+
+    /// <summary>
+    /// [DEV] shifts all paths, towers, and spawners in the level to recenter it around 0,0
+    /// </summary>
+    [Show] public void centerLevel()
+    {
+        //first, get our current center
+        Vector2 levelMidpoint = PathManagerScript.instance.levelBounds.center;
+
+        //if already at zero, we are done
+        if (levelMidpoint == Vector2.zero)
+        {
+            Debug.Log("Already centered.");
+            return;
+        }
+
+        //otherwise, adjust coordinates
+        Debug.Log("Moving all objects: " + (-levelMidpoint).ToString());
+        foreach (PathSegment ps in data.pathSegments)
+        {
+            ps.startPos -= levelMidpoint;
+            ps.endPos   -= levelMidpoint;
+        }
+
+        foreach (SpawnerData sd in data.spawners)
+            sd.spawnVec -= levelMidpoint;
+
+        foreach (PremadeTower pt in data.towers)
+        {
+            pt.x -= levelMidpoint.x;
+            pt.y -= levelMidpoint.y;
+        }
+
+        //reload everything
+        reloadLevel();
+    }
 }
