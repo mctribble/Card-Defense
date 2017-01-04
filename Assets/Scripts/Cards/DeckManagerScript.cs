@@ -270,7 +270,6 @@ public class DeckManagerScript : BaseBehaviour
     private bool shouldShowSettings() { return !Application.isPlaying; }
     [VisibleWhen("shouldShowSettings")] public static     DeckManagerScript instance; //singleton instance
     [VisibleWhen("shouldShowSettings")] public string     premadeDeckPath;            //location of premade deck file
-    [VisibleWhen("shouldShowSettings")] public HandScript playerHand;                 //reference to the player's hand, if present
 
     //casualty report settings: a new card is spawned, given these properties, then immediately discarded to report a card death to the player
     [VisibleWhen("shouldShowSettings")] public GameObject playerCardPrefab; //prefab to use when spawning
@@ -666,7 +665,7 @@ public class DeckManagerScript : BaseBehaviour
     public void DamageHand(int d)
     {
         //if the player doesnt have a hand, something is seriously wrong
-        if (playerHand == null)
+        if (PlayerHandScript.instance == null)
         {
             Debug.LogError("The player doesnt have a hand to damage!");
             return;
@@ -681,7 +680,7 @@ public class DeckManagerScript : BaseBehaviour
             Damage(d - damageDealt);
 
             //show the damage text for the excess right in the center of the area for the player's hand 
-            Vector3 textPos = Camera.main.ScreenToWorldPoint(playerHand.transform.position); 
+            Vector3 textPos = Camera.main.ScreenToWorldPoint(PlayerHandScript.instance.transform.position); 
             MessageHandlerScript.instance.spawnPlayerDamageText(textPos, (d - damageDealt));
         }
         else

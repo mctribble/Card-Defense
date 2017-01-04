@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
+  <difficulty>medium</difficulty>
+  <description>A nice place to try fighting large crowds for the fist time.</description>
+  <randomWaveCount>25</randomWaveCount>
+  <Waves />
+  <Spawners>
+    <Spawner spawnX="6" spawnY="-6" />
+  </Spawners>
+  <PathSegments>
+    <Segment startX="6" startY="-6" endX="12" endY="-6" />
+    <Segment startX="12" startY="-6" endX="12" endY="-5" />
+    <Segment startX="12" startY="-5" endX="6" endY="-5" />
+    <Segment startX="6" startY="-5" endX="6" endY="-3" />
+    <Segment startX="6" startY="-3" endX="8" endY="-3" />
+    <Segment startX="8" startY="-3" endX="8" endY="-2" />
+    <Segment startX="8" startY="-2" endX="10" endY="-2" />
+    <Segment startX="10" startY="-2" endX="10" endY="-1" />
+    <Segment startX="10" startY="-1" endX="12" endY="-1" />
+    <Segment startX="12" startY="-1" endX="12" endY="1" />
+    <Segment startX="12" startY="1" endX="13" endY="1" />
+    <Segment startX="13" startY="1" endX="13" endY="3" />
+    <Segment startX="13" startY="3" endX="14" endY="3" />
+    <Segment startX="14" startY="3" endX="14" endY="10" />
+    <Segment startX="14" startY="10" endX="-3" endY="10" />
+    <Segment startX="-3" startY="10" endX="-3" endY="3" />
+    <Segment startX="-3" startY="3" endX="-2" endY="3" />
+    <Segment startX="-2" startY="3" endX="-2" endY="1" />
+    <Segment startX="-2" startY="1" endX="-1" endY="1" />
+    <Segment startX="-1" startY="1" endX="-1" endY="-1" />
+    <Segment startX="-1" startY="-1" endX="1" endY="-1" />
+    <Segment startX="1" startY="-1" endX="1" endY="-2" />
+    <Segment startX="1" startY="-2" endX="3" endY="-2" />
+    <Segment startX="3" startY="-2" endX="3" endY="-3" />
+    <Segment startX="3" startY="-3" endX="5" endY="-3" />
+    <Segment startX="5" startY="-3" endX="5" endY="-5" />
+    <Segment startX="5" startY="-5" endX="-1" endY="-5" />
+    <Segment startX="-1" startY="-5" endX="-1" endY="-6" />
+    <Segment startX="-1" startY="-6" endX="5" endY="-6" />
+  </PathSegments>
+  <Towers />
+  <shuffleDeck>true</shuffleDeck>
+  <premadeDeckName>Challenger</premadeDeckName>
+</Level>

@@ -7,3 +7,4 @@ Short Circuit.xml
 Simplicity.xml
 Spiral Mountain.xml
 symmetry.xml
+Trophy.xml
