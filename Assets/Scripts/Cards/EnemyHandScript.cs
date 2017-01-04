@@ -46,7 +46,7 @@ public class EnemyHandScript : HandScript
         //bail if the relevant deck out of cards
         if (LevelManagerScript.instance.wavesInDeck == 0)
         {
-            if (drawSurvivorWave == false) //an empty enemy deck is fine if we're drawing a survivor wave instead of from the deck
+            if (drawSurvivorWave == false)  //an empty enemy deck is fine if we're drawing a survivor wave instead of from the deck
             {
                 if (LevelManagerScript.instance.endurance == false) //it is also fine in endurance
                 {
@@ -113,7 +113,7 @@ public class EnemyHandScript : HandScript
                 yield return new WaitForSeconds(drawDelay);
         }
 
-        //if the deck is empty, we may not be able to draw any cards.  bail if the hand is still empty at this point.
+        //if the deck is empty, we may not be able to draw any cards.  bail if the hand is still empty at this point
         if (currentHandSize == 0)
             yield break;
 

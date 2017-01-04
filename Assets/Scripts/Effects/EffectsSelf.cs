@@ -105,7 +105,8 @@ public class EffectReplaceRandomCard : BaseEffectSelf
     [Hide] public override string Name { get { return "Discard up to " + strength + " cards at random, and draw new ones to replace them"; } } //returns name and strength
     [Show] public override string XMLName { get { return "replaceRandomCard"; } } //name used to refer to this effect in XML
 
-    public override void trigger(ref PlayerCard card, GameObject card_gameObject)
+    public override void trigger(ref PlayerCard card, GameObject card_gameObject) { PlayerHandScript.instance.StartCoroutine(effectCoroutine(card, card_gameObject)); }
+    public IEnumerator effectCoroutine(PlayerCard card, GameObject card_gameObject)
     {
         int toReplace = Mathf.Min( Mathf.RoundToInt(strength), PlayerHandScript.instance.discardableCardCount-1);  //how many cards are being replaced
 
@@ -114,7 +115,8 @@ public class EffectReplaceRandomCard : BaseEffectSelf
         if (toReplace == PlayerHandScript.instance.currentHandSize - 1)
             applyDelay = false;
 
-        PlayerHandScript.instance.StartCoroutine(PlayerHandScript.instance.discardRandomCards(card_gameObject.GetComponent<CardScript>(), toReplace, applyDelay)); //discard toReplace random cards that are NOT this one (this card will be discarded regardless, since it was just played)
-        PlayerHandScript.instance.StartCoroutine(PlayerHandScript.instance.drawCards(toReplace, applyDelay)); //draw new cards to replace them
+        yield return PlayerHandScript.instance.StartCoroutine(PlayerHandScript.instance.discardRandomCards(card_gameObject.GetComponent<CardScript>(), toReplace, applyDelay)); //discard toReplace random cards that are NOT this one (this card will be discarded regardless, since it was just played)
+        yield return null;
+        yield return PlayerHandScript.instance.StartCoroutine(PlayerHandScript.instance.drawCards(toReplace, applyDelay)); //draw new cards to replace them
     }
 }
