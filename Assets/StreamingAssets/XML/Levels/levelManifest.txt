@@ -1,9 +1,11 @@
 Chain.xml
 Chokepoint.xml
+confusion.xml
 congestion.xml
 Divergence.xml
 Grid.xml
 parallel tasks.xml
+Psi.xml
 Short Circuit.xml
 Simplicity.xml
 Spiral Mountain.xml

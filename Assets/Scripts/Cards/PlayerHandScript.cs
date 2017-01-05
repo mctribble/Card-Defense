@@ -178,13 +178,9 @@ public class PlayerHandScript : HandScript
                 yield return new WaitForSeconds(drawDelay);
         }
 
-        //wait for all cards to be idle
-        foreach (CardScript c in cards)
-        {
-            if (c == null) continue;
-            CardScript waitCard = c;
-            yield return StartCoroutine(waitCard.waitForIdleOrDiscarding());
-        }
+        do
+            yield return null;
+        while (cards.Any(cs => (cs.state != CardState.idle) && (cs.state != CardState.discarding)));
 
         //flip the entire hand face up at once
         foreach (CardScript c in cards)

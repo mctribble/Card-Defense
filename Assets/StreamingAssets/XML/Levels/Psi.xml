@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
+  <difficulty>medium</difficulty>
+  <description>23rd letter of the greek alphabet</description>
+  <randomWaveCount>25</randomWaveCount>
+  <Waves />
+  <Spawners>
+    <Spawner spawnX="0" spawnY="-7" />
+  </Spawners>
+  <PathSegments>
+    <Segment startX="0" startY="-7" endX="0" endY="0" />
+    <Segment startX="0" startY="0" endX="-2" endY="0" />
+    <Segment startX="-2" startY="0" endX="-2" endY="1" />
+    <Segment startX="-2" startY="1" endX="-4" endY="1" />
+    <Segment startX="-4" startY="1" endX="-4" endY="3" />
+    <Segment startX="-4" startY="3" endX="-5" endY="3" />
+    <Segment startX="-5" startY="3" endX="-5" endY="7" />
+    <Segment startX="0" startY="0" endX="2" endY="0" />
+    <Segment startX="2" startY="0" endX="2" endY="1" />
+    <Segment startX="2" startY="1" endX="4" endY="1" />
+    <Segment startX="4" startY="1" endX="4" endY="3" />
+    <Segment startX="4" startY="3" endX="5" endY="3" />
+    <Segment startX="5" startY="3" endX="5" endY="7" />
+    <Segment startX="0" startY="0" endX="0" endY="7" />
+  </PathSegments>
+  <Towers />
+  <shuffleDeck>true</shuffleDeck>
+  <premadeDeckName>Conjuration</premadeDeckName>
+</Level>
