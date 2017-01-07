@@ -15,7 +15,7 @@ animated enemy sprites?
 content goals:
 enemies: 10/10  <<DONE!!>>
 levels:  13/30
-cards:   54/100 (+3 token)
+cards:   56/100 (+3 token)
 decks:   07/10
 ================================================================
 analytics:
