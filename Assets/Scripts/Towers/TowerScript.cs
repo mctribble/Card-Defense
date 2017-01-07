@@ -739,7 +739,7 @@ public class TowerScript : BaseBehaviour
     /// <summary>
     /// called when the tower is destroyed.  responsible for death effects
     /// </summary>
-    private void onDestroy()
+    private void OnDestroy()
     {
         //trigger effects
         if (effects != null)
