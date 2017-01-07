@@ -558,7 +558,7 @@ public class TowerScript : BaseBehaviour
         wavesRemaining += d.waveBonus;
 
         //set scale of range image
-        rangeImage.gameObject.GetComponent<RectTransform>().localScale = new Vector3(range, range, 1.0f);
+        updateRangeImage();
 
         //if the upgrade consumes a slot, then count it
         if (noUpgradeCost == false)
@@ -567,6 +567,11 @@ public class TowerScript : BaseBehaviour
         //update text
         UpdateTooltipText();
         updateLifespanText();
+    }
+
+    public void updateRangeImage()
+    {
+        rangeImage.gameObject.GetComponent<RectTransform>().localScale = new Vector3(range, range, 1.0f);
     }
 
     //helpers to call ShowUpgradeTooltip since unity SendMessage() doesn't understand default parameters
@@ -744,7 +749,7 @@ public class TowerScript : BaseBehaviour
     }
 
     //these update text associated with the tower when things change
-    private void UpdateTooltipText()
+    public void UpdateTooltipText()
     {
         tooltipText.text =
             towerName + "\n" +
@@ -769,7 +774,7 @@ public class TowerScript : BaseBehaviour
         //disable the upgrade range
         upgradeRangeImage.enabled = false;
     }
-    private void updateLifespanText()
+    public void updateLifespanText()
     {
         //show any stats that indicate when the tower will die
         if ((effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false))

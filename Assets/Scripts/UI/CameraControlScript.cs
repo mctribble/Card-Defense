@@ -137,10 +137,7 @@ public class CameraControlScript : BaseBehaviour
                 FileInfo levelFile = new FileInfo(levelName);
 
                 if (screenshotFile.LastWriteTime > levelFile.LastWriteTime)
-                {
-                    Debug.Log("Did not update screenshot because it is newer than the level file was last modified");
                     yield break;
-                }
             }
 
             //take the screenshot
@@ -151,6 +148,7 @@ public class CameraControlScript : BaseBehaviour
             Application.CaptureScreenshot(screenshotName);
             yield return null;
             UICanvas.enabled = true;
+            Debug.Log("level thumbnail updated.");
         }
         else
         {

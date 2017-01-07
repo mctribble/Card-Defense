@@ -32,6 +32,7 @@ public enum TargetingType
 /// everyRound      : triggers once every round (uses IEffectInstant)
 /// instant         : triggers instantly without the need for a target
 /// meta            : targets another effect.  These usually trigger in the same manner as their target
+/// misc            : does not fit cleanly into any category (ex: any of the Resonant effects that trigger under multiple conditions)
 /// overcharge      : triggers when a tower attacks with at least one full point of overcharge, before enemyDamaged effects
 /// periodic        : triggers on every update() call
 /// property        : is never triggered.  instead, other code tests whether or not it exists on a given object and behave accordingly
@@ -51,6 +52,7 @@ public enum EffectType
     everyRound,
     instant,
     meta,
+    misc,
     overcharge,
     periodic,
     property,

@@ -148,13 +148,35 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Resonant Tower" Charges="3" Art="Resonant_Tower.png" Tooltip="Tower_Diamond.png" Token="false">
-      <towerData Recharge="1" Range="3" Damage="15" Lifespan="4" UpgradeCap="3" Sprite="Tower_Diamond.png">
+    <Card Type="tower" Name="Resonant Tower (A)" Charges="3" Art="Resonant_Tower_A.png" Tooltip="Tower_Diamond.png" Token="false">
+      <towerData Recharge="2" Range="3" Damage="30" Lifespan="4" UpgradeCap="3" Sprite="Tower_Diamond.png">
         <towerColor r="1" g="1" b="1" a="1" />
       </towerData>
       <effectData>
         <Effects>
-          <Effect name="resonantTowerAttack" strength="1.25" argument="Resonant Tower" />
+          <Effect name="ResonantTowerAttackMult" strength="1.1" argument="Resonant" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="tower" Name="Resonant Tower (R)" Charges="3" Art="Resonant_Tower_R.png" Tooltip="Tower_Octagon.png" Token="false">
+      <towerData Recharge="1" Range="3" Damage="15" Lifespan="4" UpgradeCap="3" Sprite="Tower_Octagon.png">
+        <towerColor r="1" g="1" b="1" a="1" />
+      </towerData>
+      <effectData>
+        <Effects>
+          <Effect name="ResonantTowerRangeMod" strength="0.5" argument="Resonant" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="tower" Name="Resonant Tower (P)" Charges="3" Art="Resonant_Tower_P.png" Tooltip="Tower_Round.png" Token="false">
+      <towerData Recharge="1.5" Range="1" Damage="1" Lifespan="4" UpgradeCap="3" Sprite="Tower_Round.png">
+        <towerColor r="1" g="1" b="1" a="1" />
+      </towerData>
+      <effectData>
+        <Effects>
+          <Effect name="targetBurst" />
+          <Effect name="ResonantTowerAttackMod" strength="0.5" argument="Resonant" />
+          <Effect name="ResonantTowerRangeMod"  strength="0.25" argument="Resonant" />
         </Effects>
       </effectData>
     </Card>

@@ -40,6 +40,9 @@
     <Tower name="Mouse Tower" x="9" y="-6" />
     <Tower name="Ping Tower" x="9" y="-8" />
     <Tower name="Improvised Tower" x="5.5" y="-5.5" />
+    <Tower name="Resonant Tower (A)" x="5" y="-10" />
+    <Tower name="Resonant Tower (R)" x="5.5" y="-10" />
+    <Tower name="Resonant Tower (P)" x="6" y="-10" />
   </Towers>
   <shuffleDeck>true</shuffleDeck>
   <levelDeck name="Level Deck">
