@@ -41,13 +41,14 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
         using (FileStream stream = new FileStream(file.FullName, FileMode.Open))
             level = LevelData.Load(stream, file.Name); 
 
-        buttonText.text = file.Name;                                                     //set button text
-        buttonText.text = buttonText.text.Remove(buttonText.text.Length - 4);            //remove the '.xml' from the button text
-        buttonType = MenuButtonType.level;                                               //this is now a level button
+        buttonText.text = file.Name;       //set button text
+        levelButtonText();                 //set text for this button
+        buttonType = MenuButtonType.level; //this is now a level button
     }
 
     /// <summary>
-    /// the button is set up to correspond to the given REMOTE level file.  The web request does not need to be complete before calling
+    /// [COROUTINE] the button is set up to correspond to the given REMOTE level file.  The web request does not need to be complete before calling.
+    /// while loading, this will be a text button.  Once loading is complete, it becomes a level button.
     /// </summary>
     public IEnumerator setLevel(WWW request)
     {
@@ -92,9 +93,19 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
 
             //now we can finally setup the level button
             level = LevelData.Load(levelStream, fileName); //load the levelData
-            buttonText.text = fileName.Replace(".xml",""); //button text is the file name without extension
+            levelButtonText();                             //set text for this button
             buttonType = MenuButtonType.level;             //this is now a usable level button
         }
+    }
+
+    //sets text for a level button
+    private void levelButtonText()
+    {
+        buttonText.alignment = TextAnchor.MiddleLeft;
+        buttonText.text = "(" +
+                          (level.waves.Count + level.randomWaveCount).ToString("00") + " waves, " +
+                          level.towers.Count.ToString("00") + " towers" +
+                          ") " + level.fileName.Replace(".xml","");
     }
 
     /// <summary>

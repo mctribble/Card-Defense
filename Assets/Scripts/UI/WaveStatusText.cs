@@ -44,14 +44,13 @@ public class WaveStatusText : BaseBehaviour
         int stillToSpawn = LevelManagerScript.instance.SpawnCount - LevelManagerScript.instance.totalSpawnedThisWave;
         if (stillToSpawn > 0)
         {
-            //wave has not started or is still spawning: "?????? incoming (???s)"
-            enemyStatText.text = stillToSpawn + " incoming (" +
-            EnemyHandScript.instance.longestTime.ToString("F1") + "s)";
+            //wave has not started or is still spawning: "total: ??????"
+            enemyStatText.text = "total: " + stillToSpawn;
         }
         else
         {
-            //wave has finished spawning: "???? remain (????? health)"
-            enemyStatText.text = (EnemyManagerScript.instance.activeEnemies.Count) + " remain (" + LevelManagerScript.instance.totalRemainingHealth + " health)";
+            //wave has finished spawning: "???? remain"
+            enemyStatText.text = (EnemyManagerScript.instance.activeEnemies.Count) + " remain";
         }
 
         //if the game speed is not 1.0, add text to show what it is

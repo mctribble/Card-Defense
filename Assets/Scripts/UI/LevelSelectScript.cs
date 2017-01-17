@@ -13,14 +13,15 @@ using UnityEngine.Analytics;
 /// </summary>
 public class LevelSelectScript : BaseBehaviour
 {
-    public string       levelDir;     //directory levels are stored in
-    public string       modLevelDir;  //directory mod levels are stored in
-    public string       thumbnailDir; // where the level thumbnails are stored
-    public GameObject   buttonPrefab; //prefab used to create buttons
-    public GameObject   menuRoot;     //object to be destroyed when the menu is no longer needed
-    public Image        infoImage;    //image object to use for showing level information
-    public Text         infoText;     //text object to use for showing level information
-    public Text         menuText;     //text object to use for showing menu information
+    public string       levelDir;         //directory levels are stored in
+    public string       modLevelDir;      //directory mod levels are stored in
+    public string       thumbnailDir;     // where the level thumbnails are stored
+    public GameObject   buttonPrefab;     //prefab used to create buttons
+    public GameObject   menuHeaderPrefab; //prefab used to create menu headers
+    public GameObject   menuRoot;         //object to be destroyed when the menu is no longer needed
+    public Image        infoImage;        //image object to use for showing level information
+    public Text         infoText;         //text object to use for showing level information
+    public Text         menuText;         //text object to use for showing menu information
 
     //colors to be used on various types of buttons
     public Color        menuButtonColor;  //misc. menu buttons such as back, quit, etc.
@@ -33,6 +34,7 @@ public class LevelSelectScript : BaseBehaviour
 
     //list of created menu buttons
     private List<MenuButtonScript> menuButtons;
+    private List<MenuHeaderScript> menuHeaders;
 
     //temp storage for player menu selections
     private LevelData chosenLevel;
@@ -46,8 +48,9 @@ public class LevelSelectScript : BaseBehaviour
         float canvasHeight = Screen.height / transform.root.gameObject.GetComponent<Canvas>().transform.localScale.y;
         gameObject.GetComponentInParent<UnityEngine.UI.LayoutElement>().minHeight = canvasHeight - 50; //-50 is to make room for the menu label
 
-        //create an empty list to hold the buttons in
+        //create empty lists to hold the menu items in
         menuButtons = new List<MenuButtonScript>();
+        menuHeaders = new List<MenuHeaderScript>();
 
         //test if data persistence is working in webGL builds
         if (Application.platform == RuntimePlatform.WebGLPlayer)
@@ -81,71 +84,112 @@ public class LevelSelectScript : BaseBehaviour
     /// </summary>
     private IEnumerator setupLevelButtons()
     {
+        //random level button
+        MenuButtonScript rButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();       //create a new button
+        rButton.SendMessage("setButtonText", "Random Level"); //set the text
+        rButton.SendMessage("setColor", menuButtonColor);     //and the color
+        rButton.transform.SetParent(this.transform, false);   //add it to the menu
+        menuButtons.Add(rButton);                             //and add it to the list of buttons
+
+        //quit button, if we are not in the editor or a web build (both of which ignore Application.Quit() anyway)
+        if ((Application.isEditor == false) && (Application.platform == RuntimePlatform.WebGLPlayer == false))
+        {
+            MenuButtonScript qButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
+            qButton.SendMessage("setButtonText", "Quit");                                          //set the text
+            qButton.SendMessage("setColor", menuButtonColor);                                      //and the color
+            qButton.transform.SetParent(this.transform, false);                                    //add it to the menu
+            menuButtons.Add(qButton);                                                              //and add it to the list of buttons
+        }
+
+        //platform-specific logic to create the buttons
         if (Application.platform == RuntimePlatform.WebGLPlayer)
         {
-            //this is a web build.  Run that version
-            yield return StartCoroutine(setupLevelButtonsWeb());
+            yield return StartCoroutine(setupLevelButtonsWeb()); //this is a web build.  This performs many web requests and updates menuText with the status as it goes.  It may take a while.
         }
         else
         {
-            //this is a PC build.  Run the appropriate coroutine...
-            yield return StartCoroutine(setupLevelButtonsPC());
-        
-            //and also create/update the manifest for web builds
-            updateLevelManifest();
+            setupLevelButtonsPC(); //this is a PC build.  Makes buttons by loading files from disk and returns immediately
+            updateLevelManifest(); //and also create/update the manifest for web builds
         }
+
+        //level buttons are ready.  add them by difficulty
+        //the buttons we need to add are everything but the menu buttons we made at the start
+        List<MenuButtonScript> levelButtonsToAdd = menuButtons.SkipWhile(mbs => mbs.buttonType == MenuButtonType.text).ToList();
+
+        //do categories that we know will exist
+        string[] knownDifficulties = { "easy", "medium", "hard" };
+        foreach (string diff in knownDifficulties)
+        {
+            MenuHeaderScript header = Instantiate(menuHeaderPrefab).GetComponent<MenuHeaderScript>(); //create a new header
+            header.text = diff.ToUpper();                                                             //label it
+            header.transform.SetParent(this.transform, false);                                        //add it to the menu
+            menuHeaders.Add(header);                                                                  //add it to the list
+
+            //add the level buttons
+            foreach (MenuButtonScript levelButton in levelButtonsToAdd.Where(mbs => mbs.level.difficulty.ToUpper() == diff.ToUpper()))
+                levelButton.transform.SetParent(this.transform, false);
+
+            //take them out of the list
+            levelButtonsToAdd.RemoveAll(mbs => mbs.level.difficulty.ToUpper() == diff.ToUpper());
+        }
+
+        //make new categories for everything else
+        while (levelButtonsToAdd.Count > 0)
+        {
+            string diff = levelButtonsToAdd[0].level.difficulty;
+
+            MenuHeaderScript header = Instantiate(menuHeaderPrefab).GetComponent<MenuHeaderScript>(); //create a new header
+            header.text = diff.ToUpper();                                                             //label it
+            header.transform.SetParent(this.transform, false);                                        //add it to the menu
+            menuHeaders.Add(header);                                                                  //add it to the list
+
+            //add the level buttons
+            foreach (MenuButtonScript levelButton in levelButtonsToAdd.Where(mbs => mbs.level.difficulty.ToUpper() == diff.ToUpper()))
+                levelButton.transform.SetParent(this.transform, false);
+
+            //take them out of the list
+            levelButtonsToAdd.RemoveAll(mbs => mbs.level.difficulty.ToUpper() == diff.ToUpper());
+        }
+
+        yield return null; //give the scrollRect a frame to catch up
+        gameObject.transform.parent.parent.GetComponent<ScrollRect>().verticalNormalizedPosition = 1; //scroll the menu to the top after adding all these buttons
 
         menuText.text = "Select a level. (hover for info)";
     }
 
     /// <summary>
-    /// [COROUTINE] creates buttons to be used as a level select.  This version is for PC builds
+    /// creates buttons to be used as a level select.  This version is for PC builds
     /// </summary>
-    private IEnumerator setupLevelButtonsPC()
+    private void setupLevelButtonsPC()
     {
-        //base game levels
+        Dictionary<FileInfo, bool> fileDict = new Dictionary<FileInfo, bool>();
+
+        //look for base game level files
         DirectoryInfo dir = new DirectoryInfo (Path.Combine (Application.streamingAssetsPath, levelDir));  //find level folder
-        FileInfo[] files = dir.GetFiles ("*.xml");                                              //get list of .xml files from it
-        foreach (FileInfo f in files)                           //for each level file...
+        FileInfo[] files = dir.GetFiles ("*.xml");                                                         //get list of .xml files from it
+        foreach (FileInfo f in files)
+            fileDict.Add(f, false);
+
+        //look for modded level files
+        dir = new DirectoryInfo(Path.Combine(Application.streamingAssetsPath, modLevelDir)); //find level folder
+        files = dir.GetFiles("*.xml");                                                       //get list of .xml files from it
+        foreach (FileInfo f in files)
+            fileDict.Add(f, true);
+
+        //create buttons for each
+        foreach (KeyValuePair<FileInfo, bool> entry in fileDict) //for each level file
         {
-            MenuButtonScript fButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();     //create a new button
-            fButton.SendMessage("setLevel", f);                 //tell it what level it belongs to
-            fButton.SendMessage("setColor", baseLevelColor);    //set the button color
-            fButton.transform.SetParent(this.transform, false); //add it to the menu without altering scaling settings
-            menuButtons.Add(fButton);                           //and add it to the list of buttons
+            MenuButtonScript fButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
+            fButton.setLevel(entry.Key); //tell it what level it belongs to
+
+            //set the button color
+            if (entry.Value)
+                fButton.setColor(modLevelColor);
+            else       
+                fButton.setColor(baseLevelColor);
+
+            menuButtons.Add(fButton); //and add it to the list of buttons
         }
-
-        //modded levels
-        dir = new DirectoryInfo(Path.Combine(Application.streamingAssetsPath, modLevelDir));   //find level folder
-        files = dir.GetFiles("*.xml");                                              //get list of .xml files from it
-        foreach (FileInfo f in files)                           //for each level file
-        {
-            MenuButtonScript fButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();     //create a new button
-            fButton.SendMessage("setLevel", f);                 //tell it what level it belongs to
-            fButton.SendMessage("setColor", modLevelColor);     //set the button color
-            fButton.transform.SetParent(this.transform, false); //add it to the menu without altering scaling settings
-            menuButtons.Add(fButton);                           //and add it to the list of buttons
-        }
-
-        //also have a button to choose a random level with
-        MenuButtonScript rButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();       //create a new button
-        rButton.SendMessage("setButtonText", "Random Level"); //set the text
-        rButton.SendMessage("setColor", menuButtonColor);     //and the color
-        rButton.transform.SetParent(this.transform, false);   //and it to the menu
-        menuButtons.Add(rButton);                             //and add it to the list of buttons
-
-        //throw in a "quit" button also to exit the game with, if we are not in the editor or a web build (both of which ignore Application.Quit() anyway)
-        if ((Application.isEditor == false) && (Application.platform == RuntimePlatform.WebGLPlayer == false))
-        {
-            MenuButtonScript qButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();     //create a new button
-            qButton.SendMessage("setButtonText", "Quit");       //set the text
-            qButton.SendMessage("setColor", menuButtonColor);   //and the color
-            qButton.transform.SetParent(this.transform, false); //and it to the menu
-            menuButtons.Add(qButton);                           //and add it to the list of buttons
-        }
-
-        yield return null; //give the scrollRect a frame to catch up
-        gameObject.transform.parent.parent.GetComponent<ScrollRect>().verticalNormalizedPosition = 1; //scroll the menu to the top after adding all these buttons
     }
 
     /// <summary>
@@ -153,6 +197,8 @@ public class LevelSelectScript : BaseBehaviour
     /// </summary>
     private IEnumerator setupLevelButtonsWeb()
     {
+        menuText.text = "Loading...";
+
         //fetch the manifest
         string manifestPath = Application.streamingAssetsPath + '/' + levelDir + "levelManifest.txt";
         Debug.Log("Looking for level manifest at " + manifestPath);
@@ -161,9 +207,15 @@ public class LevelSelectScript : BaseBehaviour
 
         //error check
         if (request.error != null)
+        {
             Debug.LogError("error loading manifest: " + request.error);
+            yield return StartCoroutine(MessageHandlerScript.ShowAndYield("error loading manifest: " + request.error));
+            menuText.text = "Error.  Please refresh and try again.";
+            yield break;
+        }
 
         //read the manifest and create a button for each level
+        int requestCount = 0; //number of level requests made
         string[] manifestLines = request.text.Split('\n');
         foreach(string line in manifestLines)
         {
@@ -176,31 +228,20 @@ public class LevelSelectScript : BaseBehaviour
             MenuButtonScript lButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
             string levelPath = Application.streamingAssetsPath + '/' + levelDir + levelName;       //path of the level file
             Debug.Log("requesting level " + levelPath);                                            //log the request
-            StartCoroutine(lButton.setLevel(new WWW(levelPath)));                                  //set the level by sending the button request for the level file
+            StartCoroutine(lButton.setLevel(new WWW(levelPath)));                                  //set the level by sending the button a request for the level file
+            requestCount++;                                                                        //keep count of how many requests we made for later
             lButton.setColor(baseLevelColor);                                                      //set the button color
-            lButton.transform.SetParent(this.transform, false);                                    //add it to the menu
             menuButtons.Add(lButton);                                                              //add it to the list of buttons
         }
 
-        //also have a button to choose a random level with
-        MenuButtonScript rButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
-        rButton.SendMessage("setButtonText", "Random Level"); //set the text
-        rButton.SendMessage("setColor", menuButtonColor);     //and the color
-        rButton.transform.SetParent(this.transform, false);   //and it to the menu
-        menuButtons.Add(rButton);                             //and add it to the list of buttons
-
-        //throw in a "quit" button also to exit the game with, if we are not in the editor or a web build (both of which ignore Application.Quit() anyway)
-        if ((Application.isEditor == false) && (Application.platform == RuntimePlatform.WebGLPlayer == false))
+        //wait for all the levels to be loaded
+        int loadedCount = 0;
+        while (loadedCount < requestCount)
         {
-            MenuButtonScript qButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
-            qButton.SendMessage("setButtonText", "Quit");       //set the text
-            qButton.SendMessage("setColor", menuButtonColor);   //and the color
-            qButton.transform.SetParent(this.transform, false); //and it to the menu
-            menuButtons.Add(qButton);                           //and add it to the list of buttons
+            loadedCount = menuButtons.Count(mbs => mbs.buttonType == MenuButtonType.level); //the buttons only become level buttons once they are actually loaded, so this works
+            menuText.text = "Loading: " + loadedCount + "/" + requestCount;
+            yield return new WaitForSeconds(0.1f);
         }
-
-        yield return null; //give the scrollRect a frame to catch up
-        gameObject.transform.parent.parent.GetComponent<ScrollRect>().verticalNormalizedPosition = 1; //scroll the menu to the top after adding all these buttons
     }
 
     /// <summary>
