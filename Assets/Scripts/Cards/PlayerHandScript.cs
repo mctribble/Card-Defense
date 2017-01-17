@@ -246,7 +246,7 @@ public class PlayerHandScript : HandScript
                 continue;
 
             //make previews
-            GameObject previewCard = (GameObject)Instantiate(previewCardPrefab, SelectionHandScript.instance.transform); //spawn object
+            GameObject previewCard = Instantiate(previewCardPrefab, SelectionHandScript.instance.transform); //spawn object
             previewCard.SendMessage("PreviewCard", c.GetComponent<PlayerCardScript>().card.data);        //send it the info
             previewCard.transform.localPosition = (c.transform.localPosition);                           //spawn previews over their corresponding PlayerCardScripts
             previewCards.Add(previewCard.GetComponent<CardPreviewScript>(), c.gameObject);               //add it to the selection hand

@@ -464,7 +464,7 @@ public class PlayerCardScript : CardScript, IPointerClickHandler
         }
 
         //this card has a target.  create a tooltip object to handle casting.
-        tooltipInstance = (GameObject)Instantiate(tooltipPrefab, Vector3.zero, Quaternion.identity);    //instantiate prefab
+        tooltipInstance = Instantiate(tooltipPrefab, Vector3.zero, Quaternion.identity);    //instantiate prefab
 
         //set sprite with WWW, even on PC *twitch*
         string spritePath = "";
