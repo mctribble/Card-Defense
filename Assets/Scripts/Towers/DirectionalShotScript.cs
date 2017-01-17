@@ -41,7 +41,10 @@ public class DirectionalShotScript : BaseBehaviour
 	// Use this for initialization
 	private void Awake ()
     {
-        trail.startColor = defaultColor;
+        //set particle color
+        ParticleSystem.MainModule main = trail.main;
+        main.startColor = defaultColor;
+
         sprite.color = defaultColor;
         initialized = false;
         expectedToHit = new List<DamageEventData>();
@@ -193,7 +196,10 @@ public class DirectionalShotScript : BaseBehaviour
     //changes the color
     public void SetColor (Color c)
     {
-        trail.startColor = c;
+        //set particle color
+        ParticleSystem.MainModule main = trail.main;
+        main.startColor = c;
+
         sprite.color = c;
     }
 }

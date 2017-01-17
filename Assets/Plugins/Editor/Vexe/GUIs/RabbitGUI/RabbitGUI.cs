@@ -970,7 +970,7 @@ namespace Vexe.Editor.GUIs
 
             Rect position;
             if (CanDrawControl(out position, data))
-                EditorGUI.MinMaxSlider(label, position, ref minValue, ref maxValue, minLimit, maxLimit);
+                EditorGUI.MinMaxSlider(position, label, ref minValue, ref maxValue, minLimit, maxLimit);
         }
     }
 }
