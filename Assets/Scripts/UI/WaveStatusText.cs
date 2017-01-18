@@ -45,7 +45,7 @@ public class WaveStatusText : BaseBehaviour
         if (stillToSpawn > 0)
         {
             //wave has not started or is still spawning: "total: ??????"
-            enemyStatText.text = "total: " + stillToSpawn;
+            enemyStatText.text = stillToSpawn + " incoming";
         }
         else
         {
