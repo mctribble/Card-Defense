@@ -91,6 +91,13 @@ public class LevelSelectScript : BaseBehaviour
         rButton.transform.SetParent(this.transform, false);   //add it to the menu
         menuButtons.Add(rButton);                             //and add it to the list of buttons
 
+        //deck editor button
+        MenuButtonScript eButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
+        eButton.SendMessage("setButtonText", "Deck Editor"); //set the text
+        eButton.SendMessage("setColor", menuButtonColor);    //and the color
+        eButton.transform.SetParent(this.transform, false);  //and add it to the menu for returning to the level select
+        menuButtons.Add(eButton);                            //and add it to the list of buttons
+
         //quit button, if we are not in the editor or a web build (both of which ignore Application.Quit() anyway)
         if ((Application.isEditor == false) && (Application.platform == RuntimePlatform.WebGLPlayer == false))
         {
@@ -277,39 +284,12 @@ public class LevelSelectScript : BaseBehaviour
     {
         menuText.text = "Choose a deck. (hover for info)";
 
-        //create a button for using the Suggested Deck
+        //create a button for using the Suggested Deck...
         MenuButtonScript ldButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
-        ldButton.SendMessage("setButtonText", "Suggested Deck"); //set the text
-        ldButton.SendMessage("setColor", levelDeckColor);            //and the color
-        ldButton.transform.SetParent(this.transform, false);         //add it to the menu
-        menuButtons.Add(ldButton);                                   //and add it to the list of buttons
-        
-        //buttons for all the player decks
-        foreach (XMLDeck pd in DeckManagerScript.instance.playerDecks.decks)
-        {
-            MenuButtonScript pdButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
-            pdButton.SendMessage("setDeck", pd);                 //set the deck
-
-            //and the color (varies based on modded/not modded
-            if (pd.isModded())
-                pdButton.SendMessage("setColor", moddedDeckColor);
-            else
-                pdButton.SendMessage("setColor", playerDeckColor);   
-
-
-            pdButton.transform.SetParent(this.transform, false); //and add it to the menu
-            menuButtons.Add(pdButton);                           //and add it to the list of buttons
-        }
-
-        //buttons for all the premade decks
-        foreach (XMLDeck pd in DeckManagerScript.instance.premadeDecks.decks)
-        {
-            MenuButtonScript pdButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
-            pdButton.SendMessage("setDeck", pd);                 //set the deck
-            pdButton.SendMessage("setColor", premadeDeckColor);  //and the color
-            pdButton.transform.SetParent(this.transform, false); //and add it to the menu
-            menuButtons.Add(pdButton);                           //and add it to the list of buttons
-        }
+        ldButton.SendMessage("setButtonText", "Suggested Deck");                                //set the text
+        ldButton.SendMessage("setColor", levelDeckColor);                                       //and the color
+        ldButton.transform.SetParent(this.transform, false);                                    //add it to the menu
+        menuButtons.Add(ldButton);                                                              //and add it to the list of buttons
 
         //random deck buttons...
         MenuButtonScript rButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
@@ -324,19 +304,53 @@ public class LevelSelectScript : BaseBehaviour
         vrButton.transform.SetParent(this.transform, false);          //and add it to the menu for returning to the level select
         menuButtons.Add(vrButton);                                    //and add it to the list of buttons
 
-        //a button to open the editor...
-        MenuButtonScript eButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
-        eButton.SendMessage("setButtonText", "Deck Editor"); //set the text
-        eButton.SendMessage("setColor", menuButtonColor);    //and the color
-        eButton.transform.SetParent(this.transform, false);  //and add it to the menu for returning to the level select
-        menuButtons.Add(eButton);                            //and add it to the list of buttons
-
         //and a back button 
         MenuButtonScript backButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
         backButton.SendMessage("setButtonText", "Back");       //set the text
         backButton.SendMessage("setColor", menuButtonColor);   //and the color
         backButton.transform.SetParent(this.transform, false); //and add it to the menu for returning to the level select
         menuButtons.Add(backButton);                           //and add it to the list of buttons
+
+        //buttons for all the player decks
+        if (DeckManagerScript.instance.playerDecks.decks.Count > 0)
+        {
+            MenuHeaderScript header = Instantiate(menuHeaderPrefab).GetComponent<MenuHeaderScript>();
+            header.text = "Your Decks";
+            header.transform.SetParent(this.transform);
+            menuHeaders.Add(header);
+            foreach (XMLDeck pd in DeckManagerScript.instance.playerDecks.decks)
+            {
+                MenuButtonScript pdButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
+                pdButton.SendMessage("setDeck", pd);                 //set the deck
+
+                //and the color (varies based on modded/not modded
+                if (pd.isModded())
+                    pdButton.SendMessage("setColor", moddedDeckColor);
+                else
+                    pdButton.SendMessage("setColor", playerDeckColor);
+
+
+                pdButton.transform.SetParent(this.transform, false); //and add it to the menu
+                menuButtons.Add(pdButton);                           //and add it to the list of buttons
+            }
+        }
+
+        //buttons for all the premade decks
+        if (DeckManagerScript.instance.premadeDecks.decks.Count > 0)
+        {
+            MenuHeaderScript header = Instantiate(menuHeaderPrefab).GetComponent<MenuHeaderScript>();
+            header.text = "Premade Decks";
+            header.transform.SetParent(this.transform);
+            menuHeaders.Add(header);
+            foreach (XMLDeck pd in DeckManagerScript.instance.premadeDecks.decks)
+            {
+                MenuButtonScript pdButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
+                pdButton.SendMessage("setDeck", pd);                 //set the deck
+                pdButton.SendMessage("setColor", premadeDeckColor);  //and the color
+                pdButton.transform.SetParent(this.transform, false); //and add it to the menu
+                menuButtons.Add(pdButton);                           //and add it to the list of buttons
+            }
+        }
 
         yield return null; //give the scrollRect a frame to catch up
         gameObject.transform.parent.parent.GetComponent<ScrollRect>().verticalNormalizedPosition = 1; //scroll the menu to the top after adding all these buttons
@@ -345,11 +359,17 @@ public class LevelSelectScript : BaseBehaviour
     /// <summary>
     /// destroys all the menu buttons so a different menu can be shown
     /// </summary>
-    private void destroyButtons()
+    private void clearMenu()
     {
         foreach (MenuButtonScript button in menuButtons)
             Destroy(button.gameObject);
+
         menuButtons.Clear();
+
+        foreach (MenuHeaderScript header in menuHeaders)
+            Destroy(header.gameObject);
+
+        menuHeaders.Clear();
     }
 
     /// <summary>
@@ -358,7 +378,7 @@ public class LevelSelectScript : BaseBehaviour
     private void LevelSelected(LevelData data)
     {
         chosenLevel = data;                    //save the chosen level
-        destroyButtons();                      //get rid of the level menu
+        clearMenu();                           //get rid of the level menu
         StartCoroutine(setupDeckButtons());    //present the deck menu
         infoImage.gameObject.SetActive(false); //hide the info image since the deck menu doesnt need it
     }
@@ -498,7 +518,7 @@ public class LevelSelectScript : BaseBehaviour
             case "Back":
                 //player wants to go back to beginning
                 chosenLevel = null;
-                destroyButtons();
+                clearMenu();
                 StartCoroutine(setupLevelButtons());
                 infoImage.gameObject.SetActive(true);
                 break;
