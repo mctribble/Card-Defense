@@ -9,7 +9,9 @@ double/quad-barrel upgrade
 art needs updating for:
 ================================================================
 other presenation/art:
+on-screen "start wave" control
 need some level backgrounds
+differentiate tower/spell/upgrade cards
 ================================================================
 content goals:
 enemies: 10/10  <<DONE!!>>
@@ -24,3 +26,6 @@ balance:
 difficulty settings??
 use scoring to make gemcraft style progression?
 do we need progression at all?
+================================================================
+tutorializing:
+explain cards and what they mean
