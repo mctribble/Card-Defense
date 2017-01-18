@@ -9,5 +9,6 @@ Psi.xml
 Short Circuit.xml
 Simplicity.xml
 Spiral Mountain.xml
+Switchback.xml
 Symmetry.xml
 Trophy.xml
