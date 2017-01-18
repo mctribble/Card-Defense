@@ -333,9 +333,6 @@ public class EnemyScript : BaseBehaviour
         currentDestination = 0;
         goalFinalChance = false;
 
-        //update wave health tracker
-        LevelManagerScript.instance.totalRemainingHealth -= curHealth;
-
         //report it as a survivor, and then disable it until it is spawned into the next wave
         EnemyManagerScript.instance.EnemySurvived(this);
         gameObject.SetActive(false);        
@@ -411,7 +408,6 @@ public class EnemyScript : BaseBehaviour
         int damage = Mathf.CeilToInt(e.rawDamage);
         damage = System.Math.Min(damage, curHealth);
         curHealth -= damage;
-        LevelManagerScript.instance.totalRemainingHealth -= damage;
 
         //sound
         if (damage > 0)
