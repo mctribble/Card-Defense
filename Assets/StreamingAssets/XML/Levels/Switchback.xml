@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
+  <difficulty>easy</difficulty>
+  <description>Enemies finish near where they begin</description>
+  <randomWaveCount>25</randomWaveCount>
+  <Waves />
+  <Spawners>
+    <Spawner spawnX="-2" spawnY="-4.5" />
+  </Spawners>
+  <PathSegments>
+    <Segment startX="-2" startY="-4.5" endX="-2" endY="3.5" />
+    <Segment startX="-2" startY="3.5" endX="4" endY="3.5" />
+    <Segment startX="4" startY="3.5" endX="4" endY="-0.5" />
+    <Segment startX="4" startY="-0.5" endX="-5" endY="-0.5" />
+    <Segment startX="-5" startY="-0.5" endX="-5" endY="4.5" />
+    <Segment startX="-5" startY="4.5" endX="5" endY="4.5" />
+    <Segment startX="5" startY="4.5" endX="5" endY="-1.5" />
+    <Segment startX="5" startY="-1.5" endX="-3" endY="-1.5" />
+    <Segment startX="-3" startY="-1.5" endX="-3" endY="-4.5" />
+  </PathSegments>
+  <Towers />
+  <shuffleDeck>true</shuffleDeck>
+  <premadeDeckName>Starter Deck</premadeDeckName>
+</Level>
