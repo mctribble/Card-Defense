@@ -71,7 +71,7 @@ public class PlayerHandScript : HandScript
     /// <param name="flipOver">flipOver: card should flip over AFTER moving</param>
     /// <param name="turnToIdentity">turnToIdentity: card should straighten itself while moving</param>
     /// <param name="scaleToIdentity">scaleToIdentity: card should scale itself to (1,1,1) while moving</param>
-    /// <param name="cardToDraw">if this is not null, then the given PlayerCard is drawn instead of fetching one from the deck.  This parameter is ignored in enemy hands since they draw WaveData's instead.</param>
+    /// <param name="cardToDraw">if this is not null, then the given PlayerCard is drawn instead of fetching one from the deck.
     /// <param name="ignoreHandCap">if this is true, the hand can draw even if it is full</param>
     public void drawCard(bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true, PlayerCard? cardToDraw = null, bool ignoreHandCap = false)
     {
@@ -95,22 +95,34 @@ public class PlayerHandScript : HandScript
 
         newCard.transform.SetParent(transform.root); //declare the new card a child of the UI object at the root of this tree
 
-        //position card to match up with the deck image we are spawning at
-        RectTransform spawnT = deckImage.rectTransform;
-        newCard.GetComponent<RectTransform>().position = spawnT.position;
-        newCard.GetComponent<RectTransform>().rotation = spawnT.rotation;
-        newCard.GetComponent<RectTransform>().localScale = spawnT.localScale;
+
+        //send the card the data that defines it
+        if (cardToDraw == null)
+        {
+            //fetch the card from the deck
+            newCard.SendMessage("SetCard", DeckManagerScript.instance.Draw()); 
+
+            //position card to match up with the deck image we are spawning at
+            RectTransform spawnT = deckImage.rectTransform;
+            newCard.GetComponent<RectTransform>().position   = spawnT.position;
+            newCard.GetComponent<RectTransform>().rotation   = spawnT.rotation;
+            newCard.GetComponent<RectTransform>().localScale = spawnT.localScale;
+        }
+        else
+        {
+            //we were given the PlayerCard already, so just pass that
+            newCard.SendMessage("SetCard", cardToDraw.Value);
+
+            //position card in a special way if it did not come from the deck
+            newCard.GetComponent<RectTransform>().localPosition = Vector3.zero;                               //center of screen
+            newCard.GetComponent<RectTransform>().localRotation = Quaternion.AngleAxis(180, Vector3.forward); //face up, but upside down
+            newCard.GetComponent<RectTransform>().localScale    = new Vector3(0.5f, 0.5f);                  //very small
+        }
 
         //add the card to the hand
         addCard(newCard, flipOver, turnToIdentity, scaleToIdentity);
 
         newCard.SendMessage("SetDeckImage", deckImage); //also tell the card where the deck image is so it knows where to go if it returns there
-
-        //send the card the data that defines it
-        if (cardToDraw == null)
-            newCard.SendMessage("SetCard", DeckManagerScript.instance.Draw()); //fetch the card from the deck
-        else
-            newCard.SendMessage("SetCard", cardToDraw.Value); //we were given the PlayerCard already, so just pass that
 
         newCard.SendMessage("triggerOnDrawnEffects"); //trigger effects
     }

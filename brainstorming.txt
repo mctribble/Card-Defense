@@ -10,7 +10,6 @@ art needs updating for:
 ================================================================
 other presenation/art:
 need some level backgrounds
-animated enemy sprites?
 ================================================================
 content goals:
 enemies: 10/10  <<DONE!!>>
@@ -22,9 +21,6 @@ analytics:
 check back on the analytics to see how they're doing and tweak things
 ================================================================
 balance:
-find a way to generate .csv files to aid in balancing content?
 difficulty settings??
 use scoring to make gemcraft style progression?
-================================================================
-engine:
-progression system?
+do we need progression at all?
