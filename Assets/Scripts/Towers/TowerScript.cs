@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
@@ -329,33 +330,14 @@ public class TowerScript : BaseBehaviour
                 switch (effects.lastUsedTargetingEffect)
                 {
                     case "targetOrthogonal":
-                        //split target list into four others, one for each direction
-                        List<EnemyScript> left  = new List<EnemyScript>();
-                        List<EnemyScript> right = new List<EnemyScript>();
-                        List<EnemyScript> up    = new List<EnemyScript>();
-                        List<EnemyScript> down  = new List<EnemyScript>();
-                        foreach (EnemyScript t in targets)
+                        //if there is at least one target in range, fire directional shots in four different directions, each targeting enemies in that direction
+                        if (targets.Count > 0)
                         {
-                            if (t.transform.position.x < this.transform.position.x)
-                                left.Add(t);
-                            else if (t.transform.position.x > this.transform.position.x)
-                                right.Add(t);
-                            else if (t.transform.position.y > this.transform.position.y)
-                                up.Add(t);
-                            else if (t.transform.position.y < this.transform.position.y)
-                                down.Add(t);
+                            directionalShot(targets.Where(e => e.transform.position.x < this.transform.position.x).ToList(), ded, Vector2.left);
+                            directionalShot(targets.Where(e => e.transform.position.x > this.transform.position.x).ToList(), ded, Vector2.right);
+                            directionalShot(targets.Where(e => e.transform.position.y < this.transform.position.y).ToList(), ded, Vector2.up);
+                            directionalShot(targets.Where(e => e.transform.position.y > this.transform.position.y).ToList(), ded, Vector2.down);
                         }
-
-                        //and fire each separately
-                        if (left.Count > 0)
-                            directionalShot(left, ded, Vector2.left);
-                        if (right.Count > 0)
-                            directionalShot(right, ded, Vector2.right);
-                        if (up.Count > 0)
-                            directionalShot(up, ded, Vector2.up);
-                        if (down.Count > 0)
-                            directionalShot(down, ded, Vector2.down);
-
                         break;
 
                     case "targetBurst":

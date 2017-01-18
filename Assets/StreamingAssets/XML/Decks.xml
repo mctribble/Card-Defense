@@ -91,40 +91,36 @@
     </Deck>
     <Deck name="Variety">
       <Cards>
-        <Card name="AOE Tower" count="1" />
-        <Card name="Basic Tower" count="1" />
-        <Card name="Basic Upgrade" count="1" />
-        <Card name="Black Plague Tower" count="1" />
-        <Card name="Chain Hit" count="1" />
-        <Card name="Challenger Tower" count="1" />
-        <Card name="Enrage" count="1" />
-        <Card name="Explosive Tower" count="1" />
-        <Card name="Fast Tower" count="1" />
-        <Card name="Fast Upgrade" count="1" />
-        <Card name="Gambit" count="1" />
-        <Card name="Heavy Tower" count="1" />
-        <Card name="Heavy Upgrade" count="1" />
-        <Card name="Life Tap" count="1" />
-        <Card name="Nova Tower" count="1" />
-        <Card name="Orthogonal Tower" count="1" />
-        <Card name="Overcharge Tower" count="1" />
-        <Card name="Plague Tower" count="1" />
-        <Card name="Preservation Upgrade" count="1" />
-        <Card name="Pulse Upgrade" count="1" />
-        <Card name="Range Upgrade" count="1" />
-        <Card name="Recycle" count="1" />
-        <Card name="Reinforce" count="1" />
-        <Card name="Risky Draw" count="1" />
-        <Card name="Self-Destruct Upgrade" count="1" />
-        <Card name="Shield" count="1" />
-        <Card name="Shredder Tower" count="1" />
-        <Card name="Sniper Tower" count="1" />
-        <Card name="Spitfire Upgrade" count="1" />
-        <Card name="Summon Standard" count="1" />
-        <Card name="Summon Swarm" count="1" />
-        <Card name="Summon Tank" count="1" />
-        <Card name="Supernova Tower" count="1" />
-        <Card name="Time Crunch" count="1" />
+        <Card name="AOE Tower" count="2" />
+        <Card name="Basic Tower" count="2" />
+        <Card name="Basic Upgrade" count="2" />
+        <Card name="Challenger Tower" count="2" />
+        <Card name="Enrage" count="2" />
+        <Card name="Explosive Tower" count="2" />
+        <Card name="Fast Tower" count="2" />
+        <Card name="Fast Upgrade" count="2" />
+        <Card name="Gambit" count="2" />
+        <Card name="Heavy Tower" count="2" />
+        <Card name="Heavy Upgrade" count="2" />
+        <Card name="Life Tap" count="2" />
+        <Card name="Light Shield" count="2" />
+        <Card name="Nova Tower" count="2" />
+        <Card name="Orthogonal Tower" count="2" />
+        <Card name="Plague Tower" count="2" />
+        <Card name="Pulse Upgrade" count="2" />
+        <Card name="Range Upgrade" count="2" />
+        <Card name="Recycle" count="2" />
+        <Card name="Reinforce" count="2" />
+        <Card name="Risky Draw" count="2" />
+        <Card name="Shield" count="2" />
+        <Card name="Shredder Tower" count="2" />
+        <Card name="Sniper Tower" count="2" />
+        <Card name="Spitfire Upgrade" count="2" />
+        <Card name="Summon Standard" count="2" />
+        <Card name="Summon Swarm" count="2" />
+        <Card name="Summon Tank" count="2" />
+        <Card name="Supernova Tower" count="2" />
+        <Card name="Time Crunch" count="2" />
       </Cards>
     </Deck>
     <Deck name="Endurance">
@@ -139,9 +135,9 @@
         <Card name="Mouse Tower" count="4" />
         <Card name="Supernova Tower" count="4" />
         <Card name="Ping Tower" count="5" />
-        <Card name="Plague Tower" count="2"/>
+        <Card name="Plague Tower" count="2" />
         <Card name="Recycle" count="2" />
-        <Card name="Reinforce" count="1"/>
+        <Card name="Reinforce" count="1" />
         <Card name="Strong Reinforce" count="2" />
         <Card name="Sniper Tower" count="3" />
         <Card name="Giant Sniper" count="2" />
