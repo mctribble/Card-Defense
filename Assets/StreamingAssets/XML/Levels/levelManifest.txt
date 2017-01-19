@@ -2,6 +2,7 @@ Chain.xml
 Chokepoint.xml
 Confusion.xml
 Congestion.xml
+Diamond.xml
 Divergence.xml
 Grid.xml
 Parallel tasks.xml

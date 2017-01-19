@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
+  <difficulty>easy</difficulty>
+  <description>It has four points.</description>
+  <randomWaveCount>0</randomWaveCount>
+  <Waves>
+    <Wave type="Assassin" budget="64" time="1.1" />
+    <Wave type="Assassin" budget="87" time="2.2" />
+    <Wave type="Scrambled" budget="119" time="3.30000019" />
+    <Wave type="Scrambled" budget="161" time="4.4" />
+    <Wave type="Assassin" budget="213" time="5.5" />
+    <Wave type="Scrambled" budget="274" time="6.60000038" />
+    <Wave type="Scrambled" budget="345" time="7.70000029" />
+    <Wave type="Assassin" budget="426" time="8.8" />
+    <Wave type="Scrambled" budget="516" time="9.900001" />
+    <Wave type="Assassin" budget="617" time="11" />
+    <Wave type="Scrambled" budget="726" time="12.1" />
+    <Wave type="Scrambled" budget="846" time="13.2000008" />
+    <Wave type="Assassin" budget="975" time="14.3" />
+    <Wave type="Assassin" budget="1114" time="15.4000006" />
+    <Wave type="Scrambled" budget="1263" time="16.5" />
+    <Wave type="Scrambled" budget="1422" time="17.6" />
+    <Wave type="Assassin" budget="1590" time="18.7" />
+    <Wave type="Assassin" budget="1768" time="19.8000011" />
+    <Wave type="Scrambled" budget="1955" time="20" />
+    <Wave type="Assassin" budget="2153" time="20" />
+  </Waves>
+  <Spawners>
+    <Spawner spawnX="0.5" spawnY="-4.5" />
+  </Spawners>
+  <PathSegments>
+    <Segment startX="0.5" startY="-4.5" endX="0.5" endY="-3.5" />
+    <Segment startX="0.5" startY="-3.5" endX="1.5" endY="-3.5" />
+    <Segment startX="1.5" startY="-3.5" endX="1.5" endY="-2.5" />
+    <Segment startX="1.5" startY="-2.5" endX="2.5" endY="-2.5" />
+    <Segment startX="2.5" startY="-2.5" endX="2.5" endY="-1.5" />
+    <Segment startX="2.5" startY="-1.5" endX="3.5" endY="-1.5" />
+    <Segment startX="3.5" startY="-1.5" endX="3.5" endY="-0.5" />
+    <Segment startX="3.5" startY="-0.5" endX="4.5" endY="-0.5" />
+    <Segment startX="4.5" startY="-0.5" endX="4.5" endY="0.5" />
+    <Segment startX="4.5" startY="0.5" endX="3.5" endY="0.5" />
+    <Segment startX="3.5" startY="0.5" endX="3.5" endY="1.5" />
+    <Segment startX="3.5" startY="1.5" endX="2.5" endY="1.5" />
+    <Segment startX="2.5" startY="1.5" endX="2.5" endY="2.5" />
+    <Segment startX="2.5" startY="2.5" endX="1.5" endY="2.5" />
+    <Segment startX="1.5" startY="2.5" endX="1.5" endY="3.5" />
+    <Segment startX="1.5" startY="3.5" endX="0.5" endY="3.5" />
+    <Segment startX="0.5" startY="3.5" endX="0.5" endY="4.5" />
+    <Segment startX="0.5" startY="4.5" endX="-0.5" endY="4.5" />
+    <Segment startX="-0.5" startY="4.5" endX="-0.5" endY="3.5" />
+    <Segment startX="-0.5" startY="3.5" endX="-1.5" endY="3.5" />
+    <Segment startX="-1.5" startY="3.5" endX="-1.5" endY="2.5" />
+    <Segment startX="-1.5" startY="2.5" endX="-2.5" endY="2.5" />
+    <Segment startX="-2.5" startY="2.5" endX="-2.5" endY="1.5" />
+    <Segment startX="-2.5" startY="1.5" endX="-3.5" endY="1.5" />
+    <Segment startX="-3.5" startY="1.5" endX="-3.5" endY="0.5" />
+    <Segment startX="-3.5" startY="0.5" endX="-4.5" endY="0.5" />
+    <Segment startX="-4.5" startY="0.5" endX="-4.5" endY="-0.5" />
+    <Segment startX="-4.5" startY="-0.5" endX="-3.5" endY="-0.5" />
+    <Segment startX="-3.5" startY="-0.5" endX="-3.5" endY="-1.5" />
+    <Segment startX="-3.5" startY="-1.5" endX="-2.5" endY="-1.5" />
+    <Segment startX="-2.5" startY="-1.5" endX="-2.5" endY="-2.5" />
+    <Segment startX="-2.5" startY="-2.5" endX="-1.5" endY="-2.5" />
+    <Segment startX="-1.5" startY="-2.5" endX="-1.5" endY="-3.5" />
+    <Segment startX="-1.5" startY="-3.5" endX="-0.5" endY="-3.5" />
+    <Segment startX="-0.5" startY="-3.5" endX="-0.5" endY="-4.5" />
+  </PathSegments>
+  <Towers />
+  <shuffleDeck>true</shuffleDeck>
+  <levelDeck name="New Deck">
+    <Cards>
+      <Card name="Enrage" count="2" />
+      <Card name="Explosive Tower" count="3" />
+      <Card name="Infrastructure Funding" count="3" />
+      <Card name="Light Shield" count="3" />
+      <Card name="Quad-Barrel Upgrade" count="4" />
+      <Card name="Range Upgrade" count="5" />
+      <Card name="Resonant Tower (A)" count="10" />
+    </Cards>
+  </levelDeck>
+</Level>

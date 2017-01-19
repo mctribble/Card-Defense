@@ -34,7 +34,7 @@ public class PathManagerScript : BaseBehaviour
 
     private List<PathSegment> segments;
 
-    public const int MAX_PATH_LENGTH = 30; //throws an error if the path result would be longer than this (to catch paths that loop back forever)
+    public const int MAX_PATH_LENGTH = 100; //throws an error if the path result would be longer than this (to catch paths that loop back forever)
 
     // Use this for initialization
     private void Awake()
