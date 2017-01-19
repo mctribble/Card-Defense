@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
+  <difficulty>easy</difficulty>
+  <description>Enemies travel the central path in two directions at once</description>
+  <randomWaveCount>20</randomWaveCount>
+  <Waves />
+  <Spawners>
+    <Spawner spawnX="11" spawnY="-4" />
+    <Spawner spawnX="-10" spawnY="-4" />
+  </Spawners>
+  <PathSegments>
+    <Segment startX="11" startY="-4" endX="11" endY="0" />
+    <Segment startX="11" startY="0" endX="-11" endY="0" />
+    <Segment startX="-11" startY="0" endX="-11" endY="5" />
+    <Segment startX="-10" startY="-4" endX="-10" endY="0" />
+    <Segment startX="-10" startY="0" endX="10" endY="0" />
+    <Segment startX="10" startY="0" endX="10" endY="5" />
+  </PathSegments>
+  <Towers />
+  <shuffleDeck>true</shuffleDeck>
+  <premadeDeckName>Challenger</premadeDeckName>
+</Level>
