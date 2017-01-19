@@ -67,7 +67,7 @@
   </PathSegments>
   <Towers />
   <shuffleDeck>true</shuffleDeck>
-  <levelDeck name="New Deck">
+  <levelDeck name="Diamond Deck">
     <Cards>
       <Card name="Enrage" count="2" />
       <Card name="Explosive Tower" count="3" />

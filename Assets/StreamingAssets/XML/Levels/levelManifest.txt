@@ -1,14 +1,17 @@
 Chain.xml
 Chokepoint.xml
+Club.xml
 Confusion.xml
 Congestion.xml
 Diamond.xml
 Divergence.xml
 Grid.xml
+Heart.xml
 Parallel tasks.xml
 Psi.xml
 Short Circuit.xml
 Simplicity.xml
+Spade.xml
 Spiral Mountain.xml
 Switchback.xml
 Symmetry.xml
