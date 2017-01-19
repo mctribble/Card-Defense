@@ -46,7 +46,6 @@ public class EffectRegeneration : BaseEffectPeriodic
         //heal
         e.curHealth += healThisFrame;
         e.expectedHealth += healThisFrame;
-        LevelManagerScript.instance.totalRemainingHealth += healThisFrame;
     }
 }
 

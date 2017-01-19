@@ -241,13 +241,11 @@ public class LevelManagerScript : BaseBehaviour
 
     //private vars
     private int        totalSpawnCount;          //how many enemies still need spawning this wave
-    private int        waveTotalRemainingHealth; //health remaining across all enemies in this wave
     private GameObject pathTooltip;              //tooltip used for laying paths
 
     //properties
     public LevelData Data { get { return data; } set { data = value; } } 
     public int SpawnCount { get { return totalSpawnCount; } }
-    public int totalRemainingHealth { get { return waveTotalRemainingHealth; } set { waveTotalRemainingHealth = value; } }
     public float currentWaveTime { get { return Mathf.Max( ((data.waves.Count - wavesInDeck) * data.waveTimeLinear), data.waveTimeMax); } } //returns the time that the current wave should take to spawn.  used for survivors.
 
     // Use this for initialization
@@ -705,8 +703,6 @@ public class LevelManagerScript : BaseBehaviour
     {
         //flag the wave as started
         wavesSpawning++;
-
-        totalRemainingHealth += wave.totalRemainingHealth;
         totalSpawnCount += wave.spawnCount;
 
         //init
@@ -753,7 +749,6 @@ public class LevelManagerScript : BaseBehaviour
     {
         EnemyHandScript.instance.UpdateWaveStats();
         totalSpawnCount = EnemyHandScript.instance.spawnCount;
-        totalRemainingHealth = EnemyHandScript.instance.totalRemainingHealth;
         totalSpawnedThisWave = 0;
     }
 
