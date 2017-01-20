@@ -93,8 +93,14 @@ public class PlayerCardData : System.Object
             case PlayerCardType.tower:
                 //present tower stats
                 description += "Max Upgrades: " + towerData.upgradeCap + '\n' +
-                               "does " + towerData.attackPower + " damage every " + towerData.rechargeTime + " seconds\n" +
-                               '(' + (towerData.attackPower/towerData.rechargeTime) + "/second)\n" +
+                               "does " + towerData.attackPower + " damage\n";
+
+                if (towerData.rechargeTime > 1.0f)
+                    description += "attacks once every " + towerData.rechargeTime.ToString("F2") + " seconds\n";
+                else
+                    description += "attacks <color=lime>" + (1 / towerData.rechargeTime).ToString("F2") + " times per second</color>\n";
+
+                description += '(' + (towerData.attackPower/towerData.rechargeTime) + "/second)\n" +
                                "Range: " + towerData.range;
 
                 //lifespan
@@ -577,6 +583,14 @@ public class PlayerCardScript : CardScript, IPointerClickHandler
     {
         //save the data
         card = c;
+
+        //colorize card front based on card type
+        switch (c.data.cardType)
+        {
+            case PlayerCardType.tower:   cardFront.color = towerColor;   break;
+            case PlayerCardType.upgrade: cardFront.color = upgradeColor; break;
+            case PlayerCardType.spell:   cardFront.color = spellColor;   break;
+        }
 
         //update card text
         updateChargeText();

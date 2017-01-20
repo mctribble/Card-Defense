@@ -61,8 +61,6 @@ public class CardPreviewScript : CardScript, IPointerClickHandler
     /// </summary>
     private IEnumerator PreviewCard(PlayerCardData c)
     {
-        //Debug.Log("previewing " + c.cardName); //DEBUG ONLY
-
         //if null, show card back instead
         if (c == null)
         {
@@ -72,6 +70,18 @@ public class CardPreviewScript : CardScript, IPointerClickHandler
 
         //save the data
         data = c;
+
+        //colorize card front based on card type
+        switch (c.cardType)
+        {
+            case PlayerCardType.tower:   cardFront.color = towerColor;   break;
+            case PlayerCardType.upgrade: cardFront.color = upgradeColor; break;
+            case PlayerCardType.spell:   cardFront.color = spellColor;   break;
+        }
+
+        //override colorization if token
+        if (c.isToken)
+            cardFront.color = tokenColor;
 
         //update card text
         updateChargeText();

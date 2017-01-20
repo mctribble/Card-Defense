@@ -52,6 +52,11 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
     [VisibleWhen("shouldShowRefs")] public AudioClip[] drawSounds;  //sounds to use when drawn
     [VisibleWhen("shouldShowRefs")] public AudioSource audioSource; //source to play said sounds from
 
+    //card type colors
+    [VisibleWhen("shouldShowRefs")] public Color towerColor;
+    [VisibleWhen("shouldShowRefs")] public Color upgradeColor;
+    [VisibleWhen("shouldShowRefs")] public Color spellColor;
+
     //private data
     protected GameObject hand;            //reference to the hand object managing this card
     protected Vector2    idleLocation;    //location this card sits when it is resting

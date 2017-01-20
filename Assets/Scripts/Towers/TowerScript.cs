@@ -618,9 +618,9 @@ public class TowerScript : BaseBehaviour
             colorString = "lime";
         else
             colorString = "white";
-        tooltipText.text += attackPower.ToString("F2") + " <color=" + colorString + "> " + attackChange.ToString("+ ####0.##;- ####0.##") + "</color> damage ";
+        tooltipText.text += "does " + attackPower.ToString("F2") + " <color=" + colorString + "> " + attackChange.ToString("+ ####0.##;- ####0.##") + "</color> damage\n";
 
-        //charge time
+        //charge time 
         colorString = "magenta";
         if (rechargeChange < 0)
             colorString = "lime";
@@ -628,7 +628,12 @@ public class TowerScript : BaseBehaviour
             colorString = "red";
         else
             colorString = "white";
-        tooltipText.text += "every " + rechargeTime.ToString("F2") + " <color=" + colorString + "> " + rechargeChange.ToString("+ ####0.##;- ####0.##") + "</color> seconds\n";
+
+        //show this line in a different way depending on how fast the tower is
+        if (newRechargeTime > 1.0f)
+            tooltipText.text += "attacks every " + rechargeTime.ToString("F2") + " <color=" + colorString + "> " + rechargeChange.ToString("+ ####0.##;- ####0.##") + "</color> seconds\n";
+        else
+            tooltipText.text += "attacks " + (1 / rechargeTime).ToString("F2") + " <color=" + colorString + "> " + ((1 / newRechargeTime) - (1 / rechargeTime)).ToString("+ ####0.##;- ####0.##") + "</color> times per second\n";
 
         //DPS
         colorString = "magenta";
@@ -736,7 +741,15 @@ public class TowerScript : BaseBehaviour
         tooltipText.text =
             towerName + "\n" +
             upgradeCount + "/" + upgradeCap + " upgrades\n" +
-            attackPower + " damage every " + rechargeTime.ToString("F2") + " seconds\n" +
+            "does " + attackPower + " damage\n";
+
+        //print this line differently depending on how fast the tower is
+        if (rechargeTime > 1.0f)
+            tooltipText.text += "attacks once every " + rechargeTime.ToString("F2") + " seconds\n";
+        else
+            tooltipText.text += "attacks <color=lime>" + (1 / rechargeTime).ToString("F2") + " times per second</color>\n";
+        
+        tooltipText.text +=
             "(" + (attackPower / rechargeTime).ToString("F2") + " per second)\n" +
             "range: " + range;
 
