@@ -24,14 +24,14 @@ scaleSpeedWithTime        | enemy gets faster by X/s.  Note that there is a glob
 
 <<Enemy Damaged Effects (On tower: trigger when attacking.  On Enemy type: trigger when attacked)>>
 armor                     | enemy receives X less damage from every hit, with a minimum of 1 damage
-chainHit				  | attack spreads to all enemies within X of each other through a series of consecutive explosions.  No enemy will be hit twice.  
+chainHit		  | attack spreads to all enemies within X of each other through a series of consecutive explosions.  No enemy will be hit twice.  
 damagePercent             | enemy takes damage equal to X% of their max health
 reduceEnemyEffectOnDamage | hit enemies have the strength of effect Y reduced by X
 ResonantTowerAttackMult   | tower attack gets X times stronger for each tower that has this effect with the same value for Y
 ResonantTowerAttackMod    | tower attack increases by X for each tower that has this effect with the same value for Y
 ResonantTowerRangeMod     | tower range increases by X for each tower that has this effect with the same value for Y
 secondaryBurst            | when a valid attack is made, the tower also creates a burst attack with radius X and strength Y
-splashDamage			  | attack causes a secondary explosion, dealing X damage to all enemies within Y of the impact site.  Effects do not spread to secondary targets
+splashDamage		  | attack causes a secondary explosion, dealing X damage to all enemies within Y of the impact site.  Effects do not spread to secondary targets
 
 <<Wave effects (On Enemy type: trigger on wave creation.  On card: trigger when played)>>
 budgetPercentageChange | wave budget is increased by X percent
@@ -44,7 +44,7 @@ allTowersLifespanBonus | all towers on the map last X waves longer
 conjureSpellCard       | player conjures X spells, which are chosen randomly from all available un-modded spells and added directly to the hand as tokens
 conjureTowerCard       | player conjures X towers, which are chosen randomly from all available un-modded spells and added directly to the hand as tokens
 conjureUpgradeCard     | player conjures X upgrades, which are chosen randomly from all available un-modded spells and added directly to the hand as tokens
-damageHand			   | player's HAND takes x damage.  If the hand does not have enough charges, excess damage is dealt to their deck
+damageHand	       | player's HAND takes x damage.  If the hand does not have enough charges, excess damage is dealt to their deck
 damagePlayer           | player takes X damage
 discardChosenCard      | player chooses up to X cards to discard.  Must be on a card.
 discardRandomCard      | player discards up to X cards chosen at random.  Must be on a card.
@@ -90,8 +90,8 @@ effectCharges            | child effect can only occur up to X times
 effectCooldown           | child effect triggers under normal conditions, but only if it has been at least X seconds since the last trigger
 everyRound               | target instant effect triggers once every round
 onCardDrawn              | target instant effect triggers when the card is drawn
-onAttack		         | target instant effect triggers when the tower fires or when the enemy deals damage
-onSpawned	             | target instant effect triggers when the enemy spawns.  Does not trigger twice if the unit survives and spawns again in the next wave.
+onAttack		 | target instant effect triggers when the tower fires or when the enemy deals damage
+onSpawned	         | target instant effect triggers when the enemy spawns.  Does not trigger twice if the unit survives and spawns again in the next wave.
 percentageChance         | child effect has an X% chance of triggering
 scaleEffectByTowerAttack | on towers, multiplies effect strength by attack power of the tower.  Use this to create effects whose strength vary with the strength of the tower, like the poison on "Poison Ammo".
 ifRollRange              | child effect triggers if the die rolled anything from X to Y.  Requires dieRoll effect to work

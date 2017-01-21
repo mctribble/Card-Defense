@@ -7,6 +7,7 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using System.Linq;
 using UnityEngine.Analytics;
+using System;
 
 /// <summary>
 /// handles the level select menu
@@ -60,7 +61,7 @@ public class LevelSelectScript : BaseBehaviour
                 if (PlayerPrefs.HasKey("saveTest"))
                     PlayerPrefs.DeleteKey("saveTest");
 
-                int test = Random.Range(0,500);
+                int test = UnityEngine.Random.Range(0,500);
                 PlayerPrefs.SetInt("saveTest", test);
                 if (PlayerPrefs.HasKey("saveTest") == false)
                     MessageHandlerScript.ShowAndYield("Data saving doesn't seem to be working.  If you make a deck it may disappear when you reload the page.");
@@ -85,25 +86,32 @@ public class LevelSelectScript : BaseBehaviour
     private IEnumerator setupLevelButtons()
     {
         //random level button
-        MenuButtonScript rButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();       //create a new button
-        rButton.SendMessage("setButtonText", "Random Level"); //set the text
-        rButton.SendMessage("setColor", menuButtonColor);     //and the color
-        rButton.transform.SetParent(this.transform, false);   //add it to the menu
-        menuButtons.Add(rButton);                             //and add it to the list of buttons
+        MenuButtonScript rButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
+        rButton.setButtonText("Random Level");                                                 //set the text
+        rButton.setColor(menuButtonColor);                                                     //and the color
+        rButton.transform.SetParent(this.transform, false);                                    //add it to the menu
+        menuButtons.Add(rButton);                                                              //and add it to the list of buttons
 
         //deck editor button
         MenuButtonScript eButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
-        eButton.SendMessage("setButtonText", "Deck Editor"); //set the text
-        eButton.SendMessage("setColor", menuButtonColor);    //and the color
-        eButton.transform.SetParent(this.transform, false);  //and add it to the menu for returning to the level select
-        menuButtons.Add(eButton);                            //and add it to the list of buttons
+        eButton.setButtonText("Deck Editor");                                                  //set the text
+        eButton.setColor(menuButtonColor);                                                     //and the color
+        eButton.transform.SetParent(this.transform, false);                                    //and add it to the menu for returning to the level select
+        menuButtons.Add(eButton);                                                              //and add it to the list of buttons
+
+        //help button
+        MenuButtonScript hButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();
+        hButton.setButtonText("Help");
+        hButton.setColor(menuButtonColor);
+        hButton.transform.SetParent(this.transform, false);
+        menuButtons.Add(hButton);
 
         //quit button, if we are not in the editor or a web build (both of which ignore Application.Quit() anyway)
         if ((Application.isEditor == false) && (Application.platform == RuntimePlatform.WebGLPlayer == false))
         {
             MenuButtonScript qButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
-            qButton.SendMessage("setButtonText", "Quit");                                          //set the text
-            qButton.SendMessage("setColor", menuButtonColor);                                      //and the color
+            qButton.setButtonText("Quit");                                                         //set the text
+            qButton.setColor(menuButtonColor);                                                     //and the color
             qButton.transform.SetParent(this.transform, false);                                    //add it to the menu
             menuButtons.Add(qButton);                                                              //and add it to the list of buttons
         }
@@ -470,12 +478,21 @@ public class LevelSelectScript : BaseBehaviour
     {
         switch(buttonText)
         {
+            case "Help":
+                //purge the current menu and show the help screen instead
+                clearMenu();
+                menuText.text = "Help";
+                infoImage.enabled = false;
+                infoText.enabled = false;
+                showHelpMenu();
+                break;
+
             case "Random Level":
                 //find all level buttons currently available
                 MenuButtonScript[] levelButtons = menuButtons.Where(mb => mb.buttonType == MenuButtonType.level).ToArray();
 
                 //choose one of them at random and treat it as if that button was clicked on
-                int buttonIndex = Random.Range(0,levelButtons.Length);
+                int buttonIndex = UnityEngine.Random.Range(0,levelButtons.Length);
                 LevelSelected(levelButtons[buttonIndex].level);
 
                 break;
@@ -484,7 +501,7 @@ public class LevelSelectScript : BaseBehaviour
                 //chooses a deck at random from the player and behave as if that button was clicked on
                 IEnumerable<XMLDeck> deckOptions = DeckManagerScript.instance.playerDecks.decks.Where(xd => xd.isModded() == false); //choose from un-modded player decks...
                 deckOptions.Concat( DeckManagerScript.instance.premadeDecks.decks ); //and all premade decks
-                int deckIndex = Random.Range(0, deckOptions.Count());
+                int deckIndex = UnityEngine.Random.Range(0, deckOptions.Count());
                 DeckSelected(deckOptions.ElementAt(deckIndex));
                 break;
 
@@ -521,12 +538,155 @@ public class LevelSelectScript : BaseBehaviour
                 clearMenu();
                 StartCoroutine(setupLevelButtons());
                 infoImage.gameObject.SetActive(true);
+                infoImage.transform.parent.gameObject.SetActive(true);
+                break;
+
+            //these buttons are for individual help screens.  These we delegate to showHelpScreen() because of their length
+            case "The Basics":
+            case "Controls":
+            case "Cards":
+            case "Towers":
+            case "Effect Reference":
+                clearMenu();
+                showHelpScreen(buttonText);
                 break;
 
             default:
                 Debug.LogError("LevelSelectScript doesnt know how to handle this button!");
                 break;
         }
+    }
+
+    /// <summary>
+    /// shows the help menu
+    /// </summary>
+    private void showHelpMenu()
+    {
+        //hide unused UI elements
+        infoImage.transform.parent.gameObject.SetActive(false);
+
+        //create the buttons
+        string[] menuButtonStrings = {"The Basics", "Controls", "Cards", "Towers", "Effect Reference", "Back"};
+        foreach (string s in menuButtonStrings)
+        {
+            MenuButtonScript mbs = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();
+            mbs.setButtonText(s);
+            mbs.setColor(menuButtonColor);
+            mbs.transform.SetParent(this.transform, false);
+            menuButtons.Add(mbs);
+        }
+    }
+
+    /// <summary>
+    /// shows one of the help screens.  This is separate from the rest of TextButtonSelected() because of its length
+    /// </summary>
+    private void showHelpScreen(string screen)
+    {
+        //create the first bit of text
+        MenuHeaderScript helpText = Instantiate(menuHeaderPrefab).GetComponent<MenuHeaderScript>();
+        helpText.transform.SetParent(this.transform, false);
+        menuHeaders.Add(helpText);
+
+        //set the text, and possibly include pictures and/or additional text objects, based on which help screen it is
+        switch (screen)
+        {
+            case "Controls":
+                helpText.text = "For navigating menus and playing cards, use the mouse.  For everything else, see below:\n" +
+                    "Pan camera: arrow keys OR WASD\n" +
+                    "Zoom camera: scroll wheel or Q/E\n" +
+                    "Start wave: click enemy card or press space\n" +
+                    "Toggle fast forward: F";
+                break;
+
+            case "The Basics":
+                helpText.text =
+                    "In this game, your goal is to use your deck of cards to do battle with the enemy.  You want to deplete the enemy deck before they deplete yours.\n" + 
+                    "Enemies come in waves.  The cards along the top of the screen show what is coming next, and the cards along the bottom are what you can do to stop them.\n" +
+                    "Play cards from your hand to build and upgrade towers, then press the space bar when you feel you can defeat the enemy.  Be careful not to overbuild, as towers go away after a certain number of rounds and you will probably need them later.\n" + 
+                    "After the wave is over, any enemies that are still alive return to the top of the screen.  Both you and the enemy draw a card, and the process repeats.\n" + 
+                    "You also get a special card that doesn't come from your deck called 'Gather Power'.  This is a powerful card that returns to you at the start of the next round in addition to your normal draw.\n" +
+                    "If you manage to defeat all enemies, then you are given the option to 'continue in endurance'.  If you do this, the game will endlessly throw enemies at you until you die.";
+                    break;
+
+            case "Cards":
+                helpText.text =
+                    "Cards represent actions you can take, and are also your lifeblood.  Each card has a limited number of 'charges', shown at the top.  The card loses a charge every time it is played, and cards in your deck can lose charges if attacked by the enemy.  If a card runs out of charges, it is destroyed.\n" +
+                    "If you run out of cards in your hand, you cannot take any action besides starting the wave. If you run out of cards in your deck, and then get hit by ane nemy, you lose the game.\n" +
+                    "\n" +
+                    "There are three type of cards:\n" +
+                    "Tower Cards: these are yellow, and are used to build towers.  The description will give you the stats of the tower that would be built.\n" +
+                    "Upgrade Cards: these are green, and are used to improve towers that already exist.  Note that not all towers can be upgraded, and those that can have a limit on how many times it can be done.\n" +
+                    "Spell Cards: these are blue, and can do a lot of different things.  Read the card to find out what it does.\n" +
+                    "\n" +
+                    "You also get a special card at the beginning of every round called 'Gather Power' if you don't already have it.  This card gives the enemy one more card but gives you TWO cards, so you should use it regularly if you can to keep a steady supply of cards in your hand.\n" + 
+                    "Drawing more enemies also means that you will get to the end of their deck faster, so you wont have to worry as much about your towers decaying.\n" +
+                    "\n" +
+                    "When building your own deck, the rules are as follows:\n" +
+                    "A deck can have 30-60 cards in total.  Larger decks can take more of a beating, but it is easier to draw something specific with a smaller deck.\n" + 
+                    "A deck can contain no more than 10 copies of the same card.\n" +
+                    "You are not technically required to have towers in your deck, but you probably won't get very far without them unless the level you play on already has several built for you.\n";
+                break;
+
+            case "Towers":
+                helpText.text =
+                    "Towers are built into the world to defend yourself against the enemy.  The following is a breakdown of their stats and what they mean:\n" +
+                    "Max Upgrades: number of times you can play upgrade cards on this tower.  Upgrades which say 'does not cost an upgrade slot' are not counted against this cap.\n" +
+                    "Damage: how much health an enemy loses when it gets hit by this tower.\n" +
+                    "Attack speed: how frequently the tower can make an attack.\n" +
+                    "Damage per second: this number, shown in paranthesees, is just a general measure of about how powerful a tower is. The bigger this number is, the better.  See below for a more thorough explanation\n" +
+                    "range: how far away a tower can attack enemies from.  Unless specified otherwise, the tower looks at all enemies in range of it and attacks whichever is closest to hurting you.  If there are none in range, it will wait for one to get closer.\n" +
+                    "lifespan, or waves remaining: how many waves the tower can fight before disappearing.  When this hits zero, the tower is lost permanently.  Some towers have an infinite lifespan, but these usually have another limitation, such as limited ammo.\n" +
+                    "\n" +
+                    "Damage Per Second (DPS):\n" +
+                    "Damage per second, or DPS for short, is the amount of damage, on average, a tower will do per second that it is attacking enemies.  This number is useful as a milestone to compare different towers with each other.\n" +
+                    "For example, let's compare 'Heavy Tower' and 'Fast Tower':\n" +
+                    "Heavy tower: deals 100 damage per hit, and attacks every 3 seconds.\n" +
+                    "Fast tower: deals 4 damage per hit, and attacks 8.33 times a second.\n" +
+                    "The heavy tower does a lot of damage in one hit, but it is very slow.  The fast tower, on the other hand, does very little damage but can fire several shots a second.  Comparing these two just by looking can be confusing.\n" +
+                    "This is what DPS is for:  it turns out both towers average out to 33.33 damage per second, and so they are just as strong as each other!\n" +
+                    "\n" +
+                    "fast towers or slow towers?:\n" +
+                    "Continuing the above example, if both a 'Heavy Tower' and a 'Fast Tower' do about the same amount of damage, why would you use one over the other?  The answer is how that damage is distributed.\n" +
+                    "slower towers deal a lot of damage at once, so they are good for enemies with armor (which reduce the damage from every incoming attack), or for enemies you want to kill very quickly (like anything that heals itself)\n" +
+                    "on the other hand, if the tower attacks something with low health, then the extra damage is wasted.\n" +
+                    "fast towers deal low damage, but they attack very fast.  This makes them ideal for tackling large groups of weak enemies, since they won't waste their damage by attacking an enemy for far more health than it actually has.  They also get more chances to apply any special effects they may have.\n" +
+                    "on the other hand, if the enemy has a lot of armor, then the attacks will mostly be wasted.  Armor can't reduce the attack below 1 damage, so it will still help, but most of the damage will be wasted.\n" +
+                    "\n" +
+                    "special targeting:\n" +
+                    "There are several different types of targeting effects in the game, which override how a tower decides what to attack.  Examples include:\n" +
+                    "'Target: highest health': targets whichever enemy has the most health remaining.  Useful to stop powerful towers from wasting their attack on weak enemies.\n" +
+                    "'Target: all in range': attacks EVERY enemy in range of the tower.  DPS on these towers is expressed per enemy, so don't be fooled by how little damage they do.  10 damage dealt to 100 enemies at a time is quite a big deal!\n" +
+                    "'Target: orthogonal': this will make more sense when you see it in action, but if there is an enemy in range then all enemies above, below, left, or right of the tower, whether they are in range or not, will get attacked.\n" +
+                    "'Target: mouse': towers with this effect attack enemies near your mouse, instead of enemies near themselves.  These towers effectively have infinite range, but require you to move your mouse around to follow the enemies.\n";
+                break;
+
+            case "Effect Reference":
+                helpText.text =
+                    "This section is for more detailed explanations of some of the more confusing effects you may see on cards in the game.  Feel free to ignore this section for now and come back later to look up something that confuses you.\n" +
+                    "\n" +
+                    "[Scaled]: this tag on an enemy effect means that it becomes more powerful on tougher enemy waves.  The numbers listed on the card are always correct for whatever group you are looking at.\n" +
+                    "[Ranked]: like [Scaled], but the effect only gets stronger if the enemy ranks up (ex, a Tank III has more armor than a Tank II)\n" +
+                    "Armor: for every point of armor, incoming attacks do one less damage.  However, armor cannot reduce an attack below 0 damage.  Even an enemy with 999 armor can be taken down with enough bullets, no matter how weak they are.\n" +
+                    "Enemy loses % health: This is their max health, not their current!  Towers with this effect are VERY strong against giants, which can often end up with hundreds of thousands of health in the late game.\n" +
+                    "<Resonant>: All towers with these effects get stronger for all other towers with the same effect.  For example, if you have two resonant towers and build a third, all three will become more powerful!\n" +
+                    "secondary burst: in addition to the normal attack, the tower produces a small wave that hurts everything near the tower.\n" +
+                    "splash damage: attacks create small explosions that damage anything caught in them.\n" +
+                    "Ammo: towers with a limited supply of ammo spend one ammo per attack, regardless of how many enemies they hit with it.  When they run out of ammo, they disappear.\n" +
+                    "fired manually: towers with this effect sparkle when they are ready to attack, but they wont actually do so unless you click on them.  Usually found on towers with limited ammo.\n" +
+                    "Overcharge: if a tower with overcharge is ready to attack but nothing is in range, it can continue charging up and get bonus damage when an enemy gets close enough to attack.\n";
+                break;
+
+            default:
+                Debug.LogWarning("showHelpScreen doesnt recognize screen \"" + screen + "\"");
+                break;
+        }
+
+        //and put a back button at the bottom
+        MenuButtonScript mbs = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();
+        mbs.setButtonText("Back");
+        mbs.setColor(menuButtonColor);
+        mbs.transform.SetParent(this.transform, false);
+        menuButtons.Add(mbs);
     }
 
     /// <summary>
@@ -547,6 +707,11 @@ public class LevelSelectScript : BaseBehaviour
 
                 infoText.text = "Chooses a level at random!";
 
+                break;
+
+            case "Help":
+                //show text to explain the button
+                infoText.text = "Confused? Find explanations and tutorials here, whether you need a little help or a lot.";
                 break;
 
             case "Random Deck(from list)":
