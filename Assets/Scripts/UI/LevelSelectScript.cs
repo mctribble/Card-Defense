@@ -19,6 +19,7 @@ public class LevelSelectScript : BaseBehaviour
     public string       thumbnailDir;     // where the level thumbnails are stored
     public GameObject   buttonPrefab;     //prefab used to create buttons
     public GameObject   menuHeaderPrefab; //prefab used to create menu headers
+    public GameObject   menuTextPrefab;   //prefab used to create larger blocks of menu text
     public GameObject   menuRoot;         //object to be destroyed when the menu is no longer needed
     public Image        infoImage;        //image object to use for showing level information
     public Text         infoText;         //text object to use for showing level information
@@ -35,7 +36,7 @@ public class LevelSelectScript : BaseBehaviour
 
     //list of created menu buttons
     private List<MenuButtonScript> menuButtons;
-    private List<MenuHeaderScript> menuHeaders;
+    private List<MenuTextScript> menuHeaders;
 
     //temp storage for player menu selections
     private LevelData chosenLevel;
@@ -51,7 +52,7 @@ public class LevelSelectScript : BaseBehaviour
 
         //create empty lists to hold the menu items in
         menuButtons = new List<MenuButtonScript>();
-        menuHeaders = new List<MenuHeaderScript>();
+        menuHeaders = new List<MenuTextScript>();
 
         //test if data persistence is working in webGL builds
         if (Application.platform == RuntimePlatform.WebGLPlayer)
@@ -135,7 +136,7 @@ public class LevelSelectScript : BaseBehaviour
         string[] knownDifficulties = { "easy", "medium", "hard" };
         foreach (string diff in knownDifficulties)
         {
-            MenuHeaderScript header = Instantiate(menuHeaderPrefab).GetComponent<MenuHeaderScript>(); //create a new header
+            MenuTextScript header = Instantiate(menuHeaderPrefab).GetComponent<MenuTextScript>(); //create a new header
             header.text = diff.ToUpper();                                                             //label it
             header.transform.SetParent(this.transform, false);                                        //add it to the menu
             menuHeaders.Add(header);                                                                  //add it to the list
@@ -153,7 +154,7 @@ public class LevelSelectScript : BaseBehaviour
         {
             string diff = levelButtonsToAdd[0].level.difficulty;
 
-            MenuHeaderScript header = Instantiate(menuHeaderPrefab).GetComponent<MenuHeaderScript>(); //create a new header
+            MenuTextScript header = Instantiate(menuHeaderPrefab).GetComponent<MenuTextScript>(); //create a new header
             header.text = diff.ToUpper();                                                             //label it
             header.transform.SetParent(this.transform, false);                                        //add it to the menu
             menuHeaders.Add(header);                                                                  //add it to the list
@@ -322,7 +323,7 @@ public class LevelSelectScript : BaseBehaviour
         //buttons for all the player decks
         if (DeckManagerScript.instance.playerDecks.decks.Count > 0)
         {
-            MenuHeaderScript header = Instantiate(menuHeaderPrefab).GetComponent<MenuHeaderScript>();
+            MenuTextScript header = Instantiate(menuHeaderPrefab).GetComponent<MenuTextScript>();
             header.text = "Your Decks";
             header.transform.SetParent(this.transform);
             menuHeaders.Add(header);
@@ -346,7 +347,7 @@ public class LevelSelectScript : BaseBehaviour
         //buttons for all the premade decks
         if (DeckManagerScript.instance.premadeDecks.decks.Count > 0)
         {
-            MenuHeaderScript header = Instantiate(menuHeaderPrefab).GetComponent<MenuHeaderScript>();
+            MenuTextScript header = Instantiate(menuHeaderPrefab).GetComponent<MenuTextScript>();
             header.text = "Premade Decks";
             header.transform.SetParent(this.transform);
             menuHeaders.Add(header);
@@ -374,7 +375,7 @@ public class LevelSelectScript : BaseBehaviour
 
         menuButtons.Clear();
 
-        foreach (MenuHeaderScript header in menuHeaders)
+        foreach (MenuTextScript header in menuHeaders)
             Destroy(header.gameObject);
 
         menuHeaders.Clear();
@@ -478,6 +479,7 @@ public class LevelSelectScript : BaseBehaviour
     {
         switch(buttonText)
         {
+            case "Back to Help":
             case "Help":
                 //purge the current menu and show the help screen instead
                 clearMenu();
@@ -566,7 +568,7 @@ public class LevelSelectScript : BaseBehaviour
         infoImage.transform.parent.gameObject.SetActive(false);
 
         //create the buttons
-        string[] menuButtonStrings = {"The Basics", "Controls", "Cards", "Towers", "Effect Reference", "Back"};
+        string[] menuButtonStrings = {"The Basics", "Controls", "Cards", "Towers", "Effect Reference", "Back to Help"};
         foreach (string s in menuButtonStrings)
         {
             MenuButtonScript mbs = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();
@@ -583,7 +585,7 @@ public class LevelSelectScript : BaseBehaviour
     private void showHelpScreen(string screen)
     {
         //create the first bit of text
-        MenuHeaderScript helpText = Instantiate(menuHeaderPrefab).GetComponent<MenuHeaderScript>();
+        MenuTextScript helpText = Instantiate(menuTextPrefab).GetComponent<MenuTextScript>();
         helpText.transform.SetParent(this.transform, false);
         menuHeaders.Add(helpText);
 
@@ -664,15 +666,25 @@ public class LevelSelectScript : BaseBehaviour
                 helpText.text =
                     "This section is for more detailed explanations of some of the more confusing effects you may see on cards in the game.  Feel free to ignore this section for now and come back later to look up something that confuses you.\n" +
                     "\n" +
+                    "\n" +
                     "[Scaled]: this tag on an enemy effect means that it becomes more powerful on tougher enemy waves.  The numbers listed on the card are always correct for whatever group you are looking at.\n" +
+                    "\n" +
                     "[Ranked]: like [Scaled], but the effect only gets stronger if the enemy ranks up (ex, a Tank III has more armor than a Tank II)\n" +
+                    "\n" +
                     "Armor: for every point of armor, incoming attacks do one less damage.  However, armor cannot reduce an attack below 0 damage.  Even an enemy with 999 armor can be taken down with enough bullets, no matter how weak they are.\n" +
+                    "\n" +
                     "Enemy loses % health: This is their max health, not their current!  Towers with this effect are VERY strong against giants, which can often end up with hundreds of thousands of health in the late game.\n" +
+                    "\n" +
                     "<Resonant>: All towers with these effects get stronger for all other towers with the same effect.  For example, if you have two resonant towers and build a third, all three will become more powerful!\n" +
+                    "\n" +
                     "secondary burst: in addition to the normal attack, the tower produces a small wave that hurts everything near the tower.\n" +
+                    "\n" +
                     "splash damage: attacks create small explosions that damage anything caught in them.\n" +
+                    "\n" +
                     "Ammo: towers with a limited supply of ammo spend one ammo per attack, regardless of how many enemies they hit with it.  When they run out of ammo, they disappear.\n" +
+                    "\n" +
                     "fired manually: towers with this effect sparkle when they are ready to attack, but they wont actually do so unless you click on them.  Usually found on towers with limited ammo.\n" +
+                    "\n" +
                     "Overcharge: if a tower with overcharge is ready to attack but nothing is in range, it can continue charging up and get bonus damage when an enemy gets close enough to attack.\n";
                 break;
 
