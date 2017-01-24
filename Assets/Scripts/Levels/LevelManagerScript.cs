@@ -115,6 +115,9 @@ public class LevelData
     [DefaultValue(1.1f)]  public float waveTimeLinear = 1.1f;
     [DefaultValue(20.0f)] public float waveTimeMax    = 20.0f;
 
+    //whether or not to disable the 'Gather Power' card.  You probably only want to do this in special circumstances, such as tutorials
+    [DefaultValue(false)] public bool disableGatherPower = false;
+
     [XmlArray("Waves")]
     [XmlArrayItem("Wave")]
     [Display(Seq.GuiBox | Seq.LineNumbers | Seq.PerItemRemove)]
@@ -316,7 +319,7 @@ public class LevelManagerScript : BaseBehaviour
         yield return null;
         yield return null;
 
-        //apply wave effects on predefined waves
+        //apply wave effects and update ranks on predefined waves
         for (int i = 0; i < data.waves.Count; i++)
         {
             if (data.waves[i].enemyData.effectData != null)
@@ -324,7 +327,7 @@ public class LevelManagerScript : BaseBehaviour
                     if (e.triggersAs(EffectType.wave))
                         data.waves[i] = ((IEffectWave)e).alteredWaveData(data.waves[i]);
 
-            //Debug.Log("wave " + (i+1) + ": " + data.waves[i].ToString());
+            data.waves[i].recalculateRank();
         }
 
         //init wave count

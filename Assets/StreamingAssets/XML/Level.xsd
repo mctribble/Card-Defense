@@ -12,6 +12,7 @@
         <xsd:element name="waveGrowthExponential" type="xsd:float" minOccurs="0" maxOccurs="1"/>
         <xsd:element name="waveTimeLinear" type="xsd:float" minOccurs="0" maxOccurs="1"/>
         <xsd:element name="waveTimeMax" type="xsd:float" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="disableGatherPower" type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
         <xsd:element name="Waves">
           <xsd:complexType>
             <xsd:sequence>

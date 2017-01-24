@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
+  <difficulty>Tutorials</difficulty>
+  <description>Learn about what happens when things go badly</description>
+  <randomWaveCount>0</randomWaveCount>
+  <disableGatherPower>true</disableGatherPower>
+  <Waves>
+    <Wave type="Standard" budget="40" time="1.1" message="In this tutorial, we're going to talk about losing.  See the '5/5' line on all of your 'Basic Upgrade' cards?  Those are called charges.  When you play a card, that card loses one charge.  When a card runs out of charges, it is destroyed.  If the card still has charges after you play it, then that card stays with you by returning to the bottom of your deck.  This is important, because you're about to see what happens when an enemy makes it to their goal.  Go ahead and start the wave." />
+    <Wave type="Standard" budget="80" time="2.2" message="First of all, did you see the '-2' that came up whenever an enemy hit you?  That means that the card on top of your deck just lost 2 charges.  Some enemies will do more or less damage than that, so check on their 'Attack' stat if you ever want to know how bad it will hurt for one to break through.  The other thing that happens is that those enemies show up as a new card in the next round, labelled survivors.  This means that you absolutely have to kill every enemy: if it doesn't die, then it will simply come for you again!  Unfortunately, you still have no towers, so just start the next wave." />
+    <Wave type="Swarm" budget="999999" time="3.30000019" message="As you have seen, if a card in your deck runs out of charges, then that card is destroyed.  If you get hit and your deck is out of cards, then you lose.  Press the spacebar to see what this looks like." />
+  </Waves>
+  <Spawners>
+    <Spawner spawnX="9.5" spawnY="-1" />
+  </Spawners>
+  <PathSegments>
+    <Segment startX="9.5" startY="-1" endX="4.5" endY="-1" />
+    <Segment startX="4.5" startY="-1" endX="4.5" endY="0" />
+    <Segment startX="4.5" startY="-1" endX="4.5" endY="-2" />
+    <Segment startX="4.5" startY="0" endX="0.5" endY="0" />
+    <Segment startX="0.5" startY="0" endX="0.5" endY="-1" />
+    <Segment startX="4.5" startY="-2" endX="0.5" endY="-2" />
+    <Segment startX="0.5" startY="-2" endX="0.5" endY="-1" />
+    <Segment startX="4.5" startY="-1" endX="0.5" endY="-1" />
+    <Segment startX="0.5" startY="-1" endX="-1.5" endY="-1" />
+    <Segment startX="-1.5" startY="-1" endX="-1.5" endY="3" />
+    <Segment startX="-1.5" startY="3" endX="-9.5" endY="3" />
+    <Segment startX="-9.5" startY="3" endX="-9.5" endY="-3" />
+    <Segment startX="-9.5" startY="-3" endX="-5.5" endY="-3" />
+    <Segment startX="-5.5" startY="-3" endX="-5.5" endY="1" />
+    <Segment startX="-5.5" startY="1" endX="-7.5" endY="1" />
+  </PathSegments>
+  <Towers />
+  <shuffleDeck>false</shuffleDeck>
+  <levelDeck name="Tutorial Deck">
+    <Cards>
+      <Card name="Basic Upgrade" count="30" />
+    </Cards>
+  </levelDeck>
+</Level>

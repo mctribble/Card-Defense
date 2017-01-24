@@ -329,14 +329,6 @@ public class EnemyCardScript : CardScript
     //update stats for this wave
     public void updateWaveStats()
     {
-        //show the wave message, if there is one, and then blank it out so it only shows once
-        if (wave.message != null && wave.message != "")
-        {
-            MessageHandlerScript.ShowNoYield(wave.message);
-            wave.message = null;
-        }
-
-        //fetch wave stats
         spawnCount = wave.spawnCount;
         totalRemainingHealth = wave.totalRemainingHealth;
     }
@@ -379,14 +371,30 @@ public class EnemyCardScript : CardScript
     }
 
     /// <summary>
-    /// triggers all effects on this card that are meant to fire when the card is drawn
+    /// triggers all effects on this card that are meant to fire when the card is drawn.  This also shows any wave messages, if they are present
     /// </summary>
     public override void triggerOnDrawnEffects()
     {
+        StartCoroutine(triggerOnDrawnEffectsCoroutine());
+    }
+
+    private IEnumerator triggerOnDrawnEffectsCoroutine()
+    {
+        //wait for cards to be done moving around
+        yield return EnemyHandScript.instance.waitForReady();
+        yield return PlayerHandScript.instance.waitForReady();
+
         if (wave.isSurvivorWave == false)
+        {
+            //effects
             if (wave.enemyData.effectData != null)
                 foreach (IEffect ie in wave.enemyData.effectData.effects)
                     if (ie.triggersAs(EffectType.cardDrawn))
                         ((IEffectInstant)ie).trigger();
+
+            //wave messages
+            if (wave.message != null && wave.message != "")
+                MessageHandlerScript.ShowNoYield(wave.message);
+        }
     }
 }

@@ -20,6 +20,8 @@
   <!-- wave time is wave * waveTimeLinear, but cannot exceed waveTimeMax.  Again, these are optional.  The values shown are the defaults if you dont specify them yourself.-->
   <waveTimeLinear>1.1</waveTimeLinear>
   <waveTimeMax>20</waveTimeMax>
+  <!-- optional parameter.  Defaults to false if not present.  If true, then the player does not receive a copy of 'Gather Power' at the beginning of each round that they do not already have it.  You should not use this without a good reason.-->
+  <disableGatherPower>false</disableGatherPower>
   <!-- 	These waves will be guaranteed to spawn, in order.
 		type: name of the enemy type to spawn
 		budget: how much the wave spawner can "spend" on spawning enemies

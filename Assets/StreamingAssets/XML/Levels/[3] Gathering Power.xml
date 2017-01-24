@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
+  <difficulty>Tutorials</difficulty>
+  <description>Learn about the 'Gather Power' card and resource management</description>
+  <randomWaveCount>0</randomWaveCount>
+  <Waves>
+    <Wave type="Swarm" budget="64" time="0.732879937" message="it is time to talk about a special card called 'Gather Power'.  This card does not come from your deck, and you never draw it.  Instead, a copy is given to you at the start of every round, if you don't already have one.  It has many uses, but the most important is for dealing with situations like this: you have nothing in your hand that would be a good response to the incoming enemies.  Play 'Gather Power' in order to try and draw something more helpful." />
+    <Wave type="Swarm" budget="87" time="1.08427548" message="There you go.  Those fast towers should be able to handle the Swarms.  Notice that this also drew another card from the enemy deck.  In other words, the downside to 'Gather Power' is that you will have to deal with about twice as many enemies as you did before.  That being said, since you draw TWO cards from it, the reward is usually worth the risk.  " />
+    <Wave type="Swarm" budget="119" time="3.30000019" message="Another reason you might want to 'Gather Power' often is it allows you to finish levels faster.  For example, in this level the enemy deck has 15 cards.  Normally, it would take 15 rounds to win.  However, if you cast 'Gather Power' every round, the enemy will play two cards each time, so you can finish in only eight rounds.  This means you won't be losing as many towers to decay.  Go ahead and use it again." />
+    <Wave type="Tank" budget="161" time="4.4" />
+    <Wave type="Regenerative Tank" budget="213" time="5.5" message="There are other cards with similar effects.  For example, Challenger Towers are very strong but cause both you and the enemy to draw extra cards every round.  There is also the spell Enrage, which gives the enemy two cards and you three.  Just to show you how crowded it can get, play every card in your hand.  If something lets you draw more cards, play those too." />
+    <Wave type="Ping" budget="274" time="6.60000038" message="Just so you know, the enemy hand can hold 10 cards, and your hand can hold 15.  Even if someone is supposed to draw but can't for any reason, other effects on the card still happen.  (For example, if you play 'Gather Power' when the enemy deck is empty you still get to draw cards, even though the enemy couldn't do so)"/>
+    <Wave type="Assassin" budget="345" time="7.70000029" />
+    <Wave type="Armored" budget="426" time="8.8" />
+    <Wave type="Ping" budget="516" time="9.900001"  />
+    <Wave type="Assassin" budget="617" time="11" />
+    <Wave type="Giant" budget="726" time="12.1" message="The Nova Tower you just drew will be very helpful for dealing with this round.  It can only fire once, but it will cause massive damage to everything in range.  Wait for it to start sparkling before starting the round, and then click on it when a lot of enemies are in range of it to watch the carnage.  you should also build several other towers to fend off anything that survives the explosion."/>
+    <Wave type="Ping" budget="846" time="13.2000008" />
+    <Wave type="Scrambled" budget="975" time="14.3" />
+    <Wave type="Standard" budget="1114" time="15.4000006" />
+  </Waves>
+  <Spawners>
+    <Spawner spawnX="9.5" spawnY="-1" />
+  </Spawners>
+  <PathSegments>
+    <Segment startX="9.5" startY="-1" endX="4.5" endY="-1" />
+    <Segment startX="4.5" startY="-1" endX="4.5" endY="0" />
+    <Segment startX="4.5" startY="-1" endX="4.5" endY="-2" />
+    <Segment startX="4.5" startY="0" endX="0.5" endY="0" />
+    <Segment startX="0.5" startY="0" endX="0.5" endY="-1" />
+    <Segment startX="4.5" startY="-2" endX="0.5" endY="-2" />
+    <Segment startX="0.5" startY="-2" endX="0.5" endY="-1" />
+    <Segment startX="4.5" startY="-1" endX="0.5" endY="-1" />
+    <Segment startX="0.5" startY="-1" endX="-1.5" endY="-1" />
+    <Segment startX="-1.5" startY="-1" endX="-1.5" endY="3" />
+    <Segment startX="-1.5" startY="3" endX="-9.5" endY="3" />
+    <Segment startX="-9.5" startY="3" endX="-9.5" endY="-3" />
+    <Segment startX="-9.5" startY="-3" endX="-5.5" endY="-3" />
+    <Segment startX="-5.5" startY="-3" endX="-5.5" endY="1" />
+    <Segment startX="-5.5" startY="1" endX="-7.5" endY="1" />
+  </PathSegments>
+  <Towers />
+  <shuffleDeck>false</shuffleDeck>
+  <levelDeck name="Tutorial Deck">
+    <Cards>
+      <Card name="Heavy Tower" count="4" />
+      <Card name="Heavy Upgrade" count="2" />
+      <Card name="Sniper Tower" count="2" />
+      <Card name="Fast Tower" count="2" />
+      <Card name="Heavy Upgrade" count="3" />
+      <Card name="Challenger Tower" count="2" />
+      <Card name="Enrage" count="2" />
+      <Card name="Challenger Tower" count="2" />
+      <Card name="Nova Tower" count="1" />
+      <Card name="Piercing Ammo" count="1" />
+      <Card name="Fast Upgrade" count="3" />
+      <Card name="Heavy Upgrade" count="3" />
+      <Card name="Light Shield" count="3" />
+    </Cards>
+  </levelDeck>
+</Level>

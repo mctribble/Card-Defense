@@ -28,7 +28,8 @@ public class PlayerHandScript : HandScript
         yield return drawToHandSize(startingHandSize);
 
         //generate the "gather power" token 
-        drawToken("Gather Power", true, true, true, true);
+        if (LevelManagerScript.instance.data.disableGatherPower == false)
+            drawToken("Gather Power", true, true, true, true);
     }
 
     //called whenever a new round starts (event registered in Start())
@@ -41,8 +42,9 @@ public class PlayerHandScript : HandScript
         while (busy);
 
         //if we don't have a "gather power" token, make a new one
-        if (cards.Any(cs => cs != null && cs.cardName == "Gather Power") == false)
-            drawToken("Gather Power");
+        if (LevelManagerScript.instance.data.disableGatherPower == false)
+            if (cards.Any(cs => cs != null && cs.cardName == "Gather Power") == false)
+                drawToken("Gather Power");
     }
 
     /// <summary>

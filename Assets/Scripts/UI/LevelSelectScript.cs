@@ -133,7 +133,7 @@ public class LevelSelectScript : BaseBehaviour
         List<MenuButtonScript> levelButtonsToAdd = menuButtons.SkipWhile(mbs => mbs.buttonType == MenuButtonType.text).ToList();
 
         //do categories that we know will exist
-        string[] knownDifficulties = { "easy", "medium", "hard" };
+        string[] knownDifficulties = { "tutorials", "easy", "medium", "hard" };
         foreach (string diff in knownDifficulties)
         {
             MenuTextScript header = Instantiate(menuHeaderPrefab).GetComponent<MenuTextScript>(); //create a new header
