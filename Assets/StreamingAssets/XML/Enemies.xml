@@ -44,7 +44,7 @@
       <effectData>
         <Effects>
           <Effect name="fixedSpawnCount" strength="1" />
-          <Effect name="scaleHealthWithBudget" strength="1" />
+          <Effect name="scaleHealthWithBudget" strength="1.5" />
           <Effect name="scaleAttackWithBudget" strength="0.5" />
           <Effect name="invScaleAttackWithDamage" />
         </Effects>

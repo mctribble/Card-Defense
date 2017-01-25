@@ -15,6 +15,7 @@ Spade.xml
 Spiral Mountain.xml
 Switchback.xml
 Symmetry.xml
+theta.xml
 Trophy.xml
 Two Way Street.xml
 [1] The Basics.xml
