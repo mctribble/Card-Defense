@@ -11,6 +11,7 @@ Parallel tasks.xml
 Psi.xml
 Racetracks.xml
 Robert.xml
+Sector G7.xml
 Short Circuit.xml
 Simplicity.xml
 Spade.xml
