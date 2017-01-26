@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
+  <difficulty>medium</difficulty>
+  <description>Fine, YOU try naming this thing.</description>
+  <randomWaveCount>30</randomWaveCount>
+  <Waves />
+  <Spawners>
+    <Spawner spawnX="1" spawnY="-2" />
+    <Spawner spawnX="3" spawnY="-6" />
+    <Spawner spawnX="6" spawnY="-2" />
+  </Spawners>
+  <PathSegments>
+    <Segment startX="1" startY="-2" endX="-3" endY="-2" />
+    <Segment startX="-3" startY="-2" endX="-3" endY="3" />
+    <Segment startX="-3" startY="3" endX="-7" endY="3" />
+    <Segment startX="-7" startY="3" endX="-7" endY="-6" />
+    <Segment startX="-7" startY="-6" endX="2" endY="-6" />
+    <Segment startX="2" startY="-6" endX="2" endY="-2" />
+    <Segment startX="3" startY="-6" endX="3" endY="-1" />
+    <Segment startX="3" startY="-1" endX="-2" endY="-1" />
+    <Segment startX="-2" startY="-1" endX="-2" endY="3" />
+    <Segment startX="-2" startY="3" endX="9" endY="3" />
+    <Segment startX="9" startY="3" endX="9" endY="-1" />
+    <Segment startX="9" startY="-1" endX="4" endY="-1" />
+    <Segment startX="4" startY="-1" endX="4" endY="-6" />
+    <Segment startX="6" startY="-2" endX="10" endY="-2" />
+    <Segment startX="10" startY="-2" endX="10" endY="3" />
+    <Segment startX="10" startY="3" endX="14" endY="3" />
+    <Segment startX="14" startY="3" endX="14" endY="-6" />
+    <Segment startX="14" startY="-6" endX="5" endY="-6" />
+    <Segment startX="5" startY="-6" endX="5" endY="-2" />
+  </PathSegments>
+  <Towers />
+  <shuffleDeck>true</shuffleDeck>
+  <premadeDeckName>Challenger</premadeDeckName>
+</Level>
