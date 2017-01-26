@@ -1,13 +1,14 @@
+Apathy.xml
 Chain.xml
 Chokepoint.xml
 Club.xml
-Confusion.xml
-Congestion.xml
+confusion.xml
+congestion.xml
 Diamond.xml
 Divergence.xml
 Grid.xml
 Heart.xml
-Parallel tasks.xml
+parallel tasks.xml
 Psi.xml
 Racetracks.xml
 Robert.xml
@@ -17,7 +18,7 @@ Simplicity.xml
 Spade.xml
 Spiral Mountain.xml
 Switchback.xml
-Symmetry.xml
+symmetry.xml
 theta.xml
 Trophy.xml
 Two Way Street.xml
