@@ -8,6 +8,7 @@ Diamond.xml
 Divergence.xml
 Grid.xml
 Heart.xml
+parallel tasks 2.xml
 parallel tasks.xml
 Psi.xml
 Racetracks.xml
