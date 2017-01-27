@@ -6,6 +6,9 @@ sometimes game freezes on level load if it is not the first load of a session.  
 art needed for:
 conjure tower/upgrade/spell
 double/quad-barrel upgrade
+enemy spawn points
+maybe update enemy goal points?
+maybe indicate path direction?
 ================================================================
 art needs updating for:
 ================================================================
@@ -16,7 +19,7 @@ differentiate tower/spell/upgrade cards
 ================================================================
 content goals:
 enemies: 10/10  <<DONE!!>>
-levels:  26/30
+levels:  27/30
 cards:   56/100 (+3 token)
 decks:   07/10
 ================================================================

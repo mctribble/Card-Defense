@@ -1,8 +1,9 @@
 Apathy.xml
+Boxes.xml
 Chain.xml
 Chokepoint.xml
 Club.xml
-Confusion.xml
+confusion.xml
 Congestion.xml
 Diamond.xml
 Divergence.xml
