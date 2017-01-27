@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
+  <difficulty>hard</difficulty>
+  <description>Shaped like a Sierpinski triangle.  The spawn points are in the two bottom corners.</description>
+  <randomWaveCount>20</randomWaveCount>
+  <waveGrowthLinear>5</waveGrowthLinear>
+  <waveGrowthSquared>2.4</waveGrowthSquared>
+  <waveTimeLinear>1.3</waveTimeLinear>
+  <waveTimeMax>25</waveTimeMax>
+  <Waves />
+  <Spawners>
+    <Spawner spawnX="-8" spawnY="-6" />
+    <Spawner spawnX="-8" spawnY="-6" />
+    <Spawner spawnX="8" spawnY="-6" />
+    <Spawner spawnX="8" spawnY="-6" />
+  </Spawners>
+  <PathSegments>
+    <Segment startX="-8" startY="-6" endX="-4" endY="-6" />
+    <Segment startX="-4" startY="-6" endX="-6" endY="-3" />
+    <Segment startX="-8" startY="-6" endX="-6" endY="-3" />
+    <Segment startX="-4" startY="-6" endX="0" endY="-6" />
+    <Segment startX="0" startY="-6" endX="-2" endY="-3" />
+    <Segment startX="-4" startY="-6" endX="-2" endY="-3" />
+    <Segment startX="4" startY="-6" endX="0" endY="-6" />
+    <Segment startX="0" startY="-6" endX="2" endY="-3" />
+    <Segment startX="4" startY="-6" endX="2" endY="-3" />
+    <Segment startX="8" startY="-6" endX="4" endY="-6" />
+    <Segment startX="4" startY="-6" endX="6" endY="-3" />
+    <Segment startX="8" startY="-6" endX="6" endY="-3" />
+    <Segment startX="6" startY="-3" endX="2" endY="-3" />
+    <Segment startX="2" startY="-3" endX="4" endY="0" />
+    <Segment startX="4" startY="0" endX="0" endY="0" />
+    <Segment startX="0" startY="0" endX="2" endY="3" />
+    <Segment startX="6" startY="-3" endX="4" endY="0" />
+    <Segment startX="4" startY="0" endX="2" endY="3" />
+    <Segment startX="2" startY="3" endX="-2" endY="3" />
+    <Segment startX="-2" startY="3" endX="0" endY="6" />
+    <Segment startX="2" startY="3" endX="0" endY="6" />
+    <Segment startX="-6" startY="-3" endX="-2" endY="-3" />
+    <Segment startX="-2" startY="-3" endX="-4" endY="0" />
+    <Segment startX="-4" startY="0" endX="0" endY="0" />
+    <Segment startX="0" startY="0" endX="-2" endY="3" />
+    <Segment startX="-6" startY="-3" endX="-4" endY="0" />
+    <Segment startX="-4" startY="0" endX="-2" endY="3" />
+  </PathSegments>
+  <Towers />
+  <shuffleDeck>true</shuffleDeck>
+  <levelDeck name="New Deck">
+    <Cards>
+      <Card name="AOE Tower" count="4" />
+      <Card name="Basic Upgrade" count="6" />
+      <Card name="Enrage" count="2" />
+      <Card name="Fast Tower" count="6" />
+      <Card name="Fast Upgrade" count="6" />
+      <Card name="Light Shield" count="4" />
+      <Card name="Mouse Tower" count="8" />
+      <Card name="Reinforce" count="2" />
+      <Card name="Sniper Tower" count="2" />
+    </Cards>
+  </levelDeck>
+</Level>
