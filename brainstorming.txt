@@ -19,7 +19,7 @@ differentiate tower/spell/upgrade cards
 ================================================================
 content goals:
 enemies: 10/10  <<DONE!!>>
-levels:  27/30
+levels:  28/30
 cards:   56/100 (+3 token)
 decks:   07/10
 ================================================================

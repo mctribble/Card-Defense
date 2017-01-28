@@ -7,6 +7,7 @@ confusion.xml
 Congestion.xml
 Diamond.xml
 Divergence.xml
+Double Spiral Mountain.xml
 Grid.xml
 Heart.xml
 parallel tasks 2.xml
