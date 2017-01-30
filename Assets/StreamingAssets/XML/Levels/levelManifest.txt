@@ -1,3 +1,6 @@
+1 The Basics.xml
+2 Losing.xml
+3 Gathering Power.xml
 Apathy.xml
 Boxes.xml
 Chain.xml
@@ -26,6 +29,3 @@ Symmetry.xml
 theta.xml
 Trophy.xml
 Two Way Street.xml
-[1] The Basics.xml
-[2] Losing.xml
-[3] Gathering Power.xml

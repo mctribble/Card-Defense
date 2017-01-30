@@ -112,8 +112,8 @@ public class LevelData
     [DefaultValue(1.1f)]  public float waveGrowthExponential = 1.1f;
 
     //time: min(wave*linear, maxwavetime)
-    [DefaultValue(1.1f)]  public float waveTimeLinear = 1.1f;
-    [DefaultValue(20.0f)] public float waveTimeMax    = 20.0f;
+    [DefaultValue(2.2f)]  public float waveTimeLinear = 2.2f;
+    [DefaultValue(40.0f)] public float waveTimeMax    = 40.0f;
 
     //whether or not to disable the 'Gather Power' card.  You probably only want to do this in special circumstances, such as tutorials
     [DefaultValue(false)] public bool disableGatherPower = false;

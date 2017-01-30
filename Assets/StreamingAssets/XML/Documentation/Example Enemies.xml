@@ -11,7 +11,7 @@
       byte   damage:    the amount of charges removed from the player's deck when this enemy reaches their goal
       byte   unitSpeed: how fast this unit moves-->
       <!--because an enemy named Tank already exists in the base game, that version will be overwritten. This variation of tank has very low health. -->
-      <Enemy name="Tank" spawnCost="100" attack="10" maxHealth="8" unitSpeed="1" sprite="Enemy_Basic.png">
+      <Enemy name="Tank" spawnCost="100" attack="10" maxHealth="8" unitSpeed="0.5" sprite="Enemy_Basic.png">
         <!-- rankInfo defines how, and when, enemy waves will rank up:
         string rankUpSpawnCount: if the wave would spawn more enemies than this, it ranks up
         float  spawnCostMult:    spawnCost is multiplied by this much every time the wave ranks up.  (in this case, spawn cost will be 2x normal at rank II, 4x normal at rank III, etc.)
@@ -25,7 +25,7 @@
 	<!--because an enemy of this name does not exist in base game, this will be added to the list.
 		It will only appear in levels that spawn at least some waves at random, or include it in their explicit wave list (such as the example level file in this folder)
 		these enemies are very slow and always die in one hit, but spawn in great numbers-->
-    <Enemy name="ExEnemy" spawnCost="1" attack="1" maxHealth="1" unitSpeed="1" sprite="Enemy_Basic.png">
+    <Enemy name="ExEnemy" spawnCost="1" attack="1" maxHealth="1" unitSpeed="0.5" sprite="Enemy_Basic.png">
       <rankInfo rankUpSpawnCount="200" spawnCostMult="2" attackMult="2" maxHealthMult="2" unitSpeedMult="1" />
       <unitColor r="0" g="0" b="0" a="1" />
     </Enemy>

@@ -491,7 +491,7 @@ public class LevelSelectScript : BaseBehaviour
 
             case "Random Level":
                 //find all level buttons currently available
-                MenuButtonScript[] levelButtons = menuButtons.Where(mb => mb.buttonType == MenuButtonType.level).ToArray();
+                MenuButtonScript[] levelButtons = menuButtons.Where(mb => mb.buttonType == MenuButtonType.level).Where(mb => mb.level.difficulty != "Tutorials").ToArray();
 
                 //choose one of them at random and treat it as if that button was clicked on
                 int buttonIndex = UnityEngine.Random.Range(0,levelButtons.Length);

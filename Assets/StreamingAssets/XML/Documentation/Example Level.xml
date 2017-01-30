@@ -18,8 +18,8 @@
   <waveGrowthSquared>2.2</waveGrowthSquared>
   <waveGrowthExponential>1.1</waveGrowthExponential>
   <!-- wave time is wave * waveTimeLinear, but cannot exceed waveTimeMax.  Again, these are optional.  The values shown are the defaults if you dont specify them yourself.-->
-  <waveTimeLinear>1.1</waveTimeLinear>
-  <waveTimeMax>20</waveTimeMax>
+  <waveTimeLinear>2.2</waveTimeLinear>
+  <waveTimeMax>40</waveTimeMax>
   <!-- optional parameter.  Defaults to false if not present.  If true, then the player does not receive a copy of 'Gather Power' at the beginning of each round that they do not already have it.  You should not use this without a good reason.-->
   <disableGatherPower>false</disableGatherPower>
   <!-- 	These waves will be guaranteed to spawn, in order.
@@ -28,9 +28,9 @@
 		time: how many seconds the enemies spawn for.  Shorter time spans result in more densely packed groups.
 		message: optional message that appears at the start of the wave-->
   <Waves>
-    <Wave type="Swarm" budget="500" time="5" />
-    <Wave type="Standard" budget="800" time="8" />
-    <Wave type="Tank" budget="1000" time="10" />
+    <Wave type="Swarm" budget="500" time="10" />
+    <Wave type="Standard" budget="800" time="16" />
+    <Wave type="Tank" budget="1000" time="20" />
   </Waves>
   <!--	positions at which the enemies can spawn -->
   <Spawners>

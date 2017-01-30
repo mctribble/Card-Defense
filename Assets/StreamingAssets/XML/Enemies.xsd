@@ -44,7 +44,7 @@
                   <xsd:attribute name="spawnCost" type="xsd:unsignedShort" use="required" />
                   <xsd:attribute name="attack"    type="xsd:unsignedByte"  use="required" />
                   <xsd:attribute name="maxHealth" type="xsd:unsignedShort" use="required" />
-                  <xsd:attribute name="unitSpeed" type="xsd:unsignedByte"  use="required" />
+                  <xsd:attribute name="unitSpeed" type="xsd:float"         use="required" />
                   <xsd:attribute name="sprite"    type="xsd:string"        use="required" />
                 </xsd:complexType>
               </xsd:element>
