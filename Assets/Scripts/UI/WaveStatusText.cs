@@ -8,20 +8,7 @@ using Vexe.Runtime.Types;
 /// </summary>
 public class WaveStatusText : BaseBehaviour
 {
-    public Text enemyStatText;
     public Text enemyDeckText;
-
-    // Use this for initialization
-    private void Start()
-    {
-        LevelManagerScript.instance.LevelLoadedEvent += LevelLoadedHandler;
-    }
-
-    // event handler for LevelManagerScript.instance.LevelLoadedEvent
-    private void LevelLoadedHandler()
-    {
-        enemyStatText.raycastTarget = true; //allow this object to capture mouse events only after the level has loaded
-    }
 
     // Update is called once per frame
     private void Update()
@@ -39,32 +26,5 @@ public class WaveStatusText : BaseBehaviour
             enemyDeckText.text = "∞";
         else
             enemyDeckText.text = LevelManagerScript.instance.wavesInDeck + "/" + LevelManagerScript.instance.data.waves.Count;
-
-        //wave stats
-        int stillToSpawn = LevelManagerScript.instance.SpawnCount - LevelManagerScript.instance.totalSpawnedThisWave;
-        if (stillToSpawn > 0)
-        {
-            //wave has not started or is still spawning: "total: ??????"
-            enemyStatText.text = stillToSpawn + " incoming";
-        }
-        else
-        {
-            //wave has finished spawning: "???? remain"
-            enemyStatText.text = (EnemyManagerScript.instance.activeEnemies.Count) + " remain";
-        }
-
-        //if the game speed is not 1.0, add text to show what it is
-        if (Time.timeScale != 1.0f)
-        {
-            //decide the color of the game speed indicator based on whether or not we are below the desired speed
-            if (Time.timeScale < 1.0f)
-                enemyStatText.text += "<color=red>";
-            else if (Time.timeScale < LevelManagerScript.instance.desiredTimeScale)
-                enemyStatText.text += "<color=yellow>";
-            else
-                enemyStatText.text += "<color=green>";
-
-            enemyStatText.text += "\n(speed x" + Time.timeScale.ToString("F1") + ")</color>";
-        }
     }
 }

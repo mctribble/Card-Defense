@@ -227,7 +227,7 @@ public abstract class HandScript : BaseBehaviour
         if ((lastCardPos + cardDistance) > handRegionWidth)
         {
             //recalculate variables
-            cardDistance = (handRegionWidth - (cardWidth/2)) / currentHandSize;
+            cardDistance = (handRegionWidth - cardWidth) / currentHandSize;
             lastCardPos  = (cardDistance * (currentHandSize - 1));
             handMidpoint = lastCardPos / 2;
         }

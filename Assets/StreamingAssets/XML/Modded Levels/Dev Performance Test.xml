@@ -14,6 +14,17 @@
     <Wave type="Standard" budget="10000" time="30" />
     <Wave type="Swarm" budget="10000" time="30" />
     <Wave type="Tank" budget="10000" time="30" />
+    
+    <Wave type="Swarm" budget="10000" time="30" />
+    <Wave type="Swarm" budget="10000" time="30" />
+    <Wave type="Swarm" budget="10000" time="30" />
+    <Wave type="Swarm" budget="10000" time="30" />
+    <Wave type="Swarm" budget="10000" time="30" />
+    <Wave type="Swarm" budget="10000" time="30" />
+    <Wave type="Swarm" budget="10000" time="30" />
+    <Wave type="Swarm" budget="10000" time="30" />
+    <Wave type="Swarm" budget="10000" time="30" />
+    <Wave type="Swarm" budget="10000" time="30" />
   </Waves>
   <Spawners>
     <Spawner spawnX="0" spawnY="0" />

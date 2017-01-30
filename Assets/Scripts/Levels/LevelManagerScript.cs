@@ -239,7 +239,6 @@ public class LevelManagerScript : BaseBehaviour
     [VisibleWhen("levelLoaded")] public int   wavesInDeck;          //number of enemy groups remaining in the deck
     [VisibleWhen("levelLoaded")] public int   wavesSpawning;        //number of waves currently attacking
     [VisibleWhen("levelLoaded")] public int   totalSpawnedThisWave; //how many enemies have already spawned this wave
-    [VisibleWhen("levelLoaded")] public float desiredTimeScale;     //the game speed the player wants to play at
     [VisibleWhen("levelLoaded")] public bool  endurance;            //whether or not we are playing endurance
 
     //private vars
@@ -269,7 +268,6 @@ public class LevelManagerScript : BaseBehaviour
         wavesInDeck = 0;
         levelLoaded = false;
         totalSpawnCount = -1;
-        desiredTimeScale = 1.0f;
         endurance = false;
     }
 
@@ -521,43 +519,12 @@ public class LevelManagerScript : BaseBehaviour
             DeckManagerScript.instance.SendMessage("Shuffle");
     }
 
-    // Update is called once per frame
-    private void Update()
+    /// <summary>
+    /// starts the round
+    /// </summary>
+    public void startRound()
     {
-        //spacebar starts wave
-        if (Input.GetKeyUp(KeyCode.Space) && wavesSpawning == 0 && EnemyHandScript.instance.currentHandSize > 0)
-        {
-            StartCoroutine("spawnWaves");
-        }
-
-        //F toggles fast forward  (actual timeScale may still be lower if performance is bad.  see below)
-        if (Input.GetKeyUp(KeyCode.F) && Time.timeScale > 0.0f)
-        {
-            if (desiredTimeScale == 1.0f)
-                desiredTimeScale = 3.0f;
-            else
-                desiredTimeScale = 1.0f;
-        }
-
-        //attempt to regulate timeScale so the game slows down if the framerate tanks but then speeds back up when things settle down
-        //the time scale will go down if frame rate is below the reduce threshold, and up if frame rate is above the increase threshold
-        const float timeScaleReduceThreshold = (1.0f / 10.0f);    //10 FPS
-        const float timeScaleIncreaseThreshold = (1.0f / 15.0f);  //15 FPS
-        const float timeScaleMin = 0.5f;                //minimum allowed sim speed
-        const float timeScaleInterval = 0.1f;           //amount to adjust at each change
-
-        if (Time.timeScale > desiredTimeScale) //if we are going faster than the player wants...
-            Time.timeScale = desiredTimeScale; //then slow down!
-
-        float unscaledSmoothDeltaTime = Time.smoothDeltaTime / Time.timeScale;  //smooth delta time scales by the sim speed, so we have to undo that for framerate calculations
-
-        if (unscaledSmoothDeltaTime > timeScaleReduceThreshold)                                   //if the frame rate is too low...
-            if (Time.timeScale > timeScaleMin)                                                    //and we are still above our minimum...
-                Time.timeScale = Mathf.Max(timeScaleMin, Time.timeScale - timeScaleInterval);     //reduce it by the interval without allowing it to go below the minimum
-
-        if (unscaledSmoothDeltaTime < timeScaleIncreaseThreshold)                                 //if the frame rate is doing well...
-            if (Time.timeScale < desiredTimeScale)                                                //and the player wants a higher sim speed...
-                Time.timeScale = Mathf.Min(desiredTimeScale, Time.timeScale + timeScaleInterval); //increase it by the interval without allowing it to go above the desired setting
+        StartCoroutine(spawnWaves());
     }
 
     /// <summary>
