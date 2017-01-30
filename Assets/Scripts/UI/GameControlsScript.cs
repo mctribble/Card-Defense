@@ -72,10 +72,13 @@ public class GameControlsScript : MonoBehaviour
         //attempt to regulate timeScale so the game slows down if the framerate tanks but then speeds back up when things settle down
         //the time scale will go down if frame rate is below the reduce threshold, and up if frame rate is above the increase threshold
         float timeScaleReduceThreshold   = (1.0f / forceSlowDownBelowFPS); 
-        float timeScaleIncreaseThreshold = (1.0f / allowSpeedUpAboveFPS);  
+        float timeScaleIncreaseThreshold = (1.0f / allowSpeedUpAboveFPS);
 
         if (Time.timeScale > desiredTimeScale) //if we are going faster than the player wants...
+        {
             Time.timeScale = desiredTimeScale; //then slow down!
+            updateSpeedButtons();              //and be sure to update the buttons
+        }
 
         float unscaledSmoothDeltaTime = Time.smoothDeltaTime / Time.timeScale;  //smooth delta time scales by the sim speed, so we have to undo that for framerate calculations
 
@@ -154,82 +157,55 @@ public class GameControlsScript : MonoBehaviour
         // >
         if (desiredTimeScale == speed1)
         {
-            //button is selected
-            Speed1Button.setColor(selectedColor);
+            if (Time.timeScale < speed1)
+                Speed1Button.setColor(unusableSelectedColor); //this is the speed the player wants, but the game is going slower
+            else
+                Speed1Button.setColor(selectedColor);         //this is the speed the player wants, and they have it
         }
         else
         {
             if (Time.timeScale == speed1)
-            {
-                //button is not selected, but the game is forced to this speed
-                Speed1Button.setColor(forcedColor);
-            }
+                Speed1Button.setColor(forcedColor);  //this is not the speed the player wants, but it is the speed they have
+            else if ((Time.timeScale < desiredTimeScale) && (Time.timeScale < speed1))
+                Speed1Button.setColor(unusableColor); //this is not the speed the player wants, but the game is already forced into a lower speed
             else
-            {
-                //button is neither selected or forced to this speed
-                Speed1Button.setColor(defaultColor);
-            }
+                Speed1Button.setColor(defaultColor); //none of the above applied
         }
 
         // >>
         if (desiredTimeScale == speed2)
         {
-            if (Time.timeScale == speed2)
-            {
-                //button is selected, and game is moving this speed
-                Speed2Button.setColor(selectedColor);
-            }
+            if (Time.timeScale < speed2)
+                Speed2Button.setColor(unusableSelectedColor); //this is the speed the player wants, but the game is going slower
             else
-            {
-                //button is selected, but the game is not moving this speed because it cant keep up
-                Speed2Button.setColor(unusableSelectedColor);
-            }
+                Speed2Button.setColor(selectedColor);         //this is the speed the player wants, and they have it
         }
         else
         {
             if (Time.timeScale == speed2)
-            {
-                //button is not selected, but the game is forced to this speed
-                Speed2Button.setColor(forcedColor);
-            }
-            else if ( (Time.timeScale < speed2) && (Time.timeScale < desiredTimeScale) )
-            {
-                //button is not selected, and the game is forced to move slower than this
-                Speed2Button.setColor(unusableColor);
-            }
+                Speed2Button.setColor(forcedColor);  //this is not the speed the player wants, but it is the speed they have
+            else if ((Time.timeScale < desiredTimeScale) && (Time.timeScale < speed2))
+                Speed2Button.setColor(unusableColor); //this is not the speed the player wants, but the game is already forced into a lower speed
             else
-            {
-                //button is not selected, and the game is moving faster than this
-                Speed2Button.setColor(defaultColor);
-            }
+                Speed2Button.setColor(defaultColor); //none of the above applied
         }
 
         // >>>
         if (desiredTimeScale == speed3)
         {
-            if (Time.timeScale == speed3)
-            {
-                //button is selected, and game is moving this speed
-                Speed3Button.setColor(selectedColor);
-            }
-            else if (Time.timeScale < speed3)
-            {
-                //button is selected, but the game is not moving this speed because it cant keep up
-                Speed3Button.setColor(unusableSelectedColor);
-            }
+            if (Time.timeScale < speed3)
+                Speed3Button.setColor(unusableSelectedColor); //this is the speed the player wants, but the game is going slower
+            else
+                Speed3Button.setColor(selectedColor);         //this is the speed the player wants, and they have it
         }
         else
         {
-            if ((Time.timeScale < speed3) && (Time.timeScale < desiredTimeScale))
-            {
-                //button is not selected, and the game is forced to move slower than this
-                Speed2Button.setColor(unusableColor);
-            }
+            if (Time.timeScale == speed3)
+                Speed3Button.setColor(forcedColor);  //this is not the speed the player wants, but it is the speed they have
+            else if ((Time.timeScale < desiredTimeScale) && (Time.timeScale < speed3))
+                Speed3Button.setColor(unusableColor); //this is not the speed the player wants, but the game is already forced into a lower speed
             else
-            {
-                //button is neither selected or forced to this speed
-                Speed3Button.setColor(defaultColor);
-            }
+                Speed3Button.setColor(defaultColor); //none of the above applied
         }
     }
 
@@ -249,22 +225,18 @@ public class GameControlsScript : MonoBehaviour
                     desiredTimeScale = 0.0f;
                 }
 
-                updateSpeedButtons();
                 break;
 
             case ">":
                 desiredTimeScale = speed1;
-                updateSpeedButtons();
                 break;
 
             case ">>":
                 desiredTimeScale = speed2;
-                updateSpeedButtons();
                 break;
 
             case ">>>":
                 desiredTimeScale = speed3;
-                updateSpeedButtons();
                 break;
 
             case "Start Wave":
@@ -276,5 +248,7 @@ public class GameControlsScript : MonoBehaviour
         //if the time scale is currently 0, bump it up to speed1 to get things moving again
         if (Time.timeScale == 0.0f)
             Time.timeScale = speed1;
+
+        updateSpeedButtons();
     }
 }
