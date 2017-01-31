@@ -36,8 +36,8 @@ public class CameraControlScript : BaseBehaviour
         Vector3 newPos = transform.position; //fetch current position
 
         //update it from keyboard input
-        newPos.x += Input.GetAxis("Horizontal") * Time.deltaTime * cameraSpeed * cameraRef.orthographicSize;
-        newPos.y += Input.GetAxis("Vertical")   * Time.deltaTime * cameraSpeed * cameraRef.orthographicSize;
+        newPos.x += Input.GetAxis("Horizontal") * Time.unscaledDeltaTime * cameraSpeed * cameraRef.orthographicSize;
+        newPos.y += Input.GetAxis("Vertical")   * Time.unscaledDeltaTime * cameraSpeed * cameraRef.orthographicSize;
 
         //clamp it to the bounds
         newPos.x = Mathf.Clamp(newPos.x, cameraBounds.xMin, cameraBounds.xMax);
@@ -46,7 +46,7 @@ public class CameraControlScript : BaseBehaviour
         transform.position = newPos; //update the transform
 
         //zoom controls
-        cameraRef.orthographicSize -= Input.GetAxis("Zoom") * Time.deltaTime * zoomSpeed;
+        cameraRef.orthographicSize -= Input.GetAxis("Zoom") * Time.unscaledDeltaTime * zoomSpeed;
         cameraRef.orthographicSize  = Mathf.Clamp(cameraRef.orthographicSize, minSize, maxSize);
     }
 	

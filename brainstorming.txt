@@ -2,7 +2,6 @@ known issues:
 some lingering cause of enemies not knowing to expect damage
 [WebGL] need a placeholder image while level thumbnails are loading.
 sometimes game freezes on level load if it is not the first load of a session.  reasons unknown.
-zoom controls more sensitive at higher game speeds
 ================================================================
 art needed for:
 conjure tower/upgrade/spell
@@ -20,7 +19,7 @@ content goals:
 enemies: 10/10  <<DONE!!>>
 levels:  29/30
 cards:   56/100 (+3 token)
-decks:   07/10
+decks:   08/10
 ================================================================
 analytics:
 check back on the analytics to see how they're doing and tweak thingss??

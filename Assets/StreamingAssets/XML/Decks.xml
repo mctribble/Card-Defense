@@ -56,6 +56,20 @@
         <Card name="Basic Upgrade" count="6" />
       </Cards>
     </Deck>
+    <Deck name="Resonance">
+      <Cards>
+        <Card name="Resonant Tower (A)" count="10" />
+        <Card name="Resonant Tower (P)" count="10" />
+        <Card name="Resonant Tower (R)" count="10" />
+        <Card name="Light Shield" count="5" />
+        <Card name="Quad-Barrel Upgrade" count="5" />
+        <Card name="Reinforce" count="3" />
+        <Card name="Risky Draw" count="3" />
+        <Card name="Fast Upgrade" count="10" />
+        <Card name="Enrage" count="2" />
+        <Card name="Challenger Tower" count="2" />
+      </Cards>
+    </Deck>
     <Deck name="Starter Deck">
       <Cards>
         <Card name="Fast Tower" count="4" />

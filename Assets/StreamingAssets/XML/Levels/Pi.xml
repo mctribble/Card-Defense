@@ -27,21 +27,5 @@
   </PathSegments>
   <Towers />
   <shuffleDeck>true</shuffleDeck>
-  <levelDeck name="New Deck">
-    <Cards>
-      <Card name="Basic Tower" count="4" />
-      <Card name="Basic Upgrade" count="5" />
-      <Card name="Challenger Tower" count="3" />
-      <Card name="Fast Tower" count="4" />
-      <Card name="Fast Upgrade" count="10" />
-      <Card name="Heavy Tower" count="5" />
-      <Card name="Heavy Upgrade" count="4" />
-      <Card name="Life Tap" count="3" />
-      <Card name="Light Shield" count="4" />
-      <Card name="Plague Tower" count="2" />
-      <Card name="Quad-Barrel Upgrade" count="2" />
-      <Card name="Resonant Tower (P)" count="10" />
-      <Card name="Summon Swarm" count="4" />
-    </Cards>
-  </levelDeck>
+  <premadeDeckName>Resonance</premadeDeckName>
 </Level>
