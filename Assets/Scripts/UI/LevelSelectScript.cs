@@ -593,11 +593,13 @@ public class LevelSelectScript : BaseBehaviour
         switch (screen)
         {
             case "Controls":
-                helpText.text = "For navigating menus and playing cards, use the mouse.  For everything else, see below:\n" +
+                helpText.text = 
                     "Pan camera: arrow keys OR WASD\n" +
                     "Zoom camera: scroll wheel or Q/E\n" +
-                    "Start wave: click enemy card or press space\n" +
-                    "Toggle fast forward: F";
+                    "Start wave: click 'Start Wave' or press space\n" +
+                    "Pause: `\n" +
+                    "Set speed: 1, 2, or 3\n" +
+                    "Quit level: Esc";
                 break;
 
             case "The Basics":

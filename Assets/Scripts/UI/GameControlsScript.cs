@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameControlsScript : MonoBehaviour
 {
@@ -67,6 +68,10 @@ public class GameControlsScript : MonoBehaviour
                 TextButtonSelected(Speed3Button.buttonText.text);
             else
                 Debug.LogWarning("Couldn't Cycle Speed: no case for our current speed");
+        }
+        if (Input.GetButtonDown("Cancel"))
+        {
+            StartCoroutine(quitPromptCoroutine());
         }
 
         //attempt to regulate timeScale so the game slows down if the framerate tanks but then speeds back up when things settle down
@@ -250,5 +255,19 @@ public class GameControlsScript : MonoBehaviour
             Time.timeScale = speed1;
 
         updateSpeedButtons();
+    }
+
+    /// <summary>
+    /// if a level is loaded, asks the player if they want to quit it
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator quitPromptCoroutine()
+    {
+        if (LevelManagerScript.instance.levelLoaded)
+        {
+            yield return StartCoroutine(MessageHandlerScript.PromptYesNo("Return to main menu?"));
+            if (MessageHandlerScript.responseToLastPrompt == "Yes")
+                SceneManager.LoadScene("Game");
+        }
     }
 }

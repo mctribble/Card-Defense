@@ -25,7 +25,7 @@
           <Effect name="infiniteTowerLifespan" />
           <Effect name="limitedAmmo" strength="3" />
           <Effect name="chainHit" strength="0.75" />
-          <Effect name="poison" strength="10" argument="120" />
+          <Effect name="poison" strength="5" argument="120" />
           <Effect name="attackColor" argument="black" />
           <Effect name="manualFire" />
           <Effect name="targetClosest" />
@@ -143,7 +143,7 @@
       <effectData>
         <Effects>
           <Effect name="chainHit" strength="0.5" />
-          <Effect name="poison" strength="4" argument="120" />
+          <Effect name="poison" strength="2" argument="120" />
           <Effect name="targetRandom" />
         </Effects>
       </effectData>
@@ -286,7 +286,7 @@
       <effectData>
         <Effects>
           <Effect name="scaleEffectByTowerAttack">
-            <Effect name="poison" strength="0.2" argument="60" />
+            <Effect name="poison" strength="0.1" argument="60" />
           </Effect>
         </Effects>
       </effectData>
