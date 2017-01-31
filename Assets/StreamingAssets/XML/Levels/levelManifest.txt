@@ -6,6 +6,7 @@ Club.xml
 confusion.xml
 Congestion.xml
 Diamond.xml
+Divergence 2.xml
 Divergence.xml
 Double Spiral Mountain.xml
 Grid.xml
