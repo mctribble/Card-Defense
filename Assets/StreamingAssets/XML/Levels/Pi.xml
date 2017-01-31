@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png">
+  <difficulty>hard</difficulty>
+  <description>Enemies here are markedly stronger than usual</description>
+  <randomWaveCount>25</randomWaveCount>
+  <waveGrowthLinear>10</waveGrowthLinear>
+  <waveGrowthSquared>3.14159</waveGrowthSquared>
+  <waveGrowthExponential>1.15</waveGrowthExponential>
+  <Waves />
+  <Spawners>
+    <Spawner spawnX="-6" spawnY="4" />
+  </Spawners>
+  <PathSegments>
+    <Segment startX="-6" startY="4" endX="-5" endY="5" />
+    <Segment startX="-5" startY="5" endX="-2" endY="5" />
+    <Segment startX="-2" startY="5" endX="-2" endY="-2" />
+    <Segment startX="-2" startY="-2" endX="-3" endY="-3" />
+    <Segment startX="-3" startY="-3" endX="-4" endY="-2" />
+    <Segment startX="-4" startY="-2" endX="-3" endY="-1" />
+    <Segment startX="-2" startY="5" endX="2" endY="5" />
+    <Segment startX="2" startY="5" endX="2" endY="-2" />
+    <Segment startX="2" startY="-2" endX="3" endY="-4" />
+    <Segment startX="3" startY="-4" endX="4" endY="-5" />
+    <Segment startX="4" startY="-5" endX="5" endY="-5" />
+    <Segment startX="5" startY="-5" endX="6" endY="-3" />
+    <Segment startX="2" startY="5" endX="5" endY="5" />
+  </PathSegments>
+  <Towers />
+  <shuffleDeck>true</shuffleDeck>
+  <levelDeck name="New Deck">
+    <Cards>
+      <Card name="Basic Tower" count="4" />
+      <Card name="Basic Upgrade" count="5" />
+      <Card name="Challenger Tower" count="3" />
+      <Card name="Fast Tower" count="4" />
+      <Card name="Fast Upgrade" count="10" />
+      <Card name="Heavy Tower" count="5" />
+      <Card name="Heavy Upgrade" count="4" />
+      <Card name="Life Tap" count="3" />
+      <Card name="Light Shield" count="4" />
+      <Card name="Plague Tower" count="2" />
+      <Card name="Quad-Barrel Upgrade" count="2" />
+      <Card name="Resonant Tower (P)" count="10" />
+      <Card name="Summon Swarm" count="4" />
+    </Cards>
+  </levelDeck>
+</Level>
