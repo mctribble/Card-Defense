@@ -255,11 +255,13 @@ public class LevelSelectScript : BaseBehaviour
         int loopCount = 0;
         while (loadedCount < requestCount)
         {
-            if (loopCount % 300 == 0)
+            if (loopCount == 300)
             {
                 Debug.LogWarning("Loading is taking a long time: ");
                 foreach (MenuButtonScript button in menuButtons.Where(mbs => mbs.buttonType == MenuButtonType.text && mbs.buttonText.text.StartsWith("Loading")))
                     Debug.LogWarning(button.buttonText.text);
+                Debug.LogWarning("Forcing continue");
+                break;
             }
 
             loadedCount = menuButtons.Count(mbs => mbs.buttonType == MenuButtonType.level); //the buttons only become level buttons once they are actually loaded, so this works
