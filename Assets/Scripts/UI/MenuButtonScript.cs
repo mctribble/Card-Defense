@@ -53,7 +53,7 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
     public IEnumerator setLevel(WWW request)
     {
         //set up placeholder info during loading
-        buttonText.text = "Loading...";
+        buttonText.text = "Loading...(" + request.url + ")";
         buttonType = MenuButtonType.text;
 
         //wait for the request to load
@@ -62,6 +62,7 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
         //show error if there was one
         if (request.error != null)
         {
+            Debug.LogError(request.error);
             buttonText.text = request.error;
             buttonText.color = Color.white;
             setColor(Color.red);
