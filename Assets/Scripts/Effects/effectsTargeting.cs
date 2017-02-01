@@ -256,7 +256,7 @@ public class EffectTargetLowHealth : BaseEffectTowerTargeting
         if ((enemiesInRange == null) || (enemiesInRange.Count == 0))
             return enemiesInRange;
 
-        float lowestHealth = -1;
+        float lowestHealth = float.MaxValue;
         EnemyScript target = null;
         foreach (EnemyScript curEnemy in enemiesInRange)
         {
@@ -264,7 +264,7 @@ public class EffectTargetLowHealth : BaseEffectTowerTargeting
             float curHealth = curEnemy.expectedHealth;
 
             //if this is the lowest, update vars
-            if (curHealth < lowestHealth)
+            if ( (curHealth > 0.0f) && (curHealth < lowestHealth) )
             {
                 lowestHealth = curHealth;
                 target = curEnemy;
