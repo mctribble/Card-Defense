@@ -761,10 +761,26 @@ public class TowerScript : BaseBehaviour
         if ((effects != null) && (effects.propertyEffects.limitedAmmo != null)) //skip this section entirely if we have infinite ammo
             tooltipText.text += "\nammo remaining: " + effects.propertyEffects.limitedAmmo;
 
+        //list effects, deferring targeting effects for later
+        bool targetingEffectFound = false;
         if (effects != null)
+        {
             foreach (IEffect e in effects.effects)
+            {
                 if (e.Name != null)
-                    tooltipText.text += "\n" + "-" + e.Name;
+                {
+                    if (e.triggersAs(EffectType.towerTargeting))
+                        targetingEffectFound = true;
+                    else
+                        tooltipText.text += "\n" + "-" + e.Name;
+                }
+            }
+        }
+
+        //print the targeting effects, if any, in priority order
+        if (targetingEffectFound)
+            foreach (IEffectTowerTargeting iett in effects.targetingEffects)
+                tooltipText.text += "\n" + "-" + iett.Name;
 
         //disable the upgrade range
         upgradeRangeImage.enabled = false;

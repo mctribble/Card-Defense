@@ -164,7 +164,7 @@ public class EffectTargetClosest : BaseEffectTowerTargeting
 //targets up to X enemies closest to their goals
 public class EffectTargetMultishot : BaseEffectTowerTargeting
 {
-    [Hide] public override string Name { get { return "Target: up to " + Mathf.Floor(strength) + " enemies"; } } //returns name and strength
+    [Hide] public override string Name { get { return "Target: " + Mathf.Floor(strength) + " most threatening"; } } //returns name and strength
     [Show] public override string XMLName { get { return "targetMultishot"; } } //name used to refer to this effect in XML
     [Hide] public override TargetingPriority priority { get { return TargetingPriority.MULTIPLE; } } //priority of this targeting effect
 

@@ -215,6 +215,9 @@ public class EffectData : System.Object
         set { }
     }
 
+    //returns a list of targeting effects on the tower, in the order they would be used
+    [XmlIgnore] [Hide] public ReadOnlyCollection<IEffectTowerTargeting> targetingEffects { get { if (cachedTowerTargetingList == null) updateCachedTowerTargetingList(); return cachedTowerTargetingList.AsReadOnly(); } }
+
     //cached values for utility functions
     //the '?' on some of these is shorthand for Nullable<T> (https://msdn.microsoft.com/en-us/library/1t3y8s4s.aspx)
     [XmlIgnore] private TargetingType?              cachedCardTargetingType; 
