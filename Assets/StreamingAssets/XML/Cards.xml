@@ -81,6 +81,17 @@
         <towerColor r="0.5" g="0.5" b="0.5" a="1" />
       </towerData>
     </Card>
+    <Card Type="tower" Name="Mortar Tower" Description="Creates explosions near your mouse" Charges="4" Art="Mortar_Tower.png" Tooltip="Tower_Diamond.png" Token="false">
+      <towerData Recharge="0.5" Range="2" Damage="3" Lifespan="3" UpgradeCap="3" Sprite="Tower_Diamond.png">
+        <towerColor r="0" g="1" b="1" a="1" />
+      </towerData>
+      <effectData>
+        <Effects>
+          <Effect name="targetMouse" />
+          <Effect name="splashDamage" strength="3" argument="1" />
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="tower" Name="Mouse Tower" Description="Targets enemies near your mouse" Charges="4" Art="Mouse_Tower.png" Tooltip="Tower_Basic.png" Token="false">
       <towerData Recharge="1" Range="2" Damage="10" Lifespan="3" UpgradeCap="3" Sprite="Tower_Basic.png">
         <towerColor r="0" g="1" b="1" a="1" />
