@@ -7,6 +7,7 @@ art needed for:
 conjure tower/upgrade/spell
 double/quad-barrel upgrade
 mortar tower
+fast sniper
 enemy spawn points
 maybe update enemy goal points?
 maybe indicate path direction?
@@ -19,7 +20,7 @@ need some level backgrounds
 content goals:
 enemies: 10/10  <<DONE!!>>
 levels:  30/30  <<DONE!!>>
-cards:   57/100 (+3 token)
+cards:   58/100 (+3 token)
 decks:   08/10
 ================================================================
 analytics:

@@ -63,6 +63,7 @@ targetArmor      | tower prioritizes targets with the highest armor
 targetBurst      | tower targets all enemies in range with a single wave
 targetClosest    | tower targets the enemy closest to the tower itself
 targetHealth     | tower prioritizes targets with the highest health
+targetLowHealth  | tower prioritizes targets with the lowest health
 targetMultishot  | tower attacks up to X enemies closest to their goals
 targetMouse      | tower targets enemies near the mouse.  Range is how far away FROM THE MOUSE to search for targets.
 targetOrthogonal | tower attacks all enemies in a straight vertical or horizontal line, using special projectiles, if there is at least one enemy in range in that direction

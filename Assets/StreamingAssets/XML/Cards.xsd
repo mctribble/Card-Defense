@@ -137,6 +137,7 @@
           <xsd:enumeration value="targetBurst" />
           <xsd:enumeration value="targetClosest" />
           <xsd:enumeration value="targetHealth" />
+          <xsd:enumeration value="targetLowHealth" />
           <xsd:enumeration value="targetMultishot" />
           <xsd:enumeration value="targetMouse" />
           <xsd:enumeration value="targetOrthogonal" />
