@@ -224,12 +224,49 @@ public class EffectTargetHealth : BaseEffectTowerTargeting
         foreach (EnemyScript curEnemy in enemiesInRange)
         {
             //fetch enemy health
-            float curHealth = curEnemy.curHealth;
+            float curHealth = curEnemy.expectedHealth;
 
             //if this is the highest, update vars
             if (curHealth > highestHealth)
             {
                 highestHealth = curHealth;
+                target = curEnemy;
+            }
+        }
+
+        //return a list with just the chosen target
+        enemiesInRange.Clear();
+        enemiesInRange.Add(target);
+        return enemiesInRange;
+    }
+}
+
+//targets lowest health
+public class EffectTargetLowHealth : BaseEffectTowerTargeting
+{
+    [Hide] public override string Name { get { return "Target: lowest health"; } } //returns name and strength
+    [Show] public override string XMLName { get { return "targetLowHealth"; } } //name used to refer to this effect in XML
+    [Hide] public override TargetingPriority priority { get { return TargetingPriority.BY_STAT; } } //priority of this targeting effect
+
+    public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
+    {
+        List<EnemyScript> enemiesInRange = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange); //get a list of all valid targets
+
+        //bail if the list is empty
+        if ((enemiesInRange == null) || (enemiesInRange.Count == 0))
+            return enemiesInRange;
+
+        float lowestHealth = -1;
+        EnemyScript target = null;
+        foreach (EnemyScript curEnemy in enemiesInRange)
+        {
+            //fetch enemy health
+            float curHealth = curEnemy.expectedHealth;
+
+            //if this is the lowest, update vars
+            if (curHealth < lowestHealth)
+            {
+                lowestHealth = curHealth;
                 target = curEnemy;
             }
         }
