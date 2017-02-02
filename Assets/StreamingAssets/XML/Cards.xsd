@@ -108,6 +108,7 @@
           <xsd:enumeration value="ResonantTowerAttackMod" />
           <xsd:enumeration value="ResonantTowerRangeMod" />
           <xsd:enumeration value="secondaryBurst" />
+          <xsd:enumeration value="slowTarget" />
           <xsd:enumeration value="splashDamage" />
           <!--wave effects-->
           <xsd:enumeration value="budgetPercentageChange" />

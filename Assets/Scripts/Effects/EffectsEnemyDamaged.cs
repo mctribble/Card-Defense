@@ -264,3 +264,17 @@ public class EffectSecondaryBurst : BaseEffectEnemyDamaged
 
     public override void actualDamage(ref DamageEventData d) { }
 }
+
+//target is slowed for X seconds.  does not stack.
+public class EffectSlowTarget : BaseEffectEnemyDamaged
+{
+    [Hide] public override string Name { get { return "enemy is slowed for " + strength + " seconds" ; } } //returns name and strength
+    [Show] public override string XMLName { get { return "slowTarget"; } } //name used to refer to this effect in XML
+
+    public override void expectedDamage(ref DamageEventData d) { }
+
+    public override void actualDamage(ref DamageEventData d)
+    {
+        d.dest.slowedForSeconds = Mathf.Max(d.dest.slowedForSeconds, strength);
+    }
+}

@@ -780,7 +780,8 @@ public class TowerScript : BaseBehaviour
         //print the targeting effects, if any, in priority order
         if (targetingEffectFound)
             foreach (IEffectTowerTargeting iett in effects.targetingEffects)
-                tooltipText.text += "\n" + "-" + iett.Name;
+                if (iett != EffectTargetDefault.instance) //skip the 'default' placeholder
+                    tooltipText.text += "\n" + "-" + iett.Name;
 
         //disable the upgrade range
         upgradeRangeImage.enabled = false;

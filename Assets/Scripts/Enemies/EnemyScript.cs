@@ -183,7 +183,9 @@ public class EnemyScript : BaseBehaviour
     public int        maxHealth;
     private float     _unitSpeed;
     public float      unitSpeed { get { return _unitSpeed; } set { _unitSpeed = Mathf.Min(value, speedLimit); } }
-    public float      unitSpeedWhenSpawned;    
+    public float      unitSpeedWhenSpawned;
+    private float     _slowedForSeconds;  
+    public float      slowedForSeconds { get { return _slowedForSeconds; } set { _slowedForSeconds = Mathf.Max(value, 0.0f); } }
     public EffectData effectData;
 
     //used for health bar
@@ -241,7 +243,17 @@ public class EnemyScript : BaseBehaviour
         if (time <= 0)
             return;
 
-        float distanceToTravel = unitSpeed * time;                                                           //calculate distance to travel
+        //base distance to travel
+        float distanceToTravel = unitSpeed * time; 
+        
+        //reduce distance if unit is slowed
+        if (slowedForSeconds > 0.0f)
+        {
+            float secondsSlowed = Mathf.Min(slowedForSeconds, time); //how many seconds of the movement is slowed, which is probably all of it unless the effect is about to wear off
+            distanceToTravel -= (unitSpeed / 2.0f) * secondsSlowed;  //reduce travel distance by half for the duration of the slow
+            slowedForSeconds -= secondsSlowed;                       //reduce slow effect timer
+        }
+
         Vector2 prevLocation = transform.position;                                                           //fetch current location
         Vector2 newLocation = Vector2.MoveTowards(prevLocation, path[currentDestination], distanceToTravel); //perform movement
         distanceToTravel -= Vector2.Distance(prevLocation, newLocation);                                     //check how far we actually moved

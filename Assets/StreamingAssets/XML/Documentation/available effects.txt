@@ -31,6 +31,7 @@ ResonantTowerAttackMult   | tower attack gets X times stronger for each tower th
 ResonantTowerAttackMod    | tower attack increases by X for each tower that has this effect with the same value for Y
 ResonantTowerRangeMod     | tower range increases by X for each tower that has this effect with the same value for Y
 secondaryBurst            | when a valid attack is made, the tower also creates a burst attack with radius X and strength Y
+slowTarget                | enemies hit by this attack are slowed for X seconds.  Does not stack
 splashDamage		      | attack causes a secondary explosion, dealing X damage to all enemies within Y of the impact site.  Effects do not spread to secondary targets
 
 <<Wave effects (On Enemy type: trigger on wave creation.  On card: trigger when played)>>

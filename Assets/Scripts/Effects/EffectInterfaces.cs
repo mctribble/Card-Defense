@@ -180,17 +180,17 @@ public class XMLEffect : System.Object
 /// </summary>
 public struct PropertyEffects
 {
-    public bool   armorPierce;
-    public bool   infiniteTowerLifespan;
-    public bool   returnsToTopOfDeck;
-    public bool   manualFire;
-    public bool   noUpgradeCost;
-    public bool   upgradesForbidden;
-    public bool   cannotBeDiscarded;
-    public Color? attackColor;
-    public int?   limitedAmmo;
-    public int?   maxOvercharge;
-    public int?   dieRoll;
+    public bool   armorPierce;            //attacks ignore armor
+    public bool   infiniteTowerLifespan;  //towers do not decay
+    public bool   returnsToTopOfDeck;     //card goes to top of the deck when played
+    public bool   manualFire;             //tower is fired manually
+    public bool   noUpgradeCost;          //upgrade does not use an upgrade slot
+    public bool   upgradesForbidden;      //tower cannot be upgraded
+    public bool   cannotBeDiscarded;      //card cannot be discarded
+    public Color? attackColor;            //attack has an unusual color
+    public int?   limitedAmmo;            //tower has a limited ammo supply
+    public int?   maxOvercharge;          //amount of overcharge the tower can have
+    public int?   dieRoll;                //stores the result of a dieRoll effect
 }
 
 /// <summary>

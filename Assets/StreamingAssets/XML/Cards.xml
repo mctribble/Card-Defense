@@ -231,6 +231,17 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="tower" Name="Slowing Tower" Description="Does not deal damage, but slows enemies down so other towers have more time to hit them" Charges="2" Art="Slowing_Tower.png" Tooltip="Tower_Round.png" Token="false">
+      <towerData Recharge="0.5" Range="2" Damage="0" Lifespan="5" UpgradeCap="0" Sprite="Tower_Round.png">
+        <towerColor r="0" g="0" b="1" a="1" />
+      </towerData>
+      <effectData>
+        <Effects>
+          <Effect name="targetBurst" />
+          <Effect name="slowTarget" strength="1" />
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="tower" Name="Sniper Tower" Description="Specializes in slaying heavily armored foes" Charges="2" Art="Sniper_Tower.png" Tooltip="Tower_Octagon.png" Token="false">
       <towerData Recharge="15" Range="999" Damage="300" Lifespan="4" UpgradeCap="2" Sprite="Tower_Octagon.png">
         <towerColor r="0" g="0" b="1" a="1" />

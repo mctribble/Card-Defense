@@ -63,6 +63,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "ResonantTowerAttackMod":     ie = new EffectResonantTowerAttackMod();     break;
             case "ResonantTowerRangeMod":      ie = new EffectResonantTowerRangeMod();      break;
             case "secondaryBurst":             ie = new EffectSecondaryBurst();             break;
+            case "slowTarget":                 ie = new EffectSlowTarget();                 break;
             case "splashDamage":               ie = new EffectSplashDamage();               break;
 
             //<<Wave effects (On Enemy type: trigger on wave creation.  On card: trigger when played)>>
