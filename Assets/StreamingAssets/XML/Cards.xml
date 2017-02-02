@@ -45,7 +45,26 @@
             <Effect name="drawCard" strength="3" />
           </Effect>
           <Effect name="everyRound">
-            <Effect name="score" strength="500" />
+            <Effect name="score" strength="100" />
+          </Effect>
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="tower" Name="Champion Tower" Description="For when you really want a fight" Charges="1" Art="Champion_Tower.png" Tooltip="Tower_Basic.png" Token="false">
+      <towerData Recharge="0.50" Range="2.5" Damage="30" Lifespan="3" UpgradeCap="1" Sprite="Tower_Basic.png">
+        <towerColor r="0.8" g="0.8" b="0.8" a="1" />
+      </towerData>
+      <effectData>
+        <Effects>
+          <Effect name="targetMultishot" strength="3" />
+          <Effect name="everyRound">
+            <Effect name="drawEnemyCard" strength="5" />
+          </Effect>
+          <Effect name="everyRound">
+            <Effect name="drawCard" strength="5" />
+          </Effect>
+          <Effect name="everyRound">
+            <Effect name="score" strength="300" />
           </Effect>
         </Effects>
       </effectData>
@@ -388,6 +407,14 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="spell" Name="Enfeeble" Description="Putting the bear to sleep." Charges="3" Art="Enfeeble.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="budgetPercentageChange" strength="-20" />
+          <Effect name="discardRandomCard" strength="1" />
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="spell" Name="Enrage" Description="Poking the bear." Charges="4" Art="Enrage.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>
@@ -423,7 +450,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="spell" Name="Improvised Spell" Description="There were no upgrades in your deck, but you managed to improvise something regardless." Charges="3" Art="Improvised_Spell.png" Tooltip="Tower_Basic.png" Token="true">
+    <Card Type="spell" Name="Improvised Spell" Description="There were no spells in your deck, but you managed to improvise something regardless." Charges="3" Art="Improvised_Spell.png" Tooltip="Tower_Basic.png" Token="true">
       <effectData>
         <Effects>
           <Effect name="budgetPercentageChange" strength="-10" />
@@ -524,7 +551,7 @@
       <effectData>
         <Effects>
           <Effect name="changeWaveType" argument="Armored" />
-          <Effect name="damagePlayer" strength="3" />
+          <Effect name="budgetPercentageChange" strength="10" />
         </Effects>
       </effectData>
     </Card>
@@ -532,7 +559,7 @@
       <effectData>
         <Effects>
           <Effect name="changeWaveType" argument="Assassin" />
-          <Effect name="damagePlayer" strength="3" />
+          <Effect name="budgetPercentageChange" strength="10" />
         </Effects>
       </effectData>
     </Card>
@@ -540,7 +567,7 @@
       <effectData>
         <Effects>
           <Effect name="changeWaveType" argument="Carrier" />
-          <Effect name="damagePlayer" strength="3" />
+          <Effect name="budgetPercentageChange" strength="10" />
         </Effects>
       </effectData>
     </Card>
@@ -548,7 +575,7 @@
       <effectData>
         <Effects>
           <Effect name="changeWaveType" argument="Giant" />
-          <Effect name="damagePlayer" strength="3" />
+          <Effect name="budgetPercentageChange" strength="10" />
         </Effects>
       </effectData>
     </Card>
@@ -556,7 +583,7 @@
       <effectData>
         <Effects>
           <Effect name="changeWaveType" argument="Regenerative Tank" />
-          <Effect name="damagePlayer" strength="3" />
+          <Effect name="budgetPercentageChange" strength="10" />
         </Effects>
       </effectData>
     </Card>
@@ -564,7 +591,7 @@
       <effectData>
         <Effects>
           <Effect name="changeWaveType" argument="Scrambled" />
-          <Effect name="damagePlayer" strength="3" />
+          <Effect name="budgetPercentageChange" strength="10" />
         </Effects>
       </effectData>
     </Card>
@@ -572,7 +599,7 @@
       <effectData>
         <Effects>
           <Effect name="changeWaveType" argument="Standard" />
-          <Effect name="damagePlayer" strength="3" />
+          <Effect name="budgetPercentageChange" strength="10" />
         </Effects>
       </effectData>
     </Card>
@@ -580,7 +607,7 @@
       <effectData>
         <Effects>
           <Effect name="changeWaveType" argument="Swarm" />
-          <Effect name="damagePlayer" strength="3" />
+          <Effect name="budgetPercentageChange" strength="10" />
         </Effects>
       </effectData>
     </Card>
@@ -588,7 +615,7 @@
       <effectData>
         <Effects>
           <Effect name="changeWaveType" argument="Tank" />
-          <Effect name="damagePlayer" strength="3" />
+          <Effect name="budgetPercentageChange" strength="10" />
         </Effects>
       </effectData>
     </Card>
