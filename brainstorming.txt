@@ -9,6 +9,7 @@ double/quad-barrel upgrade
 mortar tower
 fast sniper
 Champion Tower
+slowing tower
 enemy spawn points
 maybe update enemy goal points?
 maybe indicate path direction?
