@@ -339,6 +339,10 @@ public class EffectTargetSpeed : BaseEffectTowerTargeting
             //fetch enemy Speed
             float curSpeed = curEnemy.unitSpeed;
 
+            //account for slowing
+            if (curEnemy.slowedForSeconds > 0.2f)
+                curSpeed /= 2;
+
             //if this is the highest, update vars
             if (curSpeed > highestSpeed)
             {

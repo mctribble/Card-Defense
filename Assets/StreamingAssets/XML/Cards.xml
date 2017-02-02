@@ -294,7 +294,17 @@
             </Effect>
           </Effect>
           <Effect name="noUpgradeCost" />
+          <Effect name="drawCard" strength="1" />
       </Effects>
+      </effectData>
+    </Card>
+    <Card Type="upgrade" Name="Crippling Ammo" Description="allows attacks to ignore armor" Charges="3" Art="Crippling_Ammo.png" Tooltip="Tower_Basic.png" Token="false">
+      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1.1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="3" />
+      <effectData>
+        <Effects>
+          <Effect name="slowTarget" strength="2" />
+          <Effect name="targetSpeed" />
+        </Effects>
       </effectData>
     </Card>
     <Card Type="upgrade" Name="Fast Upgrade" Description="small damage increase per shot.  best on fast towers" Charges="3" Art="Fast_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
@@ -329,6 +339,7 @@
       <effectData>
         <Effects>
           <Effect name="armorPierce" />
+          <Effect name="targetArmor" />
         </Effects>
       </effectData>
     </Card>
