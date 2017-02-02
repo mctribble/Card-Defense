@@ -8,6 +8,7 @@ conjure tower/upgrade/spell
 double/quad-barrel upgrade
 mortar tower
 fast sniper
+Champion Tower
 enemy spawn points
 maybe update enemy goal points?
 maybe indicate path direction?

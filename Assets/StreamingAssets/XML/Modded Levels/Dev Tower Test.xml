@@ -23,6 +23,7 @@
     <Tower name="Basic Tower" x="5.5" y="-6" />
     <Tower name="Black Plague Tower" x="6" y="-6" />
     <Tower name="Challenger Tower" x="6.5" y="-6" />
+    <Tower name="Champion Tower" x="6.5" y="-5.5" />
     <Tower name="Dev Chain Purge Tower" x="7" y="-6" />
     <Tower name="Dev Purge Tower" x="7.5" y="-6" />
     <Tower name="Explosive Tower" x="8" y="-6" />
@@ -53,6 +54,7 @@
       <Card name="Basic Tower" count="2" />
       <Card name="Black Plague Tower" count="2" />
       <Card name="Challenger Tower" count="2" />
+      <Card name="Champion Tower" count="2" />
       <Card name="Dev Chain Purge Tower" count="2" />
       <Card name="Dev Purge Tower" count="2" />
       <Card name="Explosive Tower" count="2" />

@@ -52,7 +52,7 @@
     </Card>
     <Card Type="tower" Name="Champion Tower" Description="For when you really want a fight" Charges="1" Art="Champion_Tower.png" Tooltip="Tower_Basic.png" Token="false">
       <towerData Recharge="0.50" Range="2.5" Damage="30" Lifespan="3" UpgradeCap="1" Sprite="Tower_Basic.png">
-        <towerColor r="0.8" g="0.8" b="0.8" a="1" />
+        <towerColor r="0.75" g="0.75" b="0.2" a="1" />
       </towerData>
       <effectData>
         <Effects>
