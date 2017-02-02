@@ -22,7 +22,7 @@ need some level backgrounds
 content goals:
 enemies: 10/10  <<DONE!!>>
 levels:  30/30  <<DONE!!>>
-cards:   61/100 (+3 token)
+cards:   62/100 (+3 token)
 decks:   08/10
 ================================================================
 analytics:
