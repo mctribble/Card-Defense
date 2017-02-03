@@ -32,6 +32,18 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="tower" Name="Construction Yard" Description="provides a steady supply of additional towers." Charges="3" Art="Construction_Yard.png" Tooltip="Tower_Basic.png" Token="true">
+      <towerData Recharge="2" Range="1.5" Damage="10" Lifespan="4" UpgradeCap="2" Sprite="Tower_Basic.png">
+        <towerColor r="0.25" g="0" b="0" a="1" />
+      </towerData>
+      <effectData>
+        <Effects>
+          <Effect name="everyRound">
+            <Effect name="conjureTowerCard" strength="1" />
+          </Effect>
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="tower" Name="Challenger Tower" Description="Even more dangerous than you think it is" Charges="1" Art="Challenger_Tower.png" Tooltip="Tower_Basic.png" Token="false">
       <towerData Recharge="1.5" Range="2.5" Damage="75" Lifespan="3" UpgradeCap="1" Sprite="Tower_Basic.png">
         <towerColor r="1" g="1" b="1" a="1" />
@@ -65,6 +77,18 @@
           </Effect>
           <Effect name="everyRound">
             <Effect name="score" strength="300" />
+          </Effect>
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="tower" Name="Workshop" Description="provides a steady supply of additional upgrades." Charges="3" Art="Workshop.png" Tooltip="Tower_Diamond.png" Token="true">
+      <towerData Recharge="2" Range="1.5" Damage="10" Lifespan="4" UpgradeCap="2" Sprite="Tower_Diamond.png">
+        <towerColor r="0.25" g="0" b="0" a="1" />
+      </towerData>
+      <effectData>
+        <Effects>
+          <Effect name="everyRound">
+            <Effect name="conjureUpgradeCard" strength="1" />
           </Effect>
         </Effects>
       </effectData>
@@ -109,6 +133,18 @@
       <towerData Recharge="2" Range="1.5" Damage="10" Lifespan="3" UpgradeCap="2" Sprite="Tower_Basic.png">
         <towerColor r="0.5" g="0.5" b="0.5" a="1" />
       </towerData>
+    </Card>
+    <Card Type="tower" Name="Magic Academy" Description="provides a steady supply of additional spells." Charges="3" Art="Magic_Academy.png" Tooltip="Tower_Round.png" Token="true">
+      <towerData Recharge="2" Range="1.5" Damage="10" Lifespan="4" UpgradeCap="2" Sprite="Tower_Round.png">
+        <towerColor r="0.25" g="0" b="0" a="1" />
+      </towerData>
+      <effectData>
+        <Effects>
+          <Effect name="everyRound">
+            <Effect name="conjureSpellCard" strength="1" />
+          </Effect>
+        </Effects>
+      </effectData>
     </Card>
     <Card Type="tower" Name="Mortar Tower" Description="Creates explosions near your mouse" Charges="4" Art="Mortar_Tower.png" Tooltip="Tower_Diamond.png" Token="false">
       <towerData Recharge="0.5" Range="2" Damage="3" Lifespan="3" UpgradeCap="3" Sprite="Tower_Diamond.png">
