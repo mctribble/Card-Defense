@@ -480,6 +480,14 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="spell" Name="Heavy Shield" Description="Very effective, but rather unwieldy" Charges="30" Art="Heavy_Shield.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="addCharges" strength="11" />
+          <Effect name="shuffle" />
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="spell" Name="Improvised Spell" Description="There were no spells in your deck, but you managed to improvise something regardless." Charges="3" Art="Improvised_Spell.png" Tooltip="Tower_Basic.png" Token="true">
       <effectData>
         <Effects>

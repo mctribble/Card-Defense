@@ -11,6 +11,7 @@ fast sniper
 Champion Tower
 slowing tower
 crippling/explosive ammo
+heavy shield
 enemy spawn points
 maybe update enemy goal points?
 maybe indicate path direction?
@@ -23,7 +24,7 @@ need some level backgrounds
 content goals:
 enemies: 10/10  <<DONE!!>>
 levels:  30/30  <<DONE!!>>
-cards:   63/100 (+3 token)
+cards:   68/100 (+4 token)
 decks:   08/10
 ================================================================
 analytics:
