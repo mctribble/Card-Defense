@@ -146,6 +146,11 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="tower" Name="Modular Tower" Description="Weak, but has a far larger capacity for upgrades than any other tower" Charges="3" Art="Modular_Tower.png" Tooltip="Tower_Octagon.png" Token="false">
+      <towerData Recharge="1.5" Range="1.5" Damage="15" Lifespan="3" UpgradeCap="10" Sprite="Tower_Octagon.png">
+        <towerColor r="0.75" g="0.75" b="0.2" a="1" />
+      </towerData>
+    </Card>
     <Card Type="tower" Name="Mortar Tower" Description="Creates explosions near your mouse" Charges="4" Art="Mortar_Tower.png" Tooltip="Tower_Diamond.png" Token="false">
       <towerData Recharge="0.5" Range="2" Damage="3" Lifespan="3" UpgradeCap="3" Sprite="Tower_Diamond.png">
         <towerColor r="0" g="1" b="1" a="1" />
@@ -340,6 +345,14 @@
         <Effects>
           <Effect name="slowTarget" strength="2" />
           <Effect name="targetSpeed" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="upgrade" Name="Crossfire Upgrade" Description="Quite powerful, but only on strategically placed towers." Charges="3" Art="Crossfire_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
+      <upgradeData RechargeMult="2.5" RangeMult="1" DamageMult="0.6" RechargeMod="0" RangeMod="0.5" DamageMod="0" WaveBonus="3" />
+      <effectData>
+        <Effects>
+          <Effect name="targetOrthogonal" />
         </Effects>
       </effectData>
     </Card>

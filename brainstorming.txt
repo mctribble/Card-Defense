@@ -15,8 +15,11 @@ heavy shield
 construction yard
 magic academy
 workshop
-enemy spawn points
 focus power: spell/tower/upgrade
+crossfire upgrade
+modular tower
+
+enemy spawn points
 maybe update enemy goal points?
 maybe indicate path direction?
 ================================================================
@@ -28,7 +31,7 @@ need some level backgrounds
 content goals:
 enemies: 10/10  <<DONE!!>>
 levels:  30/30  <<DONE!!>>
-cards:   74/100 (+4 token)
+cards:   76/100 (+4 token)
 decks:   08/10
 ================================================================
 analytics:
