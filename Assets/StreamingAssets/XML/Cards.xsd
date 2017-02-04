@@ -130,6 +130,9 @@
           <xsd:enumeration value="drawTowerCard" />
           <xsd:enumeration value="drawUpgradeCard" />
           <xsd:enumeration value="replaceRandomCard" />
+          <xsd:enumeration value="replaceRandomCardWithTower" />
+          <xsd:enumeration value="replaceRandomCardWithSpell" />
+          <xsd:enumeration value="replaceRandomCardWithUpgrade" />
           <xsd:enumeration value="score" />
           <xsd:enumeration value="shuffle" />
           <!--targeting effects-->

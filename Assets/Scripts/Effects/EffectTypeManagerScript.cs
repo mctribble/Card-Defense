@@ -72,24 +72,27 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "timePercentageChange":       ie = new EffectTimePercentageChange();       break;
                                                                                             
             //<<instant effects (trigger immediately when card is played)>>                 
-            case "addCharges":                 ie = new EffectAddCharges();                 break;
-            case "allTowersLifespanBonus":     ie = new EffectAllTowersLifespanBonus();     break;
-            case "conjureSpellCard":           ie = new EffectConjureSpellCard();           break;
-            case "conjureTowerCard":           ie = new EffectConjureTowerCard();           break;
-            case "conjureUpgradeCard":         ie = new EffectConjureUpgradeCard();         break;
-            case "damageHand":                 ie = new EffectDamageHand();                 break;
-            case "damagePlayer":               ie = new EffectDamagePlayer();               break;
-            case "discardChosenCard":          ie = new EffectDiscardChosen();              break;
-            case "discardRandomCard":          ie = new EffectDiscardRandom();              break;
-            case "drawCard":                   ie = new EffectDrawCard();                   break;
-            case "drawEnemyCard":              ie = new EffectDrawEnemyCard();              break;
-            case "drawSpellCard":              ie = new EffectDrawSpellCard();              break;
-            case "drawTowerCard":              ie = new EffectDrawTowerCard();              break;
-            case "drawUpgradeCard":            ie = new EffectDrawUpgradeCard();            break;
-            case "replaceRandomCard":          ie = new EffectReplaceRandomCard();          break;
-            case "score":                      ie = new EffectScore();                      break;
-            case "shuffle":                    ie = new EffectShuffle();                    break;
-            case "dieRoll":                    ie = new EffectDieRoll();                    break;
+            case "addCharges":                   ie = new EffectAddCharges();                   break;
+            case "allTowersLifespanBonus":       ie = new EffectAllTowersLifespanBonus();       break;
+            case "conjureSpellCard":             ie = new EffectConjureSpellCard();             break;
+            case "conjureTowerCard":             ie = new EffectConjureTowerCard();             break;
+            case "conjureUpgradeCard":           ie = new EffectConjureUpgradeCard();           break;
+            case "damageHand":                   ie = new EffectDamageHand();                   break;
+            case "damagePlayer":                 ie = new EffectDamagePlayer();                 break;
+            case "discardChosenCard":            ie = new EffectDiscardChosen();                break;
+            case "discardRandomCard":            ie = new EffectDiscardRandom();                break;
+            case "drawCard":                     ie = new EffectDrawCard();                     break;
+            case "drawEnemyCard":                ie = new EffectDrawEnemyCard();                break;
+            case "drawSpellCard":                ie = new EffectDrawSpellCard();                break;
+            case "drawTowerCard":                ie = new EffectDrawTowerCard();                break;
+            case "drawUpgradeCard":              ie = new EffectDrawUpgradeCard();              break;
+            case "replaceRandomCard":            ie = new EffectReplaceRandomCard();            break;
+            case "replaceRandomCardWithSpell":   ie = new EffectReplaceRandomCardWithSpell();   break;
+            case "replaceRandomCardWithTower":   ie = new EffectReplaceRandomCardWithTower();   break;
+            case "replaceRandomCardWithUpgrade": ie = new EffectReplaceRandomCardWithUpgrade(); break;
+            case "score":                        ie = new EffectScore();                        break;
+            case "shuffle":                      ie = new EffectShuffle();                      break;
+            case "dieRoll":                      ie = new EffectDieRoll();                      break;
                                                                                             
             //<<Targeting effects (Determines tower targeting behavior)>>                   
             case "targetAll":                  ie = new EffectTargetAll();                  break;

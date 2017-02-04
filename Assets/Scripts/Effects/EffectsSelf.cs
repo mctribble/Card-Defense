@@ -120,3 +120,150 @@ public class EffectReplaceRandomCard : BaseEffectSelf
         yield return PlayerHandScript.instance.StartCoroutine(PlayerHandScript.instance.drawCards(toReplace, applyDelay)); //draw new cards to replace them
     }
 }
+
+//discards up to x random cards from the hand IN ADDITION TO this one, then draws spell card for each card discarded EXCEPT FOR this one (therefore, if player has 7 cards and the effect replaces up to 7, their hand will be emptied and they will draw six)
+public class EffectReplaceRandomCardWithSpell : BaseEffectSelf
+{
+    [Hide] public override string Name { get { return "Discard up to " + strength + " cards at random, and draw spells to replace them"; } } //returns name and strength
+    [Show] public override string XMLName { get { return "replaceRandomCardWithSpell"; } } //name used to refer to this effect in XML
+
+    public override void trigger(ref PlayerCard card, GameObject card_gameObject) { PlayerHandScript.instance.StartCoroutine(effectCoroutine(card, card_gameObject)); }
+    public IEnumerator effectCoroutine(PlayerCard card, GameObject card_gameObject)
+    {
+        int toReplace = Mathf.Min( Mathf.RoundToInt(strength), PlayerHandScript.instance.discardableCardCount-1);  //how many cards are being replaced
+
+        //if we are replacing the entire hand, do them all at once with no delay
+        bool applyDelay = true;
+        if (toReplace == PlayerHandScript.instance.currentHandSize - 1)
+            applyDelay = false;
+
+        yield return PlayerHandScript.instance.StartCoroutine(PlayerHandScript.instance.discardRandomCards(card_gameObject.GetComponent<CardScript>(), toReplace, applyDelay)); //discard toReplace random cards that are NOT this one (this card will be discarded regardless, since it was just played)
+        yield return null; //wait a frame for things to happen
+
+        //draw new cards to replace them:
+        PlayerCard[] cards = new PlayerCard[toReplace];
+
+        //fill the array with the Cards we want to draw
+        for (int i = 0; i < toReplace; i++)
+        {
+            //attempt to draw from the deck
+            PlayerCard? drawn = DeckManagerScript.instance.DrawCardType(PlayerCardType.spell);
+
+            if (drawn != null)
+            {
+                //the draw succeeded, so we can use it directly
+                cards[i] = drawn.Value;
+            }
+            else
+            {
+                //the draw failed, so make a new card from thin air using the "Improvised Spell" token.
+                PlayerCard newCard = new PlayerCard();
+                newCard.data = CardTypeManagerScript.instance.getCardByName("Improvised Spell");
+                newCard.charges = newCard.data.cardMaxCharges;
+                cards[i] = newCard;
+            }
+
+        }
+
+        //tell the hand to draw these specific Cards.
+        PlayerHandScript.instance.StartCoroutine(PlayerHandScript.instance.drawCards(cards));
+    }
+}
+
+//discards up to x random cards from the hand IN ADDITION TO this one, then draws tower cards for each card discarded EXCEPT FOR this one (therefore, if player has 7 cards and the effect replaces up to 7, their hand will be emptied and they will draw six)
+public class EffectReplaceRandomCardWithTower : BaseEffectSelf
+{
+    [Hide] public override string Name { get { return "Discard up to " + strength + " cards at random, and draw towers to replace them"; } } //returns name and strength
+    [Show] public override string XMLName { get { return "replaceRandomCardWithTower"; } } //name used to refer to this effect in XML
+
+    public override void trigger(ref PlayerCard card, GameObject card_gameObject) { PlayerHandScript.instance.StartCoroutine(effectCoroutine(card, card_gameObject)); }
+    public IEnumerator effectCoroutine(PlayerCard card, GameObject card_gameObject)
+    {
+        int toReplace = Mathf.Min( Mathf.RoundToInt(strength), PlayerHandScript.instance.discardableCardCount-1);  //how many cards are being replaced
+
+        //if we are replacing the entire hand, do them all at once with no delay
+        bool applyDelay = true;
+        if (toReplace == PlayerHandScript.instance.currentHandSize - 1)
+            applyDelay = false;
+
+        yield return PlayerHandScript.instance.StartCoroutine(PlayerHandScript.instance.discardRandomCards(card_gameObject.GetComponent<CardScript>(), toReplace, applyDelay)); //discard toReplace random cards that are NOT this one (this card will be discarded regardless, since it was just played)
+        yield return null; //wait a frame for things to happen
+
+        //draw new cards to replace them:
+        PlayerCard[] cards = new PlayerCard[toReplace];
+
+        //fill the array with the Cards we want to draw
+        for (int i = 0; i < toReplace; i++)
+        {
+            //attempt to draw from the deck
+            PlayerCard? drawn = DeckManagerScript.instance.DrawCardType(PlayerCardType.tower);
+
+            if (drawn != null)
+            {
+                //the draw succeeded, so we can use it directly
+                cards[i] = drawn.Value;
+            }
+            else
+            {
+                //the draw failed, so make a new card from thin air using the "Improvised Spell" token.
+                PlayerCard newCard = new PlayerCard();
+                newCard.data = CardTypeManagerScript.instance.getCardByName("Improvised Tower");
+                newCard.charges = newCard.data.cardMaxCharges;
+                cards[i] = newCard;
+            }
+
+        }
+
+        //tell the hand to draw these specific Cards.
+        PlayerHandScript.instance.StartCoroutine(PlayerHandScript.instance.drawCards(cards));
+    }
+}
+
+//discards up to x random cards from the hand IN ADDITION TO this one, then draws upgrade cards for each card discarded EXCEPT FOR this one (therefore, if player has 7 cards and the effect replaces up to 7, their hand will be emptied and they will draw six)
+public class EffectReplaceRandomCardWithUpgrade : BaseEffectSelf
+{
+    [Hide] public override string Name { get { return "Discard up to " + strength + " cards at random, and draw upgrades to replace them"; } } //returns name and strength
+    [Show] public override string XMLName { get { return "replaceRandomCardWithUpgrade"; } } //name used to refer to this effect in XML
+
+    public override void trigger(ref PlayerCard card, GameObject card_gameObject) { PlayerHandScript.instance.StartCoroutine(effectCoroutine(card, card_gameObject)); }
+    public IEnumerator effectCoroutine(PlayerCard card, GameObject card_gameObject)
+    {
+        int toReplace = Mathf.Min( Mathf.RoundToInt(strength), PlayerHandScript.instance.discardableCardCount-1);  //how many cards are being replaced
+
+        //if we are replacing the entire hand, do them all at once with no delay
+        bool applyDelay = true;
+        if (toReplace == PlayerHandScript.instance.currentHandSize - 1)
+            applyDelay = false;
+
+        yield return PlayerHandScript.instance.StartCoroutine(PlayerHandScript.instance.discardRandomCards(card_gameObject.GetComponent<CardScript>(), toReplace, applyDelay)); //discard toReplace random cards that are NOT this one (this card will be discarded regardless, since it was just played)
+        yield return null; //wait a frame for things to happen
+
+        //draw new cards to replace them:
+        PlayerCard[] cards = new PlayerCard[toReplace];
+
+        //fill the array with the Cards we want to draw
+        for (int i = 0; i < toReplace; i++)
+        {
+            //attempt to draw from the deck
+            PlayerCard? drawn = DeckManagerScript.instance.DrawCardType(PlayerCardType.upgrade);
+
+            if (drawn != null)
+            {
+                //the draw succeeded, so we can use it directly
+                cards[i] = drawn.Value;
+            }
+            else
+            {
+                //the draw failed, so make a new card from thin air using the "Improvised Spell" token.
+                PlayerCard newCard = new PlayerCard();
+                newCard.data = CardTypeManagerScript.instance.getCardByName("Improvised Upgrade");
+                newCard.charges = newCard.data.cardMaxCharges;
+                cards[i] = newCard;
+            }
+
+        }
+
+        //tell the hand to draw these specific Cards.
+        PlayerHandScript.instance.StartCoroutine(PlayerHandScript.instance.drawCards(cards));
+    }
+}

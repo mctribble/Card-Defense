@@ -40,23 +40,26 @@ changeWaveType         | wave type is changed to Y
 timePercentageChange   | wave time is increased by X percent
 
 <<instant effects (trigger immediately when card is played)>>
-addCharges             | this card gains X charges.  Must be on a card.
-allTowersLifespanBonus | all towers on the map last X waves longer
-conjureSpellCard       | player conjures X spells, which are chosen randomly from all available un-modded spells and added directly to the hand as tokens
-conjureTowerCard       | player conjures X towers, which are chosen randomly from all available un-modded spells and added directly to the hand as tokens
-conjureUpgradeCard     | player conjures X upgrades, which are chosen randomly from all available un-modded spells and added directly to the hand as tokens
-damageHand	           | player's HAND takes x damage.  If the hand does not have enough charges, excess damage is dealt to their deck
-damagePlayer           | player takes X damage
-discardChosenCard      | player chooses up to X cards to discard.  Must be on a card.
-discardRandomCard      | player discards up to X cards chosen at random.  Must be on a card.
-drawCard               | player draws X cards
-drawEnemyCard          | enemy draws X cards
-drawSpellCard          | player draws X spells from their deck.   if there are not enough, "Improvised Spell" tokens are created instead.
-drawTowerCard          | player draws X towers from their deck.   if there are not enough, "Improvised Tower" tokens are created instead.
-drawUpgradeCard        | player draws X upgrades from their deck. if there are not enough, "Improvised Upgrade" tokens are created instead.
-replaceRandomCard	   | replaces up to X cards chosen at random
-score                  | player gains X points
-shuffle                | shuffles the deck
+addCharges                   | this card gains X charges.  Must be on a card.
+allTowersLifespanBonus       | all towers on the map last X waves longer
+conjureSpellCard             | player conjures X spells, which are chosen randomly from all available un-modded spells and added directly to the hand as tokens
+conjureTowerCard             | player conjures X towers, which are chosen randomly from all available un-modded spells and added directly to the hand as tokens
+conjureUpgradeCard           | player conjures X upgrades, which are chosen randomly from all available un-modded spells and added directly to the hand as tokens
+damageHand	                 | player's HAND takes x damage.  If the hand does not have enough charges, excess damage is dealt to their deck
+damagePlayer                 | player takes X damage
+discardChosenCard            | player chooses up to X cards to discard.  Must be on a card.
+discardRandomCard            | player discards up to X cards chosen at random.  Must be on a card.
+drawCard                     | player draws X cards
+drawEnemyCard                | enemy draws X cards
+drawSpellCard                | player draws X spells from their deck.   if there are not enough, "Improvised Spell" tokens are created instead.
+drawTowerCard                | player draws X towers from their deck.   if there are not enough, "Improvised Tower" tokens are created instead.
+drawUpgradeCard              | player draws X upgrades from their deck. if there are not enough, "Improvised Upgrade" tokens are created instead.
+replaceRandomCard	         | replaces up to X cards chosen at random
+replaceRandomCardWithSpell	 | replaces up to X cards chosen at random with spells
+replaceRandomCardWithTower	 | replaces up to X cards chosen at random with towers
+replaceRandomCardWithUpgrade | replaces up to X cards chosen at random with upgrades
+score                        | player gains X points
+shuffle                      | shuffles the deck
 
 <<Targeting effects (Determines tower targeting behavior)>>
 targetAll        | tower targets all enemies in range with multiple projectiles

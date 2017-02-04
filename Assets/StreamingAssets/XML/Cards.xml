@@ -489,6 +489,33 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="spell" Name="Focus Power: Spells" Description="Redirects all your efforts towards spellcasting." Charges="3" Art="Focus_Power_Spells.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="replaceRandomCardWithSpell" strength="15" />
+          <Effect name="drawSpellCard" strength="2" />
+          <Effect name="shuffle" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="spell" Name="Focus Power: Towers" Description="Redirects all your efforts towards creation of towers." Charges="3" Art="Focus_Power_Towers.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="replaceRandomCardWithTower" strength="15" />
+          <Effect name="drawTowerCard" strength="2" />
+          <Effect name="shuffle" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="spell" Name="Focus Power: Upgrades" Description="Redirects all your efforts towards improving your towers." Charges="3" Art="Focus_Power_Upgrades.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="replaceRandomCardWithUpgrade" strength="15" />
+          <Effect name="drawUpgradeCard" strength="2" />
+          <Effect name="shuffle" />
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="spell" Name="Gather Power" Description="Gives you more to work with, but attracts more enemies.  Usable once per round" Charges="1" Art="Enrage.png" Tooltip="Tower_Basic.png" Token="true">
       <effectData>
         <Effects>
