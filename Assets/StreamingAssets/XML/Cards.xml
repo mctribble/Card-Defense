@@ -32,6 +32,19 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="tower" Name="Chain Gun" Description="Best suited as a last line of defense" Charges="2" Art="Chain Gun.png" Tooltip="Tower_Basic.png" Token="false">
+      <towerData Recharge="0.1" Range="2" Damage="5" Lifespan="3" UpgradeCap="0" Sprite="Tower_Basic.png">
+        <towerColor r="0.75" g="0.75" b="0.2" a="1" />
+      </towerData>
+      <effectData>
+        <Effects>
+          <Effect name="armorPierce" />"
+          <Effect name="limitedAmmo" strength="200" />
+          <Effect name="upgradesForbidden" />
+          <Effect name="infiniteTowerLifespan" />
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="tower" Name="Construction Yard" Description="provides a steady supply of additional towers." Charges="3" Art="Construction_Yard.png" Tooltip="Tower_Basic.png" Token="true">
       <towerData Recharge="2" Range="1.5" Damage="10" Lifespan="4" UpgradeCap="2" Sprite="Tower_Basic.png">
         <towerColor r="0.25" g="0" b="0" a="1" />
@@ -58,6 +71,18 @@
           </Effect>
           <Effect name="everyRound">
             <Effect name="score" strength="100" />
+          </Effect>
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="tower" Name="Pylon" Description="provides a steady supply of additional cards from the deck." Charges="3" Art="Pylon.png" Tooltip="Tower_Octagon.png" Token="true">
+      <towerData Recharge="2" Range="1.5" Damage="10" Lifespan="4" UpgradeCap="2" Sprite="Tower_Octagon.png">
+        <towerColor r="0.25" g="0" b="0" a="1" />
+      </towerData>
+      <effectData>
+        <Effects>
+          <Effect name="everyRound">
+            <Effect name="drawCard" strength="1" />
           </Effect>
         </Effects>
       </effectData>

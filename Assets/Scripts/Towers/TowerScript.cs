@@ -295,6 +295,7 @@ public class TowerScript : BaseBehaviour
                     PropertyEffects temp = effects.propertyEffects;
                     temp.limitedAmmo--;
                     effects.propertyEffects = temp;
+                    updateLifespanText();
                     UpdateTooltipText();
                 }
             }

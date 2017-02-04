@@ -15,9 +15,11 @@ heavy shield
 construction yard
 magic academy
 workshop
+pylon
 focus power: spell/tower/upgrade
 crossfire upgrade
 modular tower
+Chain Gun
 
 enemy spawn points
 maybe update enemy goal points?
@@ -31,7 +33,7 @@ need some level backgrounds
 content goals:
 enemies: 10/10  <<DONE!!>>
 levels:  30/30  <<DONE!!>>
-cards:   76/100 (+4 token)
+cards:   78/100 (+4 token)
 decks:   08/10
 ================================================================
 analytics:

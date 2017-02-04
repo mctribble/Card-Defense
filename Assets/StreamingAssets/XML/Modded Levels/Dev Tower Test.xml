@@ -50,7 +50,9 @@
     <Tower name="Construction Yard" x="6.5" y="-10" />
     <Tower name="Magic Academy" x="7" y="-10" />
     <Tower name="Workshop" x="7.5" y="-10" />
-    <Tower name="Modular Tower" x="8" y="-10" />
+    <Tower name="Pylon" x="8" y="-10" />
+    <Tower name="Modular Tower" x="8.5" y="-10" />
+    <Tower name="Chain Gun" x="9" y="-10" />
   </Towers>
   <shuffleDeck>true</shuffleDeck>
   <levelDeck name="Level Deck">
@@ -84,7 +86,9 @@
       <Card name="Construction Yard" count="2"/>
       <Card name="Magic Academy" count="2"/>
       <Card name="Workshop" count="2"/>
+      <Card name="Pylon" count="2"/>
       <Card name="Modular Tower" count="2"/>
+      <Card name="Chain Gun" count="2"/>
     </Cards>
   </levelDeck>
 </Level>
