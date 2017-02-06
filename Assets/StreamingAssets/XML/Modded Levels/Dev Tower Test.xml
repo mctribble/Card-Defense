@@ -53,6 +53,7 @@
     <Tower name="Pylon" x="8" y="-10" />
     <Tower name="Modular Tower" x="8.5" y="-10" />
     <Tower name="Chain Gun" x="9" y="-10" />
+    <Tower name="Heavy Overcharge Tower" x="9.5" y="-10" />
   </Towers>
   <shuffleDeck>true</shuffleDeck>
   <levelDeck name="Level Deck">
@@ -89,6 +90,7 @@
       <Card name="Pylon" count="2"/>
       <Card name="Modular Tower" count="2"/>
       <Card name="Chain Gun" count="2"/>
+      <Card name="Heavy Overcharge Tower" count="2" />
     </Cards>
   </levelDeck>
 </Level>

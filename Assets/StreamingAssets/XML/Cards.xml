@@ -144,6 +144,19 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="tower" Name="Heavy Overcharge Tower" Description="Very powerful, but choose wisely when to fire." Charges="4" Art="Heavy_Overcharge_Tower.png" Tooltip="Tower_Octagon.png" Token="false">
+      <towerData Recharge="12" Range="3" Damage="200" Lifespan="4" UpgradeCap="3" Sprite="Tower_Octagon.png">
+        <towerColor r="0.75" g="0.25" b="0" a="1" />
+      </towerData>
+      <effectData>
+        <Effects>
+          <Effect name="manualFire" />
+          <Effect name="targetHealth" />
+          <Effect name="maxOvercharge" strength="2" />
+          <Effect name="overchargeDamage" strength="2" />
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="tower" Name="Heavy Tower" Description="Suitable for fighting tanks" Charges="4" Art="Heavy_Tower.png" Tooltip="Tower_Basic.png" Token="false">
       <towerData Recharge="6" Range="2" Damage="100" Lifespan="3" UpgradeCap="3" Sprite="Tower_Basic.png">
         <towerColor r="0" g="0" b="1" a="1" />
