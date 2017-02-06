@@ -4,6 +4,7 @@ some lingering cause of enemies not knowing to expect damage
 sometimes game freezes on level load if it is not the first load of a session.  reasons unknown.
 ================================================================
 art needed for:
+resonant tower a/r/p
 conjure tower/upgrade/spell
 double/quad-barrel upgrade
 mortar tower
@@ -20,8 +21,18 @@ focus power: spell/tower/upgrade
 crossfire upgrade
 modular tower
 Chain Gun
+heavy overcharge tower
+swarm tower
 
 enemy spawn points
+
+update art for:
+black plague tower
+challenger tower
+plague tower
+supernova tower
+overcharge tower
+
 maybe update enemy goal points?
 maybe indicate path direction?
 ================================================================
@@ -33,7 +44,7 @@ need some level backgrounds
 content goals:
 enemies: 10/10  <<DONE!!>>
 levels:  30/30  <<DONE!!>>
-cards:   79/100 (+4 token)
+cards:   80/100 (+4 token)
 decks:   08/10
 ================================================================
 analytics:
