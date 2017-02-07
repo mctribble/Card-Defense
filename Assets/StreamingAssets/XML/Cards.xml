@@ -32,9 +32,24 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Chain Gun" Description="Best suited as a last line of defense" Charges="2" Art="Chain Gun.png" Tooltip="Tower_Octagon.png" Token="false">
-      <towerData Recharge="0.1" Range="2" Damage="5" Lifespan="3" UpgradeCap="0" Sprite="Tower_Octagon.png">
-        <towerColor r="0.75" g="0.75" b="0.2" a="1" />
+    <Card Type="tower" Name="Blood Mage Tower" Description="Powerful, but also very dangerous." Charges="1" Art="Blood_Mage_Tower.png" Tooltip="Tower_Diamond.png" Token="false">
+      <towerData Recharge="1.5" Range="2.5" Damage="100" Lifespan="3" UpgradeCap="1" Sprite="Tower_Diamond.png">
+        <towerColor r="1" g="0" b="0" a="1" />
+      </towerData>
+      <effectData>
+        <Effects>
+          <Effect name="onAttack">
+            <Effect name="damagePlayer" strength="1" />
+          </Effect>
+          <Effect name="armorPierce" />
+          <Effect name="targetHealth" />
+          <Effect name="splashDamage" strength="20" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="tower" Name="Chain Gun" Description="Best suited as a last line of defense" Charges="2" Art="Chain Gun.png" Tooltip="Tower_Basic.png" Token="false">
+      <towerData Recharge="0.1" Range="2" Damage="5" Lifespan="3" UpgradeCap="0" Sprite="Tower_Basic.png">
+        <towerColor r="0.75" g="0.25" b="0" a="1" />
       </towerData>
       <effectData>
         <Effects>
@@ -122,7 +137,7 @@
     </Card>
     <Card Type="tower" Name="Giant Sniper" Description="Variation of Sniper Tower that specializes in slaying giants" Charges="2" Art="Giant_Sniper.png" Tooltip="Tower_Octagon.png" Token="false">
       <towerData Recharge="15" Range="999" Damage="300" Lifespan="6" UpgradeCap="0" Sprite="Tower_Octagon.png">
-        <towerColor r="0.75" g="0" b="0.75" a="1" />
+        <towerColor r="0.75" g="0.25" b="0" a="1" />
       </towerData>
       <effectData>
         <Effects>
@@ -158,6 +173,19 @@
       <towerData Recharge="2" Range="1.5" Damage="10" Lifespan="3" UpgradeCap="2" Sprite="Tower_Basic.png">
         <towerColor r="0.5" g="0.5" b="0.5" a="1" />
       </towerData>
+    </Card>
+    <Card Type="tower" Name="Death Ray" Description="Fires at a blisteringly fast pace and at great range, but dont build it until you really need it" Charges="2" Art="Death_Ray.png" Tooltip="Tower_Octagon.png" Token="false">
+      <towerData Recharge="0.01" Range="999" Damage="2" Lifespan="3" UpgradeCap="0" Sprite="Tower_Octagon.png">
+        <towerColor r="0.75" g="0.75" b="0.2" a="1" />
+      </towerData>
+      <effectData>
+        <Effects>
+          <Effect name="armorPierce" />
+          <Effect name="limitedAmmo" strength="750" />
+          <Effect name="upgradesForbidden" />
+          <Effect name="infiniteTowerLifespan" />
+        </Effects>
+      </effectData>
     </Card>
     <Card Type="tower" Name="Magic Academy" Description="provides a steady supply of additional spells." Charges="3" Art="Magic_Academy.png" Tooltip="Tower_Round.png" Token="true">
       <towerData Recharge="2" Range="1.5" Damage="10" Lifespan="4" UpgradeCap="2" Sprite="Tower_Round.png">
@@ -199,7 +227,7 @@
     </Card>
     <Card Type="tower" Name="Nova Tower" Description="The fury of a single sun tends to be sufficient" Charges="1" Art="Nova_Tower.png" Tooltip="Tower_Round.png" Token="false">
       <towerData Recharge="60" Range="8" Damage="175" Lifespan="1" UpgradeCap="0" Sprite="Tower_Round.png">
-        <towerColor r="0.5" g="0" b="0.5" a="1" />
+        <towerColor r="0.5" g="0.5" b="0.5" a="1" />
       </towerData>
       <effectData>
         <Effects>
@@ -253,6 +281,11 @@
           <Effect name="targetRandom" />
         </Effects>
       </effectData>
+    </Card>
+    <Card Type="tower" Name="Range Tower" Charges="5" Art="Range_Tower.png" Tooltip="Tower_Octagon.png" Token="false">
+      <towerData Recharge="1.7" Range="4" Damage="23" Lifespan="3" UpgradeCap="3" Sprite="Tower_octagon.png">
+        <towerColor r="0" g="1" b="0" a="1" />
+      </towerData>
     </Card>
     <Card Type="tower" Name="Pylon" Description="provides a steady supply of additional cards from the deck." Charges="3" Art="Pylon.png" Tooltip="Tower_Octagon.png" Token="true">
       <towerData Recharge="2" Range="1.5" Damage="10" Lifespan="4" UpgradeCap="2" Sprite="Tower_Octagon.png">
@@ -348,8 +381,8 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Swarm Tower" Description="Unleashes a massive hail of explosive bullets that attacks everything on the map" Charges="4" Art="Swarm_Tower.png" Tooltip="Tower_Round.png" Token="false">
-      <towerData Recharge="2" Range="999" Damage="3" Lifespan="2" UpgradeCap="3" Sprite="Tower_Round.png">
+    <Card Type="tower" Name="Swarm Tower" Description="Unleashes a massive hail of explosive bullets that attacks everything on the map" Charges="4" Art="Swarm_Tower.png" Tooltip="Tower_Octagon.png" Token="false">
+      <towerData Recharge="2" Range="999" Damage="3" Lifespan="2" UpgradeCap="3" Sprite="Tower_Octagon.png">
         <towerColor r="0.5" g="0.5" b="0.5" a="1" />
       </towerData>
       <effectData>
