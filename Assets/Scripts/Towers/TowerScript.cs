@@ -479,16 +479,25 @@ public class TowerScript : BaseBehaviour
 
         //max tower charge is 1.0 unless an effect overrides it
         maxCharge = 1.0f;
-        maxCharge = 1.0f;
         if (effects != null)
             if (effects.propertyEffects.maxOvercharge != null)
                 maxCharge += effects.propertyEffects.maxOvercharge.Value;
 
-        //if the tower has any everyRound effects, trigger them now
+        //special handling of particular effect types
         if (effects != null)
+        {
             foreach (IEffect ie in effects.effects)
+            {
+                //trigger every round effects on tower spawn
                 if (ie.triggersAs(EffectType.everyRound))
                     ((IEffectInstant)ie).trigger();
+
+                //tell effects about the tower they came from, if they want to know
+                if (ie.triggersAs(EffectType.sourceTracked))
+                    ((IEffectSourceTracked)ie).effectSource = this;
+            }
+        }
+      
     }
 
     /// <summary>
@@ -500,9 +509,16 @@ public class TowerScript : BaseBehaviour
         if (effects == null)
             effects = new EffectData();
 
-        //add the new effects to it
+        //for each effect to add
         foreach (IEffect newEffect in newEffectData.effects)
+        {
+            //tell it about the source, if it wants to know
+            if (newEffect.triggersAs(EffectType.sourceTracked))
+                ((IEffectSourceTracked)newEffect).effectSource = this;
+
+            //add it
             effects.Add(EffectData.cloneEffect(newEffect));
+        }
 
         //update tooltip text
         UpdateTooltipText();

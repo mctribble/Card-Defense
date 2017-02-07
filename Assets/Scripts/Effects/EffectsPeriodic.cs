@@ -50,7 +50,7 @@ public class EffectRegeneration : BaseEffectPeriodic
 }
 
 //enemy loses X health per second for Y seconds 
-public class EffectPoison : BaseEffectPeriodic
+public class EffectPoison : BaseEffectPeriodic, IEffectSourceTracked
 {
     //effect lifespan (this is a string to match the interface, but actually updates the float maxPoisonTime)
     public override string argument
@@ -83,6 +83,14 @@ public class EffectPoison : BaseEffectPeriodic
     [Show, Display(4)] public float maxPoisonTime; //stop dealing damage after this window has passed
     [Show, Display(5)] public float carryOver; //how much damage is carried over from the last frame due to integer health tracking
 
+    public TowerScript effectSource { get; set; } //the tower to notify about damage dealt by this effect
+
+    //override triggerAs to indicate we want to know about the effect source
+    public override bool triggersAs(EffectType triggerType)
+    {
+        return base.triggersAs(triggerType) || triggerType == EffectType.sourceTracked;
+    }
+
     //effect can be removed once it has expired
     public override bool shouldBeRemoved()
     {
@@ -111,7 +119,7 @@ public class EffectPoison : BaseEffectPeriodic
 
         //construct event
         DamageEventData damageEvent = new DamageEventData();
-        damageEvent.source = null;
+        damageEvent.source = effectSource;
         damageEvent.dest = e;
         damageEvent.rawDamage = roundedDamage;
         damageEvent.effects = null;

@@ -38,6 +38,7 @@ public enum TargetingType
 /// property        : is never triggered.  instead, other code tests whether or not it exists on a given object and behave accordingly
 /// rank            : triggers when the enemy rank changes
 /// self            : affects the card it is attached to (i.e.: to gain/lose charges when cast)
+/// sourceTracked   : this effect needs to maintain a reference to the tower it came from.  Only ever present in conjunction with other types
 /// spawn           : triggers when the enemy or tower is spawned
 /// towerTargeting  : alters the way a tower targets enemies.  if multiple are present, only the last is actually used
 /// wave            : alters the current wave
@@ -58,6 +59,7 @@ public enum EffectType
     property,
     rank,
     self,
+    sourceTracked,
     spawn,
     towerTargeting,
     wave,
@@ -638,6 +640,10 @@ public class EffectData : System.Object
         if (original.triggersAs(EffectType.meta))
             ((BaseEffectMeta)result).innerEffect = ((BaseEffectMeta)original).cloneInnerEffect();
 
+        //special handling of effects that track source: maintain source
+        if (original.triggersAs(EffectType.sourceTracked))
+            ((IEffectSourceTracked)result).effectSource = ((IEffectSourceTracked)original).effectSource;
+
         return result;
     }
 
@@ -807,4 +813,10 @@ public interface IEffectAttack : IEffect
 {
     void towerAttack(TowerScript tower);
     void enemyAttack(EnemyScript enemy);
+}
+
+//this effect needs to maintain a reference to the tower it came from.  Only ever present in conjunction with other types
+public interface IEffectSourceTracked : IEffect
+{
+    TowerScript effectSource { get; set; } //the tower to notify about damage dealt by this effect
 }
