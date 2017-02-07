@@ -47,7 +47,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Chain Gun" Description="Best suited as a last line of defense" Charges="2" Art="Chain Gun.png" Tooltip="Tower_Basic.png" Token="false">
+    <Card Type="tower" Name="Chain Gun" Description="Best suited as a last line of defense" Charges="2" Art="Chain_Gun.png" Tooltip="Tower_Basic.png" Token="false">
       <towerData Recharge="0.1" Range="2" Damage="5" Lifespan="3" UpgradeCap="0" Sprite="Tower_Basic.png">
         <towerColor r="0.75" g="0.25" b="0" a="1" />
       </towerData>
@@ -120,7 +120,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Fast Sniper" Description="Specializes in finishing off weak foes" Charges="2" Art="Fast_Sniper_Tower.png" Tooltip="Tower_Octagon.png" Token="false">
+    <Card Type="tower" Name="Fast Sniper" Description="Specializes in finishing off weak foes" Charges="2" Art="Fast_Sniper.png" Tooltip="Tower_Octagon.png" Token="false">
       <towerData Recharge="0.5" Range="999" Damage="2" Lifespan="4" UpgradeCap="2" Sprite="Tower_Octagon.png">
         <towerColor r="1" g="0" b="0" a="1" />
       </towerData>

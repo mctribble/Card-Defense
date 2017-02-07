@@ -4,39 +4,16 @@ some lingering cause of enemies not knowing to expect damage
 sometimes game freezes on level load if it is not the first load of a session.  reasons unknown.
 ================================================================
 art needed for:
-blood mage tower
-Chain Gun
-Champion Tower
 conjure tower/upgrade/spell
-construction yard
 crippling/explosive ammo
 crossfire upgrade
-death ray
 double/quad-barrel upgrade
-fast sniper
 focus power: spell/tower/upgrade
-heavy overcharge tower
 heavy shield
-magic academy
-modular tower
-mortar tower
-pylon
-range tower
-resonant tower a/r/p
-slowing tower
-swarm tower
-workshop
 
 enemy spawn points
 
 update art for:
-black plague tower
-challenger tower
-giant sniper
-nova tower
-overcharge tower
-plague tower
-supernova tower
 
 maybe update enemy goal points?
 maybe indicate path direction?
