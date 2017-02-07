@@ -512,6 +512,13 @@ public class TowerScript : BaseBehaviour
         //for each effect to add
         foreach (IEffect newEffect in newEffectData.effects)
         {
+            //apply upgrade effects, instead of adding them
+            if (newEffect.triggersAs(EffectType.upgrade))
+            {
+                ((IEffectUpgrade)newEffect).upgradeTower(this);
+                continue;
+            }
+
             //tell it about the source, if it wants to know
             if (newEffect.triggersAs(EffectType.sourceTracked))
                 ((IEffectSourceTracked)newEffect).effectSource = this;

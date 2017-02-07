@@ -133,6 +133,7 @@
           <xsd:enumeration value="ResonantTowerAttackMult" />
           <xsd:enumeration value="ResonantTowerRangeMod" />
           <xsd:enumeration value="returnsToTopOfDeck" />
+          <xsd:enumeration value="setRange" />
           <xsd:enumeration value="scaleAttackhWithBudget" />
           <xsd:enumeration value="scaleAttackWithDamage" />
           <xsd:enumeration value="scaleEffectByTowerAttack" />

@@ -4,10 +4,13 @@ some lingering cause of enemies not knowing to expect damage
 sometimes game freezes on level load if it is not the first load of a session.  reasons unknown.
 ================================================================
 art needed for:
-conjure tower/upgrade/spell
 crippling/explosive ammo
 crossfire upgrade
 double/quad-barrel upgrade
+blood magic upgrade
+mouse upgrade
+
+conjure tower/upgrade/spell
 focus power: spell/tower/upgrade
 heavy shield
 
@@ -26,7 +29,7 @@ need some level backgrounds
 content goals:
 enemies: 10/10  <<DONE!!>>
 levels:  30/30  <<DONE!!>>
-cards:   83/100 (+4 token)
+cards:   85/100 (+4 token)
 decks:   08/10
 ================================================================
 analytics:

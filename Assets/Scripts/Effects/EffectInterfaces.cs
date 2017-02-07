@@ -41,6 +41,7 @@ public enum TargetingType
 /// sourceTracked   : this effect needs to maintain a reference to the tower it came from.  Only ever present in conjunction with other types
 /// spawn           : triggers when the enemy or tower is spawned
 /// towerTargeting  : alters the way a tower targets enemies.  if multiple are present, only the last is actually used
+/// upgrade         : this effect triggers when a tower is upgraded.  They are only valid on upgrade cards
 /// wave            : alters the current wave
 /// </summary>
 public enum EffectType
@@ -62,6 +63,7 @@ public enum EffectType
     sourceTracked,
     spawn,
     towerTargeting,
+    upgrade,
     wave,
 };
 
@@ -819,4 +821,10 @@ public interface IEffectAttack : IEffect
 public interface IEffectSourceTracked : IEffect
 {
     TowerScript effectSource { get; set; } //the tower to notify about damage dealt by this effect
+}
+
+//this effect triggers when a tower is upgraded.  They are only valid on upgrade cards
+public interface IEffectUpgrade : IEffect
+{
+    void upgradeTower(TowerScript tower);
 }
