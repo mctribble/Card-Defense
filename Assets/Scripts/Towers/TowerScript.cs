@@ -81,6 +81,7 @@ public class TowerScript : BaseBehaviour
     [VisibleWhen("hasData")] private float deltaTime;            //time since last frame
     [VisibleWhen("hasData")] private float shotCharge;           //represents how charged the next shot is. 0.0 is empty, maxCharge is full
     [VisibleWhen("hasData")] private float maxCharge;            //max shot charge (default 1.0)
+    [VisibleWhen("hasData")] private float damageDealtThisRound; //amount of damage dealt by this tower this round
     [VisibleWhen("hasData")] private bool  waitingForManualFire; //whether user is being prompted to fire manually
 
     // Use this for initialization
@@ -92,6 +93,9 @@ public class TowerScript : BaseBehaviour
         upgradeCount = 0;
         maxCharge = 1.0f;
         effects = null;
+
+        //register for event
+        LevelManagerScript.instance.RoundStartedEvent += WaveStarted;
 
         //set scale of range image
         rangeImage.gameObject.GetComponent<RectTransform>().localScale = new Vector3(range, range, 1.0f);
@@ -703,6 +707,24 @@ public class TowerScript : BaseBehaviour
     }
 
     /// <summary>
+    /// should be called whenever the tower deals damage to something in order to keep track of it for the tooltip
+    /// </summary>
+    /// <param name="damageDealt">the amount that was dealt</param>
+    public void trackDamage(float damageDealt)
+    {
+        damageDealtThisRound += damageDealt;
+        UpdateTooltipText();
+    }
+
+    /// <summary>
+    /// called whenever a wave begins.  Resets the wave damage counter
+    /// </summary>
+    private void WaveStarted()
+    {
+        damageDealtThisRound = 0.0f;
+    }
+
+    /// <summary>
     /// called whenever a wave ends.  Updates the lifespan and destroys the tower if it hits zero.
     /// </summary>
     private void WaveOver()
@@ -761,6 +783,8 @@ public class TowerScript : BaseBehaviour
 
         if ((effects != null) && (effects.propertyEffects.limitedAmmo != null)) //skip this section entirely if we have infinite ammo
             tooltipText.text += "\nammo remaining: " + effects.propertyEffects.limitedAmmo;
+
+        tooltipText.text += "\ntotal damage dealt this round: " + damageDealtThisRound.ToString("F2");
 
         //list effects, deferring targeting effects for later
         bool targetingEffectFound = false;

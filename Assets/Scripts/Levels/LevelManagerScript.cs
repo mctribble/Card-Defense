@@ -214,6 +214,10 @@ public class LevelManagerScript : BaseBehaviour
     public delegate void RoundOverHandler();
     public event RoundOverHandler RoundOverEvent;
 
+    //and this one is for when a round begins
+    public delegate void RoundStartedHandler();
+    public event RoundStartedHandler RoundStartedEvent;
+
     [Hide] public static LevelManagerScript instance;  //singleton pattern
     
     //object references (not visible during play, since there is no reason to modify them in-game)
@@ -524,7 +528,12 @@ public class LevelManagerScript : BaseBehaviour
     /// </summary>
     public void startRound()
     {
+        //spawn enemies
         StartCoroutine(spawnWaves());
+
+        //fire event to tell anything that cares that a wave is starting
+        if (RoundStartedEvent != null)
+            RoundStartedEvent();
     }
 
     /// <summary>
@@ -577,7 +586,7 @@ public class LevelManagerScript : BaseBehaviour
             //tell user they won and wait for them to answer
             yield return StartCoroutine(MessageHandlerScript.ShowAndYield("Level Complete!\n" + ScoreManagerScript.instance.report(true, false))); 
 
-            //prompt userr to continue in endurance
+            //prompt user to continue in endurance
             yield return StartCoroutine(MessageHandlerScript.PromptYesNo("Continue in endurance?"));
 
             if (MessageHandlerScript.responseToLastPrompt == "Yes")

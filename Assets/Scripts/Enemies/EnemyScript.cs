@@ -421,6 +421,12 @@ public class EnemyScript : BaseBehaviour
         damage = System.Math.Min(damage, curHealth);
         curHealth -= damage;
 
+        //tell the attacking tower about it so it can keep track
+        if (e.source == null)
+            Debug.LogWarning("Could not report damage to tower because the event does not have a source specified.");
+        else
+            e.source.trackDamage(damage);
+
         //sound
         if (damage > 0)
         {
