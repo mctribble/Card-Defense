@@ -97,7 +97,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Construction Yard" Description="provides a steady supply of additional towers." Charges="3" Art="Construction_Yard.png" Tooltip="Tower_Basic.png" Token="true">
+    <Card Type="tower" Name="Construction Yard" Description="provides a steady supply of additional towers." Charges="3" Art="Construction_Yard.png" Tooltip="Tower_Basic.png" Token="false">
       <towerData Recharge="2" Range="1.5" Damage="10" Lifespan="4" UpgradeCap="2" Sprite="Tower_Basic.png">
         <towerColor r="0.25" g="0" b="0" a="1" />
       </towerData>
@@ -187,7 +187,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Magic Academy" Description="provides a steady supply of additional spells." Charges="3" Art="Magic_Academy.png" Tooltip="Tower_Round.png" Token="true">
+    <Card Type="tower" Name="Magic Academy" Description="provides a steady supply of additional spells." Charges="3" Art="Magic_Academy.png" Tooltip="Tower_Round.png" Token="false">
       <towerData Recharge="2" Range="1.5" Damage="10" Lifespan="4" UpgradeCap="2" Sprite="Tower_Round.png">
         <towerColor r="0.25" g="0" b="0" a="1" />
       </towerData>
@@ -287,7 +287,7 @@
         <towerColor r="0" g="1" b="0" a="1" />
       </towerData>
     </Card>
-    <Card Type="tower" Name="Pylon" Description="provides a steady supply of additional cards from the deck." Charges="3" Art="Pylon.png" Tooltip="Tower_Octagon.png" Token="true">
+    <Card Type="tower" Name="Pylon" Description="provides a steady supply of additional cards from the deck." Charges="3" Art="Pylon.png" Tooltip="Tower_Octagon.png" Token="false">
       <towerData Recharge="2" Range="1.5" Damage="10" Lifespan="4" UpgradeCap="2" Sprite="Tower_Octagon.png">
         <towerColor r="0.25" g="0" b="0" a="1" />
       </towerData>
@@ -392,7 +392,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Workshop" Description="provides a steady supply of additional upgrades." Charges="3" Art="Workshop.png" Tooltip="Tower_Diamond.png" Token="true">
+    <Card Type="tower" Name="Workshop" Description="provides a steady supply of additional upgrades." Charges="3" Art="Workshop.png" Tooltip="Tower_Diamond.png" Token="false">
       <towerData Recharge="2" Range="1.5" Damage="10" Lifespan="4" UpgradeCap="2" Sprite="Tower_Diamond.png">
         <towerColor r="0.25" g="0" b="0" a="1" />
       </towerData>
