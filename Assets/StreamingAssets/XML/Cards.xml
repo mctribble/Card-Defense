@@ -305,7 +305,7 @@
       </towerData>
       <effectData>
         <Effects>
-          <Effect name="ResonantTowerAttackMult" strength="1.1" argument="Resonant" />
+          <Effect name="ResonantTowerAttackMult" strength="1.1" argument="Damage Resonance" />
         </Effects>
       </effectData>
     </Card>
@@ -316,8 +316,8 @@
       <effectData>
         <Effects>
           <Effect name="targetBurst" />
-          <Effect name="ResonantTowerAttackMod" strength="0.5" argument="Resonant" />
-          <Effect name="ResonantTowerRangeMod" strength="0.25" argument="Resonant" />
+          <Effect name="ResonantTowerAttackMod" strength="0.5" argument="Damage Resonance" />
+          <Effect name="ResonantTowerRangeMod" strength="0.25" argument="Range Resonance" />
         </Effects>
       </effectData>
     </Card>
@@ -327,7 +327,7 @@
       </towerData>
       <effectData>
         <Effects>
-          <Effect name="ResonantTowerRangeMod" strength="0.5" argument="Resonant" />
+          <Effect name="ResonantTowerRangeMod" strength="0.5" argument="Range Resonance" />
         </Effects>
       </effectData>
     </Card>

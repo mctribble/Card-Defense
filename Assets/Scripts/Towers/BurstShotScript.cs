@@ -110,6 +110,10 @@ public class BurstShotScript : BaseBehaviour
     //helper function for Update().  If the given enemy needs to be attacked, attack it and return true.  otherwise, return false.
     private bool hitIfInRange(DamageEventData ded)
     {
+        //if target is dead, it doesnt need to be hit.  its dead.
+        if (ded.dest == null)
+            return false;
+
         if ((curScale == maxScale) || //if this is the last frame the attack is alive
              (Vector2.Distance(ded.dest.transform.position, transform.position) <= curScale)) //or the enemy is within the burst
 
