@@ -100,7 +100,7 @@ public class PlayerCardData : System.Object
                 else
                     description += "attacks <color=lime>" + (1 / towerData.rechargeTime).ToString("F2") + " times per second</color>\n";
 
-                description += '(' + (towerData.attackPower/towerData.rechargeTime) + "/second)\n" +
+                description += '(' + (towerData.attackPower/towerData.rechargeTime).ToString("F2") + " per second)\n" +
                                "Range: " + towerData.range;
 
                 //lifespan
@@ -121,7 +121,7 @@ public class PlayerCardData : System.Object
                 if (effectData == null || effectData.propertyEffects.infiniteTowerLifespan == false)
                 {
                     if (upgradeData.waveBonus > 0) { description += "lifespan: +" + upgradeData.waveBonus + '\n'; }
-                    if (upgradeData.waveBonus < 0) { description += "lifespan: -" + upgradeData.waveBonus + '\n'; }
+                    if (upgradeData.waveBonus < 0) { description += "lifespan: " + upgradeData.waveBonus + '\n'; } 
                 }
                 else
                     description += "Lifespan: <color=green>∞</color>\n";

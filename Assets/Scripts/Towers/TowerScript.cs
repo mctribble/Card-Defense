@@ -567,6 +567,10 @@ public class TowerScript : BaseBehaviour
         //also increase waves
         wavesRemaining += d.waveBonus;
 
+        //if this change drops the tower to 0, destroy it
+        if (wavesRemaining <= 0)
+            Destroy(gameObject);
+
         //set scale of range image
         updateRangeImage();
 

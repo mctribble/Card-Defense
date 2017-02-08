@@ -17,7 +17,7 @@
                         <xsd:attribute name="RangeMod" type="xsd:decimal" use="required" />
 						            <xsd:attribute name="DamageMult" type="xsd:decimal" use="required" />
                         <xsd:attribute name="DamageMod" type="xsd:decimal" use="required" />
-                        <xsd:attribute name="WaveBonus" type="xsd:unsignedByte" use="required" />
+                        <xsd:attribute name="WaveBonus" type="xsd:short" use="required" />
                       </xsd:complexType>
                     </xsd:element>
                     <xsd:element minOccurs="0" name="towerData">
@@ -54,7 +54,15 @@
                       </xsd:complexType>
                     </xsd:element>
                   </xsd:sequence>
-                  <xsd:attribute name="Type" type="xsd:string" use="required" />
+                  <xsd:attribute name="Type" use="required">
+                    <xsd:simpleType>
+                      <xsd:restriction base="xsd:string">
+                        <xsd:enumeration value="tower" />
+                        <xsd:enumeration value="upgrade" />
+                        <xsd:enumeration value="spell" />
+                      </xsd:restriction>
+                    </xsd:simpleType>
+                  </xsd:attribute>
                   <xsd:attribute name="Name" type="xsd:string" use="required" />
                   <xsd:attribute name="Description" type="xsd:string" use="optional" />
                   <xsd:attribute name="Charges" type="xsd:unsignedByte" use="required" />
