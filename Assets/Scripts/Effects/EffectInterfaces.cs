@@ -791,7 +791,7 @@ public interface IEffectOvercharge : IEffect
 
 //effect targets another effect.  As such, it must implement interfaces for ALL other effect types, since we dont know what kind the child may be.
 //we also provide a way to check what the inner effect is, and whether it would be applied if this one is triggered
-public interface IEffectMeta : IEffect, IEffectEnemyDamaged, IEffectEnemyReachedGoal, IEffectInstant, IEffectOvercharge, IEffectPeriodic, IEffectProperty, IEffectRank, IEffectSelf, IEffectTowerTargeting, IEffectWave, IEffectDeath, IEffectOnSpawned, IEffectCardDrawn, IEffectAttack
+public interface IEffectMeta : IEffect, IEffectEnemyDamaged, IEffectEnemyReachedGoal, IEffectInstant, IEffectOvercharge, IEffectPeriodic, IEffectProperty, IEffectRank, IEffectSelf, IEffectTowerTargeting, IEffectWave, IEffectDeath, IEffectOnSpawned, IEffectCardDrawn, IEffectAttack, IEffectSourceTracked
 {
     IEffect innerEffect { get; set; } //effect targeted by this metaEffect
     bool shouldApplyInnerEffect(); //returns whether or not the innerIeffect would trigger if this effect is

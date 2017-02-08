@@ -44,6 +44,22 @@ public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
     public virtual void towerAttack(TowerScript tower) { if (shouldApplyInnerEffect()) { ((IEffectAttack)innerEffect).towerAttack(tower); } }
     public virtual void enemyAttack(EnemyScript enemy) { if (shouldApplyInnerEffect()) { ((IEffectAttack)innerEffect).enemyAttack(enemy); } }
 
+    //source tracking forwards down to the inner effect, if it cares to know
+    private TowerScript _effectSource;
+    public virtual TowerScript effectSource
+    {
+        get
+        {
+            return _effectSource;
+        }
+        set
+        {
+            _effectSource = value;
+            if (innerEffect.triggersAs(EffectType.sourceTracked))
+                ((IEffectSourceTracked)innerEffect).effectSource = value;
+        }
+    }
+
     //returns the XMLName, skipping over any meta effects if they are present.  See also: EffectTypeManagerScript.parse()
     [Hide] public override string FinalXMLName { get { return innerEffect.FinalXMLName; } } 
 
