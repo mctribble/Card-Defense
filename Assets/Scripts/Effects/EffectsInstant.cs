@@ -14,6 +14,34 @@ public abstract class BaseEffectInstant : BaseEffect, IEffectInstant
     public abstract void trigger();
 }
 
+//player conjures X copies of the card named Y
+public class EffectConjureSpecificCard : BaseEffectInstant
+{
+    [Hide] public override string Name
+    {
+        get
+        {
+            int conjureCount = Mathf.RoundToInt(strength);
+            if (conjureCount == 1)
+                return "Conjure: " + argument;
+            else
+                return "Conjure " + conjureCount + "x: " + argument;
+        }
+    } 
+    [Show] public override string XMLName { get { return "conjureSpecificCard"; } }
+
+    public override void trigger()
+    {
+        //figure out how many to conjure
+        int conjureCount = Mathf.RoundToInt(strength);
+        List<PlayerCard> conjuredCards = new List<PlayerCard>();
+
+        //conjure them
+        for (int i = 0; i < conjureCount; i++)
+            PlayerHandScript.instance.drawToken(argument);
+    }
+}
+
 //player conjures X spells, which are chosen randomly from all available un-modded spells and added directly to the hand as tokens
 public class EffectConjureSpellCard : BaseEffectInstant
 {

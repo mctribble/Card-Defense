@@ -16,6 +16,7 @@ conformity
 conjure tower/upgrade/spell
 focus power: spell/tower/upgrade
 heavy shield
+improvisation
 
 enemy spawn points
 

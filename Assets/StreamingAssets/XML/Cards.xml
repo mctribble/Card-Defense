@@ -731,6 +731,22 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="spell" Name="Improvisation" Description="You're pretty sure you can cobble something together" Charges="4" Art="Improvisation.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="dieRoll" strength="3"/>
+          <Effect name="ifRollRange" strength="1" argument="1" >
+            <Effect name="conjureSpecificCard" strength="2" argument="Improvised Spell"/>
+          </Effect>
+          <Effect name="ifRollRange" strength="2" argument="2" >
+            <Effect name="conjureSpecificCard" strength="2" argument="Improvised Tower"/>
+          </Effect>
+          <Effect name="ifRollRange" strength="3" argument="3" >
+            <Effect name="conjureSpecificCard" strength="2" argument="Improvised Upgrade"/>
+          </Effect>
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="spell" Name="Improvised Spell" Description="There were no spells in your deck, but you managed to improvise something regardless." Charges="3" Art="Improvised_Spell.png" Tooltip="Tower_Basic.png" Token="true">
       <effectData>
         <Effects>

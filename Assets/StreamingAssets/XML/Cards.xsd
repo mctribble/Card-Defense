@@ -96,6 +96,7 @@
           <xsd:enumeration value="cannotBeDiscarded" />
           <xsd:enumeration value="chainHit" />
           <xsd:enumeration value="changeWaveType" />
+          <xsd:enumeration value="conjureSpecificCard" />
           <xsd:enumeration value="conjureSpellCard" />
           <xsd:enumeration value="conjureTowerCard" />
           <xsd:enumeration value="conjureUpgradeCard" />
