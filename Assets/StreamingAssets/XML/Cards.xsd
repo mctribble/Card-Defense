@@ -99,6 +99,7 @@
           <xsd:enumeration value="conjureSpellCard" />
           <xsd:enumeration value="conjureTowerCard" />
           <xsd:enumeration value="conjureUpgradeCard" />
+          <xsd:enumeration value="customDescription" />
           <xsd:enumeration value="damageHand" />
           <xsd:enumeration value="damagePercent" />
           <xsd:enumeration value="damagePlayer" />

@@ -121,8 +121,9 @@ public class EffectTypeManagerScript : BaseBehaviour
             //<<overcharge effects (tower maximum charge increases by 100% per point of overcharge.  Towers with at least one point of overcharge apply overcharge effects before firing)>>
             case "maxOvercharge":              ie = new EffectMaxOvercharge();              break;
             case "overchargeDamage":           ie = new EffectOverchargeDamage();           break;
-                                                                                            
+
             //<<meta effects (target another effect)>>                                      
+            case "customDescription":          ie = new EffectCustomDescription();          break;
             case "effectCharges":              ie = new EffectEffectCharges();              break;
             case "effectCooldown":             ie = new EffectEffectCooldown();             break;
             case "everyRound":                 ie = new EffectEveryRound();                 break;

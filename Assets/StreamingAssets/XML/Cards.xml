@@ -571,6 +571,60 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="spell" Name="Conformity" Charges="2" Art="Conformity.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="customDescription" argument="All incoming enemies become the same type, chosen at random.">
+            <Effect name="dieRoll" strength="9" />
+          </Effect>
+          <Effect name="customDescription" >
+            <Effect name="ifRollRange" strength="1" argument="1" >
+              <Effect name="changeWaveType" argument="Armored" />
+            </Effect>
+          </Effect>
+          <Effect name="customDescription" >
+            <Effect name="ifRollRange" strength="2" argument="2" >
+              <Effect name="changeWaveType" argument="Assassin" />
+            </Effect>
+          </Effect>
+          <Effect name="customDescription" >
+            <Effect name="ifRollRange" strength="3" argument="3" >
+              <Effect name="changeWaveType" argument="Carrier" />
+            </Effect>
+          </Effect>
+          <Effect name="customDescription" >
+            <Effect name="ifRollRange" strength="4" argument="4" >
+              <Effect name="changeWaveType" argument="Giant" />
+            </Effect>
+          </Effect>
+          <Effect name="customDescription" >
+            <Effect name="ifRollRange" strength="5" argument="5" >
+              <Effect name="changeWaveType" argument="Regenerative Tank" />
+            </Effect>
+          </Effect>
+          <Effect name="customDescription" >
+            <Effect name="ifRollRange" strength="6" argument="6" >
+              <Effect name="changeWaveType" argument="Scrambled" />
+            </Effect>
+          </Effect>
+          <Effect name="customDescription" >
+            <Effect name="ifRollRange" strength="7" argument="7" >
+              <Effect name="changeWaveType" argument="Standard" />
+            </Effect>
+          </Effect>
+          <Effect name="customDescription" >
+            <Effect name="ifRollRange" strength="8" argument="8" >
+              <Effect name="changeWaveType" argument="Swarm" />
+            </Effect>
+          </Effect>
+          <Effect name="customDescription" >
+            <Effect name="ifRollRange" strength="9" argument="9" >
+              <Effect name="changeWaveType" argument="Tank" />
+            </Effect>
+          </Effect>
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="spell" Name="Conjure Spell" Description="Something from nothing, but will it be helpful?" Charges="3" Art="Conjure_Spell.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>

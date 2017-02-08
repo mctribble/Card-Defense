@@ -668,3 +668,12 @@ public class EffectOnAttack : BaseEffectMeta
     public override void towerAttack(TowerScript tower) { ((IEffectInstant)innerEffect).trigger(); }
     public override void enemyAttack(EnemyScript enemy) { ((IEffectInstant)innerEffect).trigger(); }
 }
+
+//replaces the description of the inner effect with Y.  If Y is absent or empty, then the effect is not listed.
+public class EffectCustomDescription : BaseEffectMeta
+{
+    public override string Name { get { if (argument == "") return null; else return argument; } }
+    public override string XMLName { get { return "customDescription"; } }
+
+    public override bool shouldApplyInnerEffect() { return true; }
+}

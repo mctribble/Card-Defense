@@ -91,6 +91,7 @@ maxOvercharge    | tower can have up to X points of overcharge (currently we can
 overchargeDamage | tower deals (1+X) times as much damage when overcharged
 
 <<meta effects (target another effect)>>
+customDescription        | replaces the description of the inner effect with Y.  If Y is absent or empty, then the effect is not listed.
 effectCharges            | child effect can only occur up to X times
 effectCooldown           | child effect triggers under normal conditions, but only if it has been at least X seconds since the last trigger
 everyRound               | target instant effect triggers once every round
