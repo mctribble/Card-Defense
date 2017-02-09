@@ -64,8 +64,8 @@
         <Card name="Light Shield" count="5" />
         <Card name="Quad-Barrel Upgrade" count="5" />
         <Card name="Reinforce" count="3" />
-        <Card name="Risky Draw" count="3" />
-        <Card name="Fast Upgrade" count="10" />
+        <Card name="Construction Yard" count="4" />
+        <Card name="Fast Upgrade" count="7" />
         <Card name="Enrage" count="2" />
         <Card name="Challenger Tower" count="2" />
       </Cards>

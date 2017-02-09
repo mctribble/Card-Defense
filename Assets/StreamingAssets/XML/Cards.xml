@@ -105,6 +105,11 @@
           <Effect name="everyRound">
             <Effect name="drawTowerCard" strength="1" />
           </Effect>
+          <Effect name="everyRound">
+            <Effect name="percentageChance" strength="75">
+              <Effect name="drawEnemyCard" strength="1" />
+            </Effect>
+          </Effect>
         </Effects>
       </effectData>
     </Card>
@@ -193,6 +198,11 @@
         <Effects>
           <Effect name="everyRound">
             <Effect name="drawSpellCard" strength="1" />
+          </Effect>
+          <Effect name="everyRound">
+            <Effect name="percentageChance" strength="75">
+              <Effect name="drawEnemyCard" strength="1" />
+            </Effect>
           </Effect>
         </Effects>
       </effectData>
@@ -294,6 +304,11 @@
           <Effect name="everyRound">
             <Effect name="drawCard" strength="1" />
           </Effect>
+          <Effect name="everyRound">
+            <Effect name="percentageChance" strength="75">
+              <Effect name="drawEnemyCard" strength="1" />
+            </Effect>
+          </Effect>
         </Effects>
       </effectData>
     </Card>
@@ -303,7 +318,7 @@
       </towerData>
       <effectData>
         <Effects>
-          <Effect name="ResonantTowerAttackMult" strength="1.1" argument="Damage Resonance" />
+          <Effect name="ResonantTowerAttackMult" strength="1.1" argument="Resonance (A)" />
         </Effects>
       </effectData>
     </Card>
@@ -314,8 +329,8 @@
       <effectData>
         <Effects>
           <Effect name="targetBurst" />
-          <Effect name="ResonantTowerAttackMod" strength="0.5" argument="Damage Resonance" />
-          <Effect name="ResonantTowerRangeMod" strength="0.25" argument="Range Resonance" />
+          <Effect name="ResonantTowerAttackMod" strength="0.5" argument="Resonance (A)" />
+          <Effect name="ResonantTowerRangeMod" strength="0.25" argument="Resonance (R)" />
         </Effects>
       </effectData>
     </Card>
@@ -325,7 +340,7 @@
       </towerData>
       <effectData>
         <Effects>
-          <Effect name="ResonantTowerRangeMod" strength="0.5" argument="Range Resonance" />
+          <Effect name="ResonantTowerRangeMod" strength="0.5" argument="Resonance (R)" />
         </Effects>
       </effectData>
     </Card>
@@ -398,6 +413,11 @@
         <Effects>
           <Effect name="everyRound">
             <Effect name="drawUpgradeCard" strength="1" />
+          </Effect>
+          <Effect name="everyRound">
+            <Effect name="percentageChance" strength="75">
+              <Effect name="drawEnemyCard" strength="1" />
+            </Effect>
           </Effect>
         </Effects>
       </effectData>
