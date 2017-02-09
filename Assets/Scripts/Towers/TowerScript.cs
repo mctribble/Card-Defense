@@ -519,6 +519,13 @@ public class TowerScript : BaseBehaviour
                 continue;
             }
 
+            //trigger instant effects, instead of adding them
+            if (newEffect.triggersAs(EffectType.instant))
+            {
+                ((IEffectInstant)newEffect).trigger();
+                continue;
+            }
+
             //tell it about the source, if it wants to know
             if (newEffect.triggersAs(EffectType.sourceTracked))
                 ((IEffectSourceTracked)newEffect).effectSource = this;

@@ -11,6 +11,7 @@ double/quad-barrel upgrade
 blood magic upgrade
 mouse upgrade
 overcharge upgrade
+repairs
 
 conformity
 conjure tower/upgrade/spell
@@ -33,7 +34,7 @@ need some level backgrounds
 content goals:
 enemies: 10/10  <<DONE!!>>
 levels:  30/30  <<DONE!!>>
-cards:   88/100 (+4 token)
+cards:   90/100 (+4 token)
 decks:   08/10
 ================================================================
 analytics:
