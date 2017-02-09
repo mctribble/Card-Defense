@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Vexe.Runtime.Types;
 
 /// <summary>
@@ -68,5 +69,24 @@ class EffectSpawnEnemyOnDeath : BaseEffectDeath
     public override void onTowerDeath(TowerScript t)
     {
         Debug.LogWarning("spawnEnemyOnDeath does not support towers.");
+    }
+}
+
+//when the tower dies, conjures a token for that tower type with 1 charge remaining
+class EffectRedrawTowerOnDeath : BaseEffectDeath
+{
+    [Hide] public override string Name     { get { return "When this tower dies, it returns to your hand"; } } //returns name and strength
+    [Show] public override string XMLName  { get { return "redrawTowerOnDeath"; } } //name used to refer to this effect in XML
+
+    public override void onEnemyDeath(EnemyScript e) { Debug.LogWarning("EffectRedrawTowerOnDeath does not support enemies"); }
+
+    public override void onTowerDeath(TowerScript t)
+    {
+        PlayerCard conjuredCard = new PlayerCard();
+        conjuredCard.charges = 1;
+        conjuredCard.data = CardTypeManagerScript.instance.getCardByName(t.towerName);
+        conjuredCard.data.isToken = true;
+
+        PlayerHandScript.instance.drawCard(true, true, true, conjuredCard);
     }
 }

@@ -55,7 +55,6 @@
         <Effects>
           <Effect name="armorPierce" />
           <Effect name="limitedAmmo" strength="200" />
-          <Effect name="upgradesForbidden" />
           <Effect name="infiniteTowerLifespan" />
         </Effects>
       </effectData>
@@ -182,7 +181,6 @@
         <Effects>
           <Effect name="armorPierce" />
           <Effect name="limitedAmmo" strength="750" />
-          <Effect name="upgradesForbidden" />
           <Effect name="infiniteTowerLifespan" />
         </Effects>
       </effectData>
@@ -557,6 +555,15 @@
       <effectData>
         <Effects>
           <Effect name="drawCard" strength="1" />
+          <Effect name="noUpgradeCost" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="upgrade" Name="Tower Insurance" Description="Brings a tower back to you after it dies" Charges="3" Art="Salvage.png" Tooltip="Tower_basic.png" Token="false">
+      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="0" />
+      <effectData>
+        <Effects>
+          <Effect name="redrawTowerOnDeath" strength="1" />
           <Effect name="noUpgradeCost" />
         </Effects>
       </effectData>

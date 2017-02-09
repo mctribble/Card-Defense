@@ -134,8 +134,9 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "percentageChance":           ie = new EffectPercentageChance();           break;
             case "scaleEffectByTowerAttack":   ie = new EffectScaleEffectWithTowerAttack(); break;
             case "ifRollRange":                ie = new EffectIfRollRange();                break;
-                                                                                            
-            //<<death effects (occur when the tower/enemy dies)>>                           
+
+            //<<death effects (occur when the tower/enemy dies)>>                          
+            case "redrawTowerOnDeath":         ie = new EffectRedrawTowerOnDeath();         break;
             case "spawnEnemyOnDeath":          ie = new EffectSpawnEnemyOnDeath();          break;
 
             //<<upgrade effects (occur when a tower is upgraded.  only valid on upgrade cards)>>

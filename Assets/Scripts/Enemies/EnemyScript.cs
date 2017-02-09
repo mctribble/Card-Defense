@@ -422,9 +422,7 @@ public class EnemyScript : BaseBehaviour
         curHealth -= damage;
 
         //tell the attacking tower about it so it can keep track
-        if (e.source == null)
-            Debug.LogWarning("Could not report damage to tower because the event does not have a source specified.");
-        else
+        if (e.source != null)
             e.source.trackDamage(damage);
 
         //sound

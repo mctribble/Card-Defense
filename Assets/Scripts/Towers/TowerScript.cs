@@ -207,6 +207,12 @@ public class TowerScript : BaseBehaviour
             bool result = fire(targets);
             if (result == false)
                 break; //bail if we failed to fire for any reason
+
+            //if out of ammo, destroy tower
+            if (effects != null)
+                if (effects.propertyEffects.limitedAmmo != null)
+                    if (effects.propertyEffects.limitedAmmo == 0)
+                        Destroy(gameObject);
         }
     }
 

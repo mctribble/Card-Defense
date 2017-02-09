@@ -133,6 +133,7 @@
           <xsd:enumeration value="overchargeDamage" />
           <xsd:enumeration value="percentageChance" />
           <xsd:enumeration value="poison" />
+          <xsd:enumeration value="redrawTowerOnDeath" />
           <xsd:enumeration value="reduceEnemyEffectOnDamage" />
           <xsd:enumeration value="regeneration" />
           <xsd:enumeration value="replaceRandomCard" />

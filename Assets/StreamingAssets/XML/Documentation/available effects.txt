@@ -104,7 +104,8 @@ scaleEffectByTowerAttack | on towers, multiplies effect strength by attack power
 ifRollRange              | child effect triggers if the die rolled anything from X to Y.  Requires dieRoll effect to work
 
 <<death effects (occur when the tower/enemy dies)>>
-spawnEnemyOnDeath | spawns X enemies of type Y.  On enemies, it spawns where the enemy died.  On towers, this is unsupported
+redrawTowerOnDeath | when the tower dies, conjures a token for that tower type with 1 charge remaining
+spawnEnemyOnDeath  | spawns X enemies of type Y.  On enemies, it spawns where the enemy died.  On towers, this is unsupported
 
 //<<upgrade effects (occur when a tower is upgraded.  only valid on upgrade cards)>>
 setRange | sets the tower's range to X
