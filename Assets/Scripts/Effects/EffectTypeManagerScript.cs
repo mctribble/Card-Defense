@@ -140,6 +140,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "spawnEnemyOnDeath":          ie = new EffectSpawnEnemyOnDeath();          break;
 
             //<<upgrade effects (occur when a tower is upgraded.  only valid on upgrade cards)>>
+            case "reloadAmmo":                 ie = new EffectReloadAmmo();                 break;
             case "setRange":                   ie = new EffectSetRange();                   break;
 
             default: Debug.LogWarning("Effect type " + xe.name + " is not implemented."); return null;

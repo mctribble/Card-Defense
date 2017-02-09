@@ -31,3 +31,20 @@ public class EffectSetRange : BaseEffectUpgrade
         tower.UpdateTooltipText();
     }
 }
+
+//sets the tower's ammo to the highest value it has had, effectively restoring it to maximum
+public class EffectReloadAmmo : BaseEffectUpgrade
+{
+    [Show] public override string Name { get { return "If the tower has limited ammo, reloads it"; } }
+    [Show] public override string XMLName { get { return "reloadAmmo"; } }
+
+    public override void upgradeTower(TowerScript tower)
+    {
+        if (tower.effects != null)
+            if (tower.effects.propertyEffects.limitedAmmo != null)
+                foreach (IEffect ie in tower.effects.effects)
+                    if (ie.XMLName == "limitedAmmo")
+                        ((EffectLimitedAmmo)ie).reload();
+
+    }
+}

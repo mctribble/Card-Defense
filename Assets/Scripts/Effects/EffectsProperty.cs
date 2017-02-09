@@ -40,6 +40,20 @@ class EffectLimitedAmmo : BaseEffectProperty
 {
     [Hide] public override string Name { get { return null; } } //returns name and strength
     [Show] public override string XMLName { get { return "limitedAmmo"; } } //name used to refer to this effect in XML.
+
+    private float maxStrength = float.MinValue;
+
+    [Show] public override float strength
+    {
+        get { return base.strength; }
+        set { base.strength = value; maxStrength = Mathf.Max(maxStrength, value); }
+    }
+
+    //restores the effect strength to the highest value it has ever held
+    public void reload()
+    {
+        strength = maxStrength;
+    }
 }
 
 //tower only fires if clicked on 

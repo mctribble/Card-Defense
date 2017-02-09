@@ -135,6 +135,7 @@
           <xsd:enumeration value="poison" />
           <xsd:enumeration value="redrawTowerOnDeath" />
           <xsd:enumeration value="reduceEnemyEffectOnDamage" />
+          <xsd:enumeration value="reloadAmmo" />
           <xsd:enumeration value="regeneration" />
           <xsd:enumeration value="replaceRandomCard" />
           <xsd:enumeration value="replaceRandomCardWithSpell" />
