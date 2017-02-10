@@ -61,6 +61,7 @@ replaceRandomCardWithTower	 | replaces up to X cards chosen at random with tower
 replaceRandomCardWithUpgrade | replaces up to X cards chosen at random with upgrades
 score                        | player gains X points
 shuffle                      | shuffles the deck
+upgradeAllTowers             | applies upgrade Y to all active towers that can support it
 
 <<Targeting effects (Determines tower targeting behavior)>>
 targetAll        | tower targets all enemies in range with multiple projectiles

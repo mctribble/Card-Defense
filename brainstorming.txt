@@ -14,6 +14,7 @@ overcharge upgrade
 repairs
 resupply
 slow decay
+slow growth
 Tower Insurance
 
 conformity
@@ -21,6 +22,9 @@ conjure tower/upgrade/spell
 focus power: spell/tower/upgrade
 heavy shield
 improvisation
+mass basic upgrade
+mass fast upgrade
+mass heavy upgrade
 
 enemy spawn points
 
@@ -37,7 +41,7 @@ need some level backgrounds
 content goals:
 enemies: 10/10  <<DONE!!>>
 levels:  30/30  <<DONE!!>>
-cards:   92/100 (+4 token)
+cards:   97/100 (35 Towers(+1 token)/26 Upgrades(+1 token)/34 spells(+2 token))
 decks:   08/10
 ================================================================
 analytics:

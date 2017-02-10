@@ -176,6 +176,7 @@
           <xsd:enumeration value="targetRandom" />
           <xsd:enumeration value="targetSpeed" />
           <xsd:enumeration value="timePercentageChange" />
+          <xsd:enumeration value="upgradeAllTowers" />
           <xsd:enumeration value="upgradesForbidden" />
         </xsd:restriction>        
       </xsd:simpleType>

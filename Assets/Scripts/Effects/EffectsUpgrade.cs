@@ -63,7 +63,7 @@ public class EffectStatPercentChangePerRound : BaseEffectUpgrade
             else
                 result += "improve ";
 
-            result += "by " + Mathf.Abs(strength * 100) + "% per round";
+            result += "by " + Mathf.Abs(strength) + "% per round";
 
             return result;
         }

@@ -208,7 +208,7 @@
       </effectData>
     </Card>
     <Card Type="tower" Name="Modular Tower" Description="Weak, but has a far larger capacity for upgrades than any other tower" Charges="3" Art="Modular_Tower.png" Tooltip="Tower_Basic.png" Token="false">
-      <towerData Recharge="1.5" Range="1.5" Damage="15" Lifespan="3" UpgradeCap="10" Sprite="Tower_Basic.png">
+      <towerData Recharge="1.5" Range="1.5" Damage="20" Lifespan="3" UpgradeCap="10" Sprite="Tower_Basic.png">
         <towerColor r="0.75" g="0.75" b="0.2" a="1" />
       </towerData>
     </Card>
@@ -559,6 +559,15 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="upgrade" Name="Slow Growth" Description="best used on a tower that will stick around for a while even without further upgrades" Charges="4" Art="Slow_Growth.png" Tooltip="Tower_Basic.png" Token="false">
+      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="0" />
+      <effectData>
+        <Effects>
+          <Effect name="upgradesForbidden" />
+          <Effect name="statPercentChangePerRound" strength="5" />
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="upgrade" Name="Pulse Upgrade" Description="Adds a secondary area attack" Charges="3" Art="Pulse_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
       <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="2" />
       <effectData>
@@ -833,6 +842,33 @@
           <Effect name="onCardDrawn">
             <Effect name="drawCard" strength="1" />
           </Effect>
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="spell" Name="Mass Basic Upgrade" Charges="1" Art="Mass_Basic_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="upgradeAllTowers" argument="Basic Upgrade" />
+          <Effect name="drawEnemyCard" strength="3" />
+          <Effect name="budgetPercentageChange" strength="20" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="spell" Name="Mass Fast Upgrade" Charges="1" Art="Mass_Fast_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="upgradeAllTowers" argument="Fast Upgrade" />
+          <Effect name="drawEnemyCard" strength="3" />
+          <Effect name="budgetPercentageChange" strength="20" />
+        </Effects>
+      </effectData>
+    </Card>
+      <Card Type="spell" Name="Mass Heavy Upgrade" Charges="1" Art="Mass_Heavy_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="upgradeAllTowers" argument="Heavy Upgrade" />
+          <Effect name="drawEnemyCard" strength="3" />
+          <Effect name="budgetPercentageChange" strength="20" />
         </Effects>
       </effectData>
     </Card>

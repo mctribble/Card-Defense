@@ -80,6 +80,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "conjureUpgradeCard":           ie = new EffectConjureUpgradeCard();           break;
             case "damageHand":                   ie = new EffectDamageHand();                   break;
             case "damagePlayer":                 ie = new EffectDamagePlayer();                 break;
+            case "dieRoll":                      ie = new EffectDieRoll();                      break;
             case "discardChosenCard":            ie = new EffectDiscardChosen();                break;
             case "discardRandomCard":            ie = new EffectDiscardRandom();                break;
             case "drawCard":                     ie = new EffectDrawCard();                     break;
@@ -93,7 +94,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             case "replaceRandomCardWithUpgrade": ie = new EffectReplaceRandomCardWithUpgrade(); break;
             case "score":                        ie = new EffectScore();                        break;
             case "shuffle":                      ie = new EffectShuffle();                      break;
-            case "dieRoll":                      ie = new EffectDieRoll();                      break;
+            case "upgradeAllTowers":             ie = new EffectUpgradeAllTowers();             break;
                                                                                             
             //<<Targeting effects (Determines tower targeting behavior)>>                   
             case "targetAll":                  ie = new EffectTargetAll();                  break;

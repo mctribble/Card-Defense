@@ -293,6 +293,35 @@ public class EffectAllTowersLifespanBonus : BaseEffectInstant
     }
 }
 
+//applies upgrade Y to all active towers that can support it
+public class EffectUpgradeAllTowers : BaseEffectInstant
+{
+    [Hide] public override string Name { get { return "Applies a " + argument + " to all towers that can receive it"; } } //returns name and strength
+    [Show] public override string XMLName { get { return "upgradeAllTowers"; } } //name used to refer to this effect in XML
+
+    public override void trigger()
+    {
+        //fetch the upgrade in question
+        UpgradeData upgrade = CardTypeManagerScript.instance.getCardByName(argument).upgradeData;
+
+        if (upgrade == null)
+        {
+            Debug.LogWarning("Could not find upgrade: " + argument);
+            return;
+        }
+
+        //apply it to all towers
+        GameObject[] towers = GameObject.FindGameObjectsWithTag("Tower");
+        foreach (GameObject t in towers)
+        {
+            if (parentData.propertyEffects.noUpgradeCost)
+                t.SendMessage("FreeUpgrade", upgrade);
+            else
+                t.SendMessage("Upgrade", upgrade);
+        }
+    }
+}
+
 //shuffles the deck
 public class EffectShuffle : BaseEffectInstant
 {
