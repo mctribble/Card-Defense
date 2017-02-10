@@ -142,6 +142,7 @@ public class EffectTypeManagerScript : BaseBehaviour
             //<<upgrade effects (occur when a tower is upgraded.  only valid on upgrade cards)>>
             case "reloadAmmo":                 ie = new EffectReloadAmmo();                 break;
             case "setRange":                   ie = new EffectSetRange();                   break;
+            case "statPercentChangePerRound":  ie = new EffectStatPercentChangePerRound();  break;
 
             default: Debug.LogWarning("Effect type " + xe.name + " is not implemented."); return null;
         }

@@ -48,3 +48,51 @@ public class EffectReloadAmmo : BaseEffectUpgrade
 
     }
 }
+
+//tower stats change by X% per round.  RechargeTime change is inverted so that negative values are always bad and positive values are always good.
+public class EffectStatPercentChangePerRound : BaseEffectUpgrade
+{
+    [Show] public override string Name
+    {
+        get
+        {
+            string result = "Stats ";
+
+            if (strength < 0)
+                result += "degrade ";
+            else
+                result += "improve ";
+
+            result += "by " + Mathf.Abs(strength * 100) + "% per round";
+
+            return result;
+        }
+    }
+    [Show] public override string XMLName { get { return "statPercentChangePerRound"; } }
+
+    private TowerScript targetTower;
+
+    public override void upgradeTower(TowerScript tower)
+    {
+        targetTower = tower; //save reference
+
+        //inject the effect description onto the tower so it shows on the tooltip
+        EffectCustomDescription e = new EffectCustomDescription();
+        e.argument = Name;
+        tower.effects.Add(e);
+
+        //register for event
+        LevelManagerScript.instance.RoundOverEvent += doStatChanges;
+    }
+
+    //performs the actual stat changes at the end of each round
+    private void doStatChanges()
+    {
+        targetTower.attackPower  *= (1 + (strength / 100));
+        targetTower.range        *= (1 + (strength / 100));
+        targetTower.rechargeTime *= (1 + (-strength / 100));
+
+        targetTower.UpdateTooltipText();
+        targetTower.updateRangeImage();
+    }
+}

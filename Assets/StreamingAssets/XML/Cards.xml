@@ -549,6 +549,16 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="upgrade" Name="Slow Decay" Description="Keeps a tower around even if it cant be upgraded any further" Charges="4" Art="Slow_Decay.png" Tooltip="Tower_Basic.png" Token="false">
+      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="0" />
+      <effectData>
+        <Effects>
+          <Effect name="infiniteTowerLifespan" />
+          <Effect name="statPercentChangePerRound" strength="-10" />
+          <Effect name="noUpgradeCost" />
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="upgrade" Name="Pulse Upgrade" Description="Adds a secondary area attack" Charges="3" Art="Pulse_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
       <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="2" />
       <effectData>

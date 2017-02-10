@@ -163,6 +163,7 @@
           <xsd:enumeration value="slowTarget" />
           <xsd:enumeration value="spawnEnemyOnDeath" />
           <xsd:enumeration value="splashDamage" />
+          <xsd:enumeration value="StatPercentChangePerRound" />
           <xsd:enumeration value="targetAll" />
           <xsd:enumeration value="targetArmor" />
           <xsd:enumeration value="targetBurst" />

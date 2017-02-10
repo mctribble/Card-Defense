@@ -34,7 +34,6 @@ public class EffectConjureSpecificCard : BaseEffectInstant
     {
         //figure out how many to conjure
         int conjureCount = Mathf.RoundToInt(strength);
-        List<PlayerCard> conjuredCards = new List<PlayerCard>();
 
         //conjure them
         for (int i = 0; i < conjureCount; i++)

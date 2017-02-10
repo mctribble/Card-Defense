@@ -108,5 +108,6 @@ redrawTowerOnDeath | when the tower dies, conjures a token for that tower type w
 spawnEnemyOnDeath  | spawns X enemies of type Y.  On enemies, it spawns where the enemy died.  On towers, this is unsupported
 
 //<<upgrade effects (occur when a tower is upgraded.  only valid on upgrade cards)>>
-reloadAmmo | sets the tower's ammo to the highest value it has had, effectively restoring it to maximum
-setRange   | sets the tower's range to X
+reloadAmmo                | sets the tower's ammo to the highest value it has had, effectively restoring it to maximum
+setRange                  | sets the tower's range to X
+statPercentChangePerRound | tower stats change by X% per round.  RechargeTime change is inverted so that negative values are always bad and positive values are always good.

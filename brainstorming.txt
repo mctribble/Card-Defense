@@ -13,6 +13,7 @@ mouse upgrade
 overcharge upgrade
 repairs
 resupply
+slow decay
 Tower Insurance
 
 conformity
