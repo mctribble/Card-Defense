@@ -107,7 +107,7 @@
           </Effect>
           <Effect name="everyRound">
             <Effect name="percentageChance" strength="75">
-              <Effect name="drawEnemyCard" strength="1" />
+              <Effect name="conjureEnemyCard" strength="1" />
             </Effect>
           </Effect>
         </Effects>
@@ -201,7 +201,7 @@
           </Effect>
           <Effect name="everyRound">
             <Effect name="percentageChance" strength="75">
-              <Effect name="drawEnemyCard" strength="1" />
+              <Effect name="conjureEnemyCard" strength="1" />
             </Effect>
           </Effect>
         </Effects>
@@ -306,7 +306,7 @@
           </Effect>
           <Effect name="everyRound">
             <Effect name="percentageChance" strength="75">
-              <Effect name="drawEnemyCard" strength="1" />
+              <Effect name="conjureEnemyCard" strength="1" />
             </Effect>
           </Effect>
         </Effects>
@@ -416,7 +416,7 @@
           </Effect>
           <Effect name="everyRound">
             <Effect name="percentageChance" strength="75">
-              <Effect name="drawEnemyCard" strength="1" />
+              <Effect name="conjureEnemyCard" strength="1" />
             </Effect>
           </Effect>
         </Effects>
