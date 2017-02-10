@@ -23,6 +23,9 @@ public class WaveData
     [XmlIgnore][Comment("random waves are not saved to the level file.",helpButton:true)]
     public bool isRandomWave;
 
+    //indicates whether or not this wave is a "token".  token waves did not come from the enemy deck, meaning they would be either survivor waves or conjured from an effect of some sort
+    public bool isToken;
+
     //like ToString(), but returns a shorter, simpler result
     public string ToShortString()
     {
@@ -70,10 +73,17 @@ public class WaveData
         forcedSpawnCount = -1;
         spawnedThisWave = 0;
         isRandomWave = false;
+        isToken = false;
     }
 
-    //specific data
-    public WaveData(EnemyData waveType, int waveBudget, float waveTime)
+    /// <summary>
+    /// constructor with specific data
+    /// </summary>
+    /// <param name="waveType">data for the enemy to be spawned</param>
+    /// <param name="waveBudget">budget for the wave</param>
+    /// <param name="waveTime">how long the wave takes to spawn</param>
+    /// <param name="tokenWave">whether or not this wave is a token</param>
+    public WaveData(EnemyData waveType, int waveBudget, float waveTime, bool tokenWave = false)
     {
         type = waveType.name;
         enemyData = waveType;
@@ -84,13 +94,14 @@ public class WaveData
         spawnedThisWave = 0;
         isRandomWave = false;
         recalculateRank();
+        isToken = tokenWave;
     }
 
     //survivor wave constructor
     public WaveData(List<EnemyScript> enemies, int spawnCount, int totalRemainingHealth, float waveTime)
     {
         data = null; //enemy data doesnt apply for survival waves, since they have multiple enemy types
-        budget = int.MaxValue; //budget doesnt apply either, so make sure it stands out if used accidentally
+        budget = 0; //enemy conjuring uses the highest budget, so we want this to be 0 so it doesnt mess with that.
         time = waveTime;
         message = null;
         forcedSpawnCount = -1;
@@ -98,6 +109,7 @@ public class WaveData
         enemyList = enemies;
         forcedSpawnCount = enemies.Count;
         isRandomWave = false;
+        isToken = true;
     }
 
     /// <summary>
@@ -232,6 +244,10 @@ public class EnemyCardScript : CardScript
         foreach (Image i in art.GetComponentsInChildren<Image>())
             i.color = w.enemyData.unitColor.toColor();
         enemyType = w.enemyData.name;
+
+        //gray out card border if token
+        if (w.isToken)
+            cardFront.color = tokenColor;
     }
 
     /// <summary>
@@ -281,6 +297,9 @@ public class EnemyCardScript : CardScript
 
         //setup the WaveData object
         wave = new WaveData(survivorList, spawnCount, totalRemainingHealth, LevelManagerScript.instance.currentWaveTime);
+
+        //gray out the card border
+        cardFront.color = tokenColor;
     }
 
     // Update is called once per frame

@@ -82,6 +82,34 @@ public class EnemyHandScript : HandScript
         newCard.SendMessage("triggerOnDrawnEffects"); //trigger effects
     }
 
+    /// <summary>
+    /// draws a new card created from the given wave
+    /// </summary>
+    public void drawCard(WaveData wave)
+    {
+        //instantiate card prefab
+        CardScript newCard;
+        newCard = Instantiate(enemyCardPrefab).GetComponent<CardScript>();
+
+        newCard.transform.SetParent(transform.root); //declare the new card a child of the UI object at the root of this tree
+
+        //position card to match up with the deck image we are spawning at
+        RectTransform spawnT = deckImage.rectTransform;
+        newCard.GetComponent<RectTransform>().position = spawnT.position;
+        newCard.GetComponent<RectTransform>().rotation = spawnT.rotation;
+        newCard.GetComponent<RectTransform>().localScale = spawnT.localScale;
+
+        //add the card to the hand
+        addCard(newCard);
+
+        //send it the data
+        newCard.SendMessage("SetWave", wave);
+
+        LevelManagerScript.instance.UpdateWaveStats();
+
+        newCard.SendMessage("triggerOnDrawnEffects"); //trigger effects
+    }
+
     //we neeed to update wave stats when cards are added to this hand
     public override void addCard(CardScript cardToAdd, bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true)
     {
@@ -116,6 +144,31 @@ public class EnemyHandScript : HandScript
         //if the deck is empty, we may not be able to draw any cards.  bail if the hand is still empty at this point
         if (currentHandSize == 0)
             yield break;
+
+        //wait for all cards to be idle
+        while (cards.All(c => (c.state == CardState.idle) || (c.state == CardState.discarding)))
+            yield return null;
+
+        //flip the entire hand face up at once
+        foreach (CardScript c in cards)
+            c.SendMessage("flipFaceUp");
+
+        yield break;
+    }
+
+    /// <summary>
+    /// draws multiple waves that already exist, such as from conjureEnemyCard
+    /// </summary>
+    public IEnumerator drawCards(List<WaveData> waves, bool delay = true)
+    {
+        //draw the cards
+        foreach(WaveData w in waves)
+        {
+            drawCard(w);
+
+            if (delay)
+                yield return new WaitForSeconds(drawDelay);
+        }
 
         //wait for all cards to be idle
         while (cards.All(c => (c.state == CardState.idle) || (c.state == CardState.discarding)))

@@ -42,10 +42,12 @@ timePercentageChange   | wave time is increased by X percent
 <<instant effects (trigger immediately when card is played)>>
 addCharges                   | this card gains X charges.  Must be on a card.
 allTowersLifespanBonus       | all towers on the map last X waves longer
+conjureCard                  | player conjures X cards, which are chosen randomly from all available un-modded cards and added directly to the hand as tokens
+conjureEnemyCard             | enemy conjures X cards, which are new waves with the same budget as the highest budget wave already in the hand
 conjureSpecificCard          | player conjures X copies of the card named Y
 conjureSpellCard             | player conjures X spells, which are chosen randomly from all available un-modded spells and added directly to the hand as tokens
-conjureTowerCard             | player conjures X towers, which are chosen randomly from all available un-modded spells and added directly to the hand as tokens
-conjureUpgradeCard           | player conjures X upgrades, which are chosen randomly from all available un-modded spells and added directly to the hand as tokens
+conjureTowerCard             | player conjures X towers, which are chosen randomly from all available un-modded towers and added directly to the hand as tokens
+conjureUpgradeCard           | player conjures X upgrades, which are chosen randomly from all available un-modded upgrades and added directly to the hand as tokens
 damageHand	                 | player's HAND takes x damage.  If the hand does not have enough charges, excess damage is dealt to their deck
 damagePlayer                 | player takes X damage
 discardChosenCard            | player chooses up to X cards to discard.  Must be on a card.

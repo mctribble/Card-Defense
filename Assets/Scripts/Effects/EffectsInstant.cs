@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Vexe.Runtime.Types;
+using System.Linq;
 
 /// <summary>
 /// instant effects take place instantly with no particular target.  This base effect handles behavior common to them all
@@ -12,6 +13,61 @@ public abstract class BaseEffectInstant : BaseEffect, IEffectInstant
     [Hide] public override EffectType    effectType    { get { return EffectType.instant; } } //this is an instant effect
 
     public abstract void trigger();
+}
+
+//player conjures X cards, which are chosen randomly from all available un-modded cards and added directly to the hand as tokens
+public class EffectConjureCard : BaseEffectInstant
+{
+    [Hide] public override string Name { get { return "Conjure " + strength + " cards"; } } 
+    [Show] public override string XMLName { get { return "conjureCard"; } }
+
+    public override void trigger()
+    {
+        int conjureCount = Mathf.RoundToInt(strength);
+        List<PlayerCard> conjuredCards = new List<PlayerCard>();
+
+        for (int i = 0; i < conjureCount; i++)
+        {
+            //get the card data and make a copy that is flagged as a token
+            PlayerCardData conjuredType = CardTypeManagerScript.instance.getRandomCardType().clone();
+            conjuredType.isToken = true;
+
+            //make a PlayerCard from it
+            PlayerCard newCard = new PlayerCard();
+            newCard.data = conjuredType;
+            newCard.charges = conjuredType.cardMaxCharges;
+
+            //store it
+            conjuredCards.Add(newCard);
+        }
+
+        //"draw" them
+        PlayerHandScript.instance.StartCoroutine(PlayerHandScript.instance.drawCards(conjuredCards.ToArray(), true));
+    }
+}
+
+//enemy conjures X cards, which are new waves with the same budget as the highest budget wave already in the hand
+public class EffectConjureEnemyCard : BaseEffectInstant
+{
+    [Hide] public override string Name { get { return "Enemy conjures " + strength + " cards"; } } 
+    [Show] public override string XMLName { get { return "conjureEnemyCard"; } }
+
+    public override void trigger()
+    {
+        List<WaveData> conjuredWaves = new List<WaveData>();                           //list to hold the waves
+        int conjureCount  = Mathf.RoundToInt(strength);                                //how many to conjure
+        int conjureBudget = EnemyHandScript.instance.IncomingWaves.Max(w => w.budget); //budget for conjured waves
+        float conjureTime = EnemyHandScript.instance.IncomingWaves.Max(w => w.time);   //time for conjured waves
+
+        List<EnemyData> conjureTypes = EnemyTypeManagerScript.instance.types.enemyTypes.Where(ed => ed.name != "Ping").ToList(); //we can conjure any enemy type that is not Ping
+
+        //create the waves, each with a random type and the above budget and time.
+        for (int i = 0; i < conjureCount; i++)
+            conjuredWaves.Add(new WaveData(conjureTypes[UnityEngine.Random.Range(0, conjureTypes.Count)], conjureBudget, conjureTime, true));
+
+        //"draw" them
+        EnemyHandScript.instance.StartCoroutine(EnemyHandScript.instance.drawCards(conjuredWaves));
+    }
 }
 
 //player conjures X copies of the card named Y

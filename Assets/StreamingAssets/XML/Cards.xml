@@ -690,6 +690,14 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="spell" Name="Conjuration" Description="rather unpredictable" Charges="3" Art="Conjuration.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="conjureCard" strength="2"/>
+          <Effect name="conjureEnemyCard" strength="1"/>
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="spell" Name="Conjure Spell" Description="Something from nothing, but will it be helpful?" Charges="3" Art="Conjure_Spell.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>
@@ -715,6 +723,14 @@
       <effectData>
         <Effects>
           <Effect name="drawTowerCard" strength="2" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="spell" Name="Desperation Conjuration" Description="With a side of alliteration" Charges="3" Art="Desperation_Conjuration.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="conjureEnemyCard" strength="10" />
+          <Effect name="conjureCard" strength="15" />
         </Effects>
       </effectData>
     </Card>
