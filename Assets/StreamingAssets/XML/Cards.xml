@@ -863,7 +863,7 @@
         </Effects>
       </effectData>
     </Card>
-      <Card Type="spell" Name="Mass Heavy Upgrade" Charges="1" Art="Mass_Heavy_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
+    <Card Type="spell" Name="Mass Heavy Upgrade" Charges="1" Art="Mass_Heavy_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>
           <Effect name="upgradeAllTowers" argument="Heavy Upgrade" />

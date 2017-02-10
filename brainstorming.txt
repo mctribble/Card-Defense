@@ -41,7 +41,7 @@ need some level backgrounds
 content goals:
 enemies: 10/10  <<DONE!!>>
 levels:  30/30  <<DONE!!>>
-cards:   97/100 (35 Towers(+1 token)/26 Upgrades(+1 token)/34 spells(+2 token))
+cards:   97/100 (35 Towers(+1 token)/26 Upgrades(+1 token)/36 spells(+2 token))
 decks:   08/10
 ================================================================
 analytics:
