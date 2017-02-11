@@ -726,6 +726,24 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="spell" Name="Dark Bargain" Charges="1" Art="Dark_Bargain.png" Tooltip="Tower_Basic.png" Token="false">
+      <effectData>
+        <Effects>
+          <Effect name="conjureEnemyCard" strength="5" />
+          <Effect name="budgetPercentageChange" strength="100" />
+          <Effect name="customDescription" argument="All towers get Crippling, Piercing, and Poison ammo">
+            <Effect name="upgradeAllTowers" argument="Crippling Ammo" />
+          </Effect>
+          <Effect name="customDescription">
+            <Effect name="upgradeAllTowers" argument="Piercing Ammo" />
+          </Effect>
+          <Effect name="customDescription">
+            <Effect name="upgradeAllTowers" argument="Poison Ammo" />
+          </Effect>
+          <Effect name="noUpgradeCost" />
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="spell" Name="Desperation Conjuration" Description="With a side of alliteration" Charges="3" Art="Desperation_Conjuration.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>

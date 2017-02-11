@@ -358,7 +358,9 @@ public class EffectUpgradeAllTowers : BaseEffectInstant
     public override void trigger()
     {
         //fetch the upgrade in question
-        UpgradeData upgrade = CardTypeManagerScript.instance.getCardByName(argument).upgradeData;
+        PlayerCardData card = CardTypeManagerScript.instance.getCardByName(argument);
+        UpgradeData upgrade = card.upgradeData;
+        EffectData  effects = card.effectData;
 
         if (upgrade == null)
         {
@@ -374,6 +376,8 @@ public class EffectUpgradeAllTowers : BaseEffectInstant
                 t.SendMessage("FreeUpgrade", upgrade);
             else
                 t.SendMessage("Upgrade", upgrade);
+
+            t.SendMessage("AddEffects", effects);
         }
     }
 }
