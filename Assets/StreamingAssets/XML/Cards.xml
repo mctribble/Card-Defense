@@ -113,6 +113,18 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="tower" Name="Death Ray" Description="Fires at a blisteringly fast pace and at great range, but dont build it until you really need it" Charges="2" Art="Death_Ray.png" Tooltip="Tower_Octagon.png" Token="false">
+      <towerData Recharge="0.01" Range="999" Damage="2" Lifespan="3" UpgradeCap="0" Sprite="Tower_Octagon.png">
+        <towerColor r="0.75" g="0.75" b="0.2" a="1" />
+      </towerData>
+      <effectData>
+        <Effects>
+          <Effect name="armorPierce" />
+          <Effect name="limitedAmmo" strength="750" />
+          <Effect name="infiniteTowerLifespan" />
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="tower" Name="Explosive Tower" Description="Deals splash damage.  Good for tightly-packed enemies." Charges="3" Art="Explosive_Tower.png" Tooltip="Tower_Round.png" Token="false">
       <towerData Recharge="2" Range="2" Damage="20" Lifespan="5" UpgradeCap="3" Sprite="Tower_Round.png">
         <towerColor r="1" g="0" b="0" a="1" />
@@ -177,18 +189,6 @@
       <towerData Recharge="2" Range="1.5" Damage="10" Lifespan="3" UpgradeCap="2" Sprite="Tower_Basic.png">
         <towerColor r="0.5" g="0.5" b="0.5" a="1" />
       </towerData>
-    </Card>
-    <Card Type="tower" Name="Death Ray" Description="Fires at a blisteringly fast pace and at great range, but dont build it until you really need it" Charges="2" Art="Death_Ray.png" Tooltip="Tower_Octagon.png" Token="false">
-      <towerData Recharge="0.01" Range="999" Damage="2" Lifespan="3" UpgradeCap="0" Sprite="Tower_Octagon.png">
-        <towerColor r="0.75" g="0.75" b="0.2" a="1" />
-      </towerData>
-      <effectData>
-        <Effects>
-          <Effect name="armorPierce" />
-          <Effect name="limitedAmmo" strength="750" />
-          <Effect name="infiniteTowerLifespan" />
-        </Effects>
-      </effectData>
     </Card>
     <Card Type="tower" Name="Magic Academy" Description="provides a steady supply of additional spells." Charges="3" Art="Magic_Academy.png" Tooltip="Tower_Round.png" Token="false">
       <towerData Recharge="2" Range="1.5" Damage="10" Lifespan="4" UpgradeCap="2" Sprite="Tower_Round.png">
@@ -290,11 +290,6 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Range Tower" Charges="5" Art="Range_Tower.png" Tooltip="Tower_Octagon.png" Token="false">
-      <towerData Recharge="1.7" Range="4" Damage="23" Lifespan="3" UpgradeCap="3" Sprite="Tower_octagon.png">
-        <towerColor r="0" g="1" b="0" a="1" />
-      </towerData>
-    </Card>
     <Card Type="tower" Name="Pylon" Description="provides a steady supply of additional cards from the deck." Charges="3" Art="Pylon.png" Tooltip="Tower_Octagon.png" Token="false">
       <towerData Recharge="2" Range="1.5" Damage="10" Lifespan="4" UpgradeCap="2" Sprite="Tower_Octagon.png">
         <towerColor r="0.25" g="0" b="0" a="1" />
@@ -311,6 +306,11 @@
           </Effect>
         </Effects>
       </effectData>
+    </Card>
+    <Card Type="tower" Name="Range Tower" Charges="5" Art="Range_Tower.png" Tooltip="Tower_Octagon.png" Token="false">
+      <towerData Recharge="1.7" Range="4" Damage="23" Lifespan="3" UpgradeCap="3" Sprite="Tower_octagon.png">
+        <towerColor r="0" g="1" b="0" a="1" />
+      </towerData>
     </Card>
     <Card Type="tower" Name="Resonant Tower (A)" Charges="3" Art="Resonant_Tower_A.png" Tooltip="Tower_Basic.png" Token="false">
       <towerData Recharge="4" Range="3" Damage="30" Lifespan="4" UpgradeCap="3" Sprite="Tower_Basic.png">
@@ -488,20 +488,8 @@
     <Card Type="upgrade" Name="Heavy Upgrade" Description="Best on towers with high damage" Charges="3" Art="Heavy_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
       <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1.8" RechargeMod="1" RangeMod="0.75" DamageMod="0" WaveBonus="3" />
     </Card>
-    <Card Type="upgrade" Name="Overcharge Upgrade" Description="Allows a tower to build up extra power if it doesnt attack for a while" Charges="3" Art="Overcharge_Upgrade" Tooltip="Tower_Basic.png" Token="false">
-      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1.3" RechargeMod="1" RangeMod="0.5" DamageMod="0" WaveBonus="3" />
-      <effectData>
-        <Effects>
-          <Effect name="maxOvercharge" strength="1" />
-          <Effect name="overchargeDamage" strength="2" />
-        </Effects>
-      </effectData>
-    </Card>
     <Card Type="upgrade" Name="Improvised Upgrade" Description="There were no upgrades in your deck, but you managed to improvise something regardless." Charges="3" Art="Improvised_Upgrade.png" Tooltip="Tower_Basic.png" Token="true">
       <upgradeData RechargeMult="0.95" RangeMult="1" DamageMult="1.1" RechargeMod="0" RangeMod="0.25" DamageMod="0" WaveBonus="2" />
-    </Card>
-    <Card Type="upgrade" Name="Override Safeties" Description="Overrides tower safety mechanisms, squeezing out more power but making the tower decay faster." Charges="5" Art="Override_Safeties.png" Tooltip="Tower_Basic.png" Token="false">
-      <upgradeData RechargeMult="0.6" RangeMult="1.4" DamageMult="1.4" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="-1" />
     </Card>
     <Card Type="upgrade" Name="Manual Control" Description="If you want a job done right, then do it yourself." Charges="3" Art="Manual_Control.png" Tooltip="Tower_Basic.png" Token="false">
       <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="0" />
@@ -521,6 +509,18 @@
           <Effect name="setRange" strength="2" />
         </Effects>
       </effectData>
+    </Card>
+    <Card Type="upgrade" Name="Overcharge Upgrade" Description="Allows a tower to build up extra power if it doesnt attack for a while" Charges="3" Art="Overcharge_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
+      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1.3" RechargeMod="1" RangeMod="0.5" DamageMod="0" WaveBonus="3" />
+      <effectData>
+        <Effects>
+          <Effect name="maxOvercharge" strength="1" />
+          <Effect name="overchargeDamage" strength="2" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="upgrade" Name="Override Safeties" Description="Overrides tower safety mechanisms, squeezing out more power but making the tower decay faster." Charges="5" Art="Override_Safeties.png" Tooltip="Tower_Basic.png" Token="false">
+      <upgradeData RechargeMult="0.6" RangeMult="1.4" DamageMult="1.4" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="-1" />
     </Card>
     <Card Type="upgrade" Name="Piercing Ammo" Description="allows attacks to ignore armor" Charges="3" Art="Piercing_Ammo.png" Tooltip="Tower_Basic.png" Token="false">
       <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1.1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="3" />
@@ -546,25 +546,6 @@
       <effectData>
         <Effects>
           <Effect name="upgradesForbidden" />
-        </Effects>
-      </effectData>
-    </Card>
-    <Card Type="upgrade" Name="Slow Decay" Description="Keeps a tower around even if it cant be upgraded any further" Charges="4" Art="Slow_Decay.png" Tooltip="Tower_Basic.png" Token="false">
-      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="0" />
-      <effectData>
-        <Effects>
-          <Effect name="infiniteTowerLifespan" />
-          <Effect name="statPercentChangePerRound" strength="-10" />
-          <Effect name="noUpgradeCost" />
-        </Effects>
-      </effectData>
-    </Card>
-    <Card Type="upgrade" Name="Slow Growth" Description="best used on a tower that will stick around for a while even without further upgrades" Charges="4" Art="Slow_Growth.png" Tooltip="Tower_Basic.png" Token="false">
-      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="0" />
-      <effectData>
-        <Effects>
-          <Effect name="upgradesForbidden" />
-          <Effect name="statPercentChangePerRound" strength="5" />
         </Effects>
       </effectData>
     </Card>
@@ -608,15 +589,6 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="upgrade" Name="Tower Insurance" Description="Brings a tower back to you after it dies" Charges="3" Art="Salvage.png" Tooltip="Tower_basic.png" Token="false">
-      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="0" />
-      <effectData>
-        <Effects>
-          <Effect name="redrawTowerOnDeath" strength="1" />
-          <Effect name="noUpgradeCost" />
-        </Effects>
-      </effectData>
-    </Card>
     <Card Type="upgrade" Name="Self-Destruct Upgrade" Description="Tower becomes very powerful, but will only get one shot." Charges="3" Art="Self_Destruct_Upgrade.png" Tooltip="Tower_basic.png" Token="false">
       <upgradeData RechargeMult="1" RangeMult="5" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="1000" WaveBonus="0" />
       <effectData>
@@ -628,11 +600,39 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="upgrade" Name="Slow Decay" Description="Keeps a tower around even if it cant be upgraded any further" Charges="4" Art="Slow_Decay.png" Tooltip="Tower_Basic.png" Token="false">
+      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="0" />
+      <effectData>
+        <Effects>
+          <Effect name="infiniteTowerLifespan" />
+          <Effect name="statPercentChangePerRound" strength="-10" />
+          <Effect name="noUpgradeCost" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="upgrade" Name="Slow Growth" Description="best used on a tower that will stick around for a while even without further upgrades" Charges="4" Art="Slow_Growth.png" Tooltip="Tower_Basic.png" Token="false">
+      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="0" />
+      <effectData>
+        <Effects>
+          <Effect name="upgradesForbidden" />
+          <Effect name="statPercentChangePerRound" strength="5" />
+        </Effects>
+      </effectData>
+    </Card>
     <Card Type="upgrade" Name="Spitfire Upgrade" Description="Quantity over quality." Charges="3" Art="Spitfire_Upgrade.png" Tooltip="Tower_Basic.png" Token="false">
       <upgradeData RechargeMult="2.5" RangeMult="1" DamageMult="0.6" RechargeMod="0" RangeMod="0.5" DamageMod="0" WaveBonus="3" />
       <effectData>
         <Effects>
           <Effect name="targetMultishot" strength="50" />
+        </Effects>
+      </effectData>
+    </Card>
+    <Card Type="upgrade" Name="Tower Insurance" Description="Brings a tower back to you after it dies" Charges="3" Art="Tower_Insurance.png" Tooltip="Tower_basic.png" Token="false">
+      <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0" DamageMod="0" WaveBonus="0" />
+      <effectData>
+        <Effects>
+          <Effect name="redrawTowerOnDeath" strength="1" />
+          <Effect name="noUpgradeCost" />
         </Effects>
       </effectData>
     </Card>
@@ -642,48 +642,48 @@
           <Effect name="customDescription" argument="All incoming enemies become the same type, chosen at random.">
             <Effect name="dieRoll" strength="9" />
           </Effect>
-          <Effect name="customDescription" >
-            <Effect name="ifRollRange" strength="1" argument="1" >
+          <Effect name="customDescription">
+            <Effect name="ifRollRange" strength="1" argument="1">
               <Effect name="changeWaveType" argument="Armored" />
             </Effect>
           </Effect>
-          <Effect name="customDescription" >
-            <Effect name="ifRollRange" strength="2" argument="2" >
+          <Effect name="customDescription">
+            <Effect name="ifRollRange" strength="2" argument="2">
               <Effect name="changeWaveType" argument="Assassin" />
             </Effect>
           </Effect>
-          <Effect name="customDescription" >
-            <Effect name="ifRollRange" strength="3" argument="3" >
+          <Effect name="customDescription">
+            <Effect name="ifRollRange" strength="3" argument="3">
               <Effect name="changeWaveType" argument="Carrier" />
             </Effect>
           </Effect>
-          <Effect name="customDescription" >
-            <Effect name="ifRollRange" strength="4" argument="4" >
+          <Effect name="customDescription">
+            <Effect name="ifRollRange" strength="4" argument="4">
               <Effect name="changeWaveType" argument="Giant" />
             </Effect>
           </Effect>
-          <Effect name="customDescription" >
-            <Effect name="ifRollRange" strength="5" argument="5" >
+          <Effect name="customDescription">
+            <Effect name="ifRollRange" strength="5" argument="5">
               <Effect name="changeWaveType" argument="Regenerative Tank" />
             </Effect>
           </Effect>
-          <Effect name="customDescription" >
-            <Effect name="ifRollRange" strength="6" argument="6" >
+          <Effect name="customDescription">
+            <Effect name="ifRollRange" strength="6" argument="6">
               <Effect name="changeWaveType" argument="Scrambled" />
             </Effect>
           </Effect>
-          <Effect name="customDescription" >
-            <Effect name="ifRollRange" strength="7" argument="7" >
+          <Effect name="customDescription">
+            <Effect name="ifRollRange" strength="7" argument="7">
               <Effect name="changeWaveType" argument="Standard" />
             </Effect>
           </Effect>
-          <Effect name="customDescription" >
-            <Effect name="ifRollRange" strength="8" argument="8" >
+          <Effect name="customDescription">
+            <Effect name="ifRollRange" strength="8" argument="8">
               <Effect name="changeWaveType" argument="Swarm" />
             </Effect>
           </Effect>
-          <Effect name="customDescription" >
-            <Effect name="ifRollRange" strength="9" argument="9" >
+          <Effect name="customDescription">
+            <Effect name="ifRollRange" strength="9" argument="9">
               <Effect name="changeWaveType" argument="Tank" />
             </Effect>
           </Effect>
@@ -693,8 +693,8 @@
     <Card Type="spell" Name="Conjuration" Description="rather unpredictable" Charges="3" Art="Conjuration.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>
-          <Effect name="conjureCard" strength="2"/>
-          <Effect name="conjureEnemyCard" strength="1"/>
+          <Effect name="conjureCard" strength="2" />
+          <Effect name="conjureEnemyCard" strength="1" />
         </Effects>
       </effectData>
     </Card>
@@ -833,15 +833,15 @@
     <Card Type="spell" Name="Improvisation" Description="You're pretty sure you can cobble something together" Charges="4" Art="Improvisation.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>
-          <Effect name="dieRoll" strength="3"/>
-          <Effect name="ifRollRange" strength="1" argument="1" >
-            <Effect name="conjureSpecificCard" strength="2" argument="Improvised Spell"/>
+          <Effect name="dieRoll" strength="3" />
+          <Effect name="ifRollRange" strength="1" argument="1">
+            <Effect name="conjureSpecificCard" strength="2" argument="Improvised Spell" />
           </Effect>
-          <Effect name="ifRollRange" strength="2" argument="2" >
-            <Effect name="conjureSpecificCard" strength="2" argument="Improvised Tower"/>
+          <Effect name="ifRollRange" strength="2" argument="2">
+            <Effect name="conjureSpecificCard" strength="2" argument="Improvised Tower" />
           </Effect>
-          <Effect name="ifRollRange" strength="3" argument="3" >
-            <Effect name="conjureSpecificCard" strength="2" argument="Improvised Upgrade"/>
+          <Effect name="ifRollRange" strength="3" argument="3">
+            <Effect name="conjureSpecificCard" strength="2" argument="Improvised Upgrade" />
           </Effect>
         </Effects>
       </effectData>

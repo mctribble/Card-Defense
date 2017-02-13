@@ -6,28 +6,11 @@ conjuration seems to mess with the deck charges gauge and lock it at full
 ================================================================
 art needed for:
 crippling/explosive ammo
-crossfire upgrade
-double/quad-barrel upgrade
-blood magic upgrade
-mouse upgrade
-overcharge upgrade
-repairs
-resupply
-slow decay
-slow growth
-Tower Insurance
 
-conformity
 conjuration
 conjuration desperation
 conjure tower/upgrade/spell
 dark bargain
-focus power: spell/tower/upgrade
-heavy shield
-improvisation
-mass basic upgrade
-mass fast upgrade
-mass heavy upgrade
 
 enemy spawn points
 
