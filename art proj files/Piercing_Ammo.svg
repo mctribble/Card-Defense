@@ -10,12 +10,12 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="2560"
-   height="1280"
+   width="2730.6667"
+   height="1365.3334"
    viewBox="0 0 2560 1280.0001"
    id="svg2"
    version="1.1"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.0 r15299"
    sodipodi:docname="Piercing_Ammo.svg"
    inkscape:export-filename="C:\Users\Kaleb\Documents\GitHub\Card-Defense\Assets\StreamingAssets\Art\Card Art\Piercing_Ammo.png"
    inkscape:export-xdpi="90"
@@ -106,14 +106,14 @@
      borderopacity="1"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.47890625"
-     inkscape:cx="1280"
-     inkscape:cy="699.88482"
+     inkscape:zoom="0.33863786"
+     inkscape:cx="1497.0939"
+     inkscape:cy="713.87848"
      inkscape:document-units="px"
      inkscape:current-layer="layer3"
      showgrid="false"
-     inkscape:window-width="1680"
-     inkscape:window-height="987"
+     inkscape:window-width="1304"
+     inkscape:window-height="745"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
@@ -122,7 +122,11 @@
      units="px">
     <inkscape:grid
        type="xygrid"
-       id="grid4155" />
+       id="grid4155"
+       originx="0"
+       originy="0"
+       spacingx="1"
+       spacingy="1" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -132,7 +136,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -155,13 +159,13 @@
      style="display:inline;opacity:1">
     <path
        style="fill:url(#linearGradient4324);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.10719216px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 1062.248,639.44642 0,-122.60065 1049.4362,0 -79.5404,-240.64965 329.6522,363.2503 z"
+       d="M 1062.248,639.44642 V 516.84577 h 1049.4362 l -79.5404,-240.64965 329.6522,363.2503 z"
        id="path4301-5"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccc" />
     <path
        style="display:inline;fill:url(#linearGradient4324-1);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.10719216px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 1062.2479,640.55371 0,122.60066 1049.4363,0 -79.5404,240.64963 329.6522,-363.25029 z"
+       d="M 1062.2479,640.55371 V 763.15437 H 2111.6842 L 2032.1438,1003.804 2361.796,640.55371 Z"
        id="path4301-5-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccc" />

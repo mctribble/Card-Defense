@@ -5,12 +5,10 @@ sometimes game freezes on level load if it is not the first load of a session.  
 conjuration seems to mess with the deck charges gauge and lock it at full
 ================================================================
 art needed for:
-crippling/explosive ammo
 
 conjuration
 conjuration desperation
 conjure tower/upgrade/spell
-dark bargain
 
 enemy spawn points
 
