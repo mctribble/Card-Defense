@@ -6,10 +6,6 @@ conjuration seems to mess with the deck charges gauge and lock it at full
 ================================================================
 art needed for:
 
-conjuration
-conjuration desperation
-conjure tower/upgrade/spell
-
 enemy spawn points
 
 update art for:
