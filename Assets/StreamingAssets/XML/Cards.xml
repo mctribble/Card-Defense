@@ -213,13 +213,13 @@
       </towerData>
     </Card>
     <Card Type="tower" Name="Mortar Tower" Description="Creates explosions near your mouse" Charges="4" Art="Mortar_Tower.png" Tooltip="Tower_Octagon.png" Token="false">
-      <towerData Recharge="0.5" Range="2" Damage="3" Lifespan="3" UpgradeCap="3" Sprite="Tower_Octagon.png">
+      <towerData Recharge="0.5" Range="2" Damage="4" Lifespan="3" UpgradeCap="3" Sprite="Tower_Octagon.png">
         <towerColor r="0" g="1" b="1" a="1" />
       </towerData>
       <effectData>
         <Effects>
           <Effect name="targetMouse" />
-          <Effect name="splashDamage" strength="3" argument="1" />
+          <Effect name="splashDamage" strength="2" argument="1" />
         </Effects>
       </effectData>
     </Card>
@@ -478,7 +478,9 @@
       <upgradeData RechargeMult="1" RangeMult="1" DamageMult="1" RechargeMod="0" RangeMod="0.5" DamageMod="0" WaveBonus="3" />
       <effectData>
         <Effects>
-          <Effect name="splashDamage" strength="10" argument="1" />
+          <Effect name="scaleEffectByTowerAttack">
+            <Effect name="splashDamage" strength="0.5" argument="1" />
+          </Effect>
         </Effects>
       </effectData>
     </Card>

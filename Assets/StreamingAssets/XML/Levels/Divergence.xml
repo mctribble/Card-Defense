@@ -35,18 +35,5 @@
   </PathSegments>
   <Towers />
   <shuffleDeck>true</shuffleDeck>
-  <levelDeck name="Level Deck">
-    <Cards>
-      <Card name="AOE Tower" count="5" />
-      <Card name="Basic Upgrade" count="5" />
-      <Card name="Enrage" count="5" />
-      <Card name="Fast Tower" count="5" />
-      <Card name="Fast Upgrade" count="5" />
-      <Card name="Heavy Tower" count="5" />
-      <Card name="Heavy Upgrade" count="5" />
-      <Card name="Life Tap" count="2" />
-      <Card name="Reinforce" count="2" />
-      <Card name="Shield" count="2" />
-    </Cards>
-  </levelDeck>
+  <premadeDeckName>Control</premadeDeckName>
 </Level>

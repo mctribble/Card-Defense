@@ -194,29 +194,30 @@
     </Deck>
     <Deck name="Control">
       <Cards>
-        <Card name="Reinforce" count="1" />
-        <Card name="Light Shield" count="3" />
-        <Card name="Focus Power: Upgrades" count="1" />
-        <Card name="Focus Power: Spells" count="1" />
-        <Card name="Enrage" count="2" />
-        <Card name="Enfeeble" count="3" />
-        <Card name="Dark Bargain" count="1" />
+        <Card name="Basic Tower" count="3" />
         <Card name="Conformity" count="2" />
-        <Card name="Repairs" count="3" />
-        <Card name="Override Safeties" count="2" />
-        <Card name="Piercing Ammo" count="3" />
-        <Card name="Slowing Tower" count="5" />
-        <Card name="Crippling Ammo" count="4" />
-        <Card name="Pylon" count="3" />
-        <Card name="Ping Tower" count="2" />
+        <Card name="Dark Bargain" count="1" />
+        <Card name="Death Ray" count="2" />
+        <Card name="Enfeeble" count="3" />
+        <Card name="Enrage" count="2" />
+        <Card name="Explosive Ammo" count="2" />
+        <Card name="Fast Tower" count="2" />
+        <Card name="Focus Power: Spells" count="1" />
+        <Card name="Focus Power: Towers" count="1" />
+        <Card name="Focus Power: Upgrades" count="1" />
+        <Card name="Heavy Tower" count="2" />
+        <Card name="Light Shield" count="3" />
+        <Card name="Mass Basic Upgrade" count="1" />
         <Card name="Mortar Tower" count="4" />
         <Card name="Mouse Tower" count="4" />
-        <Card name="Death Ray" count="2" />
-        <Card name="Mass Basic Upgrade" count="1" />
+        <Card name="Override Safeties" count="2" />
+        <Card name="Piercing Ammo" count="3" />
+        <Card name="Ping Tower" count="2" />
         <Card name="Poison Ammo" count="2" />
-        <Card name="Explosive Ammo" count="2" />
-        <Card name="Double-Barrel Upgrade" count="3" />
-        <Card name="Focus Power: Towers" count="1" />
+        <Card name="Pylon" count="3" />
+        <Card name="Reinforce" count="1" />
+        <Card name="Repairs" count="3" />
+        <Card name="Slowing Tower" count="5" />
       </Cards>
     </Deck>
   </Decks>

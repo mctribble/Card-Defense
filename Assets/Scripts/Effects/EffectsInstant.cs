@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Vexe.Runtime.Types;
 using System.Linq;
+using System.Collections;
 
 /// <summary>
 /// instant effects take place instantly with no particular target.  This base effect handles behavior common to them all
@@ -52,8 +53,15 @@ public class EffectConjureEnemyCard : BaseEffectInstant
     [Hide] public override string Name { get { return "Enemy conjures " + strength + " cards"; } } 
     [Show] public override string XMLName { get { return "conjureEnemyCard"; } }
 
-    public override void trigger()
+    public override void trigger() { EnemyHandScript.instance.StartCoroutine(triggerCoroutine()); }
+    private IEnumerator triggerCoroutine()
     {
+        //avoid exceptions by waiting for the enemy hand to have something in it
+        while (EnemyHandScript.instance.currentHandSize == 0)
+            yield return null;
+
+        yield return EnemyHandScript.instance.StartCoroutine(EnemyHandScript.instance.waitForReady()); //wait for things to stop moving around before examining the hand
+
         List<WaveData> conjuredWaves = new List<WaveData>();                           //list to hold the waves
         int conjureCount  = Mathf.RoundToInt(strength);                                //how many to conjure
         int conjureBudget = EnemyHandScript.instance.IncomingWaves.Max(w => w.budget); //budget for conjured waves
@@ -64,6 +72,17 @@ public class EffectConjureEnemyCard : BaseEffectInstant
         //create the waves, each with a random type and the above budget and time.
         for (int i = 0; i < conjureCount; i++)
             conjuredWaves.Add(new WaveData(conjureTypes[UnityEngine.Random.Range(0, conjureTypes.Count)], conjureBudget, conjureTime, true));
+
+        //apply wave effects and update ranks on conjured waves
+        for (int i = 0; i < conjuredWaves.Count; i++)
+        {
+            if (conjuredWaves[i].enemyData.effectData != null)
+                foreach (IEffect e in conjuredWaves[i].enemyData.effectData.effects)
+                    if (e.triggersAs(EffectType.wave))
+                        conjuredWaves[i] = ((IEffectWave)e).alteredWaveData(conjuredWaves[i]);
+
+            conjuredWaves[i].recalculateRank();
+        }
 
         //"draw" them
         EnemyHandScript.instance.StartCoroutine(EnemyHandScript.instance.drawCards(conjuredWaves));
@@ -376,8 +395,9 @@ public class EffectUpgradeAllTowers : BaseEffectInstant
                 t.SendMessage("FreeUpgrade", upgrade);
             else
                 t.SendMessage("Upgrade", upgrade);
-
-            t.SendMessage("AddEffects", effects);
+            
+            if (effects != null)
+                t.SendMessage("AddEffects", effects);
         }
     }
 }

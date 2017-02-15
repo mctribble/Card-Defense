@@ -64,7 +64,17 @@ public class EffectChangeWaveType : BaseEffectWave
 
     public override WaveData alteredWaveData(WaveData currentWaveData)
     {
-        return new WaveData(EnemyTypeManagerScript.instance.getEnemyTypeByName(argument), currentWaveData.budget, currentWaveData.time);
+        WaveData newWave =  new WaveData(EnemyTypeManagerScript.instance.getEnemyTypeByName(argument), currentWaveData.budget, currentWaveData.time);
+
+        //apply wave effects and update ranks
+        if (newWave.enemyData.effectData != null)
+            foreach (IEffect e in newWave.enemyData.effectData.effects)
+                if (e.triggersAs(EffectType.wave))
+                    newWave = ((IEffectWave)e).alteredWaveData(newWave);
+
+        newWave.recalculateRank();
+
+        return newWave;
     }
 }
 

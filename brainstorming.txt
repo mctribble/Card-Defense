@@ -3,6 +3,10 @@ some lingering cause of enemies not knowing to expect damage
 [WebGL] need a placeholder image while level thumbnails are loading.
 sometimes game freezes on level load if it is not the first load of a session.  reasons unknown.
 conjuration seems to mess with the deck charges gauge and lock it at full
+drawn enemies sometimes dont flip over until moused over
+tooltips near side of screen "blinking" side to side
+many effects saying '1 cards' or similar 
+scaleEffectWithTowerAttack does not scale inner effect until tower attacks, causing inaccurate tooltips
 ================================================================
 art needed for:
 
@@ -17,6 +21,9 @@ art needs updating for:
 ================================================================
 other presenation/art:
 need some level backgrounds
+================================================================
+UI:
+hotkey/button for showing range of all towers?
 ================================================================
 content goals:
 enemies: 10/10   <<DONE!!>>
