@@ -126,7 +126,7 @@ public class EffectSplashDamage : BaseEffectEnemyDamaged
         }
     }
 
-    [Hide] public override string Name { get { return "deals " + strength + " damage to enemies within " + argument; } } //returns name and strength
+    [Hide] public override string Name { get { return "deals " + strength + " damage to enemies within " + argument + " of target"; } } //returns name and strength
     [Show] public override string XMLName { get { return "splashDamage"; } } //name used to refer to this effect in XML
 
     //we can ignore expected damage

@@ -32,7 +32,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Blood Mage Tower" Description="Powerful, but also very dangerous." Charges="1" Art="Blood_Mage_Tower.png" Tooltip="Tower_Diamond.png" Token="false">
+    <Card Type="tower" Name="Blood Mage Tower" Charges="1" Art="Blood_Mage_Tower.png" Tooltip="Tower_Diamond.png" Token="false">
       <towerData Recharge="1.5" Range="2.5" Damage="100" Lifespan="3" UpgradeCap="1" Sprite="Tower_Diamond.png">
         <towerColor r="1" g="0" b="0" a="1" />
       </towerData>
@@ -43,7 +43,7 @@
           </Effect>
           <Effect name="armorPierce" />
           <Effect name="targetHealth" />
-          <Effect name="splashDamage" strength="20" />
+          <Effect name="splashDamage" strength="10" argument="1" />
         </Effects>
       </effectData>
     </Card>
@@ -77,7 +77,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Champion Tower" Description="For when you really want a fight" Charges="1" Art="Champion_Tower.png" Tooltip="Tower_Diamond.png" Token="false">
+    <Card Type="tower" Name="Champion Tower" Charges="1" Art="Champion_Tower.png" Tooltip="Tower_Diamond.png" Token="false">
       <towerData Recharge="0.5" Range="2.5" Damage="30" Lifespan="3" UpgradeCap="1" Sprite="Tower_Diamond.png">
         <towerColor r="0.75" g="0.75" b="0.2" a="1" />
       </towerData>
@@ -318,7 +318,7 @@
       </towerData>
       <effectData>
         <Effects>
-          <Effect name="ResonantTowerAttackMult" strength="1.1" argument="Resonance (A)" />
+          <Effect name="ResonantTowerAttackMult" strength="1.1" argument="Res. (A)" />
         </Effects>
       </effectData>
     </Card>
@@ -329,8 +329,8 @@
       <effectData>
         <Effects>
           <Effect name="targetBurst" />
-          <Effect name="ResonantTowerAttackMod" strength="0.5" argument="Resonance (A)" />
-          <Effect name="ResonantTowerRangeMod" strength="0.25" argument="Resonance (R)" />
+          <Effect name="ResonantTowerAttackMod" strength="0.5" argument="Res. (A)" />
+          <Effect name="ResonantTowerRangeMod" strength="0.25" argument="Res. (R)" />
         </Effects>
       </effectData>
     </Card>
@@ -340,7 +340,7 @@
       </towerData>
       <effectData>
         <Effects>
-          <Effect name="ResonantTowerRangeMod" strength="0.5" argument="Resonance (R)" />
+          <Effect name="ResonantTowerRangeMod" strength="0.5" argument="Res. (R)" />
         </Effects>
       </effectData>
     </Card>
@@ -355,7 +355,7 @@
         </Effects>
       </effectData>
     </Card>
-    <Card Type="tower" Name="Slowing Tower" Description="Does not deal damage, but slows enemies down so other towers have more time to hit them" Charges="2" Art="Slowing_Tower.png" Tooltip="Tower_Round.png" Token="false">
+    <Card Type="tower" Name="Slowing Tower" Description="Slows enemies down so other towers have more time to hit them" Charges="2" Art="Slowing_Tower.png" Tooltip="Tower_Round.png" Token="false">
       <towerData Recharge="0.5" Range="2" Damage="0" Lifespan="5" UpgradeCap="0" Sprite="Tower_Round.png">
         <towerColor r="0" g="0" b="1" a="1" />
       </towerData>

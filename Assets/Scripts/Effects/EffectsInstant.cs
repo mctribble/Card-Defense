@@ -397,7 +397,7 @@ public class EffectShuffle : BaseEffectInstant
 //damages the player
 public class EffectDamagePlayer : BaseEffectInstant
 {
-    [Hide] public override string Name { get { return "you take " + strength + " damage."; } } //returns name and strength
+    [Hide] public override string Name { get { return "you take " + strength + " damage"; } } //returns name and strength
     [Show] public override string XMLName { get { return "damagePlayer"; } } //name used to refer to this effect in XML
 
     public override void trigger()
