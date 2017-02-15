@@ -41,6 +41,11 @@ public class XMLDeckEntry
     }
 
     public override string ToString() { return name + "x" + count; }
+
+    internal XMLDeckEntry clone()
+    {
+        return new XMLDeckEntry(name, count);
+    }
 };
 
 /// <summary>

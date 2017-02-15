@@ -10,7 +10,7 @@ using Vexe.Runtime.Types;
 /// </summary>
 public class DeckEditorFilter
 {
-    public string    searchString; //null if no active search.  otherwise contains the text to be found
+    public string          searchString; //null if no active search.  otherwise contains the text to be found
     public PlayerCardType? type;         //only show cards of this type.  show all card types if null.
 
     public enum SortingRule { name, charges, type };

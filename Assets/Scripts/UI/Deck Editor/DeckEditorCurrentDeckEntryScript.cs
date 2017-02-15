@@ -55,7 +55,7 @@ public class DeckEditorCurrentDeckEntryScript : BaseBehaviour, IPointerEnterHand
     //sets values of the card
     public void setData(XMLDeckEntry newData)
     {
-        data = newData;
+        data = newData.clone();
         cardNameText.text = data.name;
         cardCountText.text = data.count.ToString();
 
