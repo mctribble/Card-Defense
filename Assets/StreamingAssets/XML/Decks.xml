@@ -20,23 +20,25 @@
         <Card name="Enrage" count="2" />
         <Card name="Gambit" count="2" />
         <Card name="Pulse Upgrade" count="2" />
-        <Card name="Black Plague Tower" count="1" />
         <Card name="AOE Tower" count="1" />
         <Card name="Spitfire Upgrade" count="1" />
+        <Card name="Mass Basic Upgrade" count="1" />
       </Cards>
     </Deck>
     <Deck name="Conjuration">
       <Cards>
-        <Card name="Conjure Spell" count="10" />
+        <Card name="Conjure Spell" count="9" />
         <Card name="Conjure Tower" count="10" />
-        <Card name="Conjure Upgrade" count="10" />
+        <Card name="Conjure Upgrade" count="9" />
         <Card name="Light Shield" count="3" />
-        <Card name="Summon Standard" count="3" />
         <Card name="Basic Upgrade" count="4" />
         <Card name="Fast Upgrade" count="4" />
         <Card name="Heavy Upgrade" count="4" />
         <Card name="Plague Tower" count="3" />
         <Card name="Scavenge" count="4" />
+        <Card name="Desperation Conjuration" count="1" />
+        <Card name="Conjuration" count="6" />
+        <Card name="Conformity" count="3" />
       </Cards>
     </Deck>
     <Deck name="Plague">
@@ -54,6 +56,7 @@
         <Card name="Fast Upgrade" count="6" />
         <Card name="Range Upgrade" count="4" />
         <Card name="Basic Upgrade" count="6" />
+        <Card name="Tower Insurance" count="2" />
       </Cards>
     </Deck>
     <Deck name="Resonance">
@@ -68,6 +71,8 @@
         <Card name="Fast Upgrade" count="7" />
         <Card name="Enrage" count="2" />
         <Card name="Challenger Tower" count="2" />
+        <Card name="Mass Fast Upgrade" count="1" />
+        <Card name="Focus Power: Towers" count="1" />
       </Cards>
     </Deck>
     <Deck name="Starter Deck">
@@ -83,7 +88,8 @@
         <Card name="Reinforce" count="2" />
         <Card name="Recycle" count="1" />
         <Card name="Ping Tower" count="1" />
-        <Card name="Nova Tower" count="2" />
+        <Card name="Nova Tower" count="1" />
+        <Card name="Chain Gun" count="1" />
       </Cards>
     </Deck>
     <Deck name="Spitfire">
@@ -101,6 +107,9 @@
         <Card name="Risky Draw" count="3" />
         <Card name="Basic Tower" count="5" />
         <Card name="Shredder Tower" count="3" />
+        <Card name="Crossfire Upgrade" count="1" />
+        <Card name="Spitfire Upgrade" count="1" />
+        <Card name="Mass Fast Upgrade" count="1" />
       </Cards>
     </Deck>
     <Deck name="Variety">
@@ -139,14 +148,14 @@
     </Deck>
     <Deck name="Endurance">
       <Cards>
-        <Card name="Basic Tower" count="5" />
-        <Card name="Basic Upgrade" count="6" />
+        <Card name="Basic Tower" count="4" />
+        <Card name="Basic Upgrade" count="5" />
         <Card name="Challenger Tower" count="3" />
         <Card name="Enrage" count="3" />
-        <Card name="Fast Tower" count="8" />
-        <Card name="Fast Upgrade" count="6" />
-        <Card name="Light Shield" count="5" />
-        <Card name="Mouse Tower" count="4" />
+        <Card name="Fast Tower" count="7" />
+        <Card name="Fast Upgrade" count="5" />
+        <Card name="Light Shield" count="2" />
+        <Card name="Mouse Tower" count="2" />
         <Card name="Supernova Tower" count="4" />
         <Card name="Ping Tower" count="5" />
         <Card name="Plague Tower" count="2" />
@@ -155,7 +164,59 @@
         <Card name="Strong Reinforce" count="2" />
         <Card name="Sniper Tower" count="3" />
         <Card name="Giant Sniper" count="2" />
-        <Card name="Spitfire Upgrade" count="3" />
+        <Card name="Spitfire Upgrade" count="2" />
+        <Card name="Mortar Tower" count="2" />
+        <Card name="Crossfire Upgrade" count="1" />
+        <Card name="Heavy Shield" count="3" />
+      </Cards>
+    </Deck>
+    <Deck name="Snipers">
+      <Cards>
+        <Card name="Death Ray" count="3" />
+        <Card name="Fast Sniper" count="3" />
+        <Card name="Giant Sniper" count="3" />
+        <Card name="Range Tower" count="3" />
+        <Card name="Sniper Tower" count="3" />
+        <Card name="Swarm Tower" count="3" />
+        <Card name="Crossfire Upgrade" count="1" />
+        <Card name="Spitfire Upgrade" count="1" />
+        <Card name="Quad-Barrel Upgrade" count="3" />
+        <Card name="Repairs" count="3" />
+        <Card name="Explosive Ammo" count="2" />
+        <Card name="Crippling Ammo" count="2" />
+        <Card name="Enrage" count="4" />
+        <Card name="Focus Power: Towers" count="2" />
+        <Card name="Focus Power: Upgrades" count="2" />
+        <Card name="Focus Power: Spells" count="2" />
+        <Card name="Reinforce" count="1" />
+        <Card name="Summon Armored" count="2" />
+      </Cards>
+    </Deck>
+    <Deck name="Control">
+      <Cards>
+        <Card name="Reinforce" count="1" />
+        <Card name="Light Shield" count="3" />
+        <Card name="Focus Power: Upgrades" count="1" />
+        <Card name="Focus Power: Spells" count="1" />
+        <Card name="Enrage" count="2" />
+        <Card name="Enfeeble" count="3" />
+        <Card name="Dark Bargain" count="1" />
+        <Card name="Conformity" count="2" />
+        <Card name="Repairs" count="3" />
+        <Card name="Override Safeties" count="2" />
+        <Card name="Piercing Ammo" count="3" />
+        <Card name="Slowing Tower" count="5" />
+        <Card name="Crippling Ammo" count="4" />
+        <Card name="Pylon" count="3" />
+        <Card name="Ping Tower" count="2" />
+        <Card name="Mortar Tower" count="4" />
+        <Card name="Mouse Tower" count="4" />
+        <Card name="Death Ray" count="2" />
+        <Card name="Mass Basic Upgrade" count="1" />
+        <Card name="Poison Ammo" count="2" />
+        <Card name="Explosive Ammo" count="2" />
+        <Card name="Double-Barrel Upgrade" count="3" />
+        <Card name="Focus Power: Towers" count="1" />
       </Cards>
     </Deck>
   </Decks>

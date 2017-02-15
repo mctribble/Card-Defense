@@ -22,7 +22,7 @@ content goals:
 enemies: 10/10   <<DONE!!>>
 levels:  30/30   <<DONE!!>>
 cards:   100/100 <<DONE!!>> (35 Towers(+1 token)/26 Upgrades(+1 token)/39 spells(+2 token))
-decks:   08/10
+decks:   10/10   <<DONE!!>>
 ================================================================
 analytics:
 check back on the analytics to see how they're doing and tweak thingss??
