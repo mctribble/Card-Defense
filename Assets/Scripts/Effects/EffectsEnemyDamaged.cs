@@ -156,7 +156,7 @@ public class EffectSplashDamage : BaseEffectEnemyDamaged
 //attack damages and spreads effects to all enemies within X of each other through a series of consecutive explosions.  No enemy will be hit twice.  
 public class EffectChainHit : BaseEffectEnemyDamaged
 {
-    [Hide] public override string Name { get { return "attacks chain to all within " + strength; } } //returns name and strength
+    [Hide] public override string Name { get { return "chain attack: " + strength; } } //returns name and strength
     [Show] public override string XMLName { get { return "chainHit"; } } //name used to refer to this effect in XML
 
     private List<EnemyScript> enemiesAlreadyHit;

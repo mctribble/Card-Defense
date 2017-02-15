@@ -96,11 +96,11 @@ public class PlayerCardData : System.Object
                                "does " + towerData.attackPower + " damage\n";
 
                 if (towerData.rechargeTime > 1.0f)
-                    description += "attacks once every " + towerData.rechargeTime.ToString("F2") + " seconds\n";
+                    description += "attacks every " + towerData.rechargeTime.ToString("###0.##") + " seconds\n";
                 else
-                    description += "attacks <color=lime>" + (1 / towerData.rechargeTime).ToString("F2") + " times per second</color>\n";
+                    description += "attacks <color=lime>" + (1 / towerData.rechargeTime).ToString("###0.##") + " times per second</color>\n";
 
-                description += '(' + (towerData.attackPower/towerData.rechargeTime).ToString("F2") + " per second)\n" +
+                description += '(' + (towerData.attackPower/towerData.rechargeTime).ToString("###0.##") + " per second)\n" +
                                "Range: " + towerData.range;
 
                 //lifespan

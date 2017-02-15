@@ -663,7 +663,7 @@ public class TowerScript : BaseBehaviour
             colorString = "lime";
         else
             colorString = "white";
-        tooltipText.text += "does " + attackPower.ToString("F2") + " <color=" + colorString + "> " + attackChange.ToString("+ ####0.##;- ####0.##") + "</color> damage\n";
+        tooltipText.text += "does " + attackPower.ToString("###0.##") + " <color=" + colorString + "> " + attackChange.ToString("+ ####0.##;- ####0.##") + "</color> damage\n";
 
         //charge time 
         colorString = "magenta";
@@ -676,9 +676,9 @@ public class TowerScript : BaseBehaviour
 
         //show this line in a different way depending on how fast the tower is
         if (newRechargeTime > 1.0f)
-            tooltipText.text += "attacks every " + rechargeTime.ToString("F2") + " <color=" + colorString + "> " + rechargeChange.ToString("+ ####0.##;- ####0.##") + "</color> seconds\n";
+            tooltipText.text += "attacks every " + rechargeTime.ToString("###0.##") + " <color=" + colorString + "> " + rechargeChange.ToString("+ ####0.##;- ####0.##") + "</color> seconds\n";
         else
-            tooltipText.text += "attacks " + (1 / rechargeTime).ToString("F2") + " <color=" + colorString + "> " + ((1 / newRechargeTime) - (1 / rechargeTime)).ToString("+ ####0.##;- ####0.##") + "</color> times per second\n";
+            tooltipText.text += "attacks " + (1 / rechargeTime).ToString("###0.##") + " <color=" + colorString + "> " + ((1 / newRechargeTime) - (1 / rechargeTime)).ToString("+ ####0.##;- ####0.##") + "</color> times per second\n";
 
         //DPS
         colorString = "magenta";
@@ -808,12 +808,12 @@ public class TowerScript : BaseBehaviour
 
         //print this line differently depending on how fast the tower is
         if (rechargeTime > 1.0f)
-            tooltipText.text += "attacks once every " + rechargeTime.ToString("F2") + " seconds\n";
+            tooltipText.text += "attacks every " + rechargeTime.ToString("###0.##") + " seconds\n";
         else
-            tooltipText.text += "attacks <color=lime>" + (1 / rechargeTime).ToString("F2") + " times per second</color>\n";
+            tooltipText.text += "attacks <color=lime>" + (1 / rechargeTime).ToString("###0.##") + " times per second</color>\n";
         
         tooltipText.text +=
-            "(" + (attackPower / rechargeTime).ToString("F2") + " per second)\n" +
+            "(" + (attackPower / rechargeTime).ToString("###0.##") + " per second)\n" +
             "range: " + range;
 
         if ((effects == null) || (effects.propertyEffects.infiniteTowerLifespan == false)) //special display on infinite lifespan
@@ -824,7 +824,7 @@ public class TowerScript : BaseBehaviour
         if ((effects != null) && (effects.propertyEffects.limitedAmmo != null)) //skip this section entirely if we have infinite ammo
             tooltipText.text += "\nammo remaining: " + effects.propertyEffects.limitedAmmo;
 
-        tooltipText.text += "\ntotal damage dealt this round: " + damageDealtThisRound.ToString("F2");
+        tooltipText.text += "\ntotal damage dealt this round: " + damageDealtThisRound.ToString("###0.##");
 
         //list effects, deferring targeting effects for later
         bool targetingEffectFound = false;
