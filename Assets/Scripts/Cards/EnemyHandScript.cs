@@ -274,12 +274,13 @@ public class EnemyHandScript : HandScript
     private void showFloatingText(string message)
     {
         Vector2 screenPos = transform.position + new Vector3(0, -50, 0); //screen space of where we want the text to spawn (just below the hand)
-        Vector2 worldPos  = Camera.main.ScreenToWorldPoint(screenPos);    //convert to world space for instantiation
+        Vector2 worldPos  = Camera.main.ScreenToWorldPoint(screenPos);   //convert to world space for instantiation
 
         FloatingCombatTextScript fct = Instantiate(combatTextPrefab, worldPos, Quaternion.identity).GetComponent<FloatingCombatTextScript>(); //create text object
-        fct.transform.SetParent(PathManagerScript.instance.transform.parent, true);                            //put the object on the world canvas
-        
-        fct.errorText(message, Vector2.down); //and float downward
+        fct.transform.SetParent(PathManagerScript.instance.transform.parent, true); //put the object on the world canvas
+        fct.transform.localScale *= Camera.main.orthographicSize; //scale by camera zoom to keep text size consistent despite having to render it in world space                    
+
+        fct.errorText(message, Vector2.down); //text floats downward
     }
 
     public void updateEnemyCards()             { foreach (CardScript c in cards) if (c != null) c.SendMessage("updateWaveStats"); }    //instructs all cards in the hand to refresh themselves

@@ -305,9 +305,10 @@ public class PlayerHandScript : HandScript
         Vector2 worldPos  = Camera.main.ScreenToWorldPoint(screenPos);  //convert to world space for instantiation
 
         FloatingCombatTextScript fct = Instantiate(combatTextPrefab, worldPos, Quaternion.identity).GetComponent<FloatingCombatTextScript>(); //create text object
-        fct.transform.SetParent(PathManagerScript.instance.transform.parent, true);                                                           //put the object on the world canvas
+        fct.transform.SetParent(PathManagerScript.instance.transform.parent, true); //put the object on the world canvas
+        fct.transform.localScale *= Camera.main.orthographicSize; //scale by camera zoom to keep text size consistent despite having to render it in world space
 
-        fct.errorText(message, Vector2.up); //and float upward
+        fct.errorText(message, Vector2.up); //text floats upward
     }
 
     //[DEV] creates buttons in the inspector to manipulate the hand
