@@ -7,10 +7,6 @@ known issues:
 -tooltips near side of screen "blinking" side to side
 -many effects saying '1 cards' or similar 
 -scaleEffectWithTowerAttack does not scale inner effect until tower attacks, causing inaccurate tooltips
-*maximum enemy hand size being ignored (reproduce with conjuration deck)
-*conjuration can conjure modded cards
-*random level button can select dev levels
-*game freeze when playing a premade upgrade with instant effects on level load
 ================================================================
 art needed for:
 
