@@ -453,7 +453,7 @@ public class EffectinvScaleEffectWithDamage : BaseEffectMeta
 }
 
 //on towers, multiplies effect strength by attack power of the tower.  Use this to create effects whose strength vary with the strength of the tower, like the poison on "Poison Ammo".
-public class EffectScaleEffectWithTowerAttack : BaseEffectMeta
+public class EffectScaleEffectWithTowerAttack : BaseEffectMeta, IEffectSourceTracked
 {
     public override string Name { get { return "[scales with tower attack]" + innerEffect.Name; } } //returns name and strength
     public override string XMLName { get { return "scaleEffectByTowerAttack"; } } //name used to refer to this effect in XML
@@ -462,13 +462,17 @@ public class EffectScaleEffectWithTowerAttack : BaseEffectMeta
 
     public override bool shouldApplyInnerEffect() { return true; } //always trigger inner effect
 
-    //allow this to trigger as an onDamage effect even if the child does not
-    public override bool triggersAs(EffectType triggerType) { return triggerType == EffectType.enemyDamaged || base.triggersAs(triggerType); }
+    public override bool triggersAs(EffectType triggerType)
+    {
+        return triggerType == EffectType.enemyDamaged ||  //allow this to trigger as an onDamage effect even if the child does not
+               triggerType == EffectType.sourceTracked || //we want to be notified of the tower when we get added so we can set up the description
+               base.triggersAs(triggerType);              //maintain trigger types from the base class
+    }
 
     //we dont need to do anything on expected damage
     public override void expectedDamage(ref DamageEventData d) { if (innerEffect.triggersAs(EffectType.enemyDamaged)) base.expectedDamage(ref d); } //pass to child if it is also an enemyDamaged effect
 
-    //recalculate effect strength
+    //recalculate effect strength when attacks hit
     public override void actualDamage(ref DamageEventData d)
     {
         if (effectBaseStrength == null)
@@ -478,11 +482,31 @@ public class EffectScaleEffectWithTowerAttack : BaseEffectMeta
             innerEffect.strength = effectBaseStrength.Value * d.source.attackPower;
     }
 
-    //since we altered the inner effect, when it gets cloned we need to copy over the changes
+    //recalculate effect strength when we get built
+    public override TowerScript effectSource
+    {
+        get { return base.effectSource; }
+        set
+        {
+            if (effectBaseStrength == null)
+                effectBaseStrength = innerEffect.strength;
+
+            innerEffect.strength = effectBaseStrength.Value * value.attackPower;
+
+            base.effectSource = value;
+        }
+    } 
+
+    //clone the effect at its base strength, since it will get scaled again anyway when the effectSource gets updated
     public override IEffect cloneInnerEffect()
     {
         IEffect clone = base.cloneInnerEffect();
-        clone.strength = innerEffect.strength;
+
+        if (effectBaseStrength != null)
+            clone.strength = effectBaseStrength.Value;
+        else
+            clone.strength = innerEffect.strength;
+
         return clone;
     }
 }
