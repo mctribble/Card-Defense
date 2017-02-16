@@ -244,11 +244,14 @@ public class CardTypeManagerScript : BaseBehaviour
     //returns a random card type from the database
     public PlayerCardData getRandomCardType()
     {
+        //never randomly provide token or modded cards
+        List<PlayerCardData> choosableTypes = types.cardTypes.Where(pcd => (pcd.isModded == false) && (pcd.isToken == false)).ToList();
+            
         //get random index
-        int index = Mathf.RoundToInt (Random.Range (0.0f, types.cardTypes.Count-1));
+        int index = Mathf.RoundToInt (Random.Range (0.0f, choosableTypes.Count-1));
 
         //return card at that index
-        return types.cardTypes[index];
+        return choosableTypes[index];
     }
 
     /// <summary>

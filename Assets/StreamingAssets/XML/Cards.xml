@@ -731,7 +731,7 @@
     <Card Type="spell" Name="Dark Bargain" Charges="1" Art="Dark_Bargain.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>
-          <Effect name="conjureEnemyCard" strength="5" />
+          <Effect name="conjureEnemyCard" strength="10" />
           <Effect name="budgetPercentageChange" strength="100" />
           <Effect name="customDescription" argument="All towers get Crippling, Piercing, and Poison ammo">
             <Effect name="upgradeAllTowers" argument="Crippling Ammo" />

@@ -19,7 +19,7 @@ public abstract class BaseEffectInstant : BaseEffect, IEffectInstant
 //player conjures X cards, which are chosen randomly from all available un-modded cards and added directly to the hand as tokens
 public class EffectConjureCard : BaseEffectInstant
 {
-    [Hide] public override string Name { get { return "Conjure " + strength + " cards"; } } 
+    [Hide] public override string Name { get { return "Conjure up to " + strength + " cards"; } } 
     [Show] public override string XMLName { get { return "conjureCard"; } }
 
     public override void trigger()
@@ -119,7 +119,7 @@ public class EffectConjureSpecificCard : BaseEffectInstant
 //player conjures X spells, which are chosen randomly from all available un-modded spells and added directly to the hand as tokens
 public class EffectConjureSpellCard : BaseEffectInstant
 {
-    [Hide] public override string Name { get { return "Conjure " + strength + " spell cards"; } } 
+    [Hide] public override string Name { get { return "Conjure up to " + strength + " spell cards"; } } 
     [Show] public override string XMLName { get { return "conjureSpellCard"; } }
 
     public override void trigger()
@@ -150,7 +150,7 @@ public class EffectConjureSpellCard : BaseEffectInstant
 //player conjures X towers, which are chosen randomly from all available un-modded towers and added directly to the hand as tokens
 public class EffectConjureTowerCard : BaseEffectInstant
 {
-    [Hide] public override string Name { get { return "Conjure " + strength + " tower cards"; } } 
+    [Hide] public override string Name { get { return "Conjure up to " + strength + " tower cards"; } } 
     [Show] public override string XMLName { get { return "conjureTowerCard"; } }
 
     public override void trigger()
@@ -181,7 +181,7 @@ public class EffectConjureTowerCard : BaseEffectInstant
 //player conjures X upgradess, which are chosen randomly from all available un-modded upgrades and added directly to the hand as tokens
 public class EffectConjureUpgradeCard : BaseEffectInstant
 {
-    [Hide] public override string Name { get { return "Conjure " + strength + " spell cards"; } }
+    [Hide] public override string Name { get { return "Conjure up to " + strength + " spell cards"; } }
     [Show] public override string XMLName { get { return "conjureUpgradeCard"; } }
 
     public override void trigger()

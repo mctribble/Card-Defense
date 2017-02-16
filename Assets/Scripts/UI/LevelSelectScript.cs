@@ -502,7 +502,11 @@ public class LevelSelectScript : BaseBehaviour
 
             case "Random Level":
                 //find all level buttons currently available
-                MenuButtonScript[] levelButtons = menuButtons.Where(mb => mb.buttonType == MenuButtonType.level).Where(mb => mb.level.difficulty != "Tutorials").ToArray();
+                MenuButtonScript[] levelButtons = menuButtons           //all menu buttons
+                    .Where(mb => mb.buttonType == MenuButtonType.level) //that correspond to a level
+                    .Where(mb => mb.level.difficulty != "Tutorials")    //that is not a tutorial
+                    .Where(mb => mb.level.difficulty != "testing only") //and is not a dev map
+                    .ToArray();                                         //returned as an array
 
                 //choose one of them at random and treat it as if that button was clicked on
                 int buttonIndex = UnityEngine.Random.Range(0,levelButtons.Length);
@@ -512,10 +516,11 @@ public class LevelSelectScript : BaseBehaviour
 
             case "random existing deck":
                 //chooses a deck at random from the player and behave as if that button was clicked on
-                IEnumerable<XMLDeck> deckOptions = DeckManagerScript.instance.playerDecks.decks.Where(xd => xd.isModded() == false); //choose from un-modded player decks...
-                deckOptions.Concat( DeckManagerScript.instance.premadeDecks.decks ); //and all premade decks
-                int deckIndex = UnityEngine.Random.Range(0, deckOptions.Count());
-                DeckSelected(deckOptions.ElementAt(deckIndex));
+                List<XMLDeck> deckOptions = DeckManagerScript.instance.playerDecks.decks.Where(xd => xd.isModded() == false) //choose from un-modded player decks...
+                              .Concat( DeckManagerScript.instance.premadeDecks.decks ).                                      //and all premade decks
+                              ToList();                                                                                      //and save it as a list
+
+                DeckSelected(deckOptions[UnityEngine.Random.Range(0, deckOptions.Count)]); //select one of them
                 break;
 
             case "create random deck":

@@ -417,6 +417,10 @@ public class LevelManagerScript : BaseBehaviour
                     if (e.triggersAs(EffectType.everyRound))
                         ((IEffectInstant)e).trigger();
         }
+
+        //catch a rare timing error that can result in the game starting paused
+        if (Time.timeScale == 0.0f)
+            Time.timeScale = 1.0f;
     }
 
     /// <summary>

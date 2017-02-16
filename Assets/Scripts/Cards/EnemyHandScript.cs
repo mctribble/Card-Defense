@@ -87,6 +87,13 @@ public class EnemyHandScript : HandScript
     /// </summary>
     public void drawCard(WaveData wave)
     {
+        //skip if the hand is at capacity
+        if (currentHandSize >= maximumHandSize)
+        {
+            Debug.Log("Cannot draw enemy wave: hand is full.");
+            return;
+        }
+
         //instantiate card prefab
         CardScript newCard;
         newCard = Instantiate(enemyCardPrefab).GetComponent<CardScript>();

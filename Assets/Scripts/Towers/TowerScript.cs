@@ -528,7 +528,9 @@ public class TowerScript : BaseBehaviour
             //trigger instant effects, instead of adding them
             if (newEffect.triggersAs(EffectType.instant))
             {
-                ((IEffectInstant)newEffect).trigger();
+                if (LevelManagerScript.instance.levelLoaded) //skip them while the level is being loaded so we dont trigger card draws, etc.
+                    ((IEffectInstant)newEffect).trigger();
+
                 continue;
             }
 
