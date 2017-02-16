@@ -488,11 +488,7 @@ public class EffectScaleEffectWithTowerAttack : BaseEffectMeta, IEffectSourceTra
         get { return base.effectSource; }
         set
         {
-            if (value == null)
-            {
-                Debug.LogWarning("EffectScaleEffectWithTowerAttack: source is null!");
-            }
-            else
+            if (value != null) //effectSource can be set to null if the effect is not yet on a tower.  If this happens, just ignore it
             {
                 if (effectBaseStrength == null)
                     effectBaseStrength = innerEffect.strength;
