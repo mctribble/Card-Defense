@@ -488,10 +488,17 @@ public class EffectScaleEffectWithTowerAttack : BaseEffectMeta, IEffectSourceTra
         get { return base.effectSource; }
         set
         {
-            if (effectBaseStrength == null)
-                effectBaseStrength = innerEffect.strength;
+            if (innerEffect == null)
+            {
+                Debug.LogWarning("EffectScaleEffectWithTowerAttack: no inner effect!");
+            }
+            else
+            {
+                if (effectBaseStrength == null)
+                    effectBaseStrength = innerEffect.strength;
 
-            innerEffect.strength = effectBaseStrength.Value * value.attackPower;
+                innerEffect.strength = effectBaseStrength.Value * value.attackPower;
+            }
 
             base.effectSource = value;
         }
@@ -598,7 +605,8 @@ public class EffectScaleEffectWithBudget : BaseEffectMeta
     {
         if (alreadyScaled)
         {
-            Debug.LogWarning("ScaleEffectWithBudget triggered repeatedly!");
+            Debug.LogWarning("ScaleEffectWithBudget triggered repeatedly!  Ignoring extra call.");
+            return currentWaveData;
         }
 
         float scaleRatio = (float)currentWaveData.budget / (float)currentWaveData.enemyData.baseSpawnCost; //ratio we are scaling by

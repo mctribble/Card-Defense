@@ -67,43 +67,47 @@ public class BurstShotScript : BaseBehaviour
 
             transform.localScale = new Vector3(curScale, curScale, 1);
 
-            float lookAheadDist = (Mathf.Max(lookAhead, Time.deltaTime) * speed) + curScale; //expand the ring to include where we expect to be in lookAhead seconds, or in Time.deltaTime seconds, whichever is larger
-            lookAheadDist = Mathf.Min(lookAheadDist, maxScale); //don't look further ahead than we will actually travel
-
-            //find any enemies we are about to hit that dont already know its coming, and warn them
-            List<EnemyScript> enemiesToWarn = EnemyManagerScript.instance.activeEnemies                                                                      //enemies that are still active
-                                              .Except(alreadyHit)                                                                                            //and we have not already hit
-                                              .Where(e => expectedToHit.Exists(ded => ded.dest == e) == false)                                               //and we have not already warned
-                                              .Where(e => Vector2.Distance(e.transform.position, transform.position) < lookAheadDist).ToList<EnemyScript>(); //and are within the lookahead distance
-
-            foreach (EnemyScript enemy in enemiesToWarn)
+            //lighten the performance load by only testing attack logic every other frame
+            if (Time.frameCount % 2 == 0)
             {
-                //then create a damage event for that enemy and use it to warn them about the incoming damage
-                DamageEventData ded = new DamageEventData();
-                ded.source = baseDamageEvent.source;
-                ded.dest = enemy;
-                ded.rawDamage = baseDamageEvent.rawDamage;
-                ded.effects = baseDamageEvent.effects;
+                float lookAheadDist = (Mathf.Max(lookAhead, Time.deltaTime) * speed) + curScale; //expand the ring to include where we expect to be in lookAhead seconds, or in Time.deltaTime seconds, whichever is larger
+                lookAheadDist = Mathf.Min(lookAheadDist, maxScale); //don't look further ahead than we will actually travel
 
-                //trigger effects
-                if (ded.effects != null)
-                    foreach (IEffect i in ded.effects.effects)
-                        if (i.triggersAs(EffectType.enemyDamaged))
-                            ((IEffectEnemyDamaged)i).expectedDamage(ref ded);
+                //find any enemies we are about to hit that dont already know its coming, and warn them
+                List<EnemyScript> enemiesToWarn = EnemyManagerScript.instance.activeEnemies                                               //enemies that are still active
+                                              .Where(e => Vector2.Distance(e.transform.position, transform.position) < lookAheadDist) //and are within the lookahead distance
+                                              .Except(alreadyHit)                                                                     //and we have not already hit
+                                              .Where(e => expectedToHit.Exists(ded => ded.dest == e) == false).ToList<EnemyScript>(); //and we have not already warned
 
-                enemy.onExpectedDamage(ref ded);
-                expectedToHit.Add(ded);
+                foreach (EnemyScript enemy in enemiesToWarn)
+                {
+                    //then create a damage event for that enemy and use it to warn them about the incoming damage
+                    DamageEventData ded = new DamageEventData();
+                    ded.source = baseDamageEvent.source;
+                    ded.dest = enemy;
+                    ded.rawDamage = baseDamageEvent.rawDamage;
+                    ded.effects = baseDamageEvent.effects;
+
+                    //trigger effects
+                    if (ded.effects != null)
+                        foreach (IEffect i in ded.effects.effects)
+                            if (i.triggersAs(EffectType.enemyDamaged))
+                                ((IEffectEnemyDamaged)i).expectedDamage(ref ded);
+
+                    enemy.onExpectedDamage(ref ded);
+                    expectedToHit.Add(ded);
+                }
+
+                //figure out which enemies we need to attack this frame and attack them
+                //we use removeAll() and a helper function instead of looping here for performance reasons.  
+                //Short explanation: removeAll() can modify in-place while the work happens, so there is a lot less looping that has to happen
+                //Long explanation: see http://stackoverflow.com/questions/32351499/how-is-it-possible-that-removeall-in-linq-is-much-faster-than-iteration
+                expectedToHit.RemoveAll(ded => hitIfInRange(ded)); //for each enemy we've already warned
+
+                //if we are at max scale, we are done.  
+                if (curScale == maxScale)
+                    StartCoroutine(onDone());
             }
-
-            //figure out which enemies we need to attack this frame and attack them
-            //we use removeAll() and a helper function instead of looping here for performance reasons.  
-            //Short explanation: removeAll() can modify in-place while the work happens, so there is a lot less looping that has to happen
-            //Long explanation: see http://stackoverflow.com/questions/32351499/how-is-it-possible-that-removeall-in-linq-is-much-faster-than-iteration
-            expectedToHit.RemoveAll(ded => hitIfInRange(ded)); //for each enemy we've already warned
-            
-            //if we are at max scale, we are done.  
-            if (curScale == maxScale)
-                StartCoroutine(onDone());
         }
     }
 
