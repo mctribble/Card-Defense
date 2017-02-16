@@ -9,6 +9,7 @@ public class EnemyHandScript : HandScript
 {
     public Image       deckImage;        //image that serves as the spawn point for new cards
     public GameObject  enemyCardPrefab;  //prefab used to spawn a new enemy card
+    public GameObject  combatTextPrefab; //prefab used to spawn floating combat text
 
     [Hide] public static EnemyHandScript instance; //singleton instance
 
@@ -31,7 +32,7 @@ public class EnemyHandScript : HandScript
     /// <param name="flipOver">flipOver: card should flip over AFTER moving</param>
     /// <param name="turnToIdentity">turnToIdentity: card should straighten itself while moving</param>
     /// <param name="scaleToIdentity">scaleToIdentity: card should scale itself to (1,1,1) while moving</param>
-    /// <param name="drawSurvivorWave">drawSurvivorWave: (enemy hands only) sets up the new card with a survivor wave instead of a wave from the deck</param>
+    /// <param name="drawSurvivorWave">drawSurvivorWave: sets up the new card with a survivor wave instead of a wave from the deck</param>
     /// <param name="cardToDraw">if this is not null, then the given PlayerCard is drawn instead of fetching one from the deck.  This parameter is ignored in enemy hands since they draw WaveData's instead.</param>
     /// <param name="ignoreHandCap">if this is true, the hand can draw even if it is full</param>
     public void drawCard(bool flipOver = true, bool turnToIdentity = true, bool scaleToIdentity = true, bool drawSurvivorWave = false, bool ignoreHandCap = false)
@@ -39,7 +40,7 @@ public class EnemyHandScript : HandScript
         //bail if reached max
         if ((currentHandSize == maximumHandSize) && (ignoreHandCap == false))
         {
-            Debug.Log("Can't draw: hand is full.");
+            showFloatingText("Can't draw: hand is full.");
             return;
         }
 
@@ -50,7 +51,7 @@ public class EnemyHandScript : HandScript
             {
                 if (LevelManagerScript.instance.endurance == false) //it is also fine in endurance
                 {
-                    Debug.Log("Can't draw: enemy deck empty.");
+                    showFloatingText("Can't draw: enemy deck empty.");
                     return;
                 }
             }
@@ -90,7 +91,7 @@ public class EnemyHandScript : HandScript
         //skip if the hand is at capacity
         if (currentHandSize >= maximumHandSize)
         {
-            Debug.Log("Cannot draw enemy wave: hand is full.");
+            showFloatingText("Cannot draw enemy wave: hand is full.");
             return;
         }
 
@@ -189,7 +190,7 @@ public class EnemyHandScript : HandScript
     }
 
     /// <summary>
-    /// (enemy hands only) returns a list of all WaveData objects associated with cards in the hand
+    /// returns a list of all WaveData objects associated with cards in the hand
     /// </summary>
     public List<WaveData> IncomingWaves
     {
@@ -204,7 +205,7 @@ public class EnemyHandScript : HandScript
     }
 
     /// <summary>
-    /// (enemy hands only) returns total spawn count of all waves in the hand
+    /// returns total spawn count of all waves in the hand
     /// </summary>
     public int spawnCount
     {
@@ -218,7 +219,7 @@ public class EnemyHandScript : HandScript
     }
 
     /// <summary>
-    /// (enemy hands only) returns total remaining health of all waves in the hand
+    /// returns total remaining health of all waves in the hand
     /// </summary>
     public int totalRemainingHealth
     {
@@ -237,7 +238,7 @@ public class EnemyHandScript : HandScript
     }
 
     /// <summary>
-    /// (enemy hands only) returns longest spawn time among all cards in the hand
+    /// returns longest spawn time among all cards in the hand
     /// </summary>
     public float longestTime
     {
@@ -251,7 +252,7 @@ public class EnemyHandScript : HandScript
     }
 
     /// <summary>
-    /// (enemy hands only) discards the card associated with the given wave
+    /// discards the card associated with the given wave
     /// </summary>
     public void discardWave(WaveData toDiscard)
     {
@@ -264,6 +265,21 @@ public class EnemyHandScript : HandScript
 
         //and discard it
         card.SendMessage("Discard");
+    }
+
+    /// <summary>
+    /// Spawns a FloatingCombatText object to show the given message to the player
+    /// </summary>
+    /// <param name="message"></param>
+    private void showFloatingText(string message)
+    {
+        Vector2 screenPos = transform.position + new Vector3(0, -50, 0); //screen space of where we want the text to spawn (just below the hand)
+        Vector2 worldPos  = Camera.main.ScreenToWorldPoint(screenPos);    //convert to world space for instantiation
+
+        FloatingCombatTextScript fct = Instantiate(combatTextPrefab, worldPos, Quaternion.identity).GetComponent<FloatingCombatTextScript>(); //create text object
+        fct.transform.SetParent(PathManagerScript.instance.transform.parent, true);                            //put the object on the world canvas
+        
+        fct.errorText(message, Vector2.down); //and float downward
     }
 
     public void updateEnemyCards()             { foreach (CardScript c in cards) if (c != null) c.SendMessage("updateWaveStats"); }    //instructs all cards in the hand to refresh themselves

@@ -7,9 +7,10 @@ using Vexe.Runtime.Types;
 
 public class PlayerHandScript : HandScript
 {
-    public Image       deckImage;        //image that serves as the spawn point for new cards
-    public GameObject  playerCardPrefab; //prefab used to spawn a new player card
-    public GameObject  previewCardPrefab;//prefab used to spawn a new card preview
+    public Image       deckImage;         //image that serves as the spawn point for new cards
+    public GameObject  playerCardPrefab;  //prefab used to spawn a new player card
+    public GameObject  previewCardPrefab; //prefab used to spawn a new card preview
+    public GameObject  combatTextPrefab;  //prefab used to spawn floating text
 
     [Hide] public static PlayerHandScript instance; //singleton reference
 
@@ -80,14 +81,14 @@ public class PlayerHandScript : HandScript
         //bail if reached max
         if ((currentHandSize == maximumHandSize) && (ignoreHandCap == false))
         {
-            Debug.Log("Can't draw: hand is full.");
+            showFloatingText("Can't draw: hand is full.");
             return;
         }
 
         //bail if the relevant deck out of cards
         if (DeckManagerScript.instance.cardsLeft == 0)
         {
-            Debug.Log("Can't draw: out of cards.");
+            showFloatingText("Can't draw: out of cards.");
             return;
         }
 
@@ -292,6 +293,21 @@ public class PlayerHandScript : HandScript
         Show();
 
         yield break;
+    }
+
+    /// <summary>
+    /// Spawns a FloatingCombatText object to show the given message to the player
+    /// </summary>
+    /// <param name="message"></param>
+    private void showFloatingText(string message)
+    {
+        Vector2 screenPos = transform.position + new Vector3(0, 100, 0); //screen space of where we want the text to spawn (just above the hand)
+        Vector2 worldPos  = Camera.main.ScreenToWorldPoint(screenPos);  //convert to world space for instantiation
+
+        FloatingCombatTextScript fct = Instantiate(combatTextPrefab, worldPos, Quaternion.identity).GetComponent<FloatingCombatTextScript>(); //create text object
+        fct.transform.SetParent(PathManagerScript.instance.transform.parent, true);                                                           //put the object on the world canvas
+
+        fct.errorText(message, Vector2.up); //and float upward
     }
 
     //[DEV] creates buttons in the inspector to manipulate the hand

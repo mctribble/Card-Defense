@@ -24,10 +24,17 @@ public class FloatingCombatTextScript : BaseBehaviour
     public Vector2 damageVelocity;
     public Color   damageColor;
     public float   damageTimeToLive;
+    public float   damageScale;
 
-    //current settings
-    [Show] private Vector3 velocity;
-    [Show] private float   timeToLive;
+    //setting presets for error messages
+    public float errorSpeed;
+    public Color errorColor;
+    public float errorTimeToLive;
+    public float errorScale;
+
+    //current status
+    private Vector3 velocity;
+    private float   timeToLive;
 
     //defaults
     private void Awake()
@@ -41,6 +48,7 @@ public class FloatingCombatTextScript : BaseBehaviour
     /// <summary>
     /// sets up the text as a damage indicator with the given message
     /// </summary>
+    /// <param name="message">message to show</param>
     public void damageText(string message)
     {
         text.text  = message;
@@ -49,8 +57,24 @@ public class FloatingCombatTextScript : BaseBehaviour
         timeToLive = damageTimeToLive;
 
         transform.position = transform.position + (spawnPositionVariance * Random.Range(-1.0f, 1.0f));
+        transform.localScale *= damageScale;
     }
 
+    /// <summary>
+    /// sets up the text to show an error message to the player, travelling in the specified direction
+    /// </summary>
+    /// <param name="message">message to show</param>
+    /// <param name="direction">direction for the message to move.  Should be normalized unless you want the message to travel faster/slower than usual</param>
+    public void errorText(string message, Vector2 direction)
+    {
+        text.text  = message;
+        text.color = errorColor;
+        velocity   = direction * errorSpeed;
+        timeToLive = errorTimeToLive;
+
+        transform.position = transform.position + (spawnPositionVariance * Random.Range(-1.0f, 1.0f));
+        transform.localScale *= errorScale;
+    }
 
 	// Update is called once per frame
 	private void Update ()
