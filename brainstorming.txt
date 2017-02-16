@@ -5,7 +5,6 @@ known issues:
 -conjuration seems to mess with the deck charges gauge and lock it at full
 -drawn enemies sometimes dont flip over until moused over
 -tooltips near side of screen "blinking" side to side
--many effects saying '1 cards' or similar 
 -scaleEffectWithTowerAttack does not scale inner effect until tower attacks, causing inaccurate tooltips
 ================================================================
 art needed for:

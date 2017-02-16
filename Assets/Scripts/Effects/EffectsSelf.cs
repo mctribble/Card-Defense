@@ -89,7 +89,7 @@ public class EffectDiscardChosen : BaseEffectSelf
 //discards x random cards from the hand in addition to this one.  They return to the bottom of the deck without damage
 public class EffectDiscardRandom : BaseEffectSelf
 {
-    [Hide] public override string Name { get { return "Discard " + strength + " random cards"; } } //returns name and strength
+    [Hide] public override string Name { get { return "Discard " + strength + " random card" + ((strength == 1.0f) ? "": "s") ; } } //returns name and strength
     [Show] public override string XMLName { get { return "discardRandomCard"; } } //name used to refer to this effect in XML
 
     public override void trigger(ref PlayerCard card, GameObject card_gameObject)

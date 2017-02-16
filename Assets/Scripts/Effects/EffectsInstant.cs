@@ -19,7 +19,7 @@ public abstract class BaseEffectInstant : BaseEffect, IEffectInstant
 //player conjures X cards, which are chosen randomly from all available un-modded cards and added directly to the hand as tokens
 public class EffectConjureCard : BaseEffectInstant
 {
-    [Hide] public override string Name { get { return "Conjure up to " + strength + " cards"; } } 
+    [Hide] public override string Name { get { return "Conjure up to " + strength + " card" + ((strength == 1.0f) ? "": "s") ; } } 
     [Show] public override string XMLName { get { return "conjureCard"; } }
 
     public override void trigger()
@@ -50,7 +50,7 @@ public class EffectConjureCard : BaseEffectInstant
 //enemy conjures X cards, which are new waves with the same budget as the highest budget wave already in the hand
 public class EffectConjureEnemyCard : BaseEffectInstant
 {
-    [Hide] public override string Name { get { return "Enemy conjures " + strength + " cards"; } } 
+    [Hide] public override string Name { get { return "Enemy conjures " + strength + " card" + ((strength == 1.0f) ? "": "s") ; } } 
     [Show] public override string XMLName { get { return "conjureEnemyCard"; } }
 
     public override void trigger() { EnemyHandScript.instance.StartCoroutine(triggerCoroutine()); }
@@ -119,7 +119,7 @@ public class EffectConjureSpecificCard : BaseEffectInstant
 //player conjures X spells, which are chosen randomly from all available un-modded spells and added directly to the hand as tokens
 public class EffectConjureSpellCard : BaseEffectInstant
 {
-    [Hide] public override string Name { get { return "Conjure up to " + strength + " spell cards"; } } 
+    [Hide] public override string Name { get { return "Conjure up to " + strength + " spell card" + ((strength == 1.0f) ? "": "s") ; } } 
     [Show] public override string XMLName { get { return "conjureSpellCard"; } }
 
     public override void trigger()
@@ -150,7 +150,7 @@ public class EffectConjureSpellCard : BaseEffectInstant
 //player conjures X towers, which are chosen randomly from all available un-modded towers and added directly to the hand as tokens
 public class EffectConjureTowerCard : BaseEffectInstant
 {
-    [Hide] public override string Name { get { return "Conjure up to " + strength + " tower cards"; } } 
+    [Hide] public override string Name { get { return "Conjure up to " + strength + " tower card" + ((strength == 1.0f) ? "": "s") ; } } 
     [Show] public override string XMLName { get { return "conjureTowerCard"; } }
 
     public override void trigger()
@@ -181,7 +181,7 @@ public class EffectConjureTowerCard : BaseEffectInstant
 //player conjures X upgradess, which are chosen randomly from all available un-modded upgrades and added directly to the hand as tokens
 public class EffectConjureUpgradeCard : BaseEffectInstant
 {
-    [Hide] public override string Name { get { return "Conjure up to " + strength + " spell cards"; } }
+    [Hide] public override string Name { get { return "Conjure up to " + strength + " spell card" + ((strength == 1.0f) ? "": "s") ; } }
     [Show] public override string XMLName { get { return "conjureUpgradeCard"; } }
 
     public override void trigger()
@@ -212,7 +212,7 @@ public class EffectConjureUpgradeCard : BaseEffectInstant
 //draws x cards
 public class EffectDrawCard : BaseEffectInstant
 {
-    [Hide] public override string Name { get { return "Draw " + strength + " cards"; } } //returns name and strength
+    [Hide] public override string Name { get { return "Draw " + strength + " card" + ((strength == 1.0f) ? "": "s") ; } } //returns name and strength
     [Show] public override string XMLName { get { return "drawCard"; } } //name used to refer to this effect in XML
 
     public override void trigger() { PlayerHandScript.instance.StartCoroutine(PlayerHandScript.instance.drawCards( Mathf.FloorToInt(strength) ) ); }
@@ -221,7 +221,7 @@ public class EffectDrawCard : BaseEffectInstant
 //draws x enemy cards
 public class EffectDrawEnemyCard : BaseEffectInstant
 {
-    [Hide] public override string Name { get { return "Draw " + strength + " enemy cards"; } } //returns name and strength
+    [Hide] public override string Name { get { return "Draw " + strength + " enemy card" + ((strength == 1.0f) ? "": "s") ; } } //returns name and strength
     [Show] public override string XMLName { get { return "drawEnemyCard"; } } //name used to refer to this effect in XML
 
     public override void trigger() { EnemyHandScript.instance.StartCoroutine(EnemyHandScript.instance.drawCards( Mathf.FloorToInt(strength) ) ); }
@@ -230,7 +230,7 @@ public class EffectDrawEnemyCard : BaseEffectInstant
 //player draws X spells from their deck.  if there are not enough, "Improvised Spell" tokens are created instead.
 public class EffectDrawSpellCard : BaseEffectInstant
 {
-    [Hide] public override string Name { get { return "Draw " + strength + " spell cards"; } } //returns name and strength
+    [Hide] public override string Name { get { return "Draw " + strength + " spell card" + ((strength == 1.0f) ? "": "s") ; } } //returns name and strength
     [Show] public override string XMLName { get { return "drawSpellCard"; } } //name used to refer to this effect in XML
 
     public override void trigger()
@@ -269,7 +269,7 @@ public class EffectDrawSpellCard : BaseEffectInstant
 //player draws X towers from their deck.  if there are not enough, "Improvised Tower" tokens are created instead.
 public class EffectDrawTowerCard : BaseEffectInstant
 {
-    [Hide] public override string Name { get { return "Draw " + strength + " tower cards"; } } //returns name and strength
+    [Hide] public override string Name { get { return "Draw " + strength + " tower card" + ((strength == 1.0f) ? "": "s") ; } } //returns name and strength
     [Show] public override string XMLName { get { return "drawTowerCard"; } } //name used to refer to this effect in XML
 
     public override void trigger()
@@ -308,7 +308,7 @@ public class EffectDrawTowerCard : BaseEffectInstant
 //player draws X Upgrades from their deck.  if there are not enough, "Improvised Upgrade" tokens are created instead.
 public class EffectDrawUpgradeCard : BaseEffectInstant
 {
-    [Hide] public override string Name { get { return "Draw " + strength + " upgrade cards"; } } //returns name and strength
+    [Hide] public override string Name { get { return "Draw " + strength + " upgrade card" + ((strength == 1.0f) ? "": "s") ; } } //returns name and strength
     [Show] public override string XMLName { get { return "drawUpgradeCard"; } } //name used to refer to this effect in XML
 
     public override void trigger()

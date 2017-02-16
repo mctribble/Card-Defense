@@ -117,7 +117,7 @@ public class XMLDeck
     //returns total card count in this deck
     public int cardCount { get { return contents.Sum(x => x.count); } }
 
-    public override string ToString() { return name + "(" + cardCount + " cards"; }
+    public override string ToString() { return name + "(" + cardCount + " card" + ((cardCount == 1.0f) ? "": "s") ; }
 
     /// <summary>
     /// Sorts the contents of this XMLDeck by name
