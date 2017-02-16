@@ -488,9 +488,9 @@ public class EffectScaleEffectWithTowerAttack : BaseEffectMeta, IEffectSourceTra
         get { return base.effectSource; }
         set
         {
-            if (innerEffect == null)
+            if (value == null)
             {
-                Debug.LogWarning("EffectScaleEffectWithTowerAttack: no inner effect!");
+                Debug.LogWarning("EffectScaleEffectWithTowerAttack: source is null!");
             }
             else
             {

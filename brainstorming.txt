@@ -6,7 +6,7 @@ known issues:
 -drawn enemies sometimes dont flip over until moused over
 -tooltips near side of screen "blinking" side to side
 -hefty performance cost for BurstShotScript.update()
--scaling effects getting triggered twice? (seen on spiral mountain with conjuration deck, cant reproduce)
+-unidentified nullRef in scaleEffectWithTowerAttack
 ================================================================
 art needed for:
 

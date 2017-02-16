@@ -141,7 +141,14 @@ public class EffectScaleHealthWithBudget : BaseEffectWave
     {
         WaveData newData = currentWaveData;
         float scaleRatio = (float)newData.budget / (float)newData.enemyData.baseSpawnCost;                 //ratio we are scaling by
-        float scaleFactor = ((scaleRatio -1) * strength) + 1;                                              //factor to use for scaling
+
+        //factor to use for scaling
+        float scaleFactor;
+        if (scaleRatio < 1)
+            scaleFactor = scaleRatio;
+        else
+            scaleFactor = ((scaleRatio -1) * strength) + 1;                                              
+
         newData.enemyData.baseMaxHealth = Mathf.RoundToInt(scaleFactor * newData.enemyData.baseMaxHealth); //scale
         return newData;
     }
