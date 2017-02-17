@@ -733,11 +733,8 @@
         <Effects>
           <Effect name="conjureEnemyCard" strength="10" />
           <Effect name="budgetPercentageChange" strength="100" />
-          <Effect name="customDescription" argument="All towers get Crippling, Piercing, and Poison ammo">
+          <Effect name="customDescription" argument="All towers get Crippling, and Poison ammo">
             <Effect name="upgradeAllTowers" argument="Crippling Ammo" />
-          </Effect>
-          <Effect name="customDescription">
-            <Effect name="upgradeAllTowers" argument="Piercing Ammo" />
           </Effect>
           <Effect name="customDescription">
             <Effect name="upgradeAllTowers" argument="Poison Ammo" />
