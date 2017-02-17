@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -6,8 +7,25 @@ using System.Xml.Serialization;
 using UnityEngine;
 using Vexe.Runtime.Types;
 
-//All effects in the game must implement one of these interfaces.
-//However, they should not use IEffect directly, but instead a derivative such as IEffectInstant or IEffectWave
+//this file contains code to manage the effect system, such as the EffectData class and the various interfaces for different types of effects
+
+/// <summary>
+/// contexts an effect can appear in.  used as a paramter to ForbidEffectContext
+/// </summary>
+public enum EffectContext { card, tower, enemyType, enemyUnit } 
+
+/// <summary>
+/// forbids this effect fom appearing in the given context (ex: [ForbidEffectContext(EffectContext.Tower)] prevents the effect from being copied onto towers)
+/// </summary>
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
+public class ForbidEffectContext : System.Attribute
+{
+    private EffectContext context; //context forbidden by this attribute
+
+    public ForbidEffectContext(EffectContext contextToForbid) { context = contextToForbid; } //constructor
+     
+    public EffectContext forbiddenContext { get { return context; } } //accessor
+}
 
 /// <summary>
 /// The targeting type determines how an effect must be targeted when placed on a card

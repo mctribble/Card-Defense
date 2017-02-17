@@ -518,21 +518,18 @@ public class TowerScript : BaseBehaviour
         //for each effect to add
         foreach (IEffect newEffect in newEffectData.effects)
         {
-            //apply upgrade effects, instead of adding them
+            //apply upgrade effects
             if (newEffect.triggersAs(EffectType.upgrade))
-            {
                 ((IEffectUpgrade)newEffect).upgradeTower(this);
-                continue;
-            }
 
-            //trigger instant effects, instead of adding them
+            //trigger instant effects
             if (newEffect.triggersAs(EffectType.instant))
-            {
                 if (LevelManagerScript.instance.levelLoaded) //skip them while the level is being loaded so we dont trigger card draws, etc.
                     ((IEffectInstant)newEffect).trigger();
 
+            //do not copy effects that are forbidden on towers
+            if (newEffect.forbiddenInContext(EffectContext.tower))
                 continue;
-            }
 
             //tell it about the source, if it wants to know
             if (newEffect.triggersAs(EffectType.sourceTracked))

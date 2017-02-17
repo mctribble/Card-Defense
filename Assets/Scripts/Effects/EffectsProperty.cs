@@ -64,6 +64,7 @@ class EffectManualFire : BaseEffectProperty
 }
 
 //upgrade does not cost an upgrade slot
+[ForbidEffectContext(EffectContext.tower)]
 class EffectNoUpgradeCost : BaseEffectProperty
 {
     [Hide] public override string Name { get { return "Does not cost an upgrade slot."; } } //returns name and strength

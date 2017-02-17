@@ -36,4 +36,18 @@ public static class ExtensionMethods
         Debug.LogWarning("something went wrong in extension function ToRoman().");
         return "???";
     }
+
+    public static bool forbiddenInContext(this IEffect effect, EffectContext context)
+    {
+        //skip if it has [ForbidEffectContext(EffectContext.tower)]
+        foreach (System.Object attribute in effect.GetType().GetCustomAttributes(true))
+        {
+            ForbidEffectContext fec = (ForbidEffectContext)attribute;
+            if (fec != null)
+                if (fec.forbiddenContext == EffectContext.tower)
+                    return true;
+        }
+
+        return false;
+    }
 }
