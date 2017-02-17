@@ -5,7 +5,7 @@ known issues:
 -drawn cards sometimes take longer to flip over than they should
 -tooltips near side of screen "blinking" side to side
 -hefty performance cost for BurstShotScript.update()
--noUpgradeCost copies onto towers
+-ForbidEffectContext not yet recognized for any context other than 'tower'
 ================================================================
 art needed for:
 

@@ -481,6 +481,9 @@ public class TowerScript : BaseBehaviour
     {
         effects = d.clone();
 
+        //remove any effects that are not allowed on towers and throw warnings
+        effects.removeForbiddenEffects(EffectContext.tower, true);
+
         updateLifespanText();
 
         //max tower charge is 1.0 unless an effect overrides it

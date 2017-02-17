@@ -242,7 +242,7 @@ public class EffectData : System.Object
 
     //cached values for utility functions
     //the '?' on some of these is shorthand for Nullable<T> (https://msdn.microsoft.com/en-us/library/1t3y8s4s.aspx)
-    [XmlIgnore] private TargetingType?              cachedCardTargetingType; 
+    [XmlIgnore] private TargetingType?              cachedCardTargetingType;
     [XmlIgnore] private List<IEffectTowerTargeting> cachedTowerTargetingList;
     [XmlIgnore] private List<IEffectPeriodic>       cachedPeriodicEffectList;
     [XmlIgnore] private PropertyEffects?            cachedPropertyEffects;
@@ -250,7 +250,7 @@ public class EffectData : System.Object
     /// <summary>
     /// read only list of effect objects
     /// </summary>
-    [XmlIgnore][Show] private List<IEffect> Effects = new List<IEffect>(); 
+    [XmlIgnore][Show] private List<IEffect> Effects = new List<IEffect>();
     [XmlIgnore]
     public ReadOnlyCollection<IEffect> effects
     {
@@ -282,6 +282,30 @@ public class EffectData : System.Object
 
             //reset the caches
             resetCachedValues();
+        }
+    }
+
+    /// <summary>
+    /// removes all effects that are forbidden in the given context., optionally throwing warnings in the process
+    /// </summary>
+    /// <param name="forbiddenContext">context to forbid</param>
+    /// <param name="throwWarnings">whether or not to throw a warning for each effect removed</param>
+    public void removeForbiddenEffects(EffectContext forbiddenContext, bool throwWarnings)
+    {
+        if (throwWarnings)
+        {
+            //we have to do this the long way to throw warnings
+            List<IEffect> toRemove = Effects.Where(ie => ie.forbiddenInContext(forbiddenContext)).ToList();
+            foreach(IEffect ie in toRemove)
+            {
+                Effects.Remove(ie);
+                Debug.LogWarning("Effect " + ie.XMLName + " is forbidden in this context (" + forbiddenContext + "), and was removed!");
+            }
+        }
+        else
+        {
+            //if we dont need warnings, we can finish faster by only looping once
+            Effects.RemoveAll(ie => ie.forbiddenInContext(forbiddenContext));
         }
     }
 
