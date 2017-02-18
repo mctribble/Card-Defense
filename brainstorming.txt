@@ -15,6 +15,9 @@ update art for:
 maybe update enemy goal points?
 maybe indicate path direction?
 ================================================================
+gameplay:
+tutorial level on enemy types?
+================================================================
 art needs updating for:
 ================================================================
 other presenation/art:
