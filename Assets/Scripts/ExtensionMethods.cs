@@ -44,7 +44,7 @@ public static class ExtensionMethods
         {
             ForbidEffectContext fec = (ForbidEffectContext)attribute;
             if (fec != null)
-                if (fec.forbiddenContext == EffectContext.tower)
+                if (fec.forbiddenContext == context)
                     return true;
         }
 

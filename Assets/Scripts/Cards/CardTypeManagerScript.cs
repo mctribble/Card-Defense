@@ -118,10 +118,16 @@ public class CardTypeManagerScript : BaseBehaviour
     /// </summary>
     private IEnumerator loadCardTypes()
     {
+        //delegate to load the types differently based on platform
         if (Application.platform == RuntimePlatform.WebGLPlayer)
             yield return StartCoroutine(loadCardTypesWeb());
         else
             yield return StartCoroutine(loadCardTypesPC());
+
+        //remove effects that cannot be in this context and throw warnings about them
+        foreach (PlayerCardData pcd in types.cardTypes)
+            if (pcd.effectData != null)
+                pcd.effectData.removeForbiddenEffects(EffectContext.playerCard, true);
     }
 
     /// <summary>

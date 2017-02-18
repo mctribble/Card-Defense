@@ -12,7 +12,7 @@ using Vexe.Runtime.Types;
 /// <summary>
 /// contexts an effect can appear in.  used as a paramter to ForbidEffectContext
 /// </summary>
-public enum EffectContext { card, tower, enemyType, enemyUnit } 
+public enum EffectContext { playerCard, tower, enemyCard, enemyUnit } 
 
 /// <summary>
 /// forbids this effect fom appearing in the given context (ex: [ForbidEffectContext(EffectContext.Tower)] prevents the effect from being copied onto towers)
@@ -292,6 +292,10 @@ public class EffectData : System.Object
     /// <param name="throwWarnings">whether or not to throw a warning for each effect removed</param>
     public void removeForbiddenEffects(EffectContext forbiddenContext, bool throwWarnings)
     {
+        //make sure the effects are parsed before testing
+        if (Effects.Count == 0 && XMLEffects.Count > 0)
+            parseEffects();
+
         if (throwWarnings)
         {
             //we have to do this the long way to throw warnings
