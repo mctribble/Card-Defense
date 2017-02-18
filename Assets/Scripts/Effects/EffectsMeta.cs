@@ -338,6 +338,8 @@ public class EffectEveryRound : BaseEffectMeta
 }
 
 //target instant effect triggers when the enemy is spawned (using IEffectInstant)
+[ForbidEffectContext(EffectContext.tower)]
+[ForbidEffectContext(EffectContext.playerCard)]
 public class EffectOnSpawned : BaseEffectMeta
 {
     public override string Name { get { return "[on spawn]" + innerEffect.Name; } }
@@ -368,6 +370,8 @@ public class EffectOnSpawned : BaseEffectMeta
 }
 
 //target enemy effect scales up as the enemy takes damage.  Increases proportionally if x = 1.Higher / lower values cause it to increase faster/slower, respectively.
+[ForbidEffectContext(EffectContext.playerCard)]
+[ForbidEffectContext(EffectContext.tower)]
 public class EffectScaleEffectWithDamage : BaseEffectMeta
 {
     public override string Name { get { return "[scales up as it takes damage]" + innerEffect.Name; } } //returns name and strength
@@ -409,6 +413,8 @@ public class EffectScaleEffectWithDamage : BaseEffectMeta
 }
 
 //target enemy effect weakens as it takes damage.  Decreases proportionally if x = 1.  Higher/lower values cause it to decrease faster/slower, respectively.
+[ForbidEffectContext(EffectContext.playerCard)]
+[ForbidEffectContext(EffectContext.tower)]
 public class EffectinvScaleEffectWithDamage : BaseEffectMeta
 {
     public override string Name { get { return "[scales down as it takes damage]" + innerEffect.Name; } } //returns name and strength
@@ -453,6 +459,8 @@ public class EffectinvScaleEffectWithDamage : BaseEffectMeta
 }
 
 //on towers, multiplies effect strength by attack power of the tower.  Use this to create effects whose strength vary with the strength of the tower, like the poison on "Poison Ammo".
+[ForbidEffectContext(EffectContext.enemyCard)]
+[ForbidEffectContext(EffectContext.enemyUnit)]
 public class EffectScaleEffectWithTowerAttack : BaseEffectMeta, IEffectSourceTracked
 {
     public override string Name { get { return "[scales with tower attack]" + innerEffect.Name; } } //returns name and strength
@@ -515,6 +523,8 @@ public class EffectScaleEffectWithTowerAttack : BaseEffectMeta, IEffectSourceTra
 }
 
 //target enemy effect gets stronger by X/s
+[ForbidEffectContext(EffectContext.playerCard)]
+[ForbidEffectContext(EffectContext.tower)]
 public class EffectScaleEffectWithTime : BaseEffectMeta
 {
     public override string Name { get { return "[increases by " + strength + "/s]"; } } //returns name and strength
@@ -545,6 +555,8 @@ public class EffectScaleEffectWithTime : BaseEffectMeta
 }
 
 //target enemy effect weakens by x/s.  
+[ForbidEffectContext(EffectContext.tower)]
+[ForbidEffectContext(EffectContext.playerCard)]
 public class EffectInvScaleEffectWithTime : BaseEffectMeta
 {
     public override string Name { get { return "[decreases by " + strength + "/s]"; } } //returns name and strength
@@ -582,6 +594,8 @@ public class EffectInvScaleEffectWithTime : BaseEffectMeta
 }
 
 //target enemy effect scales up with wave budget.  Increases proportionally if x = 1.Higher / lower values cause it to increase faster/slower, respectively.
+[ForbidEffectContext(EffectContext.playerCard)]
+[ForbidEffectContext(EffectContext.tower)]
 public class EffectScaleEffectWithBudget : BaseEffectMeta
 {
     public override string Name { get { return "[scaled]" + innerEffect.Name; } } //returns name and strength
@@ -627,6 +641,8 @@ public class EffectScaleEffectWithBudget : BaseEffectMeta
 }
 
 //target enemy effect scales up with the rank of the wave (multiplied by X per rank, like how stats scale)
+[ForbidEffectContext(EffectContext.playerCard)]
+[ForbidEffectContext(EffectContext.tower)]
 public class EffectScaleEffectWithRank : BaseEffectMeta
 {
     public override string Name { get { return "[ranked]" + innerEffect.Name; } } //returns name and strength
@@ -667,6 +683,8 @@ public class EffectScaleEffectWithRank : BaseEffectMeta
 }
 
 //target instant triggers when the card is drawn
+[ForbidEffectContext(EffectContext.enemyUnit)]
+[ForbidEffectContext(EffectContext.tower)]
 public class EffectOnCardDrawn : BaseEffectMeta
 {
     public override string Name { get { return "[when drawn]" + innerEffect.Name; } }

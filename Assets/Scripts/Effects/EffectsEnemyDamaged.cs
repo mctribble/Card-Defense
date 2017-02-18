@@ -18,6 +18,8 @@ public abstract class BaseEffectEnemyDamaged : BaseEffect, IEffectEnemyDamaged
 }
 
 //reduces incoming damage by a fixed amount (but attacks always do at least 1 damage)
+[ForbidEffectContext(EffectContext.playerCard)]
+[ForbidEffectContext(EffectContext.tower)]
 public class EffectArmor : BaseEffectEnemyDamaged
 {
     [Hide] public override string Name { get { return "Armor: " + strength; } } //returns name and strength
@@ -68,6 +70,8 @@ public class EffectReduceEnemyEffectOnDamage : BaseEffectEnemyDamaged
 }
 
 //enemy slows down (to 1) as it takes damage.  Decreases proportionally if x = 1.  Higher/lower values cause it to decrease faster/slower, respectively.
+[ForbidEffectContext(EffectContext.playerCard)]
+[ForbidEffectContext(EffectContext.tower)]
 public class EffectinvScaleSpeedWithDamage : BaseEffectEnemyDamaged
 {
     [Hide] public override string Name { get { return "slows down as it takes damage"; } } //returns name and strength
@@ -87,6 +91,8 @@ public class EffectinvScaleSpeedWithDamage : BaseEffectEnemyDamaged
 }
 
 //enemy gets faster as it takes damage.  Increases proportionally if x = 1.  Higher/lower values cause it to increase faster/slower, respectively.
+[ForbidEffectContext(EffectContext.playerCard)]
+[ForbidEffectContext(EffectContext.tower)]
 public class EffectScaleSpeedWithDamage : BaseEffectEnemyDamaged
 {
     [Hide] public override string Name { get { return "gets up to " + argument + " times faster as it takes damage"; } } //returns name and strength
@@ -154,6 +160,8 @@ public class EffectSplashDamage : BaseEffectEnemyDamaged
 }
 
 //attack damages and spreads effects to all enemies within X of each other through a series of consecutive explosions.  No enemy will be hit twice.  
+[ForbidEffectContext(EffectContext.enemyUnit)]
+[ForbidEffectContext(EffectContext.enemyCard)]
 public class EffectChainHit : BaseEffectEnemyDamaged
 {
     [Hide] public override string Name { get { return "chain attack: " + strength; } } //returns name and strength
@@ -206,6 +214,8 @@ public class EffectChainHit : BaseEffectEnemyDamaged
 }
 
 //damages the enemy by X% of their maximum health
+[ForbidEffectContext(EffectContext.enemyCard)]
+[ForbidEffectContext(EffectContext.enemyUnit)]
 public class EffectDamagePercent : BaseEffectEnemyDamaged
 {
     [Hide] public override string Name { get { return "enemy loses " + strength + "% health" ; } } //returns name and strength
@@ -220,6 +230,8 @@ public class EffectDamagePercent : BaseEffectEnemyDamaged
 }
 
 //when a valid attack is made, the tower also creates a burst attack with strength X and radius Y
+[ForbidEffectContext(EffectContext.enemyUnit)]
+[ForbidEffectContext(EffectContext.enemyCard)]
 public class EffectSecondaryBurst : BaseEffectEnemyDamaged
 {
     //explosion radius
@@ -266,6 +278,8 @@ public class EffectSecondaryBurst : BaseEffectEnemyDamaged
 }
 
 //target is slowed for X seconds.  does not stack.
+[ForbidEffectContext(EffectContext.enemyUnit)]
+[ForbidEffectContext(EffectContext.enemyCard)]
 public class EffectSlowTarget : BaseEffectEnemyDamaged
 {
     [Hide] public override string Name { get { return "enemy is slowed for " + strength + " seconds" ; } } //returns name and strength

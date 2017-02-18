@@ -95,6 +95,8 @@ public abstract class BaseEffectResonant : BaseEffect, IEffectOnSpawned, IEffect
 }
 
 //tower attack gets X times stronger for each tower that has this effect with the same value for Y
+[ForbidEffectContext(EffectContext.enemyUnit)]
+[ForbidEffectContext(EffectContext.enemyCard)]
 public class EffectResonantTowerAttackMult : BaseEffectResonant
 {
     public override string Name { get { return "<" + argument + ">: " + strength + "x damage per other <" + argument + "> tower"; } }
@@ -145,6 +147,8 @@ public class EffectResonantTowerAttackMult : BaseEffectResonant
 }
 
 //tower attack increases by X for each tower that has this effect with the same value for Y
+[ForbidEffectContext(EffectContext.enemyUnit)]
+[ForbidEffectContext(EffectContext.enemyCard)]
 public class EffectResonantTowerAttackMod : BaseEffectResonant
 {
     public override string Name { get { return "<" + argument + ">: +" + strength + " damage per other <" + argument + "> tower"; } }
@@ -193,6 +197,8 @@ public class EffectResonantTowerAttackMod : BaseEffectResonant
 }
 
 //tower range gets longer by X for each tower that has this effect with the same value for Y
+[ForbidEffectContext(EffectContext.enemyUnit)]
+[ForbidEffectContext(EffectContext.enemyCard)]
 public class EffectResonantTowerRangeMod : BaseEffectResonant
 {
     public override string Name { get { return "<" + argument + ">: +" + strength + " range per other <" + argument + "> tower"; } }

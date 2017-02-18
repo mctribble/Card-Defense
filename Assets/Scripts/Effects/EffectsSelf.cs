@@ -6,6 +6,9 @@ using Vexe.Runtime.Types;
 /// <summary>
 /// all self effects take place instantly, and target the card which contains them.  This base effect handles behavior common to them all
 /// </summary>
+[ForbidEffectContext(EffectContext.enemyCard)]
+[ForbidEffectContext(EffectContext.enemyUnit)]
+[ForbidEffectContext(EffectContext.tower)]
 public abstract class BaseEffectSelf : BaseEffect, IEffectSelf
 {
     [Hide] public override TargetingType targetingType { get { return TargetingType.none; } } //this effect doesnt need a target

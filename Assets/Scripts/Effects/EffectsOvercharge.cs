@@ -5,6 +5,8 @@
 /// they alter the given damage event and take effect before enemyDamaged effects
 /// This base effect handles behavior common to them all
 /// </summary>
+[ForbidEffectContext(EffectContext.enemyUnit)]
+[ForbidEffectContext(EffectContext.enemyCard)]
 abstract class BaseEffectOvercharge : BaseEffect, IEffectOvercharge
 {
     [Hide] public override TargetingType targetingType { get { return TargetingType.none; } }    //overcharge effects are not targeted

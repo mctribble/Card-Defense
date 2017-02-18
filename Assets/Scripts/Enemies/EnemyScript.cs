@@ -399,19 +399,22 @@ public class EnemyScript : BaseBehaviour
             }
         }
 
-        //copy periodic effects from the attack onto this unit so they can take effect
+        //copy periodic effects from the attack onto this unit so they can take effect, provided they are not forbidden in this context
         if (e.effects != null)
         {
             foreach (IEffect toCopy in e.effects.effects)
             {
                 if (toCopy.triggersAs(EffectType.periodic))
                 {
-                    //found an effect we need to copy.  first make sure we have an object to copy it to.
-                    if (effectData == null)
-                        effectData = new EffectData();
+                    if (toCopy.forbiddenInContext(EffectContext.enemyUnit) == false)
+                    {
+                        //found an effect we need to copy.  first make sure we have an object to copy it to.
+                        if (effectData == null)
+                            effectData = new EffectData();
 
-                    //then copy it
-                    effectData.Add(EffectData.cloneEffect(toCopy));
+                        //then copy it
+                        effectData.Add(EffectData.cloneEffect(toCopy));
+                    }
                 }
             }
         }
@@ -484,9 +487,14 @@ public class EnemyScript : BaseBehaviour
         unitSpeedWhenSpawned = d.currentUnitSpeed;
 
         if (d.effectData != null)
+        {
             effectData = d.effectData.clone();
+            effectData.removeForbiddenEffects(EffectContext.enemyUnit, false);
+        }
         else
+        {
             effectData = null;
+        }
 
         this.GetComponent<SpriteRenderer>().color = d.unitColor.toColor();
 

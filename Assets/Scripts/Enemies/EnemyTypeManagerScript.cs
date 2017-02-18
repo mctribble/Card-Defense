@@ -91,10 +91,16 @@ public class EnemyTypeManagerScript : BaseBehaviour
     /// <returns></returns>
     private IEnumerator loadEnemyTypes()
     {
+        //delegate to load types based on blatforms
         if (Application.platform == RuntimePlatform.WebGLPlayer)
             yield return StartCoroutine(loadEnemyTypesWeb());
         else
             yield return StartCoroutine(loadEnemyTypesPC());
+
+        //remove any effects forbidden in this context, and throw warnings about them
+        foreach (EnemyData ed in types.enemyTypes)
+            if (ed.effectData != null)
+                ed.effectData.removeForbiddenEffects(EffectContext.enemyCard, true);
     }
 
     /// <summary>

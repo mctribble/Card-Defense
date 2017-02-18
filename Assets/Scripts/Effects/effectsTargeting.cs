@@ -21,6 +21,8 @@ public enum TargetingPriority
 /// The effect itself could be attached either to the attacking tower or the defending enemy.  
 /// This base effect handles behavior common to them all
 /// </summary>
+[ForbidEffectContext(EffectContext.enemyUnit)]
+[ForbidEffectContext(EffectContext.enemyCard)]
 public abstract class BaseEffectTowerTargeting : BaseEffect, IEffectTowerTargeting
 {
     [Hide] public override TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast

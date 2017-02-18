@@ -5,7 +5,8 @@ using UnityEngine;
 using Vexe.Runtime.Types;
 
 //this file is for upgrade effects, which are applied to towers on upgrade instead of copied to them.  They are called from TowerScript.AddEffects()
-
+[ForbidEffectContext(EffectContext.enemyCard)]
+[ForbidEffectContext(EffectContext.enemyUnit)]
 [ForbidEffectContext(EffectContext.tower)] //this may look misleading: these effects TARGET towers, but cannot be ON towers.
 public abstract class BaseEffectUpgrade : BaseEffect, IEffectUpgrade
 {

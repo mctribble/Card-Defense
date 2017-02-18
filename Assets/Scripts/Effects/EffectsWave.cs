@@ -4,6 +4,8 @@ using Vexe.Runtime.Types;
 /// <summary>
 /// all wave effects should derive from this
 /// </summary>
+[ForbidEffectContext(EffectContext.enemyUnit)]
+[ForbidEffectContext(EffectContext.tower)]
 public abstract class BaseEffectWave : BaseEffect, IEffectWave
 {
     [Hide] public override TargetingType targetingType { get { return TargetingType.none; } } //wave effects dont need a target
@@ -116,6 +118,7 @@ public class EffectFixedSpawnCount : BaseEffectWave
 }
 
 //enemy attack scales up with wave budget.  Increases proportionally if x = 1.  Higher/lower values cause it to decrease faster/slower, respectively.
+[ForbidEffectContext(EffectContext.playerCard)]
 public class EffectScaleAttackWithBudget : BaseEffectWave
 {
     [Hide] public override string Name { get { return "attack increases on tougher waves"; } } //returns name and strength
@@ -132,6 +135,7 @@ public class EffectScaleAttackWithBudget : BaseEffectWave
 }
 
 //enemy health scales up with wave budget.  Increases proportionally if x = 1.  Higher/lower values cause it to increase faster/slower, respectively.
+[ForbidEffectContext(EffectContext.playerCard)]
 public class EffectScaleHealthWithBudget : BaseEffectWave
 {
     [Hide] public override string Name { get { return "health increases on tougher waves"; } } 
@@ -155,6 +159,7 @@ public class EffectScaleHealthWithBudget : BaseEffectWave
 }
 
 //enemy speed  scales up with wave budget.  Increases proportionally if x = 1.  Higher/lower values cause it to increase faster/slower, respectively.
+[ForbidEffectContext(EffectContext.playerCard)]
 public class EffectScaleSpeedWithBudget : BaseEffectWave
 {
     [Hide] public override string Name { get { return "speed increases on tougher waves"; } }

@@ -16,6 +16,8 @@ public abstract class BaseEffectPeriodic : BaseEffect, IEffectPeriodic
 }
 
 //enemy recovers X health per second
+[ForbidEffectContext(EffectContext.playerCard)]
+[ForbidEffectContext(EffectContext.tower)]
 public class EffectRegeneration : BaseEffectPeriodic
 {
     [Hide] public override string Name { get { return "Regeneration: " + strength + "/s"; } } //returns name and strength
@@ -50,6 +52,7 @@ public class EffectRegeneration : BaseEffectPeriodic
 }
 
 //enemy loses X health per second for Y seconds 
+[ForbidEffectContext(EffectContext.tower)]
 public class EffectPoison : BaseEffectPeriodic, IEffectSourceTracked
 {
     //effect lifespan (this is a string to match the interface, but actually updates the float maxPoisonTime)
@@ -131,6 +134,7 @@ public class EffectPoison : BaseEffectPeriodic, IEffectSourceTracked
 }
 
 //enemy slows down by x/s (min 1.  Decreases proportionally if x = 1.  Higher/lower values cause it to decrease faster/slower, respectively.
+[ForbidEffectContext(EffectContext.tower)]
 public class EffectInvScaleSpeedWithTime : BaseEffectPeriodic
 {
     [Hide] public override string Name { get { return "Speed decreases by " + strength + "/s"; } } //returns name and strength
@@ -150,6 +154,7 @@ public class EffectInvScaleSpeedWithTime : BaseEffectPeriodic
 }
 
 //enemy slows down by x/s (min 1)
+[ForbidEffectContext(EffectContext.tower)]
 public class EffectScaleSpeedWithTime : BaseEffectPeriodic
 {
     [Hide] public override string Name { get { return "Speed increases by " + strength + "/s"; } } //returns name and strength

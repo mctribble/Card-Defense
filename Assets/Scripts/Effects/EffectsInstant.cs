@@ -9,6 +9,8 @@ using System.Collections;
 /// instant effects take place instantly with no particular target.  This base effect handles behavior common to them all
 /// </summary>
 [ForbidEffectContext(EffectContext.tower)]
+[ForbidEffectContext(EffectContext.enemyCard)]
+[ForbidEffectContext(EffectContext.enemyUnit)]
 public abstract class BaseEffectInstant : BaseEffect, IEffectInstant
 {
     [Hide] public override TargetingType targetingType { get { return TargetingType.none; } } //this effect doesnt need a target

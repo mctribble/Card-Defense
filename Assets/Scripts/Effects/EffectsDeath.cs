@@ -15,6 +15,8 @@ abstract class BaseEffectDeath : BaseEffect, IEffectDeath
 }
 
 //spawns X enemies of type Y.  On enemies, it spawns where the enemy died.  On towers, this is unsupported
+[ForbidEffectContext(EffectContext.playerCard)]
+[ForbidEffectContext(EffectContext.tower)]
 class EffectSpawnEnemyOnDeath : BaseEffectDeath
 {
     [Hide] public override string Name     { get { return "Carrying " + spawnWave.ToShortString(); } } //returns name and strength
@@ -73,6 +75,8 @@ class EffectSpawnEnemyOnDeath : BaseEffectDeath
 }
 
 //when the tower dies, conjures a token for that tower type with 1 charge remaining
+[ForbidEffectContext(EffectContext.enemyCard)]
+[ForbidEffectContext(EffectContext.enemyUnit)]
 class EffectRedrawTowerOnDeath : BaseEffectDeath
 {
     [Hide] public override string Name     { get { return "When this tower dies, it returns to your hand"; } } //returns name and strength
