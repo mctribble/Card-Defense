@@ -1,10 +1,6 @@
 known issues:
 -[WebGL] need a placeholder image while level thumbnails are loading.
-?some lingering cause of enemies not knowing to expect damage. (fixed?)
-?sometimes game freezes on level load if it is not the first load of a session.  reasons unknown. (fixed?)
-?drawn cards sometimes take longer to flip over than they should
 -tooltips "blinking" side to side if towards middle of screen.  cause unknown.
-?hefty performance cost for BurstShotScript.update()
 -scaleEffectWithTowerAttack does not show would-be effect strength on tower mouseover
 -scaleEffectWithTowerAttack does not immediately respond to tower upgrades
 -effects that are forbidden on towers still show on the tooltip during upgrades
