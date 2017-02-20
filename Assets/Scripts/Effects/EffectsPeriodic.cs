@@ -52,7 +52,6 @@ public class EffectRegeneration : BaseEffectPeriodic
 }
 
 //enemy loses X health per second for Y seconds 
-[ForbidEffectContext(EffectContext.tower)]
 public class EffectPoison : BaseEffectPeriodic, IEffectSourceTracked
 {
     //effect lifespan (this is a string to match the interface, but actually updates the float maxPoisonTime)

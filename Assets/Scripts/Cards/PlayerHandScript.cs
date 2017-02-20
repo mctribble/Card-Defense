@@ -159,7 +159,7 @@ public class PlayerHandScript : HandScript
             yield break;
 
         //wait for all cards to be idle
-        while (cards.All(c => (c.state == CardState.idle) || (c.state == CardState.discarding)))
+        while (cards.All(c => (c.state == CardState.idle) || (c.state == CardState.discarding)) == false)
             yield return null;
 
         //flip the entire hand face up at once
