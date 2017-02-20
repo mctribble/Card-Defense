@@ -84,6 +84,8 @@ public class TowerScript : BaseBehaviour
     [VisibleWhen("hasData")] private float damageDealtThisRound; //amount of damage dealt by this tower this round
     [VisibleWhen("hasData")] private bool  waitingForManualFire; //whether user is being prompted to fire manually
 
+    [VisibleWhen("isEditor")] public float tooltipPositionBuffer; //amount of extra space to buffer when positioning tooltips
+
     // Use this for initialization
     private void Awake()
     {
@@ -141,13 +143,13 @@ public class TowerScript : BaseBehaviour
             int y = 0;
 
             //if too close to the left, move pivot to the left
-            if (Input.mousePosition.x < tooltipText.preferredWidth)
+            if (Input.mousePosition.x < (tooltipText.preferredWidth + tooltipPositionBuffer))
             {
                 x = 0;
             }
 
             //if too close to the top, move pivot to the bottom
-            if (Input.mousePosition.y > (Screen.height - tooltipText.preferredHeight))
+            if (Input.mousePosition.y > (Screen.height - tooltipText.preferredHeight - tooltipPositionBuffer))
             {
                 y = 1;
             }

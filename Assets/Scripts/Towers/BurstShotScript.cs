@@ -34,7 +34,6 @@ public class BurstShotScript : BaseBehaviour
 
     private bool                  initialized;     //whether or not this shot has been initialized
     private List<DamageEventData> expectedToHit;   //list of enemies that we told to expect damage and the events associated with those hits
-    private DamageEventData       baseDamageEvent; //damage event to base all the others on
     private float                 curScale;        //current scale of this attack
     private float                 maxScale;        //maximum scale this attack should reach
 
@@ -133,15 +132,28 @@ public class BurstShotScript : BaseBehaviour
     //init attack
     public void SetData (BurstShotData data)
     {
-        maxScale = data.burstRange;
-        baseDamageEvent = data.damageEvent;
-        initialized = true; //flag ready
+        maxScale = data.burstRange; //store attack range
+
+        //warn all enemies that will be hit
+        foreach(EnemyScript e in EnemyManagerScript.instance.enemiesInRange(data.damageEvent.source.transform.position, maxScale))
+        {
+            DamageEventData ded = new DamageEventData();
+            ded.source = data.damageEvent.source;
+            ded.dest = e;
+            ded.effects = data.damageEvent.effects;
+            ded.rawDamage = data.damageEvent.rawDamage;
+
+            e.onExpectedDamage(ref ded);
+            expectedToHit.Add(ded);
+        }        
 
         //play one of the sounds at random
         int soundToPlay = Random.Range(0, burstSounds.Length);
         audioSource.clip = burstSounds[soundToPlay];
         if (isActiveAndEnabled)
             StartCoroutine(playRespectLimit(audioSource)); //plays the sound, if we are not at the sound cap and the object is not disabled
+
+        initialized = true; //flag ready
     }
 
     //overrides the default color
