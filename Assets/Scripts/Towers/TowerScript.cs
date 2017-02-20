@@ -124,13 +124,9 @@ public class TowerScript : BaseBehaviour
     {
         //clean out the effect list every 32 frames
         if (effects != null)
-        {
             if ((Time.frameCount % 32) == 0)
-            {
-                effects.cleanEffects();
-                UpdateTooltipText();
-            }
-        }
+                if (effects.cleanEffects())
+                    UpdateTooltipText();
 
         deltaTime = Time.deltaTime; //update time since last frame
 
@@ -605,14 +601,10 @@ public class TowerScript : BaseBehaviour
         rangeImage.gameObject.GetComponent<RectTransform>().localScale = new Vector3(range, range, 1.0f);
     }
 
-    //helpers to call ShowUpgradeTooltip since unity SendMessage() doesn't understand default parameters
-    private void UpgradeTooltip(UpgradeData u) { ShowUpgradeTooltip(u, false); }
-    private void FreeUpgradeTooltip(UpgradeData u) { ShowUpgradeTooltip(u, true); }
-
     /// <summary>
     /// updates the tooltip text to show what the given upgrade would change
     /// </summary>
-    private void ShowUpgradeTooltip(UpgradeData u, bool noUpgradeCost)
+    public void showUpgradeTooltip(UpgradeData u, EffectData newEffectData, bool noUpgradeCost)
     {
         //show special message if the target has upgradesForbidden
         if (effects != null)
@@ -650,6 +642,14 @@ public class TowerScript : BaseBehaviour
         float curDPS             = attackPower     / rechargeTime;
         float newDPS             = newAttackPower  / newRechargeTime;
         int   newWavesRemaining  = wavesRemaining  + u.waveBonus;
+
+        //check for "setRange" effect: it needs special handling
+        if (newEffectData != null)
+        {
+            IEffect setRangeEffect = newEffectData.effects.FirstOrDefault(ie => ie.XMLName == "setRange");
+            if (setRangeEffect != null)
+                newRange = setRangeEffect.strength;
+        }
 
         float attackChange       = newAttackPower  - attackPower;
         float rechargeChange     = newRechargeTime - rechargeTime;
@@ -729,25 +729,17 @@ public class TowerScript : BaseBehaviour
         //also show the upgrade range
         upgradeRangeImage.transform.localScale = new Vector3(newRange, newRange, 1.0f);
         upgradeRangeImage.enabled = true;
-    }
 
-    /// <summary>
-    /// shows new effects on the tooltip
-    /// </summary>
-    private void NewEffectTooltip (EffectData newEffectData)
-    {
-        //ignore if the tower cannot be upgraded
-        if (effects != null)
-            if (effects.propertyEffects.upgradesForbidden)
-                return;
-        if (upgradeCount >= upgradeCap)
-            return;
-
-        tooltipText.text += "<color=lime>";
-        foreach (IEffect e in newEffectData.effects)
-            if (e.Name != null)
-                tooltipText.text += "\n" + "++" + e.Name;
-        tooltipText.text += "</color>";
+        //effects
+        if (newEffectData != null)
+        {
+            tooltipText.text += "<color=lime>";
+            foreach (IEffect e in newEffectData.effects)
+                if (e.Name != null)
+                    if (e.forbiddenInContext(EffectContext.tower) == false)
+                        tooltipText.text += "\n" + "++" + e.Name;
+            tooltipText.text += "</color>";
+        }
     }
 
     /// <summary>

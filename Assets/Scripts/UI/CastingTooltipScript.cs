@@ -11,10 +11,10 @@ public class CastingTooltipScript : BaseBehaviour
     public Color UncastableColor;           //color of tooltip when cast is forbidden
     public Image rangeImage;                //reference to image for the range overlay
 
-    private const float GRID_SCALE = 0.5f;  //size of grid to snap to.
-    private PlayerCardScript parentCardScript;    //card that produced this tooltip
-    private bool castable;                  //whether or not the spell can be cast here
-    private GameObject targetTower;         //the tower this card is targeting.  Applies only to upgrades
+    private const float      GRID_SCALE = 0.5f; //size of grid to snap to.
+    private PlayerCardScript parentCardScript;  //card that produced this tooltip
+    private bool             castable;          //whether or not the spell can be cast here
+    private TowerScript      targetTower;       //the tower this card is targeting.  Applies only to upgrades
 
     // Use this for initialization
     private void Start()
@@ -65,19 +65,14 @@ public class CastingTooltipScript : BaseBehaviour
                     {
                         //tell old tower to revert to the normal tooltip
                         if (targetTower != null)
-                            targetTower.SendMessage("UpdateTooltipText");
+                            targetTower.UpdateTooltipText();
 
-                        targetTower = newTargetTower.gameObject; //change target
+                        targetTower = newTargetTower; //change target
 
                         //tell new target to use the upgrade tooltip, using a slightly different message depending on if the upgrade is free or not
                         bool hasUpgradeCost = (parentCardScript.card.data.effectData == null) || (parentCardScript.card.data.effectData.propertyEffects.noUpgradeCost == false);
-                        if (hasUpgradeCost)
-                            targetTower.SendMessage("UpgradeTooltip", parentCardScript.card.data.upgradeData);
-                        else
-                            targetTower.SendMessage("FreeUpgradeTooltip", parentCardScript.card.data.upgradeData);
 
-                        if ( (parentCardScript.card.data.effectData != null) && (parentCardScript.card.data.effectData.effects.Count > 0) )
-                            targetTower.SendMessage("NewEffectTooltip", parentCardScript.card.data.effectData); //if there are new effects, show those
+                        targetTower.showUpgradeTooltip(parentCardScript.card.data.upgradeData, parentCardScript.card.data.effectData, !hasUpgradeCost);
 
                         castable = true;
 
@@ -97,7 +92,7 @@ public class CastingTooltipScript : BaseBehaviour
                     //there is no tower underneath.  clear the target and tell the tower it can stop showing upgrade data
                     if (targetTower != null)
                     {
-                        targetTower.SendMessage("UpdateTooltipText");
+                        targetTower.UpdateTooltipText();
                         targetTower = null;
                     }
                     castable = false;
@@ -141,7 +136,7 @@ public class CastingTooltipScript : BaseBehaviour
                 }
                 else if (parentCardScript.card.data.cardType == PlayerCardType.upgrade)
                 { 
-                    parentCardScript.SendMessage("UpgradeTower", targetTower); //do the upgrade
+                    parentCardScript.UpgradeTower(targetTower); //do the upgrade
                 }
             }
             Destroy(gameObject);

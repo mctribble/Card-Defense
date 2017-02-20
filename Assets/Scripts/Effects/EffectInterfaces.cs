@@ -696,11 +696,11 @@ public class EffectData : System.Object
     }
 
     /// <summary>
-    /// removes any effects that have no chance of triggering again and can be destroyed safely
+    /// removes any effects that have no chance of triggering again and can be destroyed safely  returns true if something was actually removed
     /// </summary>
-    public void cleanEffects()
+    public bool cleanEffects()
     {
-        Effects.RemoveAll(ie => ie.shouldBeRemoved());
+        return Effects.RemoveAll(ie => ie.shouldBeRemoved()) > 0;
     }
 
     //provides a short string for the debugger

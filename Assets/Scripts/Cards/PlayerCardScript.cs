@@ -542,17 +542,17 @@ public class PlayerCardScript : CardScript, IPointerClickHandler
     /// <summary>
     /// (upgrade cards only) upgrades the given tower
     /// </summary>
-    private void UpgradeTower(GameObject target)
+    public void UpgradeTower(TowerScript target)
     {
         //send upgrade data to the target tower using a different message depending on whether or not it is free
         if ((card.data.effectData != null) && (card.data.effectData.propertyEffects.noUpgradeCost))
-            target.SendMessage("FreeUpgrade", card.data.upgradeData);
+            target.FreeUpgrade(card.data.upgradeData);
         else
-            target.SendMessage("Upgrade", card.data.upgradeData);
+            target.Upgrade(card.data.upgradeData);
 
         //if there are effects on the card, send them over too
         if ((card.data.effectData != null) && (card.data.effectData.effects.Count > 0))
-            target.SendMessage("AddEffects", card.data.effectData);
+            target.AddEffects(card.data.effectData);
 
         //perform steps that must be done on every cast
         Cast();

@@ -3,7 +3,6 @@ known issues:
 -tooltips "blinking" side to side if towards middle of screen.  cause unknown.
 -scaleEffectWithTowerAttack does not show would-be effect strength on tower mouseover
 -scaleEffectWithTowerAttack does not immediately respond to tower upgrades
--effects that are forbidden on towers still show on the tooltip during upgrades
 -orthogonal tower attacks move too quickly and all particles vanish simultaneously
 -tooltips should highlight which targeting effect is highest priority
 -some effects can be listed twice (such as targeting effects) even thouth this has no functional impact
