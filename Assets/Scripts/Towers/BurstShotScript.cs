@@ -143,6 +143,12 @@ public class BurstShotScript : BaseBehaviour
             ded.effects = data.damageEvent.effects;
             ded.rawDamage = data.damageEvent.rawDamage;
 
+            //apply effects
+            if (ded.effects != null)
+                foreach (IEffect ie in ded.effects.effects)
+                    if (ie.triggersAs(EffectType.enemyDamaged))
+                        ((IEffectEnemyDamaged)ie).expectedDamage(ref ded);
+
             e.onExpectedDamage(ref ded);
             expectedToHit.Add(ded);
         }        
