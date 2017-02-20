@@ -3,7 +3,7 @@ known issues:
 ?some lingering cause of enemies not knowing to expect damage. (fixed?)
 ?sometimes game freezes on level load if it is not the first load of a session.  reasons unknown. (fixed?)
 ?drawn cards sometimes take longer to flip over than they should
--tooltips "blinking" side to side if the edge would be too close to the side of the screen, but not far enough off screen
+-tooltips "blinking" side to side if towards middle of screen.  cause unknown.
 ?hefty performance cost for BurstShotScript.update()
 -scaleEffectWithTowerAttack does not show would-be effect strength on tower mouseover
 -scaleEffectWithTowerAttack does not immediately respond to tower upgrades
