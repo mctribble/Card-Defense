@@ -86,6 +86,10 @@ public class TowerScript : BaseBehaviour
 
     [VisibleWhen("isEditor")] public float tooltipPositionBuffer; //amount of extra space to buffer when positioning tooltips
 
+    //event effects can register to if they need to know when the tower gets upgraded for some reason
+    public delegate void towerUpgradedHandler(TowerScript upgradedTower);
+    public event towerUpgradedHandler towerUpgradedEvent;
+
     // Use this for initialization
     private void Awake()
     {
@@ -594,6 +598,10 @@ public class TowerScript : BaseBehaviour
         //update text
         UpdateTooltipText();
         updateLifespanText();
+
+        //fire event
+        if (towerUpgradedEvent != null)
+            towerUpgradedEvent(this);
     }
 
     public void updateRangeImage()

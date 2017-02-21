@@ -478,8 +478,16 @@ public class EffectScaleEffectWithTowerAttack : BaseEffectMeta, IEffectSourceTra
         if (effectBaseStrength == null)
             effectBaseStrength = innerEffect.strength;
 
-        if (d.source != null) //some things, like poison, do not have a tower to list as the damage source.  We can ignore these.
-            innerEffect.strength = effectBaseStrength.Value * d.source.attackPower;
+        scaleInnerEffect();
+    }
+
+    //scales the child effect appropriately
+    private void scaleInnerEffect()
+    {
+        if (effectSource != null)
+            innerEffect.strength = effectBaseStrength.Value * effectSource.attackPower;
+        else
+            innerEffect.strength = effectBaseStrength.Value;
     }
 
     //recalculate effect strength when we are told what tower has this effect.  Note that this also gets called when hovering over to do an upgrade, and so may be later set to null again.
@@ -488,26 +496,35 @@ public class EffectScaleEffectWithTowerAttack : BaseEffectMeta, IEffectSourceTra
         get { return base.effectSource; }
         set
         {
-            if (value == null) 
-            {
-                //effect is not yet actually on a tower.  Reset the inner effect strength.
-                if (effectBaseStrength == null)
-                    effectBaseStrength = innerEffect.strength;
+            //fetch the base effect strength if we dont know it already
+            if (effectBaseStrength == null)
+                effectBaseStrength = innerEffect.strength;
 
-                innerEffect.strength = effectBaseStrength.Value;
-            }
-            else
-            {
-                //either the effect was just placed on a tower, or an upgrade with this effect is being hovered over a tower.  scale the effect.
-                if (effectBaseStrength == null)
-                    effectBaseStrength = innerEffect.strength;
+            //if we the old source was a tower, deregister for the event
+            if (base.effectSource != null)
+                base.effectSource.towerUpgradedEvent -= eventHandler;
 
-                innerEffect.strength = effectBaseStrength.Value * value.attackPower;
-            }
+            //if the new value is a tower, register for the event
+            if (value != null)
+                value.towerUpgradedEvent += eventHandler;
 
-            base.effectSource = value;
+            base.effectSource = value; //update effectSource
+
+            scaleInnerEffect(); //rescale the effect
         }
     } 
+
+    //rescales the effect when the tower this upgrade is on gets upgraded
+    private void eventHandler(TowerScript upgradedTower)
+    {
+        if (upgradedTower == effectSource)
+        {
+            scaleInnerEffect();
+            upgradedTower.UpdateTooltipText();
+        }
+        else
+            Debug.LogWarning("EffectScaleEffectWithTowerAttack should not be registered to hear about upgrades from that tower, as it is not the source of the effect");
+    }
 
     //clone the effect at its base strength, since it will get scaled again anyway when the effectSource gets updated
     public override IEffect cloneInnerEffect()
