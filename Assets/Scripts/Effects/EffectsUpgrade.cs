@@ -22,6 +22,7 @@ public abstract class BaseEffectUpgrade : BaseEffect, IEffectUpgrade
 }
 
 //sets the range of the tower to X
+[ForbidEffectDuplicates]
 public class EffectSetRange : BaseEffectUpgrade
 {
     [Show] public override string Name { get { return "Range becomes " + strength; } }
@@ -36,6 +37,7 @@ public class EffectSetRange : BaseEffectUpgrade
 }
 
 //sets the tower's ammo to the highest value it has had, effectively restoring it to maximum
+[ForbidEffectDuplicates]
 public class EffectReloadAmmo : BaseEffectUpgrade
 {
     [Show] public override string Name { get { return "If the tower has limited ammo, reloads it"; } }

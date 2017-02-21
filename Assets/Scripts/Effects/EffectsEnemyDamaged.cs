@@ -280,6 +280,7 @@ public class EffectSecondaryBurst : BaseEffectEnemyDamaged
 //target is slowed for X seconds.  does not stack.
 [ForbidEffectContext(EffectContext.enemyUnit)]
 [ForbidEffectContext(EffectContext.enemyCard)]
+[ForbidEffectDuplicates]
 public class EffectSlowTarget : BaseEffectEnemyDamaged
 {
     [Hide] public override string Name { get { return "enemy is slowed for " + strength + " seconds" ; } } //returns name and strength

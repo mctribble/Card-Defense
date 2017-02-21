@@ -18,6 +18,7 @@ abstract class BaseEffectProperty : BaseEffect, IEffectProperty
 [ForbidEffectContext(EffectContext.enemyCard)]
 [ForbidEffectContext(EffectContext.enemyUnit)]
 [ForbidEffectContext(EffectContext.tower)]
+[ForbidEffectDuplicates]
 class EffectReturnsToTopOfDeck : BaseEffectProperty
 {
     [Hide] public override string Name { get { return "put this card on top of the deck"; } } //returns name and strength
@@ -27,6 +28,7 @@ class EffectReturnsToTopOfDeck : BaseEffectProperty
 //tower lifespan does not decrease and is displayed as ∞.
 [ForbidEffectContext(EffectContext.enemyCard)]
 [ForbidEffectContext(EffectContext.enemyUnit)]
+[ForbidEffectDuplicates]
 class EffectInfiniteTowerLifespan : BaseEffectProperty
 {
     [Hide] public override string Name { get { return null; } } //returns name and strength
@@ -36,6 +38,7 @@ class EffectInfiniteTowerLifespan : BaseEffectProperty
 //colorizes attacks associated with this effect
 [ForbidEffectContext(EffectContext.enemyCard)]
 [ForbidEffectContext(EffectContext.enemyUnit)]
+[ForbidEffectDuplicates]
 class EffectAttackColor : BaseEffectProperty
 {
     [Hide] public override string Name { get { return null; } } //returns name and strength
@@ -68,6 +71,7 @@ class EffectLimitedAmmo : BaseEffectProperty
 //tower only fires if clicked on 
 [ForbidEffectContext(EffectContext.enemyCard)]
 [ForbidEffectContext(EffectContext.enemyUnit)]
+[ForbidEffectDuplicates]
 class EffectManualFire : BaseEffectProperty
 {
     [Hide] public override string Name { get { return "Manual Fire"; } } //returns name and strength
@@ -78,6 +82,7 @@ class EffectManualFire : BaseEffectProperty
 [ForbidEffectContext(EffectContext.tower)]
 [ForbidEffectContext(EffectContext.enemyCard)]
 [ForbidEffectContext(EffectContext.enemyUnit)]
+[ForbidEffectDuplicates]
 class EffectNoUpgradeCost : BaseEffectProperty
 {
     [Hide] public override string Name { get { return "Does not cost an upgrade slot."; } } //returns name and strength
@@ -96,6 +101,7 @@ class EffectMaxOvercharge : BaseEffectProperty
 //attacks ignore armor
 [ForbidEffectContext(EffectContext.enemyCard)]
 [ForbidEffectContext(EffectContext.enemyUnit)]
+[ForbidEffectDuplicates]
 class EffectArmorPierce : BaseEffectProperty
 {
     [Hide] public override string Name { get { return "attacks ignore armor"; } } //returns name and strength
@@ -105,6 +111,7 @@ class EffectArmorPierce : BaseEffectProperty
 //tower cannot receive upgrades
 [ForbidEffectContext(EffectContext.enemyCard)]
 [ForbidEffectContext(EffectContext.enemyUnit)]
+[ForbidEffectDuplicates]
 class EffectUpgradesForbidden : BaseEffectProperty
 {
     [Hide] public override string Name { get { return "Cannot be upgraded"; } } //returns name and strength
@@ -114,6 +121,7 @@ class EffectUpgradesForbidden : BaseEffectProperty
 //tower cannot be discarded
 [ForbidEffectContext(EffectContext.enemyCard)]
 [ForbidEffectContext(EffectContext.enemyUnit)]
+[ForbidEffectDuplicates]
 class EffectCannotBeDiscarded : BaseEffectProperty
 {
     [Hide] public override string Name { get { return "Cannot be randomly discarded"; } } //returns name and strength
