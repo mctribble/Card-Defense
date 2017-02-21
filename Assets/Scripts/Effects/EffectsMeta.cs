@@ -482,14 +482,23 @@ public class EffectScaleEffectWithTowerAttack : BaseEffectMeta, IEffectSourceTra
             innerEffect.strength = effectBaseStrength.Value * d.source.attackPower;
     }
 
-    //recalculate effect strength when we get built
+    //recalculate effect strength when we are told what tower has this effect.  Note that this also gets called when hovering over to do an upgrade, and so may be later set to null again.
     public override TowerScript effectSource
     {
         get { return base.effectSource; }
         set
         {
-            if (value != null) //effectSource can be set to null if the effect is not yet on a tower.  If this happens, just ignore it
+            if (value == null) 
             {
+                //effect is not yet actually on a tower.  Reset the inner effect strength.
+                if (effectBaseStrength == null)
+                    effectBaseStrength = innerEffect.strength;
+
+                innerEffect.strength = effectBaseStrength.Value;
+            }
+            else
+            {
+                //either the effect was just placed on a tower, or an upgrade with this effect is being hovered over a tower.  scale the effect.
                 if (effectBaseStrength == null)
                     effectBaseStrength = innerEffect.strength;
 

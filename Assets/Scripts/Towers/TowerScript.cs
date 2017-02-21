@@ -735,11 +735,11 @@ public class TowerScript : BaseBehaviour
         {
             tooltipText.text += "<color=lime>"; //set color
 
-            foreach (IEffect e in newEffectData.effects)                    //for each effect that would be added
-                if (e.Name != null)                                         //if it has a name
-                    if (e.forbiddenInContext(EffectContext.tower) == false) //and is not forbidden by towers
-                        if (effects.additionBlockedByDuplicate(e) == false) //and is not forbidden because of a duplicate effect already on the tower
-                            tooltipText.text += "\n" + "++" + e.Name;       //list it as an additional effect on the tooltip
+            foreach (IEffect e in newEffectData.effects)                                           //for each effect that would be added
+                if (e.Name != null)                                                                //if it has a name
+                    if (e.forbiddenInContext(EffectContext.tower) == false)                        //and is not forbidden by towers
+                        if ((effects == null) || (effects.additionBlockedByDuplicate(e) == false)) //and is not forbidden because of a duplicate effect already on the tower
+                            tooltipText.text += "\n" + "++" + e.Name;                              //list it as an additional effect on the tooltip
 
             tooltipText.text += "</color>"; //reset color
         }

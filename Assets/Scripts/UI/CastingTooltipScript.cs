@@ -69,6 +69,12 @@ public class CastingTooltipScript : BaseBehaviour
 
                         targetTower = newTargetTower; //change target
 
+                        //set effect source for any effects on the upgrade so the tooltips are accurate
+                        if (parentCardScript.card.data.effectData != null)
+                            foreach (IEffect ie in parentCardScript.card.data.effectData.effects)
+                                if (ie.triggersAs(EffectType.sourceTracked))
+                                    ((IEffectSourceTracked)ie).effectSource = targetTower;
+
                         //tell new target to use the upgrade tooltip, using a slightly different message depending on if the upgrade is free or not
                         bool hasUpgradeCost = (parentCardScript.card.data.effectData == null) || (parentCardScript.card.data.effectData.propertyEffects.noUpgradeCost == false);
 
@@ -94,12 +100,30 @@ public class CastingTooltipScript : BaseBehaviour
                     {
                         targetTower.UpdateTooltipText();
                         targetTower = null;
+
+                        //set effect source for any effects on the upgrade to null so they revert to their old values
+                        if (parentCardScript.card.data.effectData != null)
+                            foreach (IEffect ie in parentCardScript.card.data.effectData.effects)
+                                if (ie.triggersAs(EffectType.sourceTracked))
+                                    ((IEffectSourceTracked)ie).effectSource = null;
                     }
                     castable = false;
                 }
             }
             else
             {
+                //there is no tower underneath.  clear the target and tell the tower it can stop showing upgrade data
+                if (targetTower != null)
+                {
+                    targetTower.UpdateTooltipText();
+                    targetTower = null;
+
+                    //set effect source for any effects on the upgrade to null so they revert to their old values
+                    if (parentCardScript.card.data.effectData != null)
+                        foreach (IEffect ie in parentCardScript.card.data.effectData.effects)
+                            if (ie.triggersAs(EffectType.sourceTracked))
+                                ((IEffectSourceTracked)ie).effectSource = null;
+                }
                 castable = false;
             }
         }
