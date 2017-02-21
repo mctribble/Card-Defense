@@ -279,14 +279,8 @@ public class EffectData : System.Object
         if (testForEffectRequirements(e)) //blocks effect from being added if other effects it relies on are absent
         {
             //if the effect [ForbidEffectDuplicate] and we already have this effect, block it]
-            foreach (System.Object attribute in e.GetType().GetCustomAttributes(true))
-            {
-                ForbidEffectDuplicates fed = attribute as ForbidEffectDuplicates;
-                if (fed != null)
-                    if (Effects.Any(ee => e.XMLName == ee.XMLName))
-                        if (Effects.Any(ee => e.strength == ee.strength))
-                            return;
-            }
+            if (additionBlockedByDuplicate(e))
+                return;
 
             Effects.Add(e); //add it
 
@@ -301,6 +295,25 @@ public class EffectData : System.Object
             //reset the caches
             resetCachedValues();
         }
+    }
+
+    /// <summary>
+    /// returns true if the effect has [ForbidEffectDuplicates] and a duplicate of the effect is already in the effect list
+    /// </summary>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    public bool additionBlockedByDuplicate(IEffect e)
+    {
+        foreach (System.Object attribute in e.GetType().GetCustomAttributes(true))
+        {
+            ForbidEffectDuplicates fed = attribute as ForbidEffectDuplicates;
+            if (fed != null)
+                if (Effects.Any(ee => e.XMLName == ee.XMLName))
+                    if (Effects.Any(ee => e.strength == ee.strength))
+                        return true;
+        }
+
+        return false;
     }
 
     /// <summary>
