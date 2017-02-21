@@ -6,6 +6,7 @@ known issues:
 -orthogonal tower attacks move too quickly and all particles vanish simultaneously
 -tooltips should highlight which targeting effect is highest priority
 -some effects can be listed twice (such as targeting effects) even thouth this has no functional impact
+-sometimes tooltip will not allow upgrading a tower until you mouse over a different tower first
 ================================================================
 art needed for:
 

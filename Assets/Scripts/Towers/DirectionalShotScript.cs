@@ -159,7 +159,7 @@ public class DirectionalShotScript : BaseBehaviour
 
             if (timeToLive <= 0)
             {
-                Destroy(gameObject);
+                StartCoroutine(onDone());
                 return;
             }
         }
@@ -201,6 +201,24 @@ public class DirectionalShotScript : BaseBehaviour
         main.startColor = c;
 
         sprite.color = c;
+    }
+
+    /// <summary>
+    /// called when its time to destroy the attack
+    /// </summary>
+    private System.Collections.IEnumerator onDone()
+    {
+        initialized = false; //mark uninitialized so updates stop running
+
+        sprite.enabled = false; //hide attack wave
+
+        //wait for particles to finish
+        trail.Stop();
+        while (trail.particleCount > 0)
+            yield return null;
+
+        //destroy self
+        Destroy(gameObject);
     }
 }
 
