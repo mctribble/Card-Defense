@@ -10,8 +10,8 @@ public enum TargetingPriority
     RANDOM     = 1,
     BY_STAT    = 2,
     MOUSE      = 3,
-    ORTHOGONAL = 4,
-    MULTIPLE   = 5,
+    MULTIPLE   = 4,
+    ORTHOGONAL = 5,
     ALL        = 6,
 }
 
