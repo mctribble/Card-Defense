@@ -23,6 +23,7 @@ public enum TargetingPriority
 /// </summary>
 [ForbidEffectContext(EffectContext.enemyUnit)]
 [ForbidEffectContext(EffectContext.enemyCard)]
+[ForbidEffectDuplicates]
 public abstract class BaseEffectTowerTargeting : BaseEffect, IEffectTowerTargeting
 {
     [Hide] public override TargetingType targetingType { get { return TargetingType.noCast; } } //this effect should never be on a card, and thus should never be cast

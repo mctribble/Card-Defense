@@ -15,7 +15,7 @@ using Vexe.Runtime.Types;
 public enum EffectContext { playerCard, tower, enemyCard, enemyUnit } 
 
 /// <summary>
-/// forbids this effect fom appearing in the given context (ex: [ForbidEffectContext(EffectContext.Tower)] prevents the effect from being copied onto towers)
+/// forbids this effect from appearing in the given context (ex: [ForbidEffectContext(EffectContext.Tower)] prevents the effect from being copied onto towers)
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
 public class ForbidEffectContext : System.Attribute
@@ -25,6 +25,14 @@ public class ForbidEffectContext : System.Attribute
     public ForbidEffectContext(EffectContext contextToForbid) { context = contextToForbid; } //constructor
      
     public EffectContext forbiddenContext { get { return context; } } //accessor
+}
+
+/// <summary>
+/// forbids this effect from appearing more than once on the same object
+/// </summary>
+public class ForbidEffectDuplicates : System.Attribute
+{
+
 }
 
 /// <summary>
@@ -268,8 +276,18 @@ public class EffectData : System.Object
     /// </summary>
     public void Add(IEffect e)
     {
-        if (testForEffectRequirements(e))
+        if (testForEffectRequirements(e)) //blocks effect from being added if other effects it relies on are absent
         {
+            //if the effect [ForbidEffectDuplicate] and we already have this effect, block it]
+            foreach (System.Object attribute in e.GetType().GetCustomAttributes(true))
+            {
+                ForbidEffectDuplicates fed = attribute as ForbidEffectDuplicates;
+                if (fed != null)
+                    if (Effects.Any(ee => e.XMLName == ee.XMLName))
+                        if (Effects.Any(ee => e.strength == ee.strength))
+                            return;
+            }
+
             Effects.Add(e); //add it
 
             //save reference to this container in the effect and all its children

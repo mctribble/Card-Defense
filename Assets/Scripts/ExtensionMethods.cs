@@ -42,7 +42,7 @@ public static class ExtensionMethods
         //skip if it has [ForbidEffectContext(EffectContext.tower)]
         foreach (System.Object attribute in effect.GetType().GetCustomAttributes(true))
         {
-            ForbidEffectContext fec = (ForbidEffectContext)attribute;
+            ForbidEffectContext fec = attribute as ForbidEffectContext;
             if (fec != null)
                 if (fec.forbiddenContext == context)
                     return true;
