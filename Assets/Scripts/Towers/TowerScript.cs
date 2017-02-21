@@ -843,9 +843,23 @@ public class TowerScript : BaseBehaviour
 
         //print the targeting effects, if any, in priority order
         if (targetingEffectFound)
+        {
             foreach (IEffectTowerTargeting iett in effects.targetingEffects)
+            {
                 if (iett != EffectTargetDefault.instance) //skip the 'default' placeholder
-                    tooltipText.text += "\n" + "-" + iett.Name;
+                {
+                    //colorize the targeting effect so that the top one is in a different color
+                    if (iett == effects.targetingEffects.ElementAt(0))
+                        tooltipText.text += "<color=lime>";
+                    else
+                        tooltipText.text += "<color=grey>";
+
+                    tooltipText.text += "\n" + "-" + iett.Name; //effect name
+
+                    tooltipText.text += "</color>"; //revert to the normal color
+                }
+            }
+        }
 
         //disable the upgrade range
         upgradeRangeImage.enabled = false;

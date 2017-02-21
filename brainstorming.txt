@@ -3,7 +3,6 @@ known issues:
 -tooltips "blinking" side to side if towards middle of screen.  cause unknown.
 -scaleEffectWithTowerAttack does not show would-be effect strength on tower mouseover
 -scaleEffectWithTowerAttack does not immediately respond to tower upgrades
--tooltips should highlight which targeting effect is highest priority
 -sometimes tooltip will not allow upgrading a tower until you mouse over a different tower first
 ================================================================
 art needed for:
