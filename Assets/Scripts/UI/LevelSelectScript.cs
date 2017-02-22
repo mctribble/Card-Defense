@@ -557,6 +557,8 @@ public class LevelSelectScript : BaseBehaviour
                 StartCoroutine(setupLevelButtons());
                 infoImage.gameObject.SetActive(true);
                 infoImage.transform.parent.gameObject.SetActive(true);
+                infoImage.enabled = true;
+                infoText.enabled = true;
                 break;
 
             //these buttons are for individual help screens.  These we delegate to showHelpScreen() because of their length
@@ -564,6 +566,7 @@ public class LevelSelectScript : BaseBehaviour
             case "Controls":
             case "Cards":
             case "Towers":
+            case "Enemy Types":
             case "Effect Reference":
                 clearMenu();
                 showHelpScreen(buttonText);
@@ -584,7 +587,7 @@ public class LevelSelectScript : BaseBehaviour
         infoImage.transform.parent.gameObject.SetActive(false);
 
         //create the buttons
-        string[] menuButtonStrings = {"The Basics", "Controls", "Cards", "Towers", "Effect Reference", "Back to Help"};
+        string[] menuButtonStrings = {"The Basics", "Controls", "Cards", "Towers", "Enemy Types", "Effect Reference", "Back"};
         foreach (string s in menuButtonStrings)
         {
             MenuButtonScript mbs = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();
@@ -680,9 +683,53 @@ public class LevelSelectScript : BaseBehaviour
                     "'Target: mouse': towers with this effect attack enemies near your mouse, instead of enemies near themselves.  These towers effectively have infinite range, but require you to move your mouse around to follow the enemies.\n";
                 break;
 
+            case "Enemy Types":
+                helpText.text =
+                    "This section is a list of enemy types and how to deal with them:\n" +
+                    "\n" +
+                    "\n" +
+                    "Armored: These enemies have extremely high armor, so they will shrug off most attacks and only receive one damage.  You have a few options to deal with this: \n" +
+                    "- use a tower that can ignore armor\n" +
+                    "- use towers that deal poison damage, since poison ignores armor\n" +
+                    "- use shredder towers to strip away the armor\n" +
+                    "- use a lot of fast-firing towers and wear them down through pure attrition.\n" +
+                    "\n" +
+                    "Assassin: These are not particularly difficult to kill, but the consequences for being hit by one are much harsher: they deal damage directly to your hand, reducing your options in future rounds. \n" +
+                    "don't be afraid to overbuild a little if you see these coming: it is better to build too much and have towers you dont need than to be hit by assassins and not have the towers at all!\n" +
+                    "If you have them, you might also consider aiming towards them specifically with towers that have 'Target: Mouse', or detonating Nova Towers as a last resort to keep them at bay.\n" +
+                    "\n" +
+                    "Carrier: These guys are pretty sturdy, but the real danger comes after they die: Carriers hold a lot of Swarm enemies that will spew out from wherever the carrier dies. \n" +
+                    "try to build towers that can handle swarms near the goal to deal with the Swarms after the main unit goes down.  If that isnt an option, build a lot of heavy hitters near the start of the line to take the carriers out before they get to your faster towers.\n" +
+                    "\n" +
+                    "Giant: These enemies only ever come one at a time, but they have a lot of health and deal a lot of damage.\n" +
+                    "For these, you really just want to hit them with as much damage are possible.  Look for towers that deal a lot of damage per second.\n" +
+                    "Giants get tougher on later waves, and on high waves you can encounter giants with tens of thousands of health!  If you are having trouble with these, consider getting some 'Giant Sniper's.  They deal damage proportional to the target's maximum health, so they deal MASSIVE damage to late game giants.\n" +
+                    "\n" +
+                    "Ping: These enemies simply serve as a distraction from other enemies on the map: they are numerous, but deal no damage. \n" +
+                    "Whenever the enemy draws a Ping card, they get to draw another card for free.  This means you only ever encounter them alongside other types of monsters. \n" +
+                    "Use towers that attack quickly and/or attack multiple enemies at once to clear them out of the way.  Ping Towers are good for this, but there are a lot of other options also. \n" +
+                    "\n" +
+                    "Regenerative Tank: These enemies have a lot of health and are capable of regenerating very quickly. \n" +
+                    "Don't try to fight them with defenses spread out all over the map, because they will heal themselves between towers and negate the damage you dealt to them.  Instead, clump a lot of towers in one spot to deal with them before they can recover. \n" +
+                    "Another option is to poison them enough to counteract the regeneration, but this can be difficult. \n" +
+                    "If you have towers with 'Target: Mouse', consider aiming specifically towards these to take them down faster, especially as they move through heavily defended areas.\n" +
+                    "\n" +
+                    "Scrambled: These enemies each get a small, random bonus when they enter the map.  Usually they won't require any special attention if you have a diverse set of defenses.\n" +
+                    "that said, watch out for the bonus that lets them get faster over time.  If they get a lot of time to speed up before reaching your defenses, you may find them outrunning your towers.\n" +
+                    "\n" +
+                    "Standard: as the name implies, they are the basic, middle-of-the-road grunts.  They shouldn't require any special attention.\n" +
+                    "\n" +
+                    "Swarm: These enemies are weak, but they are fast come in large numbers.  Don't underestimate them: they can easily overwhelm your defenses through sheer numbers if you aren't set up to deal with them.\n" +
+                    "use towers that attack quickly, instead of ones that do a lot of damage.  They have very little health, so most of the damage from a large attack is just overkill anyway.\n" +
+                    "Towers that attack multiple enemies at once, such as Ping Towers and AOE Towers, excel at dealing with swarms.  Enough such defenses in one place can easily annihalate even large groups, if they are fast enough.\n" +
+                    "\n" +
+                    "Tank: These enemies are slow and come in small groups, but they are armored and have a lot of health. \n" +
+                    "Because of the armor, they will shrug off most weak attacks.  Look for towers that do a lot of damage at once instead, such as Heavy Towers.\n";
+                break;
+
             case "Effect Reference":
                 helpText.text =
-                    "This section is for more detailed explanations of some of the more confusing effects you may see on cards in the game.  Feel free to ignore this section for now and come back later to look up something that confuses you.\n" +
+                    "This section is for more detailed explanations of some of the more confusing effects you may see on cards in the game.  Feel free to ignore this for now and come back later to look up something that confuses you.\n" +
                     "\n" +
                     "\n" +
                     "[Scaled]: this tag on an enemy effect means that it becomes more powerful on tougher enemy waves.  The numbers listed on the card are always correct for whatever group you are looking at.\n" +
@@ -690,6 +737,8 @@ public class LevelSelectScript : BaseBehaviour
                     "[Ranked]: like [Scaled], but the effect only gets stronger if the enemy ranks up (ex, a Tank III has more armor than a Tank II)\n" +
                     "\n" +
                     "Armor: for every point of armor, incoming attacks do one less damage.  However, armor cannot reduce an attack below 0 damage.  Even an enemy with 999 armor can be taken down with enough bullets, no matter how weak they are.\n" +
+                    "\n" +
+                    "Chain hit: this effect is very powerful.  When a chain hit attack hits an enemy, it creates an explosion that spreads the attack, including all effects, onto any other enemies in range.  Effectively, towers with chain hit attack an entire group of tightly-packed enemies.  The higher the number, the larger the explosions, and therefore the further apart they can be and still get hit.  Plague towers are a good example." +
                     "\n" +
                     "Enemy loses % health: This is their max health, not their current!  Towers with this effect are VERY strong against giants, which can often end up with hundreds of thousands of health in the late game.\n" +
                     "\n" +
@@ -713,7 +762,7 @@ public class LevelSelectScript : BaseBehaviour
 
         //and put a back button at the bottom
         MenuButtonScript mbs = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();
-        mbs.setButtonText("Back");
+        mbs.setButtonText("Back to Help");
         mbs.setColor(menuButtonColor);
         mbs.transform.SetParent(this.transform, false);
         menuButtons.Add(mbs);
