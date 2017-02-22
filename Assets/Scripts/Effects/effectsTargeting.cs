@@ -83,9 +83,20 @@ public class EffectTargetArmor : BaseEffectTowerTargeting
             float curArmor = 0;
             EffectData curEnemyEffects = curEnemy.effectData;
             if (curEnemyEffects != null)
+            {
                 foreach (IEffect curEffect in curEnemyEffects.effects)
-                    if (curEffect.XMLName == "armor")
-                        curArmor += curEffect.strength;
+                {
+                    //drill down through meta effects, if there are any
+                    IEffect finalCurEffect = curEffect;
+                    while (finalCurEffect.triggersAs(EffectType.meta))
+                        finalCurEffect = ((IEffectMeta)finalCurEffect).innerEffect;
+
+                    if (finalCurEffect.XMLName == "armor")
+                    {
+                        curArmor += finalCurEffect.strength;
+                    }
+                }
+            }
 
             //if this is the highest, update vars
             if (curArmor > highestArmor)

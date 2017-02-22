@@ -40,12 +40,6 @@ public class EffectArmor : BaseEffectEnemyDamaged
 
     //since damage is already recalculated, we dont need to do anything here
     public override void actualDamage(ref DamageEventData d) { }
-
-    //effect can be removed if it drops to 0
-    public override bool shouldBeRemoved()
-    {
-        return strength == 0;
-    }
 }
 
 //reduces target effect by a fixed amount (but stops at 0)
@@ -63,9 +57,20 @@ public class EffectReduceEnemyEffectOnDamage : BaseEffectEnemyDamaged
         EnemyScript enemy = d.dest;
 
         if (enemy.effectData != null)
-            foreach (IEffect e in enemy.effectData.effects)
-                if (e.XMLName == argument)
-                    e.strength = Mathf.Max(0, e.strength - strength);
+        {
+            foreach (IEffect curEffect in enemy.effectData.effects)
+            {
+                //drill down through meta effects also, if they are present
+                IEffect finalCurEffect = curEffect;
+                while (finalCurEffect.XMLName != argument && finalCurEffect.triggersAs(EffectType.meta)) //keep descending until we find the effect we are looking for or this is not a meta effect
+                    finalCurEffect = ((IEffectMeta)finalCurEffect).innerEffect;
+                
+                if (finalCurEffect.XMLName == argument)
+                {
+                    finalCurEffect.strength = Mathf.Max(0, finalCurEffect.strength - strength);
+                }
+            }
+        }
     }
 }
 
