@@ -97,6 +97,7 @@ public class TowerScript : BaseBehaviour
         rangeImage.enabled = false;
         upgradeRangeImage.enabled = false;
         upgradeCount = 0;
+        shotCharge = 1.0f;
         maxCharge = 1.0f;
         effects = null;
 
