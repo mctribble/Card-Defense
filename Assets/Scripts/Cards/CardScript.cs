@@ -278,6 +278,7 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
         //tell card to reset when no longer moused over
         targetLocation = idleLocation;
         state = CardState.moving;
+        hand.SendMessage("updateCardIdleLocations"); //works around a sporadic draw order bug
     }
 
     public abstract void Hide();

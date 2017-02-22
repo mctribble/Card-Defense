@@ -5,11 +5,11 @@
   <randomWaveCount>30</randomWaveCount>
   <Waves />
   <Spawners>
-    <Spawner spawnX="-6" spawnY="-2" />
-    <Spawner spawnX="-6" spawnY="-3" />
-    <Spawner spawnX="-6" spawnY="-4" />
-    <Spawner spawnX="-6" spawnY="-1" />
-    <Spawner spawnX="-6" spawnY="0" />
+    <Spawner spawnX="-8" spawnY="-2" />
+    <Spawner spawnX="-8" spawnY="-3" />
+    <Spawner spawnX="-8" spawnY="-4" />
+    <Spawner spawnX="-8" spawnY="-1" />
+    <Spawner spawnX="-8" spawnY="0" />
   </Spawners>
   <PathSegments>
     <Segment startX="-8" startY="-2" endX="10" endY="-2" />
