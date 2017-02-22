@@ -160,7 +160,7 @@ public class EffectSplashDamage : BaseEffectEnemyDamaged
 }
 
 //attack damages and spreads effects to all enemies within X of each other through a series of consecutive explosions.  No enemy will be hit twice.  
-[ForbidEffectContext(EffectContext.enemyUnit)]
+//[ForbidEffectContext(EffectContext.enemyUnit)]
 [ForbidEffectContext(EffectContext.enemyCard)]
 public class EffectChainHit : BaseEffectEnemyDamaged
 {

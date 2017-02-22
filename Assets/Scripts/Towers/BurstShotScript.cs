@@ -135,7 +135,8 @@ public class BurstShotScript : BaseBehaviour
         maxScale = data.burstRange; //store attack range
 
         //warn all enemies that will be hit
-        foreach(EnemyScript e in EnemyManagerScript.instance.enemiesInRange(data.damageEvent.source.transform.position, maxScale))
+        List<EnemyScript> toWarn = EnemyManagerScript.instance.enemiesInRange(transform.position, maxScale);
+        foreach (EnemyScript e in toWarn)
         {
             DamageEventData ded = new DamageEventData();
             ded.source = data.damageEvent.source;
