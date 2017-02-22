@@ -97,7 +97,7 @@ public class TowerScript : BaseBehaviour
         rangeImage.enabled = false;
         upgradeRangeImage.enabled = false;
         upgradeCount = 0;
-        shotCharge = 1.0f;
+        shotCharge = 0.99f; //not quite full, so that Update() still does stuff that is meant to happen when a shot becomes ready
         maxCharge = 1.0f;
         effects = null;
 
