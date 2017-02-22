@@ -862,7 +862,7 @@
     <Card Type="spell" Name="Life Tap" Description="Power comes at a cost" Charges="1" Art="Life Tap.png" Tooltip="Tower_Basic.png" Token="false">
       <effectData>
         <Effects>
-          <Effect name="damagePlayer" strength="5" />
+          <Effect name="damagePlayer" strength="6" />
           <Effect name="drawCard" strength="3" />
         </Effects>
       </effectData>
