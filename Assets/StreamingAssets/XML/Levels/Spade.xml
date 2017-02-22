@@ -4,26 +4,51 @@
   <description>Heavily armored foes.</description>
   <randomWaveCount>0</randomWaveCount>
   <Waves>
-    <Wave type="Armored" budget="64" time="1.083433" />
-    <Wave type="Tank" budget="87" time="2.183433" />
-    <Wave type="Armored" budget="119" time="3.25477171" />
-    <Wave type="Tank" budget="161" time="4.35477161" />
-    <Wave type="Armored" budget="213" time="5.5" />
-    <Wave type="Tank" budget="274" time="6.60000038" />
-    <Wave type="Armored" budget="345" time="7.70000029" />
-    <Wave type="Tank" budget="426" time="8.8" />
-    <Wave type="Armored" budget="516" time="9.900001" />
-    <Wave type="Armored" budget="617" time="11" />
-    <Wave type="Tank" budget="726" time="12.1" />
-    <Wave type="Armored" budget="846" time="13.2000008" />
-    <Wave type="Tank" budget="975" time="14.3" />
-    <Wave type="Armored" budget="1114" time="15.4000006" />
-    <Wave type="Tank" budget="1263" time="16.5" />
-    <Wave type="Armored" budget="1422" time="17.6" />
-    <Wave type="Tank" budget="1590" time="18.7" />
-    <Wave type="Armored" budget="1768" time="19.8000011" />
-    <Wave type="Tank" budget="1955" time="20" />
-    <Wave type="Armored" budget="2153" time="20" />
+    <Wave type="Armored" budget="64" time="1.05029225">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Tank" budget="87" time="2.15029216">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Armored" budget="119" time="3.22163081">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Tank" budget="161" time="4.32163048">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Armored" budget="213" time="4.405279">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Tank" budget="274" time="5.30780172">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Armored" budget="345" time="4.86031771">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Tank" budget="426" time="5.59707165">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Armored" budget="516" time="5.155095">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Armored" budget="617" time="4.664892">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Tank" budget="726" time="6.90674639">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Armored" budget="846" time="4.264986">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Tank" budget="975" time="8.068563">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Armored" budget="1114" time="5.077252">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Tank" budget="1263" time="10.7280054">
+      <isToken>false</isToken>
+    </Wave>
   </Waves>
   <Spawners>
     <Spawner spawnX="0.5" spawnY="-5" />
@@ -51,13 +76,12 @@
   <shuffleDeck>true</shuffleDeck>
   <levelDeck name="Spade Deck">
     <Cards>
-      <Card name="Enrage" count="2" />
-      <Card name="Shredder Tower" count="3" />
-      <Card name="Infrastructure Funding" count="3" />
-      <Card name="Light Shield" count="3" />
-      <Card name="Piercing Ammo" count="4" />
-      <Card name="Poison Ammo" count="5" />
-      <Card name="Fast Tower" count="10" />
+      <Card name="Enrage" count="3" />
+      <Card name="Fast Tower" count="8" />
+      <Card name="Fast Upgrade" count="6" />
+      <Card name="Infrastructure Funding" count="4" />
+      <Card name="Light Shield" count="4" />
+      <Card name="Shredder Tower" count="5" />
     </Cards>
   </levelDeck>
 </Level>

@@ -350,7 +350,7 @@
       </towerData>
       <effectData>
         <Effects>
-          <Effect name="reduceEnemyEffectOnDamage" strength="30" argument="armor" />
+          <Effect name="reduceEnemyEffectOnDamage" strength="50" argument="armor" />
           <Effect name="targetArmor" />
         </Effects>
       </effectData>
