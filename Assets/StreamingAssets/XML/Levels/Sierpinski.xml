@@ -53,9 +53,10 @@
       <Card name="Fast Tower" count="6" />
       <Card name="Fast Upgrade" count="6" />
       <Card name="Light Shield" count="4" />
-      <Card name="Mouse Tower" count="8" />
+      <Card name="Mortar Tower" count="4" />
+      <Card name="Mouse Tower" count="4" />
       <Card name="Reinforce" count="2" />
-      <Card name="Sniper Tower" count="2" />
+      <Card name="Sniper Tower" count="4" />
     </Cards>
   </levelDeck>
 </Level>
