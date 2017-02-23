@@ -575,6 +575,10 @@ public class LevelManagerScript : BaseBehaviour
         yield return new WaitForSeconds(1.0f);
         PlayerHandScript.instance.drawCard();
 
+        //cull null entries from the survivor list to avoid a very rare bug where enemies die after leaving the map
+        if (EnemyManagerScript.instance.survivors != null)
+            EnemyManagerScript.instance.survivors.RemoveAll(es => es == null);
+
         //if there are any survivors, draw a new survivor card to represent them
         if ((EnemyManagerScript.instance.survivors != null) && (EnemyManagerScript.instance.survivors.Count > 0))
         {

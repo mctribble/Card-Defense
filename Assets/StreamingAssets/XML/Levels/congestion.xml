@@ -96,11 +96,13 @@
       <Card name="Enrage" count="3" />
       <Card name="Fast Tower" count="5" />
       <Card name="Fast Upgrade" count="6" />
+      <Card name="Infrastructure Funding" count="2" />
+      <Card name="Life Tap" count="2" />
       <Card name="Light Shield" count="5" />
       <Card name="Range Upgrade" count="5" />
-      <Card name="Recycle" count="2" />
       <Card name="Sniper Tower" count="5" />
       <Card name="Summon Swarm" count="4" />
+      <Card name="Swarm Tower" count="3" />
     </Cards>
   </levelDeck>
 </Level>
