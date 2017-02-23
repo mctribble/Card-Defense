@@ -114,7 +114,7 @@
       </effectData>
     </Card>
     <Card Type="tower" Name="Death Ray" Description="Fires at a blisteringly fast pace and at great range, but dont build it until you really need it" Charges="2" Art="Death_Ray.png" Tooltip="Tower_Octagon.png" Token="false">
-      <towerData Recharge="0.01" Range="999" Damage="2" Lifespan="3" UpgradeCap="0" Sprite="Tower_Octagon.png">
+      <towerData Recharge="0.03" Range="999" Damage="2" Lifespan="3" UpgradeCap="0" Sprite="Tower_Octagon.png">
         <towerColor r="0.75" g="0.75" b="0.2" a="1" />
       </towerData>
       <effectData>
@@ -395,7 +395,7 @@
       </effectData>
     </Card>
     <Card Type="tower" Name="Swarm Tower" Description="Unleashes a massive hail of explosive bullets that attacks everything on the map" Charges="4" Art="Swarm_Tower.png" Tooltip="Tower_Octagon.png" Token="false">
-      <towerData Recharge="2" Range="999" Damage="3" Lifespan="2" UpgradeCap="3" Sprite="Tower_Octagon.png">
+      <towerData Recharge="2.5" Range="999" Damage="2" Lifespan="2" UpgradeCap="3" Sprite="Tower_Octagon.png">
         <towerColor r="0.5" g="0.5" b="0.5" a="1" />
       </towerData>
       <effectData>
