@@ -3,7 +3,7 @@ Boxes.xml
 Chain.xml
 Chokepoint.xml
 Club.xml
-confusion.xml
+Confusion.xml
 Congestion.xml
 Diamond.xml
 Divergence 2.xml
@@ -11,7 +11,7 @@ Divergence.xml
 Double Spiral Mountain.xml
 Grid.xml
 Heart.xml
-parallel tasks 2.xml
+Parallel tasks 2.xml
 Parallel tasks.xml
 Pi.xml
 Psi.xml
@@ -25,7 +25,7 @@ Spade.xml
 Spiral Mountain.xml
 Switchback.xml
 Symmetry.xml
-theta.xml
+Theta.xml
 Trophy.xml
 Tutorial 1 The Basics.xml
 Tutorial 2 Losing.xml
