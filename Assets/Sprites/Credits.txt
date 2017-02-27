@@ -1,7 +1,0 @@
-Christopher Kaleb Hake:
-Border
-Bubble
-Edge
-Enemy_Basic
-Particle
-Radial Burst
