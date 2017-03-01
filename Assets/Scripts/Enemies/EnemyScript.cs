@@ -258,6 +258,19 @@ public class EnemyScript : BaseBehaviour
         Vector2 newLocation = Vector2.MoveTowards(prevLocation, path[currentDestination], distanceToTravel); //perform movement
         distanceToTravel -= Vector2.Distance(prevLocation, newLocation);                                     //check how far we actually moved
 
+        //calculate angle to render the sprite
+        Vector2 trans = newLocation - prevLocation;         //translation of our movement
+        float   rot   = Vector2.Angle(Vector2.left, trans); //angle of said movement
+        if (Vector3.Cross(Vector2.left, trans).z < 0)       //because .Angle returns closest angle instead of counter-clockwise angle, use the crossproduct to make sure we arent off 180 degrees (http://answers.unity3d.com/questions/162177/vector2angles-direction.html)
+            rot = 360 - rot;
+
+        //we cant modify properties, so it takes five statements to perform the actual rotation
+        Quaternion q  = transform.localRotation;
+        Vector3 euler = q.eulerAngles;
+        euler.z = rot;
+        q.eulerAngles = euler;
+        transform.localRotation = q;
+
         //if we havent moved far enough yet, repeat until we have (with a small margin of error to account for float math)
         while (distanceToTravel > 0.001f) 
         {
@@ -275,7 +288,6 @@ public class EnemyScript : BaseBehaviour
             newLocation = Vector2.MoveTowards(prevLocation, path[currentDestination], distanceToTravel);
             distanceToTravel -= Vector2.Distance(prevLocation, newLocation);
         }
-        
 
         //save position
         transform.position = new Vector3(newLocation.x, newLocation.y, transform.position.z);
