@@ -41,6 +41,13 @@ public class MessageHandlerScript : BaseBehaviour
         buttonC.SetActive(false);
         buttonD.SetActive(false);
     }
+
+    //keep on top if a message is being shown
+    private void Update()
+    {
+        if (messageBox.activeInHierarchy)
+            transform.SetAsLastSibling();
+    }
 	
     //result handler
 	private void TextButtonSelected(string response) { responseToLastPrompt = response; messageBox.SetActive(false); }
@@ -62,7 +69,6 @@ public class MessageHandlerScript : BaseBehaviour
         instance.buttonC.SetActive(false);
         instance.buttonD.SetActive(false);
         responseToLastPrompt = null;
-        instance.gameObject.transform.SetAsLastSibling();
 
         //pause the game
         float oldTimeScale = Time.timeScale;
@@ -94,7 +100,6 @@ public class MessageHandlerScript : BaseBehaviour
         instance.buttonC.SetActive(false);
         instance.buttonD.SetActive(false);
         responseToLastPrompt = null;
-        instance.gameObject.transform.SetAsLastSibling();
 
         //pause the game
         float oldTimeScale = Time.timeScale;
