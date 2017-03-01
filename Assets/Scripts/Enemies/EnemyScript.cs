@@ -161,7 +161,7 @@ public class EnemyScript : BaseBehaviour
     public Vector2        startPos;           //position where this enemy was spawned
     public int            curHealth;          //current health
     public int            expectedHealth;     //what health will be after all active shots reach this enemy
-    public SpriteRenderer enemyImage;         //sprite component for this enemy
+    public SpriteRenderer enemyImage;         //sprite for this enemy
     public Image          healthbar;          //image used for the health bar
     public Image          deathBurst;         //image used for the death explosion
 
@@ -201,7 +201,6 @@ public class EnemyScript : BaseBehaviour
         curHealth = maxHealth;
         expectedHealth = maxHealth;
         startPos = transform.position;
-        enemyImage = GetComponent<SpriteRenderer>();
         goalFinalChance = false;
     }
 
@@ -265,11 +264,11 @@ public class EnemyScript : BaseBehaviour
             rot = 360 - rot;
 
         //we cant modify properties, so it takes five statements to perform the actual rotation
-        Quaternion q  = transform.localRotation;
+        Quaternion q  = enemyImage.transform.localRotation;
         Vector3 euler = q.eulerAngles;
         euler.z = rot;
         q.eulerAngles = euler;
-        transform.localRotation = q;
+        enemyImage.transform.localRotation = q;
 
         //if we havent moved far enough yet, repeat until we have (with a small margin of error to account for float math)
         while (distanceToTravel > 0.001f) 
@@ -508,7 +507,7 @@ public class EnemyScript : BaseBehaviour
             effectData = null;
         }
 
-        this.GetComponent<SpriteRenderer>().color = d.unitColor.toColor();
+        enemyImage.color = d.unitColor.toColor();
 
         //yes, I know its awkward, but we're setting the sprite with WWW, even on PC
         string spritePath = "";
