@@ -62,15 +62,19 @@ public class PathSegmentScript : BaseBehaviour
         if (Vector3.Cross(pathVec, Vector3.right).z > 0.0)
             angle = 360 - angle;
 
+        //clip a little bit off the end to avoid blue arrows pointing into space
+        Vector2 clippedMidpoint = Vector2.MoveTowards(midpoint, pathStart, 0.25f);
+        float   clippedSegmentLength = segmentLength - 0.5f;
+
         //position appropriately
         RectTransform rTrans = GetComponent<RectTransform> ();
-        rTrans.position = midpoint;
-        rTrans.sizeDelta = new Vector2(segmentLength, pathWidth);
+        rTrans.position = clippedMidpoint;
+        rTrans.sizeDelta = new Vector2(clippedSegmentLength, pathWidth);
         rTrans.Rotate(0.0f, 0.0f, angle);
 
         //update texture UV coords
         Rect temp = this.GetComponent<UnityEngine.UI.RawImage>().uvRect;
-        temp.Set(midpoint.x, midpoint.y, segmentLength, pathWidth);
+        temp.Set(midpoint.x, midpoint.y, clippedSegmentLength, pathWidth);
         this.GetComponent<UnityEngine.UI.RawImage>().uvRect = temp;
 
         //also scale collider

@@ -10,7 +10,6 @@ enemy spawn points
 update art for:
 
 maybe update enemy goal points?
-maybe indicate path direction?
 ================================================================
 gameplay:
 ================================================================
