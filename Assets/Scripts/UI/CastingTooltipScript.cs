@@ -65,7 +65,7 @@ public class CastingTooltipScript : BaseBehaviour
                     {
                         //tell old tower to revert to the normal tooltip
                         if (targetTower != null)
-                            targetTower.UpdateTooltipText();
+                            targetTower.cancelUpgradeTooltip();
 
                         targetTower = newTargetTower; //change target
 
@@ -98,7 +98,7 @@ public class CastingTooltipScript : BaseBehaviour
                     //there is no tower underneath.  clear the target and tell the tower it can stop showing upgrade data
                     if (targetTower != null)
                     {
-                        targetTower.UpdateTooltipText();
+                        targetTower.cancelUpgradeTooltip();
                         targetTower = null;
 
                         //set effect source for any effects on the upgrade to null so they revert to their old values
@@ -115,7 +115,7 @@ public class CastingTooltipScript : BaseBehaviour
                 //there is no tower underneath.  clear the target and tell the tower it can stop showing upgrade data
                 if (targetTower != null)
                 {
-                    targetTower.UpdateTooltipText();
+                    targetTower.cancelUpgradeTooltip();
                     targetTower = null;
 
                     //set effect source for any effects on the upgrade to null so they revert to their old values

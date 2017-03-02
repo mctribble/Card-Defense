@@ -1,7 +1,6 @@
 known issues:
 -[WebGL] need a placeholder image while level thumbnails are loading.
 -tooltips "blinking" side to side if towards middle of screen.  cause unknown.
--scaleEffectWithTowerAttack does not show strength changes when an upgrade is being hovered.  Maybe this is fine?
 -some lingering cause of enemies not expecting damage
 ================================================================
 art needed for:

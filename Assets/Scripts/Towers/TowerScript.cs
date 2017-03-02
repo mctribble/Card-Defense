@@ -86,9 +86,11 @@ public class TowerScript : BaseBehaviour
 
     [VisibleWhen("isEditor")] public float tooltipPositionBuffer; //amount of extra space to buffer when positioning tooltips
 
-    //event effects can register to if they need to know when the tower gets upgraded for some reason
+    //events effects can register to if they need to respond to upgrades in some way
     public delegate void towerUpgradedHandler(TowerScript upgradedTower);
     public event towerUpgradedHandler towerUpgradedEvent;
+    public delegate void towerUpgradingHandler(TowerScript hoveredTower, UpgradeData upgrade); //if upgrade is null, that means the player changed their mind and moved away from the tower
+    public event towerUpgradingHandler towerUpgradingEvent;
 
     // Use this for initialization
     private void Awake()
@@ -635,6 +637,10 @@ public class TowerScript : BaseBehaviour
             }
         }
 
+        //fire event if anything needs to know that an upgrade is being hovered over this tower
+        if (towerUpgradingEvent != null)
+            towerUpgradingEvent(this, u);
+
         //tower name does not change
         tooltipText.text = towerName + "\n";
 
@@ -804,6 +810,14 @@ public class TowerScript : BaseBehaviour
             foreach (IEffect ie in effects.effects)
                 if (ie.triggersAs(EffectType.death))
                     ((IEffectDeath)ie).onTowerDeath(this);
+    }
+
+    //stops showing the upgrade tooltip.  This updates the tooltip text and fires the Upgrading event with a null upgrade so effects who need to know get notified
+    public void cancelUpgradeTooltip()
+    {
+        UpdateTooltipText();
+        if (towerUpgradingEvent != null)
+            towerUpgradingEvent(this, null);
     }
 
     //these update text associated with the tower when things change

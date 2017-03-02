@@ -455,7 +455,26 @@ public class EffectinvScaleEffectWithDamage : BaseEffectMeta
 //on towers, multiplies effect strength by attack power of the tower.  Use this to create effects whose strength vary with the strength of the tower, like the poison on "Poison Ammo".
 public class EffectScaleEffectWithTowerAttack : BaseEffectMeta, IEffectSourceTracked
 {
-    public override string Name { get { return "[scales with tower attack]" + innerEffect.Name; } } //returns name and strength
+    //name is in yellow if an upgrade that changes the effect strength is being hovered over the tower
+    private bool upgrading = false;
+    public override string Name
+    {
+        get
+        {
+            string result = "";
+
+            if (upgrading)
+                result += "<color=yellow>";
+
+            result += "[scales with tower attack]" + innerEffect.Name;
+
+            if (upgrading)
+                result += "</color>";
+
+            return result;
+        }
+    }
+
     public override string XMLName { get { return "scaleEffectByTowerAttack"; } } //name used to refer to this effect in XML
 
     private float? effectBaseStrength; //original strength of the inner effect
@@ -500,22 +519,53 @@ public class EffectScaleEffectWithTowerAttack : BaseEffectMeta, IEffectSourceTra
             if (effectBaseStrength == null)
                 effectBaseStrength = innerEffect.strength;
 
-            //if we the old source was a tower, deregister for the event
+            //if we the old source was a tower, deregister for the events
             if (base.effectSource != null)
-                base.effectSource.towerUpgradedEvent -= eventHandler;
-
-            //if the new value is a tower, register for the event
+            {
+                base.effectSource.towerUpgradingEvent -= towerUpgrading;
+                base.effectSource.towerUpgradedEvent  -= towerUpgraded;
+            }
+            //if the new value is a tower, register for the events
             if (value != null)
-                value.towerUpgradedEvent += eventHandler;
+            {
+                value.towerUpgradingEvent += towerUpgrading;
+                value.towerUpgradedEvent  += towerUpgraded;
+            }
 
             base.effectSource = value; //update effectSource
 
             scaleInnerEffect(); //rescale the effect
         }
-    } 
+    }
+
+    //rescales the effect when an upgrade is hovered over the tower with this effect.  If upgrade is null, that means the player changed their mind and moved away from a previous upgrade
+    private void towerUpgrading(TowerScript hoveredTower, UpgradeData upgrade)
+    {
+        if (hoveredTower == effectSource)
+        {
+
+            if (upgrade == null)
+            {
+                scaleInnerEffect(); //an upgrade was cancelled.  revert to normal strength
+                upgrading = false;  //and remove the 'upgrading' flag that changes name color
+            }
+            else
+            {
+                innerEffect.strength = effectBaseStrength.Value * (effectSource.attackPower * upgrade.attackMultiplier + upgrade.attackModifier); //scale as if the upgrade had already been applied
+
+                //if the upgrade actually changes the attack, then set the 'upgrading' flag that changes name color
+                if (upgrade.attackMultiplier != 1.0f || upgrade.attackModifier != 0.0f)
+                    upgrading = true; 
+            }
+
+            hoveredTower.UpdateTooltipText(); //make the tower update its tooltip
+        }
+        else
+            Debug.LogWarning("EffectScaleEffectWithTowerAttack should not be registered to hear about upgrades from that tower, as it is not the source of the effect");
+    }
 
     //rescales the effect when the tower this upgrade is on gets upgraded
-    private void eventHandler(TowerScript upgradedTower)
+    private void towerUpgraded(TowerScript upgradedTower)
     {
         if (upgradedTower == effectSource)
         {
