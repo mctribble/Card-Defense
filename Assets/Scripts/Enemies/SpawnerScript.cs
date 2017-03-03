@@ -43,6 +43,7 @@ public class SpawnerScript : BaseBehaviour
         {
             data.spawnX = value.x;
             data.spawnY = value.y;
+            transform.localPosition = spawnPos;
         }
     }
 
@@ -50,6 +51,7 @@ public class SpawnerScript : BaseBehaviour
     private void SetData(SpawnerData newData)
     {
         data = newData;
+        transform.localPosition = spawnPos;
     }
 
     /// <summary>
