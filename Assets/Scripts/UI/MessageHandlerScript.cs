@@ -12,6 +12,7 @@ public class MessageHandlerScript : BaseBehaviour
     //object references
     private bool shouldShowRefs() { return !Application.isPlaying; }
     [VisibleWhen("shouldShowRefs")] public GameObject messageBox;
+    [VisibleWhen("shouldShowRefs")] public GameObject volumeControls;
     [VisibleWhen("shouldShowRefs")] public Text       messageText;
     [VisibleWhen("shouldShowRefs")] public GameObject buttonA;
     [VisibleWhen("shouldShowRefs")] public GameObject buttonB;
@@ -48,9 +49,9 @@ public class MessageHandlerScript : BaseBehaviour
         if (messageBox.activeInHierarchy)
             transform.SetAsLastSibling();
     }
-	
+
     //result handler
-	private void TextButtonSelected(string response) { responseToLastPrompt = response; messageBox.SetActive(false); }
+    private void TextButtonSelected(string response) { responseToLastPrompt = response; messageBox.SetActive(false); }
 
     /// <summary>
     /// [COROUTINE] handles messages whose only valid response is "OK".  
@@ -62,6 +63,7 @@ public class MessageHandlerScript : BaseBehaviour
     {
         //set up the box
         instance.messageBox.SetActive(true);
+        instance.volumeControls.SetActive(false);
         instance.messageText.text = message;
         instance.buttonA.SetActive(true);
         instance.buttonA.SendMessage("setButtonText", "OK");
@@ -92,6 +94,7 @@ public class MessageHandlerScript : BaseBehaviour
     {
         //set up the box
         instance.messageBox.SetActive(true);
+        instance.volumeControls.SetActive(false);
         instance.messageText.text = prompt;
         instance.buttonA.SetActive(true);
         instance.buttonA.SendMessage("setButtonText", "Yes");
@@ -112,6 +115,55 @@ public class MessageHandlerScript : BaseBehaviour
         //allow the game to continue
         Time.timeScale = oldTimeScale;
     }
+
+    /// <summary>
+    /// [COROUTINE] handles the Esc key during a mission.  Presents volume controls.
+    /// Pauses and yields until the prompt is answered.
+    /// the response can be retrieved from MessageHandlerScript.responseToLastPrompt
+    /// </summary>
+    public static IEnumerator ShowPauseMenu()
+    {
+        //set up the box
+        instance.messageBox.SetActive(true);
+        instance.volumeControls.SetActive(true);
+        instance.messageText.text = "PAUSED";
+        instance.buttonA.SetActive(true);
+        instance.buttonA.SendMessage("setButtonText", "Continue");
+        instance.buttonB.SetActive(true);
+        instance.buttonB.SendMessage("setButtonText", "Quit Level");
+
+        if (Application.platform == RuntimePlatform.WebGLPlayer || Application.isEditor)
+            instance.buttonC.SetActive(false);
+        else
+        {
+            instance.buttonC.SetActive(true);
+            instance.buttonC.SendMessage("setButtonText", "Quit Game");
+        }
+
+        instance.buttonD.SetActive(false);
+        responseToLastPrompt = null;
+
+        //pause the game
+        float oldTimeScale = Time.timeScale;
+        Time.timeScale = 0.0f;
+
+        //wait for the box to be closed
+        while (responseToLastPrompt == null)
+            yield return null;
+
+        //allow the game to continue
+        Time.timeScale = oldTimeScale;
+    }
+
+    //volume controls
+    private float SFXVolume = 0.3f,  MusicVolume = 0.5f;
+    private bool  SFXMute   = false, MusicMute   = false;
+    public void SFXSlider(float setting) { SFXVolume = setting; }
+    public void MusicSlider(float setting) { MusicVolume = setting; }
+    public void SFXMuteToggle(bool setting) { SFXMute = setting; }
+    public void MusicMuteToggle(bool setting) { MusicMute = setting; }
+    public float SFXVolumeSetting { get { if (SFXMute) return 0.0f; else return SFXVolume; } }
+    public float MusicVolumeSetting { get { if (MusicMute) return 0.0f; else return MusicVolume; } }
 
     /// <summary>
     /// calls ShowAndYield but returns without waiting for a response.  Useful for places (like Update()) where the engine does not allow you to yield

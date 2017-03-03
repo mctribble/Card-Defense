@@ -265,9 +265,11 @@ public class GameControlsScript : MonoBehaviour
     {
         if (LevelManagerScript.instance.levelLoaded)
         {
-            yield return StartCoroutine(MessageHandlerScript.PromptYesNo("Return to main menu?"));
-            if (MessageHandlerScript.responseToLastPrompt == "Yes")
+            yield return StartCoroutine(MessageHandlerScript.ShowPauseMenu());
+            if (MessageHandlerScript.responseToLastPrompt == "Quit Level")
                 SceneManager.LoadScene("Game");
+            else if (MessageHandlerScript.responseToLastPrompt == "Quit Game")
+                Application.Quit();                
         }
     }
 }
