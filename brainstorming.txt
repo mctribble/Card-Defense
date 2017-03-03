@@ -5,11 +5,8 @@ known issues:
 ================================================================
 art needed for:
 
-enemy spawn points
-
 update art for:
 
-maybe update enemy goal points?
 ================================================================
 gameplay:
 ================================================================
@@ -20,6 +17,7 @@ need some level backgrounds
 ================================================================
 UI:
 hotkey/button for showing range of all towers?
+settings menu for volume controls
 ================================================================
 content goals:
 enemies: 10/10   <<DONE!!>>
