@@ -492,7 +492,7 @@ public class LevelManagerScript : BaseBehaviour
         while (true)
         {
             musicSource.clip = levelMusic[curSong];
-            musicSource.Play();
+            musicSource.Play(); //(we dont update the volume because the MessageHandler does that on its own for the music)
 
             while (musicSource.isPlaying)
                 yield return new WaitForSeconds(0.1f);

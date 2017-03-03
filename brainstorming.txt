@@ -17,7 +17,8 @@ need some level backgrounds
 ================================================================
 UI:
 hotkey/button for showing range of all towers?
-settings menu for volume controls
+make volume controls accessible in level select and deck editor
+make volume settings persistent
 ================================================================
 content goals:
 enemies: 10/10   <<DONE!!>>

@@ -549,7 +549,6 @@ public class EnemyScript : BaseBehaviour
         //sound
         int soundToPlay = Random.Range(0, deathSounds.Length);
         audioSource.clip = deathSounds[soundToPlay];
-        //audioSource.Play();
         StartCoroutine(playRespectLimit(audioSource)); //plays the sound, if we are not at the sound cap
 
         //disable normal images and turn on the death burst instead
@@ -598,6 +597,7 @@ public class EnemyScript : BaseBehaviour
 
         //otherwise, play the sound and track it
         curSoundsAtOnce++;
+        source.volume = MessageHandlerScript.instance.SFXVolumeSetting;
         source.Play();
         while (source.isPlaying)
             yield return null;

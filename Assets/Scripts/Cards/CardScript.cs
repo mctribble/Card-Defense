@@ -91,6 +91,7 @@ public abstract class CardScript : BaseBehaviour, IPointerEnterHandler, IPointer
         {
             int soundToPlay = Random.Range(0, drawSounds.Length);
             audioSource.clip = drawSounds[soundToPlay];
+            audioSource.volume = MessageHandlerScript.instance.SFXVolumeSetting;
             audioSource.Play();
         }
     }

@@ -182,6 +182,7 @@ public class BurstShotScript : BaseBehaviour
 
         //otherwise, play the sound and track it
         curSoundsAtOnce++;
+        source.volume = MessageHandlerScript.instance.SFXVolumeSetting;
         source.Play();
         while (source.isPlaying)
             yield return null;

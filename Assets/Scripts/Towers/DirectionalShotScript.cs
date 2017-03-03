@@ -188,6 +188,7 @@ public class DirectionalShotScript : BaseBehaviour
         //play sound
         int soundToPlay = Random.Range(0, attackSounds.Length);
         audioSource.clip = attackSounds[soundToPlay];
+        audioSource.volume = MessageHandlerScript.instance.SFXVolumeSetting;
         audioSource.Play();
 
         initialized = true; //flag ready

@@ -155,6 +155,7 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
         //play the random sound with thea udio source attached to the main camera since we dont want UI sounds to overlap and this button may cease to exist before the sound is done
         int soundToPlay = Random.Range(0, clickSounds.Length);
         Camera.main.GetComponent<AudioSource>().clip = clickSounds[soundToPlay];
+        Camera.main.GetComponent<AudioSource>().volume = MessageHandlerScript.instance.SFXVolumeSetting;
         Camera.main.GetComponent<AudioSource>().Play();
 
         switch (buttonType)

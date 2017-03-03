@@ -550,6 +550,7 @@ public class DeckManagerScript : BaseBehaviour
         //sound
         int soundToPlay = UnityEngine.Random.Range(0, playerDamageSounds.Length);
         audioSource.clip = playerDamageSounds[soundToPlay];
+        audioSource.volume = MessageHandlerScript.instance.SFXVolumeSetting;
         audioSource.Play();
 
         List<CardScript> deadCards = new List<CardScript>();
@@ -693,6 +694,7 @@ public class DeckManagerScript : BaseBehaviour
             //if it was all dealt, then we'll play the sound here
             int soundToPlay = UnityEngine.Random.Range(0, playerDamageSounds.Length);
             audioSource.clip = playerDamageSounds[soundToPlay];
+            audioSource.volume = MessageHandlerScript.instance.SFXVolumeSetting;
             audioSource.Play();
         }
     }

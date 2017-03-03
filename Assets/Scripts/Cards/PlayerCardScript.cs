@@ -347,6 +347,7 @@ public class PlayerCardScript : CardScript, IPointerClickHandler
             //sound
             int soundToPlay = UnityEngine.Random.Range(0, cardDestroyedSounds.Length);
             audioSource.clip = cardDestroyedSounds[soundToPlay];
+            audioSource.volume = MessageHandlerScript.instance.SFXVolumeSetting;
             audioSource.Play();
 
             //fadeout

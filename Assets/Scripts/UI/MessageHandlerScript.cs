@@ -158,10 +158,10 @@ public class MessageHandlerScript : BaseBehaviour
     //volume controls
     private float SFXVolume = 0.3f,  MusicVolume = 0.5f;
     private bool  SFXMute   = false, MusicMute   = false;
-    public void SFXSlider(float setting) { SFXVolume = setting; }
-    public void MusicSlider(float setting) { MusicVolume = setting; }
-    public void SFXMuteToggle(bool setting) { SFXMute = setting; }
-    public void MusicMuteToggle(bool setting) { MusicMute = setting; }
+    public void SFXSlider(float setting)      { SFXVolume   = setting; }
+    public void MusicSlider(float setting)    { MusicVolume = setting; LevelManagerScript.instance.musicSource.volume = MusicVolumeSetting; }
+    public void SFXMuteToggle(bool setting)   { SFXMute     = setting; }
+    public void MusicMuteToggle(bool setting) { MusicMute   = setting; LevelManagerScript.instance.musicSource.volume = MusicVolumeSetting; }
     public float SFXVolumeSetting { get { if (SFXMute) return 0.0f; else return SFXVolume; } }
     public float MusicVolumeSetting { get { if (MusicMute) return 0.0f; else return MusicVolume; } }
 
