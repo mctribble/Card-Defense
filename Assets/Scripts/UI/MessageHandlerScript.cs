@@ -11,14 +11,19 @@ public class MessageHandlerScript : BaseBehaviour
 {
     //object references
     private bool shouldShowRefs() { return !Application.isPlaying; }
-    [VisibleWhen("shouldShowRefs")] public GameObject messageBox;
-    [VisibleWhen("shouldShowRefs")] public GameObject volumeControls;
-    [VisibleWhen("shouldShowRefs")] public Text       messageText;
-    [VisibleWhen("shouldShowRefs")] public GameObject buttonA;
-    [VisibleWhen("shouldShowRefs")] public GameObject buttonB;
-    [VisibleWhen("shouldShowRefs")] public GameObject buttonC;
-    [VisibleWhen("shouldShowRefs")] public GameObject buttonD;
-    [VisibleWhen("shouldShowRefs")] public GameObject combatTextPrefab;
+    [VisibleWhen("shouldShowRefs")] public GameObject    messageBox;
+    [VisibleWhen("shouldShowRefs")] public GameObject    volumeControls;
+    [VisibleWhen("shouldShowRefs")] public Slider        SFXSliderComponent;
+    [VisibleWhen("shouldShowRefs")] public Slider        MusicSliderComponent;
+    [VisibleWhen("shouldShowRefs")] public Toggle        SFXMuteToggleComponent;
+    [VisibleWhen("shouldShowRefs")] public Toggle        MusicMuteToggleComponent;
+    [VisibleWhen("shouldShowRefs")] public AudioSource[] musicSources; 
+    [VisibleWhen("shouldShowRefs")] public Text          messageText;
+    [VisibleWhen("shouldShowRefs")] public GameObject    buttonA;
+    [VisibleWhen("shouldShowRefs")] public GameObject    buttonB;
+    [VisibleWhen("shouldShowRefs")] public GameObject    buttonC;
+    [VisibleWhen("shouldShowRefs")] public GameObject    buttonD;
+    [VisibleWhen("shouldShowRefs")] public GameObject    combatTextPrefab;
 
     /// <summary>
     /// text of the button selected on the last prompt.  null if there was no previous prompt
@@ -41,6 +46,18 @@ public class MessageHandlerScript : BaseBehaviour
         buttonB.SetActive(false);
         buttonC.SetActive(false);
         buttonD.SetActive(false);
+
+        //load volume settings, if present, or use defaults if not
+        SFXVolume   = PlayerPrefs.GetFloat("SFX Volume",   0.75f);
+        MusicVolume = PlayerPrefs.GetFloat("Music Volume", 0.75f);
+        SFXMute     = (PlayerPrefs.GetInt("SFX Mute",   0) == 1);
+        MusicMute   = (PlayerPrefs.GetInt("Music Mute", 0) == 1);
+
+        //make sure the dialog shows these settings
+        SFXSliderComponent.value = SFXVolume;
+        MusicSliderComponent.value = MusicVolume;
+        SFXMuteToggleComponent.isOn = SFXMute;
+        MusicMuteToggleComponent.isOn = MusicMute;
     }
 
     //keep on top if a message is being shown
@@ -153,17 +170,66 @@ public class MessageHandlerScript : BaseBehaviour
 
         //allow the game to continue
         Time.timeScale = oldTimeScale;
+
+        //save the new settings
+        PlayerPrefs.SetFloat("SFX Volume",   instance.SFXVolume);
+        PlayerPrefs.SetFloat("Music Volume", instance.MusicVolume);
+        PlayerPrefs.SetInt("SFX Mute",   instance.SFXMute   ? 1 : 0);
+        PlayerPrefs.SetInt("Music Mute", instance.MusicMute ? 1 : 0);
+        PlayerPrefs.Save(); //technically this is unnecessary, but we have few values to save and this makes sure they get retained if the game crashes for some reason
     }
 
     //volume controls
-    private float SFXVolume = 0.3f,  MusicVolume = 0.5f;
-    private bool  SFXMute   = false, MusicMute   = false;
-    public void SFXSlider(float setting)      { SFXVolume   = setting; }
-    public void MusicSlider(float setting)    { MusicVolume = setting; LevelManagerScript.instance.musicSource.volume = MusicVolumeSetting; }
-    public void SFXMuteToggle(bool setting)   { SFXMute     = setting; }
-    public void MusicMuteToggle(bool setting) { MusicMute   = setting; LevelManagerScript.instance.musicSource.volume = MusicVolumeSetting; }
-    public float SFXVolumeSetting { get { if (SFXMute) return 0.0f; else return SFXVolume; } }
-    public float MusicVolumeSetting { get { if (MusicMute) return 0.0f; else return MusicVolume; } }
+    private float SFXVolume, MusicVolume;
+    private bool  SFXMute, MusicMute;
+
+    public void SFXSlider(float setting)
+    {
+        SFXVolume = setting;
+    }
+
+    public void MusicSlider(float setting)
+    {
+        MusicVolume = setting;
+        foreach (AudioSource ms in musicSources)
+            if (ms != null)
+                ms.volume = MusicVolumeSetting;
+    }
+
+    public void SFXMuteToggle(bool setting)
+    {
+        SFXMute = setting;
+    }
+
+    public void MusicMuteToggle(bool setting)
+    {
+        MusicMute = setting;
+        foreach (AudioSource ms in musicSources)
+            if (ms != null)
+                ms.volume = MusicVolumeSetting;
+    }
+
+    public float SFXVolumeSetting
+    {
+        get
+        {
+            if (SFXMute)
+                return 0.0f;
+            else
+                return SFXVolume;
+        }
+    }
+
+    public float MusicVolumeSetting
+    {
+        get
+        {
+            if (MusicMute)
+                return 0.0f;
+            else
+                return MusicVolume;
+        }
+    }
 
     /// <summary>
     /// calls ShowAndYield but returns without waiting for a response.  Useful for places (like Update()) where the engine does not allow you to yield
