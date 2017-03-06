@@ -179,6 +179,43 @@ public class MessageHandlerScript : BaseBehaviour
         PlayerPrefs.Save(); //technically this is unnecessary, but we have few values to save and this makes sure they get retained if the game crashes for some reason
     }
 
+    /// <summary>
+    /// [COROUTINE] Presents volume controls.
+    /// Pauses and yields until the prompt is answered.
+    /// the response can be retrieved from MessageHandlerScript.responseToLastPrompt
+    /// </summary>
+    public static IEnumerator ShowSettingsMenu()
+    {
+        //set up the box
+        instance.messageBox.SetActive(true);
+        instance.volumeControls.SetActive(true);
+        instance.messageText.text = "You can also access these by pressing Esc during gameplay";
+        instance.buttonA.SetActive(true);
+        instance.buttonA.SendMessage("setButtonText", "Continue");
+        instance.buttonB.SetActive(false);
+        instance.buttonC.SetActive(false);
+        instance.buttonD.SetActive(false);
+        responseToLastPrompt = null;
+
+        //pause the game
+        float oldTimeScale = Time.timeScale;
+        Time.timeScale = 0.0f;
+
+        //wait for the box to be closed
+        while (responseToLastPrompt == null)
+            yield return null;
+
+        //allow the game to continue
+        Time.timeScale = oldTimeScale;
+
+        //save the new settings
+        PlayerPrefs.SetFloat("SFX Volume", instance.SFXVolume);
+        PlayerPrefs.SetFloat("Music Volume", instance.MusicVolume);
+        PlayerPrefs.SetInt("SFX Mute", instance.SFXMute ? 1 : 0);
+        PlayerPrefs.SetInt("Music Mute", instance.MusicMute ? 1 : 0);
+        PlayerPrefs.Save(); //technically this is unnecessary, but we have few values to save and this makes sure they get retained if the game crashes for some reason
+    }
+
     //volume controls
     private float SFXVolume, MusicVolume;
     private bool  SFXMute, MusicMute;

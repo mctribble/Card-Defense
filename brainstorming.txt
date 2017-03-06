@@ -16,8 +16,9 @@ other presenation/art:
 need some level backgrounds
 ================================================================
 UI:
+replace unity default UI graphics
 hotkey/button for showing range of all towers?
-make volume controls accessible in level select and deck editor
+play sound when adjusting sound effects
 ================================================================
 content goals:
 enemies: 10/10   <<DONE!!>>

@@ -86,38 +86,24 @@ public class LevelSelectScript : BaseBehaviour
     /// </summary>
     private IEnumerator setupLevelButtons()
     {
-        //random level button
-        MenuButtonScript rButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
-        rButton.setButtonText("Random Level");                                                 //set the text
-        rButton.setColor(menuButtonColor);                                                     //and the color
-        rButton.transform.SetParent(this.transform, false);                                    //add it to the menu
-        menuButtons.Add(rButton);                                                              //and add it to the list of buttons
+        //buttons we know we want
+        List<String> menuButtonsToAdd = new List<string>(new string[] { "Random Level", "Deck Editor", "Help", "Settings" } );
 
-        //deck editor button
-        MenuButtonScript eButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
-        eButton.setButtonText("Deck Editor");                                                  //set the text
-        eButton.setColor(menuButtonColor);                                                     //and the color
-        eButton.transform.SetParent(this.transform, false);                                    //and add it to the menu for returning to the level select
-        menuButtons.Add(eButton);                                                              //and add it to the list of buttons
-
-        //help button
-        MenuButtonScript hButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>();
-        hButton.setButtonText("Help");
-        hButton.setColor(menuButtonColor);
-        hButton.transform.SetParent(this.transform, false);
-        menuButtons.Add(hButton);
-
-        //quit button, if we are not in the editor or a web build (both of which ignore Application.Quit() anyway)
+        //if we are not in the editor or a web build (both of which ignore Application.Quit() anyway), also do a Quit button
         if ((Application.isEditor == false) && (Application.platform == RuntimePlatform.WebGLPlayer == false))
+            menuButtonsToAdd.Add("Quit");
+
+        //create the menu buttons
+        foreach (String s in menuButtonsToAdd)
         {
-            MenuButtonScript qButton = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
-            qButton.setButtonText("Quit");                                                         //set the text
-            qButton.setColor(menuButtonColor);                                                     //and the color
-            qButton.transform.SetParent(this.transform, false);                                    //add it to the menu
-            menuButtons.Add(qButton);                                                              //and add it to the list of buttons
+            MenuButtonScript button = Instantiate(buttonPrefab).GetComponent<MenuButtonScript>(); //create a new button
+            button.setButtonText(s);                                                              //set the text
+            button.setColor(menuButtonColor);                                                     //and the color
+            button.transform.SetParent(this.transform, false);                                    //add it to the menu
+            menuButtons.Add(button);                                                              //and add it to the list of buttons
         }
 
-        //platform-specific logic to create the buttons
+        //platform-specific logic to create the level buttons
         if (Application.platform == RuntimePlatform.WebGLPlayer)
         {
             yield return StartCoroutine(setupLevelButtonsWeb()); //this is a web build.  This performs many web requests and updates menuText with the status as it goes.  It may take a while.
@@ -128,7 +114,7 @@ public class LevelSelectScript : BaseBehaviour
             updateLevelManifest(); //and also create/update the manifest for web builds
         }
 
-        //level buttons are ready.  add them by difficulty
+        //level buttons are ready.  add them to the menu by difficulty
         //the buttons we need to add are everything but the menu buttons we made at the start
         List<MenuButtonScript> levelButtonsToAdd = menuButtons.SkipWhile(mbs => mbs.buttonType == MenuButtonType.text).ToList();
 
@@ -137,9 +123,9 @@ public class LevelSelectScript : BaseBehaviour
         foreach (string diff in knownDifficulties)
         {
             MenuTextScript header = Instantiate(menuHeaderPrefab).GetComponent<MenuTextScript>(); //create a new header
-            header.text = diff.ToUpper();                                                             //label it
-            header.transform.SetParent(this.transform, false);                                        //add it to the menu
-            menuHeaders.Add(header);                                                                  //add it to the list
+            header.text = diff.ToUpper();                                                         //label it
+            header.transform.SetParent(this.transform, false);                                    //add it to the menu
+            menuHeaders.Add(header);                                                              //add it to the list
 
             //add the level buttons
             foreach (MenuButtonScript levelButton in levelButtonsToAdd.Where(mbs => mbs.level.difficulty.ToUpper() == diff.ToUpper()))
@@ -561,6 +547,11 @@ public class LevelSelectScript : BaseBehaviour
                 infoText.enabled = true;
                 break;
 
+            case "Settings":
+                //player wants to see the settings menu
+                StartCoroutine(MessageHandlerScript.ShowSettingsMenu());
+                break;
+
             //these buttons are for individual help screens.  These we delegate to showHelpScreen() because of their length
             case "The Basics":
             case "Controls":
@@ -814,6 +805,11 @@ public class LevelSelectScript : BaseBehaviour
             case "Deck Editor":
                 //show text to explain the button
                 infoText.text = "Go to the deck editor to create or edit a deck of your own!";
+                break;
+
+            case "Settings":
+                //show text to explain the button
+                infoText.text = "Opens the settings menu so you can adjust the volume controls.  These options can also be found in-game by pressing Esc";
                 break;
 
             case "Back":

@@ -325,6 +325,11 @@ public class DeckEditorMainScript : BaseBehaviour
                 BroadcastMessage("refresh", openDeck);                      //show the new deck
                 break;
 
+            case "Settings":
+                //player wants to see the settings menu
+                StartCoroutine(MessageHandlerScript.ShowSettingsMenu());
+                break;
+
             default: //button has not been implemented.  Print warning.
                 Debug.LogError("DeckEditorMainScript doesn't know how to respond to this button");
                 break;
