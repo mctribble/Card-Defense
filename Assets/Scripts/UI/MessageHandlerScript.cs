@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using Vexe.Runtime.Types;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// provides static utilities to show dialog boxes or floating combat text to the player.  
@@ -11,19 +12,20 @@ public class MessageHandlerScript : BaseBehaviour
 {
     //object references
     private bool shouldShowRefs() { return !Application.isPlaying; }
-    [VisibleWhen("shouldShowRefs")] public GameObject    messageBox;
-    [VisibleWhen("shouldShowRefs")] public GameObject    volumeControls;
-    [VisibleWhen("shouldShowRefs")] public Slider        SFXSliderComponent;
-    [VisibleWhen("shouldShowRefs")] public Slider        MusicSliderComponent;
-    [VisibleWhen("shouldShowRefs")] public Toggle        SFXMuteToggleComponent;
-    [VisibleWhen("shouldShowRefs")] public Toggle        MusicMuteToggleComponent;
-    [VisibleWhen("shouldShowRefs")] public AudioSource[] musicSources; 
-    [VisibleWhen("shouldShowRefs")] public Text          messageText;
-    [VisibleWhen("shouldShowRefs")] public GameObject    buttonA;
-    [VisibleWhen("shouldShowRefs")] public GameObject    buttonB;
-    [VisibleWhen("shouldShowRefs")] public GameObject    buttonC;
-    [VisibleWhen("shouldShowRefs")] public GameObject    buttonD;
-    [VisibleWhen("shouldShowRefs")] public GameObject    combatTextPrefab;
+    [VisibleWhen("shouldShowRefs")] public GameObject    messageBox;                //game object containing everything used to show dialogs
+    [VisibleWhen("shouldShowRefs")] public GameObject    volumeControls;            //parent game object for all volume controls
+    [VisibleWhen("shouldShowRefs")] public Slider        SFXSliderComponent;        //slider for SFX volume
+    [VisibleWhen("shouldShowRefs")] public Slider        MusicSliderComponent;      //slider for music volume
+    [VisibleWhen("shouldShowRefs")] public Toggle        SFXMuteToggleComponent;    //toggle for muting SFX
+    [VisibleWhen("shouldShowRefs")] public Toggle        MusicMuteToggleComponent;  //toggle for muting music
+    [VisibleWhen("shouldShowRefs")] public AudioSource[] musicSources;              //audio sources to update when music volume changes
+    [VisibleWhen("shouldShowRefs")] public AudioClip     SFXTestClip;               //clip to play when SFX volume changes
+    [VisibleWhen("shouldShowRefs")] public Text          messageText;               //text object on the dialog box used to show the message itself
+    [VisibleWhen("shouldShowRefs")] public GameObject    buttonA;                   //button used to allow the player to answer prompts
+    [VisibleWhen("shouldShowRefs")] public GameObject    buttonB;                   //button used to allow the player to answer prompts
+    [VisibleWhen("shouldShowRefs")] public GameObject    buttonC;                   //button used to allow the player to answer prompts
+    [VisibleWhen("shouldShowRefs")] public GameObject    buttonD;                   //button used to allow the player to answer prompts
+    [VisibleWhen("shouldShowRefs")] public GameObject    combatTextPrefab;          //prefab used to spawn floating combat text
 
     /// <summary>
     /// text of the button selected on the last prompt.  null if there was no previous prompt
@@ -39,7 +41,6 @@ public class MessageHandlerScript : BaseBehaviour
     //init
     private void Start()
     {
-        instance = this;
         messageBox.SetActive(false);
         messageText.text = "No Message.";
         buttonA.SetActive(false);
@@ -48,16 +49,12 @@ public class MessageHandlerScript : BaseBehaviour
         buttonD.SetActive(false);
 
         //load volume settings, if present, or use defaults if not
-        SFXVolume   = PlayerPrefs.GetFloat("SFX Volume",   0.75f);
-        MusicVolume = PlayerPrefs.GetFloat("Music Volume", 0.75f);
-        SFXMute     = (PlayerPrefs.GetInt("SFX Mute",   0) == 1);
-        MusicMute   = (PlayerPrefs.GetInt("Music Mute", 0) == 1);
+        SFXSliderComponent.value   = PlayerPrefs.GetFloat("SFX Volume",   0.75f);
+        MusicSliderComponent.value = PlayerPrefs.GetFloat("Music Volume", 0.75f);
+        SFXMuteToggleComponent.isOn   = (PlayerPrefs.GetInt("SFX Mute",   0) == 1);
+        MusicMuteToggleComponent.isOn = (PlayerPrefs.GetInt("Music Mute", 0) == 1);
 
-        //make sure the dialog shows these settings
-        SFXSliderComponent.value = SFXVolume;
-        MusicSliderComponent.value = MusicVolume;
-        SFXMuteToggleComponent.isOn = SFXMute;
-        MusicMuteToggleComponent.isOn = MusicMute;
+        instance = this;
     }
 
     //keep on top if a message is being shown
@@ -220,9 +217,14 @@ public class MessageHandlerScript : BaseBehaviour
     private float SFXVolume, MusicVolume;
     private bool  SFXMute, MusicMute;
 
-    public void SFXSlider(float setting)
+    public void SFXSlider(BaseEventData eventData)
     {
-        SFXVolume = setting;
+        SFXVolume = SFXSliderComponent.value; //save the new setting
+
+        //play a clip so the player can hear it at the new volume
+        Camera.main.GetComponent<AudioSource>().clip = SFXTestClip;
+        Camera.main.GetComponent<AudioSource>().volume = MessageHandlerScript.instance.SFXVolumeSetting;
+        Camera.main.GetComponent<AudioSource>().Play();
     }
 
     public void MusicSlider(float setting)
@@ -235,7 +237,15 @@ public class MessageHandlerScript : BaseBehaviour
 
     public void SFXMuteToggle(bool setting)
     {
-        SFXMute = setting;
+        SFXMute = setting; //save the new setting
+
+        //play a clip so the player can hear it at the new volume
+        if (instance != null) //skip if Start() hasnt finished yet, since that means this change was from loading the old setting at startup
+        {
+            Camera.main.GetComponent<AudioSource>().clip = SFXTestClip;
+            Camera.main.GetComponent<AudioSource>().volume = MessageHandlerScript.instance.SFXVolumeSetting;
+            Camera.main.GetComponent<AudioSource>().Play();
+        }
     }
 
     public void MusicMuteToggle(bool setting)
