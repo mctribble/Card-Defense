@@ -84,6 +84,8 @@ public class TowerScript : BaseBehaviour
     [VisibleWhen("hasData")] private float damageDealtThisRound; //amount of damage dealt by this tower this round
     [VisibleWhen("hasData")] private bool  waitingForManualFire; //whether user is being prompted to fire manually
 
+    private bool towerMousedOver; //whether or not the tower is being moused over
+
     [VisibleWhen("isEditor")] public float tooltipPositionBuffer; //amount of extra space to buffer when positioning tooltips
 
     //events effects can register to if they need to respond to upgrades in some way
@@ -177,6 +179,10 @@ public class TowerScript : BaseBehaviour
             tooltipPanel.transform.position = Input.mousePosition + positionOffset;
         }
 
+        //the range should be shown if...
+        rangeImage.enabled = towerMousedOver || //the tower is moused over
+                             (range < 100 && Input.GetButton("Show Tower Range")); //or the tower does not have effectively infinite range and the button is being held down
+
         //increase shot charge if the gauge is not already full
         //note that this is a "soft cap": a single frame can bring the value over, but it would stop charging afterwards
         //this avoids issues when towers should be shooting every frame, or even multiple times per frame
@@ -224,7 +230,7 @@ public class TowerScript : BaseBehaviour
     /// <summary> called when the mouse is over the tower to activate the tooltip </summary>
     private void TowerMouseEnter()
     {
-        rangeImage.enabled = true;
+        towerMousedOver = true;
         tooltipPanel.enabled = true;
         tooltipText.enabled = true;
     }
@@ -232,7 +238,7 @@ public class TowerScript : BaseBehaviour
     /// <summary> called when the mouse is over the tower to deactivate the tooltip </summary>
     private void TowerMouseExit()
     {
-        rangeImage.enabled = false;
+        towerMousedOver = false;
         tooltipPanel.enabled = false;
         tooltipText.enabled = false;
     }
