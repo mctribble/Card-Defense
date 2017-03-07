@@ -16,7 +16,6 @@ other presenation/art:
 need some level backgrounds
 ================================================================
 UI:
-replace unity default UI graphics
 hotkey/button for showing range of all towers?
 ================================================================
 content goals:
