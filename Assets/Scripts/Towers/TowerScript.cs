@@ -67,16 +67,22 @@ public class TowerScript : BaseBehaviour
     [VisibleWhen("hasData")] public EffectData  effects;        //effects on this tower
 
     //component references for all the display objects
-    [VisibleWhen("isEditor")] public Image towerImage;
-    [VisibleWhen("isEditor")] public Image rangeImage;
-    [VisibleWhen("isEditor")] public Image upgradeRangeImage;
-    [VisibleWhen("isEditor")] public Image chargeGaugeImage1x;
-    [VisibleWhen("isEditor")] public Image chargeGaugeImage2x;
-    [VisibleWhen("isEditor")] public Image chargeGaugeImage3x;
-    [VisibleWhen("isEditor")] public Image tooltipPanel;
-    [VisibleWhen("isEditor")] public Text  tooltipText;
-    [VisibleWhen("isEditor")] public Text  lifespanText;
+    [VisibleWhen("isEditor")] public Image          towerImage;
+    [VisibleWhen("isEditor")] public Image          rangeImage;
+    [VisibleWhen("isEditor")] public Image          rangeImage2;
+    [VisibleWhen("isEditor")] public Image          upgradeRangeImage;
+    [VisibleWhen("isEditor")] public Image          upgradeRangeImage2;
+    [VisibleWhen("isEditor")] public Image          chargeGaugeImage1x;
+    [VisibleWhen("isEditor")] public Image          chargeGaugeImage2x;
+    [VisibleWhen("isEditor")] public Image          chargeGaugeImage3x;
+    [VisibleWhen("isEditor")] public Image          tooltipPanel;
+    [VisibleWhen("isEditor")] public Text           tooltipText;
+    [VisibleWhen("isEditor")] public Text           lifespanText;
     [VisibleWhen("isEditor")] public ParticleSystem manualFireParticles;
+    [VisibleWhen("isEditor")] public Sprite         defaultRangeSprite;
+    [VisibleWhen("isEditor")] public Sprite         mouseRangeSprite;
+    [VisibleWhen("isEditor")] public Sprite         orthogonalRangeSprite;
+    [VisibleWhen("isEditor")] public Sprite         hollowOrthogonalRangeSprite;
 
     [VisibleWhen("hasData")] private float deltaTime;            //time since last frame
     [VisibleWhen("hasData")] private float shotCharge;           //represents how charged the next shot is. 0.0 is empty, maxCharge is full
@@ -99,7 +105,9 @@ public class TowerScript : BaseBehaviour
     {
         //init vars
         rangeImage.enabled = false;
+        rangeImage2.enabled = false;
         upgradeRangeImage.enabled = false;
+        upgradeRangeImage2.enabled = false;
         upgradeCount = 0;
         shotCharge = 0.99f; //not quite full, so that Update() still does stuff that is meant to happen when a shot becomes ready
         maxCharge = 1.0f;
@@ -109,7 +117,7 @@ public class TowerScript : BaseBehaviour
         LevelManagerScript.instance.RoundStartedEvent += WaveStarted;
 
         //set scale of range image
-        rangeImage.gameObject.GetComponent<RectTransform>().localScale = new Vector3(range, range, 1.0f);
+        updateRangeImage();
 
         //hide tooltip until moused over
         tooltipText.enabled = false;
@@ -179,9 +187,43 @@ public class TowerScript : BaseBehaviour
             tooltipPanel.transform.position = Input.mousePosition + positionOffset;
         }
 
-        //the range should be shown if...
-        rangeImage.enabled = towerMousedOver || //the tower is moused over
-                             (range < 100 && Input.GetButton("Show Tower Range")); //or the tower does not have effectively infinite range and the button is being held down
+        //decide whether or not to show the range image
+        if (towerMousedOver || rangeImage.sprite == mouseRangeSprite)
+        {
+            rangeImage.enabled = true; //always show if moused over or the tower does mouse targeting
+        }
+        else if (Input.GetButton("Show Tower Range")) //the show range button might also force the image to show
+        {
+            //normal towers are only forced to show if their range is less than 100
+            if (rangeImage.sprite == defaultRangeSprite)
+                rangeImage.enabled = (range < 100);
+            else //other range image types always show in response to the button
+                rangeImage.enabled = true;
+        }
+        else
+        {
+            rangeImage.enabled = false; //if none of the above applies, default to hidden
+        }
+
+        //for mouse targeting, make the range image follow the mouse
+        if (rangeImage.sprite == mouseRangeSprite)
+        {
+            if (towerMousedOver)
+            {
+                //if we are mousing over the tower right now, snap the rangeImage to the tower so that the upgrade ring lines up
+                rangeImage.transform.localPosition = Vector3.zero;
+            }
+            else
+            {
+                //otherwise, center it on the mouse
+                Vector3 mousePositionWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                rangeImage.transform.position = new Vector3(mousePositionWorld.x, mousePositionWorld.y, 0.0f);
+            }
+        }
+
+        //orthogonal targeting requires two images instead of one.  make the second image match state with the first
+        else if (rangeImage.sprite == orthogonalRangeSprite)
+            rangeImage2.enabled = rangeImage.enabled;
 
         //increase shot charge if the gauge is not already full
         //note that this is a "soft cap": a single frame can bring the value over, but it would stop charging afterwards
@@ -480,7 +522,7 @@ public class TowerScript : BaseBehaviour
             towerImage.color = d.towerColor.toColor();
 
         //set scale of range image
-        rangeImage.gameObject.GetComponent<RectTransform>().localScale = new Vector3(range, range, 1.0f);
+        updateRangeImage();
 
         //update text
         UpdateTooltipText();
@@ -517,7 +559,24 @@ public class TowerScript : BaseBehaviour
                     ((IEffectSourceTracked)ie).effectSource = this;
             }
         }
-      
+
+        //use the range sprite appropriate to the top targeting effect
+        switch (effects.topTargetingEffect.XMLName)
+        {
+            case "targetMouse":
+                rangeImage.sprite = mouseRangeSprite;
+                break;
+            case "targetOrthogonal":
+                rangeImage.sprite = orthogonalRangeSprite;
+                break;
+            default:
+                rangeImage.sprite = defaultRangeSprite;
+                break;
+        }
+
+        //make sure the scale is being set right
+        updateRangeImage();
+
     }
 
     /// <summary>
@@ -563,6 +622,26 @@ public class TowerScript : BaseBehaviour
         if (effects != null)
             if (effects.propertyEffects.maxOvercharge != null)
                 maxCharge += effects.propertyEffects.maxOvercharge.Value;
+
+        //use the range sprite appropriate to the top targeting effect
+        switch (effects.topTargetingEffect.XMLName)
+        {
+            case "targetMouse":
+                rangeImage.sprite = mouseRangeSprite;
+                rangeImage2.enabled = false;
+                break;
+            case "targetOrthogonal":
+                rangeImage.sprite = orthogonalRangeSprite;
+                rangeImage2.enabled = false;
+                break;
+            default:
+                rangeImage.sprite = defaultRangeSprite;
+                rangeImage2.enabled = false;
+                break;
+        }
+
+        //make sure the scale is being set right
+        updateRangeImage();
     }
 
     //helper functions to allow calling Upgrade through sendMessage (Unity message handling doesn't understand default parameters)
@@ -615,7 +694,17 @@ public class TowerScript : BaseBehaviour
 
     public void updateRangeImage()
     {
-        rangeImage.gameObject.GetComponent<RectTransform>().localScale = new Vector3(range, range, 1.0f);
+        if (rangeImage.sprite == orthogonalRangeSprite)
+        {
+            //two straight lines
+            rangeImage. transform.localScale = new Vector3(0.3f, range*2, 1.0f);
+            rangeImage2.transform.localScale = new Vector3(0.3f, range*2, 1.0f); //rangeImage2 has a 90 degree rotation, so despite the lines going in different directions, they should be scaled the same
+        }
+        else
+        {
+            //one circle
+            rangeImage.transform.localScale = new Vector3(range, range, 1.0f);
+        }
     }
 
     /// <summary>
@@ -748,7 +837,23 @@ public class TowerScript : BaseBehaviour
                     tooltipText.text += "\n" + "-" + e.Name;
 
         //also show the upgrade range
-        upgradeRangeImage.transform.localScale = new Vector3(newRange, newRange, 1.0f);
+        if ( (rangeImage.sprite == orthogonalRangeSprite || (newEffectData != null && newEffectData.containsEffect("targetOrthogonal"))) //if we currently target orthogonally, or if we will gain that effect
+              && (newEffectData == null || newEffectData.topTargetingEffect.priority <= TargetingPriority.ORTHOGONAL) ) //AND we will not gain an effect of higher targeting priority
+        {
+            //we will target orthogonally after the upgrade.  Show the upgrade range as two lines
+            upgradeRangeImage. transform.localScale = new Vector3(0.3f, newRange*2, 1.0f);
+            upgradeRangeImage2.transform.localScale = new Vector3(0.3f, newRange * 2, 1.0f); //second upgrade range image has a 90 degree rotation, so both lines scale the same
+            upgradeRangeImage.sprite = hollowOrthogonalRangeSprite;
+            upgradeRangeImage2.enabled = true;
+        }
+        else
+        {
+            //we will not target orthogonally after the upgrade.  Show the upgrade range as a circle
+            upgradeRangeImage.transform.localScale = new Vector3(newRange, newRange, 1.0f); 
+            upgradeRangeImage.sprite = mouseRangeSprite;
+            upgradeRangeImage2.enabled = false;
+        }
+
         upgradeRangeImage.enabled = true;
 
         //effects
@@ -892,6 +997,7 @@ public class TowerScript : BaseBehaviour
 
         //disable the upgrade range
         upgradeRangeImage.enabled = false;
+        upgradeRangeImage2.enabled = false;
     }
     public void updateLifespanText()
     {

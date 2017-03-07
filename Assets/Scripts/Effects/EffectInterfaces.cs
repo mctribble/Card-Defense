@@ -510,6 +510,20 @@ public class EffectData : System.Object
     public string lastUsedTargetingEffect { get; set; }
 
     /// <summary>
+    /// returns the top targeting effect in the list.  This is the effect we can reasonably expect to use for most attacks.
+    /// </summary>
+    public IEffectTowerTargeting topTargetingEffect
+    {
+        get
+        {
+            if (cachedTowerTargetingList == null)
+                updateCachedTowerTargetingList();
+
+            return cachedTowerTargetingList.ElementAt(0);
+        }
+    }
+
+    /// <summary>
     /// helper that returns a struct containing information on all property effects in this set
     /// </summary>
     //results are cached to save performance
