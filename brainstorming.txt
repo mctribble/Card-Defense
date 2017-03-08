@@ -16,7 +16,6 @@ other presenation/art:
 need some level backgrounds
 ================================================================
 UI:
-custom range images for target: mouse and target: orthogonal
 ================================================================
 content goals:
 enemies: 10/10   <<DONE!!>>
