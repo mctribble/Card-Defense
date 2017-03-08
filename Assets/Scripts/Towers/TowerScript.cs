@@ -528,6 +528,12 @@ public class TowerScript : BaseBehaviour
         UpdateTooltipText();
 
         updateLifespanText();
+
+        //colorize range according to tower color
+        rangeImage. color = towerImage.color;
+        rangeImage2.color = towerImage.color;
+        upgradeRangeImage. color = new Color(1.0f - rangeImage.color.r, 1.0f - rangeImage.color.g, 1.0f - rangeImage.color.b);
+        upgradeRangeImage2.color = new Color(1.0f - rangeImage.color.r, 1.0f - rangeImage.color.g, 1.0f - rangeImage.color.b);
     }
 
     private void SetEffectData(EffectData d)

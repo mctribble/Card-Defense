@@ -173,6 +173,8 @@ public class CastingTooltipScript : BaseBehaviour
     private void SetParent(PlayerCardScript parent)
     {
         parentCardScript = parent;
+        if (parentCardScript.card.data.cardType == PlayerCardType.tower)
+            rangeImage.color = parentCardScript.card.data.towerData.towerColor.toColor();
     }
 
     /// <summary>
