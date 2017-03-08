@@ -604,11 +604,13 @@ public class LevelSelectScript : BaseBehaviour
         {
             case "Controls":
                 helpText.text = 
+                    "(Note that these are just the defaults: some can be changed from the unity launcher)\n\n" +
                     "Pan camera: arrow keys OR WASD\n" +
                     "Zoom camera: scroll wheel or Q/E\n" +
                     "Start wave: click 'Start Wave' or press space\n" +
                     "Pause: `\n" +
                     "Set speed: 1, 2, or 3\n" +
+                    "Show tower ranges: R\n" +
                     "Quit level: Esc";
                 break;
 
