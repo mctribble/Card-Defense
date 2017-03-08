@@ -530,8 +530,8 @@ public class TowerScript : BaseBehaviour
         updateLifespanText();
 
         //colorize range according to tower color
-        rangeImage. color = towerImage.color;
-        rangeImage2.color = towerImage.color;
+        rangeImage. color        = new Color(towerImage.color.r, towerImage.color.g, towerImage.color.b, 0.5f);
+        rangeImage2.color        = new Color(towerImage.color.r, towerImage.color.g, towerImage.color.b, 0.5f);
         upgradeRangeImage. color = new Color(1.0f - rangeImage.color.r, 1.0f - rangeImage.color.g, 1.0f - rangeImage.color.b);
         upgradeRangeImage2.color = new Color(1.0f - rangeImage.color.r, 1.0f - rangeImage.color.g, 1.0f - rangeImage.color.b);
     }
