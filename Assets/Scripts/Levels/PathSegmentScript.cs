@@ -79,6 +79,6 @@ public class PathSegmentScript : BaseBehaviour
 
         //also scale collider
         BoxCollider2D collider = gameObject.GetComponent<BoxCollider2D>();
-        collider.size = new Vector2(segmentLength, pathWidth);
+        collider.size = new Vector2(clippedSegmentLength, pathWidth);
     }
 }
