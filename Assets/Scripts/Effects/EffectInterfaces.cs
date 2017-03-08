@@ -18,11 +18,11 @@ public enum EffectContext { playerCard, tower, enemyCard, enemyUnit }
 /// forbids this effect from appearing in the given context (ex: [ForbidEffectContext(EffectContext.Tower)] prevents the effect from being copied onto towers)
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
-public class ForbidEffectContext : System.Attribute
+public class ForbidEffectContextAttribute : System.Attribute
 {
     private EffectContext context; //context forbidden by this attribute
 
-    public ForbidEffectContext(EffectContext contextToForbid) { context = contextToForbid; } //constructor
+    public ForbidEffectContextAttribute(EffectContext contextToForbid) { context = contextToForbid; } //constructor
      
     public EffectContext forbiddenContext { get { return context; } } //accessor
 }

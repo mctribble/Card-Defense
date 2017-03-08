@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System;
 
 /// <summary>
 /// container class for all the extension methods used in this project
@@ -37,17 +39,71 @@ public static class ExtensionMethods
         return "???";
     }
 
+    //for caching which effects are forbidden where
+    private struct Contexts { public bool playerCard; public bool tower; public bool enemyCard; public bool enemyUnit; }
+    private static Dictionary<Type, Contexts> contextForbidDict;
+
+    //calculates the contextForbidDict by examining all effects
+    private static void buildContextForbidDict()
+    {
+        contextForbidDict = new Dictionary<Type, Contexts>(); //create the dict
+
+        IEnumerable<Type> effectTypes = EffectTypeManagerScript.IEffectTypes(); //gets all classes that implement IEffect
+
+        foreach(Type T in effectTypes)
+        {
+            //create a Contexts struct for each one
+            Contexts C = new Contexts();
+            C.playerCard = false;
+            C.tower      = false;
+            C.enemyCard  = false;
+            C.enemyUnit  = false;
+
+            //search for [ForbidEffectContext] on the type and set the appropriate flag if it is found
+            foreach (System.Object attribute in T.GetCustomAttributes(true))
+            {
+                ForbidEffectContextAttribute fec = attribute as ForbidEffectContextAttribute;
+                if (fec != null)
+                {
+                    switch (fec.forbiddenContext)
+                    {
+                        case EffectContext.playerCard: C.playerCard = true; break;
+                        case EffectContext.tower:      C.tower      = true; break;
+                        case EffectContext.enemyCard:  C.enemyCard  = true; break;
+                        case EffectContext.enemyUnit:  C.enemyUnit  = true; break;
+                        default: Debug.LogWarning("Unknown Context"); break;
+                    }
+                }
+            }
+
+            //add it to the dict
+            contextForbidDict.Add(T, C);
+        }
+    }
+
     public static bool forbiddenInContext(this IEffect effect, EffectContext context)
     {
-        //skip if it has [ForbidEffectContext(EffectContext.tower)]
-        foreach (System.Object attribute in effect.GetType().GetCustomAttributes(true))
-        {
-            ForbidEffectContext fec = attribute as ForbidEffectContext;
-            if (fec != null)
-                if (fec.forbiddenContext == context)
-                    return true;
-        }
+        //if the Dictionary doesnt exist yet, build it
+        if (contextForbidDict == null)
+            buildContextForbidDict();
 
-        return false;
+        //look up the effect
+        Contexts C;
+        if (contextForbidDict.TryGetValue(effect.GetType(), out C))
+        {
+            switch (context)
+            {
+                case EffectContext.playerCard: return C.playerCard;
+                case EffectContext.tower:      return C.tower;
+                case EffectContext.enemyCard:  return C.enemyCard;
+                case EffectContext.enemyUnit:  return C.enemyUnit;
+                default: Debug.LogWarning("Unknown Context"); return true;
+            }   
+        }       
+        else    
+        {
+            Debug.LogError("Could not find " + effect.XMLName + " in the forbidden context dict!");
+            return true;
+        }
     }
 }

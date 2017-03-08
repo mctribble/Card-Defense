@@ -746,14 +746,14 @@ public class LevelManagerScript : BaseBehaviour
     /// <param name="position">where to put it</param>
     public void createExplosion(BurstShotData data, Vector2 position)
     {
-        GameObject instance = Instantiate(explosionPrefab);
+        BurstShotScript instance = Instantiate(explosionPrefab).GetComponent<BurstShotScript>();
         instance.transform.position = new Vector3(position.x, position.y, -3.0f);
-        instance.SendMessage("SetData", data);
+        instance.SetData(data);
 
         //apply attackColor property, if it is present
         if (data.damageEvent.effects != null)
             if (data.damageEvent.effects.propertyEffects.attackColor != null)
-                instance.SendMessage("SetColor", data.damageEvent.effects.propertyEffects.attackColor);
+                instance.SetColor(data.damageEvent.effects.propertyEffects.attackColor.Value);
     }
 
     /// <summary>

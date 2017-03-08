@@ -178,7 +178,7 @@ public class EffectTypeManagerScript : BaseBehaviour
     /// <summary>
     /// returns a list of all classes that implement IEffect
     /// </summary>
-    public IEnumerable<Type> IEffectTypes()
+    public static IEnumerable<Type> IEffectTypes()
     {
         return AppDomain.CurrentDomain.GetAssemblies()
                .SelectMany(s => s.GetTypes())
