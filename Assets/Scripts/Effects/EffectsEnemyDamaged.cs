@@ -183,38 +183,46 @@ public class EffectChainHit : BaseEffectEnemyDamaged
     //use expectedDamage() to prevent the attack from hitting the same enemy twice
     public override void expectedDamage(ref DamageEventData d)
     {
-        //if this enemy has already been hit, nullify the attack
+        //if this enemy has already been hit, throw warning and nullify the attack
         if (enemiesAlreadyHit.Contains(d.dest))
         {
+            Debug.LogWarning("EffectChainHit tried to attack the same thing multiple times!");
             d.rawDamage = 0;
             d.effects = null;
             return;
         }
-
-        //otherwise, add it to the list
-        enemiesAlreadyHit.Add(d.dest);
     }
 
-    //but actual damage creates an explosion
+    //when an enemy is hit, spawn a bullet to attack all nearby enemies that havent yet been hit with this attack
     public override void actualDamage(ref DamageEventData originalDamageEvent)
     {
         //if we make it here, the enemy has not been attacked yet, and we can chain off of it.
 
-        //construct a damage event for the explosion
-        DamageEventData explosionDamageEvent = new DamageEventData();
-        explosionDamageEvent.source    = originalDamageEvent.source;
-        explosionDamageEvent.rawDamage = originalDamageEvent.rawDamage;
-        explosionDamageEvent.effects   = originalDamageEvent.effects; 
-        explosionDamageEvent.dest = null; //burstShot object ignores the destination anyway
+        foreach (EnemyScript e in EnemyManagerScript.instance.enemiesInRange(originalDamageEvent.dest.transform.position, strength))
+        {
+            //skip enemies we have already hit
+            if (enemiesAlreadyHit.Contains(e))
+                continue;
 
-        //construct burst shot data
-        BurstShotData explosion = new BurstShotData();
-        explosion.damageEvent   = explosionDamageEvent;
-        explosion.burstRange    = strength;
-        explosion.targetList    = EnemyManagerScript.instance.enemiesInRange(originalDamageEvent.dest.transform.position, explosion.burstRange);
+            //create the event
+            DamageEventData damageEvent = new DamageEventData();
+            damageEvent.source = originalDamageEvent.source;
+            damageEvent.rawDamage = originalDamageEvent.rawDamage;
+            damageEvent.effects = originalDamageEvent.effects;
+            damageEvent.dest = e;
 
-        //call on the level manager to create the actual explosion, since this effect doesnt have a prefab reference
-        LevelManagerScript.instance.createExplosion(explosion, originalDamageEvent.dest.transform.position);
+            //spawn the attack
+            GameObject bullet = GameObject.Instantiate(originalDamageEvent.source.bulletPrefab, originalDamageEvent.dest.transform.position, Quaternion.identity);
+            bullet.SendMessage("InitBullet", damageEvent);
+
+            //apply attackColor property, if it is present
+            if (originalDamageEvent.effects != null)
+                if (originalDamageEvent.effects.propertyEffects.attackColor != null)
+                    bullet.SendMessage("SetColor", originalDamageEvent.effects.propertyEffects.attackColor);
+
+            //add it to the list of enemies we already hit
+            enemiesAlreadyHit.Add(e);
+        }
     }
 }
 
