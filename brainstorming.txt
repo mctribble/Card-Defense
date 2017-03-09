@@ -2,6 +2,8 @@ known issues:
 -[WebGL] need a placeholder image while level thumbnails are loading.
 -tooltips "blinking" side to side if towards middle of screen.  cause unknown.
 -some lingering cause of enemies not expecting damage
+-optimization target: EnemyScript.LateUpdate()
+-optimization target: BulletScript.Update()
 ================================================================
 art needed for:
 
