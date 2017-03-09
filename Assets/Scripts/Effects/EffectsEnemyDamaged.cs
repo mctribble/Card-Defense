@@ -183,10 +183,11 @@ public class EffectChainHit : BaseEffectEnemyDamaged
     //use expectedDamage() to prevent the attack from hitting the same enemy twice
     public override void expectedDamage(ref DamageEventData d)
     {
-        //if this enemy has already been hit, throw warning and nullify the attack
+        //if this enemy has already been hit, nullify the attack
+        //this catches a rare race condition where multiple bullets originating from the same attack try to chain onto this in the same frame
         if (enemiesAlreadyHit.Contains(d.dest))
         {
-            Debug.LogWarning("EffectChainHit tried to attack the same thing multiple times!");
+            //Debug.LogWarning("EffectChainHit tried to attack the same thing multiple times!");
             d.rawDamage = 0;
             d.effects = null;
             return;

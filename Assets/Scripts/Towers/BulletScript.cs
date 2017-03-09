@@ -25,7 +25,6 @@ public class BulletScript : BaseBehaviour
 
     private bool initialized = false; //whether or not the bullet is ready for action
     private DamageEventData data;     //details about the attack
-    private EnemyScript enemyRef;     //reference to the EnemyScript attached to the target
 
     //set default color when spawned
     private void Start() { spriteRenderer.color = color; }
@@ -51,21 +50,16 @@ public class BulletScript : BaseBehaviour
             return;
         }
 
-        //fetch position of destination object
-        Vector2 curDestination = data.dest.transform.position;
-
-        //fetch current location
-        Vector2 curLocation = gameObject.transform.position;
-
-        //calculate new location
-        Vector2 newLocation = Vector2.MoveTowards (curLocation, curDestination, speed * Time.deltaTime);
+        Vector2 curDestination = data.dest.transform.position; //fetch position of target
+        Vector2 curLocation = gameObject.transform.position;   //fetch current location
+        Vector2 newLocation = Vector2.MoveTowards (curLocation, curDestination, speed * Time.deltaTime); //calculate new location
 
         //turn in direction of travel ('forward' and 'up' intentionally switched, since we technically want the object to 'look' towards the screen)
         transform.localRotation = Quaternion.LookRotation(Vector3.forward, curLocation - newLocation); 
 
         //if the enemy is in the brief "final chance" state between reaching the goal and dealing damage, blink instantaneously to the target.  This way, enemies wont escape just because projectile speed is low.
         //TODO: visual lightning-bolt effect or something for this
-        if (enemyRef.goalFinalChance)
+        if (data.dest.goalFinalChance)
             newLocation = curDestination;
 
         //if destination is reached, trigger effects and pass data to target and destroy self
@@ -74,22 +68,24 @@ public class BulletScript : BaseBehaviour
             //trigger effects
             if (data.effects != null)
             {
-                foreach (IEffect i in data.effects.effects)
+                foreach (IEffect ie in data.effects.effects)
                 {
-                    if (i.triggersAs(EffectType.enemyDamaged))
+                    if (ie.triggersAs(EffectType.enemyDamaged))
                     {
-                        float damageBefore = data.rawDamage;
-                        ((IEffectEnemyDamaged)i).actualDamage(ref data);
+                        //DEBUG: uncomment this and the if block below to warn if damage amount changed in .actualDamage(), as this causes hard-to-find bugs.  
+                        //anything that changes amount of damage done should happen in expectedDamage()
+                        //float damageBefore = data.rawDamage;
 
-                        //warn if damage amount changed in .actualDamage(), as this causes hard-to-find bugs.  anything that changes amount of damage done should happen in expectedDamage()
-                        if (damageBefore != data.rawDamage)
-                            Debug.LogWarning("damage amount altered in .actualDamage() call of " + i.XMLName + "!");
+                        ((IEffectEnemyDamaged)ie).actualDamage(ref data);
+
+                        //if (damageBefore != data.rawDamage)
+                        //    Debug.LogWarning("damage amount altered in .actualDamage() call of " + ie.XMLName + "!");
                     }
                 }
             }
 
-            enemyRef.onDamage(data);
-            Destroy(gameObject);
+            data.dest.onDamage(data); //deal the damage
+            Destroy(gameObject); //destroy the target
         }
 
         //save position
@@ -101,7 +97,6 @@ public class BulletScript : BaseBehaviour
     {
         //init
         data = newData;
-        enemyRef = data.dest.GetComponent<EnemyScript>();
 
         //trigger effects
         if (data.effects != null)
@@ -110,7 +105,7 @@ public class BulletScript : BaseBehaviour
                     ((IEffectEnemyDamaged)i).expectedDamage(ref data);
 
         //tell enemy to expect the damage
-        enemyRef.onExpectedDamage(ref data);
+        data.dest.onExpectedDamage(ref data);
 
         initialized = true;
     }
