@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Vexe.Runtime.Types;
 
@@ -172,7 +173,7 @@ public class EffectChainHit : BaseEffectEnemyDamaged
     [Hide] public override string Name { get { return "chain attack: " + strength; } } //returns name and strength
     [Show] public override string XMLName { get { return "chainHit"; } } //name used to refer to this effect in XML
 
-    private List<EnemyScript> enemiesAlreadyHit;
+    protected List<EnemyScript> enemiesAlreadyHit;
 
     //constructor
     public EffectChainHit()
@@ -209,8 +210,23 @@ public class EffectChainHit : BaseEffectEnemyDamaged
             DamageEventData damageEvent = new DamageEventData();
             damageEvent.source = originalDamageEvent.source;
             damageEvent.rawDamage = originalDamageEvent.rawDamage;
-            damageEvent.effects = originalDamageEvent.effects;
             damageEvent.dest = e;
+
+            //the already hit list should be reset for every attack the tower makes, but be retained for attacks chained off of other enemies.
+            //To accomplish this, if the already hit list is empty the attack gets a clone of the attack's effects, and we add the enemy to the list on the clone instead of ourselves
+            //if the already hit list contains enemies, we know we have been chained at least once, so we can just keep using the same list
+            List<EnemyScript> listToUse;
+            if (enemiesAlreadyHit.Count == 0)
+            {
+                damageEvent.effects = originalDamageEvent.effects.clone();
+                EffectChainHit clonedEffect = (EffectChainHit)damageEvent.effects.effects.First(ie => ie.XMLName == XMLName);
+                listToUse = clonedEffect.enemiesAlreadyHit;
+            }
+            else
+            {
+                damageEvent.effects = originalDamageEvent.effects;
+                listToUse = enemiesAlreadyHit;
+            }
 
             //spawn the attack
             GameObject bullet = GameObject.Instantiate(originalDamageEvent.source.bulletPrefab, originalDamageEvent.dest.transform.position, Quaternion.identity);
@@ -222,7 +238,7 @@ public class EffectChainHit : BaseEffectEnemyDamaged
                     bullet.SendMessage("SetColor", originalDamageEvent.effects.propertyEffects.attackColor);
 
             //add it to the list of enemies we already hit
-            enemiesAlreadyHit.Add(e);
+            listToUse.Add(e);
         }
     }
 }

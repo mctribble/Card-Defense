@@ -35,5 +35,18 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="tower" Name="Dev Swarm Tower" Description="Fills the world with a hailstorm of bullets" Charges="4" Art="Dev_Art.png" Tooltip="Dev_Tower.png" Token="false">
+      <towerData Recharge="0.1" Range="999" Damage="1" Lifespan="2" UpgradeCap="3" Sprite="Tower_Octagon.png">
+        <towerColor r="0.5" g="0.5" b="0.5" a="1" />
+      </towerData>
+      <effectData>
+        <Effects>
+          <Effect name="targetRandom" />
+          <Effect name="chainHit" strength="999" />
+          <Effect name="damagePercent" strength="10" />
+          <Effect name="manualFire" />
+        </Effects>
+      </effectData>
+    </Card>
   </Cards>
 </CardTypes>
