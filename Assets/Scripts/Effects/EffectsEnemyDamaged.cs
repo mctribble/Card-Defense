@@ -199,13 +199,10 @@ public class EffectChainHit : BaseEffectEnemyDamaged
     public override void actualDamage(ref DamageEventData originalDamageEvent)
     {
         //if we make it here, the enemy has not been attacked yet, and we can chain off of it.
-
-        foreach (EnemyScript e in EnemyManagerScript.instance.enemiesInRange(originalDamageEvent.dest.transform.position, strength))
+        
+        //for each enemy in range of this one, where range is the effect strength, that we have not already hit
+        foreach (EnemyScript e in EnemyManagerScript.instance.enemiesInRange(originalDamageEvent.dest.transform.position, strength).Except(enemiesAlreadyHit))
         {
-            //skip enemies we have already hit
-            if (enemiesAlreadyHit.Contains(e))
-                continue;
-
             //create the event
             DamageEventData damageEvent = new DamageEventData();
             damageEvent.source = originalDamageEvent.source;
