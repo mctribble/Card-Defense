@@ -141,10 +141,14 @@ public class EffectInvScaleSpeedWithTime : BaseEffectPeriodic
 
     public override void UpdateEnemy(EnemyScript e, float deltaTime)
     {
-        e.unitSpeed -= (strength * deltaTime);      //slow enemy
-        e.unitSpeed = Mathf.Max(e.unitSpeed, 1.0f); //enforce minimum
-        if (e.unitSpeed == 1.0f)                    //if at minimum, we are done
-            done = true;
+        if (done == false)
+        {
+            e.unitSpeed -= (strength * deltaTime);      //slow enemy
+            e.unitSpeed = Mathf.Max(e.unitSpeed, 1.0f); //enforce minimum
+            if (e.unitSpeed == 1.0f)                    //if at minimum, we are done
+                done = true;
+            EnemyManagerScript.instance.EnemySpeedChanged(e);
+        }
     }
 
     //effect can be removed once it has hit the floor
@@ -152,7 +156,7 @@ public class EffectInvScaleSpeedWithTime : BaseEffectPeriodic
     public override bool shouldBeRemoved() { return base.shouldBeRemoved() || done; }
 }
 
-//enemy slows down by x/s (min 1)
+//enemy speeds up by x/s (min 1)
 [ForbidEffectContext(EffectContext.tower)]
 public class EffectScaleSpeedWithTime : BaseEffectPeriodic
 {
@@ -161,6 +165,10 @@ public class EffectScaleSpeedWithTime : BaseEffectPeriodic
 
     public override void UpdateEnemy(EnemyScript e, float deltaTime)
     {
-        e.unitSpeed += (strength * deltaTime);
+        if (e.unitSpeed < EnemyScript.speedLimit)
+        {
+            e.unitSpeed += (strength * deltaTime);
+            EnemyManagerScript.instance.EnemySpeedChanged(e);
+        }
     }
 }

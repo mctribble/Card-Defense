@@ -24,7 +24,7 @@ scaleSpeedWithTime        | enemy gets faster by X/s.  Note that there is a glob
 
 <<Enemy Damaged Effects (On tower: trigger when attacking.  On Enemy type: trigger when attacked)>>
 armor                     | enemy receives X less damage from every hit, with a minimum of 1 damage
-chainHit		          | attack spreads to all enemies within X of each other through a series of consecutive explosions.  No enemy will be hit twice.  
+chainHit		          | attack spreads to up to Y enemies within X of each other through a series of consecutive explosions.  No enemy will be hit twice.  
 damagePercent             | enemy takes damage equal to X% of their max health
 reduceEnemyEffectOnDamage | hit enemies have the strength of effect Y reduced by X
 ResonantTowerAttackMult   | tower attack gets X times stronger for each tower that has this effect with the same value for Y

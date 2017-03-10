@@ -184,9 +184,25 @@ public class EnemyScript : BaseBehaviour
     private float     _unitSpeed;
     public float      unitSpeed { get { return _unitSpeed; } set { _unitSpeed = Mathf.Min(value, speedLimit); } }
     public float      unitSpeedWhenSpawned;
-    private float     _slowedForSeconds;  
-    public float      slowedForSeconds { get { return _slowedForSeconds; } set { _slowedForSeconds = Mathf.Max(value, 0.0f); } }
     public EffectData effectData;
+
+    private float _slowedForSeconds;  
+    public  float  slowedForSeconds
+    {
+        get { return _slowedForSeconds; }
+        set
+        {
+            float newValue = Mathf.Max(value, 0.0f);
+            if (newValue != _slowedForSeconds)
+            {
+                //the slow time has changed.  However, this only changed our speed if we just became slow or just stopped being slow
+                if (_slowedForSeconds == 0.0f || newValue == 0.0f)
+                    EnemyManagerScript.instance.EnemySpeedChanged(this);
+
+                _slowedForSeconds = newValue;
+            }
+        }
+    }
 
     //used for health bar
     public Color healthyColor; //color when healthy
@@ -539,6 +555,14 @@ public class EnemyScript : BaseBehaviour
             result += Vector2.Distance(path[segment - 1], path[segment]);
 
         return result;
+    }
+
+    /// <summary>
+    /// returns how long it will take the enemy to reach the goal, given its current path and speed
+    /// </summary>
+    public float timeToGoal()
+    {
+        return distanceToGoal() / unitSpeed;
     }
 
     /// <summary>

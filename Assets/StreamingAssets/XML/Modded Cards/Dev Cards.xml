@@ -8,7 +8,7 @@
       </towerData>
       <effectData>
         <Effects>
-          <Effect name="chainHit" strength="1" />
+          <Effect name="chainHit" strength="1" argument="9999"/>
           <Effect name="targetClosest" />
         </Effects>
       </effectData>
@@ -42,7 +42,7 @@
       <effectData>
         <Effects>
           <Effect name="targetRandom" />
-          <Effect name="chainHit" strength="999" />
+          <Effect name="chainHit" strength="999" argument="9999"/>
           <Effect name="damagePercent" strength="10" />
           <Effect name="manualFire" />
         </Effects>

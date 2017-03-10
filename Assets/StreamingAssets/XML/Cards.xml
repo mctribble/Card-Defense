@@ -24,7 +24,7 @@
         <Effects>
           <Effect name="infiniteTowerLifespan" />
           <Effect name="limitedAmmo" strength="3" />
-          <Effect name="chainHit" strength="0.75" />
+          <Effect name="chainHit" strength="0.75" argument="100" />
           <Effect name="poison" strength="5" argument="120" />
           <Effect name="attackColor" argument="black" />
           <Effect name="manualFire" />
@@ -284,7 +284,7 @@
       </towerData>
       <effectData>
         <Effects>
-          <Effect name="chainHit" strength="0.5" />
+          <Effect name="chainHit" strength="0.5" argument="100" />
           <Effect name="poison" strength="2" argument="120" />
           <Effect name="targetRandom" />
         </Effects>
@@ -441,7 +441,7 @@
         <Effects>
           <Effect name="effectCooldown" strength="5">
             <Effect name="effectCharges" strength="4">
-              <Effect name="chainHit" strength="2" />
+              <Effect name="chainHit" strength="2" argument="50" />
             </Effect>
           </Effect>
           <Effect name="noUpgradeCost" />

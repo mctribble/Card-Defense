@@ -166,11 +166,29 @@ public class EffectSplashDamage : BaseEffectEnemyDamaged
 }
 
 //attack damages and spreads effects to all enemies within X of each other through a series of consecutive explosions.  No enemy will be hit twice.  
-//[ForbidEffectContext(EffectContext.enemyUnit)]
 [ForbidEffectContext(EffectContext.enemyCard)]
 public class EffectChainHit : BaseEffectEnemyDamaged
 {
-    [Hide] public override string Name { get { return "chain attack: " + strength; } } //returns name and strength
+    //cap on numbef of enemies that can be hit
+    private int targetCap;
+    [Show]
+    public override string argument
+    {
+        get { return targetCap.ToString(); }
+        set
+        {
+            try
+            {
+                targetCap = Convert.ToInt32(value);
+            }
+            catch (Exception)
+            {
+                Debug.LogWarning("<" + cardName + "> " + XMLName + " could not convert the argument to a valid number.  Defaulting to 1.0");
+            }
+        }
+    }
+
+    [Hide] public override string Name { get { return "Attack chains up to " + targetCap + " times with a range of " + strength; } } //returns name and strength
     [Show] public override string XMLName { get { return "chainHit"; } } //name used to refer to this effect in XML
 
     protected List<EnemyScript> enemiesAlreadyHit;
@@ -201,7 +219,7 @@ public class EffectChainHit : BaseEffectEnemyDamaged
         //if we make it here, the enemy has not been attacked yet, and we can chain off of it.
         
         //for each enemy in range of this one, where range is the effect strength, that we have not already hit
-        foreach (EnemyScript e in EnemyManagerScript.instance.enemiesInRange(originalDamageEvent.dest.transform.position, strength).Except(enemiesAlreadyHit))
+        foreach (EnemyScript e in EnemyManagerScript.instance.enemiesInRange(originalDamageEvent.dest.transform.position, strength, targetCap - enemiesAlreadyHit.Count).Except(enemiesAlreadyHit))
         {
             //create the event
             DamageEventData damageEvent = new DamageEventData();
@@ -216,8 +234,7 @@ public class EffectChainHit : BaseEffectEnemyDamaged
             if (enemiesAlreadyHit.Count == 0)
             {
                 damageEvent.effects = originalDamageEvent.effects.clone();
-                EffectChainHit clonedEffect = (EffectChainHit)damageEvent.effects.effects.First(ie => ie.XMLName == XMLName);
-                listToUse = clonedEffect.enemiesAlreadyHit;
+                listToUse = ((EffectChainHit)damageEvent.effects.effects.First(ie => ie.XMLName == XMLName)).enemiesAlreadyHit;
             }
             else
             {

@@ -39,7 +39,7 @@ public abstract class BaseEffectTowerTargeting : BaseEffect, IEffectTowerTargeti
 /// </summary>
 public class EffectTargetDefault : BaseEffectTowerTargeting
 {
-    [Hide] public override string Name { get { return "Target: default"; } } //returns name and strength
+    [Hide] public override string Name { get { return "Target: imminent threat"; } } //returns name and strength
     [Show] public override string XMLName { get { return "<NO_XML_NAME>"; } } //name used to refer to this effect in XML.  This should never happen for this effect since it is a placeholder
     [Hide] public override TargetingPriority priority { get { return TargetingPriority.DEFAULT; } } //priority of this targeting effect
 
@@ -178,7 +178,7 @@ public class EffectTargetClosest : BaseEffectTowerTargeting
 //targets up to X enemies closest to their goals
 public class EffectTargetMultishot : BaseEffectTowerTargeting
 {
-    [Hide] public override string Name { get { return "Target: " + Mathf.Floor(strength) + " most threatening"; } } //returns name and strength
+    [Hide] public override string Name { get { return "Target: " + Mathf.Floor(strength) + " most imminent threats"; } } //returns name and strength
     [Show] public override string XMLName { get { return "targetMultishot"; } } //name used to refer to this effect in XML
     [Hide] public override TargetingPriority priority { get { return TargetingPriority.MULTIPLE; } } //priority of this targeting effect
 
@@ -300,7 +300,7 @@ public class EffectTargetMouse : BaseEffectTowerTargeting
     private static float            cachedRange;            //range of the cached result
     private static int              cachedFrame;            //what frame those results are from
 
-    [Hide] public override string Name { get { return "Target: near mouse"; } } //returns name and strength
+    [Hide] public override string Name { get { return "Target: imminent threat near mouse"; } } //returns name and strength
     [Show] public override string XMLName { get { return "targetMouse"; } } //name used to refer to this effect in XML
     [Hide] public override TargetingPriority priority { get { return TargetingPriority.MOUSE; } } //priority of this targeting effect
 

@@ -14,14 +14,32 @@ public class EnemyDistanceToGoalComparer : Comparer<EnemyScript>
 }
 
 /// <summary>
+/// compares two enemies by how quickly they will reach their goals.  Used for sorting the enemy list
+/// </summary>
+public class EnemyTimeToGoalComparer : Comparer<EnemyScript>
+{
+    public override int Compare(EnemyScript x, EnemyScript y)
+    {
+        return x.timeToGoal().CompareTo(y.timeToGoal());
+    }
+}
+
+
+
+/// <summary>
 /// responsible for tracking active enemies and performing group operations on them
 /// </summary>
 public class EnemyManagerScript : BaseBehaviour
 {
+    public enum SortMethod { distanceToGoal, timeToGoal }
+    [Show, OnChanged("targetingMethodChanged")] public SortMethod defaultTargetingMethod;
+
     public static EnemyManagerScript instance; //this class is a singleton
     public List<EnemyScript> activeEnemies; //excludes enemies that expect to die but have not yet done so
     public List<EnemyScript> survivors; //list of enemies that survived their run and should be added as a new wave on the next round
-    private EnemyDistanceToGoalComparer comparer;
+
+    private EnemyDistanceToGoalComparer distanceComparer;
+    private EnemyTimeToGoalComparer     timeComparer;
 
     // Use this for initialization
     private void Awake()
@@ -29,7 +47,8 @@ public class EnemyManagerScript : BaseBehaviour
         instance = this;
         activeEnemies = new List<EnemyScript>();
         survivors = null;
-        comparer = new EnemyDistanceToGoalComparer();
+        distanceComparer = new EnemyDistanceToGoalComparer();
+        timeComparer     = new EnemyTimeToGoalComparer();
     }
 
     //called to reset the manager
@@ -44,11 +63,19 @@ public class EnemyManagerScript : BaseBehaviour
     /// </summary>
     public void EnemySpawned(EnemyScript e)
     {
+        //choose a comparer based on the current targeting method
+        IComparer<EnemyScript> comparerToUse = null;
+        switch(defaultTargetingMethod)
+        {
+            case SortMethod.distanceToGoal: comparerToUse = distanceComparer; break;
+            case SortMethod.timeToGoal:     comparerToUse = timeComparer;     break;
+        }
+
         //perform a sorted insert.  We expect this enemy to be near the end of the list, so start at the back
         //we insert it after the first enemy that is not further away than this one
         for (int i = activeEnemies.Count - 1; i > 0; i--)
         {
-            if (comparer.Compare(activeEnemies[i], e) <= 0)
+            if (comparerToUse.Compare(activeEnemies[i], e) <= 0)
             {
                 activeEnemies.Insert(i + 1, e);
                 return;
@@ -72,8 +99,22 @@ public class EnemyManagerScript : BaseBehaviour
     /// </summary>
     public void EnemyPathChanged(EnemyScript e)
     {
+        //always reposition the enemy in the list if its path changes
         EnemyExpectedDeath(e);
         EnemySpawned(e);
+    }
+
+    /// <summary>
+    /// called when the enemy speed changes, such as when they become slowed or slowness wears off
+    /// </summary>
+    public void EnemySpeedChanged(EnemyScript e)
+    {
+        //speed change only warrants a reposition if using the timeToGoal sort
+        if (defaultTargetingMethod == SortMethod.timeToGoal)
+        {
+            EnemyExpectedDeath(e);
+            EnemySpawned(e);
+        }
     }
 
     /// <summary>
@@ -91,7 +132,7 @@ public class EnemyManagerScript : BaseBehaviour
 
     /// <summary>
     /// returns a list of all enemies that are within the given range of the given position, limiting it to at most max items
-    /// if more than max enemies are found, the ones closest to their goals are returned
+    /// if more than max enemies are found, the ones given the highest targeting priority are returned
     /// </summary>
     /// <param name="targetPosition">center of the circle</param>
     /// <param name="range">radius of the circle</param>
@@ -117,10 +158,26 @@ public class EnemyManagerScript : BaseBehaviour
     }
 
     /// <summary>
-    /// sorts the enemy list by how close they are to their goal
+    /// re-sorts the entire enemy list
     /// </summary>
     private void sortEnemyList()
     {
-        activeEnemies.Sort(comparer);
+        activeEnemies.Sort(distanceComparer);
+    }
+
+    //called every frame
+    private void Update()
+    {
+        //if we are sorting by distance instead of time, we have to re-sort the list every now and then to account for enemies passing each other
+        if (defaultTargetingMethod == SortMethod.distanceToGoal)
+            if (Time.frameCount % 10 == 0)
+                sortEnemyList();
+    }
+
+    //called when the targeting method changes
+    private void targetingMethodChanged(SortMethod newMethod)
+    {
+        Debug.Log("targeting method changed to " + newMethod);
+        sortEnemyList();
     }
 }
