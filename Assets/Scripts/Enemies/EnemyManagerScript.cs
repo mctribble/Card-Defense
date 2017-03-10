@@ -100,8 +100,7 @@ public class EnemyManagerScript : BaseBehaviour
     public void EnemyPathChanged(EnemyScript e)
     {
         //always reposition the enemy in the list if its path changes
-        EnemyExpectedDeath(e);
-        EnemySpawned(e);
+        updateEnemyPosition(e);
     }
 
     /// <summary>
@@ -109,12 +108,26 @@ public class EnemyManagerScript : BaseBehaviour
     /// </summary>
     public void EnemySpeedChanged(EnemyScript e)
     {
-        //speed change only warrants a reposition if using the timeToGoal sort
-        if (defaultTargetingMethod == SortMethod.timeToGoal)
+        //dead enemies should be removed instead of repositioned
+        if (e == null)
         {
             EnemyExpectedDeath(e);
-            EnemySpawned(e);
+            return;
         }
+
+        //speed change only warrants a reposition if using the timeToGoal sort
+        if (defaultTargetingMethod == SortMethod.timeToGoal)
+            updateEnemyPosition(e);
+    }
+
+    /// <summary>
+    /// repositions the enemy to its proper place in the list.
+    /// </summary>
+    /// <param name=""></param>
+    private void updateEnemyPosition(EnemyScript e)
+    {
+        EnemyExpectedDeath(e);
+        EnemySpawned(e);
     }
 
     /// <summary>
