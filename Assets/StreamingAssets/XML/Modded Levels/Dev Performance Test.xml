@@ -105,11 +105,11 @@
   <levelDeck name="Level Deck">
     <Cards>
       <Card name="Dev Purge Tower" count="2" />
-      <Card name="Chain Hit" count="1" />
-      <Card name="Gambit" count="2" />
+      <Card name="Spitfire Upgrade" count="2" />
+      <Card name="Plague Tower" count="2" />
       <Card name="Orthogonal Tower" count="2" />
-      <Card name="Reinforce" count="5" />
-      <Card name="Shield" count="200" />
+      <Card name="Reinforce" count="2" />
+      <Card name="Heavy Shield" count="200" />
     </Cards>
   </levelDeck>
 </Level>

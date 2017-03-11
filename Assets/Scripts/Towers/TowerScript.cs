@@ -334,7 +334,7 @@ public class TowerScript : BaseBehaviour
 
         Debug.Assert(targets != null); //there must always be a target list, even if it is empty
 
-        return targets;
+        return targets.ToList();
     }
 
     /// <summary>
