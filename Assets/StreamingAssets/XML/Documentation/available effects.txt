@@ -5,20 +5,15 @@ regeneration | enemy recovers X health per second.
 poison       | enemy takes X damage per second for Y seconds
 
 <<Enemy Effects (Stat Scaling)>>
-fixedSpawnCount           | waves of this enemy type always spawn exactly X enemies.  Best when used with budget scaling effects, so stronger waves can continue getting stronger.
 invScaleAttackWithDamage  | enemy deals less damage as it gets injured.  Decreases proportionally if x = 1.  Higher/lower values cause it to decrease faster/slower, respectively.
 invScaleEffectWithDamage  | target enemy effect weakens as it takes damage.  Decreases proportionally if x = 1.  Higher/lower values cause it to decrease faster/slower, respectively.
 invScaleEffectWithTime    | target enemy effect weakens by x/s.  
 invScaleSpeedWithDamage   | enemy slows down (to 1) as it takes damage.  Decreases proportionally if x = 1.  Higher/lower values cause it to decrease faster/slower, respectively.
 invScaleSpedWithTime      | enemy slows down by x/s (min 1)
-scaleAttackhWithBudget    | enemy attack scales up with wave budget.  Increases proportionally if x = 1.  Higher/lower values cause it to increase faster/slower, respectively.
 scaleAttackWithDamage     | monster deals more damage as it gets injured.  Increases proportionally if x = 1.  Higher/lower values cause it to increase faster/slower, respectively.
-scaleEffectWithBudget     | target enemy effect scales up with wave budget.  Increases proportionally if x = 1.  Higher/lower values cause it to increase faster/slower, respectively.
 scaleEffectWithDamage     | target enemy effect scales up as the enemy takes damage.  Increases proportionally if x = 1.  Higher/lower values cause it to increase faster/slower, respectively.
 scaleEffectWithRank       | target enemy effect scales up with the rank of the wave (multiplied by X per rank, like how stats scale)
 scaleEffectWithTime       | target enemy effect gets stronger by X/s
-scaleHealthWithBudget     | enemy health scales up with wave budget.  Increases proportionally if x = 1.  Higher/lower values cause it to increase faster/slower, respectively.
-scaleSpeedWithBudget      | enemy speed  scales up with wave budget.  Increases proportionally if x = 1.  Higher/lower values cause it to increase faster/slower, respectively.
 scaleSpeedWithDamage      | enemy gets faster as it takes damage.  Increases proportionally if x = 1.  Higher/lower values cause it to increase faster/slower, respectively.
 scaleSpeedWithTime        | enemy gets faster by X/s.  Note that there is a global speed limit for all enemies that this will not exceed.
 

@@ -60,9 +60,102 @@
     <xsd:sequence>
       <xsd:element name="Effect" type="tEffect" minOccurs="0"/>
     </xsd:sequence>
-    <xsd:attribute name="name"     type="xsd:string"  use="required" />
+    <xsd:attribute name="name" use="required" >
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="addCharges" />
+          <xsd:enumeration value="allTowersLifespanBonus" />
+          <xsd:enumeration value="armor" />
+          <xsd:enumeration value="armorPierce" />
+          <xsd:enumeration value="attackColor" />
+          <xsd:enumeration value="budgetPercentageChange" />
+          <xsd:enumeration value="cannotBeDiscarded" />
+          <xsd:enumeration value="chainHit" />
+          <xsd:enumeration value="changeWaveType" />
+          <xsd:enumeration value="conjureCard" />
+          <xsd:enumeration value="conjureEnemyCard" />
+          <xsd:enumeration value="conjureSpecificCard" />
+          <xsd:enumeration value="conjureSpellCard" />
+          <xsd:enumeration value="conjureTowerCard" />
+          <xsd:enumeration value="conjureUpgradeCard" />
+          <xsd:enumeration value="customDescription" />
+          <xsd:enumeration value="damageHand" />
+          <xsd:enumeration value="damagePercent" />
+          <xsd:enumeration value="damagePlayer" />
+          <xsd:enumeration value="dieRoll" />
+          <xsd:enumeration value="discardChosenCard" />
+          <xsd:enumeration value="discardRandomCard" />
+          <xsd:enumeration value="drawCard" />
+          <xsd:enumeration value="drawEnemyCard" />
+          <xsd:enumeration value="drawSpellCard" />
+          <xsd:enumeration value="drawTowerCard" />
+          <xsd:enumeration value="drawUpgradeCard" />
+          <xsd:enumeration value="effectCharges" />
+          <xsd:enumeration value="effectCooldown" />
+          <xsd:enumeration value="everyRound" />
+          <xsd:enumeration value="ifRollRange" />
+          <xsd:enumeration value="infiniteTowerLifespan" />
+          <xsd:enumeration value="invScaleAttackWithDamage" />
+          <xsd:enumeration value="invScaleEffectWithDamage" />
+          <xsd:enumeration value="invScaleEffectWithTime" />
+          <xsd:enumeration value="invScaleSpedWithTime" />
+          <xsd:enumeration value="invScaleSpeedWithDamage" />
+          <xsd:enumeration value="limitedAmmo" />
+          <xsd:enumeration value="manualFire" />
+          <xsd:enumeration value="maxOvercharge" />
+          <xsd:enumeration value="noUpgradeCost" />
+          <xsd:enumeration value="onAttack" />
+          <xsd:enumeration value="onCardDrawn" />
+          <xsd:enumeration value="onSpawned" />
+          <xsd:enumeration value="overchargeDamage" />
+          <xsd:enumeration value="percentageChance" />
+          <xsd:enumeration value="poison" />
+          <xsd:enumeration value="redrawTowerOnDeath" />
+          <xsd:enumeration value="reduceEnemyEffectOnDamage" />
+          <xsd:enumeration value="reloadAmmo" />
+          <xsd:enumeration value="regeneration" />
+          <xsd:enumeration value="replaceRandomCard" />
+          <xsd:enumeration value="replaceRandomCardWithSpell" />
+          <xsd:enumeration value="replaceRandomCardWithTower" />
+          <xsd:enumeration value="replaceRandomCardWithUpgrade" />
+          <xsd:enumeration value="ResonantTowerAttackMod" />
+          <xsd:enumeration value="ResonantTowerAttackMult" />
+          <xsd:enumeration value="ResonantTowerRangeMod" />
+          <xsd:enumeration value="returnsToTopOfDeck" />
+          <xsd:enumeration value="setRange" />
+          <xsd:enumeration value="scaleAttackWithDamage" />
+          <xsd:enumeration value="scaleEffectByTowerAttack" />
+          <xsd:enumeration value="scaleEffectWithDamage" />
+          <xsd:enumeration value="scaleEffectWithRank" />
+          <xsd:enumeration value="scaleEffectWithTime" />
+          <xsd:enumeration value="scaleSpeedWithDamage" />
+          <xsd:enumeration value="scaleSpeedWithTime" />
+          <xsd:enumeration value="score" />
+          <xsd:enumeration value="secondaryBurst" />
+          <xsd:enumeration value="shuffle" />
+          <xsd:enumeration value="slowTarget" />
+          <xsd:enumeration value="spawnEnemyOnDeath" />
+          <xsd:enumeration value="splashDamage" />
+          <xsd:enumeration value="statPercentChangePerRound" />
+          <xsd:enumeration value="targetAll" />
+          <xsd:enumeration value="targetArmor" />
+          <xsd:enumeration value="targetBurst" />
+          <xsd:enumeration value="targetClosest" />
+          <xsd:enumeration value="targetHealth" />
+          <xsd:enumeration value="targetLowHealth" />
+          <xsd:enumeration value="targetMouse" />
+          <xsd:enumeration value="targetMultishot" />
+          <xsd:enumeration value="targetOrthogonal" />
+          <xsd:enumeration value="targetRandom" />
+          <xsd:enumeration value="targetSpeed" />
+          <xsd:enumeration value="timePercentageChange" />
+          <xsd:enumeration value="upgradeAllTowers" />
+          <xsd:enumeration value="upgradesForbidden" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
     <xsd:attribute name="strength" type="xsd:decimal" use="optional" />
-    <xsd:attribute name="argument" type="xsd:string"  use="optional" />
+    <xsd:attribute name="argument" type="xsd:string" use="optional" />
   </xsd:complexType>
   
 </xs:schema>

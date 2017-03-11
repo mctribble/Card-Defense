@@ -25,27 +25,22 @@
         </Effects>
       </effectData>
     </Enemy>
-    <Enemy name="Carrier" spawnCost="300" attack="4" maxHealth="200" unitSpeed="1" sprite="Enemy_Elite.png">
-      <rankInfo rankUpSpawnCount="200" spawnCostMult="2" attackMult="1.5" maxHealthMult="2" unitSpeedMult="1" />
+    <Enemy name="Carrier" spawnCost="300" attack="6" maxHealth="200" unitSpeed="1" sprite="Enemy_Elite.png">
+      <rankInfo rankUpSpawnCount="2" spawnCostMult="2" attackMult="2" maxHealthMult="2" unitSpeedMult="1" />
       <unitColor r="0.75" g="0.75" b="0.75" a="1" />
       <effectData>
         <Effects>
-          <Effect name="fixedSpawnCount" strength="1" />
-          <Effect name="scaleHealthWithBudget" strength="1" />
-          <Effect name="scaleEffectWithBudget" strength="1" >
+          <Effect name="scaleEffectWithRank" strength="2" >
             <Effect name="spawnEnemyOnDeath" strength="5" argument="Swarm" />
           </Effect>
         </Effects>
       </effectData>
     </Enemy>
     <Enemy name="Giant" spawnCost="400" attack="8" maxHealth="600" unitSpeed=".5" sprite="Enemy_Boss.png">
-      <rankInfo rankUpSpawnCount="200" spawnCostMult="2" attackMult="1.5" maxHealthMult="2" unitSpeedMult="1" />
+      <rankInfo rankUpSpawnCount="2" spawnCostMult="2" attackMult="1.5" maxHealthMult="2.5" unitSpeedMult="1" />
       <unitColor r="0.75" g="0" b="0.75" a="1" />
       <effectData>
         <Effects>
-          <Effect name="fixedSpawnCount" strength="1" />
-          <Effect name="scaleHealthWithBudget" strength="1.5" />
-          <Effect name="scaleAttackWithBudget" strength="0.5" />
           <Effect name="invScaleAttackWithDamage" />
         </Effects>
       </effectData>

@@ -553,8 +553,8 @@ public class EnemyScript : BaseBehaviour
         //only do the work once per frame
         if (float.IsNaN(cachedDistance))
         {
-            //distance is 0 if we are at the goal
-            if (path.Count == currentDestination)
+            //distance is 0 if we are dead or at the goal
+            if (path.Count == currentDestination || this == null)
                 return 0.0f;
 
             float cachedDistance = Vector2.Distance(transform.position, path[currentDestination]); //start with distance to the current destination...

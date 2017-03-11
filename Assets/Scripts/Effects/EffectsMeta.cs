@@ -658,51 +658,6 @@ public class EffectInvScaleEffectWithTime : BaseEffectMeta
     public override bool shouldBeRemoved() { return base.shouldBeRemoved() || done; }
 }
 
-//target enemy effect scales up with wave budget.  Increases proportionally if x = 1.Higher / lower values cause it to increase faster/slower, respectively.
-public class EffectScaleEffectWithBudget : BaseEffectMeta
-{
-    public override string Name { get { return "[scaled]" + innerEffect.Name; } } //returns name and strength
-    public override string XMLName { get { return "scaleEffectWithBudget"; } } //name used to refer to this effect in XML
-
-    public override bool shouldApplyInnerEffect() { return true; } //always trigger inner effect
-
-    //allow this to trigger as an onDamage effect even if the child does not
-    public override bool triggersAs(EffectType triggerType)
-    {
-        return triggerType == EffectType.wave || base.triggersAs(triggerType);
-    }
-
-    bool alreadyScaled = false;
-
-    public override WaveData alteredWaveData(WaveData currentWaveData)
-    {
-        if (alreadyScaled)
-        {
-            Debug.LogWarning("ScaleEffectWithBudget triggered repeatedly!  Ignoring extra call.");
-            return currentWaveData;
-        }
-
-        float scaleRatio = (float)currentWaveData.budget / (float)currentWaveData.enemyData.baseSpawnCost; //ratio we are scaling by
-        float scaleFactor = ((scaleRatio -1) * strength) + 1;                                              //factor to use for scaling
-        innerEffect.strength = Mathf.RoundToInt(scaleFactor * innerEffect.strength);                       //scale
-
-        alreadyScaled = true;
-
-        if (innerEffect.triggersAs(EffectType.wave))
-            return base.alteredWaveData(currentWaveData);
-        else
-            return currentWaveData;
-    }
-
-    //since we altered the inner effect, when it gets cloned we need to copy over the changes
-    public override IEffect cloneInnerEffect()
-    {
-        IEffect clone = base.cloneInnerEffect();
-        clone.strength = innerEffect.strength;
-        return clone;
-    }
-}
-
 //target enemy effect scales up with the rank of the wave (multiplied by X per rank, like how stats scale)
 public class EffectScaleEffectWithRank : BaseEffectMeta
 {

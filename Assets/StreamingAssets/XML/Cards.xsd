@@ -117,7 +117,6 @@
           <xsd:enumeration value="effectCharges" />
           <xsd:enumeration value="effectCooldown" />
           <xsd:enumeration value="everyRound" />
-          <xsd:enumeration value="fixedSpawnCount" />
           <xsd:enumeration value="ifRollRange" />
           <xsd:enumeration value="infiniteTowerLifespan" />
           <xsd:enumeration value="invScaleAttackWithDamage" />
@@ -148,15 +147,11 @@
           <xsd:enumeration value="ResonantTowerRangeMod" />
           <xsd:enumeration value="returnsToTopOfDeck" />
           <xsd:enumeration value="setRange" />
-          <xsd:enumeration value="scaleAttackhWithBudget" />
           <xsd:enumeration value="scaleAttackWithDamage" />
           <xsd:enumeration value="scaleEffectByTowerAttack" />
-          <xsd:enumeration value="scaleEffectWithBudget" />
           <xsd:enumeration value="scaleEffectWithDamage" />
           <xsd:enumeration value="scaleEffectWithRank" />
           <xsd:enumeration value="scaleEffectWithTime" />
-          <xsd:enumeration value="scaleHealthWithBudget" />
-          <xsd:enumeration value="scaleSpeedWithBudget" />
           <xsd:enumeration value="scaleSpeedWithDamage" />
           <xsd:enumeration value="scaleSpeedWithTime" />
           <xsd:enumeration value="score" />

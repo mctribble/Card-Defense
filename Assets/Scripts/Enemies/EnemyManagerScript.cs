@@ -36,8 +36,11 @@ public class EnemyManagerScript : BaseBehaviour
     [Show, OnChanged("targetingMethodChanged")] public SortMethod defaultTargetingMethod;
 
     public static EnemyManagerScript instance; //this class is a singleton
-    public LinkedList<EnemyScript> activeEnemies; //excludes enemies that expect to die but have not yet done so
     public List<EnemyScript> survivors; //list of enemies that survived their run and should be added as a new wave on the next round
+
+    //VFW doesnt support linkedList, so we hide it in the inspector and create a property to show instead
+    [Hide] public  LinkedList<EnemyScript> activeEnemies; //excludes enemies that expect to die but have not yet done so
+    [Show] private List<EnemyScript> _ActiveEnemies { get { return activeEnemies.AsEnumerable().ToList(); } }
 
     private EnemyDistanceToGoalComparer distanceComparer;
     private EnemyTimeToGoalComparer     timeComparer;
@@ -131,7 +134,8 @@ public class EnemyManagerScript : BaseBehaviour
     private void updateEnemyPosition(EnemyScript e)
     {
         EnemyExpectedDeath(e);
-        EnemySpawned(e);
+        if (e != null && e.expectedHealth > 0)
+            EnemySpawned(e);
     }
 
     /// <summary>
