@@ -155,15 +155,14 @@ public class EnemyManagerScript : BaseBehaviour
     /// <param name="range">radius of the circle</param>
     /// <param name="max">max number of enemies to return</param>
     /// <returns>up to max enemies within the circle</returns>
-    public List<EnemyScript> enemiesInRange(Vector2 targetPosition, float range, int max = int.MaxValue)
+    public IEnumerable<EnemyScript> enemiesInRange(Vector2 targetPosition, float range, int max = int.MaxValue)
     {
         //find result with a Linq query:
-                                                                                                         //we are looking for...
+        //we are looking for...
         return activeEnemies.Where(e => e.expectedHealth > 0)                                            //active enemies that don't already expect to die
                             .Where(e => Vector2.Distance(targetPosition, e.transform.position) <= range) //and are in range
-                                        //and we want to return...
-                            .Take(max)  //up to max enemies
-                            .ToList();  //as a list
+                                         //and we want to return...
+                            .Take(max);  //up to max enemies
     }
 
     /// <summary>

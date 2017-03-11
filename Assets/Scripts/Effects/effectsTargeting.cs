@@ -31,7 +31,7 @@ public abstract class BaseEffectTowerTargeting : BaseEffect, IEffectTowerTargeti
 
     [Hide] public abstract TargetingPriority priority { get; }
 
-    public abstract List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange);
+    public abstract IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange);
 }
 
 /// <summary>
@@ -43,7 +43,7 @@ public class EffectTargetDefault : BaseEffectTowerTargeting
     [Show] public override string XMLName { get { return "<NO_XML_NAME>"; } } //name used to refer to this effect in XML.  This should never happen for this effect since it is a placeholder
     [Hide] public override TargetingPriority priority { get { return TargetingPriority.DEFAULT; } } //priority of this targeting effect
 
-    public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
+    public override IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
         return EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange, 1);
     }
@@ -70,11 +70,12 @@ public class EffectTargetArmor : BaseEffectTowerTargeting
     [Show] public override string XMLName { get { return "targetArmor"; } } //name used to refer to this effect in XML
     [Hide] public override TargetingPriority priority { get { return TargetingPriority.BY_STAT; } } //priority of this targeting effect
 
-    public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
+    public override IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
-        List<EnemyScript> enemiesInRange = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange); //get a list of all valid targets
-        if ((enemiesInRange == null) || (enemiesInRange.Count == 0))
+        IEnumerable<EnemyScript> enemiesInRange = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange); //get a list of all valid targets
+        if ((enemiesInRange == null) || (enemiesInRange.Any() == false))
             return enemiesInRange;
+
         float highestArmor = -1;
         EnemyScript target = null;
         foreach (EnemyScript curEnemy in enemiesInRange)
@@ -107,9 +108,9 @@ public class EffectTargetArmor : BaseEffectTowerTargeting
         }
 
         //return a list with just the chosen target
-        enemiesInRange.Clear();
-        enemiesInRange.Add(target);
-        return enemiesInRange;
+        List<EnemyScript> result = new List<EnemyScript>();
+        result.Add(target);
+        return result;
     }
 }
 
@@ -120,7 +121,7 @@ public class EffectTargetAll : BaseEffectTowerTargeting
     [Show] public override string XMLName { get { return "targetAll"; } } //name used to refer to this effect in XML
     [Hide] public override TargetingPriority priority { get { return TargetingPriority.ALL; } } //priority of this targeting effect
 
-    public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
+    public override IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
         return EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange); //simply returns all targets in range
     }
@@ -133,7 +134,7 @@ public class EffectTargetBurst : BaseEffectTowerTargeting
     [Show] public override string XMLName { get { return "targetBurst"; } } //name used to refer to this effect in XML
     [Hide] public override TargetingPriority priority { get { return TargetingPriority.ALL; } } //priority of this targeting effect
 
-    public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
+    public override IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
         return EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange); //simply returns all targets in range
     }
@@ -146,10 +147,10 @@ public class EffectTargetClosest : BaseEffectTowerTargeting
     [Show] public override string XMLName { get { return "targetClosest"; } } //name used to refer to this effect in XML.
     [Hide] public override TargetingPriority priority { get { return TargetingPriority.BY_STAT; } } //priority of this targeting effect
 
-    public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
+    public override IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
         //fetch all valid targets
-        List <EnemyScript> validTargets = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange, 1);
+        IEnumerable<EnemyScript> validTargets = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange, 1);
 
         //find the closest one
         EnemyScript closest = null;
@@ -182,13 +183,13 @@ public class EffectTargetMultishot : BaseEffectTowerTargeting
     [Show] public override string XMLName { get { return "targetMultishot"; } } //name used to refer to this effect in XML
     [Hide] public override TargetingPriority priority { get { return TargetingPriority.MULTIPLE; } } //priority of this targeting effect
 
-    public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
+    public override IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
         //fetch valid targets
-        List<EnemyScript> validTargets = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange);
+        IEnumerable<EnemyScript> validTargets = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange);
 
         //bail if the list is empty
-        if ((validTargets == null) || (validTargets.Count == 0))
+        if ((validTargets == null) || (validTargets.Any() == false))
             return validTargets;
 
         //return the first X enemies in the list
@@ -203,14 +204,14 @@ public class EffectTargetRandom : BaseEffectTowerTargeting
     [Show] public override string XMLName { get { return "targetRandom"; } } //name used to refer to this effect in XML
     [Hide] public override TargetingPriority priority { get { return TargetingPriority.RANDOM; } } //priority of this targeting effect
 
-    public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
+    public override IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
-        List<EnemyScript> validTargets = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange); //get all in range
+        List<EnemyScript> validTargets = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange).ToList(); //get all in range
 
         //bail if the list is empty
         if ((validTargets == null) || (validTargets.Count == 0))
             return validTargets;
-
+        
         EnemyScript target = validTargets[UnityEngine.Random.Range(0, validTargets.Count)];                     //pick one at random
         validTargets.Clear();                                                                                  //purge the list
         validTargets.Add(target);                                                                              //add the chosen target back in
@@ -225,9 +226,9 @@ public class EffectTargetHealth : BaseEffectTowerTargeting
     [Show] public override string XMLName { get { return "targetHealth"; } } //name used to refer to this effect in XML
     [Hide] public override TargetingPriority priority { get { return TargetingPriority.BY_STAT; } } //priority of this targeting effect
 
-    public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
+    public override IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
-        List<EnemyScript> enemiesInRange = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange); //get a list of all valid targets
+        List<EnemyScript> enemiesInRange = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange).ToList(); //get a list of all valid targets
 
         //bail if the list is empty
         if ((enemiesInRange == null) || (enemiesInRange.Count == 0))
@@ -262,9 +263,9 @@ public class EffectTargetLowHealth : BaseEffectTowerTargeting
     [Show] public override string XMLName { get { return "targetLowHealth"; } } //name used to refer to this effect in XML
     [Hide] public override TargetingPriority priority { get { return TargetingPriority.BY_STAT; } } //priority of this targeting effect
 
-    public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
+    public override IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
-        List<EnemyScript> enemiesInRange = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange); //get a list of all valid targets
+        List<EnemyScript> enemiesInRange = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange).ToList(); //get a list of all valid targets
 
         //bail if the list is empty
         if ((enemiesInRange == null) || (enemiesInRange.Count == 0))
@@ -306,7 +307,7 @@ public class EffectTargetMouse : BaseEffectTowerTargeting
 
     public EffectTargetMouse() { cachedEnemiesNearMouse = null; cachedFrame = -1; cachedRange = 0.0f; }
 
-    public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
+    public override IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
         if (cachedFrame == Time.frameCount)
         {
@@ -324,7 +325,7 @@ public class EffectTargetMouse : BaseEffectTowerTargeting
 
         //either we did not have a cached result, or it was unusable.  do a normal test
         Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        cachedEnemiesNearMouse = EnemyManagerScript.instance.enemiesInRange(mouseWorldPosition, towerRange, 1);
+        cachedEnemiesNearMouse = EnemyManagerScript.instance.enemiesInRange(mouseWorldPosition, towerRange, 1).ToList();
         cachedFrame = Time.frameCount;
         cachedRange = towerRange;
         return cachedEnemiesNearMouse;
@@ -338,9 +339,9 @@ public class EffectTargetSpeed : BaseEffectTowerTargeting
     [Show] public override string XMLName { get { return "targetSpeed"; } } //name used to refer to this effect in XML
     [Hide] public override TargetingPriority priority { get { return TargetingPriority.BY_STAT; } } //priority of this targeting effect
 
-    public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
+    public override IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
-        List<EnemyScript> enemiesInRange = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange); //get a list of all valid targets
+        List<EnemyScript> enemiesInRange = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange).ToList(); //get a list of all valid targets
 
         //bail if the list is empty
         if ((enemiesInRange == null) || (enemiesInRange.Count == 0))
@@ -379,9 +380,9 @@ public class EffectTargetOrthogonal : BaseEffectTowerTargeting
     [Show] public override string XMLName { get { return "targetOrthogonal"; } } //name used to refer to this effect in XML
     [Hide] public override TargetingPriority priority { get { return TargetingPriority.ORTHOGONAL; } } //priority of this targeting effect
 
-    public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
+    public override IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
-        List<EnemyScript> enemiesInRange = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange); //get a list of all valid targets
+        List<EnemyScript> enemiesInRange = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange).ToList(); //get a list of all valid targets
         
         //bail if the list is empty
         if ((enemiesInRange == null) || (enemiesInRange.Count == 0))

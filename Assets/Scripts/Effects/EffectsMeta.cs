@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 using Vexe.Runtime.Types;
+using System.Linq;
 
 //this file contains effects that apply to other effects.
 //they are implemented as wrappers around another effect, so they don't have an interface or type of their own: they use that of whichever the target effect is
@@ -28,7 +29,7 @@ public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
 
     //each of these trigger functions check shouldApplyInnerEffect() and pass the call through if it returns true
     public virtual WaveData alteredWaveData(WaveData currentWaveData) { if (shouldApplyInnerEffect()) { return ((IEffectWave)innerEffect).alteredWaveData(currentWaveData); } else { return currentWaveData;} }
-    public virtual List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange) { if (shouldApplyInnerEffect()) { return ((IEffectTowerTargeting)innerEffect).findTargets(towerPosition, towerRange); } else { return null; } }
+    public virtual IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange) { if (shouldApplyInnerEffect()) { return ((IEffectTowerTargeting)innerEffect).findTargets(towerPosition, towerRange); } else { return null; } }
     public virtual void UpdateEnemy(EnemyScript e, float deltaTime) { if (shouldApplyInnerEffect()) { ((IEffectPeriodic)innerEffect).UpdateEnemy(e, deltaTime); } }
     public virtual void trigger(ref PlayerCard card, GameObject card_gameObject) { if (shouldApplyInnerEffect()) { ((IEffectSelf)innerEffect).trigger(ref card, card_gameObject); } }
     public virtual void trigger(ref DamageEventData d, int pointsOfOvercharge) { if (shouldApplyInnerEffect()) { ((IEffectOvercharge)innerEffect).trigger(ref d, pointsOfOvercharge); } }
@@ -301,12 +302,12 @@ public class EffectEffectCooldown : BaseEffectMeta
     }
 
     //targeting effects trigger the cooldown IF AND ONLY IF they found something
-    public override List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
+    public override IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
-        List<EnemyScript> result = base.findTargets(towerPosition, towerRange);
+        IEnumerable<EnemyScript> result = base.findTargets(towerPosition, towerRange);
 
         if (result != null)
-            if (result.Count > 0)
+            if (result.Any())
                 LevelManagerScript.instance.StartCoroutine(cooldown());
 
         return result;

@@ -12,9 +12,9 @@ using System.Linq;
 /// </summary>
 public struct BurstShotData
 {
-    public DamageEventData   damageEvent; 
-    public List<EnemyScript> targetList;  
-    public float             burstRange;  
+    public DamageEventData          damageEvent; 
+    public IEnumerable<EnemyScript> targetList;  
+    public float                    burstRange;  
 }
 
 //round burst attack used by towers with TargetAll.  expands to the towers range and attacks enemies as it reaches them.
@@ -135,7 +135,7 @@ public class BurstShotScript : BaseBehaviour
         maxScale = data.burstRange; //store attack range
 
         //warn all enemies that will be hit
-        List<EnemyScript> toWarn = EnemyManagerScript.instance.enemiesInRange(transform.position, maxScale);
+        IEnumerable<EnemyScript> toWarn = EnemyManagerScript.instance.enemiesInRange(transform.position, maxScale);
         foreach (EnemyScript e in toWarn)
         {
             DamageEventData ded = new DamageEventData();

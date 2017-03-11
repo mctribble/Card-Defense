@@ -256,7 +256,7 @@ public class TowerScript : BaseBehaviour
             }
 
             //call helpers to perform targeting and shooting
-            List<EnemyScript> targets = target();
+            IEnumerable<EnemyScript> targets = target();
             bool result = fire(targets);
             if (result == false)
                 break; //bail if we failed to fire for any reason
@@ -291,7 +291,7 @@ public class TowerScript : BaseBehaviour
         if (waitingForManualFire)
         {
             //call helpers to perform targeting and shooting
-            List<EnemyScript> targets = target();
+            IEnumerable<EnemyScript> targets = target();
             bool result = fire(targets);
             if (result == false)
                 return; //bail if we failed to fire for any reason
@@ -313,7 +313,7 @@ public class TowerScript : BaseBehaviour
     /// finds all the enemies that this tower should hit if it makes an attack now.  Said list might be empty, but it will not be null.
     /// </summary>
     /// <returns>the resulting list</returns>
-    private List<EnemyScript> target()
+    private IEnumerable<EnemyScript> target()
     {
         //bail if there are no enemies on the map
         if (EnemyManagerScript.instance.activeEnemies.Count == 0)
@@ -326,7 +326,7 @@ public class TowerScript : BaseBehaviour
                     return null;
 
         //get the target list from effect data. (this is for performance reasons: effectData can cache the list of different targeting effects on the object and return the first that doesn't error)
-        List<EnemyScript> targets;
+        IEnumerable<EnemyScript> targets;
         if (effects != null)
             targets = effects.doTowerTargeting(transform.position, range);
         else
@@ -342,10 +342,10 @@ public class TowerScript : BaseBehaviour
     /// </summary>
     /// <param name="targets">the enemies to attack</param>
     /// <returns>whether or not the attack was successful</returns>
-    private bool fire(List<EnemyScript> targets)
+    private bool fire(IEnumerable<EnemyScript> targets)
     {
         //only fire if we have valid targets
-        if ((targets != null) && (targets.Count != 0))
+        if ((targets != null) && targets.Any())
         {
             //reduce charge meter (if the gauge was overcharged, retain the excess)
             shotCharge -= 1.0f;
@@ -395,7 +395,7 @@ public class TowerScript : BaseBehaviour
                 {
                     case "targetOrthogonal":
                         //if there is at least one target in range, fire directional shots in four different directions, each targeting enemies in that direction
-                        if (targets.Count > 0)
+                        if (targets.Any())
                         {
                             directionalShot(targets.Where(e => e.transform.position.x < this.transform.position.x).ToList(), ded, Vector2.left);
                             directionalShot(targets.Where(e => e.transform.position.x > this.transform.position.x).ToList(), ded, Vector2.right);
@@ -452,7 +452,7 @@ public class TowerScript : BaseBehaviour
     /// </summary>
     /// <param name="targets">list of enemies in range.  The burstShot itself will catch enemies that enter the region during the attack</param>
     /// <param name="damageEvent">details of the attack.  damageEvent.dest is ignored.</param>
-    private void burstFire(List<EnemyScript> targets, DamageEventData damageEvent)
+    private void burstFire(IEnumerable<EnemyScript> targets, DamageEventData damageEvent)
     {
         //construct burst shot event
         BurstShotData data = new BurstShotData();

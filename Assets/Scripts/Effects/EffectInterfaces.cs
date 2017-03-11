@@ -445,14 +445,14 @@ public class EffectData : System.Object
     /// targeting effect prority is set by the effects themselves, and generally prefers more targets than fewer targets, and more specific targets to less specific ones
     /// </summary>
     //the result is cached since it is needed regularly but changes rarely
-    public List<EnemyScript> doTowerTargeting(Vector2 towerPosition, float towerRange)
+    public IEnumerable<EnemyScript> doTowerTargeting(Vector2 towerPosition, float towerRange)
     {
         //cache a list of targeting effects on this object.  each one is tested in turn, and the first that returns a non-null response has its result returned to the tower
         if (cachedTowerTargetingList == null)
             updateCachedTowerTargetingList();
 
         //find the first targeting effect that returns an actual result
-        List<EnemyScript> res = null;
+        IEnumerable<EnemyScript> res = null;
         foreach (IEffectTowerTargeting ie in cachedTowerTargetingList)
         {
             res = ie.findTargets(towerPosition, towerRange);
@@ -862,9 +862,9 @@ public interface IEffectEnemyReachedGoal : IEffect
 //effect alters the way a tower targets enemies.  if multiple are present, then higher priority takes precedence
 public interface IEffectTowerTargeting : IEffect
 {
-    TargetingPriority priority { get; } 
+    TargetingPriority priority { get; }
 
-    List<EnemyScript> findTargets(Vector2 towerPosition, float towerRange);
+    IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange);
 }
 
 //effect triggers on every update
