@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Vexe.Runtime.Types;
+using System.Linq;
 
 /// <summary>
 /// compares two enemies by their distance to their goals.  Used for sorting the enemy list
@@ -35,7 +36,7 @@ public class EnemyManagerScript : BaseBehaviour
     [Show, OnChanged("targetingMethodChanged")] public SortMethod defaultTargetingMethod;
 
     public static EnemyManagerScript instance; //this class is a singleton
-    public List<EnemyScript> activeEnemies; //excludes enemies that expect to die but have not yet done so
+    public LinkedList<EnemyScript> activeEnemies; //excludes enemies that expect to die but have not yet done so
     public List<EnemyScript> survivors; //list of enemies that survived their run and should be added as a new wave on the next round
 
     private EnemyDistanceToGoalComparer distanceComparer;
@@ -45,7 +46,7 @@ public class EnemyManagerScript : BaseBehaviour
     private void Awake()
     {
         instance = this;
-        activeEnemies = new List<EnemyScript>();
+        activeEnemies = new LinkedList<EnemyScript>();
         survivors = null;
         distanceComparer = new EnemyDistanceToGoalComparer();
         timeComparer     = new EnemyTimeToGoalComparer();
@@ -54,7 +55,7 @@ public class EnemyManagerScript : BaseBehaviour
     //called to reset the manager
     private void Reset()
     {
-        activeEnemies = new List<EnemyScript>();
+        activeEnemies = new LinkedList<EnemyScript>();
         survivors = null;
     }
 
@@ -73,17 +74,20 @@ public class EnemyManagerScript : BaseBehaviour
 
         //perform a sorted insert.  We expect this enemy to be near the end of the list, so start at the back
         //we insert it after the first enemy that is not further away than this one
-        for (int i = activeEnemies.Count - 1; i > 0; i--)
+        LinkedListNode<EnemyScript> curNode = activeEnemies.Last;
+        while (curNode != null && curNode.Previous != null)
         {
-            if (comparerToUse.Compare(activeEnemies[i], e) <= 0)
+            if (comparerToUse.Compare(curNode.Value, e) <= 0)
             {
-                activeEnemies.Insert(i + 1, e);
+                activeEnemies.AddAfter(curNode, e);
                 return;
             }
+
+            curNode = curNode.Previous;
         }
 
         //if we made it here, then this enemy actually belongs at the START of the list
-        activeEnemies.Insert(0, e);
+        activeEnemies.AddFirst(e);
     }
 
     /// <summary>
@@ -153,21 +157,13 @@ public class EnemyManagerScript : BaseBehaviour
     /// <returns>up to max enemies within the circle</returns>
     public List<EnemyScript> enemiesInRange(Vector2 targetPosition, float range, int max = int.MaxValue)
     {
-        List<EnemyScript> targetList = new List<EnemyScript>();
-
-        //search loop: finds the valid target that is closest to its goal.  Valid targets must be...
-        for (int e = 0; (e < activeEnemies.Count) && (targetList.Count < max); e++) //active enemies... (also: stop searching if we hit the max)
-        {
-            if (activeEnemies[e].expectedHealth > 0) //that are not expecting to die... (enemies that expect to die are supposed to be inactive anyway, but sometimes the list takes a frame or two to catch up)
-            {
-                if (Vector2.Distance(targetPosition, activeEnemies[e].transform.position) <= range) //and are in range
-                {
-                    targetList.Add(EnemyManagerScript.instance.activeEnemies[e]); //valid target found
-                }
-            }
-        }
-
-        return targetList;
+        //find result with a Linq query:
+                                                                                                         //we are looking for...
+        return activeEnemies.Where(e => e.expectedHealth > 0)                                            //active enemies that don't already expect to die
+                            .Where(e => Vector2.Distance(targetPosition, e.transform.position) <= range) //and are in range
+                                        //and we want to return...
+                            .Take(max)  //up to max enemies
+                            .ToList();  //as a list
     }
 
     /// <summary>
@@ -175,7 +171,47 @@ public class EnemyManagerScript : BaseBehaviour
     /// </summary>
     private void sortEnemyList()
     {
-        activeEnemies.Sort(distanceComparer);
+        //choose a comparer based on the current targeting method
+        IComparer<EnemyScript> comparerToUse = null;
+        switch (defaultTargetingMethod)
+        {
+            case SortMethod.distanceToGoal: comparerToUse = distanceComparer; break;
+            case SortMethod.timeToGoal: comparerToUse = timeComparer; break;
+        }
+
+        //we expect the list to be mostly sorted, so we will use bubble sort
+        bool listChanged = true;
+        while (listChanged)
+        {
+            listChanged = false;
+
+            LinkedListNode<EnemyScript> searchNode = activeEnemies.Last;
+            while (searchNode != null && searchNode.Previous != null)
+            {
+                if (comparerToUse.Compare(searchNode.Value, searchNode.Previous.Value) <= 0)
+                {
+                    //searchNode is where it belongs.  move on.
+                    searchNode = searchNode.Previous;
+                    continue;
+                }
+                else
+                {
+                    //searchNode is not where it belongs. Remove it.
+                    LinkedListNode<EnemyScript> hold = searchNode;
+                    searchNode = searchNode.Previous;
+                    activeEnemies.Remove(hold);
+
+                    //continue up the list until we hit the beginning or find a smaller node
+                    while (searchNode.Previous != null && comparerToUse.Compare(searchNode.Value, searchNode.Previous.Value) > 0)
+                        searchNode = searchNode.Previous;
+
+                    //put it back in the list
+                    activeEnemies.AddBefore(searchNode, hold);
+                    searchNode = hold.Previous;
+                    listChanged = true;
+                }
+            }
+        }
     }
 
     //called every frame

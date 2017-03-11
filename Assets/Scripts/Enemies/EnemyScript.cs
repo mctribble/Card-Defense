@@ -223,6 +223,10 @@ public class EnemyScript : BaseBehaviour
     // LateUpdate is called once per frame, after other objects have done a regular Update().  We use LateUpdate to make sure bullets get to move first this frame.
     private void LateUpdate()
     {
+        //reset cached distanceToGoal and timeToGoal calculations
+        cachedDistance = float.NaN;
+        cachedTime = float.NaN;
+
         //clean out the effect list every 32 frames
         if (effectData != null)
             if ((Time.frameCount % 32) == 0)
@@ -541,28 +545,40 @@ public class EnemyScript : BaseBehaviour
 
     /// <summary>
     /// returns the distance from this enemy's current position to the goal, following its current path
+    /// this caches its result so it only has to be calculated once per frame
     /// </summary>
+    private float cachedDistance;
     public float distanceToGoal()
     {
-        //distance is 0 if we are at the goal
-        if (path.Count == currentDestination)
-            return 0.0f;
+        //only do the work once per frame
+        if (float.IsNaN(cachedDistance))
+        {
+            //distance is 0 if we are at the goal
+            if (path.Count == currentDestination)
+                return 0.0f;
 
-        float result = Vector2.Distance(transform.position, path[currentDestination]); //start with distance to the current destination...
+            float cachedDistance = Vector2.Distance(transform.position, path[currentDestination]); //start with distance to the current destination...
 
-        //..and add the length of each subsequent segment
-        for (int segment = currentDestination + 1; segment < path.Count; segment++)
-            result += Vector2.Distance(path[segment - 1], path[segment]);
+            //..and add the length of each subsequent segment
+            for (int segment = currentDestination + 1; segment < path.Count; segment++)
+                cachedDistance += Vector2.Distance(path[segment - 1], path[segment]);
+        }
 
-        return result;
+        return cachedDistance;
     }
 
     /// <summary>
     /// returns how long it will take the enemy to reach the goal, given its current path and speed
+    /// this caches its result so it only has to be calculated once per frame
     /// </summary>
+    private float cachedTime;
     public float timeToGoal()
     {
-        return distanceToGoal() / unitSpeed;
+        //only do the work once per frame
+        if (float.IsNaN(cachedTime))
+            cachedTime = distanceToGoal() / unitSpeed;
+
+        return cachedTime;
     }
 
     /// <summary>
