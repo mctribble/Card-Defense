@@ -547,7 +547,10 @@ public class LevelManagerScript : BaseBehaviour
     {
         //start the waves
         foreach (WaveData d in EnemyHandScript.instance.IncomingWaves)
+        {
             StartCoroutine(spawnWave(d));
+            yield return new WaitForSeconds(0.1f);
+        }
 
         //wait for them to finish
         while (wavesSpawning > 0)
