@@ -219,7 +219,7 @@ public class EffectChainHit : BaseEffectEnemyDamaged
         //if we make it here, the enemy has not been attacked yet, and we can chain off of it.
         
         //for each enemy in range of this one, where range is the effect strength, that we have not already hit
-        foreach (EnemyScript e in EnemyManagerScript.instance.enemiesInRange(originalDamageEvent.dest.transform.position, strength, targetCap - enemiesAlreadyHit.Count).Except(enemiesAlreadyHit).ToList()) //that last .toList() is to allow continued iteration even if the original list changes
+        foreach (EnemyScript e in EnemyManagerScript.instance.enemiesInRange(originalDamageEvent.dest.transform.position, strength, targetCap - enemiesAlreadyHit.Count).Except(enemiesAlreadyHit))
         {
             //create the event
             DamageEventData damageEvent = new DamageEventData();

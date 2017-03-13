@@ -193,7 +193,7 @@ public class EffectTargetMultishot : BaseEffectTowerTargeting
             return validTargets;
 
         //return the first X enemies in the list
-        return validTargets.Take(Mathf.FloorToInt(strength)).ToList();
+        return validTargets.Take(Mathf.FloorToInt(strength));
     }
 }
 
@@ -206,7 +206,7 @@ public class EffectTargetRandom : BaseEffectTowerTargeting
 
     public override IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
-        List<EnemyScript> validTargets = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange).ToList(); //get all in range
+        List<EnemyScript> validTargets = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange); //get all in range
 
         //bail if the list is empty
         if ((validTargets == null) || (validTargets.Count == 0))
@@ -228,7 +228,7 @@ public class EffectTargetHealth : BaseEffectTowerTargeting
 
     public override IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
-        List<EnemyScript> enemiesInRange = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange).ToList(); //get a list of all valid targets
+        List<EnemyScript> enemiesInRange = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange); //get a list of all valid targets
 
         //bail if the list is empty
         if ((enemiesInRange == null) || (enemiesInRange.Count == 0))
@@ -265,7 +265,7 @@ public class EffectTargetLowHealth : BaseEffectTowerTargeting
 
     public override IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
-        List<EnemyScript> enemiesInRange = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange).ToList(); //get a list of all valid targets
+        List<EnemyScript> enemiesInRange = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange); //get a list of all valid targets
 
         //bail if the list is empty
         if ((enemiesInRange == null) || (enemiesInRange.Count == 0))
@@ -325,7 +325,7 @@ public class EffectTargetMouse : BaseEffectTowerTargeting
 
         //either we did not have a cached result, or it was unusable.  do a normal test
         Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        cachedEnemiesNearMouse = EnemyManagerScript.instance.enemiesInRange(mouseWorldPosition, towerRange, 1).ToList();
+        cachedEnemiesNearMouse = EnemyManagerScript.instance.enemiesInRange(mouseWorldPosition, towerRange, 1);
         cachedFrame = Time.frameCount;
         cachedRange = towerRange;
         return cachedEnemiesNearMouse;
@@ -341,7 +341,7 @@ public class EffectTargetSpeed : BaseEffectTowerTargeting
 
     public override IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
-        List<EnemyScript> enemiesInRange = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange).ToList(); //get a list of all valid targets
+        List<EnemyScript> enemiesInRange = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange); //get a list of all valid targets
 
         //bail if the list is empty
         if ((enemiesInRange == null) || (enemiesInRange.Count == 0))
@@ -382,7 +382,7 @@ public class EffectTargetOrthogonal : BaseEffectTowerTargeting
 
     public override IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
-        List<EnemyScript> enemiesInRange = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange).ToList(); //get a list of all valid targets
+        List<EnemyScript> enemiesInRange = EnemyManagerScript.instance.enemiesInRange(towerPosition, towerRange); //get a list of all valid targets
         
         //bail if the list is empty
         if ((enemiesInRange == null) || (enemiesInRange.Count == 0))
