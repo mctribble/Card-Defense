@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Vexe.Runtime.Types;
 using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// periodic effects trigger when the object they are attached to is updated.  
@@ -139,15 +140,22 @@ public class EffectInvScaleSpeedWithTime : BaseEffectPeriodic
     [Hide] public override string Name { get { return "Speed decreases by " + strength + "/s"; } } //returns name and strength
     [Show] public override string XMLName { get { return "invScaleSpeedWithTime"; } } //name used to refer to this effect in XML
 
+    //regular speed changes means the target enemy will frequently be repositioned in the list.  We cache the node so that the enemy manager doesnt have to search the list every frame
+    LinkedListNode<EnemyScript> enemyNode = null;
+
     public override void UpdateEnemy(EnemyScript e, float deltaTime)
     {
+        //fetch node if we dont have it already
+        if (enemyNode == null)
+            enemyNode = EnemyManagerScript.instance.activeEnemies.Find(e);
+
         if (done == false)
         {
             e.unitSpeed -= (strength * deltaTime);      //slow enemy
             e.unitSpeed = Mathf.Max(e.unitSpeed, 1.0f); //enforce minimum
             if (e.unitSpeed == 1.0f)                    //if at minimum, we are done
                 done = true;
-            EnemyManagerScript.instance.EnemySpeedChanged(e);
+            EnemyManagerScript.instance.EnemySpeedChanged(enemyNode);
         }
     }
 
@@ -163,12 +171,19 @@ public class EffectScaleSpeedWithTime : BaseEffectPeriodic
     [Hide] public override string Name { get { return "Speed increases by " + strength + "/s"; } } //returns name and strength
     [Show] public override string XMLName { get { return "scaleSpeedWithTime"; } } //name used to refer to this effect in XML
 
+    //regular speed changes means the target enemy will frequently be repositioned in the list.  We cache the node so that the enemy manager doesnt have to search the list every frame
+    LinkedListNode<EnemyScript> enemyNode = null; 
+
     public override void UpdateEnemy(EnemyScript e, float deltaTime)
     {
+        //fetch node if we dont have it already
+        if (enemyNode == null)
+            enemyNode = EnemyManagerScript.instance.activeEnemies.Find(e);
+
         if (e.unitSpeed < EnemyScript.speedLimit)
         {
             e.unitSpeed += (strength * deltaTime);
-            EnemyManagerScript.instance.EnemySpeedChanged(e);
+            EnemyManagerScript.instance.EnemySpeedChanged(enemyNode);
         }
     }
 }

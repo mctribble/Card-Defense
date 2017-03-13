@@ -48,5 +48,10 @@
         </Effects>
       </effectData>
     </Card>
+    <Card Type="tower" Name="Dev Targeting Test Tower" Description="Harmless tower for testing targeting" Charges="99" Art="Dev_Art.png" Tooltip="Dev_Tower.png" Token="false">
+      <towerData Recharge="0.1" Range="10" Damage="0" Lifespan="99" UpgradeCap="3" Sprite="Dev_Tower.png">
+        <towerColor r="1" g="1" b="1" a="1"/>
+      </towerData>
+    </Card>
   </Cards>
 </CardTypes>

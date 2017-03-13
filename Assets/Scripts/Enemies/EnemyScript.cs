@@ -214,6 +214,8 @@ public class EnemyScript : BaseBehaviour
     private void Awake()
     {
         //init vars
+        cachedDistance = float.NaN;
+        cachedTime = float.NaN;
         curHealth = maxHealth;
         expectedHealth = maxHealth;
         startPos = transform.position;
@@ -548,23 +550,26 @@ public class EnemyScript : BaseBehaviour
     /// this caches its result so it only has to be calculated once per frame
     /// </summary>
     private float cachedDistance;
-    public float distanceToGoal()
+    public float distanceToGoal
     {
-        //only do the work once per frame
-        if (float.IsNaN(cachedDistance))
+        get
         {
-            //distance is 0 if we are dead or at the goal
-            if (path.Count == currentDestination || this == null)
-                return 0.0f;
+            //only do the work once per frame
+            if (float.IsNaN(cachedDistance))
+            {
+                //distance is 0 if we are dead or at the goal
+                if (path.Count == currentDestination || this == null)
+                    return 0.0f;
 
-            float cachedDistance = Vector2.Distance(transform.position, path[currentDestination]); //start with distance to the current destination...
+                cachedDistance = Vector2.Distance(transform.position, path[currentDestination]); //start with distance to the current destination...
 
-            //..and add the length of each subsequent segment
-            for (int segment = currentDestination + 1; segment < path.Count; segment++)
-                cachedDistance += Vector2.Distance(path[segment - 1], path[segment]);
+                //..and add the length of each subsequent segment
+                for (int segment = currentDestination + 1; segment < path.Count; segment++)
+                    cachedDistance += Vector2.Distance(path[segment - 1], path[segment]);
+            }
+
+            return cachedDistance;
         }
-
-        return cachedDistance;
     }
 
     /// <summary>
@@ -572,13 +577,16 @@ public class EnemyScript : BaseBehaviour
     /// this caches its result so it only has to be calculated once per frame
     /// </summary>
     private float cachedTime;
-    public float timeToGoal()
+    public float timeToGoal
     {
-        //only do the work once per frame
-        if (float.IsNaN(cachedTime))
-            cachedTime = distanceToGoal() / unitSpeed;
+        get
+        {
+            //only do the work once per frame
+            if (float.IsNaN(cachedTime))
+                cachedTime = distanceToGoal / unitSpeed;
 
-        return cachedTime;
+            return cachedTime;
+        }
     }
 
     /// <summary>

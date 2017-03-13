@@ -10,7 +10,7 @@ public class EnemyDistanceToGoalComparer : Comparer<EnemyScript>
 {
     public override int Compare(EnemyScript x, EnemyScript y)
     {
-        return x.distanceToGoal().CompareTo(y.distanceToGoal());
+        return x.distanceToGoal.CompareTo(y.distanceToGoal);
     }
 }
 
@@ -21,7 +21,8 @@ public class EnemyTimeToGoalComparer : Comparer<EnemyScript>
 {
     public override int Compare(EnemyScript x, EnemyScript y)
     {
-        return x.timeToGoal().CompareTo(y.timeToGoal());
+        int temp = x.timeToGoal.CompareTo(y.timeToGoal);
+        return temp;
     }
 }
 
@@ -35,12 +36,14 @@ public class EnemyManagerScript : BaseBehaviour
     public enum SortMethod { distanceToGoal, timeToGoal }
     [Show, OnChanged("targetingMethodChanged")] public SortMethod defaultTargetingMethod;
 
-    public static EnemyManagerScript instance; //this class is a singleton
-    public List<EnemyScript> survivors; //list of enemies that survived their run and should be added as a new wave on the next round
+    [Hide] public static EnemyManagerScript instance; //this class is a singleton
+    [VisibleWhen("showLists")]public List<EnemyScript> survivors; //list of enemies that survived their run and should be added as a new wave on the next round
 
     //VFW doesnt support linkedList, so we hide it in the inspector and create a property to show instead
     [Hide] public  LinkedList<EnemyScript> activeEnemies; //excludes enemies that expect to die but have not yet done so
-    [Show] private List<EnemyScript> _ActiveEnemies { get { return activeEnemies.AsEnumerable().ToList(); } }
+    [Show, VisibleWhen("showLists")] private List<EnemyScript> _ActiveEnemies { get { return activeEnemies.AsEnumerable().ToList(); } }
+
+    private bool showLists() { return instance != null; } //only show lists when running
 
     private EnemyDistanceToGoalComparer distanceComparer;
     private EnemyTimeToGoalComparer     timeComparer;
@@ -67,6 +70,13 @@ public class EnemyManagerScript : BaseBehaviour
     /// </summary>
     public void EnemySpawned(EnemyScript e)
     {
+        //if the list is empty, just add e
+        if (activeEnemies.Count == 0)
+        {
+            activeEnemies.AddFirst(e);
+            return;
+        }
+
         //choose a comparer based on the current targeting method
         IComparer<EnemyScript> comparerToUse = null;
         switch(defaultTargetingMethod)
@@ -77,20 +87,17 @@ public class EnemyManagerScript : BaseBehaviour
 
         //perform a sorted insert.  We expect this enemy to be near the end of the list, so start at the back
         //we insert it after the first enemy that is not further away than this one
-        LinkedListNode<EnemyScript> curNode = activeEnemies.Last;
-        while (curNode != null && curNode.Previous != null)
-        {
-            if (comparerToUse.Compare(curNode.Value, e) <= 0)
-            {
-                activeEnemies.AddAfter(curNode, e);
-                return;
-            }
+        LinkedListNode<EnemyScript> searchNode = activeEnemies.Last;
 
-            curNode = curNode.Previous;
-        }
+        //search until we hit the start of the list or find something <= e
+        while (searchNode != null && comparerToUse.Compare(searchNode.Value, e) > 0)
+            searchNode = searchNode.Previous;
 
-        //if we made it here, then this enemy actually belongs at the START of the list
-        activeEnemies.AddFirst(e);
+        //searchNode is now either null or the first item <= e
+        if (searchNode == null)
+            activeEnemies.AddFirst(e); //searchNode is null, so we hit the front of the list without finding something <= e, and e belongs at the front
+        else
+            activeEnemies.AddAfter(searchNode, e); //we found something <= e, so we can put e after it
     }
 
     /// <summary>
@@ -128,14 +135,80 @@ public class EnemyManagerScript : BaseBehaviour
     }
 
     /// <summary>
+    /// called when the enemy speed changes, such as when they become slowed or slowness wears off.  
+    /// This version is more efficient because it doesnt have to perform a search if we already have the node.
+    /// </summary>
+    public void EnemySpeedChanged(LinkedListNode<EnemyScript> e)
+    {
+        //dead enemies should be removed instead of repositioned
+        if (e.Value == null)
+        {
+            EnemyExpectedDeath(e.Value);
+            return;
+        }
+
+        //speed change only warrants a reposition if using the timeToGoal sort
+        if (defaultTargetingMethod == SortMethod.timeToGoal)
+            updateEnemyPosition(e);
+    }
+
+    /// <summary>
     /// repositions the enemy to its proper place in the list.
     /// </summary>
     /// <param name=""></param>
     private void updateEnemyPosition(EnemyScript e)
     {
-        EnemyExpectedDeath(e);
-        if (e != null && e.expectedHealth > 0)
-            EnemySpawned(e);
+        LinkedListNode<EnemyScript> enemyNode = activeEnemies.Find(e);
+        updateEnemyPosition(enemyNode);
+    }
+
+    /// <summary>
+    /// repositions the enemy to its proper place in the list.
+    /// This version is more efficient because it doesnt have to perform a search if we already have the node.
+    /// </summary>
+    /// <param name=""></param>
+    private void updateEnemyPosition(LinkedListNode<EnemyScript> e)
+    {
+        //choose a comparer based on the current targeting method
+        IComparer<EnemyScript> comparerToUse = null;
+        switch (defaultTargetingMethod)
+        {
+            case SortMethod.distanceToGoal: comparerToUse = distanceComparer; break;
+            case SortMethod.timeToGoal: comparerToUse = timeComparer; break;
+        }
+
+        if (e.Previous != null && comparerToUse.Compare(e.Previous.Value, e.Value) > 0) //if there is a node before e, and it is larger than e
+        {
+            //e needs to move further up the list
+            LinkedListNode<EnemyScript> searchNode = e.Previous;
+            activeEnemies.Remove(e);
+
+            //search until we hit the start of the list or find something <= e
+            while (searchNode != null && comparerToUse.Compare(searchNode.Value, e.Value) > 0)
+                searchNode = searchNode.Previous;
+
+            //searchNode is now either null or the first item <= e
+            if (searchNode == null)
+                activeEnemies.AddFirst(e); //searchNode is null, so we hit the front of the list without finding something <= e, and e belongs at the front
+            else
+                activeEnemies.AddAfter(searchNode, e); //we found something <= e, so we can put e after it
+        }
+        else if (e.Next != null && comparerToUse.Compare(e.Next.Value, e.Value) < 0) //if there is a node after 3, and it is smaller than e
+        {
+            //e needs to move further down the list
+            LinkedListNode<EnemyScript> searchNode = e.Next;
+            activeEnemies.Remove(e);
+
+            //search until we hit the start of the list or find something <= e
+            while (searchNode.Next != null && comparerToUse.Compare(searchNode.Value, e.Value) < 0)
+                searchNode = searchNode.Next;
+
+            //searchNode is now either null or the first item >= e
+            if (searchNode == null)
+                activeEnemies.AddLast(e); //searchNode is null, so we hit the end of the list without finding something >= e, and e belongs at the rear
+            else
+                activeEnemies.AddBefore(searchNode, e); //we found something <= e, so we can put e after it
+        }
     }
 
     /// <summary>
