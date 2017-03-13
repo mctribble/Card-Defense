@@ -2,7 +2,10 @@ known issues:
 -[WebGL] need a placeholder image while level thumbnails are loading.
 -tooltips "blinking" side to side if towards middle of screen.  cause unknown.
 -some lingering cause of enemies not expecting damage
--optimization target: SpanwerScript.Spawn() (calulatePathFromPos(), Instantiate(), SetData())
+-optimization target: SpanwerScript.Spawn -> (calulatePathFromPos, Instantiate, SetData)
+-optimization target: EnemyManagerScript.enemiesInRange()
+-optimization target: EnemyScript.LateUpdate -> EffectData.triggerAllPeriodicEnemy -> scaleSpeedWithTime -> EnemyMangerScript.EnemySpeedChanged -> EnemyPositionChanged -> EnemyExpectedDeath -> Find
+-optimization target: EnemyScript.moveForwardByTime -> (Angle, moveTowards)
 ================================================================
 art needed for:
 
