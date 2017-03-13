@@ -53,8 +53,8 @@ class EffectSpawnEnemyOnDeath : BaseEffectDeath
         set
         {
             base.argument = value;
-            spawnWave.budget = Mathf.FloorToInt(strength * spawnWave.enemyData.baseSpawnCost); //update budget instead of using forcedSpawnCount so the wave can rank up normally
-            spawnWave.recalculateRank(); //make sure to recalculate the rank also
+            spawnWave.type = argument;
+            spawnWave.enemyData = EnemyTypeManagerScript.instance.getEnemyTypeByName(argument);
         }
     }
 
