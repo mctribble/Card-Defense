@@ -115,6 +115,53 @@ public class PathManagerScript : BaseBehaviour
     }
 
     /// <summary>
+    /// calculates all possible paths from startPos to a goal
+    /// </summary>
+    /// <param name="startPos">position to start from</param>
+    /// <returns>a list of vectors leading to the destination</returns>
+    public List<List<Vector2>> CalculateAllPathsFromPos(Vector2 startPos, int searchDepth = 0)
+    {
+        //error if we have hit the path length limit
+        if (searchDepth > MAX_PATH_LENGTH)
+            throw new System.Exception("Path too long!  Make sure the segments defined for this level do not loop back on themselves.");
+
+        //find all segments leading away from startPos
+        List<Vector2> pathCandidates = new List<Vector2>();
+        foreach (PathSegment seg in segments.Where(s => s.startPos == startPos))
+            pathCandidates.Add(seg.endPos);
+
+        List<List<Vector2>> result = new List<List<Vector2>>(); 
+
+        //special case: no paths lead from here
+        if (pathCandidates.Count == 0)
+        {
+            //if this was the initial call, then there are no paths to return
+            if (searchDepth == 0)
+                throw new System.InvalidOperationException("There is no path connected to the start point!  Check your spawner positions.");
+
+            //otherwise, this just means we have reached the end of a path.  Return just the position we ended at.
+            List<Vector2> path = new List<Vector2>();
+            path.Add(startPos);
+            result.Add(path);
+        }
+        else
+        {
+            //general case: at least one path leads from here.  Return a path for each one.
+            
+            foreach (Vector2 pc in pathCandidates)
+                foreach (List<Vector2> path in CalculateAllPathsFromPos(pc, searchDepth + 1))
+                    result.Add(path);
+
+            //unless we are at the initial call, we need to add this position to the front of each path to record how we got there.  The initial call can skip this since the caller already knows where it wanted to start
+            if (searchDepth > 0)
+                foreach (List<Vector2> path in result)
+                    path.Insert(0, startPos);
+        }
+
+        return result;
+    }
+
+    /// <summary>
     /// spawns the path objects
     /// </summary>
     private void SpawnPaths()

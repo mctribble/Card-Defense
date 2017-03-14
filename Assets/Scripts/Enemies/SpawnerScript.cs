@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 using UnityEngine;
 using Vexe.Runtime.Types;
@@ -28,7 +29,9 @@ public class SpawnerScript : BaseBehaviour
 
     public Vector2? forcedFirstDestination;
 
-    public void Awake() { forcedFirstDestination = null; } //init
+    private List<List<Vector2>> paths;
+
+    public void Awake() { forcedFirstDestination = null; paths = null; } //init
 
     /// <summary>
     /// where enemies should be spawned
@@ -44,6 +47,7 @@ public class SpawnerScript : BaseBehaviour
             data.spawnX = value.x;
             data.spawnY = value.y;
             transform.localPosition = spawnPos;
+            paths = null; //clear cached path data
         }
     }
 
@@ -52,6 +56,7 @@ public class SpawnerScript : BaseBehaviour
     {
         data = newData;
         transform.localPosition = spawnPos;
+        paths = null; //clear cached path data
     }
 
     /// <summary>
@@ -64,6 +69,14 @@ public class SpawnerScript : BaseBehaviour
     }
 
     /// <summary>
+    /// recalculates all the paths avalable to this spawner
+    /// </summary>
+    public void recalcPaths()
+    {
+        paths = PathManagerScript.instance.CalculateAllPathsFromPos(spawnPos);
+    }
+
+    /// <summary>
     /// spawns an enemy
     /// </summary>
     /// <param name="timePassedSinceSpawn">time that has passed since the unit was supposed to spawn.  Used to move it along the path and keep things smooth in low framerates</param>
@@ -73,14 +86,21 @@ public class SpawnerScript : BaseBehaviour
         EnemyScript enemy = ((GameObject)Object.Instantiate(enemyPrefab, spawnPos, Quaternion.identity)).GetComponent<EnemyScript>(); //spawn the enemy
         enemy.SetData(type); //set its type
 
-        //set its path
+        
         List<Vector2> path = null;
         if (forcedFirstDestination == null)
         {
-            path = PathManagerScript.instance.CalculatePathFromPos(spawnPos);
+            //this is a normal spawner. set enemy path by randomly pulling one from the cache
+
+            if (paths == null) //if the cache hasnt been built yet
+                recalcPaths(); //build it
+
+            int pathIndex = Random.Range(0, paths.Count); //choose a path at random
+            path = paths[pathIndex];                      //and use it
         }
         else
         {
+            //this spawner was created by an effect.  Make enemies calculate new paths as they spawn
             //put the pathfinding in a try-catch since it can fail if we spawn on the last path segment
             try
             {
