@@ -445,7 +445,7 @@ public class EffectDamageHand : BaseEffectInstant
 //rolls an x-sided die.  the result can be fetched from argument and used by other effects.
 class EffectDieRoll : BaseEffectInstant
 {
-    [Hide] public override string Name { get { return "roll a " + strength + "-sided die:"; } } //returns name and strength
+    [Hide] public override string Name { get { return "roll a d" + strength + ":"; } } //returns name and strength
     [Show] public override string XMLName { get { return "dieRoll"; } } //name used to refer to this effect in XML.
 
     //this effect also triggers as a property effect, since its result is used as a property

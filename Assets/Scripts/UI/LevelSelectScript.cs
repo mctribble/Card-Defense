@@ -725,6 +725,8 @@ public class LevelSelectScript : BaseBehaviour
                     "This section is for more detailed explanations of some of the more confusing effects you may see on cards in the game.  Feel free to ignore this for now and come back later to look up something that confuses you.\n" +
                     "\n" +
                     "\n" +
+                    "roll a d#: this is just shorthand for 'roll a #-sided die'.  In other words, a d6 ranges from 1-6, a d2 is 1 or 2, a d20 is anywhere from 1-20, and so on.\n" + 
+                    "\n" + 
                     "[Scaled]: this tag on an enemy effect means that it becomes more powerful on tougher enemy waves.  The numbers listed on the card are always correct for whatever group you are looking at.\n" +
                     "\n" +
                     "[Ranked]: like [Scaled], but the effect only gets stronger if the enemy ranks up (ex, a Tank III has more armor than a Tank II)\n" +

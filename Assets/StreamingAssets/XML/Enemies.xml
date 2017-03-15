@@ -76,7 +76,7 @@
             <Effect name="dieRoll" strength="4" />
           </Effect>
           <Effect name="ifRollRange" strength="1" argument="1">
-            <Effect name="scaleEffectWithRank" strength="2.5">
+            <Effect name="scaleEffectWithRank" strength="1.5">
               <Effect name="scaleSpeedWithTime" strength="0.1" />
             </Effect>
           </Effect>
@@ -91,7 +91,7 @@
             </Effect>
           </Effect>
           <Effect name="ifRollRange" strength="4" argument="4">
-            <Effect name="scaleEffectWithRank" strength="1.5">
+            <Effect name="scaleEffectWithRank" strength="2">
               <Effect name="armor" strength="10" />
             </Effect>
           </Effect>
