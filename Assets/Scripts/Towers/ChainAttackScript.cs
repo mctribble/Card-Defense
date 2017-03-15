@@ -130,6 +130,11 @@ public class ChainAttackScript : BaseBehaviour
     /// </summary>
     private IEnumerator onDone()
     {
+        //the line renderer misbehaves if we let it render on the frame we set it up (https://forum.unity3d.com/threads/problems-about-line-renderer.31005/)
+        //as such, we wait a frame and then enable it after the fact
+        yield return null;
+        lineRenderer.enabled = true;
+
         float t = 0.0f;
         float maxWidth = lineRenderer.widthMultiplier;
 

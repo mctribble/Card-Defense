@@ -1,9 +1,7 @@
 known issues:
 -[WebGL] need a placeholder image while level thumbnails are loading.
--tooltips "blinking" side to side if towards middle of screen.  cause unknown.
--some lingering cause of enemies not expecting damage
--optimization target: EnemyManagerScript.enemiesInRange()
--optimization target: EnemyScript.moveForwardByTime -> (Angle, moveTowards)
+-tooltips "blinking" side to side if towards middle of screen.  cause unknown.  Cant reliably reproduce.
+-some lingering cause of enemies not expecting damage.  Cant reliably reproduce.
 ================================================================
 art needed for:
 
