@@ -694,9 +694,9 @@ public class LevelSelectScript : BaseBehaviour
                     "Carrier: These guys are pretty sturdy, but the real danger comes after they die: Carriers hold a lot of Swarm enemies that will spew out from wherever the carrier dies. \n" +
                     "try to build towers that can handle swarms near the goal to deal with the Swarms after the main unit goes down.  If that isnt an option, build a lot of heavy hitters near the start of the line to take the carriers out before they get to your faster towers.\n" +
                     "\n" +
-                    "Giant: These enemies only ever come one at a time, but they have a lot of health and deal a lot of damage.\n" +
+                    "Giant: These enemies come in very small groups, but they have a lot of health and deal a lot of damage.\n" +
                     "For these, you really just want to hit them with as much damage are possible.  Look for towers that deal a lot of damage per second.\n" +
-                    "Giants get tougher on later waves, and on high waves you can encounter giants with tens of thousands of health!  If you are having trouble with these, consider getting some 'Giant Sniper's.  They deal damage proportional to the target's maximum health, so they deal MASSIVE damage to late game giants.\n" +
+                    "Giants get tougher on later waves, and on high waves you can encounter giants with tens of thousands of health!  If you are having trouble with these, consider getting some 'Giant Sniper' towers.  They deal damage proportional to the target's MAXIMUM health, so they deal MASSIVE damage to late game giants.\n" +
                     "\n" +
                     "Ping: These enemies simply serve as a distraction from other enemies on the map: they are numerous, but deal no damage. \n" +
                     "Whenever the enemy draws a Ping card, they get to draw another card for free.  This means you only ever encounter them alongside other types of monsters. \n" +
