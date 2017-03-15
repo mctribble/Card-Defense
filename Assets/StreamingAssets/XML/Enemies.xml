@@ -62,7 +62,7 @@
       <effectData>
         <Effects>
           <Effect name="scaleEffectWithRank" strength="1.5">
-            <Effect name="regeneration" strength="30" />
+            <Effect name="regeneration" strength="20" />
           </Effect>
         </Effects>
       </effectData>
