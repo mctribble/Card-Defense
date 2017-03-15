@@ -155,39 +155,48 @@ public class EnemyData
 /// </summary>
 public class EnemyScript : BaseBehaviour
 {
-    public string         enemyTypeName;      //name of this type of enemy
-    public List<Vector2>  path;               //list of points this unit must go to
-    public int            currentDestination; //index in the path that indicates the current destination
-    public Vector2        startPos;           //position where this enemy was spawned
-    public int            curHealth;          //current health
-    public int            expectedHealth;     //what health will be after all active shots reach this enemy
-    public SpriteRenderer enemyImage;         //sprite for this enemy
-    public Image          healthbar;          //image used for the health bar
-    public Image          deathBurst;         //image used for the death explosion
+    //functions used to determine what should be shown when in the inspector
+    private bool isEditor() { return Application.isPlaying == false; }
+    private bool hasData() { return ((enemyTypeName != null) && (enemyTypeName != "")); }
+
+    [VisibleWhen("isEditor")] public SpriteRenderer enemyImage;         //sprite for this enemy
+    [VisibleWhen("isEditor")] public Image          healthbar;          //image used for the health bar
+    [VisibleWhen("isEditor")] public Image          deathBurst;         //image used for the death explosion
+    [VisibleWhen("isEditor")] public ParticleSystem damageParticles;    //system used to produce particles when this enemy is damaged
+    [VisibleWhen("hasData")]  public string         enemyTypeName;      //name of this type of enemy
+    [VisibleWhen("hasData")]  public List<Vector2>  path;               //list of points this unit must go to
+    [VisibleWhen("hasData")]  public int            currentDestination; //index in the path that indicates the current destination
+    [VisibleWhen("hasData")]  public Vector2        startPos;           //position where this enemy was spawned
+    [VisibleWhen("hasData")]  public int            curHealth;          //current health
+    [VisibleWhen("hasData")]  public int            expectedHealth;     //what health will be after all active shots reach this enemy
 
     //constant settings set here instead of inspector to save on memory instead of recreating these on every enemy
-    //I tried pretty hard to convince unity to show constants or statics, but it doesnt want to do s
-    public const float deathBurstSize  = 1.0f; //max scale of the death burst
-    public const float deathBurstTime  = 0.2f; //time taken to animate death burst
-    public const float speedLimit      = 7.5f; //maximum speed an enemy is ever allowed to travel.  Enforced as a cap on unitSpeed.
-    public const int   maxSoundsAtOnce = 25;   //limit to how many sounds can be played at once, shared across ALL enemies
+    //I tried pretty hard to convince unity to show constants or statics, but it doesnt want to do so
+    public const float deathBurstSize    = 1.0f; //max scale of the death burst
+    public const float deathBurstTime    = 0.2f; //time taken to animate death burst
+    public const float speedLimit        = 7.5f; //maximum speed an enemy is ever allowed to travel.  Enforced as a cap on unitSpeed.
+    public const int   maxSoundsAtOnce   = 25;   //limit to how many sounds can be played at once, shared across ALL enemies
+
+    //when damaged, the enemy spawns particles based on how much damage it took.  it spawns damageParticleBase + (damage/damagePerParticle), rounded down.
+    public const int   damageParticleBaseCount = 3;
+    public const float damagePerExtraParticle  = 5;    
 
     //sound settings
-    public AudioSource audioSource;     //source to use to play sounds from
-    public AudioClip[] enemyHitSounds;  //sounds to play when the player is hurt.  one of these is chosen at random.
-    public AudioClip[] deathSounds;     //sounds to play when this enemy is dead.  one of these is chosen at random.
+    [VisibleWhen("isEditor")] public AudioSource audioSource;     //source to use to play sounds from
+    [VisibleWhen("isEditor")] public AudioClip[] enemyHitSounds;  //sounds to play when the player is hurt.  one of these is chosen at random.
+    [VisibleWhen("isEditor")] public AudioClip[] deathSounds;     //sounds to play when this enemy is dead.  one of these is chosen at random.
     private static int curSoundsAtOnce; //number of sounds currently playing, shared across ALL enemies
 
     //enemy data
-    public int        damage;        
-    public int        maxHealth;
+    [VisibleWhen("hasData")] public int        damage;        
+    [VisibleWhen("hasData")] public int        maxHealth;
     private float     _unitSpeed;
-    public float      unitSpeed { get { return _unitSpeed; } set { _unitSpeed = Mathf.Min(value, speedLimit); } }
-    public float      unitSpeedWhenSpawned;
-    public EffectData effectData;
+    [VisibleWhen("hasData")] public float      unitSpeed { get { return _unitSpeed; } set { _unitSpeed = Mathf.Min(value, speedLimit); } }
+    [VisibleWhen("hasData")] public float      unitSpeedWhenSpawned;
+    [VisibleWhen("hasData")] public EffectData effectData;
 
     private float _slowedForSeconds;  
-    public  float  slowedForSeconds
+    [VisibleWhen("hasData")] public  float  slowedForSeconds
     {
         get { return _slowedForSeconds; }
         set
@@ -205,10 +214,10 @@ public class EnemyScript : BaseBehaviour
     }
 
     //used for health bar
-    public Color healthyColor; //color when healthy
-    public Color dyingColor;   //color when near death
+    [VisibleWhen("isEditor")] public Color healthyColor; //color when healthy
+    [VisibleWhen("isEditor")] public Color dyingColor;   //color when near death
 
-    public bool goalFinalChance; //this is true for the very short period between reaching the goal and dealing damage to give attacks a final chance to kill this enemy
+    [VisibleWhen("hasData")] public bool goalFinalChance; //this is true for the very short period between reaching the goal and dealing damage to give attacks a final chance to kill this enemy
 
     // Use this for initialization
     private void Awake()
@@ -407,7 +416,9 @@ public class EnemyScript : BaseBehaviour
     /// <summary>
     /// deals damage to the enemy.  (make sure to call onExpectedDamage() first to avoid targeting bugs)
     /// </summary>
-    public void onDamage(DamageEventData e)
+    /// <param name="e">damage event containing information about the attack</param>
+    /// <param name="showParticles">if true, particles will be generated from the attack</param>
+    public void onDamage(DamageEventData e, bool showParticles = true)
     {
         //dont bother if we are already dead
         if (curHealth <= 0)
@@ -461,13 +472,18 @@ public class EnemyScript : BaseBehaviour
         if (e.source != null)
             e.source.trackDamage(damage);
 
-        //sound
+        //provide user feedback
         if (damage > 0)
         {
+            //sound
             int soundToPlay = Random.Range(0, enemyHitSounds.Length);
             audioSource.clip = enemyHitSounds[soundToPlay];
             if (isActiveAndEnabled)
                 StartCoroutine(playRespectLimit(audioSource)); //plays the sound, if we are not at the sound cap and the object is not disabled
+
+            //particles
+            if (showParticles)
+                damageParticles.Emit( damageParticleBaseCount + Mathf.FloorToInt( damage / damagePerExtraParticle) );
         }
 
         if (curHealth <= 0)
@@ -530,6 +546,8 @@ public class EnemyScript : BaseBehaviour
         }
 
         enemyImage.color = d.unitColor.toColor();
+        ParticleSystem.MainModule particleSettings = damageParticles.main;
+        particleSettings.startColor = enemyImage.color;
 
         //yes, I know its awkward, but we're setting the sprite with WWW, even on PC
         string spritePath = "";

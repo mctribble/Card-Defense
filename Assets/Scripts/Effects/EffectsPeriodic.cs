@@ -129,7 +129,7 @@ public class EffectPoison : BaseEffectPeriodic, IEffectSourceTracked
 
         //deal damage
         e.onExpectedDamage(ref damageEvent);
-        e.onDamage(damageEvent);
+        e.onDamage(damageEvent, false); //hide particles from poison damage
     }
 }
 
