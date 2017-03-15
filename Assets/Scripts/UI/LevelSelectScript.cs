@@ -731,7 +731,7 @@ public class LevelSelectScript : BaseBehaviour
                     "\n" +
                     "Armor: for every point of armor, incoming attacks do one less damage.  However, armor cannot reduce an attack below 0 damage.  Even an enemy with 999 armor can be taken down with enough bullets, no matter how weak they are.\n" +
                     "\n" +
-                    "Chain hit: this effect is very powerful.  When a chain hit attack hits an enemy, it creates an explosion that spreads the attack, including all effects, onto any other enemies in range.  Effectively, towers with chain hit attack an entire group of tightly-packed enemies.  The higher the number, the larger the explosions, and therefore the further apart they can be and still get hit.  Plague towers are a good example." +
+                    "Chain hit: this effect is very powerful.  Towers with chain hit attack an entire group of tightly-packed enemies.  The higher the range, the farther apart enemies can be and still get affected.  There is a limit to how many enemies will be hit by the chain, and the attack only chains once, even if the original attack hit multiple enemies.  (For example, if a Ping Tower with this effect hits 10 enemies, only the first one hit will start a chain reaction)\n" +
                     "\n" +
                     "Enemy loses % health: This is their max health, not their current!  Towers with this effect are VERY strong against giants, which can often end up with hundreds of thousands of health in the late game.\n" +
                     "\n" +

@@ -373,7 +373,11 @@ public class TowerScript : BaseBehaviour
             DamageEventData ded = new DamageEventData();
             ded.rawDamage = attackPower;
             ded.source = this;
-            ded.effects = effects;
+
+            if (effects != null)
+                ded.effects = effects.clone();
+            else
+                ded.effects = null;
 
             //if overcharged and there are overcharge effects, try to apply them
             if ((shotCharge >= 1.0f) && (effects != null) && (effects.propertyEffects.maxOvercharge != null))

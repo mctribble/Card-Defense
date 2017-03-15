@@ -10,13 +10,15 @@ public class ChainAttackScript : BaseBehaviour
     public float        displayTime;  //how long the effect should stay on screen after the attack is made
 
     private List<DamageEventData> attacksWaiting;
-    private Vector3 firstTargetPos;
+    private Vector3               firstTargetPos;
+    private bool                  alreadyTriggered;
 
     // Use this for initialization
     private void Awake ()
     {
         attacksWaiting = new List<DamageEventData>();
         firstTargetPos = Vector3.zero;
+        alreadyTriggered = false;
 	}
 	
     /// <summary>
@@ -28,6 +30,14 @@ public class ChainAttackScript : BaseBehaviour
     /// <param name="targetCap">max number of enemies to hit</param>
     public void ChainAttackWarn(DamageEventData baseEvent, EnemyScript firstTarget, float chainRange, int targetCap)
     {
+        //when a tower attacks, it clones the effectData.  If an attack hits multiple targets, they all share the same effects
+        //therefore, by only allowing ourselves to trigger once, we ensure the attack only chains once per attack fired from the originating tower
+        //regardless of how many enemies were hit by that attack
+        if (alreadyTriggered)
+            return;
+        else
+            alreadyTriggered = true;
+
         //abort if the effects we were given include chainHit: this causes issues so severe it crashes the editor
         if (baseEvent.effects != null)
         {

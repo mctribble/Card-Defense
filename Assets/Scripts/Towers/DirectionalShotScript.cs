@@ -175,12 +175,20 @@ public class DirectionalShotScript : BaseBehaviour
         //put the initial target list on the expected list and inform those enemies
         foreach (EnemyScript t in data.targetList)
         {
+            //build event
             DamageEventData ded = new DamageEventData();
             ded.source = baseDamageEvent.source;
             ded.rawDamage = baseDamageEvent.rawDamage;
             ded.effects = baseDamageEvent.effects;
             ded.dest = t;
 
+            //trigger effects
+            if (ded.effects != null)
+                foreach (IEffect ie in ded.effects.effects)
+                    if (ie.triggersAs(EffectType.enemyDamaged))
+                        ((IEffectEnemyDamaged)ie).expectedDamage(ref ded);
+
+            //warn enemy
             t.onExpectedDamage(ref ded);
             expectedToHit.Add(ded);
         }
