@@ -169,7 +169,7 @@ public class EffectSplashDamage : BaseEffectEnemyDamaged
 [ForbidEffectContext(EffectContext.enemyCard)]
 public class EffectChainHit : BaseEffectEnemyDamaged
 {
-    //cap on numbef of enemies that can be hit
+    //cap on number of enemies that can be hit
     private int targetCap;
     [Show]
     public override string argument
@@ -191,69 +191,46 @@ public class EffectChainHit : BaseEffectEnemyDamaged
     [Hide] public override string Name { get { return "Attack chains up to " + targetCap + " times with a range of " + strength; } } //returns name and strength
     [Show] public override string XMLName { get { return "chainHit"; } } //name used to refer to this effect in XML
 
-    protected List<EnemyScript> enemiesAlreadyHit;
+    private ChainAttackScript attackObject; //object used to handle chaining the attack
 
     //constructor
     public EffectChainHit()
     {
-        enemiesAlreadyHit = new List<EnemyScript>();
+        
     }
 
-    //use expectedDamage() to prevent the attack from hitting the same enemy twice
+    //use expectedDamage() to initiate the chainAttack object and send warnings to everything
     public override void expectedDamage(ref DamageEventData d)
     {
-        //if this enemy has already been hit, nullify the attack
-        //this catches a rare race condition where multiple bullets originating from the same attack try to chain onto this in the same frame
-        if (enemiesAlreadyHit.Contains(d.dest))
+        //spawn a chainAttack object.  We borrow a prefab reference from the level manager since we cant have one of our own
+        attackObject = ((GameObject)GameObject.Instantiate(LevelManagerScript.instance.chainAttackPrefab)).GetComponent<ChainAttackScript>();
+
+        //set the attack color, if there is one
+        if (d.effects.propertyEffects.attackColor != null)
         {
-            //Debug.LogWarning("EffectChainHit tried to attack the same thing multiple times!");
-            d.rawDamage = 0;
-            d.effects = null;
-            return;
+            attackObject.lineRenderer.startColor = d.effects.propertyEffects.attackColor.Value;
+            attackObject.lineRenderer.endColor   = d.effects.propertyEffects.attackColor.Value / 2;
         }
+
+        //create a DamageEventData for the attack object to base its attacks on
+        DamageEventData baseEvent = new DamageEventData();
+        baseEvent.dest = null;
+        baseEvent.rawDamage = d.rawDamage;
+        baseEvent.source = d.source;
+
+        //the chained attack contains all effects except for this one
+        baseEvent.effects = d.effects.clone();
+        baseEvent.effects.removeEffect("chainHit");
+
+        //have it spread warnings around to everything that will get hit
+        attackObject.ChainAttackWarn(baseEvent, d.dest, strength, targetCap);
     }
 
     //when an enemy is hit, spawn a bullet to attack all nearby enemies that havent yet been hit with this attack
     public override void actualDamage(ref DamageEventData originalDamageEvent)
     {
-        //if we make it here, the enemy has not been attacked yet, and we can chain off of it.
-        
-        //for each enemy in range of this one, where range is the effect strength, that we have not already hit
-        foreach (EnemyScript e in EnemyManagerScript.instance.enemiesInRange(originalDamageEvent.dest.transform.position, strength, targetCap - enemiesAlreadyHit.Count).Except(enemiesAlreadyHit))
-        {
-            //create the event
-            DamageEventData damageEvent = new DamageEventData();
-            damageEvent.source = originalDamageEvent.source;
-            damageEvent.rawDamage = originalDamageEvent.rawDamage;
-            damageEvent.dest = e;
-
-            //the already hit list should be reset for every attack the tower makes, but be retained for attacks chained off of other enemies.
-            //To accomplish this, if the already hit list is empty the attack gets a clone of the attack's effects, and we add the enemy to the list on the clone instead of ourselves
-            //if the already hit list contains enemies, we know we have been chained at least once, so we can just keep using the same list
-            List<EnemyScript> listToUse;
-            if (enemiesAlreadyHit.Count == 0)
-            {
-                damageEvent.effects = originalDamageEvent.effects.clone();
-                listToUse = ((EffectChainHit)damageEvent.effects.effects.First(ie => ie.XMLName == XMLName)).enemiesAlreadyHit;
-            }
-            else
-            {
-                damageEvent.effects = originalDamageEvent.effects;
-                listToUse = enemiesAlreadyHit;
-            }
-
-            //spawn the attack
-            GameObject bullet = GameObject.Instantiate(originalDamageEvent.source.bulletPrefab, originalDamageEvent.dest.transform.position, Quaternion.identity);
-            bullet.SendMessage("InitBullet", damageEvent);
-
-            //apply attackColor property, if it is present
-            if (originalDamageEvent.effects != null)
-                if (originalDamageEvent.effects.propertyEffects.attackColor != null)
-                    bullet.SendMessage("SetColor", originalDamageEvent.effects.propertyEffects.attackColor);
-
-            //add it to the list of enemies we already hit
-            listToUse.Add(e);
-        }
+        //have the attack object we made earlier spread attack events around to all affected enemies
+        attackObject.ChainAttackHit();
     }
 }
 

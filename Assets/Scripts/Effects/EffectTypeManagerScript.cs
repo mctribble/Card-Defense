@@ -147,7 +147,7 @@ public class EffectTypeManagerScript : BaseBehaviour
         ie.strength = xe.strength;
         ie.argument = xe.argument;
         ie.cardName = cardName;
-
+        
         //if there is an inner effect,attempt to pass that too
         if (xe.innerEffect != null)
         {

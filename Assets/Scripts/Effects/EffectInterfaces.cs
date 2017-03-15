@@ -255,6 +255,8 @@ public class EffectData : System.Object
     [XmlIgnore] private List<IEffectPeriodic>       cachedPeriodicEffectList;
     [XmlIgnore] private PropertyEffects?            cachedPropertyEffects;
 
+    private bool effectsParsed = false; //whether or not XMLEffects have already been turned into actual IEFfect objects
+
     /// <summary>
     /// read only list of effect objects
     /// </summary>
@@ -264,7 +266,7 @@ public class EffectData : System.Object
     {
         get
         {
-            if (Effects.Count == 0 && XMLEffects.Count > 0)
+            if (effectsParsed == false)
                 parseEffects();
 
             return Effects.AsReadOnly();
@@ -324,7 +326,7 @@ public class EffectData : System.Object
     public void removeForbiddenEffects(EffectContext forbiddenContext, bool throwWarnings)
     {
         //make sure the effects are parsed before testing
-        if (Effects.Count == 0 && XMLEffects.Count > 0)
+        if (effectsParsed == false)
             parseEffects();
 
         if (throwWarnings)
@@ -422,7 +424,7 @@ public class EffectData : System.Object
             if (cachedCardTargetingType != null)
                 return cachedCardTargetingType.Value;
 
-            if (effects.Count == 0) parseEffects(); //make sure we have actual code references to the effects
+            if (effectsParsed == false) parseEffects(); //make sure we have actual code references to the effects
 
             //return the target type of the first effect that requires a target.  no card can have effects that target two different types of things
             foreach (IEffect e in effects)
@@ -490,7 +492,8 @@ public class EffectData : System.Object
     private void updateCachedTowerTargetingList()
     {
         //make sure effects are parsed
-        parseEffects();
+        if (effectsParsed == false)
+            parseEffects();
 
         //start with just the default targeting
         cachedTowerTargetingList = new List<IEffectTowerTargeting>();
@@ -685,14 +688,20 @@ public class EffectData : System.Object
     /// <param name="cardName">optional name to provide the new effects for logging purposes</param>
     public void parseEffects(string cardName = "<UNKNOWN_CARD>")
     {
-        if (XMLEffects.Count > Effects.Count)
+        //throw warning and bail if we try to parse twice
+        if (effectsParsed)
         {
-            foreach (XMLEffect xe in XMLEffects)
-            {
-                IEffect ie = EffectTypeManagerScript.instance.parse(xe, cardName);
-                if (ie != null)
-                    Add(ie);
-            }
+            Debug.LogWarning("Attempted to parse effects multiple times!");
+            return;
+        }
+
+        effectsParsed = true;
+
+        foreach (XMLEffect xe in XMLEffects)
+        {
+            IEffect ie = EffectTypeManagerScript.instance.parse(xe, cardName);
+            if (ie != null)
+                Add(ie);
         }
     }
 
@@ -705,12 +714,15 @@ public class EffectData : System.Object
         clone.XMLEffects = XMLEffects; //copy the list of xml effects over so we dont lose it
 
         //parse our own effects if needed
-        if (effects.Count > XMLEffects.Count)
+        if (effectsParsed == false)
             parseEffects();
 
         //clone the effects also
         foreach (IEffect ie in effects)
             clone.Add(cloneEffect(ie));
+
+        //dont let the clone parse effects again, since we just did it for them
+        clone.effectsParsed = true;
 
         return clone;
     }
@@ -757,6 +769,44 @@ public class EffectData : System.Object
             return effects[0].ToString();
         else
             return effects.Count + " effects.";
+    }
+
+    /// <summary>
+    /// removes all effects with the given XMLName
+    /// </summary>
+    public void removeEffect(string XMLName)
+    {
+        //make sure the effects are parsed
+        if (effectsParsed == false)
+            parseEffects();
+
+        List<IEffect> toRemove = new List<IEffect>();
+        foreach (IEffect ie in Effects)
+        {
+            //drill down until we find what we are looking for or curEffect is not a meta effect
+            IEffect curEffect = ie;
+            while (curEffect.triggersAs(EffectType.meta))
+            {
+                if (curEffect.XMLName == XMLName)
+                {
+                    break;
+                }
+                else
+                {
+                    curEffect = ((IEffectMeta)curEffect).innerEffect;
+                }
+            }
+
+            //mark it for removal if it matches
+            if (curEffect.XMLName == XMLName)
+                toRemove.Add(ie);
+        }
+
+        //remove marked effects
+        foreach (IEffect ie in toRemove)
+            Effects.Remove(ie);
+
+        resetCachedValues();
     }
 }
 

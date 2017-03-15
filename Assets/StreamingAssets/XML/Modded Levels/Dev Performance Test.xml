@@ -95,6 +95,10 @@
         <Upgrade Name="Fast Upgrade" Count="5" />
       </Upgrades>
     </Tower>
+    <Tower name="Plague Tower" x="-1.5" y="-1.5" />
+    <Tower name="Plague Tower" x="1.5" y="2.5" />
+    <Tower name="Dev Purge Tower" x="-4.5" y="1.5" />
+    <Tower name="Dev Purge Tower" x="4.5" y="-0.5" />
     <Tower name="Challenger Tower" x="-1" y="-5" />
     <Tower name="Challenger Tower" x="-0.5" y="-5" />
     <Tower name="Challenger Tower" x="0" y="-5" />

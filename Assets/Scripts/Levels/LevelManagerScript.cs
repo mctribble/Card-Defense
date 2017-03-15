@@ -225,6 +225,7 @@ public class LevelManagerScript : BaseBehaviour
     [VisibleWhen("shouldShowRefs")] public GameObject  spawnerPrefab;     //prefab used to create spawners
     [VisibleWhen("shouldShowRefs")] public GameObject  towerPrefab;       //prefab used to create towers
     [VisibleWhen("shouldShowRefs")] public GameObject  explosionPrefab;   //prefab used to create explosions
+    [VisibleWhen("shouldShowRefs")] public GameObject  chainAttackPrefab; //prefab used to create chain attacks (note: this is a slight hack: the LevelManagerScript itself doesn't use this, but the ChainHit effect does, and it cant have a prefab reference of its own.  DO NOT remove it as 'unused'!)
     [VisibleWhen("shouldShowRefs")] public GameObject  pathTooltipPrefab; //prefab used to create the path laying tooltip
     [VisibleWhen("shouldShowRefs")] public RawImage    background;        //reference to the background texture
 
@@ -243,6 +244,7 @@ public class LevelManagerScript : BaseBehaviour
     [VisibleWhen("levelLoaded")] public int   wavesInDeck;          //number of enemy groups remaining in the deck
     [VisibleWhen("levelLoaded")] public int   wavesSpawning;        //number of waves currently attacking
     [VisibleWhen("levelLoaded")] public int   totalSpawnedThisWave; //how many enemies have already spawned this wave
+
     [VisibleWhen("levelLoaded")] public bool  endurance;            //whether or not we are playing endurance
 
     //private vars
