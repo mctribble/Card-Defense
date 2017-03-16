@@ -40,12 +40,14 @@ public abstract class BaseEffectMeta : BaseEffect, IEffectMeta
     public virtual void onTowerSpawned(TowerScript tower) { if (shouldApplyInnerEffect()) { ((IEffectOnSpawned)innerEffect).onTowerSpawned(tower); } }
     public virtual void onEnemySpawned(EnemyScript enemy) {  if (shouldApplyInnerEffect()) { ((IEffectOnSpawned)innerEffect).onEnemySpawned(enemy); } }
     public virtual void playerCardDrawn(CardScript playerCard) { if (shouldApplyInnerEffect()) { ((IEffectCardDrawn)innerEffect).playerCardDrawn(playerCard); } }
-    public virtual void rankChanged(int rank) { if (shouldApplyInnerEffect()) { ((IEffectRank)innerEffect).rankChanged(rank); } }
     public virtual void enemyCardDrawn(EnemyScript enemyCard) { if (shouldApplyInnerEffect()) { ((IEffectCardDrawn)innerEffect).enemyCardDrawn(enemyCard); } }
     public virtual void towerAttack(TowerScript tower) { if (shouldApplyInnerEffect()) { ((IEffectAttack)innerEffect).towerAttack(tower); } }
     public virtual void enemyAttack(EnemyScript enemy) { if (shouldApplyInnerEffect()) { ((IEffectAttack)innerEffect).enemyAttack(enemy); } }
 
-    //source tracking forwards down to the inner effect, if it cares to know
+    //this one is special: rankChanged is used for scaling effects, so those should ALWAYS be passed through, even if the condition on this effect is false
+    public virtual void rankChanged(int rank) { { ((IEffectRank)innerEffect).rankChanged(rank); } }
+
+    //source tracking forwards down to the inner effect, if it cares to know.  This cascades down the tree even if we should not apply the inner effect
     private TowerScript _effectSource;
     public virtual TowerScript effectSource
     {
