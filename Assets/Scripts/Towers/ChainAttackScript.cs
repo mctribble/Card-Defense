@@ -110,7 +110,7 @@ public class ChainAttackScript : BaseBehaviour
         //the line should have the points of all attacked enemies, including the first, but we need to drop their Z coordinates a little to make sure they show up
         Vector3 offset = new Vector3(0, 0, -5);
         List<Vector3> enemyPositions = attacksWaiting.Select(ded => ded.dest.transform.position + offset).ToList();
-       // enemyPositions.Insert(0, firstTargetPos);
+        enemyPositions.Insert(0, firstTargetPos);
 
         //pass them to the renderer
         lineRenderer.numPositions = enemyPositions.Count;
