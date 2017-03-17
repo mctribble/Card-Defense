@@ -8,11 +8,12 @@ public enum TargetingPriority
 {
     DEFAULT    = 0,
     RANDOM     = 1,
-    BY_STAT    = 2,
-    MOUSE      = 3,
-    MULTIPLE   = 4,
-    ORTHOGONAL = 5,
-    ALL        = 6,
+    BY_HEALTH  = 2,
+    BY_STAT    = 3,
+    MOUSE      = 4,
+    MULTIPLE   = 5,
+    ORTHOGONAL = 6,
+    ALL        = 7,
 }
 
 
@@ -224,7 +225,7 @@ public class EffectTargetHealth : BaseEffectTowerTargeting
 {
     [Hide] public override string Name { get { return "Target: highest health"; } } //returns name and strength
     [Show] public override string XMLName { get { return "targetHealth"; } } //name used to refer to this effect in XML
-    [Hide] public override TargetingPriority priority { get { return TargetingPriority.BY_STAT; } } //priority of this targeting effect
+    [Hide] public override TargetingPriority priority { get { return TargetingPriority.BY_HEALTH; } } //priority of this targeting effect
 
     public override IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
@@ -261,7 +262,7 @@ public class EffectTargetLowHealth : BaseEffectTowerTargeting
 {
     [Hide] public override string Name { get { return "Target: lowest health"; } } //returns name and strength
     [Show] public override string XMLName { get { return "targetLowHealth"; } } //name used to refer to this effect in XML
-    [Hide] public override TargetingPriority priority { get { return TargetingPriority.BY_STAT; } } //priority of this targeting effect
+    [Hide] public override TargetingPriority priority { get { return TargetingPriority.BY_HEALTH; } } //priority of this targeting effect
 
     public override IEnumerable<EnemyScript> findTargets(Vector2 towerPosition, float towerRange)
     {
