@@ -396,13 +396,12 @@
       </effectData>
     </Card>
     <Card Type="tower" Name="Swarm Tower" Description="Unleashes a massive hail of explosive bullets that attacks everything on the map" Charges="4" Art="Swarm_Tower.png" Tooltip="Tower_Octagon.png" Token="false">
-      <towerData Recharge="2.5" Range="999" Damage="2" Lifespan="2" UpgradeCap="3" Sprite="Tower_Octagon.png">
+      <towerData Recharge="4" Range="999" Damage="2" Lifespan="2" UpgradeCap="3" Sprite="Tower_Octagon.png">
         <towerColor r="0.5" g="0.5" b="0.5" a="1" />
       </towerData>
       <effectData>
         <Effects>
           <Effect name="targetAll" />
-          <Effect name="splashDamage" strength="1" argument="1" />
         </Effects>
       </effectData>
     </Card>
