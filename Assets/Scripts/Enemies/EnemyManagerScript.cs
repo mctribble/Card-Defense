@@ -153,13 +153,14 @@ public class EnemyManagerScript : BaseBehaviour
     }
 
     /// <summary>
-    /// repositions the enemy to its proper place in the list.
+    /// repositions the enemy to its proper place in the list.  If the enemy is not currently in the list, nothing happens
     /// </summary>
     /// <param name=""></param>
     private void updateEnemyPosition(EnemyScript e)
     {
         LinkedListNode<EnemyScript> enemyNode = activeEnemies.Find(e);
-        updateEnemyPosition(enemyNode);
+        if (e != null)
+            updateEnemyPosition(enemyNode);
     }
 
     /// <summary>
