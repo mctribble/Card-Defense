@@ -159,7 +159,7 @@ public class EnemyManagerScript : BaseBehaviour
     private void updateEnemyPosition(EnemyScript e)
     {
         LinkedListNode<EnemyScript> enemyNode = activeEnemies.Find(e);
-        if (e != null)
+        if (enemyNode != null)
             updateEnemyPosition(enemyNode);
     }
 
