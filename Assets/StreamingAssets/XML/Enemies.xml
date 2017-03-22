@@ -31,7 +31,7 @@
       <effectData>
         <Effects>
           <Effect name="scaleEffectWithRank" strength="3" >
-            <Effect name="spawnEnemyOnDeath" strength="5" argument="Swarm" />
+            <Effect name="spawnEnemyOnDeath" strength="10" argument="Swarm" />
           </Effect>
         </Effects>
       </effectData>
