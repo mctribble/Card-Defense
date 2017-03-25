@@ -39,7 +39,7 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
     {
         //load the levelData
         using (FileStream stream = new FileStream(file.FullName, FileMode.Open))
-            level = LevelData.Load(stream, file.Name); 
+            level = LevelData.Load(stream, file.Name, file.FullName); 
 
         buttonText.text = file.Name;       //set button text
         levelButtonText();                 //set text for this button
@@ -93,7 +93,7 @@ public class MenuButtonScript : BaseBehaviour, IPointerClickHandler, IPointerEnt
             }
 
             //now we can finally setup the level button
-            level = LevelData.Load(levelStream, fileName); //load the levelData
+            level = LevelData.Load(levelStream, fileName, request.url); //load the levelData
             levelButtonText();                             //set text for this button
             buttonType = MenuButtonType.level;             //this is now a usable level button
         }

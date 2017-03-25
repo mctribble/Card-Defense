@@ -87,6 +87,7 @@ public class LevelData
 
     //where this level was loaded from
     [XmlIgnore] public string fileName;
+    [XmlIgnore] public string fileFullName;
 
     //difficulty of the level.  Appears on level select screen.
     public string difficulty;
@@ -98,9 +99,13 @@ public class LevelData
     [XmlAttribute("enemyFileDependencies")][DefaultValue("")][Hide] public string enemyDependencies;
     [XmlAttribute( "cardFileDependencies")][DefaultValue("")][Hide] public string  cardDependencies;
 
-    //level background
+    //file name of the background image
     [XmlAttribute("background")]
     public string background = "Default_bg";
+
+    //how mnay tiles the texture covers.  For example, a backgroundTileRate of 4 means the texture covers the same space in game as 4x4 towers.
+    [XmlAttribute("backgroundTileRate")]
+    public float backgroundTileRate = 1.0f;
 
     //wave generation parameters
     public int randomWaveCount;
@@ -191,12 +196,26 @@ public class LevelData
     /// <summary>
     /// returns a new LevelData created from the provided XML file
     /// </summary>
-    public static LevelData Load(Stream levelStream, string fileName)
+    public static LevelData Load(Stream levelStream, string fileName, string fileFullName)
     {
         XmlSerializer serializer = new XmlSerializer(typeof(LevelData));
         LevelData result = serializer.Deserialize(levelStream) as LevelData;
         result.fileName = fileName;
+        result.fileFullName = fileFullName;
         return result;
+    }
+
+    /// <summary>
+    /// returns a new LevelData created from the same file as this one
+    /// </summary>
+    /// <returns></returns>
+    public LevelData Reload()
+    {
+        if (fileFullName.StartsWith("http:"))
+            throw new NotImplementedException("Reload() doesnt support URLs yet!");
+
+        using (FileStream stream = new FileStream(fileFullName, FileMode.Open))
+            return LevelData.Load(stream, fileName, fileFullName);
     }
 }
 
@@ -310,7 +329,19 @@ public class LevelManagerScript : BaseBehaviour
         yield return www;
 
         if (www.error == null)
-            background.texture = www.texture;
+        {
+            //set the texture, but force mipmapping
+            Texture2D rawTex = www.texture;
+            Texture2D newTex = new Texture2D(rawTex.width, rawTex.height, rawTex.format, true);
+            www.LoadImageIntoTexture(newTex);
+            background.texture = newTex;
+
+            //calculate the UV coordinates we need to make the texture repeat every data.backgroundTileRate tiles (each tile is 0.5f in world space)
+            float uvTileSize = (background.rectTransform.rect.height * 2) / data.backgroundTileRate;
+
+            //set the uv coordinates
+            background.uvRect = new Rect(0.0f, 0.0f, uvTileSize, uvTileSize);
+        }
         else
             Debug.LogWarning("Could not load background: " + filename + " (" + www.error + ")");
 
@@ -822,7 +853,7 @@ public class LevelManagerScript : BaseBehaviour
 
         //reload the level
         Awake();
-        yield return StartCoroutine(loadLevel(data));
+        yield return StartCoroutine(loadLevel(data.Reload()));
 
         data.usingLevelDeck = usingLevelDeck; //restore the level deck flag to its original value
     }
