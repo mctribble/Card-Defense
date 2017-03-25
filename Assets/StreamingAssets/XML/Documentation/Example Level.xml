@@ -2,9 +2,10 @@
 <!--This is a fully functioning mod file.  Copy it to StreamingAssets/XML/Modded Levels to see it in action!-->
 
 <!--background: name of the level background to use
+    backgroundTileRate: number tiles to be covered by the texture.  for example, if thebackground shows a 3x3 grid of tiles, backgroundTileRate should be 3.  You CAN use noninteger values here, if you dont want the background to be constantly aligned with the level paths
     enemyFileDependencies: optional comma-seperated list of enemy mod files this level depends on
     cardFileDependencies: optional comma-seperated list of card mod files this level depends on-->
-<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png" >
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black_WhiteGridSquares.png" backgroundTileRate="1">
   <!-- brief note that describes how hard the level is.  You can put whatever you like, but it should probably only be one or two words.  appears in level select.-->
   <difficulty>easy</difficulty>
   <!-- Brief message that appears in the level select menu -->
