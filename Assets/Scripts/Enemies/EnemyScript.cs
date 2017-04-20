@@ -561,6 +561,10 @@ public class EnemyScript : BaseBehaviour
             enemyImage.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
         else
             enemyImage.sprite = Resources.Load<Sprite>("Sprites/Error");
+
+        //set the scale to keep enemy size consistent even with various image sizes 
+        const float BASE_SCALE = 0.32f;
+        enemyImage.transform.localScale = new Vector3(BASE_SCALE / enemyImage.sprite.bounds.size.x, BASE_SCALE / enemyImage.sprite.bounds.size.y, 1.0f);
     }
 
     /// <summary>

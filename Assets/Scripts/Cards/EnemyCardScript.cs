@@ -241,13 +241,38 @@ public class EnemyCardScript : CardScript
         wave = w;
         description.text = w.enemyData.getDescription();
 
-        foreach (Image i in art.GetComponentsInChildren<Image>())
-            i.color = w.enemyData.unitColor.toColor();
+        //use a coroutine to set the art
+        StartCoroutine(SetWaveCoroutine());
         enemyType = w.enemyData.name;
 
         //gray out card border if token
         if (w.isToken)
             cardFront.color = tokenColor;
+    }
+
+    private IEnumerator SetWaveCoroutine()
+    {
+        Color unitColor = wave.enemyData.unitColor.toColor();
+
+        //yes, I know its awkward, but we're setting the sprite with WWW, even on PC
+        Sprite enemySprite;
+        string spritePath = "";
+        if (Application.platform != RuntimePlatform.WebGLPlayer)
+            spritePath = "file:///";
+        spritePath += Application.streamingAssetsPath + "/Art/Sprites/" + wave.enemyData.spriteName;
+        WWW www = new WWW (spritePath);
+        yield return www;
+
+        if (www.error == null)
+            enemySprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
+        else
+            enemySprite = Resources.Load<Sprite>("Sprites/Error");
+
+        foreach (Image i in art.GetComponentsInChildren<Image>())
+        {
+            i.sprite = enemySprite;
+            i.color = unitColor;
+        }
     }
 
     /// <summary>

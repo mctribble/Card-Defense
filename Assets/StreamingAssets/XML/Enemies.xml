@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<EnemyTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<EnemyTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="Enemies.xsd" >
   <Enemies>
     <Enemy name="Armored" spawnCost="100" attack="5" maxHealth="25" unitSpeed=".5" sprite="Enemy_Elite.png">
       <rankInfo rankUpSpawnCount="50" spawnCostMult="2" attackMult="1.5" maxHealthMult="1.75" unitSpeedMult="1" />
@@ -102,7 +102,7 @@
       <rankInfo rankUpSpawnCount="100" spawnCostMult="2" attackMult="1.5" maxHealthMult="2" unitSpeedMult="1" />
       <unitColor r="0" g="1" b="0" a="1" />
     </Enemy>
-    <Enemy name="Swarm" spawnCost="12" attack="1" maxHealth="8" unitSpeed="2.5" sprite="Enemy_Basic.png">
+    <Enemy name="Swarm" spawnCost="12" attack="1" maxHealth="8" unitSpeed="2.5" sprite="Enemy_Swarm.png">
       <rankInfo rankUpSpawnCount="150" spawnCostMult="2" attackMult="1.5" maxHealthMult="2" unitSpeedMult="1" />
       <unitColor r="1" g="0" b="0" a="1" />
     </Enemy>
