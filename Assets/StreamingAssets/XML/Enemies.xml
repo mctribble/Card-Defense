@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <EnemyTypes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="Enemies.xsd" >
   <Enemies>
-    <Enemy name="Armored" spawnCost="100" attack="5" maxHealth="25" unitSpeed=".5" sprite="Enemy_Elite.png">
+    <Enemy name="Armored" spawnCost="100" attack="5" maxHealth="25" unitSpeed=".5" sprite="Enemy_Armored.png">
       <rankInfo rankUpSpawnCount="50" spawnCostMult="2" attackMult="1.5" maxHealthMult="1.75" unitSpeedMult="1" />
       <unitColor r="0.2" g="1" b="1" a="1" />
       <effectData>
@@ -12,7 +12,7 @@
         </Effects>
       </effectData>
     </Enemy>
-    <Enemy name="Assassin" spawnCost="30" attack="0" maxHealth="60" unitSpeed="2" sprite="Enemy_Strong.png">
+    <Enemy name="Assassin" spawnCost="30" attack="0" maxHealth="60" unitSpeed="2" sprite="Enemy_Assassin.png">
       <rankInfo rankUpSpawnCount="100" spawnCostMult="2" attackMult="1" maxHealthMult="2" unitSpeedMult="1" />
       <unitColor r="0.2" g="0.75" b="0.2" a="0.4" />
       <effectData>
@@ -25,7 +25,7 @@
         </Effects>
       </effectData>
     </Enemy>
-    <Enemy name="Carrier" spawnCost="300" attack="6" maxHealth="200" unitSpeed="1" sprite="Enemy_Elite.png">
+    <Enemy name="Carrier" spawnCost="300" attack="6" maxHealth="200" unitSpeed="1" sprite="Enemy_Carrier.png">
       <rankInfo rankUpSpawnCount="3" spawnCostMult="3" attackMult="3" maxHealthMult="2" unitSpeedMult="1" />
       <unitColor r="0.75" g="0.75" b="0.75" a="1" />
       <effectData>
@@ -36,7 +36,7 @@
         </Effects>
       </effectData>
     </Enemy>
-    <Enemy name="Giant" spawnCost="400" attack="8" maxHealth="600" unitSpeed=".5" sprite="Enemy_Boss.png">
+    <Enemy name="Giant" spawnCost="400" attack="8" maxHealth="600" unitSpeed=".5" sprite="Enemy_Giant.png">
       <rankInfo rankUpSpawnCount="3" spawnCostMult="3" attackMult="2.5" maxHealthMult="3.5" unitSpeedMult="1" />
       <unitColor r="0.75" g="0" b="0.75" a="1" />
       <effectData>
@@ -45,7 +45,7 @@
         </Effects>
       </effectData>
     </Enemy>
-    <Enemy name="Ping" spawnCost="20" attack="0" maxHealth="5" unitSpeed="1" sprite="Enemy_Basic.png">
+    <Enemy name="Ping" spawnCost="20" attack="0" maxHealth="5" unitSpeed="1" sprite="Enemy_Ping.png">
       <rankInfo rankUpSpawnCount="150" spawnCostMult="2" attackMult="1.5" maxHealthMult="2.5" unitSpeedMult="1" />
       <unitColor r="0.45" g="0.45" b="0.45" a="1" />
       <effectData>
@@ -56,7 +56,7 @@
         </Effects>
       </effectData>
     </Enemy>
-    <Enemy name="Regenerative Tank" spawnCost="200" attack="4" maxHealth="300" unitSpeed=".5" sprite="Enemy_Strong.png">
+    <Enemy name="Regenerative Tank" spawnCost="200" attack="4" maxHealth="300" unitSpeed=".5" sprite="Enemy_Regenerative_Tank.png">
       <rankInfo rankUpSpawnCount="25" spawnCostMult="2" attackMult="1.5" maxHealthMult="2" unitSpeedMult="1" />
       <unitColor r="0.5" g="0.5" b="1" a="1" />
       <effectData>
@@ -98,7 +98,7 @@
         </Effects>
       </effectData>
     </Enemy>
-    <Enemy name="Standard" spawnCost="20" attack="2" maxHealth="50" unitSpeed="1" sprite="Enemy_Basic.png">
+    <Enemy name="Standard" spawnCost="20" attack="2" maxHealth="50" unitSpeed="1" sprite="Enemy_Standard.png">
       <rankInfo rankUpSpawnCount="100" spawnCostMult="2" attackMult="1.5" maxHealthMult="2" unitSpeedMult="1" />
       <unitColor r="0" g="1" b="0" a="1" />
     </Enemy>
@@ -106,7 +106,7 @@
       <rankInfo rankUpSpawnCount="150" spawnCostMult="2" attackMult="1.5" maxHealthMult="2" unitSpeedMult="1" />
       <unitColor r="1" g="0" b="0" a="1" />
     </Enemy>
-    <Enemy name="Tank" spawnCost="125" attack="5" maxHealth="400" unitSpeed=".5" sprite="Enemy_Strong.png">
+    <Enemy name="Tank" spawnCost="125" attack="5" maxHealth="400" unitSpeed=".5" sprite="Enemy_Tank.png">
       <rankInfo rankUpSpawnCount="50" spawnCostMult="2" attackMult="1.5" maxHealthMult="2" unitSpeedMult="1" />
       <unitColor r="0" g="0" b="1" a="1" />
       <effectData>
