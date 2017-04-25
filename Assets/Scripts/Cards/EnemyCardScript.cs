@@ -264,7 +264,15 @@ public class EnemyCardScript : CardScript
         yield return www;
 
         if (www.error == null)
-            enemySprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0.5f, 0.5f));
+        {
+            //load the texture, but force mipmapping
+            Texture2D rawTex = www.texture;
+            Texture2D newTex = new Texture2D(rawTex.width, rawTex.height, rawTex.format, true);
+            www.LoadImageIntoTexture(newTex);
+
+            //use it to make a sprite   
+            enemySprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), new Vector2(0.5f, 0.5f));
+        }
         else
             enemySprite = Resources.Load<Sprite>("Sprites/Error");
 

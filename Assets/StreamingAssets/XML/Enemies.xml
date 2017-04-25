@@ -67,7 +67,7 @@
         </Effects>
       </effectData>
     </Enemy>
-    <Enemy name="Scrambled" spawnCost="30" attack="2" maxHealth="50" unitSpeed="1" sprite="Enemy_Strong.png">
+    <Enemy name="Scrambled" spawnCost="30" attack="2" maxHealth="50" unitSpeed="1" sprite="Enemy_Scrambled.png">
       <rankInfo rankUpSpawnCount="100" spawnCostMult="2" attackMult="1.5" maxHealthMult="2" unitSpeedMult="1" />
       <unitColor r="1" g="1" b="0.2" a="1" />
       <effectData>
