@@ -241,46 +241,23 @@ public class EnemyCardScript : CardScript
         wave = w;
         description.text = w.enemyData.getDescription();
 
-        //use a coroutine to set the art
-        StartCoroutine(SetWaveCoroutine());
-        enemyType = w.enemyData.name;
-
-        //gray out card border if token
-        if (w.isToken)
-            cardFront.color = tokenColor;
-    }
-
-    private IEnumerator SetWaveCoroutine()
-    {
+        //set the art
         Color unitColor = wave.enemyData.unitColor.toColor();
 
-        //yes, I know its awkward, but we're setting the sprite with WWW, even on PC
-        Sprite enemySprite;
-        string spritePath = "";
-        if (Application.platform != RuntimePlatform.WebGLPlayer)
-            spritePath = "file:///";
-        spritePath += Application.streamingAssetsPath + "/Art/Sprites/" + wave.enemyData.spriteName;
-        WWW www = new WWW (spritePath);
-        yield return www;
-
-        if (www.error == null)
-        {
-            //load the texture, but force mipmapping
-            Texture2D rawTex = www.texture;
-            Texture2D newTex = new Texture2D(rawTex.width, rawTex.height, rawTex.format, true);
-            www.LoadImageIntoTexture(newTex);
-
-            //use it to make a sprite   
-            enemySprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), new Vector2(0.5f, 0.5f));
-        }
-        else
-            enemySprite = Resources.Load<Sprite>("Sprites/Error");
+        Sprite enemySprite = EnemyTypeManagerScript.instance.getEnemySprite(wave.enemyData.spriteName);
 
         foreach (Image i in art.GetComponentsInChildren<Image>())
         {
             i.sprite = enemySprite;
             i.color = unitColor;
         }
+
+        //set the name
+        enemyType = w.enemyData.name;
+
+        //gray out card border if token
+        if (w.isToken)
+            cardFront.color = tokenColor;
     }
 
     /// <summary>

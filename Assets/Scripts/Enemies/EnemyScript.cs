@@ -524,15 +524,14 @@ public class EnemyScript : BaseBehaviour
     }
 
     //stores the data specific to this type of enemy
-    public void SetData(EnemyData d) { StartCoroutine(SetDataCoroutine(d)); }
-    private IEnumerator SetDataCoroutine(EnemyData d)
+    public void SetData(EnemyData d)
     {
-        enemyTypeName        = d.name;
-        damage               = d.currentAttack;
-        maxHealth            = d.currentMaxHealth;
-        curHealth            = d.currentMaxHealth;
-        expectedHealth       = d.currentMaxHealth;
-        unitSpeed            = d.currentUnitSpeed;
+        enemyTypeName = d.name;
+        damage = d.currentAttack;
+        maxHealth = d.currentMaxHealth;
+        curHealth = d.currentMaxHealth;
+        expectedHealth = d.currentMaxHealth;
+        unitSpeed = d.currentUnitSpeed;
         unitSpeedWhenSpawned = d.currentUnitSpeed;
 
         if (d.effectData != null)
@@ -549,28 +548,7 @@ public class EnemyScript : BaseBehaviour
         ParticleSystem.MainModule particleSettings = damageParticles.main;
         particleSettings.startColor = enemyImage.color;
 
-        //yes, I know its awkward, but we're setting the sprite with WWW, even on PC
-        string spritePath = "";
-        if (Application.platform != RuntimePlatform.WebGLPlayer)
-            spritePath = "file:///";
-        spritePath += Application.streamingAssetsPath + "/Art/Sprites/" + d.spriteName;
-        WWW www = new WWW (spritePath);
-        yield return www;
-
-        if (www.error == null)
-        {
-            //load the texture, but force mipmapping
-            Texture2D rawTex = www.texture;
-            Texture2D newTex = new Texture2D(rawTex.width, rawTex.height, rawTex.format, true);
-            www.LoadImageIntoTexture(newTex);
-         
-            //use it to make a sprite   
-            enemyImage.sprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), new Vector2(0.5f, 0.5f));
-        }
-        else
-        {
-            enemyImage.sprite = Resources.Load<Sprite>("Sprites/Error");
-        }
+        enemyImage.sprite = EnemyTypeManagerScript.instance.getEnemySprite(d.spriteName);
 
         //set the scale to keep enemy size consistent even with various image sizes 
         const float BASE_SCALE = 0.32f;

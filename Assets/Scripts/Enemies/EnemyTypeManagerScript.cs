@@ -78,6 +78,9 @@ public class EnemyTypeManagerScript : BaseBehaviour
     public bool areTypesLoaded() { return (types != null && types.enemyTypes.Count > 0); }
     [VisibleWhen("areTypesLoaded")] public EnemyTypeCollection types;
 
+    //private dictionary of enemy sprites so we only have to load them once
+    private Dictionary<string, Sprite> enemySprites = new Dictionary<string, Sprite>();
+
     // Use this for initialization
     private void Awake()
     {
@@ -97,10 +100,16 @@ public class EnemyTypeManagerScript : BaseBehaviour
         else
             yield return StartCoroutine(loadEnemyTypesPC());
 
-        //remove any effects forbidden in this context, and throw warnings about them
+        //load-time processing of enemy types
         foreach (EnemyData ed in types.enemyTypes)
+        {
+            //remove any effects forbidden in this context, and throw warnings about them
             if (ed.effectData != null)
                 ed.effectData.removeForbiddenEffects(EffectContext.enemyCard, true);
+
+            //load the sprites for these enemy types
+            yield return StartCoroutine(loadEnemySprite(ed.spriteName));
+        }
     }
 
     /// <summary>
@@ -266,5 +275,69 @@ public class EnemyTypeManagerScript : BaseBehaviour
 
         names.Sort();
         return names.ToArray();
+    }
+
+    /// <summary>
+    /// if a sprite with the given name has not been loaded yet, loads that sprite.  
+    /// This should be called at least once for each sprite before calling getEnemySprite()
+    /// loadEnemyTypes() handles calls this once for each enemy in the collection
+    /// </summary>
+    /// <param name="spriteName"></param>
+    /// <returns></returns>
+    private IEnumerator loadEnemySprite(string spriteName)
+    {
+        //bail if it is already loaded
+        if (enemySprites.ContainsKey(spriteName))
+            yield break;
+
+        //yes, I know its awkward, but we're setting the sprite with WWW, even on PC
+        Sprite enemySprite;
+        string spritePath = "";
+        if (Application.platform != RuntimePlatform.WebGLPlayer)
+            spritePath = "file:///";
+        spritePath += Application.streamingAssetsPath + "/Art/Sprites/" + spriteName;
+        WWW www = new WWW (spritePath);
+        yield return www;
+
+        if (www.error == null)
+        {
+            //load the texture, but force mipmapping
+            Texture2D rawTex = www.texture;
+            Texture2D newTex = new Texture2D(rawTex.width, rawTex.height, rawTex.format, true);
+            www.LoadImageIntoTexture(newTex);
+
+            //use it to make a sprite   
+            enemySprite = Sprite.Create(newTex, new Rect(0, 0, newTex.width, newTex.height), new Vector2(0.5f, 0.5f));
+        }
+        else
+        {
+            Debug.LogWarning("Failed to load enemy sprite " + spriteName + ": " + www.error);
+            enemySprite = Resources.Load<Sprite>("Sprites/Error");
+        }
+
+        //store the sprite
+        enemySprites.Add(spriteName, enemySprite);
+    }
+
+    /// <summary>
+    /// returns the sprite to be used for this type of enemy.  Maintains an internal list so all instances of the enemy can share one sprite
+    /// if that sprite has not been loaded yet, returns the error sprite.
+    /// </summary>
+    /// <param name="enemyName"></param>
+    /// <returns></returns>
+    public Sprite getEnemySprite(string spriteName)
+    {
+        //attempt to fetch the sprite
+        Sprite enemySprite = null;
+        bool   spriteFound = enemySprites.TryGetValue(spriteName, out enemySprite);
+
+        //bail if the sprite has not been loaded yet
+        if (spriteFound == false)
+        {
+            Debug.LogWarning("Attempted to get an enemy sprite that hasnt been loaded yet! (" + spriteName + ")");
+            return Resources.Load<Sprite>("Sprites/Error");
+        }
+        else
+            return enemySprite;
     }
 }
