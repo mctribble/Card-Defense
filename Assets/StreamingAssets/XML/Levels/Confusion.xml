@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Blue_Gradient.png" backgroundTileRate="64" >
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black.png" backgroundTileRate="1" centerBackground="true">
   <difficulty>medium</difficulty>
   <description>A jumbled map where it is difficult to tell which paths lead where.</description>
   <randomWaveCount>20</randomWaveCount>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | Card Defense</title>
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <link rel="shortcut icon" href="TemplateData/favicon.ico" />
+    <script src="TemplateData/UnityProgress.js"></script>
+  </head>
+  <body class="template">
+    <div class="template-wrap clear">
+      <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" height="768px" width="1024px"></canvas>
+      <br>
+      <div class="logo"></div>
+      <div class="fullscreen"><img src="TemplateData/fullscreen.png" width="38" height="38" alt="Fullscreen" title="Fullscreen" onclick="SetFullscreen(1);" /></div>
+      <div class="title">Card Defense</div>
+    </div>
+	<div>
+		<!--I suck too much at HTML to do this properly-->
+		<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+		(current version: a91)<br>
+		if you prefer, you can download the game to your computer.  If you dont know which version to use, do 32-bit.<br><br>
+		<a href="card-defense_a91_x32.zip">32-bit</a><br>
+		<a href="card-defense_a91_x64.zip">64-bit</a><br><br>
+		To use, just extract the files anywhere you like and run the .exe.  If updating from an old version, be sure to delete the old files before extracting the new ones. <br>
+		your save data is stored elsewhere on the computer, and will not be lost if you simply delete the old folder and make another. <br>
+	</div>
+    <script type='text/javascript'>
+  var Module = {
+    TOTAL_MEMORY: 536870912,
+    errorhandler: null,			// arguments: err, url, line. This function must return 'true' if the error is handled, otherwise 'false'
+    compatibilitycheck: null,
+    backgroundColor: "#222C36",
+    splashStyle: "Light",
+    dataUrl: "Release/WebGL.data",
+    codeUrl: "Release/WebGL.js",
+    asmUrl: "Release/WebGL.asm.js",
+    memUrl: "Release/WebGL.mem",
+  };
+</script>
+<script src="Release/UnityLoader.js"></script>
+
+  </body>
+</html>
