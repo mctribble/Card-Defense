@@ -3,6 +3,7 @@
 
 <!--background: name of the level background to use
     backgroundTileRate: number tiles to be covered by the texture.  for example, if thebackground shows a 3x3 grid of tiles, backgroundTileRate should be 3.  You CAN use noninteger values here, if you dont want the background to be constantly aligned with the level paths
+    centerBackground: optional parameter.  If set to true, the background will be centered on the center of the level
     enemyFileDependencies: optional comma-seperated list of enemy mod files this level depends on
     cardFileDependencies: optional comma-seperated list of card mod files this level depends on-->
 <Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Black_WhiteGridSquares.png" backgroundTileRate="1">

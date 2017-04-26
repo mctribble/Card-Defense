@@ -106,6 +106,7 @@
       </xsd:sequence>
       <xsd:attribute name="background" type="xsd:string" />
       <xsd:attribute name="backgroundTileRate" type="xsd:float" />
+      <xsd:attribute name="centerBackground" type="xsd:boolean" use="optional" />
       <xsd:attribute name="cardFileDependencies" type="xsd:string" use="optional" />
       <xsd:attribute name="enemyFileDependencies" type="xsd:string" use="optional" />
     </xsd:complexType>

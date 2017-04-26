@@ -1,10 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd"  background="Blue_Gradient.png" backgroundTileRate="64" >
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Diffraction.png" backgroundTileRate="32" centerBackground="true">
   <difficulty>medium</difficulty>
   <description>Two symmetrical spirals.  The default level deck here contains no towers.</description>
   <randomWaveCount>19</randomWaveCount>
   <Waves>
-    <Wave type="Standard" budget="116" time="1.1" />
+    <Wave type="Standard" budget="116" time="1.1">
+      <isToken>false</isToken>
+    </Wave>
   </Waves>
   <Spawners>
     <Spawner spawnX="0" spawnY="-0.5" />

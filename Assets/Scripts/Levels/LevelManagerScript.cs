@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
@@ -99,13 +100,18 @@ public class LevelData
     [XmlAttribute("enemyFileDependencies")][DefaultValue("")][Hide] public string enemyDependencies;
     [XmlAttribute( "cardFileDependencies")][DefaultValue("")][Hide] public string  cardDependencies;
 
-    //file name of the background image
+    //file name of the background image, with a popup menu
     [XmlAttribute("background")]
+    [Popup("getBackgroundNames",CaseSensitive = true, Filter = true, HideUpdate = true,TextField = true)]
     public string background = "Default_bg";
 
     //how mnay tiles the texture covers.  For example, a backgroundTileRate of 4 means the texture covers the same space in game as 4x4 towers.
     [XmlAttribute("backgroundTileRate")]
     public float backgroundTileRate = 1.0f;
+
+    [XmlAttribute("centerBackground")]
+    [DefaultValue(false)]
+    public bool centerBackground = false;
 
     //wave generation parameters
     public int randomWaveCount;
@@ -216,6 +222,17 @@ public class LevelData
 
         using (FileStream stream = new FileStream(fileFullName, FileMode.Open))
             return LevelData.Load(stream, fileName, fileFullName);
+    }
+
+    /// <summary>
+    /// returns a list of all available level backgrounds
+    /// </summary>
+    /// <returns></returns>
+    private string[] getBackgroundNames()
+    {
+        DirectoryInfo dir = new DirectoryInfo(Path.Combine(Application.streamingAssetsPath, "Art/Backgrounds")); //find the background directory
+        FileInfo[] files = dir.GetFiles("*.png").Concat(dir.GetFiles("*.jpg")).ToArray();                        //list all .png and .jpg files inside it 
+        return files.Select<FileInfo, string>(fi => fi.Name).ToArray();                                          //return the names of those files
     }
 }
 
@@ -339,8 +356,11 @@ public class LevelManagerScript : BaseBehaviour
             //calculate the UV coordinates we need to make the texture repeat every data.backgroundTileRate tiles (each tile is 0.5f in world space)
             float uvTileSize = (background.rectTransform.rect.height * 2) / data.backgroundTileRate;
 
+            //the X and Y uv coordinates vary based on whether or not the background should be centered
+            float uvOffset = data.centerBackground ? 0.5f : 0.0f;
+
             //set the uv coordinates
-            background.uvRect = new Rect(0.0f, 0.0f, uvTileSize, uvTileSize);
+            background.uvRect = new Rect(uvOffset, uvOffset, uvTileSize, uvTileSize);
         }
         else
             Debug.LogWarning("Could not load background: " + filename + " (" + www.error + ")");

@@ -1,29 +1,69 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Blue_Gradient.png" backgroundTileRate="64" >
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Green_Gradient.png" backgroundTileRate="64">
   <difficulty>easy</difficulty>
   <description>Enemies here will take a lot of damage to take down</description>
   <randomWaveCount>0</randomWaveCount>
   <Waves>
-    <Wave type="Regenerative Tank" budget="64" time="1.1" />
-    <Wave type="Regenerative Tank" budget="87" time="2.2" />
-    <Wave type="Giant" budget="119" time="3.30000019" />
-    <Wave type="Giant" budget="161" time="4.4" />
-    <Wave type="Giant" budget="213" time="5.5" />
-    <Wave type="Regenerative Tank" budget="274" time="6.60000038" />
-    <Wave type="Giant" budget="345" time="7.70000029" />
-    <Wave type="Regenerative Tank" budget="426" time="8.8" />
-    <Wave type="Giant" budget="516" time="9.900001" />
-    <Wave type="Regenerative Tank" budget="617" time="11" />
-    <Wave type="Giant" budget="726" time="12.1" />
-    <Wave type="Giant" budget="846" time="13.2000008" />
-    <Wave type="Regenerative Tank" budget="975" time="14.3" />
-    <Wave type="Giant" budget="1114" time="15.4000006" />
-    <Wave type="Regenerative Tank" budget="1263" time="16.5" />
-    <Wave type="Regenerative Tank" budget="1422" time="17.6" />
-    <Wave type="Giant" budget="1590" time="18.7" />
-    <Wave type="Regenerative Tank" budget="1768" time="19.8000011" />
-    <Wave type="Regenerative Tank" budget="1955" time="20" />
-    <Wave type="Giant" budget="2500" time="20" />
+    <Wave type="Regenerative Tank" budget="64" time="1.1">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Regenerative Tank" budget="87" time="2.2">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Giant" budget="119" time="3.30000019">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Giant" budget="161" time="4.4">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Giant" budget="213" time="5.5">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Regenerative Tank" budget="274" time="6.60000038">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Giant" budget="345" time="7.70000029">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Regenerative Tank" budget="426" time="8.8">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Giant" budget="516" time="9.900001">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Regenerative Tank" budget="617" time="11">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Giant" budget="726" time="12.1">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Giant" budget="846" time="13.2000008">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Regenerative Tank" budget="975" time="14.3">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Giant" budget="1114" time="15.4000006">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Regenerative Tank" budget="1263" time="16.5">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Regenerative Tank" budget="1422" time="17.6">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Giant" budget="1590" time="18.7">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Regenerative Tank" budget="1768" time="19.8000011">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Regenerative Tank" budget="1955" time="20">
+      <isToken>false</isToken>
+    </Wave>
+    <Wave type="Giant" budget="2500" time="20">
+      <isToken>false</isToken>
+    </Wave>
   </Waves>
   <Spawners>
     <Spawner spawnX="0" spawnY="2" />

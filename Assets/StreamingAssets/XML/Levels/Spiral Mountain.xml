@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd"  background="Blue_Gradient.png" backgroundTileRate="64" >
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="../Level.xsd" background="Purple_Vortex.png" backgroundTileRate="64" centerBackground="true">
   <difficulty>medium</difficulty>
   <description>Very easy layout, but more waves than in any other level.  Will take a long time without frequently drawing for more enemies.</description>
   <randomWaveCount>50</randomWaveCount>
