@@ -1,6 +1,6 @@
 Christopher Kaleb Hake:
 All SFX (many made with bfxr, others recorded with audacity)
-music A, B, C, E, F, G
+music A, B, C, E, F, G, H
 
 Jamie Stephen Hake
 music D
