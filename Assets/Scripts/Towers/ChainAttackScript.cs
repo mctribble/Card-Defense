@@ -113,7 +113,7 @@ public class ChainAttackScript : BaseBehaviour
         enemyPositions.Insert(0, firstTargetPos);
 
         //pass them to the renderer
-        lineRenderer.numPositions = enemyPositions.Count;
+        lineRenderer.positionCount = enemyPositions.Count;
         lineRenderer.SetPositions(enemyPositions.ToArray());
 
         //make the attacks
